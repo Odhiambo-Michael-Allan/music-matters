@@ -91,24 +91,26 @@ open class BaseViewModel(
                     it.id != playlistRepository.favoritesPlaylistInfo.value.id
         }
 
-    fun renamePlaylist(playlistInfo: PlaylistInfo, newName: String ) {
-        playlistRepository.renamePlaylist( playlistInfo, newName )
+    fun renamePlaylist( playlistInfo: PlaylistInfo, newName: String ) {
+        viewModelScope.launch { playlistRepository.renamePlaylist( playlistInfo, newName ) }
     }
 
     fun deletePlaylist(playlistInfo: PlaylistInfo ) {
-        playlistRepository.deletePlaylist( playlistInfo )
+        viewModelScope.launch { playlistRepository.deletePlaylist( playlistInfo ) }
     }
 
     fun addToFavorites( songId: String ) {
-        playlistRepository.addToFavorites( songId )
+        viewModelScope.launch { playlistRepository.addToFavorites( songId ) }
     }
 
     fun addSongsToPlaylist(
         playlistInfo: PlaylistInfo,
         songs: List<Song>
     ) {
-        songs.forEach {
-            playlistRepository.addSongIdToPlaylist( it.id, playlistInfo.id )
+        viewModelScope.launch {
+            songs.forEach {
+                playlistRepository.addSongIdToPlaylist( it.id, playlistInfo.id )
+            }
         }
     }
 

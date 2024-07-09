@@ -59,9 +59,9 @@ class ForYouScreenViewModel(
         viewModelScope.launch { observeLanguageChange() }
         viewModelScope.launch { observeRecentlyAddedSongs() }
         viewModelScope.launch { observeSuggestedAlbums() }
-        viewModelScope.launch { observeMostPlayedSongsMap() }
         viewModelScope.launch { observeSuggestedArtists() }
         viewModelScope.launch { observeRecentlyPlayedSongsPlaylist() }
+        viewModelScope.launch { observeMostPlayedSongsPlaylist() }
         addOnPlaylistsChangeListener {
             _uiState.value = _uiState.value.copy( playlistInfos = it )
         }
@@ -76,7 +76,7 @@ class ForYouScreenViewModel(
                 isLoadingMostPlayedSongs = it,
                 isLoadingRecentlyPlayedSongs = it
             )
-            fetchMostPlayedSongsUsing( playlistRepository.mostPlayedSongsMap.value )
+            fetchMostPlayedSongsUsing( playlistRepository.mostPlayedSongsPlaylistInfo.value )
             fetchRecentlyPlayedSongsUsing( playlistRepository.recentlyPlayedSongsPlaylistInfo.value )
         }
     }
@@ -105,16 +105,9 @@ class ForYouScreenViewModel(
         }
     }
 
-    private suspend fun observeMostPlayedSongsMap() {
-        playlistRepository.mostPlayedSongsMap.collect {
-            fetchMostPlayedSongsUsing( it )
-        }
-    }
-
-    private fun fetchMostPlayedSongsUsing( mostPlayedSongsMap: Map<String, Int>) {
+    private fun fetchMostPlayedSongsUsing( playlistInfo: PlaylistInfo ) {
         val songs = musicServiceConnection.cachedSongs.value
-        val sortedMap = mostPlayedSongsMap.toList().sortedByDescending { it.second }.toMap()
-        val mostPlayedSongs = sortedMap.keys.mapNotNull { key ->
+        val mostPlayedSongs = playlistInfo.songIds.mapNotNull { key ->
             songs.find { it.id == key }
         }
         _uiState.value = _uiState.value.copy(
@@ -133,6 +126,12 @@ class ForYouScreenViewModel(
     private suspend fun observeRecentlyPlayedSongsPlaylist() {
         playlistRepository.recentlyPlayedSongsPlaylistInfo.collect {
             fetchRecentlyPlayedSongsUsing( it )
+        }
+    }
+
+    private suspend fun observeMostPlayedSongsPlaylist() {
+        playlistRepository.mostPlayedSongsPlaylistInfo.collect {
+            fetchMostPlayedSongsUsing( it )
         }
     }
 
@@ -161,10 +160,8 @@ class ForYouScreenViewModel(
     }
 
     fun playMostPlayedSong( song: Song ) {
-        val mostPlayedSongsMap = playlistRepository.mostPlayedSongsMap.value
         val songs = musicServiceConnection.cachedSongs.value
-        val sortedMap = mostPlayedSongsMap.toList().sortedByDescending { it.second }.toMap()
-        val mostPlayedSongs = sortedMap.keys.mapNotNull { key ->
+        val mostPlayedSongs = playlistRepository.mostPlayedSongsPlaylistInfo.value.songIds.mapNotNull { key ->
             songs.find { it.id == key }
         }
         playSongs(

@@ -1,6 +1,5 @@
 package com.odesa.musicMatters.ui.forYou
 
-import com.odesa.musicMatters.MainCoroutineRule
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.connection.FakeMusicServiceConnection
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
@@ -19,16 +18,12 @@ import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith( RobolectricTestRunner::class )
 class ForYouScreenViewModelTest {
-
-    @get:Rule
-    val mainCoroutineRule = MainCoroutineRule()
 
     private lateinit var musicServiceConnection: FakeMusicServiceConnection
     private lateinit var playlistRepository: FakePlaylistRepository
@@ -98,13 +93,8 @@ class ForYouScreenViewModelTest {
         }
         assertEquals( 5, viewModel.uiState.value.recentlyPlayedSongs.size )
         assertFalse( viewModel.uiState.value.isLoadingRecentlyPlayedSongs )
-
         playlistRepository.addToRecentlyPlayedSongsPlaylist( testSongs.last().id )
         assertEquals( testSongs.last().id, viewModel.uiState.value.recentlyPlayedSongs.first().id )
-
-//        for ( index in 1 .. 7 )
-//            playlistRepository.removeFromRecentlyPlayedSongsPlaylist( testSongs[index].id )
-//        assertEquals( 4, viewModel.uiState.value.recentlyPlayedSongs.size )
     }
 
     @Test
@@ -119,5 +109,18 @@ class ForYouScreenViewModelTest {
         assertEquals( 1, viewModel.uiState.value.playlistInfos.size )
         testPlaylistInfos.forEach { playlistRepository.savePlaylist( it ) }
         assertEquals( 1 + testPlaylistInfos.size, viewModel.uiState.value.playlistInfos.size )
+    }
+
+    @Test
+    fun testMostPlayedSongsAreCorrectlyUpdated() = runTest {
+        musicServiceConnection.setIsInitialized()
+        assertEquals( 0, viewModel.uiState.value.mostPlayedSongs.size )
+        assertFalse( viewModel.uiState.value.isLoadingMostPlayedSongs )
+        testSongs.forEach {
+            playlistRepository.addToMostPlayedPlaylist( it.id )
+        }
+        assertEquals( 5, viewModel.uiState.value.mostPlayedSongs.size )
+//        playlistRepository.addToMostPlayedPlaylist( testSongs.last().id )
+//        assertEquals( testSongs.last().id, viewModel.uiState.value.mostPlayedSongs.first().id )
     }
 }

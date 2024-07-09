@@ -159,7 +159,7 @@ private fun PlaylistWithEntries.asDomain() =
 
 private fun List<SongPlayCountEntry>.asPlaylist() =
     PlaylistInfo(
-        id = "",
+        id = MOST_PLAYED_SONGS_PLAYLIST_ID,
         title = "Most Played Songs",
         songIds = sortedByDescending { it.numberOfTimesPlayed }.map { it.songId }
     )
@@ -169,3 +169,5 @@ private fun PlaylistInfo.asEntity() =
         id = id,
         title = title
     )
+
+private const val MOST_PLAYED_SONGS_PLAYLIST_ID = "--MUSIC-MATTERS-MOST-PLAYED-SONGS-PLAYLIST-ID"
