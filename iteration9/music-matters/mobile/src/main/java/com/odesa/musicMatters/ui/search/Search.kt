@@ -6,7 +6,6 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,7 +23,7 @@ import com.odesa.musicMatters.core.data.utils.subListNonStrict
 import com.odesa.musicMatters.core.datatesting.albums.testAlbums
 import com.odesa.musicMatters.core.datatesting.artists.testArtists
 import com.odesa.musicMatters.core.datatesting.genres.testGenres
-import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.search.testSearchHistoryItems
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
@@ -33,7 +32,7 @@ import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
 import com.odesa.musicMatters.core.model.Genre
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.SearchFilter
 import com.odesa.musicMatters.core.model.SearchHistoryItem
 import com.odesa.musicMatters.core.model.Song
@@ -45,7 +44,7 @@ fun SearchScreen(
     onArtistClick: (Artist) -> Unit,
     onAlbumClick: (Album) -> Unit,
     onGenreClick: (Genre) -> Unit,
-    onPlaylistClick: (Playlist) -> Unit,
+    onPlaylistClick: (PlaylistInfo) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -57,7 +56,7 @@ fun SearchScreen(
         onGetAlbum = viewModel::getAlbumWithName,
         onGetArtist = viewModel::getArtistWithName,
         onGetGenre = viewModel::getGenreWithName,
-        onGetPlaylist = viewModel::getPlaylistWithId,
+        onGetPlaylistInfo = viewModel::getPlaylistWithId,
         onGetPlaylistArtworkUri = viewModel::getPlaylistArtworkUri,
         onSearch = viewModel::search,
         onSongClick = {
@@ -95,14 +94,14 @@ fun SearchScreenContent(
     onGetAlbum: ( String ) -> Album?,
     onGetArtist: ( String ) -> Artist?,
     onGetGenre: ( String ) -> Genre?,
-    onGetPlaylist: ( String ) -> Playlist?,
-    onGetPlaylistArtworkUri: ( Playlist ) -> Uri?,
+    onGetPlaylistInfo: (String ) -> PlaylistInfo?,
+    onGetPlaylistArtworkUri: (PlaylistInfo ) -> Uri?,
     onSearch: ( String, SearchFilter? ) -> Unit,
     onSongClick: ( Song ) -> Unit,
     onArtistClick: ( Artist ) -> Unit,
     onAlbumClick: ( Album ) -> Unit,
     onGenreClick: ( Genre ) -> Unit,
-    onPlaylistClick: ( Playlist ) -> Unit,
+    onPlaylistClick: (PlaylistInfo ) -> Unit,
     onClearSearchHistory: () -> Unit,
     onDeleteSearchHistoryItem: (SearchHistoryItem) -> Unit,
     onNavigateBack: () -> Unit,
@@ -160,7 +159,7 @@ fun SearchScreenContent(
                 onGetAlbum = onGetAlbum,
                 onGetArtist = onGetArtist,
                 onGetGenre = onGetGenre,
-                onGetPlaylist = onGetPlaylist,
+                onGetPlaylistInfo = onGetPlaylistInfo,
                 onGetPlaylistArtworkUri = onGetPlaylistArtworkUri,
                 onSongClick = onSongClick,
                 onAlbumClick = onAlbumClick,
@@ -195,7 +194,7 @@ fun SearchScreenContentPreview() {
                     matchingAlbums = testAlbums.subListNonStrict( 2 ),
                     matchingGenres = testGenres.subListNonStrict( 2 ),
                     matchingArtists = testArtists.subListNonStrict( 2 ),
-                    matchingPlaylists = testPlaylists.subListNonStrict( 2 )
+                    matchingPlaylistInfos = testPlaylistInfos.subListNonStrict( 2 )
                 ),
                 themeMode = SettingsDefaults.themeMode,
                 searchHistoryItems = testSearchHistoryItems,
@@ -207,7 +206,7 @@ fun SearchScreenContentPreview() {
             onGetAlbum = { testAlbums.first() },
             onGetArtist = { testArtists.first() },
             onGetGenre = { testGenres.first() },
-            onGetPlaylist = { testPlaylists.first() },
+            onGetPlaylistInfo = { testPlaylistInfos.first() },
             onGetPlaylistArtworkUri = { null },
             onGenreClick = {},
             onArtistClick = {},

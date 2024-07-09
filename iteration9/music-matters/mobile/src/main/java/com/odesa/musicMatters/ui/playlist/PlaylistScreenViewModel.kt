@@ -8,12 +8,12 @@ import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
-import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +35,7 @@ class PlaylistScreenViewModel(
 
     private val _uiState = MutableStateFlow(
         PlaylistScreenUiState(
-            playlist = EMPTY_PLAYLIST,
+            playlistInfo = EMPTY_PLAYLISTInfo,
             songsInPlaylist = emptyList(),
             sortSongsBy = settingsRepository.sortSongsBy.value,
             sortSongsInReverse = settingsRepository.sortSongsInReverse.value,
@@ -43,8 +43,8 @@ class PlaylistScreenViewModel(
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
             currentlyPlayingSongId = musicServiceConnection.nowPlayingMediaItem.value.mediaId,
-            favoriteSongIds = playlistRepository.favoritesPlaylist.value.songIds,
-            playlists = emptyList()
+            favoriteSongIds = playlistRepository.favoritesPlaylistInfo.value.songIds,
+            playlistInfos = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -54,7 +54,7 @@ class PlaylistScreenViewModel(
         viewModelScope.launch { observeCurrentlyPlayingSong() }
         viewModelScope.launch { observeFavoriteSongIds() }
         addOnPlaylistsChangeListener {
-            _uiState.value = _uiState.value.copy( playlists = it )
+            _uiState.value = _uiState.value.copy( playlistInfos = it )
             // The songs in the current playlist may have changed so fetch them again..
             fetchSongsInPlaylistWithId( playlistId )
         }
@@ -85,7 +85,7 @@ class PlaylistScreenViewModel(
     }
 
     private suspend fun observeFavoriteSongIds() {
-        playlistRepository.favoritesPlaylist.collect {
+        playlistRepository.favoritesPlaylistInfo.collect {
             _uiState.value = _uiState.value.copy(
                 favoriteSongIds = it.songIds
             )
@@ -96,7 +96,7 @@ class PlaylistScreenViewModel(
         currentPlaylistId = playlistId
         playlistRepository.playlists.value.find { it.id == playlistId }?.let { playlist ->
             _uiState.value = _uiState.value.copy(
-                playlist = playlist,
+                playlistInfo = playlist,
                 songsInPlaylist = musicServiceConnection.cachedSongs.value
                     .filter { playlist.songIds.contains( it.id ) }
             )
@@ -106,7 +106,7 @@ class PlaylistScreenViewModel(
 }
 
 data class PlaylistScreenUiState(
-    val playlist: Playlist,
+    val playlistInfo: PlaylistInfo,
     val songsInPlaylist: List<Song>,
     val sortSongsBy: SortSongsBy,
     val sortSongsInReverse: Boolean,
@@ -115,17 +115,17 @@ data class PlaylistScreenUiState(
     val themeMode: ThemeMode,
     val currentlyPlayingSongId: String,
     val favoriteSongIds: List<String>,
-    val playlists: List<Playlist>
+    val playlistInfos: List<PlaylistInfo>
 )
 
-private val EMPTY_PLAYLIST = Playlist(
+private val EMPTY_PLAYLISTInfo = PlaylistInfo(
     id = "",
     title = "",
     songIds = emptyList()
 )
 
 internal val testPlaylistScreenUiState = PlaylistScreenUiState(
-    playlist = testPlaylists.first(),
+    playlistInfo = testPlaylistInfos.first(),
     songsInPlaylist = testSongs,
     sortSongsBy = SettingsDefaults.sortSongsBy,
     sortSongsInReverse = false,
@@ -134,7 +134,7 @@ internal val testPlaylistScreenUiState = PlaylistScreenUiState(
     currentlyPlayingSongId = testSongs.first().id,
     favoriteSongIds = emptyList(),
     themeMode = SettingsDefaults.themeMode,
-    playlists = emptyList()
+    playlistInfos = emptyList()
 )
 
 @Suppress( "UNCHECKED_CAST" )

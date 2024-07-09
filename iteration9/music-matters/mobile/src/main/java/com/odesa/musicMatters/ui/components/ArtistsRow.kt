@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 
 @Composable
@@ -27,9 +27,9 @@ fun ArtistsRow(
     onShufflePlay: ( Artist ) -> Unit,
     onViewArtist: ( Artist ) -> Unit,
     onGetSongsByArtist: ( Artist ) -> List<Song>,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: (Playlist) -> List<Song>,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo) -> List<Song>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onPlaySongsByArtist: ( Artist ) -> Unit,

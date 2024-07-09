@@ -20,7 +20,7 @@ import com.odesa.musicMatters.core.datatesting.albums.testAlbums
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 
 @Composable
@@ -38,11 +38,11 @@ fun AlbumGrid(
     onPlayNext: ( Album ) -> Unit,
     onShufflePlay: ( Album ) -> Unit,
     onViewArtist: ( String ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
     onGetSongsInAlbum: ( Album ) -> List<Song>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
 ) {
     MediaSortBarScaffold(

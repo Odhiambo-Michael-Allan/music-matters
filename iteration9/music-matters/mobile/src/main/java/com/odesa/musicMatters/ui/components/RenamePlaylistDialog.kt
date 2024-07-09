@@ -13,7 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 
@@ -71,7 +71,7 @@ fun RenamePlaylistDialog(
 @Composable
 fun RenamePlaylistDialogPreview() {
     RenamePlaylistDialog(
-        playlistTitle = testPlaylists.first().title,
+        playlistTitle = testPlaylistInfos.first().title,
         language = English,
         onRename = { /*TODO*/ },
         onDismissRequest = {}

@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -15,7 +14,7 @@ import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.designsystem.theme.isLight
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.MinimalAppBar
@@ -57,7 +56,7 @@ fun GenreScreen(
         onSearchSongsMatchingQuery = viewModel::searchSongsMatching,
         onCreatePlaylist = viewModel::createPlaylist,
         onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
-        onGetPlaylists = { uiState.playlists },
+        onGetPlaylists = { uiState.playlistInfos },
         onGetSongsInPlaylist = viewModel::getSongsInPlaylist
     )
 }
@@ -76,12 +75,12 @@ fun GenreScreenContent(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onNavigateBack: () -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>
 ) {
 
     val fallbackResourceId =
@@ -106,7 +105,7 @@ fun GenreScreenContent(
                 onSortTypeChange = onSortTypeChange,
                 language = uiState.language,
                 songs = uiState.songsInGenre,
-                playlists = onGetPlaylists(),
+                playlistInfos = onGetPlaylists(),
                 onShufflePlay = onShufflePlay,
                 fallbackResourceId = fallbackResourceId,
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,

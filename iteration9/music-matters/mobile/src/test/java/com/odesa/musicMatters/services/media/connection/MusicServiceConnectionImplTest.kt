@@ -102,7 +102,7 @@ class MusicServiceConnectionImplTest {
         )
         assertEquals(
             testSongMediaItems.size,
-            playlistRepository.currentPlayingQueuePlaylist.value.songIds.size
+            playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )
     }
 
@@ -141,7 +141,7 @@ class MusicServiceConnectionImplTest {
         )
         assertEquals(
             testSongMediaItems.size,
-            playlistRepository.currentPlayingQueuePlaylist.value.songIds.size
+            playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )
     }
 
@@ -164,7 +164,7 @@ class MusicServiceConnectionImplTest {
         )
         assertEquals(
             testSongMediaItems.size,
-            playlistRepository.currentPlayingQueuePlaylist.value.songIds.size
+            playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )
     }
 
@@ -202,7 +202,7 @@ class MusicServiceConnectionImplTest {
         )
         assertEquals(
             testSongMediaItems.size,
-            playlistRepository.currentPlayingQueuePlaylist.value.songIds.size
+            playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )
     }
 
@@ -223,7 +223,7 @@ class MusicServiceConnectionImplTest {
         assertEquals( 0, connectable.player!!.currentMediaItemIndex )
         assertEquals(
             testSongMediaItems.size,
-            playlistRepository.currentPlayingQueuePlaylist.value.songIds.size
+            playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )
     }
 
@@ -241,7 +241,7 @@ class MusicServiceConnectionImplTest {
             musicServiceConnection.currentlyPlayingMediaItemIndex.value
         )
         assertTrue(
-            playlistRepository.currentPlayingQueuePlaylist.value.songIds.isEmpty()
+            playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.isEmpty()
         )
     }
 
@@ -318,7 +318,7 @@ class MusicServiceConnectionImplTest {
 
     @Test
     fun testMediaItemsInQueueAreSavedCorrectly() {
-        assertTrue( playlistRepository.currentPlayingQueuePlaylist.value.songIds.isEmpty() )
+        assertTrue( playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.isEmpty() )
         musicServiceConnection.playMediaItem(
             mediaItem = testSongMediaItems.first(),
             mediaItems = testSongMediaItems,
@@ -326,7 +326,7 @@ class MusicServiceConnectionImplTest {
         )
         assertEquals(
             testSongMediaItems.size,
-            playlistRepository.currentPlayingQueuePlaylist.value.songIds.size
+            playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )
     }
 

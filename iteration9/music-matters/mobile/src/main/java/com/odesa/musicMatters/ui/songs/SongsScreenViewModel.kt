@@ -12,7 +12,7 @@ import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,9 +37,9 @@ class SongsScreenViewModel(
             sortSongsBy = settingsRepository.sortSongsBy.value,
             sortSongsInReverse = settingsRepository.sortSongsInReverse.value,
             currentlyPlayingSongId = musicServiceConnection.nowPlayingMediaItem.value.mediaId,
-            favoriteSongIds = playlistRepository.favoritesPlaylist.value.songIds,
+            favoriteSongIds = playlistRepository.favoritesPlaylistInfo.value.songIds,
             isLoading = musicServiceConnection.isInitializing.value,
-            playlists = emptyList()
+            playlistInfos = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -52,7 +52,7 @@ class SongsScreenViewModel(
         viewModelScope.launch { observeCurrentlyPlayingSong() }
         viewModelScope.launch { observeFavoriteSongIds() }
         addOnPlaylistsChangeListener {
-            _uiState.value = _uiState.value.copy( playlists = it )
+            _uiState.value = _uiState.value.copy( playlistInfos = it )
         }
         addOnSortSongsByChangeListener { sortSongsBy, sortSongsInReverse ->
             _uiState.value = _uiState.value.copy(
@@ -107,7 +107,7 @@ class SongsScreenViewModel(
     }
 
     private suspend fun observeFavoriteSongIds() {
-        playlistRepository.favoritesPlaylist.collect {
+        playlistRepository.favoritesPlaylistInfo.collect {
             _uiState.value = _uiState.value.copy(
                 favoriteSongIds = it.songIds
             )
@@ -124,7 +124,7 @@ data class SongsScreenUiState(
     val currentlyPlayingSongId: String,
     val favoriteSongIds: List<String>,
     val isLoading: Boolean,
-    val playlists: List<Playlist>
+    val playlistInfos: List<PlaylistInfo>
 )
 
 internal val testSongsScreenUiState = SongsScreenUiState(
@@ -136,7 +136,7 @@ internal val testSongsScreenUiState = SongsScreenUiState(
     isLoading = true,
     sortSongsBy = SortSongsBy.TITLE,
     sortSongsInReverse = false,
-    playlists = emptyList()
+    playlistInfos = emptyList()
 )
 
 @Suppress( "UNCHECKED_CAST" )

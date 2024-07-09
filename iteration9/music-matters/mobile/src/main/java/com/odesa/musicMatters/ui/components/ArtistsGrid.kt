@@ -18,7 +18,7 @@ import com.odesa.musicMatters.core.datatesting.artists.testArtists
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 
 @Composable
@@ -35,10 +35,10 @@ fun ArtistsGrid(
     onShufflePlaySongsByArtist: (Artist ) -> Unit,
     onAddSongsByArtistToQueue: (Artist ) -> Unit,
     onPlaySongsByArtistNext: (Artist ) -> Unit,
-    onAddSongsByArtistToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onAddSongsByArtistToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onGetSongsByArtist: ( Artist ) -> List<Song>,
 ) {

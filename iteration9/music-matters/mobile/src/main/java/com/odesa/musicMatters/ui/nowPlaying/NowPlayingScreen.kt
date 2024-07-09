@@ -46,7 +46,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -79,7 +78,7 @@ import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.designsystem.theme.isLight
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.BottomSheetMenuItem
 import com.odesa.musicMatters.ui.components.GenericOptionsBottomSheet
@@ -160,10 +159,10 @@ fun NowPlayingBottomSheetContent(
     onPlayingPitchChange: ( Float ) -> Unit,
     onQueueClicked: () -> Unit,
     onCreateEqualizerActivityContract: () -> Unit,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onHideBottomSheet: () -> Unit,
@@ -214,7 +213,7 @@ fun NowPlayingBottomSheetContent(
         onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
         onCreatePlaylist = onCreatePlaylist,
         onAddSongsToPlaylist = onAddSongsToPlaylist,
-        onGetPlaylists = { uiState.playlists },
+        onGetPlaylists = { uiState.playlistInfos },
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
         onHideNowPlayingBottomSheet = onHideBottomSheet
@@ -261,11 +260,11 @@ fun NowPlayingScreenContent(
     onPlayingSpeedChange: ( Float ) -> Unit,
     onPlayingPitchChange: ( Float ) -> Unit,
     onCreateEqualizerActivityContract: () -> Unit,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onGetPlaylists: () -> List<PlaylistInfo>,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onHideNowPlayingBottomSheet: () -> Unit,

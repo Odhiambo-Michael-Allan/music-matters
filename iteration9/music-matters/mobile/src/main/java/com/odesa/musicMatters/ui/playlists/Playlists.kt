@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.core.data.preferences.SortPlaylistsBy
 import com.odesa.musicMatters.core.designsystem.theme.isLight
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.NewPlaylistDialog
@@ -81,17 +81,17 @@ fun PlaylistsScreenContent(
     onPlaylistClick: ( String, String ) -> Unit,
     onNavigateToSearch: () -> Unit,
     onSettingsClicked: () -> Unit,
-    onPlaySongsInPlaylist: ( Playlist ) -> Unit,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onAddSongsInPlaylistToPlaylist: ( Playlist, List<Song> ) -> Unit,
-    onAddSongsInPlaylistToQueue: ( Playlist ) -> Unit,
+    onPlaySongsInPlaylist: (PlaylistInfo ) -> Unit,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onAddSongsInPlaylistToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onAddSongsInPlaylistToQueue: (PlaylistInfo ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onPlaySongsInPlaylistNext: ( Playlist ) -> Unit,
-    onShufflePlaySongsInPlaylist: ( Playlist ) -> Unit,
+    onPlaySongsInPlaylistNext: (PlaylistInfo ) -> Unit,
+    onShufflePlaySongsInPlaylist: (PlaylistInfo ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
-    playlistIsDeletable: ( Playlist ) -> Boolean,
-    onDeletePlaylist: ( Playlist ) -> Unit,
-    onRenamePlaylist: ( Playlist, String ) -> Unit,
+    playlistIsDeletable: (PlaylistInfo ) -> Boolean,
+    onDeletePlaylist: (PlaylistInfo ) -> Unit,
+    onRenamePlaylist: (PlaylistInfo, String ) -> Unit,
     onSortTypeChange: ( SortPlaylistsBy ) -> Unit,
     onSortReverseChange: ( Boolean ) -> Unit,
 ) {
@@ -118,7 +118,7 @@ fun PlaylistsScreenContent(
                 loading = uiState.language.loading
             ) {
                 PlaylistGrid(
-                    playlists = uiState.playlists,
+                    playlistInfos = uiState.playlistInfos,
                     isLoadingSongsInPlaylist = uiState.isLoadingSongs,
                     language = uiState.language,
                     sortType = uiState.sortPlaylistsBy,
@@ -129,7 +129,7 @@ fun PlaylistsScreenContent(
                     onPlaylistClick = onPlaylistClick,
                     onPlaySongsInPlaylist = onPlaySongsInPlaylist,
                     onGetSongsInPlaylist = onGetSongsInPlaylist,
-                    onGetPlaylists = { uiState.playlists },
+                    onGetPlaylists = { uiState.playlistInfos },
                     onAddSongsInPlaylistToPlaylist = onAddSongsInPlaylistToPlaylist,
                     onAddSongsInPlaylistToQueue = onAddSongsInPlaylistToQueue,
                     onCreatePlaylist = onCreatePlaylist,

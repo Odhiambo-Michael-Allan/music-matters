@@ -4,9 +4,9 @@ import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.connection.FakeMusicServiceConnection
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
-import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
@@ -23,7 +23,7 @@ class BaseViewModelTest {
     private lateinit var playlistRepository: PlaylistRepository
     private lateinit var viewModel: BaseViewModel
 
-    private lateinit var currentPlaylists: List<Playlist>
+    private lateinit var currentPlaylistInfos: List<PlaylistInfo>
 
     @Before
     fun setup() {
@@ -40,25 +40,25 @@ class BaseViewModelTest {
     @Test
     fun testPlaylistsAreUpdatedCorrectly() = runTest {
         viewModel.addOnPlaylistsChangeListener {
-            currentPlaylists = it
+            currentPlaylistInfos = it
         }
-        assertEquals( 1, currentPlaylists.size )
-        testPlaylists.forEach {
+        assertEquals( 1, currentPlaylistInfos.size )
+        testPlaylistInfos.forEach {
             playlistRepository.savePlaylist( it )
         }
-        assertEquals( 1 + testPlaylists.size, currentPlaylists.size )
+        assertEquals( 1 + testPlaylistInfos.size, currentPlaylistInfos.size )
     }
 
     @Test
     fun testPlaylistIsRenamedCorrectly() = runTest {
-        testPlaylists.forEach {
+        testPlaylistInfos.forEach {
             playlistRepository.savePlaylist( it )
         }
         viewModel.addOnPlaylistsChangeListener {
-            currentPlaylists = it
+            currentPlaylistInfos = it
         }
-        viewModel.renamePlaylist( testPlaylists.first(), "chill-rnb" )
-        assertTrue( currentPlaylists.map { it.title }.contains( "chill-rnb" ) )
+        viewModel.renamePlaylist( testPlaylistInfos.first(), "chill-rnb" )
+        assertTrue( currentPlaylistInfos.map { it.title }.contains( "chill-rnb" ) )
     }
 
 }

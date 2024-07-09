@@ -31,7 +31,7 @@ import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.datatesting.albums.testAlbums
 import com.odesa.musicMatters.core.datatesting.artists.testArtists
 import com.odesa.musicMatters.core.datatesting.genres.testGenres
-import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.search.testSearchHistoryItems
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
@@ -40,7 +40,7 @@ import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
 import com.odesa.musicMatters.core.model.Genre
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.SearchFilter
 import com.odesa.musicMatters.core.model.SearchHistoryItem
 import com.odesa.musicMatters.core.model.Song
@@ -57,13 +57,13 @@ fun SearchHistoryList(
     onGetAlbum: ( String ) -> Album?,
     onGetArtist: ( String ) -> Artist?,
     onGetGenre: ( String ) -> Genre?,
-    onGetPlaylist: ( String ) -> Playlist?,
-    onGetPlaylistArtworkUri: (Playlist) -> Uri?,
+    onGetPlaylistInfo: (String ) -> PlaylistInfo?,
+    onGetPlaylistArtworkUri: (PlaylistInfo) -> Uri?,
     onSongClick: (Song) -> Unit,
     onAlbumClick: (Album) -> Unit,
     onArtistClick: (Artist) -> Unit,
     onGenreClick: (Genre) -> Unit,
-    onPlaylistClick: (Playlist) -> Unit,
+    onPlaylistClick: (PlaylistInfo) -> Unit,
     onClearSearchHistory: () -> Unit,
     onDeleteSearchHistoryItem: ( SearchHistoryItem ) -> Unit,
 ) {
@@ -170,7 +170,7 @@ fun SearchHistoryList(
 
                             }
                             SearchFilter.PLAYLIST -> {
-                                onGetPlaylist( it.id )?.let { playlist ->
+                                onGetPlaylistInfo( it.id )?.let { playlist ->
                                     SearchHistoryListItem(
                                         artworkUri = onGetPlaylistArtworkUri( playlist ),
                                         fallbackResourceId = fallbackResourceId,
@@ -275,7 +275,7 @@ fun SearchHistoryListPreview() {
             onGetAlbum = { testAlbums.first() },
             onGetArtist = { testArtists.first() },
             onGetGenre = { testGenres.first() },
-            onGetPlaylist = { testPlaylists.first() },
+            onGetPlaylistInfo = { testPlaylistInfos.first() },
             onGetPlaylistArtworkUri = { null },
             onArtistClick = {},
             onAlbumClick = {},

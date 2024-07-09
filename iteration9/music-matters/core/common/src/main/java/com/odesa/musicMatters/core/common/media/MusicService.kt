@@ -140,7 +140,10 @@ class MusicService : MediaLibraryService() {
             }
         }
         setMediaNotificationProvider( MusicMattersMediaNotificationProvider( applicationContext ) )
-        dataDiModule = DataDiModule.getInstance( applicationContext )
+        dataDiModule = DataDiModule.getInstance(
+            applicationContext,
+            dispatcher = Dispatchers.Main
+        )
     }
 
     override fun onGetSession( controllerInfo: MediaSession.ControllerInfo ): MediaLibrarySession? {
@@ -152,8 +155,6 @@ class MusicService : MediaLibraryService() {
      */
     override fun onTaskRemoved( rootIntent: Intent? ) {
         super.onTaskRemoved( rootIntent )
-        Timber.tag( TAG ).d( "ON TASK REMOVED" )
-        dataDiModule.playlistRepository.cachePlaylistData()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -162,8 +163,6 @@ class MusicService : MediaLibraryService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.tag( TAG ).d( "DESTROYING SERVICE" )
-        dataDiModule.playlistRepository.cachePlaylistData()
         releaseMediaSession()
     }
 

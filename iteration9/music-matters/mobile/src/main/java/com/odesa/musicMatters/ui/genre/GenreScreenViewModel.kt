@@ -12,7 +12,7 @@ import com.odesa.musicMatters.core.data.utils.sortSongs
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,7 +40,7 @@ class GenreScreenViewModel(
             currentlyPlayingSongId = musicServiceConnection.nowPlayingMediaItem.value.mediaId,
             favoriteSongIds = emptyList(),
             isLoading = musicServiceConnection.isInitializing.value,
-            playlists = emptyList()
+            playlistInfos = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -52,7 +52,7 @@ class GenreScreenViewModel(
         viewModelScope.launch { observeCurrentlyPlayingSong() }
         viewModelScope.launch { observeFavoriteSongIds() }
         addOnPlaylistsChangeListener {
-            _uiState.value = _uiState.value.copy( playlists = it )
+            _uiState.value = _uiState.value.copy( playlistInfos = it )
         }
         addOnSortSongsByChangeListener { sortSongsBy, sortSongsInReverse ->
             _uiState.value = _uiState.value.copy(
@@ -109,7 +109,7 @@ class GenreScreenViewModel(
     }
 
     private suspend fun observeFavoriteSongIds() {
-        playlistRepository.favoritesPlaylist.collect {
+        playlistRepository.favoritesPlaylistInfo.collect {
             _uiState.value = _uiState.value.copy(
                 favoriteSongIds = it.songIds
             )
@@ -143,7 +143,7 @@ data class GenreScreenUiState(
     val currentlyPlayingSongId: String,
     val favoriteSongIds: List<String>,
     val isLoading: Boolean,
-    val playlists: List<Playlist>
+    val playlistInfos: List<PlaylistInfo>
 )
 
 internal val testGenreScreenUiState = GenreScreenUiState(
@@ -155,5 +155,5 @@ internal val testGenreScreenUiState = GenreScreenUiState(
     currentlyPlayingSongId = testSongs.first().id,
     favoriteSongIds = emptyList(),
     isLoading = false,
-    playlists = emptyList()
+    playlistInfos = emptyList()
 )

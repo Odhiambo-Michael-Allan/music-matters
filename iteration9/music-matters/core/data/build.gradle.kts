@@ -1,14 +1,15 @@
 plugins {
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias( libs.plugins.androidLibrary )
+    alias( libs.plugins.jetbrainsKotlinAndroid )
+    alias( libs.plugins.ksp )
 }
 
 android {
     namespace = "com.odesa.musicMatters.core.data"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 26
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -45,11 +46,17 @@ dependencies {
     implementation( projects.core.i8n )
     implementation( projects.core.model )
 
+    // Database
+    implementation( libs.androidx.room.runtime )
+    implementation( libs.androidx.room.ktx )
+    ksp( libs.androidx.room.compiler )
+
     testImplementation( libs.junit )
     testImplementation( libs.androidx.junit )
     testImplementation( libs.robolectric )
 
     testImplementation( libs.kotlinx.coroutines.test )
+    testImplementation( projects.core.testing )
 
     androidTestImplementation( libs.androidx.junit )
     androidTestImplementation( libs.androidx.espresso.core )

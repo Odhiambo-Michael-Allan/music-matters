@@ -2,56 +2,63 @@ package com.odesa.musicMatters.core.data.playlists.impl
 
 import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.playlists.PlaylistStore
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-class PlaylistRepositoryImpl( private val playlistStore: PlaylistStore ) : PlaylistRepository {
+class PlaylistRepositoryImpl(
+    private val playlistStore: PlaylistStore,
+    private val coroutineDispatcher: CoroutineDispatcher,
+) : PlaylistRepository {
 
-    private val _favoritesPlaylist = MutableStateFlow( playlistStore.fetchFavoritesPlaylist() )
-    override val favoritesPlaylist = _favoritesPlaylist.asStateFlow()
+    private val _favoritesPlaylist = MutableStateFlow( EMPTY_PLAYLIST )
+    override val favoritesPlaylistInfo = _favoritesPlaylist.asStateFlow()
 
-    private val _recentlyPlayedSongsPlaylist = MutableStateFlow(
-        playlistStore.fetchRecentlyPlayedSongsPlaylist()
-    )
-    override val recentlyPlayedSongsPlaylist = _recentlyPlayedSongsPlaylist.asStateFlow()
+    private val _recentlyPlayedSongsPlaylist = MutableStateFlow( EMPTY_PLAYLIST )
+    override val recentlyPlayedSongsPlaylistInfo = _recentlyPlayedSongsPlaylist.asStateFlow()
 
-    private val _mostPlayedSongsPlaylist = MutableStateFlow(
-        playlistStore.fetchMostPlayedSongsPlaylist()
-    )
-    override val mostPlayedSongsPlaylist = _mostPlayedSongsPlaylist.asStateFlow()
+    private val _mostPlayedSongsPlaylist = MutableStateFlow( EMPTY_PLAYLIST )
+    override val mostPlayedSongsPlaylistInfo = _mostPlayedSongsPlaylist.asStateFlow()
 
-    private val _playlists = MutableStateFlow( playlistStore.fetchAllPlaylists() )
+    private val _playlists = MutableStateFlow( emptyList<PlaylistInfo>() )
     override val playlists = _playlists.asStateFlow()
 
-    private val _mostPlayedSongsMap = MutableStateFlow( playlistStore.fetchMostPlayedSongsMap() )
-    override val mostPlayedSongsMap = _mostPlayedSongsMap.asStateFlow()
+    private val _currentPlayingQueuePlaylist = MutableStateFlow( EMPTY_PLAYLIST )
+    override val currentPlayingQueuePlaylistInfo = _currentPlayingQueuePlaylist.asStateFlow()
 
-    private val _currentPlayingQueuePlaylist = MutableStateFlow(
-        playlistStore.fetchCurrentPlayingQueue()
-    )
-    override val currentPlayingQueuePlaylist = _currentPlayingQueuePlaylist.asStateFlow()
+    private val coroutineScope = CoroutineScope( coroutineDispatcher )
 
-    override fun isFavorite( songId: String ): Boolean {
-        return favoritesPlaylist.value.songIds.contains( songId )
+    init {
+        coroutineScope.launch {
+            _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
+            _recentlyPlayedSongsPlaylist.value = playlistStore.fetchRecentlyPlayedSongsPlaylist()
+            _mostPlayedSongsPlaylist.value = playlistStore.fetchMostPlayedSongsPlaylist()
+            _playlists.value = playlistStore.fetchAllPlaylists()
+            _currentPlayingQueuePlaylist.value = playlistStore.fetchCurrentPlayingQueue()
+        }
     }
 
-    override fun addToFavorites( songId: String ) {
-        if ( isFavorite( songId ) ) playlistStore.removeFromFavorites( songId )
-        else playlistStore.addToFavorites( songId )
+    override fun isFavorite( songId: String ) = favoritesPlaylistInfo.value.songIds.contains( songId )
+
+    override suspend fun addToFavorites( songId: String ) {
+        if ( isFavorite( songId ) ) playlistStore.removeSongIdFromFavoritesPlaylist( songId )
+        else playlistStore.addSongIdToFavoritesPlaylist( songId )
         _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
         _playlists.value = playlistStore.fetchAllPlaylists()
     }
 
-    override fun removeFromFavorites( songId: String ) {
-        playlistStore.removeFromFavorites( songId )
+    override suspend fun removeFromFavorites( songId: String ) {
+        playlistStore.removeSongIdFromFavoritesPlaylist( songId )
         _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
         _playlists.value = playlistStore.fetchAllPlaylists()
     }
 
-    override fun addToRecentlyPlayedSongsPlaylist( songId: String ) {
+    override suspend fun addToRecentlyPlayedSongsPlaylist( songId: String ) {
         Timber.tag( PLAYLIST_REPOSITORY_TAG ).d( "ADDING SONG TO RECENTLY PLAYED PLAYLIST. ID: $songId" )
         playlistStore.addSongIdToRecentlyPlayedSongsPlaylist( songId )
         val newSongIds = playlistStore.fetchRecentlyPlayedSongsPlaylist().songIds
@@ -61,41 +68,24 @@ class PlaylistRepositoryImpl( private val playlistStore: PlaylistStore ) : Playl
         _playlists.value = playlistStore.fetchAllPlaylists()
     }
 
-    override fun removeFromRecentlyPlayedSongsPlaylist( songId: String ) {
-        playlistStore.removeFromRecentlyPlayedSongsPlaylist( songId )
-        val newSongIds = playlistStore.fetchRecentlyPlayedSongsPlaylist().songIds
-        _recentlyPlayedSongsPlaylist.value = _recentlyPlayedSongsPlaylist.value.copy(
-            songIds = newSongIds
-        )
-        _playlists.value = playlistStore.fetchAllPlaylists()
-    }
-
-    override fun addToMostPlayedPlaylist( songId: String ) {
+    override suspend fun addToMostPlayedPlaylist( songId: String ) {
         Timber.tag( PLAYLIST_REPOSITORY_TAG ).d( "ADDING SONG TO MOST PLAYED PLAYLIST. ID: $songId" )
-        playlistStore.addToMostPlayedSongsPlaylist( songId )
+        playlistStore.addSongIdToMostPlayedSongsPlaylist( songId )
         _playlists.value = playlistStore.fetchAllPlaylists()
         _mostPlayedSongsPlaylist.value = playlistStore.fetchMostPlayedSongsPlaylist()
-        _mostPlayedSongsMap.value = playlistStore.fetchMostPlayedSongsMap()
     }
 
-    override fun removeFromMostPlayedPlaylist( songId: String ) {
-        playlistStore.removeFromMostPlayedSongsPlaylist( songId )
-        _playlists.value = playlistStore.fetchAllPlaylists()
-        _mostPlayedSongsMap.value = playlistStore.fetchMostPlayedSongsMap()
-        _mostPlayedSongsPlaylist.value = playlistStore.fetchMostPlayedSongsPlaylist()
-    }
-
-    override fun savePlaylist( playlist: Playlist ) {
-        playlistStore.savePlaylist( playlist )
+    override suspend fun savePlaylist( playlistInfo: PlaylistInfo ) {
+        playlistStore.savePlaylist( playlistInfo )
         _playlists.value = playlistStore.fetchAllPlaylists()
     }
 
-    override fun deletePlaylist( playlist: Playlist ) {
-        playlistStore.deletePlaylist( playlist )
+    override suspend fun deletePlaylist( playlistInfo: PlaylistInfo ) {
+        playlistStore.deletePlaylist( playlistInfo )
         _playlists.value = playlistStore.fetchAllPlaylists()
     }
 
-    override fun addSongIdToPlaylist( songId: String, playlistId: String ) {
+    override suspend fun addSongIdToPlaylist( songId: String, playlistId: String ) {
         _playlists.value.find { it.id == playlistId }?.let {
             playlistStore.addSongIdToPlaylist( songId, it )
             _playlists.value = playlistStore.fetchAllPlaylists()
@@ -104,28 +94,19 @@ class PlaylistRepositoryImpl( private val playlistStore: PlaylistStore ) : Playl
         }
     }
 
-    override fun renamePlaylist( playlist: Playlist, newTitle: String ) {
-        playlistStore.renamePlaylist( playlist, newTitle )
+    override suspend fun renamePlaylist(playlistInfo: PlaylistInfo, newTitle: String ) {
+        playlistStore.renamePlaylist( playlistInfo, newTitle )
         _playlists.value = playlistStore.fetchAllPlaylists()
     }
 
-    override fun saveCurrentQueue( songIds: List<String> ) {
+    override suspend fun saveCurrentQueue( songIds: List<String> ) {
         songIds.forEach { playlistStore.addSongIdToCurrentPlayingQueue( it ) }
         _currentPlayingQueuePlaylist.value = playlistStore.fetchCurrentPlayingQueue()
     }
 
-    override fun clearCurrentPlayingQueuePlaylist() {
+    override suspend fun clearCurrentPlayingQueuePlaylist() {
         playlistStore.clearCurrentPlayingQueuePlaylist()
         _currentPlayingQueuePlaylist.value = playlistStore.fetchCurrentPlayingQueue()
-    }
-
-    /**
-     * This method will be called when the MusicService is being destroyed. This ensures
-     * playlist data saved in the app's external cache is read only TWICE, once when the
-     * playlist store is created, and once when the MusicService is destroyed.
-     */
-    override fun cachePlaylistData() {
-        playlistStore.cachePlaylistData()
     }
 
     companion object {
@@ -133,13 +114,24 @@ class PlaylistRepositoryImpl( private val playlistStore: PlaylistStore ) : Playl
         @Volatile
         private var INSTANCE: PlaylistRepository? = null
 
-        fun getInstance( playlistStore: PlaylistStore ): PlaylistRepository {
+        fun getInstance(
+            playlistStore: PlaylistStore,
+            coroutineDispatcher: CoroutineDispatcher
+        ): PlaylistRepository {
             return INSTANCE ?: synchronized( this ) {
-                PlaylistRepositoryImpl( playlistStore ).also { INSTANCE = it }
+                PlaylistRepositoryImpl(
+                    playlistStore = playlistStore,
+                    coroutineDispatcher = coroutineDispatcher
+                ).also { INSTANCE = it }
             }
 
         }
     }
 }
 
+private val EMPTY_PLAYLIST = PlaylistInfo(
+    id = "",
+    title = "",
+    songIds = emptyList()
+)
 const val PLAYLIST_REPOSITORY_TAG = "PLAYLIST-REPOSITORY-TAG"

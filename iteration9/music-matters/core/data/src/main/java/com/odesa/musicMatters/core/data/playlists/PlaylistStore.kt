@@ -1,33 +1,28 @@
 package com.odesa.musicMatters.core.data.playlists
 
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 
 interface PlaylistStore {
-    fun fetchAllPlaylists(): List<Playlist>
+    suspend fun fetchAllPlaylists(): List<PlaylistInfo>
+    suspend fun fetchFavoritesPlaylist(): PlaylistInfo
+    suspend fun addSongIdToFavoritesPlaylist(songId: String )
 
-    fun fetchFavoritesPlaylist(): Playlist
-    fun addToFavorites( songId: String )
-    fun removeFromFavorites( songId: String )
+    suspend fun removeSongIdFromFavoritesPlaylist(songId: String )
+    suspend fun fetchRecentlyPlayedSongsPlaylist(): PlaylistInfo
+    suspend fun addSongIdToRecentlyPlayedSongsPlaylist( songId: String )
 
-    fun fetchRecentlyPlayedSongsPlaylist(): Playlist
-    fun addSongIdToRecentlyPlayedSongsPlaylist( songId: String )
-    fun removeFromRecentlyPlayedSongsPlaylist( songId: String )
+    suspend fun fetchMostPlayedSongsPlaylist(): PlaylistInfo
+    suspend fun addSongIdToMostPlayedSongsPlaylist(songId: String )
+    suspend fun fetchEditablePlaylists(): List<PlaylistInfo>
 
-    fun fetchMostPlayedSongsPlaylist(): Playlist
-    fun addToMostPlayedSongsPlaylist( songId: String )
-    fun removeFromMostPlayedSongsPlaylist( songId: String )
+    suspend fun savePlaylist(playlistInfo: PlaylistInfo )
+    suspend fun deletePlaylist(playlistInfo: PlaylistInfo )
+    suspend fun addSongIdToPlaylist(songId: String, playlistInfo: PlaylistInfo )
 
-    fun fetchEditablePlaylists(): List<Playlist>
-    fun savePlaylist( playlist: Playlist )
-    fun deletePlaylist( playlist: Playlist )
+    suspend fun renamePlaylist(playlistInfo: PlaylistInfo, newTitle: String )
+    suspend fun addSongIdToCurrentPlayingQueue( songId: String )
+    suspend fun fetchCurrentPlayingQueue(): PlaylistInfo
 
-    fun addSongIdToPlaylist( songId: String, playlist: Playlist )
-    fun fetchMostPlayedSongsMap(): Map<String, Int>
-    fun renamePlaylist( playlist: Playlist, newTitle: String )
+    suspend fun clearCurrentPlayingQueuePlaylist()
 
-    fun addSongIdToCurrentPlayingQueue( songId: String )
-    fun fetchCurrentPlayingQueue(): Playlist
-    fun clearCurrentPlayingQueuePlaylist()
-
-    fun cachePlaylistData()
 }

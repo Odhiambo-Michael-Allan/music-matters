@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -16,7 +15,7 @@ import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.designsystem.theme.isLight
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.SongList
@@ -58,7 +57,7 @@ fun SongsScreen(
         onCreatePlaylist = { title, songs -> viewModel.createPlaylist( title, songs ) },
         onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
         onNavigateToSearch = onNavigateToSearch,
-        onGetPlaylists = { uiState.playlists }
+        onGetPlaylists = { uiState.playlistInfos }
     )
 }
 
@@ -76,11 +75,11 @@ fun SongsScreenContent(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
-    onGetSongsInPlaylist: (Playlist) -> List<Song>,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onGetSongsInPlaylist: (PlaylistInfo) -> List<Song>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
     onNavigateToSearch: () -> Unit,
 ) {
     val fallbackResourceId =
@@ -107,7 +106,7 @@ fun SongsScreenContent(
                 onSortTypeChange = onSortTypeChange,
                 language = uiState.language,
                 songs = uiState.songs,
-                playlists = onGetPlaylists(),
+                playlistInfos = onGetPlaylists(),
                 onShufflePlay = onShufflePlay,
                 fallbackResourceId = fallbackResourceId,
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,

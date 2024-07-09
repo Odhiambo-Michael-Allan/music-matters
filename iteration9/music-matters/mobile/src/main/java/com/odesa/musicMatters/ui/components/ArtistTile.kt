@@ -14,7 +14,7 @@ import com.odesa.musicMatters.core.datatesting.artists.testArtists
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 
 
@@ -29,9 +29,9 @@ fun ArtistTile(
     onAddToQueue: () -> Unit,
     onViewArtist: () -> Unit,
     onGetSongsByArtist: ( Artist ) -> List<Song>,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onAddSongsByArtistToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onAddSongsByArtistToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
 ) {

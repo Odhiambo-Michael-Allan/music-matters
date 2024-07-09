@@ -17,7 +17,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,12 +31,12 @@ import coil.request.ImageRequest
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
-import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.designsystem.theme.isLight
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.BottomSheetMenuItem
 import com.odesa.musicMatters.ui.components.GenericOptionsBottomSheet
@@ -58,7 +57,7 @@ fun PlaylistScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     PlaylistScreenContent(
-        playlistTitle = uiState.playlist.title.ifEmpty { playlistTitle },
+        playlistTitle = uiState.playlistInfo.title.ifEmpty { playlistTitle },
         uiState = uiState,
         onSortReverseChange = viewModel::setSortSongsInReverse,
         onSortTypeChange = viewModel::setSortSongsBy,
@@ -83,7 +82,7 @@ fun PlaylistScreen(
             viewModel.createPlaylist( title, songs )
         },
         onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
-        onGetPlaylists = { uiState.playlists },
+        onGetPlaylists = { uiState.playlistInfos },
         onGetSongsInPlaylist = viewModel::getSongsInPlaylist,
         onPlaySongsInPlaylistNext = { viewModel.playSongsNext( songs = uiState.songsInPlaylist ) },
         onAddSongsInPlaylistToQueue = { viewModel.addSongsToQueue( songs = uiState.songsInPlaylist ) },
@@ -101,7 +100,7 @@ fun PlaylistScreen(
 fun PlaylistScreenContent(
     playlistTitle: String,
     uiState: PlaylistScreenUiState,
-    playlistIsDeletable: ( Playlist ) -> Boolean,
+    playlistIsDeletable: (PlaylistInfo ) -> Boolean,
     onSortReverseChange: ( Boolean ) -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
     onShufflePlay: () -> Unit,
@@ -112,16 +111,16 @@ fun PlaylistScreenContent(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onNavigateBack: () -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onAddSongsInPlaylistToQueue: () -> Unit,
     onPlaySongsInPlaylistNext: () -> Unit,
-    onRenamePlaylist: ( playlist: Playlist, String ) -> Unit,
-    onDeletePlaylist: (Playlist ) -> Unit,
+    onRenamePlaylist: (playlistInfo: PlaylistInfo, String ) -> Unit,
+    onDeletePlaylist: (PlaylistInfo ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -150,10 +149,10 @@ fun PlaylistScreenContent(
                         ) {
                             PlaylistBottomSheetMenu(
                                 isLoading = uiState.isLoadingSongsInPlaylist,
-                                playlist = uiState.playlist,
+                                playlistInfo = uiState.playlistInfo,
                                 fallbackResourceId = fallbackResourceId,
                                 language = uiState.language,
-                                playlistIsDeletable = playlistIsDeletable( uiState.playlist ),
+                                playlistIsDeletable = playlistIsDeletable( uiState.playlistInfo ),
                                 onGetSongsInPlaylist = onGetSongsInPlaylist,
                                 onShufflePlay = onShufflePlay,
                                 onPlayNext = onPlaySongsInPlaylistNext,
@@ -161,7 +160,7 @@ fun PlaylistScreenContent(
                                 onDismissRequest = { showOptionsMenu = false },
                                 onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                                 onGetPlaylists = onGetPlaylists,
-                                onGetSongs = { onGetSongsInPlaylist( uiState.playlist ) },
+                                onGetSongs = { onGetSongsInPlaylist( uiState.playlistInfo ) },
                                 onAddSongsToPlaylist = onAddSongsToPlaylist,
                                 onCreatePlaylist = onCreatePlaylist,
                                 onRenamePlaylist = onRenamePlaylist,
@@ -186,7 +185,7 @@ fun PlaylistScreenContent(
                 onShufflePlay = onShufflePlay,
                 fallbackResourceId = fallbackResourceId,
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
-                playlists = onGetPlaylists(),
+                playlistInfos = onGetPlaylists(),
                 playSong = playSong,
                 isFavorite = { uiState.favoriteSongIds.contains( it ) },
                 onFavorite = onFavorite,
@@ -207,22 +206,22 @@ fun PlaylistScreenContent(
 @Composable
 fun PlaylistBottomSheetMenu(
     isLoading: Boolean,
-    playlist: Playlist,
+    playlistInfo: PlaylistInfo,
     @DrawableRes fallbackResourceId: Int,
     language: Language,
     playlistIsDeletable: Boolean,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onShufflePlay: () -> Unit,
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onGetPlaylists: () -> List<PlaylistInfo>,
     onCreatePlaylist: (String, List<Song>) -> Unit,
     onGetSongs: () -> List<Song>,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onDismissRequest: () -> Unit,
-    onRenamePlaylist: ( Playlist, String ) -> Unit,
-    onDeletePlaylist: ( Playlist ) -> Unit
+    onRenamePlaylist: (PlaylistInfo, String ) -> Unit,
+    onDeletePlaylist: (PlaylistInfo ) -> Unit
 ) {
 
     var showRenamePlaylistDialog by remember { mutableStateOf( false ) }
@@ -240,12 +239,12 @@ fun PlaylistBottomSheetMenu(
         } else {
             GenericOptionsBottomSheet(
                 headerImage = ImageRequest.Builder( LocalContext.current ).apply {
-                    data( onGetSongsInPlaylist( playlist ).firstOrNull { it.artworkUri != null }?.artworkUri )
+                    data( onGetSongsInPlaylist( playlistInfo ).firstOrNull { it.artworkUri != null }?.artworkUri )
                     placeholder( fallbackResourceId )
                     error( fallbackResourceId )
                     crossfade( true )
                 }.build(),
-                headerTitle = playlist.title,
+                headerTitle = playlistInfo.title,
                 headerDescription = language.playlist,
                 language = language,
                 fallbackResourceId = fallbackResourceId,
@@ -276,7 +275,7 @@ fun PlaylistBottomSheetMenu(
                             label = language.delete,
                             onClick = {
                                 onDismissRequest()
-                                onDeletePlaylist( playlist )
+                                onDeletePlaylist( playlistInfo )
                             }
                         )
                     }
@@ -285,9 +284,9 @@ fun PlaylistBottomSheetMenu(
         }
         if ( showRenamePlaylistDialog ) {
             RenamePlaylistDialog(
-                playlistTitle = playlist.title,
+                playlistTitle = playlistInfo.title,
                 language = language,
-                onRename = { onRenamePlaylist( playlist, it ) }
+                onRename = { onRenamePlaylist( playlistInfo, it ) }
             ) {
                 showRenamePlaylistDialog = false
                 onDismissRequest()
@@ -308,7 +307,7 @@ fun PlaylistBottomSheetMenuPreview() {
     ) {
         PlaylistBottomSheetMenu(
             isLoading = false,
-            playlist = testPlaylists.first(),
+            playlistInfo = testPlaylistInfos.first(),
             fallbackResourceId = R.drawable.placeholder_light,
             language = English,
             playlistIsDeletable = true,

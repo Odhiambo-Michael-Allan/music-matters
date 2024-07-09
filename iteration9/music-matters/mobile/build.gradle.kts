@@ -1,6 +1,7 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    id( "com.android.application" )
+    id( "org.jetbrains.kotlin.android" )
+    alias( libs.plugins.compose.compiler )
 }
 
 android {
@@ -39,9 +40,6 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {
@@ -87,7 +85,7 @@ dependencies {
     implementation( projects.core.designsystem )
     implementation( projects.core.common )
     implementation( projects.core.data )
-    implementation( projects.core.datatesting )
+    implementation( projects.core.testing )
     implementation( projects.core.i8n )
     implementation( projects.core.model )
 

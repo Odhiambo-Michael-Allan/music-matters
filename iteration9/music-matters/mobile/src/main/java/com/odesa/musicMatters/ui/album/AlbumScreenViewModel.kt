@@ -14,7 +14,7 @@ import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,7 +43,7 @@ class AlbumScreenViewModel(
             sortSongsInReverse = settingsRepository.sortSongsInReverse.value,
             currentlyPlayingSongId = musicServiceConnection.nowPlayingMediaItem.value.mediaId,
             favoriteSongIds = emptyList(),
-            playlists = emptyList()
+            playlistInfos = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -56,7 +56,7 @@ class AlbumScreenViewModel(
         viewModelScope.launch { observeFavoriteSongIds() }
         addOnPlaylistsChangeListener {
             _uiState.value = _uiState.value.copy(
-                playlists = it
+                playlistInfos = it
             )
         }
         addOnSortSongsByChangeListener { sortSongsBy, sortSongsInReverse ->
@@ -102,7 +102,7 @@ class AlbumScreenViewModel(
     }
 
     private suspend fun observeFavoriteSongIds() {
-        playlistRepository.favoritesPlaylist.collect {
+        playlistRepository.favoritesPlaylistInfo.collect {
             _uiState.value = _uiState.value.copy(
                 favoriteSongIds = it.songIds
             )
@@ -148,7 +148,7 @@ data class AlbumScreenUiState(
     val sortSongsInReverse: Boolean,
     val currentlyPlayingSongId: String,
     val favoriteSongIds: List<String>,
-    val playlists: List<Playlist>
+    val playlistInfos: List<PlaylistInfo>
 )
 
 internal val testAlbumScreenUiState = AlbumScreenUiState(
@@ -161,5 +161,5 @@ internal val testAlbumScreenUiState = AlbumScreenUiState(
     sortSongsInReverse = false,
     currentlyPlayingSongId = "",
     favoriteSongIds = emptyList(),
-    playlists = emptyList()
+    playlistInfos = emptyList()
 )

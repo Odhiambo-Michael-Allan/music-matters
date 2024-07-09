@@ -36,17 +36,17 @@ import com.odesa.musicMatters.R
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 
 @Composable
 fun AddSongsToPlaylistDialog(
     songs: List<Song>,
-    onGetPlaylists: () -> List<Playlist>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
     language: Language,
     @DrawableRes fallbackResourceId: Int,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onAddDisplayedSongsToPlaylist: (Playlist) -> Unit,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onAddDisplayedSongsToPlaylist: (PlaylistInfo) -> Unit,
     onCreateNewPlaylist: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {

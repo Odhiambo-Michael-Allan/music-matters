@@ -3,7 +3,6 @@ package com.odesa.musicMatters.ui.albums
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -15,7 +14,7 @@ import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.designsystem.theme.isLight
 import com.odesa.musicMatters.core.model.Album
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.AlbumGrid
 import com.odesa.musicMatters.ui.components.LoaderScaffold
@@ -45,7 +44,7 @@ fun AlbumsScreen(
         onSearchSongsMatchingQuery = viewModel::searchSongsMatching,
         onCreatePlaylist = viewModel::createPlaylist,
         onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
-        onGetPlaylists = { uiState.playlists },
+        onGetPlaylists = { uiState.playlistInfos },
         onGetSongsInAlbum = viewModel::getSongsInAlbum,
         onGetSongsInPlaylist = viewModel::getSongsInPlaylist,
         onSortTypeChange = viewModel::setSortAlbumsBy,
@@ -64,11 +63,11 @@ fun AlbumsScreenContent(
     onPlayNext: (Album) -> Unit,
     onShufflePlay: ( Album ) -> Unit,
     onAddToQueue: ( Album ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
     onGetSongsInAlbum: ( Album ) -> List<Song>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onSortTypeChange: ( SortAlbumsBy ) -> Unit,
     onSortReverseChange: ( Boolean ) -> Unit,

@@ -15,7 +15,7 @@ import com.odesa.musicMatters.core.datatesting.tree.testTreeMap
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,9 +47,9 @@ class TreeScreenViewModel(
             currentlyPlayingSongId = musicServiceConnection.nowPlayingMediaItem.value.mediaId,
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
-            favoriteSongIds = playlistRepository.favoritesPlaylist.value.songIds,
+            favoriteSongIds = playlistRepository.favoritesPlaylistInfo.value.songIds,
             disabledTreePaths = emptyList(),
-            playlists = emptyList()
+            playlistInfos = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -65,7 +65,7 @@ class TreeScreenViewModel(
         viewModelScope.launch { observeSortPathsBy() }
         viewModelScope.launch { observeSortPathsInReverse() }
         addOnPlaylistsChangeListener {
-            _uiState.value = _uiState.value.copy( playlists = it )
+            _uiState.value = _uiState.value.copy( playlistInfos = it )
         }
         addOnSortSongsByChangeListener { sortSongsBy, sortSongsInReverse ->
             _uiState.value = _uiState.value.copy(
@@ -157,7 +157,7 @@ class TreeScreenViewModel(
     }
 
     private suspend fun observeFavoriteSongsPlaylist() {
-        playlistRepository.favoritesPlaylist.collect {
+        playlistRepository.favoritesPlaylistInfo.collect {
             _uiState.value = _uiState.value.copy(
                 favoriteSongIds = it.songIds
             )
@@ -240,7 +240,7 @@ data class TreeScreenUiState(
     val themeMode: ThemeMode,
     val favoriteSongIds: List<String>,
     val disabledTreePaths: List<String>,
-    val playlists: List<Playlist>
+    val playlistInfos: List<PlaylistInfo>
 )
 
 val testTreeScreenUiState = TreeScreenUiState(
@@ -256,7 +256,7 @@ val testTreeScreenUiState = TreeScreenUiState(
     favoriteSongIds = emptyList(),
     themeMode = SettingsDefaults.themeMode,
     disabledTreePaths = emptyList(),
-    playlists = emptyList()
+    playlistInfos = emptyList()
 )
 
 fun Path.directoryName(): String {

@@ -17,7 +17,7 @@ import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,10 +44,10 @@ class ArtistScreenViewModel(
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
             currentlyPlayingSongId = musicServiceConnection.nowPlayingMediaItem.value.mediaId,
-            favoriteSongIds = playlistRepository.favoritesPlaylist.value.songIds,
+            favoriteSongIds = playlistRepository.favoritesPlaylistInfo.value.songIds,
             sortSongsByArtistBy = settingsRepository.sortSongsBy.value,
             sortSongsByArtistInReverse = settingsRepository.sortSongsInReverse.value,
-            playlists = emptyList()
+            playlistInfos = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -60,7 +60,7 @@ class ArtistScreenViewModel(
         viewModelScope.launch { observeFavoritesPlaylist() }
         addOnPlaylistsChangeListener {
             _uiState.value = _uiState.value.copy(
-                playlists = it
+                playlistInfos = it
             )
         }
         addOnSortSongsByChangeListener { sortSongsBy, sortSongsInReverse ->
@@ -121,7 +121,7 @@ class ArtistScreenViewModel(
     }
 
     private suspend fun observeFavoritesPlaylist() {
-        playlistRepository.favoritesPlaylist.collect {
+        playlistRepository.favoritesPlaylistInfo.collect {
             _uiState.value = _uiState.value.copy(
                 favoriteSongIds = it.songIds
             )
@@ -157,7 +157,7 @@ data class ArtistScreenUiState(
     val favoriteSongIds: List<String>,
     val sortSongsByArtistBy: SortSongsBy,
     val sortSongsByArtistInReverse: Boolean,
-    val playlists: List<Playlist>
+    val playlistInfos: List<PlaylistInfo>
 )
 
 internal val testArtistScreenUiState = ArtistScreenUiState(
@@ -171,5 +171,5 @@ internal val testArtistScreenUiState = ArtistScreenUiState(
     favoriteSongIds = emptyList(),
     sortSongsByArtistBy = SettingsDefaults.sortSongsBy,
     sortSongsByArtistInReverse = false,
-    playlists = emptyList()
+    playlistInfos = emptyList()
 )

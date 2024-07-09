@@ -12,7 +12,7 @@ import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,7 +36,7 @@ class AlbumsScreenViewModel(
             isLoadingAlbums = true,
             language = settingsRepository.language.value,
             themeMode = settingsRepository.themeMode.value,
-            playlists = emptyList()
+            playlistInfos = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -50,7 +50,7 @@ class AlbumsScreenViewModel(
         viewModelScope.launch { observeSortAlbumsInReverse() }
         addOnPlaylistsChangeListener {
             _uiState.value = _uiState.value.copy(
-                playlists = it
+                playlistInfos = it
             )
         }
     }
@@ -136,7 +136,7 @@ data class AlbumsScreenUiState(
     val isLoadingAlbums: Boolean,
     val language: Language,
     val themeMode: ThemeMode,
-    val playlists: List<Playlist>
+    val playlistInfos: List<PlaylistInfo>
 )
 
 internal val testAlbumsScreenUiState =
@@ -154,7 +154,7 @@ internal val testAlbumsScreenUiState =
         isLoadingAlbums = false,
         language = English,
         themeMode = SettingsDefaults.themeMode,
-        playlists = emptyList()
+        playlistInfos = emptyList()
     )
 
 @Suppress( "UNCHECKED_CAST" )

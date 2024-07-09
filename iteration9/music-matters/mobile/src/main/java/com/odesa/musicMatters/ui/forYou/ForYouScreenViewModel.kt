@@ -18,7 +18,7 @@ import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,7 +49,7 @@ class ForYouScreenViewModel(
             recentlyPlayedSongs = emptyList(),
             language = settingsRepository.language.value,
             themeMode = SettingsDefaults.themeMode,
-            playlists = emptyList()
+            playlistInfos = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -63,7 +63,7 @@ class ForYouScreenViewModel(
         viewModelScope.launch { observeSuggestedArtists() }
         viewModelScope.launch { observeRecentlyPlayedSongsPlaylist() }
         addOnPlaylistsChangeListener {
-            _uiState.value = _uiState.value.copy( playlists = it )
+            _uiState.value = _uiState.value.copy( playlistInfos = it )
         }
     }
 
@@ -77,7 +77,7 @@ class ForYouScreenViewModel(
                 isLoadingRecentlyPlayedSongs = it
             )
             fetchMostPlayedSongsUsing( playlistRepository.mostPlayedSongsMap.value )
-            fetchRecentlyPlayedSongsUsing( playlistRepository.recentlyPlayedSongsPlaylist.value )
+            fetchRecentlyPlayedSongsUsing( playlistRepository.recentlyPlayedSongsPlaylistInfo.value )
         }
     }
 
@@ -131,15 +131,15 @@ class ForYouScreenViewModel(
     }
 
     private suspend fun observeRecentlyPlayedSongsPlaylist() {
-        playlistRepository.recentlyPlayedSongsPlaylist.collect {
+        playlistRepository.recentlyPlayedSongsPlaylistInfo.collect {
             fetchRecentlyPlayedSongsUsing( it )
         }
     }
 
-    private fun fetchRecentlyPlayedSongsUsing( playlist: Playlist) {
+    private fun fetchRecentlyPlayedSongsUsing(playlistInfo: PlaylistInfo) {
         val songs = musicServiceConnection.cachedSongs.value
         val songsInPlaylist = mutableListOf<Song>()
-        playlist.songIds.forEach { songId ->
+        playlistInfo.songIds.forEach { songId ->
             songs.find { it.id == songId }?.let {
                 songsInPlaylist.add( it )
             }
@@ -174,7 +174,7 @@ class ForYouScreenViewModel(
     }
 
     fun playSongInPlayHistory( song: Song ) {
-        val playHistoryPlaylist = playlistRepository.recentlyPlayedSongsPlaylist.value
+        val playHistoryPlaylist = playlistRepository.recentlyPlayedSongsPlaylistInfo.value
         val songs = musicServiceConnection.cachedSongs.value
         val songsInPlaylist = mutableListOf<Song>()
         playHistoryPlaylist.songIds.forEach { songId ->
@@ -208,7 +208,7 @@ data class ForYouScreenUiState(
     val suggestedArtists: List<Artist>,
     val isLoadingRecentlyPlayedSongs: Boolean,
     val recentlyPlayedSongs: List<Song>,
-    val playlists: List<Playlist>,
+    val playlistInfos: List<PlaylistInfo>,
 )
 
 internal val testForYouScreenUiState = ForYouScreenUiState(
@@ -224,7 +224,7 @@ internal val testForYouScreenUiState = ForYouScreenUiState(
     suggestedArtists = testArtists,
     isLoadingRecentlyPlayedSongs = false,
     recentlyPlayedSongs = testSongs,
-    playlists = emptyList()
+    playlistInfos = emptyList()
 )
 
 @Suppress( "UNCHECKED_CAST" )

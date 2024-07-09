@@ -51,7 +51,7 @@ import com.odesa.musicMatters.core.common.media.extensions.formatMilliseconds
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -61,7 +61,7 @@ fun SongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
-    playlists: List<Playlist>,
+    playlistInfos: List<PlaylistInfo>,
     @DrawableRes fallbackResourceId: Int,
     onClick: () -> Unit,
     onFavorite: ( String ) -> Unit,
@@ -70,8 +70,8 @@ fun SongCard(
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
 ) {
@@ -186,7 +186,7 @@ fun SongCard(
             if ( showAddToPlaylistDialog ) {
                 AddSongsToPlaylistDialog(
                     songs = listOf( song ),
-                    onGetPlaylists = { playlists },
+                    onGetPlaylists = { playlistInfos },
                     language = language,
                     fallbackResourceId = fallbackResourceId,
                     onGetSongsInPlaylist = onGetSongsInPlaylist,
@@ -336,7 +336,7 @@ fun QueueSongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
-    playlists: List<Playlist>,
+    playlistInfos: List<PlaylistInfo>,
     @DrawableRes fallbackResourceId: Int,
     onClick: () -> Unit,
     onFavorite: ( String ) -> Unit,
@@ -345,8 +345,8 @@ fun QueueSongCard(
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: (String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDragHandleClick: () -> Unit,
@@ -368,7 +368,7 @@ fun QueueSongCard(
             song = song,
             isCurrentlyPlaying = isCurrentlyPlaying,
             isFavorite = isFavorite,
-            playlists = playlists,
+            playlistInfos = playlistInfos,
             fallbackResourceId = fallbackResourceId,
             onClick = onClick,
             onFavorite = onFavorite,
@@ -393,7 +393,7 @@ fun SongCardPreview() {
         song = testSongs.first(),
         isCurrentlyPlaying = true,
         isFavorite = true,
-        playlists = emptyList(),
+        playlistInfos = emptyList(),
         fallbackResourceId = R.drawable.placeholder_light,
         onClick = {},
         onFavorite = {},
@@ -417,7 +417,7 @@ fun QueueSongCardPreview() {
         song = testSongs.first(),
         isCurrentlyPlaying = true,
         isFavorite = true,
-        playlists = emptyList(),
+        playlistInfos = emptyList(),
         fallbackResourceId = R.drawable.placeholder_light,
         onClick = {},
         onFavorite = {},

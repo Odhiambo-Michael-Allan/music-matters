@@ -17,7 +17,7 @@ import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.BaseViewModel
 import com.odesa.musicMatters.ui.components.PlaybackPosition
@@ -57,7 +57,7 @@ class NowPlayingViewModel(
             themeMode = settingsRepository.themeMode.value,
             textMarquee = settingsRepository.miniPlayerTextMarquee.value,
             showSamplingInfo = settingsRepository.showNowPlayingAudioInformation.value,
-            playlists = emptyList()
+            playlistInfos = emptyList()
         )
     )
 
@@ -88,7 +88,7 @@ class NowPlayingViewModel(
         viewModelScope.launch { observeShowNowPlayingAudioInformation() }
         addOnPlaylistsChangeListener {
             _uiState.value = _uiState.value.copy(
-                playlists = it
+                playlistInfos = it
             )
         }
     }
@@ -266,7 +266,7 @@ class NowPlayingViewModel(
     }
 
     private suspend fun observeFavoriteSongs() {
-        playlistRepository.favoritesPlaylist.collect {
+        playlistRepository.favoritesPlaylistInfo.collect {
             _uiState.value = _uiState.value.copy(
                 currentlyPlayingSongIsFavorite = playlistRepository.isFavorite(
                     getCurrentlyPlayingSong()?.id ?: ""  )
@@ -387,7 +387,7 @@ data class NowPlayingScreenUiState(
     val themeMode: ThemeMode,
     val textMarquee: Boolean,
     val showSamplingInfo: Boolean,
-    val playlists: List<Playlist>,
+    val playlistInfos: List<PlaylistInfo>,
 )
 
 internal val testNowPlayingScreenUiState = NowPlayingScreenUiState(
@@ -409,7 +409,7 @@ internal val testNowPlayingScreenUiState = NowPlayingScreenUiState(
     themeMode = SettingsDefaults.themeMode,
     textMarquee = true,
     showSamplingInfo = true,
-    playlists = emptyList()
+    playlistInfos = emptyList()
 )
 
 

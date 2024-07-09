@@ -18,7 +18,7 @@ import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.queue.QueueScreenUiState
 import com.odesa.musicMatters.ui.queue.testQueueScreenUiState
@@ -29,7 +29,7 @@ fun SongList(
     sortSongsBy: SortSongsBy,
     language: Language,
     songs: List<Song>,
-    playlists: List<Playlist>,
+    playlistInfos: List<PlaylistInfo>,
     @DrawableRes fallbackResourceId: Int,
     onShufflePlay: () -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
@@ -43,8 +43,8 @@ fun SongList(
     onAddToQueue: ( Song ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     leadingContent: ( LazyListScope.() -> Unit )? = null
@@ -92,7 +92,7 @@ fun SongList(
                             song = song,
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = isFavorite( songs[ index ].id ),
-                            playlists = playlists,
+                            playlistInfos = playlistInfos,
                             fallbackResourceId = fallbackResourceId,
                             onClick = { playSong( song ) },
                             onFavorite = { onFavorite( songs[ index ].id ) },
@@ -135,7 +135,7 @@ fun SongListPreview() {
         sortSongsBy = SortSongsBy.TITLE,
         language = English,
         songs = testSongs,
-        playlists = emptyList(),
+        playlistInfos = emptyList(),
         fallbackResourceId = R.drawable.placeholder_light,
         onShufflePlay = {},
         onSortTypeChange = {},
@@ -159,7 +159,7 @@ fun SongListPreview() {
 @Composable
 fun QueueSongList(
     uiState: QueueScreenUiState,
-    playlists: List<Playlist>,
+    playlistInfos: List<PlaylistInfo>,
     @DrawableRes fallbackResourceId: Int,
     isFavorite: ( String ) -> Boolean,
     onFavorite: ( String ) -> Unit,
@@ -169,8 +169,8 @@ fun QueueSongList(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     playSong: ( Song ) -> Unit,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
 ) {
@@ -200,7 +200,7 @@ fun QueueSongList(
                         song = song,
                         isCurrentlyPlaying = uiState.currentlyPlayingSongId == song.id,
                         isFavorite = isFavorite( song.id ),
-                        playlists = playlists,
+                        playlistInfos = playlistInfos,
                         fallbackResourceId = fallbackResourceId,
                         onClick = { playSong( song ) },
                         onFavorite = onFavorite,
@@ -235,7 +235,7 @@ fun QueueSongListPreview() {
         onAddToQueue = {},
         onViewAlbum = {},
         onViewArtist = {},
-        playlists = emptyList(),
+        playlistInfos = emptyList(),
         onGetSongsInPlaylist = { emptyList() },
         onAddSongsToPlaylist = { _, _ -> },
         onSearchSongsMatchingQuery = { emptyList() },

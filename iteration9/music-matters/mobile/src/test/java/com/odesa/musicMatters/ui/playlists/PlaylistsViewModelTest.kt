@@ -6,7 +6,7 @@ import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.connection.FakeMusicServiceConnection
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
-import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistsForSorting
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
@@ -51,17 +51,17 @@ class PlaylistsViewModelTest {
     fun testPlaylistsAreCorrectlyLoaded() {
         musicServiceConnection.setIsInitialized()
         assertEquals( testSongs.size, viewModel.uiState.value.songs.size )
-        assertEquals( 3, viewModel.uiState.value.playlists.size )
+        assertEquals( 3, viewModel.uiState.value.playlistInfos.size )
         assertFalse( viewModel.uiState.value.isLoadingSongs )
     }
 
     @Test
     fun testPlaylistsAreCorrectlyUpdated() = runTest {
         musicServiceConnection.setIsInitialized()
-        playlistRepository.savePlaylist( testPlaylists.first() )
-        assertEquals( 4, viewModel.uiState.value.playlists.size )
-        playlistRepository.deletePlaylist( testPlaylists.first() )
-        assertEquals( 3, viewModel.uiState.value.playlists.size )
+        playlistRepository.savePlaylist( testPlaylistInfos.first() )
+        assertEquals( 4, viewModel.uiState.value.playlistInfos.size )
+        playlistRepository.deletePlaylist( testPlaylistInfos.first() )
+        assertEquals( 3, viewModel.uiState.value.playlistInfos.size )
     }
 
     @Test
@@ -70,7 +70,7 @@ class PlaylistsViewModelTest {
         playlistRepository.playlists.value.forEach {
             playlistRepository.addSongIdToPlaylist( testSongs.first().id, it.id )
         }
-        viewModel.uiState.value.playlists.forEach {
+        viewModel.uiState.value.playlistInfos.forEach {
             assertTrue( it.songIds.contains( testSongs.first().id ) )
         }
     }
@@ -106,21 +106,21 @@ class PlaylistsViewModelTest {
         testPlaylistsForSorting.forEach { playlistRepository.savePlaylist( it ) }
         // --------- Sort by title ------------
         // Ascending
-        assertEquals( "Favorites", viewModel.uiState.value.playlists.first().title )
+        assertEquals( "Favorites", viewModel.uiState.value.playlistInfos.first().title )
         assertEquals( SortPlaylistsBy.TITLE, viewModel.uiState.value.sortPlaylistsBy )
         assertFalse( viewModel.uiState.value.sortPlaylistsInReverse )
         // Descending
         viewModel.setSortPlaylistsInReverse( true )
-        assertEquals( "Recently Played Songs", viewModel.uiState.value.playlists.first().title )
+        assertEquals( "Recently Played Songs", viewModel.uiState.value.playlistInfos.first().title )
         assertTrue( viewModel.uiState.value.sortPlaylistsInReverse )
         // -------- Sort by track count ----------
         // Descending
         viewModel.setSortPlaylistsBy( SortPlaylistsBy.TRACKS_COUNT )
         assertEquals( SortPlaylistsBy.TRACKS_COUNT, viewModel.uiState.value.sortPlaylistsBy )
-        assertEquals( "Playlist-19", viewModel.uiState.value.playlists.first().title )
+        assertEquals( "Playlist-19", viewModel.uiState.value.playlistInfos.first().title )
         // Ascending
         viewModel.setSortPlaylistsInReverse( false )
         assertFalse( viewModel.uiState.value.sortPlaylistsInReverse )
-        assertEquals( "Favorites", viewModel.uiState.value.playlists.first().title )
+        assertEquals( "Favorites", viewModel.uiState.value.playlistInfos.first().title )
     }
 }

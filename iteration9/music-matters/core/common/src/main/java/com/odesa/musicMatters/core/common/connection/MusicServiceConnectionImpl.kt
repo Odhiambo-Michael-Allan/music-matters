@@ -128,7 +128,7 @@ class MusicServiceConnectionImpl(
     }
 
     private fun fetchPreviouslySavedQueue(): List<MediaItem> {
-        val songIdsInPreviouslySavedQueue = playlistRepository.currentPlayingQueuePlaylist.value.songIds
+        val songIdsInPreviouslySavedQueue = playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds
         return _cachedSongs.value
             .filter { songIdsInPreviouslySavedQueue.contains( it.id ) }
             .map { it.mediaItem }

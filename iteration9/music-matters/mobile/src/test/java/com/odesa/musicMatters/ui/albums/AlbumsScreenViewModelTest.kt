@@ -6,7 +6,7 @@ import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.connection.FakeMusicServiceConnection
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
-import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Belarusian
@@ -81,9 +81,9 @@ class AlbumsScreenViewModelTest {
 
     @Test
     fun testPlaylistsAreCorrectlyUpdated() = runTest {
-        assertEquals( 1, viewModel.uiState.value.playlists.size )
-        testPlaylists.forEach { playlistRepository.savePlaylist( it ) }
-        assertEquals( 1 + testPlaylists.size, viewModel.uiState.value.playlists.size )
+        assertEquals( 1, viewModel.uiState.value.playlistInfos.size )
+        testPlaylistInfos.forEach { playlistRepository.savePlaylist( it ) }
+        assertEquals( 1 + testPlaylistInfos.size, viewModel.uiState.value.playlistInfos.size )
     }
 
     @Test

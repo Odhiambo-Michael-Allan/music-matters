@@ -12,7 +12,7 @@ import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
 import com.odesa.musicMatters.core.model.Genre
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.SearchFilter
 import com.odesa.musicMatters.core.model.SearchHistoryItem
 import com.odesa.musicMatters.core.model.Song
@@ -142,7 +142,7 @@ class SearchScreenViewModel (
                 val albums = mutableListOf<Album>()
                 val artists = mutableListOf<Artist>()
                 val genres = mutableListOf<Genre>()
-                val playlists = mutableListOf<Playlist>()
+                val playlistInfos = mutableListOf<PlaylistInfo>()
                 if ( searchQuery.isNotEmpty() ) {
                     searchFilter?.let {
                         when ( it ) {
@@ -176,7 +176,7 @@ class SearchScreenViewModel (
                                 )
                             }
                             SearchFilter.PLAYLIST -> {
-                                playlists.addAll(
+                                playlistInfos.addAll(
                                     playlistFuzzySearcher.search(
                                         terms = searchQuery,
                                         entities = playlistRepository.playlists.value.map { playlist -> playlist.id }
@@ -206,7 +206,7 @@ class SearchScreenViewModel (
                                 entities = musicServiceConnection.cachedGenres.value.map { it.name }
                             ).mapNotNull { getGenreWithName( it.entity ) }
                         )
-                        playlists.addAll(
+                        playlistInfos.addAll(
                             playlistFuzzySearcher.search(
                                 terms = searchQuery,
                                 entities = playlistRepository.playlists.value.map { it.id }
@@ -219,7 +219,7 @@ class SearchScreenViewModel (
                     matchingAlbums = albums,
                     matchingArtists = artists,
                     matchingGenres = genres,
-                    matchingPlaylists = playlists
+                    matchingPlaylistInfos = playlistInfos
                 )
                 _uiState.value = _uiState.value.copy(
                     currentSearchResults = searchResults,
@@ -231,8 +231,8 @@ class SearchScreenViewModel (
 
     fun getSongWithId( id: String ) = musicServiceConnection.cachedSongs.value.find { it.id == id }
 
-    fun getPlaylistArtworkUri( playlist: Playlist ) = musicServiceConnection.cachedSongs.value
-        .filter { playlist.songIds.contains( it.id ) }.firstOrNull { it.artworkUri != null }
+    fun getPlaylistArtworkUri(playlistInfo: PlaylistInfo ) = musicServiceConnection.cachedSongs.value
+        .filter { playlistInfo.songIds.contains( it.id ) }.firstOrNull { it.artworkUri != null }
         ?.artworkUri
 
     fun addSongToSearchHistory( song: Song ) {
@@ -279,11 +279,11 @@ class SearchScreenViewModel (
         }
     }
 
-    fun addPlaylistToSearchHistory( playlist: Playlist ) {
+    fun addPlaylistToSearchHistory(playlistInfo: PlaylistInfo ) {
         viewModelScope.launch {
             searchHistoryRepository.saveSearchHistoryItem(
                 SearchHistoryItem(
-                    id = playlist.id,
+                    id = playlistInfo.id,
                     category = SearchFilter.PLAYLIST
                 )
             )
@@ -331,7 +331,7 @@ data class SearchResults(
     val matchingArtists: List<Artist>,
     val matchingAlbums: List<Album>,
     val matchingGenres: List<Genre>,
-    val matchingPlaylists: List<Playlist>,
+    val matchingPlaylistInfos: List<PlaylistInfo>,
 )
 
 val emptySearchResults = SearchResults(
@@ -339,5 +339,5 @@ val emptySearchResults = SearchResults(
     matchingAlbums = emptyList(),
     matchingArtists = emptyList(),
     matchingGenres = emptyList(),
-    matchingPlaylists = emptyList()
+    matchingPlaylistInfos = emptyList()
 )

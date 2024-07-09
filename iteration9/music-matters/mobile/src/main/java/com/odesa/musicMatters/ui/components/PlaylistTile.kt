@@ -16,16 +16,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
-import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 
 @Composable
 fun PlaylistTile(
     modifier: Modifier,
-    playList: Playlist,
+    playList: PlaylistInfo,
     language: Language,
     @DrawableRes fallbackResourceId: Int,
     playlistIsDeletable: Boolean,
@@ -34,13 +34,13 @@ fun PlaylistTile(
     onShufflePlay: () -> Unit,
     onPlaylistClick: () -> Unit,
     onAddToQueue: () -> Unit,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onGetPlaylists: () -> List<Playlist>,
-    onAddSongsInPlaylistToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onAddSongsInPlaylistToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
-    onDeletePlaylist: ( Playlist ) -> Unit,
-    onRenamePlaylist: ( Playlist, String ) -> Unit,
+    onDeletePlaylist: (PlaylistInfo ) -> Unit,
+    onRenamePlaylist: (PlaylistInfo, String ) -> Unit,
 ) {
 
     var showRenamePlaylistDialog by remember { mutableStateOf( false ) }
@@ -105,7 +105,7 @@ fun PlaylistTile(
 fun PlaylistTilePreview() {
     PlaylistTile(
         modifier = Modifier.fillMaxWidth(),
-        playList = testPlaylists.first(),
+        playList = testPlaylistInfos.first(),
         language = English,
         fallbackResourceId = R.drawable.placeholder_light,
         playlistIsDeletable = true,

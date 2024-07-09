@@ -13,7 +13,7 @@ import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +37,7 @@ class ArtistsScreenViewModel(
             themeMode = settingsRepository.themeMode.value,
             sortArtistsBy = settingsRepository.sortArtistsBy.value,
             sortArtistsInReverse = settingsRepository.sortArtistsInReverse.value,
-            playlists = emptyList()
+            playlistInfos = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -50,7 +50,7 @@ class ArtistsScreenViewModel(
         viewModelScope.launch { observeSortArtistsBy() }
         viewModelScope.launch { observeSortArtistsInReverse() }
         addOnPlaylistsChangeListener {
-            _uiState.value = _uiState.value.copy( playlists = it )
+            _uiState.value = _uiState.value.copy( playlistInfos = it )
         }
     }
 
@@ -145,7 +145,7 @@ data class ArtistsScreenUiState(
     val themeMode: ThemeMode,
     val sortArtistsBy: SortArtistsBy,
     val sortArtistsInReverse: Boolean,
-    val playlists: List<Playlist>
+    val playlistInfos: List<PlaylistInfo>
 )
 
 internal val testArtistsScreenUiState = ArtistsScreenUiState(
@@ -155,7 +155,7 @@ internal val testArtistsScreenUiState = ArtistsScreenUiState(
     themeMode = SettingsDefaults.themeMode,
     sortArtistsBy = SettingsDefaults.sortArtistsBy,
     sortArtistsInReverse = false,
-    playlists = emptyList()
+    playlistInfos = emptyList()
 )
 
 

@@ -1,33 +1,29 @@
 package com.odesa.musicMatters.core.data.playlists
 
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import kotlinx.coroutines.flow.StateFlow
 
 interface PlaylistRepository {
 
-    val favoritesPlaylist: StateFlow<Playlist>
-    val recentlyPlayedSongsPlaylist: StateFlow<Playlist>
-    val mostPlayedSongsPlaylist: StateFlow<Playlist>
-    val playlists: StateFlow<List<Playlist>>
-    val mostPlayedSongsMap: StateFlow<Map<String, Int>>
-    val currentPlayingQueuePlaylist: StateFlow<Playlist>
+    val favoritesPlaylistInfo: StateFlow<PlaylistInfo>
+    val recentlyPlayedSongsPlaylistInfo: StateFlow<PlaylistInfo>
+    val mostPlayedSongsPlaylistInfo: StateFlow<PlaylistInfo>
+
+    val playlists: StateFlow<List<PlaylistInfo>>
+    val currentPlayingQueuePlaylistInfo: StateFlow<PlaylistInfo>
 
     fun isFavorite( songId: String ): Boolean
-    fun addToFavorites( songId: String )
-    fun removeFromFavorites( songId: String )
+    suspend fun addToFavorites( songId: String )
+    suspend fun removeFromFavorites( songId: String )
 
-    fun addToRecentlyPlayedSongsPlaylist( songId: String )
-    fun removeFromRecentlyPlayedSongsPlaylist( songId: String )
-    fun addToMostPlayedPlaylist( songId: String )
+    suspend fun addToRecentlyPlayedSongsPlaylist( songId: String )
+    suspend fun addToMostPlayedPlaylist( songId: String )
+    suspend fun savePlaylist( playlistInfo: PlaylistInfo )
 
-    fun removeFromMostPlayedPlaylist( songId: String )
-    fun savePlaylist( playlist: Playlist )
-    fun deletePlaylist( playlist: Playlist )
+    suspend fun deletePlaylist( playlistInfo: PlaylistInfo )
+    suspend fun addSongIdToPlaylist( songId: String, playlistId: String )
+    suspend fun renamePlaylist( playlistInfo: PlaylistInfo, newTitle: String )
 
-    fun addSongIdToPlaylist( songId: String, playlistId: String )
-    fun renamePlaylist( playlist: Playlist, newTitle: String )
-    fun saveCurrentQueue( songIds: List<String> )
-
-    fun clearCurrentPlayingQueuePlaylist()
-    fun cachePlaylistData()
+    suspend fun saveCurrentQueue( songIds: List<String> )
+    suspend fun clearCurrentPlayingQueuePlaylist()
 }

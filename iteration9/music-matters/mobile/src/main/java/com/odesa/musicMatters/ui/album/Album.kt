@@ -9,7 +9,6 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,7 +23,7 @@ import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.designsystem.theme.isLight
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.Banner
 import com.odesa.musicMatters.ui.components.BottomSheetMenuItem
@@ -68,7 +67,7 @@ fun AlbumScreen(
         onSearchSongsMatchingQuery = viewModel::searchSongsMatching,
         onCreatePlaylist = viewModel::createPlaylist,
         onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
-        onGetPlaylists = { uiState.playlists },
+        onGetPlaylists = { uiState.playlistInfos },
         onPlaySongsInAlbumNext = viewModel::playSongsInAlbumNext,
         onGetSongsInPlaylist = viewModel::getSongsInPlaylist
     )
@@ -89,12 +88,12 @@ fun AlbumScreenContent(
     onAddToQueue: ( Song ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
     onPlaySongsInAlbumNext: ( Album ) -> Unit,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
 ) {
 
     val fallbackResourceId =
@@ -122,7 +121,7 @@ fun AlbumScreenContent(
                 onSortTypeChange = onSortTypeChange,
                 onSortReverseChange = onSortReverseChange,
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
-                playlists = onGetPlaylists(),
+                playlistInfos = onGetPlaylists(),
                 playSong = playSong,
                 isFavorite = { uiState.favoriteSongIds.contains( it ) },
                 onFavorite = onFavorite,
@@ -167,14 +166,14 @@ private fun AlbumArtwork(
     @DrawableRes fallbackResourceId: Int,
     onShufflePlaySongsInAlbum: ( Album ) -> Unit,
     onPlaySongsInAlbumNext: ( Album ) -> Unit,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onAddSongsInAlbumToQueue: ( Album ) -> Unit,
     onViewArtist: ( String ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onGetSongsInAlbum: ( Album ) -> List<Song>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
 ) {
     Banner(
         imageRequest = ImageRequest.Builder( LocalContext.current ).apply {

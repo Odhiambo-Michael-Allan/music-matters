@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.core.designsystem.theme.isLight
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.NewPlaylistDialog
@@ -54,7 +53,7 @@ fun QueueScreen(
         },
         onSearchSongsMatchingQuery = viewModel::searchSongsMatching,
         onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
-        onGetPlaylists = { uiState.playlists }
+        onGetPlaylists = { uiState.playlistInfos }
     )
 }
 
@@ -72,9 +71,9 @@ fun QueueScreenContent(
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
-    onGetPlaylists: () -> List<Playlist>
+    onGetPlaylists: () -> List<PlaylistInfo>
 ) {
 
     val fallbackResourceId =

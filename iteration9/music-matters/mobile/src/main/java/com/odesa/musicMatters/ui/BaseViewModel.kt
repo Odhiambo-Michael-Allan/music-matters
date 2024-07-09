@@ -9,7 +9,7 @@ import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.utils.FuzzySearchOption
 import com.odesa.musicMatters.utils.FuzzySearcher
@@ -31,7 +31,7 @@ open class BaseViewModel(
         )
     )
 
-    private val playlistsChangeListeners: MutableList<( List<Playlist> )->Unit> = mutableListOf()
+    private val playlistsChangeListeners: MutableList<( List<PlaylistInfo> )->Unit> = mutableListOf()
     private val sortSongsByChangeListeners: MutableList<( SortSongsBy, Boolean )->Unit> = mutableListOf()
 
     init {
@@ -64,7 +64,7 @@ open class BaseViewModel(
         }
     }
 
-    fun addOnPlaylistsChangeListener( listener: ( List<Playlist>) -> Unit ) {
+    fun addOnPlaylistsChangeListener( listener: ( List<PlaylistInfo>) -> Unit ) {
         playlistsChangeListeners.add( listener )
         // Supply the newly added listener with the currently editable playlists..
         listener.invoke( getEditablePlaylists() )
@@ -82,21 +82,21 @@ open class BaseViewModel(
         viewModelScope.launch { settingsRepository.setSortSongsInReverse( reverse ) }
     }
 
-    fun isPlaylistDeletable( playlist: Playlist ) = getDeletablePlaylists().contains( playlist )
+    fun isPlaylistDeletable(playlistInfo: PlaylistInfo ) = getDeletablePlaylists().contains( playlistInfo )
 
-    private fun getDeletablePlaylists(): List<Playlist> =
+    private fun getDeletablePlaylists(): List<PlaylistInfo> =
         playlistRepository.playlists.value.filter {
-            it.id != playlistRepository.mostPlayedSongsPlaylist.value.id &&
-                    it.id != playlistRepository.recentlyPlayedSongsPlaylist.value.id &&
-                    it.id != playlistRepository.favoritesPlaylist.value.id
+            it.id != playlistRepository.mostPlayedSongsPlaylistInfo.value.id &&
+                    it.id != playlistRepository.recentlyPlayedSongsPlaylistInfo.value.id &&
+                    it.id != playlistRepository.favoritesPlaylistInfo.value.id
         }
 
-    fun renamePlaylist( playlist: Playlist, newName: String ) {
-        playlistRepository.renamePlaylist( playlist, newName )
+    fun renamePlaylist(playlistInfo: PlaylistInfo, newName: String ) {
+        playlistRepository.renamePlaylist( playlistInfo, newName )
     }
 
-    fun deletePlaylist( playlist: Playlist ) {
-        playlistRepository.deletePlaylist( playlist )
+    fun deletePlaylist(playlistInfo: PlaylistInfo ) {
+        playlistRepository.deletePlaylist( playlistInfo )
     }
 
     fun addToFavorites( songId: String ) {
@@ -104,11 +104,11 @@ open class BaseViewModel(
     }
 
     fun addSongsToPlaylist(
-        playlist: Playlist,
+        playlistInfo: PlaylistInfo,
         songs: List<Song>
     ) {
         songs.forEach {
-            playlistRepository.addSongIdToPlaylist( it.id, playlist.id )
+            playlistRepository.addSongIdToPlaylist( it.id, playlistInfo.id )
         }
     }
 
@@ -177,8 +177,8 @@ open class BaseViewModel(
         ).mapNotNull { getSongWithId( it.entity ) }
 
     private fun getEditablePlaylists() = playlistRepository.playlists.value.filter {
-        it.id != playlistRepository.mostPlayedSongsPlaylist.value.id &&
-                it.id != playlistRepository.recentlyPlayedSongsPlaylist.value.id
+        it.id != playlistRepository.mostPlayedSongsPlaylistInfo.value.id &&
+                it.id != playlistRepository.recentlyPlayedSongsPlaylistInfo.value.id
     }
 
     fun createPlaylist(
@@ -187,7 +187,7 @@ open class BaseViewModel(
     ) {
         viewModelScope.launch {
             playlistRepository.savePlaylist(
-                Playlist(
+                PlaylistInfo(
                     id = UUID.randomUUID().toString(),
                     title = playlistTitle,
                     songIds = songsToAddToPlaylist.map { it.id }
@@ -215,16 +215,16 @@ open class BaseViewModel(
         addMediaItemsToQueue( getSongsInAlbumAsMediaItems( album ) )
     }
 
-    fun playSongsInPlaylist( playlist: Playlist ) {
+    fun playSongsInPlaylist(playlistInfo: PlaylistInfo ) {
         playSongs(
-            songs = getSongsInPlaylist( playlist ).map { it.mediaItem },
+            songs = getSongsInPlaylist( playlistInfo ).map { it.mediaItem },
             shuffle = settingsRepository.shuffle.value
         )
     }
 
-    fun getSongsInPlaylist( playlist: Playlist ) =
+    fun getSongsInPlaylist(playlistInfo: PlaylistInfo ) =
         musicServiceConnection.cachedSongs.value.filter {
-            playlist.songIds.contains( it.id )
+            playlistInfo.songIds.contains( it.id )
         }
 
     fun playSongsByArtist(

@@ -3,7 +3,6 @@ package com.odesa.musicMatters.ui.artists
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -13,7 +12,7 @@ import com.odesa.musicMatters.R
 import com.odesa.musicMatters.core.data.preferences.SortArtistsBy
 import com.odesa.musicMatters.core.designsystem.theme.isLight
 import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.ArtistsGrid
 import com.odesa.musicMatters.ui.components.LoaderScaffold
@@ -40,7 +39,7 @@ fun ArtistsScreen(
         onAddSongsByArtistToQueue = viewModel::addSongsByArtistToQueue,
         onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
         onGetSongsByArtist = viewModel::getSongsByArtist,
-        onGetPlaylists = { uiState.playlists },
+        onGetPlaylists = { uiState.playlistInfos },
         onCreatePlaylist = viewModel::createPlaylist,
         onSortTypeChange = viewModel::setSortArtistsBy,
         onSortReverseChange = viewModel::setSortArtistsInReverse,
@@ -61,12 +60,12 @@ fun ArtistsScreenContent(
     onAddSongsByArtistToQueue: ( Artist ) -> Unit,
     onShufflePlaySongsByArtist: ( Artist ) -> Unit,
     onPlaySongsByArtistNext: ( Artist ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onGetSongsByArtist: ( Artist ) -> List<Song>,
-    onGetPlaylists: () -> List<Playlist>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     ) {
 
     val fallbackResourceId =

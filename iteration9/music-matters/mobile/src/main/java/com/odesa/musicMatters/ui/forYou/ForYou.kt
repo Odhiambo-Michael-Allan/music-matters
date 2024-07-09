@@ -52,7 +52,7 @@ import com.odesa.musicMatters.core.designsystem.theme.isLight
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.AlbumRow
 import com.odesa.musicMatters.ui.components.ArtistsRow
@@ -85,7 +85,7 @@ fun ForYouScreen(
         onAddSongsInAlbumToQueue = viewModel::addSongsInAlbumToQueue,
         onPlaySongsInAlbumNext = viewModel::playSongsInAlbumNext,
         onSearchSongsMatchingQuery = viewModel::searchSongsMatching,
-        onGetPlaylists = { uiState.playlists },
+        onGetPlaylists = { uiState.playlistInfos },
         onGetSongsInAlbum = viewModel::getSongsInAlbum,
         onCreatePlaylist = viewModel::createPlaylist,
         onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
@@ -115,9 +115,9 @@ fun ForYouScreenContent(
     onPlaySongsInAlbumNext: ( Album ) -> Unit,
     onSearchSongsMatchingQuery: (String ) -> List<Song>,
     onCreatePlaylist: (String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onGetSongsInAlbum: ( Album ) -> List<Song>,
     onGetSongsByArtist: (Artist) -> List<Song>,
     onShufflePlaySongsByArtist: ( Artist ) -> Unit,
@@ -529,10 +529,10 @@ private fun SuggestedAlbums(
     onClick: ( String ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onGetPlaylists: () -> List<PlaylistInfo>,
     onGetSongsInAlbum: ( Album ) -> List<Song>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>
 ) {
     SideHeading {
         Text( text = language.suggestedAlbums )
@@ -571,9 +571,9 @@ private fun SuggestedArtists(
     onShufflePlay: ( Artist ) -> Unit,
     onPlayNext: ( Artist ) -> Unit,
     onGetSongsByArtist: ( Artist ) -> List<Song>,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onPlaySongsByArtist: ( Artist ) -> Unit,

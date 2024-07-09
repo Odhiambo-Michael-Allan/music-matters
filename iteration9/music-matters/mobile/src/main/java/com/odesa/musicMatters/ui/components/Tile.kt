@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -61,9 +61,9 @@ fun GenericTile(
     onAddToQueue: () -> Unit,
     onPlayNext: () -> Unit,
     onGetSongs: () -> List<Song>,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     additionalBottomSheetMenuItems: ( @Composable ( () -> Unit ) -> Unit )? = null,
@@ -133,11 +133,11 @@ fun GenericOptionsBottomSheet(
     onShufflePlay: () -> Unit,
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onGetSongs: () -> List<Song>,
     additionalBottomSheetMenuItems: ( @Composable ( () -> Unit ) -> Unit )? = null,
 ) {

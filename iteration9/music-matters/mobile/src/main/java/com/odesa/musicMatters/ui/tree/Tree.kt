@@ -13,7 +13,7 @@ import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.designsystem.theme.isLight
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.TopAppBar
@@ -46,7 +46,7 @@ fun TreeScreen(
         onAddToQueue = viewModel::addSongToQueue,
         onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
         onNavigateToSearch = onNavigateToSearch,
-        onGetPlaylists = { uiState.playlists },
+        onGetPlaylists = { uiState.playlistInfos },
         onGetSongsInPlaylist = viewModel::getSongsInPlaylist,
         onShufflePlay = viewModel::shuffleAndPlay,
         onSortSongsByChange = viewModel::setSortSongsBy,
@@ -61,7 +61,7 @@ fun TreeScreenContent(
     uiState: TreeScreenUiState,
     togglePath: ( String ) -> Unit,
     onPlaySong: (Song) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
@@ -72,8 +72,8 @@ fun TreeScreenContent(
     onShareSong: ( Uri ) -> Unit,
     onNavigateToSearch: () -> Unit,
     onSettingsClicked: () -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onShufflePlay: ( List<Song> ) -> Unit,
     onSortSongsByChange: ( SortSongsBy ) -> Unit,
     onSortSongsInReverseChange: ( Boolean ) -> Unit,

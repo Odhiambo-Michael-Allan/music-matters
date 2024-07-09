@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.utils.ScreenOrientation
 
@@ -48,11 +48,11 @@ fun Banner(
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
     onGetSongs: () -> List<Song>,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     additionalBottomSheetMenuItems: ( @Composable ( () -> Unit ) -> Unit )? = null,
     content: @Composable () -> Unit
 ) {

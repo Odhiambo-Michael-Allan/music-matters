@@ -1,28 +1,41 @@
 package com.odesa.musicMatters.core.data.di
 
 import android.content.Context
+import com.odesa.musicMatters.core.data.database.MusicMattersDatabase
+import com.odesa.musicMatters.core.data.playlists.impl.Clock
+import com.odesa.musicMatters.core.data.playlists.impl.LocalPlaylistStore
 import com.odesa.musicMatters.core.data.playlists.impl.PlaylistRepositoryImpl
-import com.odesa.musicMatters.core.data.playlists.impl.PlaylistStoreImpl
 import com.odesa.musicMatters.core.data.preferences.impl.PreferenceStoreImpl
 import com.odesa.musicMatters.core.data.search.impl.SearchHistoryRepositoryImpl
 import com.odesa.musicMatters.core.data.search.impl.SearchHistoryStoreImpl
 import com.odesa.musicMatters.core.data.settings.impl.SettingsRepositoryImpl
+import kotlinx.coroutines.CoroutineDispatcher
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import java.util.Calendar
 
-class DataDiModule private constructor ( context: Context ) {
+class DataDiModule private constructor ( context: Context, dispatcher: CoroutineDispatcher ) {
 
     private val preferenceStore = PreferenceStoreImpl( context )
-    private val playlistStore = PlaylistStoreImpl.getInstance(
-        playlistsFile = retrievePlaylistFileFromAppExternalCache( context ),
-        mostPlayedSongsFile = retrieveMostPlayedSongsFileFromAppExternalCache( context )
+    private val database = MusicMattersDatabase.getDatabase(
+        context = context,
+        dispatcher = dispatcher
+    )
+    private val playlistStore = LocalPlaylistStore(
+        playlistDao = database.playlistDao(),
+        playlistEntryDao = database.playlistEntryDao(),
+        songPlayCountEntryDao = database.songPlayCountEntryDao(),
+        clock = RealClock
     )
     private val searchHistoryStore = SearchHistoryStoreImpl(
         searchHistoryFile = retrieveFileFromAppExternalCache( SEARCH_HISTORY_FILE_NAME, context )
     )
     val settingsRepository = SettingsRepositoryImpl.getInstance( preferenceStore )
-    val playlistRepository = PlaylistRepositoryImpl.getInstance( playlistStore )
+    val playlistRepository = PlaylistRepositoryImpl.getInstance(
+        playlistStore = playlistStore,
+        coroutineDispatcher = dispatcher
+    )
     val searchHistoryRepository = SearchHistoryRepositoryImpl( searchHistoryStore )
 
 
@@ -31,21 +44,14 @@ class DataDiModule private constructor ( context: Context ) {
         @Volatile
         private var INSTANCE: DataDiModule? = null
 
-        fun getInstance( context: Context ): DataDiModule {
+        fun getInstance( context: Context, dispatcher: CoroutineDispatcher ): DataDiModule {
             return INSTANCE ?: synchronized( this ) {
-                DataDiModule( context ).also { INSTANCE = it }
+                DataDiModule(
+                    context = context,
+                    dispatcher = dispatcher
+                ).also { INSTANCE = it }
             }
         }
-
-        fun retrievePlaylistFileFromAppExternalCache( context: Context ) = retrieveFileFromAppExternalCache(
-            fileName = "playlists.json",
-            context = context
-        )
-
-        fun retrieveMostPlayedSongsFileFromAppExternalCache( context: Context ) = retrieveFileFromAppExternalCache(
-            fileName = "most-played-songs.json",
-            context = context
-        )
 
         private fun retrieveFileFromAppExternalCache( fileName: String, context: Context ): File {
             val file = File( context.dataDir.absolutePath, fileName )
@@ -62,7 +68,12 @@ class DataDiModule private constructor ( context: Context ) {
     }
 }
 
-private const val PLAYLISTS_FILE_NAME = "playlists.json"
-private const val MOST_PLAYED_SONGS_FILE_NAME = "most-played-songs.json"
+private val RealClock = object : Clock {
+    private val calendar = Calendar.getInstance()
+    override val currentTimeInMillis: Long
+        get() = calendar.timeInMillis
+
+}
+
 private const val SEARCH_HISTORY_FILE_NAME = "search-history.json"
 private const val TAG = "DATA-DI-MODULE-TAG"

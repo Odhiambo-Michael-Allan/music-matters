@@ -11,7 +11,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +25,7 @@ import com.odesa.musicMatters.core.designsystem.theme.isLight
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.AlbumRow
 import com.odesa.musicMatters.ui.components.Banner
@@ -78,7 +77,7 @@ fun ArtistScreen(
         onAddSongsByArtistToQueue = viewModel::addSongsByArtistToQueue,
         onPlaySongsByArtistNext = viewModel::playSongsByArtistNext,
         onShuffleAndPlaySongsByArtist = viewModel::shufflePlaySongsByArtist,
-        onGetPlaylists = { uiState.playlists }
+        onGetPlaylists = { uiState.playlistInfos }
     )
 }
 
@@ -99,9 +98,9 @@ fun ArtistScreenContent(
     onAddToQueue: ( Song ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onGetSongsInAlbum: ( Album ) -> List<Song>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onNavigateBack: () -> Unit,
     onShufflePlaySongsInAlbum: ( Album ) -> Unit,
     onPlaySongsInAlbumNext: ( Album ) -> Unit,
@@ -109,7 +108,7 @@ fun ArtistScreenContent(
     onAddSongsByArtistToQueue: ( Artist ) -> Unit,
     onPlaySongsByArtistNext: ( Artist ) -> Unit,
     onShuffleAndPlaySongsByArtist: ( Artist ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
     ) {
 
     val fallbackResourceId =
@@ -137,7 +136,7 @@ fun ArtistScreenContent(
                 onSortTypeChange = onSortTypeChange,
                 onSortReverseChange = onSortReverseChange,
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
-                playlists = onGetPlaylists(),
+                playlistInfos = onGetPlaylists(),
                 playSong = playSong,
                 isFavorite = { uiState.favoriteSongIds.contains(it) },
                 onFavorite = onFavorite,
@@ -212,9 +211,9 @@ private fun ArtistArtwork(
     onPlayNext: ( Artist ) -> Unit,
     onAddToQueue: ( Artist ) -> Unit,
     onGetSongsByArtist: ( Artist ) -> List<Song>,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: (String ) -> List<Song>,
     onCreatePlaylist: (String, List<Song> ) -> Unit,
 ) {

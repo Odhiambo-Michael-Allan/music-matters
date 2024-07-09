@@ -30,7 +30,7 @@ import com.odesa.musicMatters.core.data.utils.subListNonStrict
 import com.odesa.musicMatters.core.datatesting.albums.testAlbums
 import com.odesa.musicMatters.core.datatesting.artists.testArtists
 import com.odesa.musicMatters.core.datatesting.genres.testGenres
-import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.i8n.English
@@ -38,7 +38,7 @@ import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
 import com.odesa.musicMatters.core.model.Genre
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.SearchFilter
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.components.GenericCard
@@ -56,8 +56,8 @@ fun SearchResultsList(
     onArtistClick: (Artist) -> Unit,
     onAlbumClick: (Album) -> Unit,
     onGenreClick: (Genre) -> Unit,
-    onGetPlaylistArtworkUri: (Playlist) -> Uri?,
-    onPlaylistClick: (Playlist) -> Unit,
+    onGetPlaylistArtworkUri: (PlaylistInfo) -> Uri?,
+    onPlaylistClick: (PlaylistInfo) -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -66,7 +66,7 @@ fun SearchResultsList(
         val hasArtists = isFilterSelected( SearchFilter.ARTIST, currentSearchFilter ) && searchResults.matchingArtists.isNotEmpty()
         val hasAlbums = isFilterSelected( SearchFilter.ALBUM, currentSearchFilter ) && searchResults.matchingAlbums.isNotEmpty()
         val hasGenres = isFilterSelected( SearchFilter.GENRE, currentSearchFilter ) && searchResults.matchingGenres.isNotEmpty()
-        val hasPlaylists = isFilterSelected( SearchFilter.PLAYLIST, currentSearchFilter ) && searchResults.matchingPlaylists.isNotEmpty()
+        val hasPlaylists = isFilterSelected( SearchFilter.PLAYLIST, currentSearchFilter ) && searchResults.matchingPlaylistInfos.isNotEmpty()
         val hasNoResults = !hasSongs && !hasArtists && !hasAlbums && !hasPlaylists && !hasGenres
 
         Box( modifier = Modifier.fillMaxSize() ) {
@@ -174,7 +174,7 @@ fun SearchResultsList(
                         }
                         if ( hasPlaylists ) {
                             SideHeading( searchFilter = SearchFilter.PLAYLIST, language = language )
-                            matchingPlaylists.forEach {
+                            matchingPlaylistInfos.forEach {
                                 GenericCard(
                                     imageRequest = createImageRequest(
                                         context = context,
@@ -237,7 +237,7 @@ fun SearchResultsListPreview() {
                 matchingAlbums = testAlbums.subListNonStrict( 2 ),
                 matchingGenres = testGenres.subListNonStrict( 2 ),
                 matchingArtists = testArtists.subListNonStrict( 2 ),
-                matchingPlaylists = testPlaylists.subListNonStrict( 2 )
+                matchingPlaylistInfos = testPlaylistInfos.subListNonStrict( 2 )
             ),
             language = English,
             fallbackResourceId = R.drawable.placeholder_light,

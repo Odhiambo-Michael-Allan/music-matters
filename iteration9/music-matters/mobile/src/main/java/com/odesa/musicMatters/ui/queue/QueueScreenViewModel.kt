@@ -12,7 +12,7 @@ import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +38,7 @@ class QueueScreenViewModel(
             themeMode = settingsRepository.themeMode.value,
             favoriteSongIds = emptyList(),
             isLoading = true,
-            playlists = emptyList()
+            playlistInfos = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -49,7 +49,7 @@ class QueueScreenViewModel(
         viewModelScope.launch { observeCurrentlyPlayingSongIndex() }
         viewModelScope.launch { observeThemeMode() }
         viewModelScope.launch { observeFavoriteSongIds() }
-        addOnPlaylistsChangeListener { _uiState.value = _uiState.value.copy( playlists = it ) }
+        addOnPlaylistsChangeListener { _uiState.value = _uiState.value.copy( playlistInfos = it ) }
     }
 
     private suspend fun observeMediaItemsInQueue() {
@@ -86,7 +86,7 @@ class QueueScreenViewModel(
     }
 
     private suspend fun observeFavoriteSongIds() {
-        playlistRepository.favoritesPlaylist.collect {
+        playlistRepository.favoritesPlaylistInfo.collect {
             _uiState.value = _uiState.value.copy(
                 favoriteSongIds = it.songIds
             )
@@ -111,7 +111,7 @@ data class QueueScreenUiState(
     val themeMode: ThemeMode,
     val favoriteSongIds: List<String>,
     val isLoading: Boolean,
-    val playlists: List<Playlist>
+    val playlistInfos: List<PlaylistInfo>
 )
 
 internal val testQueueScreenUiState = QueueScreenUiState(
@@ -122,7 +122,7 @@ internal val testQueueScreenUiState = QueueScreenUiState(
     themeMode = SettingsDefaults.themeMode,
     favoriteSongIds = emptyList(),
     isLoading = false,
-    playlists = emptyList()
+    playlistInfos = emptyList()
 )
 
 @Suppress( "UNCHECKED_CAST" )

@@ -8,11 +8,11 @@ import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortPlaylistsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
-import com.odesa.musicMatters.core.datatesting.playlists.testPlaylists
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +31,7 @@ class PlaylistsViewModel(
 
     private val _uiState = MutableStateFlow(
         PlaylistsScreenUiState(
-            playlists = playlistRepository.playlists.value,
+            playlistInfos = playlistRepository.playlists.value,
             sortPlaylistsBy = settingsRepository.sortPlaylistsBy.value,
             sortPlaylistsInReverse = settingsRepository.sortPlaylistsInReverse.value,
             songs = emptyList(),
@@ -71,7 +71,7 @@ class PlaylistsViewModel(
     private suspend fun observePlaylists() {
         playlistRepository.playlists.collect {
             _uiState.value = _uiState.value.copy(
-                playlists = it.sortPlaylists(
+                playlistInfos = it.sortPlaylists(
                     sortPlaylistsBy = settingsRepository.sortPlaylistsBy.value,
                     reverse = settingsRepository.sortPlaylistsInReverse.value
                 )
@@ -100,7 +100,7 @@ class PlaylistsViewModel(
             settingsRepository.sortPlaylistsBy.collect {
                 _uiState.value = _uiState.value.copy(
                     sortPlaylistsBy = it,
-                    playlists = playlistRepository.playlists.value.sortPlaylists(
+                    playlistInfos = playlistRepository.playlists.value.sortPlaylists(
                         sortPlaylistsBy = it,
                         reverse = settingsRepository.sortPlaylistsInReverse.value
                     )
@@ -114,7 +114,7 @@ class PlaylistsViewModel(
             settingsRepository.sortPlaylistsInReverse.collect {
                 _uiState.value = _uiState.value.copy(
                     sortPlaylistsInReverse = it,
-                    playlists = playlistRepository.playlists.value.sortPlaylists(
+                    playlistInfos = playlistRepository.playlists.value.sortPlaylists(
                         sortPlaylistsBy = settingsRepository.sortPlaylistsBy.value,
                         reverse = it
                     )
@@ -134,7 +134,7 @@ class PlaylistsViewModel(
 
 data class PlaylistsScreenUiState(
     val songs: List<Song>,
-    val playlists: List<Playlist>,
+    val playlistInfos: List<PlaylistInfo>,
     val sortPlaylistsBy: SortPlaylistsBy,
     val sortPlaylistsInReverse: Boolean,
     val isLoadingSongs: Boolean,
@@ -144,7 +144,7 @@ data class PlaylistsScreenUiState(
 
 internal val testPlaylistsScreenUiState = PlaylistsScreenUiState(
     songs = emptyList(),
-    playlists = testPlaylists,
+    playlistInfos = testPlaylistInfos,
     sortPlaylistsBy = SettingsDefaults.sortPlaylistsBy,
     sortPlaylistsInReverse = SettingsDefaults.SORT_PLAYLISTS_IN_REVERSE,
     isLoadingSongs = false,
@@ -152,7 +152,7 @@ internal val testPlaylistsScreenUiState = PlaylistsScreenUiState(
     themeMode = SettingsDefaults.themeMode
 )
 
-private fun List<Playlist>.sortPlaylists( sortPlaylistsBy: SortPlaylistsBy, reverse: Boolean ) =
+private fun List<PlaylistInfo>.sortPlaylists(sortPlaylistsBy: SortPlaylistsBy, reverse: Boolean ) =
     when ( sortPlaylistsBy ) {
         SortPlaylistsBy.TITLE -> if ( reverse ) sortedByDescending { it.title } else sortedBy { it.title }
         SortPlaylistsBy.TRACKS_COUNT -> if ( reverse ) sortedByDescending { it.songIds.size } else sortedBy { it.songIds.size }

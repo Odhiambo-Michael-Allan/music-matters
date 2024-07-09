@@ -60,7 +60,7 @@ import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Playlist
+import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.tree.TreeScreenUiState
 import com.odesa.musicMatters.ui.tree.sortPathsByLabel
@@ -73,7 +73,7 @@ fun TreeSongList(
     @DrawableRes fallbackResourceId: Int,
     togglePath: ( String ) -> Unit,
     onPlaySong: (Song) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: (String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
@@ -82,8 +82,8 @@ fun TreeSongList(
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onFavorite: ( String ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onShufflePlay: ( List<Song> ) -> Unit,
     onSortSongsByChange: ( SortSongsBy ) -> Unit,
     onSortSongsInReverseChange: ( Boolean ) -> Unit,
@@ -181,11 +181,11 @@ fun TreeSongListContent(
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onShufflePlay: ( List<Song> ) -> Unit,
 ) {
 
@@ -277,7 +277,7 @@ fun TreeSongListContent(
                         song = song,
                         isCurrentlyPlaying = isCurrentlyPlaying,
                         isFavorite = isFavorite,
-                        playlists = onGetPlaylists(),
+                        playlistInfos = onGetPlaylists(),
                         fallbackResourceId = fallbackResourceId,
                         onClick = { onPlaySong(song) },
                         onFavorite = onFavorite,
