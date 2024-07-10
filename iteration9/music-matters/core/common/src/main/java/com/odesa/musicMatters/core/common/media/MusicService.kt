@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.ConditionVariable
 import android.widget.Toast
+import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -29,6 +30,7 @@ import com.odesa.musicMatters.core.common.media.library.BrowseTree
 import com.odesa.musicMatters.core.common.media.library.LocalMusicSource
 import com.odesa.musicMatters.core.common.media.library.MEDIA_SEARCH_SUPPORTED
 import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_BROWSABLE_ROOT
+import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_TRACKS_ROOT
 import com.odesa.musicMatters.core.common.media.library.MusicSource
 import com.odesa.musicMatters.core.data.di.DataDiModule
 import kotlinx.coroutines.CoroutineScope
@@ -107,6 +109,7 @@ class MusicService : MediaLibraryService() {
     }
 
     /** @return the {@link MediaLibrarySessionCallback} to be used to build the media session */
+    @OptIn(UnstableApi::class)
     fun getCallback(): MediaLibrarySession.Callback {
         return MusicServiceCallback()
     }
@@ -209,6 +212,7 @@ class MusicService : MediaLibraryService() {
         conditionVariable.open()
     }
 
+    @UnstableApi
     open inner class MusicServiceCallback : MediaLibrarySession.Callback {
 
         @UnstableApi
@@ -310,6 +314,23 @@ class MusicService : MediaLibraryService() {
         ): ListenableFuture<SessionResult> {
             return Futures.immediateFuture(
                 SessionResult( SessionResult.RESULT_ERROR_NOT_SUPPORTED ) )
+        }
+
+        override fun onPlaybackResumption(
+            mediaSession: MediaSession,
+            controller: MediaSession.ControllerInfo
+        ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+            val currentlyPlayingSongId = dataDiModule.settingsRepository.currentlyPlayingSongId.value
+            val songIdsInCurrentQueue = dataDiModule.playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds
+            val mediaItems = browseTree[ MUSIC_MATTERS_TRACKS_ROOT ]
+                ?.filter { songIdsInCurrentQueue.contains( it.mediaId ) } ?: emptyList()
+            return Futures.immediateFuture(
+                MediaSession.MediaItemsWithStartPosition(
+                    mediaItems,
+                    mediaItems.indexOfFirst { it.mediaId == currentlyPlayingSongId },
+                    0L
+                )
+            )
         }
     }
 
