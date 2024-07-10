@@ -289,7 +289,10 @@ fun TreeSongListContent(
                         onAddSongsToPlaylist = onAddSongsToPlaylist,
                         onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                         onCreatePlaylist = onCreatePlaylist,
-                        onGetSongsInPlaylist = onGetSongsInPlaylist
+                        onGetSongsInPlaylist = onGetSongsInPlaylist,
+                        onGetSongAdditionalMetadata = {
+                            uiState.songsAdditionalMetadataList.find { it.id == song.id }
+                        }
                     )
                 }
             }

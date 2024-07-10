@@ -4,9 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.data.utils.sortSongs
 import com.odesa.musicMatters.core.datatesting.albums.testAlbums
@@ -16,6 +17,7 @@ import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
+import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,11 +27,13 @@ class AlbumScreenViewModel(
     private val albumName: String,
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
-    private val playlistRepository: PlaylistRepository
+    private val playlistRepository: PlaylistRepository,
+    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : BaseViewModel(
     musicServiceConnection = musicServiceConnection,
     settingsRepository = settingsRepository,
-    playlistRepository = playlistRepository
+    playlistRepository = playlistRepository,
+    songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
 ) {
 
     private val _uiState = MutableStateFlow(
@@ -43,7 +47,8 @@ class AlbumScreenViewModel(
             sortSongsInReverse = settingsRepository.sortSongsInReverse.value,
             currentlyPlayingSongId = musicServiceConnection.nowPlayingMediaItem.value.mediaId,
             favoriteSongIds = emptyList(),
-            playlistInfos = emptyList()
+            playlistInfos = emptyList(),
+            songsAdditionalMetadataList = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -65,6 +70,11 @@ class AlbumScreenViewModel(
                 sortSongsInReverse = sortSongsInReverse,
             )
             loadSongsInAlbum( albumName )
+        }
+        addOnSongsMetadataListChangeListener {
+            _uiState.value = _uiState.value.copy(
+                songsAdditionalMetadataList = it
+            )
         }
     }
 
@@ -127,14 +137,16 @@ class AlbumScreenViewModelFactory(
     private val albumName: String,
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
-    private val playlistRepository: PlaylistRepository
+    private val playlistRepository: PlaylistRepository,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create( modelClass: Class<T> ) =
         ( AlbumScreenViewModel(
             albumName = albumName,
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
-            playlistRepository = playlistRepository
+            playlistRepository = playlistRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
         ) as T )
 }
 
@@ -148,7 +160,8 @@ data class AlbumScreenUiState(
     val sortSongsInReverse: Boolean,
     val currentlyPlayingSongId: String,
     val favoriteSongIds: List<String>,
-    val playlistInfos: List<PlaylistInfo>
+    val playlistInfos: List<PlaylistInfo>,
+    val songsAdditionalMetadataList: List<SongAdditionalMetadataInfo>
 )
 
 internal val testAlbumScreenUiState = AlbumScreenUiState(
@@ -161,5 +174,6 @@ internal val testAlbumScreenUiState = AlbumScreenUiState(
     sortSongsInReverse = false,
     currentlyPlayingSongId = "",
     favoriteSongIds = emptyList(),
-    playlistInfos = emptyList()
+    playlistInfos = emptyList(),
+    songsAdditionalMetadataList = emptyList()
 )

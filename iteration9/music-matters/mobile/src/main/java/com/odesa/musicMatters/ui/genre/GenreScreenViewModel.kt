@@ -4,9 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.data.utils.sortSongs
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
@@ -14,6 +15,7 @@ import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
+import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,10 +26,12 @@ class GenreScreenViewModel(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
+    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 ) : BaseViewModel(
     musicServiceConnection = musicServiceConnection,
     settingsRepository = settingsRepository,
-    playlistRepository = playlistRepository
+    playlistRepository = playlistRepository,
+    songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
 ) {
 
     private val _uiState = MutableStateFlow(
@@ -40,7 +44,8 @@ class GenreScreenViewModel(
             currentlyPlayingSongId = musicServiceConnection.nowPlayingMediaItem.value.mediaId,
             favoriteSongIds = emptyList(),
             isLoading = musicServiceConnection.isInitializing.value,
-            playlistInfos = emptyList()
+            playlistInfos = emptyList(),
+            songsAdditionalMetadataList = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -59,6 +64,11 @@ class GenreScreenViewModel(
                 sortSongsBy = sortSongsBy,
                 sortSongsInReverse = sortSongsInReverse,
                 songsInGenre = loadSongsInGenre( genreName )
+            )
+        }
+        addOnSongsMetadataListChangeListener {
+            _uiState.value = _uiState.value.copy(
+                songsAdditionalMetadataList = it
             )
         }
     }
@@ -124,6 +134,7 @@ class GenreScreenViewModelFactory(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T: ViewModel> create( modelClass: Class<T> ) =
         ( GenreScreenViewModel(
@@ -131,6 +142,7 @@ class GenreScreenViewModelFactory(
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
         ) as T )
 }
 
@@ -143,7 +155,8 @@ data class GenreScreenUiState(
     val currentlyPlayingSongId: String,
     val favoriteSongIds: List<String>,
     val isLoading: Boolean,
-    val playlistInfos: List<PlaylistInfo>
+    val playlistInfos: List<PlaylistInfo>,
+    val songsAdditionalMetadataList: List<SongAdditionalMetadataInfo>
 )
 
 internal val testGenreScreenUiState = GenreScreenUiState(
@@ -155,5 +168,6 @@ internal val testGenreScreenUiState = GenreScreenUiState(
     currentlyPlayingSongId = testSongs.first().id,
     favoriteSongIds = emptyList(),
     isLoading = false,
-    playlistInfos = emptyList()
+    playlistInfos = emptyList(),
+    songsAdditionalMetadataList = emptyList()
 )

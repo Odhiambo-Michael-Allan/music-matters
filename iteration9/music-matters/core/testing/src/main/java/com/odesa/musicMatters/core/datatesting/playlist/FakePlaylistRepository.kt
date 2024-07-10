@@ -1,6 +1,6 @@
 package com.odesa.musicMatters.core.datatesting.playlist
 
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

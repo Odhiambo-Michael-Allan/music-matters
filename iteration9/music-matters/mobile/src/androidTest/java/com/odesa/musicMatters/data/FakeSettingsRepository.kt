@@ -1,21 +1,25 @@
 package com.odesa.musicMatters.data
 
-import com.odesa.musicMatters.data.preferences.HomePageBottomBarLabelVisibility
-import com.odesa.musicMatters.data.preferences.NowPlayingLyricsLayout
-import com.odesa.musicMatters.data.preferences.SortArtistsBy
-import com.odesa.musicMatters.data.preferences.SortSongsBy
-import com.odesa.musicMatters.data.preferences.impl.LoopMode
-import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
-import com.odesa.musicMatters.data.settings.SettingsRepository
-import com.odesa.musicMatters.services.i18n.Belarusian
-import com.odesa.musicMatters.services.i18n.Chinese
-import com.odesa.musicMatters.services.i18n.English
-import com.odesa.musicMatters.services.i18n.French
-import com.odesa.musicMatters.services.i18n.German
-import com.odesa.musicMatters.services.i18n.Language
-import com.odesa.musicMatters.services.i18n.Spanish
-import com.odesa.musicMatters.ui.theme.SupportedFonts
-import com.odesa.musicMatters.ui.theme.ThemeMode
+import com.odesa.musicMatters.core.data.preferences.HomePageBottomBarLabelVisibility
+import com.odesa.musicMatters.core.data.preferences.LoopMode
+import com.odesa.musicMatters.core.data.preferences.NowPlayingLyricsLayout
+import com.odesa.musicMatters.core.data.preferences.SortAlbumsBy
+import com.odesa.musicMatters.core.data.preferences.SortArtistsBy
+import com.odesa.musicMatters.core.data.preferences.SortGenresBy
+import com.odesa.musicMatters.core.data.preferences.SortPathsBy
+import com.odesa.musicMatters.core.data.preferences.SortPlaylistsBy
+import com.odesa.musicMatters.core.data.preferences.SortSongsBy
+import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.settings.SettingsRepository
+import com.odesa.musicMatters.core.designsystem.theme.SupportedFonts
+import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
+import com.odesa.musicMatters.core.i8n.Belarusian
+import com.odesa.musicMatters.core.i8n.Chinese
+import com.odesa.musicMatters.core.i8n.English
+import com.odesa.musicMatters.core.i8n.French
+import com.odesa.musicMatters.core.i8n.German
+import com.odesa.musicMatters.core.i8n.Language
+import com.odesa.musicMatters.core.i8n.Spanish
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -100,10 +104,11 @@ class FakeSettingsRepository : SettingsRepository {
         SettingsDefaults.SHOW_NOW_PLAYING_SEEK_CONTROLS
     )
     override val showNowPlayingSeekControls = _showNowPlayingSeekControls.asStateFlow()
-    override val currentPlayingSpeed: StateFlow<Float>
+    override val currentPlaybackSpeed: StateFlow<Float>
         get() = TODO("Not yet implemented")
-    override val currentPlayingPitch: StateFlow<Float>
+    override val currentPlaybackPitch: StateFlow<Float>
         get() = TODO("Not yet implemented")
+
     override val currentLoopMode: StateFlow<LoopMode>
         get() = TODO("Not yet implemented")
     override val shuffle: StateFlow<Boolean>
@@ -119,6 +124,24 @@ class FakeSettingsRepository : SettingsRepository {
     override val sortSongsInReverse = MutableStateFlow( SettingsDefaults.SORT_SONGS_IN_REVERSE )
     override val sortArtistsBy = MutableStateFlow( SettingsDefaults.sortArtistsBy )
     override val sortArtistsInReverse = MutableStateFlow( SettingsDefaults.SORT_ARTISTS_IN_REVERSE )
+    override val sortGenresBy: StateFlow<SortGenresBy>
+        get() = TODO("Not yet implemented")
+    override val sortGenresInReverse: StateFlow<Boolean>
+        get() = TODO("Not yet implemented")
+    override val sortPlaylistsBy: StateFlow<SortPlaylistsBy>
+        get() = TODO("Not yet implemented")
+    override val sortPlaylistsInReverse: StateFlow<Boolean>
+        get() = TODO("Not yet implemented")
+    override val sortAlbumsBy: StateFlow<SortAlbumsBy>
+        get() = TODO("Not yet implemented")
+    override val sortAlbumsInReverse: StateFlow<Boolean>
+        get() = TODO("Not yet implemented")
+    override val sortPathsBy: StateFlow<SortPathsBy>
+        get() = TODO("Not yet implemented")
+    override val sortPathsInReverse: StateFlow<Boolean>
+        get() = TODO("Not yet implemented")
+    override val currentlyPlayingSongId: StateFlow<String>
+        get() = TODO("Not yet implemented")
 
 
     override suspend fun setLanguage( localeCode: String ) {
@@ -271,6 +294,42 @@ class FakeSettingsRepository : SettingsRepository {
     }
 
     override suspend fun setSortArtistsInReverseTo(sortArtistsInReverse: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setSortGenresBy(sortGenresBy: SortGenresBy) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setSortGenresInReverse(sortGenresInReverse: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setSortPlaylistsBy(sortPlaylistsBy: SortPlaylistsBy) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setSortPlaylistsInReverse(sortPlaylistsInReverse: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setSortAlbumsBy(sortAlbumsBy: SortAlbumsBy) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setSortAlbumsInReverse(sortAlbumsInReverse: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setSortPathsBy(sortPathsBy: SortPathsBy) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setSortPathsInReverse(reverse: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun saveCurrentlyPlayingSongId(songId: String) {
         TODO("Not yet implemented")
     }
 }

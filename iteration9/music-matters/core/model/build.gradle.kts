@@ -5,10 +5,10 @@ plugins {
 
 android {
     namespace = "com.odesa.musicMatters.core.model"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 26
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -34,14 +34,16 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation( libs.androidx.core.ktx )
+    implementation( libs.androidx.appcompat )
+    implementation( libs.material )
 
     // Androidx Media3 Dependencies
     implementation( libs.androidx.media3.common )
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation( projects.core.i8n )
+
+    testImplementation( libs.junit )
+    androidTestImplementation( libs.androidx.junit )
+    androidTestImplementation( libs.androidx.espresso.core )
 }

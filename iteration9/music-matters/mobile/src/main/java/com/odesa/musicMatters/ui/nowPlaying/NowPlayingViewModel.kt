@@ -9,16 +9,18 @@ import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
 import com.odesa.musicMatters.core.common.connection.NOTHING_PLAYING
 import com.odesa.musicMatters.core.common.media.extensions.artistTagSeparators
 import com.odesa.musicMatters.core.common.media.extensions.toSong
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.LoopMode
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.data.preferences.toRepeatMode
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
+import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 import com.odesa.musicMatters.ui.BaseViewModel
 import com.odesa.musicMatters.ui.components.PlaybackPosition
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,11 +31,13 @@ import timber.log.Timber
 class NowPlayingViewModel(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
-    private val playlistRepository: PlaylistRepository
+    private val playlistRepository: PlaylistRepository,
+    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : BaseViewModel(
     settingsRepository = settingsRepository,
     playlistRepository = playlistRepository,
-    musicServiceConnection = musicServiceConnection
+    musicServiceConnection = musicServiceConnection,
+    songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
 ) {
 
     private val handler = Handler( Looper.getMainLooper() )
@@ -57,7 +61,8 @@ class NowPlayingViewModel(
             themeMode = settingsRepository.themeMode.value,
             textMarquee = settingsRepository.miniPlayerTextMarquee.value,
             showSamplingInfo = settingsRepository.showNowPlayingAudioInformation.value,
-            playlistInfos = emptyList()
+            playlistInfos = emptyList(),
+            songsAdditionalMetadataList = emptyList(),
         )
     )
 
@@ -89,6 +94,11 @@ class NowPlayingViewModel(
         addOnPlaylistsChangeListener {
             _uiState.value = _uiState.value.copy(
                 playlistInfos = it
+            )
+        }
+        addOnSongsMetadataListChangeListener {
+            _uiState.value = _uiState.value.copy(
+                songsAdditionalMetadataList = it
             )
         }
     }
@@ -356,14 +366,16 @@ class NowPlayingViewModelFactory(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress( "unchecked_cast" )
     override fun <T : ViewModel> create( modelClass: Class<T> ): T {
         return NowPlayingViewModel(
-            musicServiceConnection,
-            settingsRepository,
-            playlistRepository
+            musicServiceConnection = musicServiceConnection,
+            settingsRepository = settingsRepository,
+            playlistRepository = playlistRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
         ) as T
     }
 }
@@ -388,6 +400,7 @@ data class NowPlayingScreenUiState(
     val textMarquee: Boolean,
     val showSamplingInfo: Boolean,
     val playlistInfos: List<PlaylistInfo>,
+    val songsAdditionalMetadataList: List<SongAdditionalMetadataInfo>
 )
 
 internal val testNowPlayingScreenUiState = NowPlayingScreenUiState(
@@ -409,7 +422,8 @@ internal val testNowPlayingScreenUiState = NowPlayingScreenUiState(
     themeMode = SettingsDefaults.themeMode,
     textMarquee = true,
     showSamplingInfo = true,
-    playlistInfos = emptyList()
+    playlistInfos = emptyList(),
+    songsAdditionalMetadataList = emptyList(),
 )
 
 

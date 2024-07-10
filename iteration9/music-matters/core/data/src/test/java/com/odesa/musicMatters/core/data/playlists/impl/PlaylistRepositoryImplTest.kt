@@ -1,13 +1,15 @@
 package com.odesa.musicMatters.core.data.playlists.impl
 
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
 import com.odesa.musicMatters.core.data.playlists.PlaylistStore
+import com.odesa.musicMatters.core.data.repository.PlaylistRepositoryImpl
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistStore
 import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -26,27 +28,27 @@ class PlaylistRepositoryImplTest {
     fun setup() {
         playlistStore = FakePlaylistStore()
         playlistRepository = PlaylistRepositoryImpl(
-            playlistStore,
-            coroutineDispatcher = UnconfinedTestDispatcher()
+            playlistStore = playlistStore,
+            coroutineScope = TestCoroutineScope()
         )
     }
 
     @Test
-    fun testPlaylistRepositoryInitiallyHasThreePlaylists_favoritesRecentsAndMostPlayedPlaylist() = runTest {
-        TestCase.assertEquals(3, playlistRepository.playlists.value.size)
+    fun testPlaylistRepositoryInitiallyHasThreePlaylists_favoritesRecentAndMostPlayedPlaylist() = runTest {
+        assertEquals( 3, playlistRepository.playlists.value.size )
     }
 
     @Test
     fun whenNoFavoritesPlaylistHasPreviouslyBeenSaved_emptyPlaylistIsReturned() {
         val favoritesPlaylist = playlistRepository.favoritesPlaylistInfo.value
-        TestCase.assertEquals(0, favoritesPlaylist.songIds.size)
+        assertEquals( 0, favoritesPlaylist.songIds.size )
     }
 
     @Test
     fun testSongIdsAreCorrectlyAddedToFavoritesPlaylist() = runTest {
         for ( i in 0 until 100 )
             playlistRepository.addToFavorites( UUID.randomUUID().toString() )
-        TestCase.assertEquals(100, playlistRepository.favoritesPlaylistInfo.value.songIds.size)
+        assertEquals( 100, playlistRepository.favoritesPlaylistInfo.value.songIds.size )
     }
 
     @Test
@@ -58,9 +60,9 @@ class PlaylistRepositoryImplTest {
             playlistRepository.addToFavorites( it )
         }
         playlistRepository.removeFromFavorites( songIdsToBeAdded.first() )
-        TestCase.assertEquals(99, playlistRepository.favoritesPlaylistInfo.value.songIds.size)
+        assertEquals(99, playlistRepository.favoritesPlaylistInfo.value.songIds.size)
         playlistRepository.removeFromFavorites( songIdsToBeAdded.last() )
-        TestCase.assertEquals(98, playlistRepository.favoritesPlaylistInfo.value.songIds.size)
+        assertEquals(98, playlistRepository.favoritesPlaylistInfo.value.songIds.size)
     }
 
     @Test
@@ -78,16 +80,16 @@ class PlaylistRepositoryImplTest {
         songIdsToBeAdded.forEach {
             playlistRepository.addToRecentlyPlayedSongsPlaylist( it )
         }
-        TestCase.assertEquals(
+        assertEquals(
             songIdsToBeAdded.size,
             playlistRepository.recentlyPlayedSongsPlaylistInfo.value.songIds.size
         )
         playlistRepository.addToRecentlyPlayedSongsPlaylist( songIdsToBeAdded.last() )
-        TestCase.assertEquals(
+        assertEquals(
             songIdsToBeAdded.size,
             playlistRepository.recentlyPlayedSongsPlaylistInfo.value.songIds.size
         )
-        TestCase.assertEquals(
+        assertEquals(
             songIdsToBeAdded.last(),
             playlistRepository.recentlyPlayedSongsPlaylistInfo.value.songIds.first()
         )
@@ -98,7 +100,7 @@ class PlaylistRepositoryImplTest {
         songIdsToBeAdded.forEach {
             playlistRepository.addToMostPlayedPlaylist( it )
         }
-        TestCase.assertEquals(
+        assertEquals(
             songIdsToBeAdded.size,
             playlistRepository.mostPlayedSongsPlaylistInfo.value.songIds.size
         )
@@ -109,7 +111,7 @@ class PlaylistRepositoryImplTest {
         testPlaylistInfos.forEach {
             playlistRepository.savePlaylist( it )
         }
-        TestCase.assertEquals(testPlaylistInfos.size + 3, playlistRepository.playlists.value.size)
+        assertEquals(testPlaylistInfos.size + 3, playlistRepository.playlists.value.size)
     }
 
     @Test
@@ -119,7 +121,7 @@ class PlaylistRepositoryImplTest {
         }
         playlistRepository.deletePlaylist( testPlaylistInfos.first() )
         playlistRepository.deletePlaylist( testPlaylistInfos.last() )
-        TestCase.assertEquals(
+        assertEquals(
             (testPlaylistInfos.size - 2) + 3,
             playlistRepository.playlists.value.size
         )
@@ -130,12 +132,12 @@ class PlaylistRepositoryImplTest {
         testSongs.forEach {
             playlistRepository.addToFavorites( it.id )
         }
-        TestCase.assertEquals(
+        assertEquals(
             testSongs.size,
             playlistRepository.favoritesPlaylistInfo.value.songIds.size
         )
         playlistRepository.addToFavorites( testSongs.first().id )
-        TestCase.assertEquals(
+        assertEquals(
             testSongs.size - 1,
             playlistRepository.favoritesPlaylistInfo.value.songIds.size
         )
@@ -156,11 +158,11 @@ class PlaylistRepositoryImplTest {
     fun testSongsIdsAreCorrectlyAddedToCurrentPlayingQueuePlaylist() = runTest {
         TestCase.assertTrue(playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.isEmpty())
         playlistRepository.saveCurrentQueue( songIdsToBeAdded )
-        TestCase.assertEquals(
+        assertEquals(
             songIdsToBeAdded.size,
             playlistStore.fetchCurrentPlayingQueue().songIds.size
         )
-        TestCase.assertEquals(
+        assertEquals(
             songIdsToBeAdded.size,
             playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )

@@ -70,7 +70,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.core.common.media.extensions.formatMilliseconds
-import com.odesa.musicMatters.core.common.media.extensions.toSamplingInfoString
 import com.odesa.musicMatters.core.data.preferences.LoopMode
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
@@ -80,6 +79,7 @@ import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
+import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 import com.odesa.musicMatters.ui.components.BottomSheetMenuItem
 import com.odesa.musicMatters.ui.components.GenericOptionsBottomSheet
 import com.odesa.musicMatters.ui.components.PlaybackPosition
@@ -216,7 +216,10 @@ fun NowPlayingBottomSheetContent(
         onGetPlaylists = { uiState.playlistInfos },
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
-        onHideNowPlayingBottomSheet = onHideBottomSheet
+        onHideNowPlayingBottomSheet = onHideBottomSheet,
+        onGetSongAdditionalMetadata = {
+            uiState.songsAdditionalMetadataList.find { it.id == uiState.currentlyPlayingSong.id }
+        }
     )
 }
 
@@ -268,6 +271,7 @@ fun NowPlayingScreenContent(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onHideNowPlayingBottomSheet: () -> Unit,
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?
 ) {
 
     var showOptionsMenu by remember { mutableStateOf( false ) }
@@ -321,15 +325,15 @@ fun NowPlayingScreenContent(
                         }
                     }
                     if ( showSamplingInfo ) {
-                        target.toSamplingInfoString( language )?.let {
-                            val localContentColor = LocalContentColor.current
-                            Text(
-                                text = it,
-                                style = MaterialTheme.typography.labelSmall
-                                    .copy( color = localContentColor.copy( alpha = 0.7f ) ),
-                                modifier = Modifier.padding( top = 4.dp )
-                            )
-                        }
+//                        target.toSamplingInfoString( language )?.let {
+//                            val localContentColor = LocalContentColor.current
+//                            Text(
+//                                text = it,
+//                                style = MaterialTheme.typography.labelSmall
+//                                    .copy( color = localContentColor.copy( alpha = 0.7f ) ),
+//                                modifier = Modifier.padding( top = 4.dp )
+//                            )
+//                        }
                     }
                 }
             }
@@ -478,7 +482,9 @@ fun NowPlayingScreenContent(
             SongDetailsDialog(
                 song = currentlyPlayingSong,
                 language = language,
-                durationFormatter = { it.formatMilliseconds() }
+                durationFormatter = { it.formatMilliseconds() },
+                isLoadingSongAdditionalMetadata = false,
+                onGetSongAdditionalMetadata = onGetSongAdditionalMetadata
             ) {
                 showSongDetailsDialog = false
             }
@@ -546,7 +552,8 @@ fun NowPlayingScreenContentPreview() {
             onGetPlaylists = { emptyList() },
             onViewAlbum = {},
             onViewArtist = {},
-            onHideNowPlayingBottomSheet = {}
+            onHideNowPlayingBottomSheet = {},
+            onGetSongAdditionalMetadata = { null }
         )
     }
 }

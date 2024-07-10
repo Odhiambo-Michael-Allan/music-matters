@@ -4,9 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.data.utils.sortSongs
 import com.odesa.musicMatters.core.data.utils.subListNonStrict
@@ -29,10 +30,12 @@ class ForYouScreenViewModel(
     private val musicServiceConnection: MusicServiceConnection,
     private val playlistRepository: PlaylistRepository,
     private val settingsRepository: SettingsRepository,
+    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : BaseViewModel(
     musicServiceConnection = musicServiceConnection,
     playlistRepository = playlistRepository,
-    settingsRepository = settingsRepository
+    settingsRepository = settingsRepository,
+    songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
 ) {
 
     private val _uiState = MutableStateFlow(
@@ -135,7 +138,7 @@ class ForYouScreenViewModel(
         }
     }
 
-    private fun fetchRecentlyPlayedSongsUsing(playlistInfo: PlaylistInfo) {
+    private fun fetchRecentlyPlayedSongsUsing( playlistInfo: PlaylistInfo ) {
         val songs = musicServiceConnection.cachedSongs.value
         val songsInPlaylist = mutableListOf<Song>()
         playlistInfo.songIds.forEach { songId ->
@@ -228,12 +231,14 @@ internal val testForYouScreenUiState = ForYouScreenUiState(
 class ForYouViewModelFactory(
     private val musicServiceConnection: MusicServiceConnection,
     private val playlistRepository: PlaylistRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : ViewModelProvider.NewInstanceFactory() {
      override fun <T : ViewModel> create(modelClass: Class<T> ) =
         ( ForYouScreenViewModel(
             musicServiceConnection = musicServiceConnection,
             playlistRepository = playlistRepository,
             settingsRepository = settingsRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
         ) as T )
 }

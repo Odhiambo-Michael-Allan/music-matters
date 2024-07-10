@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.search.SearchHistoryRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
@@ -29,11 +30,13 @@ class SearchScreenViewModel (
     val musicServiceConnection: MusicServiceConnection,
     val playlistRepository: PlaylistRepository,
     val settingsRepository: SettingsRepository,
-    val searchHistoryRepository: SearchHistoryRepository
+    val searchHistoryRepository: SearchHistoryRepository,
+    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : BaseViewModel(
     musicServiceConnection = musicServiceConnection,
     playlistRepository = playlistRepository,
-    settingsRepository = settingsRepository
+    settingsRepository = settingsRepository,
+    songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
 ) {
 
     private val albumsFuzzySearcher = FuzzySearcher<String>(
@@ -305,14 +308,16 @@ class SearchScreenViewModelFactory(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
-    private val searchHistoryRepository: SearchHistoryRepository
+    private val searchHistoryRepository: SearchHistoryRepository,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create( modelClass: Class<T> ) =
         ( SearchScreenViewModel(
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository,
-            searchHistoryRepository = searchHistoryRepository
+            searchHistoryRepository = searchHistoryRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
         ) as T )
 }
 

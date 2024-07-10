@@ -93,7 +93,7 @@ fun AlbumScreenContent(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onGetPlaylists: () -> List<PlaylistInfo>,
     onPlaySongsInAlbumNext: ( Album ) -> Unit,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onGetSongsInPlaylist: ( PlaylistInfo ) -> List<Song>,
 ) {
 
     val fallbackResourceId =
@@ -134,6 +134,9 @@ fun AlbumScreenContent(
                 onAddSongsToPlaylist = onAddSongsToPlaylist,
                 onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                 onCreatePlaylist = onCreatePlaylist,
+                onGetAdditionalMetadataForSongWithId = { songId ->
+                    uiState.songsAdditionalMetadataList.find { it.id == songId }
+                },
                 leadingContent = {
                     item {
                         AlbumArtwork(

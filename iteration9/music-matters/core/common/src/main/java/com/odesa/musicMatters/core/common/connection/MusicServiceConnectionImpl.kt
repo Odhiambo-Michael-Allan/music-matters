@@ -18,7 +18,7 @@ import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_RECENT_SON
 import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT
 import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT
 import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_TRACKS_ROOT
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist

@@ -4,13 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
+import com.odesa.musicMatters.core.data.repository.asDomain
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
+import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 import com.odesa.musicMatters.utils.FuzzySearchOption
 import com.odesa.musicMatters.utils.FuzzySearcher
 import kotlinx.coroutines.launch
@@ -20,6 +23,7 @@ open class BaseViewModel(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 ) : ViewModel() {
 
     private val songsFuzzySearcher: FuzzySearcher<String> = FuzzySearcher(
@@ -33,11 +37,14 @@ open class BaseViewModel(
 
     private val playlistsChangeListeners: MutableList<( List<PlaylistInfo> )->Unit> = mutableListOf()
     private val sortSongsByChangeListeners: MutableList<( SortSongsBy, Boolean )->Unit> = mutableListOf()
+    private val additionalMetadataListeners: MutableList<( List<SongAdditionalMetadataInfo> ) -> Unit> = mutableListOf()
+    private var songsAdditionalMetadataList = listOf<SongAdditionalMetadataInfo>()
 
     init {
         viewModelScope.launch { observePlaylists() }
         viewModelScope.launch { observeSortSongsBy() }
         viewModelScope.launch { observeSortSongsInReverse() }
+        viewModelScope.launch { observeSongsAdditionalMetadata() }
     }
 
     private suspend fun observePlaylists() {
@@ -64,10 +71,24 @@ open class BaseViewModel(
         }
     }
 
+    private suspend fun observeSongsAdditionalMetadata() {
+        songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().collect { additionalMetadata ->
+            songsAdditionalMetadataList = additionalMetadata.mapNotNull { it.asDomain() }
+            additionalMetadataListeners.forEach {
+                it.invoke( songsAdditionalMetadataList )
+            }
+        }
+    }
+
     fun addOnPlaylistsChangeListener( listener: ( List<PlaylistInfo>) -> Unit ) {
         playlistsChangeListeners.add( listener )
         // Supply the newly added listener with the currently editable playlists..
         listener.invoke( getEditablePlaylists() )
+    }
+
+    fun addOnSongsMetadataListChangeListener( listener: ( List<SongAdditionalMetadataInfo>) -> Unit ) {
+        additionalMetadataListeners.add( listener )
+        listener.invoke( songsAdditionalMetadataList )
     }
 
     fun addOnSortSongsByChangeListener( listener: ( SortSongsBy, Boolean ) -> Unit ) {

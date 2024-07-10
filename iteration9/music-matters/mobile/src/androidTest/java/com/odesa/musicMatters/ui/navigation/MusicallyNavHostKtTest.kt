@@ -14,16 +14,16 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import com.odesa.musicMatters.data.FakeMusicServiceConnection
-import com.odesa.musicMatters.data.FakePlaylistRepository
+import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.search.SearchHistoryRepository
+import com.odesa.musicMatters.core.data.settings.SettingsRepository
+import com.odesa.musicMatters.core.datatesting.connection.FakeMusicServiceConnection
+import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
+import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.data.FakeSearchHistoryRepository
 import com.odesa.musicMatters.data.FakeSettingsRepository
-import com.odesa.musicMatters.data.playlists.PlaylistRepository
-import com.odesa.musicMatters.data.preferences.impl.SettingsDefaults
-import com.odesa.musicMatters.data.search.SearchHistoryRepository
-import com.odesa.musicMatters.data.settings.SettingsRepository
-import com.odesa.musicMatters.services.i18n.English
-import com.odesa.musicMatters.services.media.connection.MusicServiceConnection
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -56,7 +56,7 @@ class MusicallyNavHostKtTest {
                 language = SettingsDefaults.language,
                 playlistRepository = playlistRepository,
                 searchHistoryRepository = searchHistoryRepository,
-            ) {}
+            )
         }
     }
 

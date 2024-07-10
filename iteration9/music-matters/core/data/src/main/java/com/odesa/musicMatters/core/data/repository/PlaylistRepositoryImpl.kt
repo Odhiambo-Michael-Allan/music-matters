@@ -1,9 +1,7 @@
-package com.odesa.musicMatters.core.data.playlists.impl
+package com.odesa.musicMatters.core.data.repository
 
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.playlists.PlaylistStore
 import com.odesa.musicMatters.core.model.PlaylistInfo
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +11,7 @@ import timber.log.Timber
 
 class PlaylistRepositoryImpl(
     private val playlistStore: PlaylistStore,
-    private val coroutineDispatcher: CoroutineDispatcher,
+    coroutineScope: CoroutineScope,
 ) : PlaylistRepository {
 
     private val _favoritesPlaylist = MutableStateFlow( EMPTY_PLAYLIST )
@@ -31,14 +29,12 @@ class PlaylistRepositoryImpl(
     private val _currentPlayingQueuePlaylist = MutableStateFlow( EMPTY_PLAYLIST )
     override val currentPlayingQueuePlaylistInfo = _currentPlayingQueuePlaylist.asStateFlow()
 
-    private val coroutineScope = CoroutineScope( coroutineDispatcher )
-
     init {
         coroutineScope.launch {
+            _playlists.value = playlistStore.fetchAllPlaylists()
             _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
             _recentlyPlayedSongsPlaylist.value = playlistStore.fetchRecentlyPlayedSongsPlaylist()
             _mostPlayedSongsPlaylist.value = playlistStore.fetchMostPlayedSongsPlaylist()
-            _playlists.value = playlistStore.fetchAllPlaylists()
             _currentPlayingQueuePlaylist.value = playlistStore.fetchCurrentPlayingQueue()
         }
     }
@@ -116,12 +112,12 @@ class PlaylistRepositoryImpl(
 
         fun getInstance(
             playlistStore: PlaylistStore,
-            coroutineDispatcher: CoroutineDispatcher
+            coroutineScope: CoroutineScope
         ): PlaylistRepository {
             return INSTANCE ?: synchronized( this ) {
                 PlaylistRepositoryImpl(
                     playlistStore = playlistStore,
-                    coroutineDispatcher = coroutineDispatcher
+                    coroutineScope = coroutineScope
                 ).also { INSTANCE = it }
             }
 

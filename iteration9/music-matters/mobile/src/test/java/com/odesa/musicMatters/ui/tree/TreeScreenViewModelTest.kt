@@ -1,14 +1,16 @@
 package com.odesa.musicMatters.ui.tree
 
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortPathsBy
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.connection.FakeMusicServiceConnection
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
 import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
+import com.odesa.musicMatters.core.datatesting.repository.FakeSongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.datatesting.tree.testPaths
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
@@ -36,6 +38,7 @@ class TreeScreenViewModelTest {
     private lateinit var musicServiceConnection: FakeMusicServiceConnection
     private lateinit var settingsRepository: SettingsRepository
     private lateinit var playlistRepository: PlaylistRepository
+    private lateinit var songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
     private lateinit var viewModel: TreeScreenViewModel
 
     @Before
@@ -43,10 +46,12 @@ class TreeScreenViewModelTest {
         musicServiceConnection = FakeMusicServiceConnection()
         settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
+        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         viewModel = TreeScreenViewModel(
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
-            playlistRepository = playlistRepository
+            playlistRepository = playlistRepository,
+            songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         )
     }
 

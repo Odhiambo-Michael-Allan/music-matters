@@ -35,8 +35,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.HomePageBottomBarLabelVisibility
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.search.SearchHistoryRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.i8n.Language
@@ -99,6 +100,7 @@ fun MusicMattersNavHost(
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
     searchHistoryRepository: SearchHistoryRepository,
+    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
     musicServiceConnection: MusicServiceConnection,
     language: Language,
     labelVisibility: HomePageBottomBarLabelVisibility,
@@ -108,6 +110,7 @@ fun MusicMattersNavHost(
         factory = NowPlayingViewModelFactory(
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
             musicServiceConnection = musicServiceConnection
         )
     )
@@ -162,7 +165,8 @@ fun MusicMattersNavHost(
                     factory = ForYouViewModelFactory(
                         musicServiceConnection = musicServiceConnection,
                         playlistRepository = playlistRepository,
-                        settingsRepository = settingsRepository
+                        settingsRepository = settingsRepository,
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
                     )
                 )
                 ForYouScreen(
@@ -182,7 +186,8 @@ fun MusicMattersNavHost(
                     factory = SongsViewModelFactory(
                         settingsRepository = settingsRepository,
                         playlistRepository = playlistRepository,
-                        musicServiceConnection = musicServiceConnection
+                        musicServiceConnection = musicServiceConnection,
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
                     )
                 )
                 SongsScreen(
@@ -203,7 +208,8 @@ fun MusicMattersNavHost(
                     factory = ArtistsViewModelFactory(
                         musicServiceConnection = musicServiceConnection,
                         settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository
+                        playlistRepository = playlistRepository,
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
                     )
                 )
                 ArtistsScreen(
@@ -228,7 +234,8 @@ fun MusicMattersNavHost(
                         artistName = artistName,
                         musicServiceConnection = musicServiceConnection,
                         settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository
+                        playlistRepository = playlistRepository,
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
                     )
                 )
                 ArtistScreen(
@@ -250,6 +257,7 @@ fun MusicMattersNavHost(
                         musicServiceConnection = musicServiceConnection,
                         settingsRepository = settingsRepository,
                         playlistRepository = playlistRepository,
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
                     )
                 )
                 AlbumsScreen(
@@ -274,7 +282,8 @@ fun MusicMattersNavHost(
                         albumName = albumName,
                         musicServiceConnection = musicServiceConnection,
                         settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository
+                        playlistRepository = playlistRepository,
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
                     )
                 )
 
@@ -321,6 +330,7 @@ fun MusicMattersNavHost(
                         musicServiceConnection = musicServiceConnection,
                         settingsRepository = settingsRepository,
                         playlistRepository = playlistRepository,
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
                     )
                 )
                 GenreScreen(
@@ -342,6 +352,7 @@ fun MusicMattersNavHost(
                         musicServiceConnection = musicServiceConnection,
                         settingsRepository = settingsRepository,
                         playlistRepository = playlistRepository,
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
                     )
                 )
                 PlaylistsScreen(
@@ -368,7 +379,8 @@ fun MusicMattersNavHost(
                         playlistId = playlistId,
                         musicServiceConnection = musicServiceConnection,
                         settingsRepository = settingsRepository,
-                        playlistsRepository = playlistRepository
+                        playlistsRepository = playlistRepository,
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
                     )
                 )
 
@@ -390,7 +402,8 @@ fun MusicMattersNavHost(
                     factory = TreeViewModelFactory(
                         musicServiceConnection = musicServiceConnection,
                         settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository
+                        playlistRepository = playlistRepository,
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
                     )
                 )
                 TreeScreen(
@@ -409,9 +422,10 @@ fun MusicMattersNavHost(
             ) {
                 val queueScreenViewModel: QueueScreenViewModel = viewModel(
                     factory = QueueScreenViewModelFactory(
+                        musicServiceConnection = musicServiceConnection,
                         settingsRepository = settingsRepository,
                         playlistRepository = playlistRepository,
-                        musicServiceConnection = musicServiceConnection
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
                     )
                 )
                 QueueScreen(
@@ -436,7 +450,8 @@ fun MusicMattersNavHost(
                         musicServiceConnection = musicServiceConnection,
                         settingsRepository = settingsRepository,
                         playlistRepository = playlistRepository,
-                        searchHistoryRepository = searchHistoryRepository
+                        searchHistoryRepository = searchHistoryRepository,
+                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
                     )
                 )
                 SearchScreen(

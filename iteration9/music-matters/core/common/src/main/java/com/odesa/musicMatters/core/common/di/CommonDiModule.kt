@@ -7,7 +7,7 @@ import com.odesa.musicMatters.core.common.connection.MediaBrowserAdapter
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnectionImpl
 import com.odesa.musicMatters.core.common.media.MusicService
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.toRepeatMode
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import kotlinx.coroutines.Dispatchers

@@ -53,6 +53,7 @@ import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
+import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -74,6 +75,7 @@ fun SongCard(
     onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?
 ) {
 
     var showSongOptionsBottomSheet by remember { mutableStateOf( false ) }
@@ -178,7 +180,9 @@ fun SongCard(
                 SongDetailsDialog(
                     song = song,
                     language = language,
-                    durationFormatter = { it.formatMilliseconds() }
+                    durationFormatter = { it.formatMilliseconds() },
+                    isLoadingSongAdditionalMetadata = onGetSongAdditionalMetadata() == null,
+                    onGetSongAdditionalMetadata = onGetSongAdditionalMetadata
                 ) {
                     showSongDetailsDialog = false
                 }
@@ -350,6 +354,7 @@ fun QueueSongCard(
     onSearchSongsMatchingQuery: (String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDragHandleClick: () -> Unit,
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?
 ) {
     Row (
         verticalAlignment = Alignment.CenterVertically
@@ -380,7 +385,8 @@ fun QueueSongCard(
             onGetSongsInPlaylist = onGetSongsInPlaylist,
             onAddSongsToPlaylist = onAddSongsToPlaylist,
             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-            onCreatePlaylist = onCreatePlaylist
+            onCreatePlaylist = onCreatePlaylist,
+            onGetSongAdditionalMetadata = onGetSongAdditionalMetadata,
         )
     }
 }
@@ -405,7 +411,8 @@ fun SongCardPreview() {
         onGetSongsInPlaylist = { emptyList() },
         onAddSongsToPlaylist = { _, _ -> },
         onSearchSongsMatchingQuery = { emptyList() },
-        onCreatePlaylist = { _, _ -> }
+        onCreatePlaylist = { _, _ -> },
+        onGetSongAdditionalMetadata = { null }
     )
 }
 
@@ -430,6 +437,7 @@ fun QueueSongCardPreview() {
         onDragHandleClick = {},
         onAddSongsToPlaylist = { _, _ -> },
         onSearchSongsMatchingQuery = { emptyList() },
-        onCreatePlaylist = { _, _ -> }
+        onCreatePlaylist = { _, _ -> },
+        onGetSongAdditionalMetadata = { null }
     )
 }

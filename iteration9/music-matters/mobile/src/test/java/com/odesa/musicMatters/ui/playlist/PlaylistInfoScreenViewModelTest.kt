@@ -1,14 +1,16 @@
 package com.odesa.musicMatters.ui.playlist
 
 import com.odesa.musicMatters.MainCoroutineRule
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.connection.FakeMusicServiceConnection
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
 import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
+import com.odesa.musicMatters.core.datatesting.repository.FakeSongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.datatesting.songs.id1
 import com.odesa.musicMatters.core.datatesting.songs.testSongMediaItemsForId
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
@@ -32,6 +34,7 @@ class PlaylistInfoScreenViewModelTest {
     private lateinit var musicServiceConnection: FakeMusicServiceConnection
     private lateinit var settingsRepository: SettingsRepository
     private lateinit var playlistRepository: PlaylistRepository
+    private lateinit var songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
     private lateinit var viewModel: PlaylistScreenViewModel
 
     @Before
@@ -39,11 +42,13 @@ class PlaylistInfoScreenViewModelTest {
         musicServiceConnection = FakeMusicServiceConnection()
         settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
+        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         viewModel = PlaylistScreenViewModel(
             playlistId = playlistRepository.favoritesPlaylistInfo.value.id,
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
-            playlistRepository = playlistRepository
+            playlistRepository = playlistRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
         )
     }
 

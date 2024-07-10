@@ -4,9 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortPlaylistsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
@@ -23,10 +24,12 @@ class PlaylistsViewModel(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
+    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : BaseViewModel(
     musicServiceConnection = musicServiceConnection,
     settingsRepository = settingsRepository,
-    playlistRepository = playlistRepository
+    playlistRepository = playlistRepository,
+    songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
 ) {
 
     private val _uiState = MutableStateFlow(
@@ -163,12 +166,14 @@ private fun List<PlaylistInfo>.sortPlaylists(sortPlaylistsBy: SortPlaylistsBy, r
 class PlaylistsViewModelFactory(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
-    private val playlistRepository: PlaylistRepository
+    private val playlistRepository: PlaylistRepository,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>) =
         ( PlaylistsViewModel(
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
-            playlistRepository = playlistRepository
+            playlistRepository = playlistRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
         ) as T )
 }

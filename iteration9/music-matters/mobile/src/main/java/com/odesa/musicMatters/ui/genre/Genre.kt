@@ -121,6 +121,9 @@ fun GenreScreenContent(
                 onAddSongsToPlaylist = onAddSongsToPlaylist,
                 onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                 onCreatePlaylist = onCreatePlaylist,
+                onGetAdditionalMetadataForSongWithId = { songId ->
+                    uiState.songsAdditionalMetadataList.find { it.id == songId }
+                }
             )
         }
     }

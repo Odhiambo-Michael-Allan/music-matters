@@ -1,10 +1,12 @@
 package com.odesa.musicMatters.ui.forYou
 
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.connection.FakeMusicServiceConnection
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
 import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
+import com.odesa.musicMatters.core.datatesting.repository.FakeSongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.i8n.Belarusian
 import com.odesa.musicMatters.core.i8n.Chinese
@@ -28,6 +30,7 @@ class ForYouScreenViewModelTest {
     private lateinit var musicServiceConnection: FakeMusicServiceConnection
     private lateinit var playlistRepository: FakePlaylistRepository
     private lateinit var settingsRepository: SettingsRepository
+    private lateinit var songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
     private lateinit var viewModel: ForYouScreenViewModel
 
     @Before
@@ -35,10 +38,12 @@ class ForYouScreenViewModelTest {
         musicServiceConnection = FakeMusicServiceConnection()
         playlistRepository = FakePlaylistRepository()
         settingsRepository = FakeSettingsRepository()
+        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         viewModel = ForYouScreenViewModel(
             musicServiceConnection = musicServiceConnection,
             playlistRepository = playlistRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
         )
     }
 

@@ -41,6 +41,8 @@ targetSdk = "33"
 compileSdk = "34"
 
 room = "2.6.1"
+# @pin When updating to AGP 7.4.0-alpha10 and up we can update this https://developer.android.com/studio/write/java8-support#library-desugaring-versions
+jdkDesugar = "1.2.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -88,6 +90,7 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 
 androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
+core-jdk-desugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "jdkDesugar" }
 
 # Room
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }

@@ -4,10 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortPathsBy
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.data.utils.sortSongs
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
@@ -17,6 +18,7 @@ import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
+import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,10 +31,12 @@ class TreeScreenViewModel(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
+    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : BaseViewModel(
     musicServiceConnection = musicServiceConnection,
     settingsRepository = settingsRepository,
-    playlistRepository = playlistRepository
+    playlistRepository = playlistRepository,
+    songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
 ) {
 
     private val _uiState = MutableStateFlow(
@@ -49,7 +53,8 @@ class TreeScreenViewModel(
             themeMode = settingsRepository.themeMode.value,
             favoriteSongIds = playlistRepository.favoritesPlaylistInfo.value.songIds,
             disabledTreePaths = emptyList(),
-            playlistInfos = emptyList()
+            playlistInfos = emptyList(),
+            songsAdditionalMetadataList = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -72,6 +77,11 @@ class TreeScreenViewModel(
                 sortSongsBy = sortSongsBy,
                 sortSongsInReverse = sortSongsInReverse,
                 tree = constructTreeUsing( musicServiceConnection.cachedSongs.value )
+            )
+        }
+        addOnSongsMetadataListChangeListener {
+            _uiState.value = _uiState.value.copy(
+                songsAdditionalMetadataList = it
             )
         }
     }
@@ -240,7 +250,8 @@ data class TreeScreenUiState(
     val themeMode: ThemeMode,
     val favoriteSongIds: List<String>,
     val disabledTreePaths: List<String>,
-    val playlistInfos: List<PlaylistInfo>
+    val playlistInfos: List<PlaylistInfo>,
+    val songsAdditionalMetadataList: List<SongAdditionalMetadataInfo>
 )
 
 val testTreeScreenUiState = TreeScreenUiState(
@@ -256,7 +267,8 @@ val testTreeScreenUiState = TreeScreenUiState(
     favoriteSongIds = emptyList(),
     themeMode = SettingsDefaults.themeMode,
     disabledTreePaths = emptyList(),
-    playlistInfos = emptyList()
+    playlistInfos = emptyList(),
+    songsAdditionalMetadataList = emptyList()
 )
 
 fun Path.directoryName(): String {
@@ -293,11 +305,13 @@ class TreeViewModelFactory(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T: ViewModel> create( modelClass: Class<T> ) =
         ( TreeScreenViewModel(
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
         ) as T )
 }

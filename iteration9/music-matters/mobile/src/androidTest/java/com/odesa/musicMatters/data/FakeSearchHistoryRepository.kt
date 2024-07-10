@@ -1,7 +1,7 @@
 package com.odesa.musicMatters.data
 
-import com.odesa.musicMatters.data.search.SearchHistoryItem
-import com.odesa.musicMatters.data.search.SearchHistoryRepository
+import com.odesa.musicMatters.core.data.search.SearchHistoryRepository
+import com.odesa.musicMatters.core.model.SearchHistoryItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 

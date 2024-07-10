@@ -9,7 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.search.SearchHistoryRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.ui.navigation.MusicMattersNavHost
@@ -20,14 +21,16 @@ fun MusicallyApp(
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
     searchHistoryRepository: SearchHistoryRepository,
+    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
     musicServiceConnection: MusicServiceConnection,
 ) {
     MusicallyAppContent(
         navController = navController,
         settingsRepository = settingsRepository,
         playlistRepository = playlistRepository,
-        musicServiceConnection = musicServiceConnection,
         searchHistoryRepository = searchHistoryRepository,
+        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
+        musicServiceConnection = musicServiceConnection,
     )
 }
 
@@ -37,6 +40,7 @@ fun MusicallyAppContent(
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
     searchHistoryRepository: SearchHistoryRepository,
+    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
     musicServiceConnection: MusicServiceConnection,
 ) {
 
@@ -51,6 +55,7 @@ fun MusicallyAppContent(
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository,
             searchHistoryRepository = searchHistoryRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
             musicServiceConnection = musicServiceConnection,
             language = language,
             labelVisibility = labelVisibility,

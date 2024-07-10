@@ -93,6 +93,7 @@ class MainActivity : ComponentActivity() {
                                 musicServiceConnection = mobileDiModule.musicServiceConnection,
                                 playlistRepository = mobileDiModule.playlistRepository,
                                 searchHistoryRepository = mobileDiModule.searchHistoryRepository,
+                                songsAdditionalMetadataRepository = mobileDiModule.songsAdditionalMetadataRepository,
                             )
                         }
                     }

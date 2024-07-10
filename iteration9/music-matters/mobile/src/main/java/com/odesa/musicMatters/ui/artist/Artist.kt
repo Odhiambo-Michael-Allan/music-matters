@@ -149,6 +149,9 @@ fun ArtistScreenContent(
                 onAddSongsToPlaylist = onAddSongsToPlaylist,
                 onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                 onCreatePlaylist = onCreatePlaylist,
+                onGetAdditionalMetadataForSongWithId = { songId ->
+                    uiState.songsAdditionalMetadataList.find { it.id == songId }
+                },
                 leadingContent = {
                     item {
                         ArtistArtwork(

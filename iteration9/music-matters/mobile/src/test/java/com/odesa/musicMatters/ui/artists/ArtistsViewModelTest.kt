@@ -1,8 +1,9 @@
 package com.odesa.musicMatters.ui.artists
 
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortArtistsBy
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.artists.testArtistMediaItems
 import com.odesa.musicMatters.core.datatesting.artists.testArtistsForSorting
@@ -10,6 +11,7 @@ import com.odesa.musicMatters.core.datatesting.connection.FakeMusicServiceConnec
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
 import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
+import com.odesa.musicMatters.core.datatesting.repository.FakeSongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Belarusian
 import com.odesa.musicMatters.core.i8n.Chinese
@@ -34,17 +36,19 @@ class ArtistsViewModelTest {
     private lateinit var settingsRepository: SettingsRepository
     private lateinit var playlistRepository: PlaylistRepository
     private lateinit var viewModel: ArtistsScreenViewModel
-
+    private lateinit var songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 
     @Before
     fun setup() {
         musicServiceConnection = FakeMusicServiceConnection()
         settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
+        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         viewModel = ArtistsScreenViewModel(
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
-            playlistRepository = playlistRepository
+            playlistRepository = playlistRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
         )
     }
 

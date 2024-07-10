@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.data.utils.sortSongs
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
@@ -14,6 +15,7 @@ import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
+import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,10 +25,12 @@ class SongsScreenViewModel(
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
     private val musicServiceConnection: MusicServiceConnection,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 ) : BaseViewModel(
     musicServiceConnection = musicServiceConnection,
     settingsRepository = settingsRepository,
     playlistRepository = playlistRepository,
+    songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
 ) {
 
     private val _uiState = MutableStateFlow(
@@ -39,7 +43,8 @@ class SongsScreenViewModel(
             currentlyPlayingSongId = musicServiceConnection.nowPlayingMediaItem.value.mediaId,
             favoriteSongIds = playlistRepository.favoritesPlaylistInfo.value.songIds,
             isLoading = musicServiceConnection.isInitializing.value,
-            playlistInfos = emptyList()
+            playlistInfos = emptyList(),
+            songsAdditionalMetadataList = emptyList()
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -62,6 +67,11 @@ class SongsScreenViewModel(
                     sortSongsBy,
                     sortSongsInReverse
                 )
+            )
+        }
+        addOnSongsMetadataListChangeListener {
+            _uiState.value = _uiState.value.copy(
+                songsAdditionalMetadataList = it
             )
         }
     }
@@ -124,7 +134,8 @@ data class SongsScreenUiState(
     val currentlyPlayingSongId: String,
     val favoriteSongIds: List<String>,
     val isLoading: Boolean,
-    val playlistInfos: List<PlaylistInfo>
+    val playlistInfos: List<PlaylistInfo>,
+    val songsAdditionalMetadataList: List<SongAdditionalMetadataInfo>,
 )
 
 internal val testSongsScreenUiState = SongsScreenUiState(
@@ -136,7 +147,8 @@ internal val testSongsScreenUiState = SongsScreenUiState(
     isLoading = true,
     sortSongsBy = SortSongsBy.TITLE,
     sortSongsInReverse = false,
-    playlistInfos = emptyList()
+    playlistInfos = emptyList(),
+    songsAdditionalMetadataList = emptyList()
 )
 
 @Suppress( "UNCHECKED_CAST" )
@@ -144,11 +156,13 @@ class SongsViewModelFactory(
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
     private val musicServiceConnection: MusicServiceConnection,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create( modelClass: Class<T> ) =
         ( SongsScreenViewModel(
             settingsRepository,
             playlistRepository,
             musicServiceConnection,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
         ) as T )
 }

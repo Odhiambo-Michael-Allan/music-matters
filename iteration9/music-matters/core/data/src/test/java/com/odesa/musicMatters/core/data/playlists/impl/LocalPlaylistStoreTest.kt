@@ -30,6 +30,7 @@ class LocalPlaylistStoreTest : TestDatabase() {
 
     @Before
     fun setUp() {
+        var counter = 0L
         playlistDao = database.playlistDao()
         playlistEntryDao = database.playlistEntryDao()
         songPlayCountEntryDao = database.songPlayCountEntryDao()
@@ -37,7 +38,7 @@ class LocalPlaylistStoreTest : TestDatabase() {
             playlistDao = playlistDao,
             playlistEntryDao = playlistEntryDao,
             songPlayCountEntryDao = songPlayCountEntryDao,
-            clock = TestClock
+            currentTimeInMillis = { counter++ }
         )
     }
 
@@ -185,11 +186,4 @@ class LocalPlaylistStoreTest : TestDatabase() {
                 .title
         )
     }
-}
-
-private val TestClock = object : Clock {
-    private var counter: Long = 0L
-    override val currentTimeInMillis: Long
-        get() = counter++
-
 }

@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.odesa.musicMatters"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.odesa.musicMatters"
-        minSdk = 26
-        targetSdk = 34
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -31,6 +31,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -103,4 +104,6 @@ dependencies {
 
     debugImplementation( libs.androidx.ui.tooling )
     debugImplementation( libs.androidx.ui.test.manifest )
+
+    coreLibraryDesugaring( libs.core.jdk.desugaring )
 }

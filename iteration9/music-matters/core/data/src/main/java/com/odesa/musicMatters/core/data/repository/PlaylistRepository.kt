@@ -1,4 +1,4 @@
-package com.odesa.musicMatters.core.data.playlists
+package com.odesa.musicMatters.core.data.repository
 
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import kotlinx.coroutines.flow.StateFlow

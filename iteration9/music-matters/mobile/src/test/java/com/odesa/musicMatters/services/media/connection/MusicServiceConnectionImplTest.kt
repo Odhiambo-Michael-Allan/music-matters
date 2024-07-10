@@ -7,7 +7,7 @@ import com.odesa.musicMatters.core.common.connection.CURRENTLY_PLAYING_MEDIA_ITE
 import com.odesa.musicMatters.core.common.connection.Connectable
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnectionImpl
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.allowedSpeedPitchValues
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.albums.testAlbumMediaItems

@@ -17,6 +17,7 @@ import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.designsystem.theme.isLight
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
+import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 import com.odesa.musicMatters.ui.components.LoaderScaffold
 import com.odesa.musicMatters.ui.components.SongList
 import com.odesa.musicMatters.ui.components.TopAppBar
@@ -57,7 +58,10 @@ fun SongsScreen(
         onCreatePlaylist = { title, songs -> viewModel.createPlaylist( title, songs ) },
         onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
         onNavigateToSearch = onNavigateToSearch,
-        onGetPlaylists = { uiState.playlistInfos }
+        onGetPlaylists = { uiState.playlistInfos },
+        onGetAdditionalMetadataForSongWithId = { songId ->
+            uiState.songsAdditionalMetadataList.find { it.id == songId }
+        }
     )
 }
 
@@ -81,6 +85,7 @@ fun SongsScreenContent(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onGetPlaylists: () -> List<PlaylistInfo>,
     onNavigateToSearch: () -> Unit,
+    onGetAdditionalMetadataForSongWithId: ( String ) -> SongAdditionalMetadataInfo?
 ) {
     val fallbackResourceId =
         if ( uiState.themeMode.isLight( LocalContext.current ) )
@@ -121,7 +126,8 @@ fun SongsScreenContent(
                 onGetSongsInPlaylist = onGetSongsInPlaylist,
                 onAddSongsToPlaylist = onAddSongsToPlaylist,
                 onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-                onCreatePlaylist = onCreatePlaylist
+                onCreatePlaylist = onCreatePlaylist,
+                onGetAdditionalMetadataForSongWithId = onGetAdditionalMetadataForSongWithId
             )
         }
     }
@@ -156,7 +162,8 @@ fun SongsScreenContentPreview() {
             onSearchSongsMatchingQuery = { emptyList() },
             onCreatePlaylist = { _, _ -> },
             onNavigateToSearch = {},
-            onGetPlaylists = { emptyList() }
+            onGetPlaylists = { emptyList() },
+            onGetAdditionalMetadataForSongWithId = { null }
         )
     }
 }

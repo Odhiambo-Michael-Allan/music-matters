@@ -20,6 +20,7 @@ import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
+import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 import com.odesa.musicMatters.ui.queue.QueueScreenUiState
 import com.odesa.musicMatters.ui.queue.testQueueScreenUiState
 
@@ -47,6 +48,7 @@ fun SongList(
     onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
+    onGetAdditionalMetadataForSongWithId: ( String ) -> SongAdditionalMetadataInfo?,
     leadingContent: ( LazyListScope.() -> Unit )? = null
 ) {
 
@@ -104,7 +106,8 @@ fun SongList(
                             onGetSongsInPlaylist = onGetSongsInPlaylist,
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
                             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-                            onCreatePlaylist = onCreatePlaylist
+                            onCreatePlaylist = onCreatePlaylist,
+                            onGetSongAdditionalMetadata = { onGetAdditionalMetadataForSongWithId( song.id ) }
                         )
                     }
                 }
@@ -152,7 +155,8 @@ fun SongListPreview() {
         onGetSongsInPlaylist = { emptyList() },
         onAddSongsToPlaylist = { _, _ -> },
         onSearchSongsMatchingQuery = { emptyList() },
-        onCreatePlaylist = { _, _ -> }
+        onCreatePlaylist = { _, _ -> },
+        onGetAdditionalMetadataForSongWithId = { null }
     )
 }
 
@@ -173,6 +177,7 @@ fun QueueSongList(
     onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
+    onGetAdditionalMetadataForSongWithId: (String) -> SongAdditionalMetadataInfo?
 ) {
     when {
         uiState.songsInQueue.isEmpty() -> IconTextBody(
@@ -214,6 +219,7 @@ fun QueueSongList(
                         onDragHandleClick = {},
                         onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                         onCreatePlaylist = onCreatePlaylist,
+                        onGetSongAdditionalMetadata = { onGetAdditionalMetadataForSongWithId( song.id ) }
                     )
                 }
             }
@@ -239,7 +245,8 @@ fun QueueSongListPreview() {
         onGetSongsInPlaylist = { emptyList() },
         onAddSongsToPlaylist = { _, _ -> },
         onSearchSongsMatchingQuery = { emptyList() },
-        onCreatePlaylist = { _, _ -> }
+        onCreatePlaylist = { _, _ -> },
+        onGetAdditionalMetadataForSongWithId = { null }
     )
 }
 

@@ -88,6 +88,9 @@ fun QueueList(
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
                             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                             onCreatePlaylist = onCreatePlaylist,
+                            onGetSongAdditionalMetadata = {
+                                uiState.songsAdditionalMetadataList.find { it.id == song.id }
+                            }
                         )
                     }
                 }

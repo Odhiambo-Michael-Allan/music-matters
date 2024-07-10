@@ -12,12 +12,13 @@ import com.odesa.musicMatters.core.data.database.model.PlaylistWithEntries
 import com.odesa.musicMatters.core.data.database.model.SongPlayCountEntry
 import com.odesa.musicMatters.core.data.playlists.PlaylistStore
 import com.odesa.musicMatters.core.model.PlaylistInfo
+import timber.log.Timber
 
 class LocalPlaylistStore(
     private val playlistDao: PlaylistDao,
     private val playlistEntryDao: PlaylistEntryDao,
     private val songPlayCountEntryDao: SongPlayCountEntryDao,
-    private val clock: Clock
+    private val currentTimeInMillis: () -> Long
 ) : PlaylistStore {
 
     override suspend fun fetchAllPlaylists() = playlistDao
@@ -60,11 +61,13 @@ class LocalPlaylistStore(
 
     override suspend fun addSongIdToRecentlyPlayedSongsPlaylist( songId: String ) {
         playlistEntryDao.deleteEntry( RECENTLY_PLAYED_SONGS_PLAYLIST_ID, songId )
+        val currentTime = currentTimeInMillis()
+        Timber.tag( "-LOCAL-PLAYLIST-STORE-TAG-" ).d( "ADDING RECENTLY PLAYED SONG ID AT TIME: $currentTime" )
         playlistEntryDao.insert(
             PlaylistEntry(
                 playlistId = RECENTLY_PLAYED_SONGS_PLAYLIST_ID,
                 songId = songId,
-                dateAdded = clock.currentTimeInMillis
+                dateAdded = currentTimeInMillis()
             )
         )
     }
@@ -142,10 +145,6 @@ class LocalPlaylistStore(
     override suspend fun clearCurrentPlayingQueuePlaylist() {
         playlistEntryDao.removeEntriesForPlaylistWithId( CURRENT_PLAYING_QUEUE_PLAYLIST_ID )
     }
-}
-
-interface Clock {
-    val currentTimeInMillis: Long
 }
 
 private fun List<PlaylistWithEntries>.asDomain() = map { it.asDomain() }

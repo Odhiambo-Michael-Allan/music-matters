@@ -3,14 +3,16 @@ package com.odesa.musicMatters.ui.nowPlaying
 import androidx.media3.common.Player
 import com.odesa.musicMatters.core.common.connection.PlaybackState
 import com.odesa.musicMatters.core.common.media.extensions.toSong
-import com.odesa.musicMatters.core.data.playlists.PlaylistRepository
 import com.odesa.musicMatters.core.data.preferences.LoopMode
 import com.odesa.musicMatters.core.data.preferences.allowedSpeedPitchValues
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.connection.FakeMusicServiceConnection
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
+import com.odesa.musicMatters.core.datatesting.repository.FakeSongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.datatesting.songs.id1
 import com.odesa.musicMatters.core.datatesting.songs.testSongMediaItemsForId
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
@@ -41,16 +43,19 @@ class NowPlayingViewModelTest {
     private lateinit var nowPlayingViewModel: NowPlayingViewModel
     private lateinit var settingsRepository: SettingsRepository
     private lateinit var playlistRepository: PlaylistRepository
+    private lateinit var songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 
     @Before
     fun setup() {
         musicServiceConnection = FakeMusicServiceConnection()
         settingsRepository = FakeSettingsRepository()
         playlistRepository = FakePlaylistRepository()
+        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         nowPlayingViewModel = NowPlayingViewModel(
             musicServiceConnection = musicServiceConnection,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
         )
     }
 

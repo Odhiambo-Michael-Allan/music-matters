@@ -114,6 +114,10 @@ class MusicService : MediaLibraryService() {
     @UnstableApi
     override fun onCreate() {
         super.onCreate()
+        dataDiModule = DataDiModule.getInstance(
+            applicationContext,
+            dispatcher = Dispatchers.Main
+        )
         mediaSession = with ( MediaLibrarySession.Builder(
             this, replaceableForwardingPlayer, getCallback() )
         ) {
@@ -131,7 +135,10 @@ class MusicService : MediaLibraryService() {
             build()
         }
 
-        musicSource = LocalMusicSource( applicationContext )
+        musicSource = LocalMusicSource(
+            context = applicationContext,
+            songsAdditionalMetadataRepository = dataDiModule.songsAdditionalMetadataRepository
+        )
         MediaPermissionsManager.checkForPermissions( applicationContext )
         serviceScope.launch {
             MediaPermissionsManager.hasAllRequiredPermissions.collect {
@@ -140,10 +147,6 @@ class MusicService : MediaLibraryService() {
             }
         }
         setMediaNotificationProvider( MusicMattersMediaNotificationProvider( applicationContext ) )
-        dataDiModule = DataDiModule.getInstance(
-            applicationContext,
-            dispatcher = Dispatchers.Main
-        )
     }
 
     override fun onGetSession( controllerInfo: MediaSession.ControllerInfo ): MediaLibrarySession? {
@@ -157,8 +160,8 @@ class MusicService : MediaLibraryService() {
         super.onTaskRemoved( rootIntent )
     }
 
-    override fun onUnbind(intent: Intent?): Boolean {
-        return super.onUnbind(intent)
+    override fun onUnbind( intent: Intent? ): Boolean {
+        return super.onUnbind( intent )
     }
 
     override fun onDestroy() {
@@ -198,7 +201,7 @@ class MusicService : MediaLibraryService() {
     }
 
     /** Returns a function that opens the condition variable when called. */
-    private fun openWhenReady( conditionVariable: ConditionVariable): (Boolean ) -> Unit = {
+    private fun openWhenReady( conditionVariable: ConditionVariable): ( Boolean ) -> Unit = {
         val successfullyInitialized = it
         if ( !successfullyInitialized ) {
             Timber.tag( TAG ).d( "Loading music failed" )
@@ -334,7 +337,7 @@ class MusicService : MediaLibraryService() {
             }
         }
 
-        override fun onPlayerError( error: PlaybackException) {
+        override fun onPlayerError( error: PlaybackException ) {
             var message = R.string.generic_error
             Timber.tag( TAG ).d( "Player error: ${error.errorCodeName} ( ${error.errorCode} )" )
             if ( error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS
@@ -365,5 +368,4 @@ val EMPTY_MEDIA_ITEM = MediaItem.Builder()
             .setIsBrowsable( false )
             .setIsPlayable( false )
             .build()
-    )
-    .build()
+    ).build()

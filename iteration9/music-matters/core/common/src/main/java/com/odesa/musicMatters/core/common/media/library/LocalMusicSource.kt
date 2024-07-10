@@ -1,9 +1,17 @@
 package com.odesa.musicMatters.core.common.media.library
 
 import android.content.Context
+import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import androidx.media3.common.MediaItem
+import com.odesa.musicMatters.core.common.media.extensions.UNKNOWN_LONG_VALUE
+import com.odesa.musicMatters.core.common.media.extensions.UNKNOWN_STRING_VALUE
 import com.odesa.musicMatters.core.common.media.extensions.from
+import com.odesa.musicMatters.core.data.database.dao.SongAdditionalMetadataDao
+import com.odesa.musicMatters.core.data.database.model.SongAdditionalMetadata
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -11,12 +19,15 @@ import timber.log.Timber
 /**
  * Source of [MediaMetadataCompat] objects stored locally on the user's device.
  */
-class LocalMusicSource( private val context: Context ) : AbstractMusicSource() {
+class LocalMusicSource(
+    private val context: Context,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
+) : AbstractMusicSource() {
 
     private var musicCatalog: List<MediaItem> = emptyList()
 
     init {
-        Timber.tag( LocalMusicSourceTag ).d( "INITIALIZING LOCAL MUSIC SOURCE" )
+        Timber.tag(TAG).d( "INITIALIZING LOCAL MUSIC SOURCE" )
         state = STATE_INITIALIZING
     }
 
@@ -26,17 +37,18 @@ class LocalMusicSource( private val context: Context ) : AbstractMusicSource() {
         updateCatalog()?.let {
             musicCatalog = it
             state = STATE_INITIALIZED
-            Timber.tag( LocalMusicSourceTag ).d( "MUSIC CATALOG INITIALIZED. STATE IS INITIALIZED" )
+            Timber.tag(TAG).d( "MUSIC CATALOG INITIALIZED. STATE IS INITIALIZED" )
+            fetchMediaItemsAdditionalMetadata()
         } ?: run {
             musicCatalog = emptyList()
             state = STATE_ERROR
-            Timber.tag( LocalMusicSourceTag ).d( "STATE IS ERROR.." )
+            Timber.tag(TAG).d( "STATE IS ERROR.." )
         }
     }
 
     private suspend fun updateCatalog(): List<MediaItem>? {
         return withContext( Dispatchers.IO ) {
-            Timber.tag( LocalMusicSourceTag ).d( "READING MEDIA ITEMS FROM STORAGE" )
+            Timber.tag(TAG).d( "READING MEDIA ITEMS FROM STORAGE" )
             val mediaItemList = mutableListOf<MediaItem>()
             try {
                 context.contentResolver.query(
@@ -55,14 +67,68 @@ class LocalMusicSource( private val context: Context ) : AbstractMusicSource() {
                     }
                 }
             } catch ( exception: Exception ) {
-                Timber.tag( LocalMusicSourceTag ).e( exception,
+                Timber.tag(TAG).e( exception,
                     "Error occurred while updating music catalog" )
                 return@withContext null
             }
-            Timber.tag( LocalMusicSourceTag ).d( "NUMBER OF TRACKS RETRIEVED FROM STORAGE ${mediaItemList.size}" )
+            Timber.tag(TAG).d( "NUMBER OF TRACKS RETRIEVED FROM STORAGE ${mediaItemList.size}" )
             mediaItemList
         }
     }
+
+    private suspend fun fetchMediaItemsAdditionalMetadata() {
+        withContext( Dispatchers.IO ) {
+            val mediaMetadataRetriever = MediaMetadataRetriever()
+            musicCatalog.forEach {
+                val uri = it.localConfiguration?.uri ?: Uri.EMPTY
+                Timber.tag(TAG).d( "FETCHING ADDITIONAL METADATA FOR SONG" +
+                        " WITH URI: $uri AND TITLE: ${it.mediaMetadata.title}" )
+                mediaMetadataRetriever.setDataSource( context, uri )
+                val bitrate = extractBitrateUsing( mediaMetadataRetriever )
+                Timber.tag( TAG ).d( "Bitrate: $bitrate" )
+                val bitsPerSample = extractBitsPerSampleUsing( mediaMetadataRetriever )
+                Timber.tag( TAG ).d( "Bits Per Sample: $bitsPerSample" )
+                val codec = extractCodecUsing( mediaMetadataRetriever )
+                Timber.tag( TAG ).d( "Codec: $codec" )
+                val samplingRate = extractSamplingRateUsing( mediaMetadataRetriever )
+                Timber.tag( TAG ).d( "Sampling Rate: $samplingRate" )
+                songsAdditionalMetadataRepository.save(
+                    SongAdditionalMetadata(
+                        id = it.mediaId,
+                        bitrate = bitrate,
+                        bitsPerSample = bitsPerSample,
+                        codec = codec,
+                        samplingRate = samplingRate
+                    )
+                )
+            }
+            mediaMetadataRetriever.release()
+        }
+    }
+
+    private fun extractBitrateUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
+        mediaMetadataRetriever.runCatching {
+            extractMetadata( MediaMetadataRetriever.METADATA_KEY_BITRATE )?.toLong()
+        }.getOrNull() ?: UNKNOWN_LONG_VALUE
+
+    private fun extractBitsPerSampleUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {
+            mediaMetadataRetriever.runCatching {
+                extractMetadata( MediaMetadataRetriever.METADATA_KEY_BITS_PER_SAMPLE )?.toLong()
+            }.getOrNull() ?: UNKNOWN_LONG_VALUE
+        } else UNKNOWN_LONG_VALUE
+
+    private fun extractCodecUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
+        mediaMetadataRetriever.runCatching {
+            extractMetadata( MediaMetadataRetriever.METADATA_KEY_MIMETYPE )
+        }.getOrNull() ?: UNKNOWN_STRING_VALUE
+
+    private fun extractSamplingRateUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {
+            mediaMetadataRetriever.runCatching {
+                extractMetadata( MediaMetadataRetriever.METADATA_KEY_SAMPLERATE )?.toLong()
+            }.getOrNull() ?: UNKNOWN_LONG_VALUE
+        } else UNKNOWN_LONG_VALUE
 }
 
 val projection = arrayOf(
@@ -83,4 +149,4 @@ val projection = arrayOf(
     MediaStore.Audio.AudioColumns.ALBUM_ID,
 )
 
-const val LocalMusicSourceTag = "LOCAL MUSIC SOURCE"
+private const val TAG = "LOCAL MUSIC SOURCE"

@@ -197,7 +197,10 @@ fun PlaylistScreenContent(
                 onGetSongsInPlaylist = onGetSongsInPlaylist,
                 onAddSongsToPlaylist = onAddSongsToPlaylist,
                 onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-                onCreatePlaylist = onCreatePlaylist
+                onCreatePlaylist = onCreatePlaylist,
+                onGetAdditionalMetadataForSongWithId = { songId ->
+                    uiState.songsAdditionalMetadataList.find { it.id == songId }
+                }
             )
         }
     }
