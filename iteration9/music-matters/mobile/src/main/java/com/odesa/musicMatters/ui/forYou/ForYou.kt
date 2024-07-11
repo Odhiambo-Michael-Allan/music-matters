@@ -302,8 +302,8 @@ fun ForYouSongRow(
                 songs.forEach { song ->
                     ForYouSongCard(
                         modifier = Modifier
-                            .width(300.dp)
-                            .height(96.dp),
+                            .width( 300.dp )
+                            .height( 96.dp ),
                         song = song,
                         fallbackResourceId = fallbackResourceId,
                         onClick = { onSongSelected( song ) }
@@ -311,21 +311,7 @@ fun ForYouSongRow(
                 }
                 Spacer( modifier = Modifier.width( 12.dp ) )
             }
-//            LazyRow (
-//                contentPadding = PaddingValues( 20.dp, 0.dp ),
-//                horizontalArrangement = Arrangement.spacedBy( 8.dp )
-//            ) {
-//                items( songs ) { song ->
-//                    ForYouSongCard(
-//                        modifier = Modifier
-//                            .width(300.dp)
-//                            .height(96.dp),
-//                        song = song,
-//                        fallbackResourceId = fallbackResourceId,
-//                        onClick = { onSongSelected( song ) }
-//                    )
-//                }
-//            }
+
         }
     }
 }
