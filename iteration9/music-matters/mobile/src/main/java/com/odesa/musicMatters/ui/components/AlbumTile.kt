@@ -3,8 +3,6 @@ package com.odesa.musicMatters.ui.components
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
-import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -77,74 +75,6 @@ fun AlbumTile(
         }
     )
 }
-
-@Composable
-fun AlbumOptionsBottomSheetMenu(
-    album: Album,
-    language: Language,
-    @DrawableRes fallbackResourceId: Int,
-    onShufflePlay: () -> Unit,
-    onPlayNext: () -> Unit,
-    onAddToQueue: () -> Unit,
-    onViewArtist: ( String ) -> Unit,
-    onAddToPlaylist: () -> Unit,
-    onDismissRequest: () -> Unit
-) {
-    BottomSheetMenuContent(
-        bottomSheetHeader = {
-            BottomSheetMenuHeader(
-                headerImage = ImageRequest.Builder( LocalContext.current ).apply {
-                    data( album.artworkUri )
-                    placeholder( fallbackResourceId )
-                    fallback( fallbackResourceId )
-                    error( fallbackResourceId )
-                    crossfade( true )
-                }.build(),
-                title = album.title,
-                description = album.artists.joinToString()
-            )
-        }
-    ) {
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
-            label = language.shufflePlay
-        ) {
-            onDismissRequest()
-            onShufflePlay()
-        }
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
-            label = language.playNext
-        ) {
-            onDismissRequest()
-            onPlayNext()
-        }
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
-            label = language.addToQueue
-        ) {
-            onDismissRequest()
-            onAddToQueue()
-        }
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistAdd,
-            label = language.addToPlaylist
-        ) {
-            onDismissRequest()
-            onAddToPlaylist()
-        }
-        album.artists.forEach {
-            BottomSheetMenuItem(
-                leadingIcon = Icons.Filled.Person,
-                label = "${language.viewArtist}: $it"
-            ) {
-                onDismissRequest()
-                onViewArtist( it )
-            }
-        }
-    }
-}
-
 
 @Preview( showSystemUi = true )
 @Composable

@@ -185,6 +185,7 @@ fun GenericOptionsBottomSheet(
         additionalBottomSheetMenuItems?.let {
             it( onDismissRequest )
         }
+        Spacer( modifier = Modifier.size( 32.dp ) )
     }
     if ( showAddToPlaylistDialog ) {
         AddSongsToPlaylistDialog(
@@ -225,7 +226,7 @@ fun Tile(
     Card(
         modifier = Modifier
             .wrapContentHeight()
-            .then(modifier),
+            .then( modifier ),
         colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
         onClick = onClick
     ) {

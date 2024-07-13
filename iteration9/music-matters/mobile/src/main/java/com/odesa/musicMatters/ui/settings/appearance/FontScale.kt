@@ -37,15 +37,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
+import com.odesa.musicMatters.core.data.settings.impl.scalingPresets
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.ui.components.ScaffoldDialog
 import com.odesa.musicMatters.ui.settings.components.SettingsTileDefaults
-
-val scalingPresets = listOf(
-    0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f,
-    1.75f, 2f, 2.25f, 2.5f, 2.75f, 3f
-)
 
 @Composable
 fun FontScale(

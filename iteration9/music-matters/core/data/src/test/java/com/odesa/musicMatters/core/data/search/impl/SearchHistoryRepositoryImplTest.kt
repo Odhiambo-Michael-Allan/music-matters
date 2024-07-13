@@ -1,11 +1,10 @@
-package com.odesa.musicMatters.data.search.impl
+package com.odesa.musicMatters.core.data.search.impl
 
 import com.odesa.musicMatters.core.data.search.SearchHistoryRepository
 import com.odesa.musicMatters.core.data.search.SearchHistoryStore
-import com.odesa.musicMatters.core.data.search.impl.SearchHistoryRepositoryImpl
 import com.odesa.musicMatters.core.datatesting.search.testSearchHistoryItems
 import com.odesa.musicMatters.core.datatesting.store.FakeSearchHistoryStore
-import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -26,12 +25,12 @@ class SearchHistoryRepositoryImplTest {
 
     @Test
     fun testSearchHistoryItemsAreCorrectlySaved() = runTest {
-        assertEquals( 0, searchHistoryRepository.searchHistory.value.size )
+        TestCase.assertEquals( 0, searchHistoryRepository.searchHistory.value.size )
         testSearchHistoryItems.forEach {
             searchHistoryRepository.saveSearchHistoryItem( it )
         }
-        assertEquals( testSearchHistoryItems.size, searchHistoryStore.fetchSearchHistory().size )
-        assertEquals( testSearchHistoryItems.size, searchHistoryRepository.searchHistory.value.size )
+        TestCase.assertEquals( testSearchHistoryItems.size, searchHistoryStore.fetchSearchHistory().size )
+        TestCase.assertEquals( testSearchHistoryItems.size, searchHistoryRepository.searchHistory.value.size )
     }
 
     @Test
@@ -41,8 +40,8 @@ class SearchHistoryRepositoryImplTest {
         }
         searchHistoryRepository.deleteSearchHistoryItem( testSearchHistoryItems.first() )
         searchHistoryRepository.deleteSearchHistoryItem( testSearchHistoryItems.last() )
-        assertEquals( testSearchHistoryItems.size - 2, searchHistoryStore.fetchSearchHistory().size )
-        assertEquals( testSearchHistoryItems.size - 2, searchHistoryRepository.searchHistory.value.size )
+        TestCase.assertEquals( testSearchHistoryItems.size - 2, searchHistoryStore.fetchSearchHistory().size )
+        TestCase.assertEquals( testSearchHistoryItems.size - 2, searchHistoryRepository.searchHistory.value.size )
     }
 
     @Test
@@ -51,7 +50,7 @@ class SearchHistoryRepositoryImplTest {
             searchHistoryRepository.saveSearchHistoryItem( it )
         }
         searchHistoryRepository.saveSearchHistoryItem( testSearchHistoryItems.last() )
-        assertEquals( testSearchHistoryItems.size, searchHistoryRepository.searchHistory.value.size )
-        assertEquals( testSearchHistoryItems.last().id, searchHistoryRepository.searchHistory.value.first().id )
+        TestCase.assertEquals( testSearchHistoryItems.size, searchHistoryRepository.searchHistory.value.size )
+        TestCase.assertEquals( testSearchHistoryItems.last().id, searchHistoryRepository.searchHistory.value.first().id )
     }
 }

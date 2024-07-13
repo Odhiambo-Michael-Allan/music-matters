@@ -4,7 +4,6 @@ import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
@@ -18,7 +17,6 @@ import timber.log.Timber
 
 fun MediaItem.Builder.from( cursor: Cursor, context: Context ): MediaItem.Builder {
     val mediaUri = getMediaUriFrom( cursor )
-//    Timber.tag( TAG ).d( "Media Uri: $mediaUri" )
     setMediaId( mediaUri.toString() )
     setUri( mediaUri )
     setMediaMetadata(
@@ -34,7 +32,9 @@ fun getMediaUriFrom( cursor: Cursor ): Uri = ContentUris.withAppendedId(
 fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri ): MediaMetadata.Builder {
 //    val mediaMetadataRetriever = MediaMetadataRetriever()
 //    mediaMetadataRetriever.setDataSource( context, mediaUri )
+    val genreUri = MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI
 
+    val id = cursor.getLongFrom( AudioColumns._ID )
     val title = cursor.getStringFrom( AudioColumns.TITLE )
     Timber.tag( TAG ).d( "Title: $title" )
 
@@ -70,17 +70,28 @@ fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri 
     val path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: UNKNOWN_STRING_VALUE
     Timber.tag( TAG ).d( "Path: $path" )
 
+    // =============================== Genre ===============================
+
     var _genre: String? = null
-    if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ) {
-        _genre = cursor.getNullableStringFrom( AudioColumns.GENRE )
+    val genreAudioUri = MediaStore.Audio.Genres.getContentUriForAudioId(
+        "external",
+        id.toInt()
+    )
+    val genreCursor = context.contentResolver.query(
+        genreAudioUri, null, null, null, null
+    )
+    if ( genreCursor != null && genreCursor.moveToFirst() ) {
+        val genreIndex = genreCursor.getColumnIndex( MediaStore.Audio.GenresColumns.NAME )
+        _genre = genreCursor.getString( genreIndex )
     }
+    genreCursor?.close()
     val genre = _genre  ?: UNKNOWN_STRING_VALUE
     val finalGenre = genre.split( *genreTagSeparators.toTypedArray() ).first()
     Timber.tag( TAG ).d( "Genre: $finalGenre" )
 
-    Timber.tag( TAG ).d( "------------------------------------------------------------------" )
+    // =====================================================================
 
-//    mediaMetadataRetriever.release()
+    Timber.tag( TAG ).d( "------------------------------------------------------------------" )
 
     setTitle( title )
     setDisplayTitle( title )
@@ -120,6 +131,7 @@ fun getArtworkUriWith(cursor: Cursor ): Uri? = MediaStore.Audio.Media.EXTERNAL_C
         appendPath( "albumart" )
         build()
     }
+
 
 fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
     id = mediaId,

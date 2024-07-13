@@ -1,9 +1,8 @@
-package com.odesa.musicMatters.data.search.impl
+package com.odesa.musicMatters.core.data.search.impl
 
 import com.odesa.musicMatters.core.data.search.SearchHistoryStore
-import com.odesa.musicMatters.core.data.search.impl.SearchHistoryStoreImpl
 import com.odesa.musicMatters.core.datatesting.search.testSearchHistoryItems
-import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -36,7 +35,7 @@ class SearchHistoryStoreImplTest {
         testSearchHistoryItems.forEach {
             searchHistoryStore.saveSearchHistoryItem( it )
         }
-        assertEquals( testSearchHistoryItems.size, searchHistoryStore.fetchSearchHistory().size )
+        TestCase.assertEquals( testSearchHistoryItems.size, searchHistoryStore.fetchSearchHistory().size )
     }
 
     @Test
@@ -44,7 +43,7 @@ class SearchHistoryStoreImplTest {
         testSearchHistoryItems.forEach {
             searchHistoryStore.saveSearchHistoryItem( it )
         }
-        assertEquals( testSearchHistoryItems.last().id,
+        TestCase.assertEquals( testSearchHistoryItems.last().id,
             searchHistoryStore.fetchSearchHistory().first().id )
     }
 
@@ -55,9 +54,8 @@ class SearchHistoryStoreImplTest {
         }
         searchHistoryStore.deleteSearchHistoryItem( testSearchHistoryItems.first() )
         searchHistoryStore.deleteSearchHistoryItem( testSearchHistoryItems.last() )
-        assertEquals( testSearchHistoryItems.size - 2,
+        TestCase.assertEquals( testSearchHistoryItems.size - 2,
             searchHistoryStore.fetchSearchHistory().size
         )
     }
 }
-

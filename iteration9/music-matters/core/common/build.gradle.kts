@@ -53,9 +53,10 @@ dependencies {
     implementation( projects.core.i8n )
     implementation( projects.core.data )
 
-
-
     testImplementation( libs.junit )
+    testImplementation( libs.robolectric )
+    testImplementation( projects.core.testing )
+    testImplementation( libs.kotlinx.coroutines.test )
     androidTestImplementation( libs.androidx.junit )
     androidTestImplementation( libs.androidx.espresso.core )
 }

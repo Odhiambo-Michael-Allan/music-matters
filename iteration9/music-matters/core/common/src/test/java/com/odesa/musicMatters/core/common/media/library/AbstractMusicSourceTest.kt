@@ -1,12 +1,10 @@
-package com.odesa.musicMatters.services.media.library
+package com.odesa.musicMatters.core.common.media.library
 
 import android.os.Bundle
 import android.provider.MediaStore
 import com.odesa.musicMatters.core.datatesting.media.FakeMusicSource
 import com.odesa.musicMatters.core.datatesting.songs.testSongMediaItems
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertFalse
-import junit.framework.TestCase.assertTrue
+import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,24 +29,24 @@ class AbstractMusicSourceTest {
     fun testWhenSourceSuccessfullyInitializes_listenersAreNotified() {
         var waiting = true
         testSource.whenReady {
-            assertTrue( it )
+            TestCase.assertTrue(it)
             waiting = false
         }
-        assertTrue( waiting )
+        TestCase.assertTrue(waiting)
         testSource.prepare()
-        assertFalse( waiting )
+        TestCase.assertFalse(waiting)
     }
 
     @Test
     fun testWhenErrorOccursWhileInitializing_listenersAreNotified() {
         var waiting = true
         testSource.whenReady {
-            assertFalse( it )
+            TestCase.assertFalse(it)
             waiting = false
         }
-        assertTrue( waiting )
+        TestCase.assertTrue(waiting)
         testSource.error()
-        assertFalse( waiting )
+        TestCase.assertFalse(waiting)
     }
 
     @Test
@@ -60,7 +58,7 @@ class AbstractMusicSourceTest {
             putString( MediaStore.EXTRA_MEDIA_GENRE, searchQuery )
         }
         val result = testSource.search( searchQuery, searchExtras )
-        assertEquals( 3, result.size )
+        TestCase.assertEquals(3, result.size)
     }
 
     @Test
@@ -74,7 +72,7 @@ class AbstractMusicSourceTest {
             putString( MediaStore.EXTRA_MEDIA_ARTIST, "7 Developers and a Pastry Chef" )
         }
         val result = testSource.search( searchQuery, searchExtras )
-        assertEquals( 1, result.size )
+        TestCase.assertEquals(1, result.size)
     }
 
     @Test
@@ -88,7 +86,7 @@ class AbstractMusicSourceTest {
             putString( MediaStore.EXTRA_MEDIA_ARTIST, "Brainiest Jet" )
         }
         val result = testSource.search( searchQuery, searchExtras )
-        assertEquals( 0, result.size )
+        TestCase.assertEquals(0, result.size)
     }
 
     @Test
@@ -97,6 +95,6 @@ class AbstractMusicSourceTest {
         val searchQuery = "hasse"
         val searchExtras = Bundle.EMPTY
         val result = testSource.search( searchQuery, searchExtras )
-        assertEquals( 1, result.size )
+        TestCase.assertEquals(1, result.size)
     }
 }

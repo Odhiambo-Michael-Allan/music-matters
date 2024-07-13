@@ -3,7 +3,6 @@ package com.odesa.musicMatters
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
@@ -24,11 +23,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate( savedInstanceState: Bundle? ) {
         super.onCreate( savedInstanceState )
+        // Allow app to draw behind system bar decorations (e.g.: navbar)
+//        WindowCompat.setDecorFitsSystemWindows( window, false )
         Timber.plant( Timber.DebugTree() )
         mobileDiModule = ( application as MusicMatters ).diModule
 
         MediaPermissionsManager.checkForPermissions( applicationContext )
-        enableEdgeToEdge()
         setContent {
 
             val allRequiredPermissionsHaveBeenGranted by MediaPermissionsManager.hasAllRequiredPermissions.collectAsState()

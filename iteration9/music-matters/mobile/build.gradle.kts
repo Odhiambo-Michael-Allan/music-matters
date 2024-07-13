@@ -81,6 +81,8 @@ dependencies {
 
     implementation( libs.reorderable )
 
+    implementation( libs.androidx.compose.material3.adaptive.navigation.suite )
+
 
 
     implementation( projects.core.designsystem )

@@ -8,16 +8,12 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.launch
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -148,443 +143,439 @@ fun MusicMattersNavHost(
         }
     }
 
-
-    Column {
-        NavHost(
-            modifier = Modifier
-                .weight(1f),
-            navController = navController,
-            startDestination = Route.ForYou.name
-        ) {
-            composable(
-                Route.ForYou.name,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) {
-                val forYouScreenViewModel: ForYouScreenViewModel = viewModel(
-                    factory = ForYouViewModelFactory(
-                        musicServiceConnection = musicServiceConnection,
-                        playlistRepository = playlistRepository,
-                        settingsRepository = settingsRepository,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-                    )
-                )
-                ForYouScreen(
-                    viewModel = forYouScreenViewModel,
-                    onSettingsClicked = { navController.navigate( Route.Settings.name ) },
-                    onNavigateToSearch = { navController.navigateToSearchScreen( "--" ) },
-                    onSuggestedAlbumClick = navController::navigateToAlbumScreen,
-                    onViewArtist = navController::navigateToArtistScreen,
-                )
-            }
-            composable(
-                route = Route.Songs.name,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) {
-                val songsScreenViewModel: SongsScreenViewModel = viewModel(
-                    factory = SongsViewModelFactory(
-                        settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository,
-                        musicServiceConnection = musicServiceConnection,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-                    )
-                )
-                SongsScreen(
-                    viewModel = songsScreenViewModel,
-                    onSettingsClicked = { navController.navigate( Route.Settings.name ) },
-                    onViewAlbum = navController::navigateToAlbumScreen,
-                    onViewArtist = navController::navigateToArtistScreen,
-                    onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-                    onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.SONG.name ) }
-                )
-            }
-            composable(
-                route = Route.Artists.name,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) {
-                val artistsScreenViewModel: ArtistsScreenViewModel = viewModel(
-                    factory = ArtistsViewModelFactory(
-                        musicServiceConnection = musicServiceConnection,
-                        settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-                    )
-                )
-                ArtistsScreen(
-                    viewModel = artistsScreenViewModel,
-                    onArtistClick = navController::navigateToArtistScreen,
-                    onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.ARTIST.name ) },
-                    onSettingsClicked = { navController.navigate( Route.Settings.name ) }
-                )
-            }
-            composable(
-                route = Artist.route.name,
-                arguments = Artist.arguments,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) { navBackStackEntry ->
-                // Retrieve the passed argument
-                val artistName = navBackStackEntry.getRouteArgument(
-                    RouteParameters.ARTIST_ROUTE_ARTIST_NAME
-                ) ?: ""
-                val artistScreenViewModel: ArtistScreenViewModel = viewModel(
-                    factory = ArtistScreenViewModelFactory(
-                        artistName = artistName,
-                        musicServiceConnection = musicServiceConnection,
-                        settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-                    )
-                )
-                ArtistScreen(
-                    artistName = artistName,
-                    viewModel = artistScreenViewModel,
-                    onViewAlbum = navController::navigateToAlbumScreen,
-                    onViewArtist = navController::navigateToArtistScreen,
-                    onNavigateBack = { navController.navigateUp() },
-                    onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-                )
-            }
-            composable(
-                route = Route.Albums.name,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) {
-                val albumsScreenViewModel: AlbumsScreenViewModel = viewModel(
-                    factory = AlbumsViewModelFactory(
-                        musicServiceConnection = musicServiceConnection,
-                        settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-                    )
-                )
-                AlbumsScreen(
-                    viewModel = albumsScreenViewModel,
-                    onAlbumClick = navController::navigateToAlbumScreen,
-                    onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.ALBUM.name ) },
-                    onSettingsClicked = { navController.navigate( Route.Settings.name ) },
-                    onViewArtist = navController::navigateToArtistScreen
-                )
-            }
-            composable(
-                route = Album.routeWithArgs,
-                arguments = Album.arguments,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) { navBackStackEntry ->
-                // Retrieve the passed argument
-                val albumName = navBackStackEntry.getRouteArgument(
-                    RouteParameters.ALBUM_ROUTE_ALBUM_NAME ) ?: ""
-                val albumScreenViewModel: AlbumScreenViewModel = viewModel(
-                    factory = AlbumScreenViewModelFactory(
-                        albumName = albumName,
-                        musicServiceConnection = musicServiceConnection,
-                        settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-                    )
-                )
-
-                AlbumScreen(
-                    albumName = albumName,
-                    viewModel = albumScreenViewModel,
-                    onNavigateBack = { navController.navigateUp() },
-                    onViewAlbum = navController::navigateToAlbumScreen,
-                    onViewArtist = navController::navigateToArtistScreen,
-                    onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-                )
-            }
-            composable(
-                route = Route.Genres.name,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) {
-                val genresScreenViewModel: GenresScreenViewModel = viewModel(
-                    factory = GenresScreenViewModelFactory(
-                        musicServiceConnection = musicServiceConnection,
-                        settingsRepository = settingsRepository
-                    )
-                )
-                GenresScreen(
-                    viewModel = genresScreenViewModel,
-                    onGenreClick = navController::navigateToGenreScreen,
-                    onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.GENRE.name ) },
-                    onSettingsClicked = { navController.navigate( Route.Settings.name ) }
-                )
-            }
-            composable(
-                route = Genre.routeWithArgs,
-                arguments = Genre.arguments,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) { navBackStackEntry ->
-                // Retrieve the passed argument
-                val genreName = navBackStackEntry.getRouteArgument(
-                    RouteParameters.GENRE_ROUTE_GENRE_NAME ) ?: ""
-
-                val genreScreenViewModel: GenreScreenViewModel = viewModel(
-                    factory = GenreScreenViewModelFactory(
-                        genreName = genreName,
-                        musicServiceConnection = musicServiceConnection,
-                        settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-                    )
-                )
-                GenreScreen(
-                    genreName = genreName,
-                    viewModel = genreScreenViewModel,
-                    onViewAlbum = navController::navigateToAlbumScreen,
-                    onViewArtist = navController::navigateToArtistScreen,
-                    onNavigateBack = { navController.navigateUp() },
-                    onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-                )
-            }
-            composable(
-                route = Route.Playlists.name,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) {
-                val playlistsViewModel: PlaylistsViewModel = viewModel(
-                    factory = PlaylistsViewModelFactory(
-                        musicServiceConnection = musicServiceConnection,
-                        settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
-                    )
-                )
-                PlaylistsScreen(
-                    viewModel = playlistsViewModel,
-                    onPlaylistClick = { playlistId, playlistName -> navController.navigateToPlaylistScreen( playlistId, playlistName ) },
-                    onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.PLAYLIST.name ) },
-                    onSettingsClicked = { navController.navigate( Route.Settings.name ) }
-                )
-            }
-            composable(
-                route = Playlist.routeWithArgs,
-                arguments = Playlist.arguments,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) { navBackStackEntry ->
-                val playlistId = navBackStackEntry.getRouteArgument(
-                    RouteParameters.PLAYLIST_ROUTE_PLAYLIST_ID
-                ) ?: ""
-                val playlistName = navBackStackEntry.getRouteArgument(
-                    RouteParameters.PLAYLIST_ROUTE_PLAYLIST_NAME
-                ) ?: ""
-                val playlistScreenViewModel: PlaylistScreenViewModel = viewModel(
-                    factory = PlaylistScreenViewModelFactory(
-                        playlistId = playlistId,
-                        musicServiceConnection = musicServiceConnection,
-                        settingsRepository = settingsRepository,
-                        playlistsRepository = playlistRepository,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
-                    )
-                )
-
-                PlaylistScreen(
-                    playlistTitle = playlistName,
-                    viewModel = playlistScreenViewModel,
-                    onViewAlbum = navController::navigateToAlbumScreen,
-                    onViewArtist = navController::navigateToArtistScreen,
-                    onNavigateBack = { navController.navigateUp() },
-                    onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-                )
-            }
-            composable(
-                route = Route.Tree.name,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) {
-                val treeScreenViewModel: TreeScreenViewModel = viewModel(
-                    factory = TreeViewModelFactory(
-                        musicServiceConnection = musicServiceConnection,
-                        settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-                    )
-                )
-                TreeScreen(
-                    viewModel = treeScreenViewModel,
-                    onViewArtist = navController::navigateToArtistScreen,
-                    onViewAlbum = navController::navigateToAlbumScreen,
-                    onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-                    onNavigateToSearch = { navController.navigateToSearchScreen( "--" ) },
-                    onSettingsClicked = { navController.navigate( Route.Settings.name ) }
-                )
-            }
-            composable(
-                route = Route.Queue.name,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) {
-                val queueScreenViewModel: QueueScreenViewModel = viewModel(
-                    factory = QueueScreenViewModelFactory(
-                        musicServiceConnection = musicServiceConnection,
-                        settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
-                    )
-                )
-                QueueScreen(
-                    viewModel = queueScreenViewModel,
-                    onViewArtist = navController::navigateToArtistScreen,
-                    onViewAlbum = navController::navigateToAlbumScreen,
-                    onNavigateBack = navController::navigateUp,
-                    onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-                )
-            }
-            composable(
-                route = Search.routeWithArgs,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) { navBackStackEntry ->
-                val searchFilterName = navBackStackEntry.getRouteArgument(
-                    RouteParameters.SEARCH_ROUTE_SEARCH_FILTER
-                ) ?: ""
-
-                val searchScreenViewModel: SearchScreenViewModel = viewModel(
-                    factory = SearchScreenViewModelFactory(
-                        musicServiceConnection = musicServiceConnection,
-                        settingsRepository = settingsRepository,
-                        playlistRepository = playlistRepository,
-                        searchHistoryRepository = searchHistoryRepository,
-                        songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
-                    )
-                )
-                SearchScreen(
-                    viewModel = searchScreenViewModel,
-                    initialSearchFilter = getSearchFilterFrom( searchFilterName ),
-                    onAlbumClick = { navController.navigateToAlbumScreen( it.title ) },
-                    onArtistClick = { navController.navigateToArtistScreen( it.name ) },
-                    onGenreClick = { navController.navigateToGenreScreen( it.name ) },
-                    onPlaylistClick = { navController.navigateToPlaylistScreen( it.id, it.title ) }
-                ) {
-                    navController.navigateUp()
-                }
-            }
-            composable(
-                Route.Settings.name,
-                enterTransition = { SlideTransition.slideUp.enterTransition() },
-                exitTransition = { FadeTransition.exitTransition() }
-            ) {
-                val settingsViewModel: SettingsViewModel = viewModel(
-                    factory = SettingsViewModelFactory(
-                        settingsRepository
-                    )
-                )
-                SettingsScreen(
-                    viewModel = settingsViewModel,
-                    onBackPressed = { navController.popBackStack() }
+    NavigationSuiteScaffold(
+        navigationSuiteItems = {
+            TOP_LEVEL_DESTINATIONS.forEach { tab ->
+                val isSelected = currentTabName == tab.route.name
+                val label = tab.getLabel( language )
+                item(
+                    selected = isSelected,
+                    alwaysShowLabel = labelVisibility == HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE,
+                    onClick = {
+                        if ( tab == Library ) showMoreDestinationsBottomSheet = true
+                        else {
+                            currentTabName = tab.route.name
+                            navController.navigate( tab.route )
+                        }
+                    },
+                    icon = {
+                        Crossfade(
+                            targetState = isSelected,
+                            label = "home-bottom-bar"
+                        ) {
+                            Icon(
+                                imageVector = if ( it ) tab.selectedIcon else tab.unselectedIcon,
+                                contentDescription = tab.iconContentDescription
+                            )
+                        }
+                    },
+                    label = when ( labelVisibility ) {
+                        HomePageBottomBarLabelVisibility.INVISIBLE -> null
+                        else -> ( {
+                            Text(
+                                text = label,
+                                style = MaterialTheme.typography.labelSmall,
+                                textAlign = TextAlign.Center,
+                                overflow = TextOverflow.Ellipsis,
+                                softWrap = false,
+                            )
+                        } )
+                    }
                 )
             }
         }
+    ) {
         Column {
-            NowPlayingBottomBar(
-                viewModel = nowPlayingViewModel
+            NavHost(
+                modifier = Modifier
+                    .weight(1f),
+                navController = navController,
+                startDestination = Route.ForYou.name
             ) {
-                showNowPlayingBottomSheet = true
-            }
-
-            if ( showNowPlayingBottomSheet ) {
-
-                ModalBottomSheet(
-                    sheetState = nowPlayingBottomSheetState,
-                    onDismissRequest = { showNowPlayingBottomSheet = false }
+                composable(
+                    Route.ForYou.name,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
                 ) {
-                    NowPlayingBottomSheet(
-                        viewModel = nowPlayingViewModel,
+                    val forYouScreenViewModel: ForYouScreenViewModel = viewModel(
+                        factory = ForYouViewModelFactory(
+                            musicServiceConnection = musicServiceConnection,
+                            playlistRepository = playlistRepository,
+                            settingsRepository = settingsRepository,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
+                        )
+                    )
+                    ForYouScreen(
+                        viewModel = forYouScreenViewModel,
+                        onSettingsClicked = { navController.navigate( Route.Settings.name ) },
+                        onNavigateToSearch = { navController.navigateToSearchScreen( "--" ) },
+                        onSuggestedAlbumClick = navController::navigateToAlbumScreen,
+                        onViewArtist = navController::navigateToArtistScreen,
+                    )
+                }
+                composable(
+                    route = Route.Songs.name,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) {
+                    val songsScreenViewModel: SongsScreenViewModel = viewModel(
+                        factory = SongsViewModelFactory(
+                            settingsRepository = settingsRepository,
+                            playlistRepository = playlistRepository,
+                            musicServiceConnection = musicServiceConnection,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
+                        )
+                    )
+                    SongsScreen(
+                        viewModel = songsScreenViewModel,
+                        onSettingsClicked = { navController.navigate( Route.Settings.name ) },
                         onViewAlbum = navController::navigateToAlbumScreen,
                         onViewArtist = navController::navigateToArtistScreen,
-                        onHideBottomSheet = { showNowPlayingBottomSheet = false },
-                        onNavigateToQueueScreen = {
-                            navController.navigate( Route.Queue.name ) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onLaunchEqualizerActivity = {
-                            try {
-                                equalizerActivity.launch()
-                            } catch ( exception: Exception ) {
-                                Timber.tag( "NOW-PLAYING-BOTTOM-BAR" ).d(
-                                    "Launching equalizer failed: $exception"
-                                )
-                            }
-                        }
+                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.SONG.name ) }
                     )
                 }
-            }
-            NavigationBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Spacer( modifier = Modifier.width( 2.dp ) )
-                TOP_LEVEL_DESTINATIONS.forEach { tab ->
-                    val isSelected = currentTabName == tab.route.name
-                    val label = tab.getLabel( language )
-                    NavigationBarItem(
-                        selected = isSelected,
-                        alwaysShowLabel = labelVisibility == HomePageBottomBarLabelVisibility.ALWAYS_VISIBLE,
-                        onClick = {
-                            if ( tab == Library ) showMoreDestinationsBottomSheet = true
-                            else {
-                                currentTabName = tab.route.name
-                                navController.navigate( tab.route )
-                            }
-                        },
-                        icon = {
-                            Crossfade(
-                                targetState = isSelected,
-                                label = "home-bottom-bar"
-                            ) {
-                                Icon(
-                                    imageVector = if ( it ) tab.selectedIcon else tab.unselectedIcon,
-                                    contentDescription = tab.iconContentDescription
-                                )
-                            }
-                        },
-                        label = when ( labelVisibility ) {
-                            HomePageBottomBarLabelVisibility.INVISIBLE -> null
-                            else -> ( {
-                                Text(
-                                    text = label,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    textAlign = TextAlign.Center,
-                                    overflow = TextOverflow.Ellipsis,
-                                    softWrap = false,
-                                )
-                            } )
-                        }
-                    )
-                }
-                Spacer( modifier = Modifier.width( 2.dp ) )
-            }
-
-            if ( showMoreDestinationsBottomSheet ) {
-                ModalBottomSheet(
-                    sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
-                    onDismissRequest = { showMoreDestinationsBottomSheet = false }
+                composable(
+                    route = Route.Artists.name,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
                 ) {
-                    MORE_DESTINATIONS.forEach {
-                        BottomSheetMenuItem(
-                            leadingIcon = it.selectedIcon,
-                            leadingIconContentDescription = it.iconContentDescription,
-                            label = it.getLabel( language ),
-                            isSelected = currentlySelectedMoreTab == it.route.name
-                        ) {
-                            currentlySelectedMoreTab = it.route.name
-                            showMoreDestinationsBottomSheet = false
-                            currentTabName = Library.route.name
-                            navController.navigate( it.route )
+                    val artistsScreenViewModel: ArtistsScreenViewModel = viewModel(
+                        factory = ArtistsViewModelFactory(
+                            musicServiceConnection = musicServiceConnection,
+                            settingsRepository = settingsRepository,
+                            playlistRepository = playlistRepository,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
+                        )
+                    )
+                    ArtistsScreen(
+                        viewModel = artistsScreenViewModel,
+                        onArtistClick = navController::navigateToArtistScreen,
+                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.ARTIST.name ) },
+                        onSettingsClicked = { navController.navigate( Route.Settings.name ) }
+                    )
+                }
+                composable(
+                    route = Artist.route.name,
+                    arguments = Artist.arguments,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) { navBackStackEntry ->
+                    // Retrieve the passed argument
+                    val artistName = navBackStackEntry.getRouteArgument(
+                        RouteParameters.ARTIST_ROUTE_ARTIST_NAME
+                    ) ?: ""
+                    val artistScreenViewModel: ArtistScreenViewModel = viewModel(
+                        factory = ArtistScreenViewModelFactory(
+                            artistName = artistName,
+                            musicServiceConnection = musicServiceConnection,
+                            settingsRepository = settingsRepository,
+                            playlistRepository = playlistRepository,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
+                        )
+                    )
+                    ArtistScreen(
+                        artistName = artistName,
+                        viewModel = artistScreenViewModel,
+                        onViewAlbum = navController::navigateToAlbumScreen,
+                        onViewArtist = navController::navigateToArtistScreen,
+                        onNavigateBack = { navController.navigateUp() },
+                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                    )
+                }
+                composable(
+                    route = Route.Albums.name,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) {
+                    val albumsScreenViewModel: AlbumsScreenViewModel = viewModel(
+                        factory = AlbumsViewModelFactory(
+                            musicServiceConnection = musicServiceConnection,
+                            settingsRepository = settingsRepository,
+                            playlistRepository = playlistRepository,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
+                        )
+                    )
+                    AlbumsScreen(
+                        viewModel = albumsScreenViewModel,
+                        onAlbumClick = navController::navigateToAlbumScreen,
+                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.ALBUM.name ) },
+                        onSettingsClicked = { navController.navigate( Route.Settings.name ) },
+                        onViewArtist = navController::navigateToArtistScreen
+                    )
+                }
+                composable(
+                    route = Album.routeWithArgs,
+                    arguments = Album.arguments,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) { navBackStackEntry ->
+                    // Retrieve the passed argument
+                    val albumName = navBackStackEntry.getRouteArgument(
+                        RouteParameters.ALBUM_ROUTE_ALBUM_NAME ) ?: ""
+                    val albumScreenViewModel: AlbumScreenViewModel = viewModel(
+                        factory = AlbumScreenViewModelFactory(
+                            albumName = albumName,
+                            musicServiceConnection = musicServiceConnection,
+                            settingsRepository = settingsRepository,
+                            playlistRepository = playlistRepository,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
+                        )
+                    )
+
+                    AlbumScreen(
+                        albumName = albumName,
+                        viewModel = albumScreenViewModel,
+                        onNavigateBack = { navController.navigateUp() },
+                        onViewAlbum = navController::navigateToAlbumScreen,
+                        onViewArtist = navController::navigateToArtistScreen,
+                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                    )
+                }
+                composable(
+                    route = Route.Genres.name,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) {
+                    val genresScreenViewModel: GenresScreenViewModel = viewModel(
+                        factory = GenresScreenViewModelFactory(
+                            musicServiceConnection = musicServiceConnection,
+                            settingsRepository = settingsRepository
+                        )
+                    )
+                    GenresScreen(
+                        viewModel = genresScreenViewModel,
+                        onGenreClick = navController::navigateToGenreScreen,
+                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.GENRE.name ) },
+                        onSettingsClicked = { navController.navigate( Route.Settings.name ) }
+                    )
+                }
+                composable(
+                    route = Genre.routeWithArgs,
+                    arguments = Genre.arguments,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) { navBackStackEntry ->
+                    // Retrieve the passed argument
+                    val genreName = navBackStackEntry.getRouteArgument(
+                        RouteParameters.GENRE_ROUTE_GENRE_NAME ) ?: ""
+
+                    val genreScreenViewModel: GenreScreenViewModel = viewModel(
+                        factory = GenreScreenViewModelFactory(
+                            genreName = genreName,
+                            musicServiceConnection = musicServiceConnection,
+                            settingsRepository = settingsRepository,
+                            playlistRepository = playlistRepository,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
+                        )
+                    )
+                    GenreScreen(
+                        genreName = genreName,
+                        viewModel = genreScreenViewModel,
+                        onViewAlbum = navController::navigateToAlbumScreen,
+                        onViewArtist = navController::navigateToArtistScreen,
+                        onNavigateBack = { navController.navigateUp() },
+                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                    )
+                }
+                composable(
+                    route = Route.Playlists.name,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) {
+                    val playlistsViewModel: PlaylistsViewModel = viewModel(
+                        factory = PlaylistsViewModelFactory(
+                            musicServiceConnection = musicServiceConnection,
+                            settingsRepository = settingsRepository,
+                            playlistRepository = playlistRepository,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
+                        )
+                    )
+                    PlaylistsScreen(
+                        viewModel = playlistsViewModel,
+                        onPlaylistClick = { playlistId, playlistName -> navController.navigateToPlaylistScreen( playlistId, playlistName ) },
+                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.PLAYLIST.name ) },
+                        onSettingsClicked = { navController.navigate( Route.Settings.name ) }
+                    )
+                }
+                composable(
+                    route = Playlist.routeWithArgs,
+                    arguments = Playlist.arguments,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) { navBackStackEntry ->
+                    val playlistId = navBackStackEntry.getRouteArgument(
+                        RouteParameters.PLAYLIST_ROUTE_PLAYLIST_ID
+                    ) ?: ""
+                    val playlistName = navBackStackEntry.getRouteArgument(
+                        RouteParameters.PLAYLIST_ROUTE_PLAYLIST_NAME
+                    ) ?: ""
+                    val playlistScreenViewModel: PlaylistScreenViewModel = viewModel(
+                        factory = PlaylistScreenViewModelFactory(
+                            playlistId = playlistId,
+                            musicServiceConnection = musicServiceConnection,
+                            settingsRepository = settingsRepository,
+                            playlistsRepository = playlistRepository,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
+                        )
+                    )
+
+                    PlaylistScreen(
+                        playlistTitle = playlistName,
+                        viewModel = playlistScreenViewModel,
+                        onViewAlbum = navController::navigateToAlbumScreen,
+                        onViewArtist = navController::navigateToArtistScreen,
+                        onNavigateBack = { navController.navigateUp() },
+                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                    )
+                }
+                composable(
+                    route = Route.Tree.name,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) {
+                    val treeScreenViewModel: TreeScreenViewModel = viewModel(
+                        factory = TreeViewModelFactory(
+                            musicServiceConnection = musicServiceConnection,
+                            settingsRepository = settingsRepository,
+                            playlistRepository = playlistRepository,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
+                        )
+                    )
+                    TreeScreen(
+                        viewModel = treeScreenViewModel,
+                        onViewArtist = navController::navigateToArtistScreen,
+                        onViewAlbum = navController::navigateToAlbumScreen,
+                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                        onNavigateToSearch = { navController.navigateToSearchScreen( "--" ) },
+                        onSettingsClicked = { navController.navigate( Route.Settings.name ) }
+                    )
+                }
+                composable(
+                    route = Route.Queue.name,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) {
+                    val queueScreenViewModel: QueueScreenViewModel = viewModel(
+                        factory = QueueScreenViewModelFactory(
+                            musicServiceConnection = musicServiceConnection,
+                            settingsRepository = settingsRepository,
+                            playlistRepository = playlistRepository,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
+                        )
+                    )
+                    QueueScreen(
+                        viewModel = queueScreenViewModel,
+                        onViewArtist = navController::navigateToArtistScreen,
+                        onViewAlbum = navController::navigateToAlbumScreen,
+                        onNavigateBack = navController::navigateUp,
+                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                    )
+                }
+                composable(
+                    route = Search.routeWithArgs,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) { navBackStackEntry ->
+                    val searchFilterName = navBackStackEntry.getRouteArgument(
+                        RouteParameters.SEARCH_ROUTE_SEARCH_FILTER
+                    ) ?: ""
+
+                    val searchScreenViewModel: SearchScreenViewModel = viewModel(
+                        factory = SearchScreenViewModelFactory(
+                            musicServiceConnection = musicServiceConnection,
+                            settingsRepository = settingsRepository,
+                            playlistRepository = playlistRepository,
+                            searchHistoryRepository = searchHistoryRepository,
+                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
+                        )
+                    )
+                    SearchScreen(
+                        viewModel = searchScreenViewModel,
+                        initialSearchFilter = getSearchFilterFrom( searchFilterName ),
+                        onAlbumClick = { navController.navigateToAlbumScreen( it.title ) },
+                        onArtistClick = { navController.navigateToArtistScreen( it.name ) },
+                        onGenreClick = { navController.navigateToGenreScreen( it.name ) },
+                        onPlaylistClick = { navController.navigateToPlaylistScreen( it.id, it.title ) }
+                    ) {
+                        navController.navigateUp()
+                    }
+                }
+                composable(
+                    Route.Settings.name,
+                    enterTransition = { SlideTransition.slideUp.enterTransition() },
+                    exitTransition = { FadeTransition.exitTransition() }
+                ) {
+                    val settingsViewModel: SettingsViewModel = viewModel(
+                        factory = SettingsViewModelFactory(
+                            settingsRepository
+                        )
+                    )
+                    SettingsScreen(
+                        viewModel = settingsViewModel,
+                        onBackPressed = { navController.popBackStack() }
+                    )
+                }
+            }
+            Column {
+                NowPlayingBottomBar(
+                    viewModel = nowPlayingViewModel
+                ) {
+                    showNowPlayingBottomSheet = true
+                }
+
+                if ( showNowPlayingBottomSheet ) {
+
+                    ModalBottomSheet(
+                        sheetState = nowPlayingBottomSheetState,
+                        onDismissRequest = { showNowPlayingBottomSheet = false }
+                    ) {
+                        NowPlayingBottomSheet(
+                            viewModel = nowPlayingViewModel,
+                            onViewAlbum = navController::navigateToAlbumScreen,
+                            onViewArtist = navController::navigateToArtistScreen,
+                            onHideBottomSheet = { showNowPlayingBottomSheet = false },
+                            onNavigateToQueueScreen = {
+                                navController.navigate( Route.Queue.name ) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onLaunchEqualizerActivity = {
+                                try {
+                                    equalizerActivity.launch()
+                                } catch ( exception: Exception ) {
+                                    Timber.tag( "NOW-PLAYING-BOTTOM-BAR" ).d(
+                                        "Launching equalizer failed: $exception"
+                                    )
+                                }
+                            }
+                        )
+                    }
+                }
+
+                if ( showMoreDestinationsBottomSheet ) {
+                    ModalBottomSheet(
+                        sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
+                        onDismissRequest = { showMoreDestinationsBottomSheet = false }
+                    ) {
+                        MORE_DESTINATIONS.forEach {
+                            BottomSheetMenuItem(
+                                leadingIcon = it.selectedIcon,
+                                leadingIconContentDescription = it.iconContentDescription,
+                                label = it.getLabel( language ),
+                                isSelected = currentlySelectedMoreTab == it.route.name
+                            ) {
+                                currentlySelectedMoreTab = it.route.name
+                                showMoreDestinationsBottomSheet = false
+                                currentTabName = Library.route.name
+                                navController.navigate( it.route )
+                            }
                         }
                     }
                 }
             }
         }
     }
-
 }
 
 
