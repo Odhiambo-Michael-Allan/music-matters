@@ -84,7 +84,6 @@ fun GenericTile(
                         language = language,
                         fallbackResourceId = fallbackResourceId,
                         onDismissRequest = onDismissRequest,
-                        onShufflePlay = onShufflePlay,
                         onAddToQueue = onAddToQueue,
                         onPlayNext = onPlayNext,
                         onAddSongsToPlaylist = onAddSongsToPlaylist,
@@ -93,7 +92,16 @@ fun GenericTile(
                         onGetSongsInPlaylist = onGetSongsInPlaylist,
                         onGetSongs = onGetSongs,
                         onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-                        additionalBottomSheetMenuItems = additionalBottomSheetMenuItems,
+                        trailingBottomSheetMenuItems = additionalBottomSheetMenuItems,
+                        leadingBottomSheetMenuItem = {
+                            BottomSheetMenuItem(
+                                leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
+                                label = language.shufflePlay
+                            ) {
+                                onDismissRequest()
+                                onShufflePlay()
+                            }
+                        }
                     )
                 }
             }
@@ -130,7 +138,6 @@ fun GenericOptionsBottomSheet(
     language: Language,
     @DrawableRes fallbackResourceId: Int,
     onDismissRequest: () -> Unit,
-    onShufflePlay: () -> Unit,
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
     onGetPlaylists: () -> List<PlaylistInfo>,
@@ -139,7 +146,8 @@ fun GenericOptionsBottomSheet(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onGetSongs: () -> List<Song>,
-    additionalBottomSheetMenuItems: ( @Composable ( () -> Unit ) -> Unit )? = null,
+    leadingBottomSheetMenuItem: ( @Composable (() -> Unit ) -> Unit ),
+    trailingBottomSheetMenuItems: ( @Composable (() -> Unit ) -> Unit )? = null,
 ) {
 
     var showAddToPlaylistDialog by remember { mutableStateOf( false ) }
@@ -155,13 +163,14 @@ fun GenericOptionsBottomSheet(
             )
         }
     ) {
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
-            label = language.shufflePlay
-        ) {
-            onDismissRequest()
-            onShufflePlay()
-        }
+        leadingBottomSheetMenuItem( onDismissRequest )
+//        BottomSheetMenuItem(
+//            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
+//            label = language.shufflePlay
+//        ) {
+//            onDismissRequest()
+//            onShufflePlay()
+//        }
         BottomSheetMenuItem(
             leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
             label = language.playNext
@@ -182,7 +191,7 @@ fun GenericOptionsBottomSheet(
         ) {
             showAddToPlaylistDialog = true
         }
-        additionalBottomSheetMenuItems?.let {
+        trailingBottomSheetMenuItems?.let {
             it( onDismissRequest )
         }
         Spacer( modifier = Modifier.size( 32.dp ) )

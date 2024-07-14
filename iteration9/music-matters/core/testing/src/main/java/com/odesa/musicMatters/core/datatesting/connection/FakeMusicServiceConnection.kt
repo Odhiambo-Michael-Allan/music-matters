@@ -50,6 +50,12 @@ class FakeMusicServiceConnection : MusicServiceConnection {
     private val _cachedSuggestedAlbums = MutableStateFlow( testAlbums.subListNonStrict( 6 ) )
     override val cachedSuggestedAlbums = _cachedSuggestedAlbums.asStateFlow()
 
+    private val _isInitializing = MutableStateFlow( true )
+    override var isInitializing = _isInitializing.asStateFlow()
+
+    private val _isLoadingGenres = MutableStateFlow( true )
+    override val isLoadingGenres = _isLoadingGenres.asStateFlow()
+
     override val currentPlaybackPosition = 0L
 
     override fun playPause() {
@@ -76,11 +82,12 @@ class FakeMusicServiceConnection : MusicServiceConnection {
         TODO("Not yet implemented")
     }
 
-    private val _isInitializing = MutableStateFlow( true )
-    override var isInitializing = _isInitializing.asStateFlow()
-
     fun setIsInitialized() {
         _isInitializing.value = false
+    }
+
+    fun setIsLoadingGenres( isLoadingGenres: Boolean ) {
+        _isLoadingGenres.value = isLoadingGenres
     }
 
     fun setSongs( songs: List<Song> ) {

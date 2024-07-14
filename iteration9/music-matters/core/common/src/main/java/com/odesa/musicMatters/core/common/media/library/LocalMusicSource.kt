@@ -9,7 +9,7 @@ import androidx.media3.common.MediaItem
 import com.odesa.musicMatters.core.common.media.extensions.UNKNOWN_LONG_VALUE
 import com.odesa.musicMatters.core.common.media.extensions.UNKNOWN_STRING_VALUE
 import com.odesa.musicMatters.core.common.media.extensions.from
-import com.odesa.musicMatters.core.data.database.dao.SongAdditionalMetadataDao
+import com.odesa.musicMatters.core.common.media.extensions.genreTagSeparators
 import com.odesa.musicMatters.core.data.database.model.SongAdditionalMetadata
 import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +27,7 @@ class LocalMusicSource(
     private var musicCatalog: List<MediaItem> = emptyList()
 
     init {
-        Timber.tag(TAG).d( "INITIALIZING LOCAL MUSIC SOURCE" )
+        Timber.tag( TAG ).d( "INITIALIZING LOCAL MUSIC SOURCE" )
         state = STATE_INITIALIZING
     }
 
@@ -37,7 +37,7 @@ class LocalMusicSource(
         updateCatalog()?.let {
             musicCatalog = it
             state = STATE_INITIALIZED
-            Timber.tag(TAG).d( "MUSIC CATALOG INITIALIZED. STATE IS INITIALIZED" )
+            Timber.tag( TAG ).d( "MUSIC CATALOG INITIALIZED. STATE IS INITIALIZED" )
             fetchMediaItemsAdditionalMetadata()
         } ?: run {
             musicCatalog = emptyList()
@@ -48,7 +48,7 @@ class LocalMusicSource(
 
     private suspend fun updateCatalog(): List<MediaItem>? {
         return withContext( Dispatchers.IO ) {
-            Timber.tag(TAG).d( "READING MEDIA ITEMS FROM STORAGE" )
+            Timber.tag( TAG ).d( "READING MEDIA ITEMS FROM STORAGE" )
             val mediaItemList = mutableListOf<MediaItem>()
             try {
                 context.contentResolver.query(
@@ -60,7 +60,7 @@ class LocalMusicSource(
                 )?.use {
                     while ( it.moveToNext() ) {
                         kotlin.runCatching {
-                            MediaItem.Builder().from( it, context )
+                            MediaItem.Builder().from( it )
                         }.getOrNull() ?.also { mediaItemBuilder ->
                             mediaItemList.add( mediaItemBuilder.build() )
                         }
@@ -79,6 +79,7 @@ class LocalMusicSource(
     private suspend fun fetchMediaItemsAdditionalMetadata() {
         withContext( Dispatchers.IO ) {
             val mediaMetadataRetriever = MediaMetadataRetriever()
+            val additionalMetadataList = mutableListOf<SongAdditionalMetadata>()
             musicCatalog.forEach {
                 val uri = it.localConfiguration?.uri ?: Uri.EMPTY
                 Timber.tag(TAG).d( "FETCHING ADDITIONAL METADATA FOR SONG" +
@@ -92,16 +93,21 @@ class LocalMusicSource(
                 Timber.tag( TAG ).d( "Codec: $codec" )
                 val samplingRate = extractSamplingRateUsing( mediaMetadataRetriever )
                 Timber.tag( TAG ).d( "Sampling Rate: $samplingRate" )
-                songsAdditionalMetadataRepository.save(
+                val genre = extractGenreUsing( mediaMetadataRetriever )
+                Timber.tag( TAG ).d( "Genre: $genre" )
+
+                additionalMetadataList.add(
                     SongAdditionalMetadata(
                         id = it.mediaId,
                         bitrate = bitrate,
                         bitsPerSample = bitsPerSample,
                         codec = codec,
-                        samplingRate = samplingRate
+                        samplingRate = samplingRate,
+                        genre = genre
                     )
                 )
             }
+            songsAdditionalMetadataRepository.save( additionalMetadataList )
             mediaMetadataRetriever.release()
         }
     }
@@ -129,6 +135,14 @@ class LocalMusicSource(
                 extractMetadata( MediaMetadataRetriever.METADATA_KEY_SAMPLERATE )?.toLong()
             }.getOrNull() ?: UNKNOWN_LONG_VALUE
         } else UNKNOWN_LONG_VALUE
+
+    private fun extractGenreUsing( mediaMetadataRetriever: MediaMetadataRetriever ): String {
+        val genre = mediaMetadataRetriever.runCatching {
+            extractMetadata( MediaMetadataRetriever.METADATA_KEY_GENRE )
+        }.getOrNull() ?: UNKNOWN_STRING_VALUE
+        return genre.split( *genreTagSeparators.toTypedArray() ).first()
+    }
+
 }
 
 val projection = arrayOf(

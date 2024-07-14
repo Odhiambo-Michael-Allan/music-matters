@@ -106,13 +106,12 @@ fun SongDetailsDialog(
                                 language = language
                             )
                         }
-                        song.genre?.let {
-                            SongDetailsItem(
-                                key = language.genre,
-                                value = it,
-                                language = language
-                            )
-                        }
+                        SongDetailsItem(
+                            key = language.genre,
+                            value = onGetSongAdditionalMetadata()?.genre ?: "",
+                            language = language,
+                            isLoadingValue = isLoadingSongAdditionalMetadata
+                        )
                         song.year?.let {
                             SongDetailsItem(
                                 key = language.year,
@@ -238,7 +237,8 @@ fun SongDetailsDialogPreview() {
                     codec = "unknown",
                     bitrate = "unknown",
                     samplingRate = "unknown",
-                    bitsPerSample = "unknown"
+                    bitsPerSample = "unknown",
+                    genre = "unknown"
                 )
             },
             onDismissRequest = {}

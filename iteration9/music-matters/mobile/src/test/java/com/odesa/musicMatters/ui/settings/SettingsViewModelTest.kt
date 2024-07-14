@@ -5,6 +5,7 @@ import com.odesa.musicMatters.core.data.preferences.HomePageBottomBarLabelVisibi
 import com.odesa.musicMatters.core.data.preferences.NowPlayingLyricsLayout
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
+import com.odesa.musicMatters.core.data.settings.impl.scalingPresets
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
 import com.odesa.musicMatters.core.designsystem.theme.MusicallyFont
 import com.odesa.musicMatters.core.designsystem.theme.MusicallyTypography
@@ -18,7 +19,6 @@ import com.odesa.musicMatters.core.i8n.French
 import com.odesa.musicMatters.core.i8n.German
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.i8n.Spanish
-import com.odesa.musicMatters.ui.settings.appearance.scalingPresets
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue

@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.ArrowDownward
@@ -251,7 +252,6 @@ fun TreeSongListContent(
                             language = uiState.language,
                             fallbackResourceId = fallbackResourceId,
                             onDismissRequest = { showOptionsMenu = false },
-                            onShufflePlay = { onShufflePlay( songsInDirectory ) },
                             onPlayNext = { songsInDirectory.forEach { onPlayNext( it ) } },
                             onAddToQueue = { songsInDirectory.forEach { onAddToQueue( it ) } },
                             onGetPlaylists = onGetPlaylists,
@@ -259,7 +259,16 @@ fun TreeSongListContent(
                             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                             onCreatePlaylist = onCreatePlaylist,
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
-                            onGetSongs = { songsInDirectory }
+                            onGetSongs = { songsInDirectory },
+                            leadingBottomSheetMenuItem = { onDismissRequest ->
+                                BottomSheetMenuItem(
+                                    leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
+                                    label = uiState.language.shufflePlay
+                                ) {
+                                    onDismissRequest()
+                                    onShufflePlay( songsInDirectory )
+                                }
+                            }
                         )
                     }
                 }

@@ -6,10 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.odesa.musicMatters.core.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.core.data.preferences.NowPlayingLyricsLayout
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
+import com.odesa.musicMatters.core.data.settings.impl.scalingPresets
 import com.odesa.musicMatters.core.designsystem.theme.MusicallyFont
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.ui.settings.appearance.scalingPresets
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

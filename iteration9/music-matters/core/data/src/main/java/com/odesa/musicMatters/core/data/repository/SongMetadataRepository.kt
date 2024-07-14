@@ -8,4 +8,5 @@ interface SongsAdditionalMetadataRepository {
     fun fetchAdditionalMetadataEntries(): Flow<List<SongAdditionalMetadata>>
     suspend fun fetchAdditionalMetadataForSongWithId( songId: String ): SongAdditionalMetadataInfo?
     suspend fun save( songAdditionalMetadata: SongAdditionalMetadata )
+    suspend fun save( songAdditionalMetadata: List<SongAdditionalMetadata> )
 }

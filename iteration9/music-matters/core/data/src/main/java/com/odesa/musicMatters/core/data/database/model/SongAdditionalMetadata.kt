@@ -12,5 +12,6 @@ data class SongAdditionalMetadata(
     @ColumnInfo( name = "codec" ) val codec: String,
     @ColumnInfo( name = "bits_per_sample" ) val bitsPerSample: Long,
     @ColumnInfo( name = "bitrate" ) val bitrate: Long,
-    @ColumnInfo( name = "sampling_rate" ) val samplingRate: Long
+    @ColumnInfo( name = "sampling_rate" ) val samplingRate: Long,
+    @ColumnInfo( name = "genre" ) val genre: String
 )

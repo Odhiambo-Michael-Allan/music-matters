@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface MusicServiceConnection {
     val isInitializing: StateFlow<Boolean>
+    val isLoadingGenres: StateFlow<Boolean>
     val nowPlayingMediaItem: StateFlow<MediaItem>
     val playbackState: StateFlow<PlaybackState>
     val currentlyPlayingMediaItemIndex: StateFlow<Int>

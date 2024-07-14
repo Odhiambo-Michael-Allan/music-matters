@@ -20,6 +20,10 @@ class SongsAdditionalMetadataRepositoryImpl(
     override suspend fun save( songAdditionalMetadata: SongAdditionalMetadata ) {
         songAdditionalMetadataDao.insert( songAdditionalMetadata )
     }
+
+    override suspend fun save( songAdditionalMetadata: List<SongAdditionalMetadata> ) {
+        songAdditionalMetadataDao.insertAll( songAdditionalMetadata )
+    }
 }
 
 fun SongAdditionalMetadata?.asDomain(): SongAdditionalMetadataInfo? =
@@ -31,4 +35,5 @@ fun SongAdditionalMetadata?.asDomain(): SongAdditionalMetadataInfo? =
             bitsPerSample = bitsPerSample.toString(),
             bitrate = bitrate.toString(),
             samplingRate = samplingRate.toFloat().div( 1000 ).toString(),
+            genre = genre
         )

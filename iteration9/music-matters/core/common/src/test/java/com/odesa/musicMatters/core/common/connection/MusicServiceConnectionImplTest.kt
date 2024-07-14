@@ -3,19 +3,26 @@ package com.odesa.musicMatters.core.common.connection
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
+import com.odesa.musicMatters.core.data.database.model.SongAdditionalMetadata
 import com.odesa.musicMatters.core.data.preferences.allowedSpeedPitchValues
 import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.albums.testAlbumMediaItems
 import com.odesa.musicMatters.core.datatesting.artists.testArtistMediaItems
 import com.odesa.musicMatters.core.datatesting.connection.FakeConnectable
-import com.odesa.musicMatters.core.datatesting.genres.testGenreMediaItems
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
+import com.odesa.musicMatters.core.datatesting.repository.FakeSongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.datatesting.songs.testSongMediaItems
+import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,6 +37,7 @@ class MusicServiceConnectionImplTest {
     private lateinit var connectable: Connectable
     private lateinit var playlistRepository: PlaylistRepository
     private lateinit var settingsRepository: SettingsRepository
+    private lateinit var songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
     private lateinit var musicServiceConnection: MusicServiceConnection
 
 
@@ -39,10 +47,12 @@ class MusicServiceConnectionImplTest {
         connectable = FakeConnectable()
         playlistRepository = FakePlaylistRepository()
         settingsRepository = FakeSettingsRepository()
+        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         musicServiceConnection = MusicServiceConnectionImpl(
-            connectable,
+            connectable = connectable,
             playlistRepository = playlistRepository,
             settingsRepository = settingsRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
             dispatcher = UnconfinedTestDispatcher(),
             initialPlaybackParameters = PlaybackParameters( playbackSpeed, playbackPitch ),
             initialRepeatMode = currentRepeatMode
@@ -51,38 +61,64 @@ class MusicServiceConnectionImplTest {
 
     @Test
     fun testCachesAreCorrectlyUpdated() {
-        TestCase.assertFalse(musicServiceConnection.isInitializing.value)
-        TestCase.assertEquals(
+        TestCase.assertFalse( musicServiceConnection.isInitializing.value )
+        assertEquals(
             testSongMediaItems.size,
             musicServiceConnection.cachedSongs.value.size
         )
-        TestCase.assertEquals(
-            testGenreMediaItems.size,
-            musicServiceConnection.cachedGenres.value.size
-        )
-        TestCase.assertEquals(
+        assertEquals(
             3,
             musicServiceConnection.cachedGenres.value.find { it.name == "Pop" }!!.numberOfTracks
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             musicServiceConnection.cachedRecentlyAddedSongs.value.size
         )
-        TestCase.assertEquals(
+        assertEquals(
             testArtistMediaItems.size,
             musicServiceConnection.cachedArtists.value.size
         )
-        TestCase.assertEquals(
+        assertEquals(
             testArtistMediaItems.size,
             musicServiceConnection.cachedSuggestedArtists.value.size
         )
-        TestCase.assertEquals(
+        assertEquals(
             testAlbumMediaItems.size,
             musicServiceConnection.cachedAlbums.value.size
         )
-        TestCase.assertEquals(
+        assertEquals(
             testAlbumMediaItems.size,
             musicServiceConnection.cachedSuggestedAlbums.value.size
+        )
+    }
+
+    @Test
+    fun testGenresAreCorrectlyLoaded() = runTest {
+        val testGenres = listOf(
+            "Pop", "Hip Hop", "RnB", "House", "Alternative", "Rock",
+            "Reggae", "Country", "Jazz", "Blues", "Folk"
+        )
+        assertTrue( musicServiceConnection.isLoadingGenres.value )
+        assertEquals( 0, musicServiceConnection.cachedGenres.value.size )
+        for ( index in testSongs.indices )
+            songsAdditionalMetadataRepository.save(
+                SongAdditionalMetadata(
+                    id = testSongs[ index ].id,
+                    codec = "",
+                    bitsPerSample = 0L,
+                    bitrate = 0L,
+                    samplingRate = 0L,
+                    genre = testGenres[ index ]
+                )
+            )
+        assertFalse( musicServiceConnection.isLoadingGenres.value )
+        assertEquals(
+            11,
+            musicServiceConnection.cachedGenres.value.size
+        )
+        assertEquals(
+            1,
+            musicServiceConnection.cachedGenres.value.find { it.name == "Pop" }!!.numberOfTracks
         )
     }
 
@@ -92,32 +128,32 @@ class MusicServiceConnectionImplTest {
             musicServiceConnection.addToQueue( it )
         }
         musicServiceConnection.addToQueue( testSongMediaItems.first() ) // NO DUPLICATES!
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             musicServiceConnection.mediaItemsInQueue.value.size
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             connectable.player!!.mediaItemCount
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.first().mediaId,
             connectable.player!!.currentMediaItem!!.mediaId
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.first().mediaId,
             musicServiceConnection.nowPlayingMediaItem.value.mediaId
         )
-        TestCase.assertEquals(
+        assertEquals(
             0,
             musicServiceConnection.currentlyPlayingMediaItemIndex.value
         )
         TestCase.assertTrue(musicServiceConnection.playbackState.value.isPlaying)
-        TestCase.assertEquals(
+        assertEquals(
             0,
             connectable.player!!.currentMediaItemIndex
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )
@@ -128,35 +164,35 @@ class MusicServiceConnectionImplTest {
         testSongMediaItems.forEach {
             musicServiceConnection.playNext( it )
         }
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             musicServiceConnection.mediaItemsInQueue.value.size
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             connectable.player!!.mediaItemCount
         )
         TestCase.assertTrue(musicServiceConnection.playbackState.value.isPlaying)
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.first().mediaId,
             musicServiceConnection.mediaItemsInQueue.value.first().mediaId
         )
         musicServiceConnection.playNext(
             testSongMediaItems.last()
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             musicServiceConnection.mediaItemsInQueue.value.size
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.last().mediaId,
             musicServiceConnection.mediaItemsInQueue.value[1].mediaId
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.last().mediaId,
             connectable.player!!.getMediaItemAt(1).mediaId
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )
@@ -166,11 +202,11 @@ class MusicServiceConnectionImplTest {
     fun testShuffleAndPlay() {
         musicServiceConnection.shuffleAndPlay( testSongMediaItems )
         TestCase.assertTrue(musicServiceConnection.playbackState.value.isPlaying)
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             musicServiceConnection.mediaItemsInQueue.value.size
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             connectable.player!!.mediaItemCount
         )
@@ -179,7 +215,7 @@ class MusicServiceConnectionImplTest {
                 it.mediaId == musicServiceConnection.nowPlayingMediaItem.value.mediaId
             }
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )
@@ -190,14 +226,14 @@ class MusicServiceConnectionImplTest {
         testSongMediaItems.forEach {
             musicServiceConnection.addToQueue( it )
         }
-        TestCase.assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
-        TestCase.assertEquals(0, connectable.player!!.currentMediaItemIndex)
+        assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
+        assertEquals(0, connectable.player!!.currentMediaItemIndex)
         musicServiceConnection.playNextSong()
-        TestCase.assertEquals(1, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
-        TestCase.assertEquals(1, connectable.player!!.currentMediaItemIndex)
+        assertEquals(1, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
+        assertEquals(1, connectable.player!!.currentMediaItemIndex)
         musicServiceConnection.playNextSong()
-        TestCase.assertEquals(2, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
-        TestCase.assertEquals(2, connectable.player!!.currentMediaItemIndex)
+        assertEquals(2, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
+        assertEquals(2, connectable.player!!.currentMediaItemIndex)
     }
 
     @Test
@@ -207,17 +243,17 @@ class MusicServiceConnectionImplTest {
         }
         connectable.player!!.seekToNext()  // testMediaItems[1] is currently playing
         musicServiceConnection.shuffleSongsInQueue()
-        TestCase.assertEquals(0, connectable.player!!.currentMediaItemIndex)
-        TestCase.assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
-        TestCase.assertEquals(
+        assertEquals(0, connectable.player!!.currentMediaItemIndex)
+        assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
+        assertEquals(
             testSongMediaItems[1].mediaId,
             musicServiceConnection.nowPlayingMediaItem.value.mediaId
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems[1].mediaId,
             connectable.player!!.currentMediaItem!!.mediaId
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )
@@ -229,16 +265,16 @@ class MusicServiceConnectionImplTest {
             musicServiceConnection.addToQueue( it )
         }
         musicServiceConnection.moveMediaItem( 0, 2 )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.first().mediaId,
             musicServiceConnection.mediaItemsInQueue.value[2].mediaId
         )
-        TestCase.assertEquals(2, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
-        TestCase.assertEquals(2, connectable.player!!.currentMediaItemIndex)
+        assertEquals(2, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
+        assertEquals(2, connectable.player!!.currentMediaItemIndex)
         musicServiceConnection.moveMediaItem( 2, 0 )
-        TestCase.assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
-        TestCase.assertEquals(0, connectable.player!!.currentMediaItemIndex)
-        TestCase.assertEquals(
+        assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
+        assertEquals(0, connectable.player!!.currentMediaItemIndex)
+        assertEquals(
             testSongMediaItems.size,
             playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )
@@ -250,10 +286,10 @@ class MusicServiceConnectionImplTest {
             musicServiceConnection.addToQueue( it )
         }
         musicServiceConnection.clearQueue()
-        TestCase.assertEquals(0, musicServiceConnection.mediaItemsInQueue.value.size)
-        TestCase.assertEquals(0, connectable.player!!.mediaItemCount)
-        TestCase.assertEquals(MediaItem.EMPTY, musicServiceConnection.nowPlayingMediaItem.value)
-        TestCase.assertEquals(
+        assertEquals(0, musicServiceConnection.mediaItemsInQueue.value.size)
+        assertEquals(0, connectable.player!!.mediaItemCount)
+        assertEquals(MediaItem.EMPTY, musicServiceConnection.nowPlayingMediaItem.value)
+        assertEquals(
             CURRENTLY_PLAYING_MEDIA_ITEM_INDEX_UNDEFINED,
             musicServiceConnection.currentlyPlayingMediaItemIndex.value
         )
@@ -264,15 +300,15 @@ class MusicServiceConnectionImplTest {
 
     @Test
     fun testPlaybackParametersAreSetCorrectly() {
-        TestCase.assertEquals(playbackSpeed, connectable.player!!.playbackParameters.speed)
-        TestCase.assertEquals(playbackPitch, connectable.player!!.playbackParameters.pitch)
+        assertEquals(playbackSpeed, connectable.player!!.playbackParameters.speed)
+        assertEquals(playbackPitch, connectable.player!!.playbackParameters.pitch)
     }
 
     @Test
     fun testSetPlaybackSpeed() {
         allowedSpeedPitchValues.forEach {
             musicServiceConnection.setPlaybackSpeed( it )
-            TestCase.assertEquals(it, connectable.player!!.playbackParameters.speed)
+            assertEquals(it, connectable.player!!.playbackParameters.speed)
         }
     }
 
@@ -280,16 +316,16 @@ class MusicServiceConnectionImplTest {
     fun testSetPlaybackPitch() {
         allowedSpeedPitchValues.forEach {
             musicServiceConnection.setPlaybackPitch( it )
-            TestCase.assertEquals(it, connectable.player!!.playbackParameters.pitch)
+            assertEquals(it, connectable.player!!.playbackParameters.pitch)
         }
     }
 
     @Test
     fun testSetRepeatMode() {
-        TestCase.assertEquals(Player.REPEAT_MODE_OFF, connectable.player!!.repeatMode)
+        assertEquals(Player.REPEAT_MODE_OFF, connectable.player!!.repeatMode)
         listOf( Player.REPEAT_MODE_OFF, Player.REPEAT_MODE_ONE, Player.REPEAT_MODE_ALL ).forEach {
             musicServiceConnection.setRepeatMode( it )
-            TestCase.assertEquals(it, connectable.player!!.repeatMode)
+            assertEquals(it, connectable.player!!.repeatMode)
         }
     }
 
@@ -311,25 +347,25 @@ class MusicServiceConnectionImplTest {
         testSongMediaItems.forEach {
             musicServiceConnection.addToQueue( it )
         }
-        TestCase.assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
-        TestCase.assertEquals(0, connectable.player!!.currentMediaItemIndex)
+        assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
+        assertEquals(0, connectable.player!!.currentMediaItemIndex)
 
         musicServiceConnection.playPreviousSong()
-        TestCase.assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
-        TestCase.assertEquals(0, connectable.player!!.currentMediaItemIndex)
+        assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
+        assertEquals(0, connectable.player!!.currentMediaItemIndex)
 
         musicServiceConnection.playNextSong()
         musicServiceConnection.playNextSong()
-        TestCase.assertEquals(2, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
-        TestCase.assertEquals(2, connectable.player!!.currentMediaItemIndex)
+        assertEquals(2, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
+        assertEquals(2, connectable.player!!.currentMediaItemIndex)
 
         musicServiceConnection.playPreviousSong()
-        TestCase.assertEquals(1, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
-        TestCase.assertEquals(1, connectable.player!!.currentMediaItemIndex)
+        assertEquals(1, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
+        assertEquals(1, connectable.player!!.currentMediaItemIndex)
 
         musicServiceConnection.playPreviousSong()
-        TestCase.assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
-        TestCase.assertEquals(0, connectable.player!!.currentMediaItemIndex)
+        assertEquals(0, musicServiceConnection.currentlyPlayingMediaItemIndex.value)
+        assertEquals(0, connectable.player!!.currentMediaItemIndex)
         connectable.player
     }
 
@@ -341,7 +377,7 @@ class MusicServiceConnectionImplTest {
             mediaItems = testSongMediaItems,
             shuffle = false
         )
-        TestCase.assertEquals(
+        assertEquals(
             testSongMediaItems.size,
             playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
         )

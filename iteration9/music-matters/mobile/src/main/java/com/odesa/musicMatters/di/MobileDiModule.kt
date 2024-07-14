@@ -13,7 +13,8 @@ class MobileDiModule( context: Context ) {
     private val commonDiModule = CommonDiModule(
         context = context,
         playlistRepository = dataDiModule.playlistRepository,
-        settingsRepository = dataDiModule.settingsRepository
+        settingsRepository = dataDiModule.settingsRepository,
+        songsAdditionalMetadataRepository = dataDiModule.songsAdditionalMetadataRepository
     )
     val settingsRepository = dataDiModule.settingsRepository
     val playlistRepository = dataDiModule.playlistRepository

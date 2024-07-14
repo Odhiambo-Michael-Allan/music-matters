@@ -11,14 +11,13 @@ import com.odesa.musicMatters.core.datatesting.genres.testGenres
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.Genre
-
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class GenresScreenViewModel(
     private val musicServiceConnection: MusicServiceConnection,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -27,21 +26,21 @@ class GenresScreenViewModel(
             sortGenresBy = settingsRepository.sortGenresBy.value,
             sortGenresInReverse = settingsRepository.sortSongsInReverse.value,
             language = settingsRepository.language.value,
-            isLoading = musicServiceConnection.isInitializing.value
+            isLoading = true
         )
     )
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch { observeMusicServiceConnectionInitializedStatus() }
+        viewModelScope.launch { observeIsLoadingGenres() }
         viewModelScope.launch { observeGenres() }
         viewModelScope.launch { observeLanguageChange() }
         viewModelScope.launch { observeSortGenresBy() }
         viewModelScope.launch { observeSortGenresInReverse() }
     }
 
-    private suspend fun observeMusicServiceConnectionInitializedStatus() {
-        musicServiceConnection.isInitializing.collect {
+    private suspend fun observeIsLoadingGenres() {
+        musicServiceConnection.isLoadingGenres.collect {
             _uiState.value = _uiState.value.copy(
                 isLoading = it
             )
@@ -118,12 +117,12 @@ private fun List<Genre>.sortGenres( sortGenresBy: SortGenresBy, reverse: Boolean
 @Suppress( "UNCHECKED_CAST" )
 class GenresScreenViewModelFactory(
     private val musicServiceConnection: MusicServiceConnection,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T: ViewModel> create( modelClass: Class<T> ) =
         ( GenresScreenViewModel(
             musicServiceConnection = musicServiceConnection,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
         ) as T )
 }
 

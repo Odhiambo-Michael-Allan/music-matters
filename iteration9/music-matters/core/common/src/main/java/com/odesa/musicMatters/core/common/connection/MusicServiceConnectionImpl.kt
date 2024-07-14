@@ -9,16 +9,16 @@ import com.odesa.musicMatters.core.common.media.extensions.artistTagSeparators
 import com.odesa.musicMatters.core.common.media.extensions.move
 import com.odesa.musicMatters.core.common.media.extensions.toAlbum
 import com.odesa.musicMatters.core.common.media.extensions.toArtist
-import com.odesa.musicMatters.core.common.media.extensions.toGenre
 import com.odesa.musicMatters.core.common.media.extensions.toSong
 import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_ALBUMS_ROOT
 import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_ARTISTS_ROOT
-import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_GENRES_ROOT
 import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_RECENT_SONGS_ROOT
 import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT
 import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT
 import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_TRACKS_ROOT
+import com.odesa.musicMatters.core.data.database.model.SongAdditionalMetadata
 import com.odesa.musicMatters.core.data.repository.PlaylistRepository
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
@@ -26,18 +26,21 @@ import com.odesa.musicMatters.core.model.Genre
 import com.odesa.musicMatters.core.model.Song
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class MusicServiceConnectionImpl(
     private val connectable: Connectable,
     private val playlistRepository: PlaylistRepository,
     private val settingsRepository: SettingsRepository,
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
     private val initialPlaybackParameters: PlaybackParameters,
     private val initialRepeatMode: @Player.RepeatMode Int,
     dispatcher: CoroutineDispatcher
@@ -47,6 +50,9 @@ class MusicServiceConnectionImpl(
 
     private val _isInitializing = MutableStateFlow( true )
     override val isInitializing = _isInitializing.asStateFlow()
+
+    private val _isLoadingGenres = MutableStateFlow( true )
+    override val isLoadingGenres = _isLoadingGenres.asStateFlow()
 
     private val _nowPlayingMediaItem = MutableStateFlow( NOTHING_PLAYING )
     override val nowPlayingMediaItem = _nowPlayingMediaItem.asStateFlow()
@@ -58,7 +64,6 @@ class MusicServiceConnectionImpl(
     override val currentlyPlayingMediaItemIndex = _currentlyPlayingMediaItemIndex.asStateFlow()
 
     private val playerListener: PlayerListener = PlayerListener()
-
     private var player: Player? = null
 
     private var _mediaItemsInQueue = MutableStateFlow( emptyList<MediaItem>() )
@@ -107,14 +112,13 @@ class MusicServiceConnectionImpl(
             _nowPlayingMediaItem.value = fetchNowPlayingMediaItem()
             _currentlyPlayingMediaItemIndex.value = getCurrentMediaItemIndex()
             _isInitializing.value = false
+            observeSongsAdditionalMetadata()
         }
     }
 
     private suspend fun updateMediaCaches() {
         _cachedSongs.value = connectable.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
             .map { it.toSong( artistTagSeparators ) }
-        _cachedGenres.value = connectable.getChildren( MUSIC_MATTERS_GENRES_ROOT )
-            .map { it.toGenre( songs = _cachedSongs.value ) }
         _cachedRecentlyAddedSongs.value = connectable.getChildren( MUSIC_MATTERS_RECENT_SONGS_ROOT )
             .map { it.toSong( artistTagSeparators ) }
         _cachedAlbums.value = connectable.getChildren( MUSIC_MATTERS_ALBUMS_ROOT )
@@ -125,6 +129,39 @@ class MusicServiceConnectionImpl(
             .map { it.toArtist( _cachedSongs.value, _cachedAlbums.value ) }
         _cachedSuggestedArtists.value = connectable.getChildren( MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT )
             .map { it.toArtist( _cachedSongs.value, _cachedAlbums.value ) }
+    }
+
+    private fun updateMediaItemsInQueueWith( newMediaItemsInQueue: List<MediaItem> ) {
+        _mediaItemsInQueue.value = newMediaItemsInQueue
+        saveCurrentQueue()
+    }
+
+    private suspend fun observeSongsAdditionalMetadata() {
+        withContext( Dispatchers.IO ) {
+            songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().collect {
+                if ( it.size >= cachedSongs.value.size ) {
+                    // At this point, we are sure all additional metadata for each song has been loaded.
+                    _cachedGenres.value = constructGenresUsing( it )
+                    _isLoadingGenres.value = false
+                }
+            }
+        }
+    }
+
+    private fun constructGenresUsing(
+        songsAdditionalMetadata: List<SongAdditionalMetadata>
+    ): List<Genre> {
+        val songsAdditionalMetadataGroupedByGenre = songsAdditionalMetadata.groupBy { it.genre }
+        return songsAdditionalMetadataGroupedByGenre.map { ( genreName, songsInGenre ) ->
+            Genre(
+                name = genreName,
+                songsInGenre = cachedSongs
+                    .value
+                    .filter { song -> songsInGenre.map { it.id }.contains( song.id ) },
+                numberOfTracks = songsInGenre.size
+            )
+
+        }
     }
 
     private fun fetchPreviouslySavedQueue(): List<MediaItem> {
@@ -275,11 +312,6 @@ class MusicServiceConnectionImpl(
         }
     }
 
-    private fun updateMediaItemsInQueueWith( newMediaItemsInQueue: List<MediaItem> ) {
-        _mediaItemsInQueue.value = newMediaItemsInQueue
-        saveCurrentQueue()
-    }
-
     override fun setPlaybackSpeed( playbackSpeed: Float ) {
         player?.setPlaybackSpeed( playbackSpeed )
     }
@@ -342,6 +374,7 @@ class MusicServiceConnectionImpl(
             connectable: Connectable,
             playlistRepository: PlaylistRepository,
             settingsRepository: SettingsRepository,
+            songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
             dispatcher: CoroutineDispatcher,
             playbackParameters: PlaybackParameters,
             repeatMode: Int,
@@ -351,6 +384,7 @@ class MusicServiceConnectionImpl(
                     connectable = connectable,
                     playlistRepository = playlistRepository,
                     settingsRepository = settingsRepository,
+                    songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
                     dispatcher = dispatcher,
                     initialPlaybackParameters = playbackParameters,
                     initialRepeatMode = repeatMode,

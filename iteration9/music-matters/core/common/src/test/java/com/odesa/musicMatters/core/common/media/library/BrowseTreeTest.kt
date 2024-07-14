@@ -29,13 +29,6 @@ class BrowseTreeTest {
     }
 
     @Test
-    fun testGenresAreCorrectlyConfigured() {
-        val genresList = browseTree[ MUSIC_MATTERS_GENRES_ROOT ]
-        TestCase.assertNotNull(genresList)
-        TestCase.assertEquals(4, genresList!!.size)
-    }
-
-    @Test
     fun testRecentlyAddedSongsAreCorrectlyConfigured() {
         val recentlyAddedSongs = browseTree[ MUSIC_MATTERS_RECENT_SONGS_ROOT ]
         TestCase.assertNotNull(recentlyAddedSongs)

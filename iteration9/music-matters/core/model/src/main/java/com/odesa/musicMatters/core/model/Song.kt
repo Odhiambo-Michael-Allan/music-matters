@@ -16,7 +16,6 @@ data class Song(
     val trackNumber: Int?,
     val year: Int?,
     val albumTitle: String?,
-    val genre: String?,
     val composer: String?,
     val artworkUri: Uri?,
     val mediaItem: MediaItem

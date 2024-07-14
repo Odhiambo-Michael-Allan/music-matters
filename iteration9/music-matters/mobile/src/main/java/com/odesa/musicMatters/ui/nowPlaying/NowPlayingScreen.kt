@@ -88,7 +88,6 @@ import com.odesa.musicMatters.ui.components.PlaybackPosition
 import com.odesa.musicMatters.ui.components.SongDetailsDialog
 import com.odesa.musicMatters.ui.components.swipeable
 import com.odesa.musicMatters.ui.navigation.FadeTransition
-import java.time.Duration
 
 
 // Stateful
@@ -388,7 +387,6 @@ fun NowPlayingScreenContent(
                                 language = language,
                                 fallbackResourceId = fallbackResourceId,
                                 onDismissRequest = { showOptionsMenu = false },
-                                onShufflePlay = { onSeekEnd( Duration.ZERO.toMillis() ) }, // Just seek to the beginning
                                 onPlayNext = {}, // No need to do anything as duplicates are not allowed in queue
                                 onAddToQueue = {}, // No need to do anything as duplicates are not allowed in queue
                                 onGetPlaylists = onGetPlaylists,
@@ -397,7 +395,17 @@ fun NowPlayingScreenContent(
                                 onCreatePlaylist = onCreatePlaylist,
                                 onAddSongsToPlaylist = onAddSongsToPlaylist,
                                 onGetSongs = { listOf( currentlyPlayingSong ) },
-                                additionalBottomSheetMenuItems = { onDismissRequest ->
+                                leadingBottomSheetMenuItem = { onDismissRequest ->
+                                    BottomSheetMenuItem(
+                                        leadingIcon = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                                        label = language.favorite,
+                                        leadingIconTint = MaterialTheme.colorScheme.primary
+                                    ) {
+                                        onDismissRequest()
+                                        onFavorite( currentlyPlayingSong.id )
+                                    }
+                                },
+                                trailingBottomSheetMenuItems = { onDismissRequest ->
                                     currentlyPlayingSong.albumTitle?.let { albumTitle ->
                                         BottomSheetMenuItem(
                                             leadingIcon = Icons.Default.Album,

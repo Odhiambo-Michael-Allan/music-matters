@@ -15,6 +15,14 @@ class FakeSongsAdditionalMetadataRepository : SongsAdditionalMetadataRepository 
     override suspend fun fetchAdditionalMetadataForSongWithId( songId: String ) = null
 
     override suspend fun save( songAdditionalMetadata: SongAdditionalMetadata ) {
-        TODO("Not yet implemented")
+        val newList = _songsAdditionalMetadataList.value.toMutableList()
+        newList.add( songAdditionalMetadata )
+        _songsAdditionalMetadataList.value = newList
+    }
+
+    override suspend fun save( songAdditionalMetadata: List<SongAdditionalMetadata> ) {
+        val newList = _songsAdditionalMetadataList.value.toMutableList()
+        newList.addAll( songAdditionalMetadata )
+        _songsAdditionalMetadataList.value = newList
     }
 }

@@ -16,7 +16,9 @@ import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 import com.odesa.musicMatters.utils.FuzzySearchOption
 import com.odesa.musicMatters.utils.FuzzySearcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 open class BaseViewModel(
@@ -72,10 +74,12 @@ open class BaseViewModel(
     }
 
     private suspend fun observeSongsAdditionalMetadata() {
-        songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().collect { additionalMetadata ->
-            songsAdditionalMetadataList = additionalMetadata.mapNotNull { it.asDomain() }
-            additionalMetadataListeners.forEach {
-                it.invoke( songsAdditionalMetadataList )
+        withContext( Dispatchers.IO ) {
+            songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().collect { additionalMetadata ->
+                songsAdditionalMetadataList = additionalMetadata.mapNotNull { it.asDomain() }
+                additionalMetadataListeners.forEach {
+                    it.invoke( songsAdditionalMetadataList )
+                }
             }
         }
     }

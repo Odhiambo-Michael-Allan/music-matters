@@ -2,6 +2,7 @@ package com.odesa.musicMatters.core.data.database.dao
 
 import com.odesa.musicMatters.core.data.TestDatabase
 import com.odesa.musicMatters.core.data.database.model.SongAdditionalMetadata
+import com.odesa.musicMatters.core.datatesting.songs.additionalMetadata.songsAdditionalMetadataList
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
@@ -26,22 +27,7 @@ class SongAdditionalMetadataDaoTest : TestDatabase() {
 
     @Test
     fun testInsert() = runTest {
-        dao.insertAll(
-            SongAdditionalMetadata(
-                id = testSongs.first().id,
-                codec = "mp3",
-                bitrate = 0L,
-                bitsPerSample = 0L,
-                samplingRate = 0L
-            ),
-            SongAdditionalMetadata(
-                id = testSongs.last().id,
-                codec = "mp3",
-                bitrate = 0L,
-                bitsPerSample = 0L,
-                samplingRate = 0L
-            )
-        )
+        dao.insertAll( songsAdditionalMetadataList )
         assertNotNull( dao.fetchAdditionalMetadataForSongWithId( testSongs.first().id ) )
         assertNotNull( dao.fetchAdditionalMetadataForSongWithId( testSongs.last().id ) )
         assertNull( dao.fetchAdditionalMetadataForSongWithId( testSongs[1].id ) )
@@ -49,22 +35,7 @@ class SongAdditionalMetadataDaoTest : TestDatabase() {
 
     @Test
     fun testUpdate() = runTest {
-        dao.insertAll(
-            SongAdditionalMetadata(
-                id = testSongs.first().id,
-                codec = "mp3",
-                bitrate = 0L,
-                bitsPerSample = 0L,
-                samplingRate = 0L
-            ),
-            SongAdditionalMetadata(
-                id = testSongs.last().id,
-                codec = "mp3",
-                bitrate = 0L,
-                bitsPerSample = 0L,
-                samplingRate = 0L
-            )
-        )
+        dao.insertAll( songsAdditionalMetadataList )
         dao.insert(
             SongAdditionalMetadata(
                 id = testSongs.first().id,
@@ -83,22 +54,7 @@ class SongAdditionalMetadataDaoTest : TestDatabase() {
     @Test
     fun testObserveTable() = runTest {
         assertTrue( dao.observeEntries().first().isEmpty() )
-        dao.insertAll(
-            SongAdditionalMetadata(
-                id = testSongs.first().id,
-                codec = "mp3",
-                bitrate = 0L,
-                bitsPerSample = 0L,
-                samplingRate = 0L
-            ),
-            SongAdditionalMetadata(
-                id = testSongs.last().id,
-                codec = "mp3",
-                bitrate = 0L,
-                bitsPerSample = 0L,
-                samplingRate = 0L
-            )
-        )
+        dao.insertAll( songsAdditionalMetadataList )
         assertEquals( 2, dao.observeEntries().first().size )
     }
 }

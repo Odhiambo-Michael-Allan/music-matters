@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -122,7 +123,6 @@ fun Banner(
                     language = language,
                     fallbackResourceId = fallbackResourceId,
                     onDismissRequest = { showBottomSheetMenu = false },
-                    onShufflePlay = onShufflePlay,
                     onPlayNext = onPlayNext,
                     onAddToQueue = onAddToQueue,
                     onGetSongs = onGetSongs,
@@ -131,7 +131,16 @@ fun Banner(
                     onGetSongsInPlaylist = onGetSongsInPlaylist,
                     onAddSongsToPlaylist = onAddSongsToPlaylist,
                     onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-                    additionalBottomSheetMenuItems = additionalBottomSheetMenuItems
+                    trailingBottomSheetMenuItems = additionalBottomSheetMenuItems,
+                    leadingBottomSheetMenuItem = { onDismissRequest ->
+                        BottomSheetMenuItem(
+                            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
+                            label = language.shufflePlay
+                        ) {
+                            onDismissRequest()
+                            onShufflePlay()
+                        }
+                    }
                 )
             }
         }

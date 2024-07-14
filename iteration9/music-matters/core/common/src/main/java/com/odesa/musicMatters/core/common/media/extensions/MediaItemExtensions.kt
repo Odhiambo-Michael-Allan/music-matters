@@ -1,7 +1,6 @@
 package com.odesa.musicMatters.core.common.media.extensions
 
 import android.content.ContentUris
-import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
@@ -11,16 +10,15 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.Genre
 import com.odesa.musicMatters.core.model.Song
 import timber.log.Timber
 
-fun MediaItem.Builder.from( cursor: Cursor, context: Context ): MediaItem.Builder {
+fun MediaItem.Builder.from( cursor: Cursor ): MediaItem.Builder {
     val mediaUri = getMediaUriFrom( cursor )
     setMediaId( mediaUri.toString() )
     setUri( mediaUri )
     setMediaMetadata(
-        MediaMetadata.Builder().from( cursor, context, mediaUri ).build()
+        MediaMetadata.Builder().from( cursor ).build()
     )
     return this
 }
@@ -29,10 +27,7 @@ fun getMediaUriFrom( cursor: Cursor ): Uri = ContentUris.withAppendedId(
     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, cursor.getLongFrom( AudioColumns._ID )
 )
 
-fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri ): MediaMetadata.Builder {
-//    val mediaMetadataRetriever = MediaMetadataRetriever()
-//    mediaMetadataRetriever.setDataSource( context, mediaUri )
-    val genreUri = MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI
+fun MediaMetadata.Builder.from( cursor: Cursor ): MediaMetadata.Builder {
 
     val id = cursor.getLongFrom( AudioColumns._ID )
     val title = cursor.getStringFrom( AudioColumns.TITLE )
@@ -70,27 +65,6 @@ fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri 
     val path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: UNKNOWN_STRING_VALUE
     Timber.tag( TAG ).d( "Path: $path" )
 
-    // =============================== Genre ===============================
-
-    var _genre: String? = null
-    val genreAudioUri = MediaStore.Audio.Genres.getContentUriForAudioId(
-        "external",
-        id.toInt()
-    )
-    val genreCursor = context.contentResolver.query(
-        genreAudioUri, null, null, null, null
-    )
-    if ( genreCursor != null && genreCursor.moveToFirst() ) {
-        val genreIndex = genreCursor.getColumnIndex( MediaStore.Audio.GenresColumns.NAME )
-        _genre = genreCursor.getString( genreIndex )
-    }
-    genreCursor?.close()
-    val genre = _genre  ?: UNKNOWN_STRING_VALUE
-    val finalGenre = genre.split( *genreTagSeparators.toTypedArray() ).first()
-    Timber.tag( TAG ).d( "Genre: $finalGenre" )
-
-    // =====================================================================
-
     Timber.tag( TAG ).d( "------------------------------------------------------------------" )
 
     setTitle( title )
@@ -101,7 +75,6 @@ fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri 
     setArtist( artist )
     setAlbumArtist( albumArtist )
     setComposer( composer )
-    setGenre( finalGenre )
     setIsPlayable( true )
     setArtworkUri( getArtworkUriWith( cursor ) )
     setIsBrowsable( false )
@@ -119,6 +92,7 @@ fun MediaMetadata.Builder.from( cursor: Cursor, context: Context, mediaUri: Uri 
             putInt( RELEASE_YEAR_KEY, year )
             putString( ALBUM_TITLE_KEY, albumTitle )
             putString( ARTIST_KEY, artist )
+            putLong( MEDIA_ITEM_ID_KEY, id )
         }
     )
     return this
@@ -142,7 +116,6 @@ fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
     year = mediaMetadata.extras?.getInt( RELEASE_YEAR_KEY ),
     duration = mediaMetadata.extras?.getLong( SONG_DURATION ) ?: UNKNOWN_LONG_VALUE,
     albumTitle = mediaMetadata.extras?.getString( ALBUM_TITLE_KEY ),
-    genre = mediaMetadata.genre?.toString(),
     artists = parseArtistStringIntoIndividualArtists( artistTagSeparators ),
     composer = mediaMetadata.composer.toString(),
     dateModified = mediaMetadata.extras?.getLong( DATE_KEY ) ?: UNKNOWN_LONG_VALUE ,
@@ -166,11 +139,6 @@ fun MediaItem.toArtist( songs: List<Song>, albums: List<Album> ) = Artist(
     albumCount = albums.count { it.artists.contains( mediaMetadata.title ) }
 )
 
-fun MediaItem.toGenre( songs: List<Song> ) = Genre(
-    name = mediaMetadata.title.toString(),
-    numberOfTracks = songs.count { it.genre == mediaMetadata.title.toString() }
-)
-
 fun MediaItem.parseArtistStringIntoIndividualArtists( separators: Set<String> ): Set<String> {
     val artistsSet = mediaMetadata.extras?.getString( ARTIST_KEY )?.split( *separators.toTypedArray() )
         ?.mapNotNull { x -> x.trim().takeIf { it.isNotEmpty() } }
@@ -183,27 +151,6 @@ fun MediaItem.parseAlbumArtistsStringIntoIndividualArtists( separators: Set<Stri
     ?.mapNotNull { x -> x.trim().takeIf { it.isNotEmpty() } }
     ?.toSet() ?: setOf()
 
-fun MediaItem.stringRep() = StringBuilder().apply {
-    appendWithLineBreak( "Media Id: $mediaId" )
-    appendWithLineBreak( "Media Uri: ${Uri.parse( mediaId ) }" )
-    appendWithLineBreak( "Title: ${mediaMetadata.title}\n" )
-    appendWithLineBreak( "Display Title: ${mediaMetadata.extras?.getString( DISPLAY_TITLE_KEY)}" )
-    appendWithLineBreak( "Track Number: ${mediaMetadata.extras?.getInt( TRACK_NUMBER_KEY)}" )
-    appendWithLineBreak( "Release Year: ${mediaMetadata.extras?.getInt( RELEASE_YEAR_KEY)}" )
-    appendWithLineBreak( "Album title: ${mediaMetadata.extras?.getString( ALBUM_TITLE_KEY)}" )
-    appendWithLineBreak( "Artist: ${mediaMetadata.extras?.getString( ARTIST_KEY)}" )
-    appendWithLineBreak( "Duration: ${mediaMetadata.extras?.getLong( SONG_DURATION )}" )
-    appendWithLineBreak( "Date Modified: ${mediaMetadata.extras?.getLong( DATE_KEY )}" )
-    appendWithLineBreak( "Size: ${mediaMetadata.extras?.getLong( SIZE_KEY )}" )
-    appendWithLineBreak( "Path: ${mediaMetadata.extras?.getString( PATH_KEY )}" )
-    appendWithLineBreak( "Bitrate: ${mediaMetadata.extras?.getLong( BITRATE_KEY )}" )
-    appendWithLineBreak( "Bits per sample: ${mediaMetadata.extras?.getLong( BITS_PER_SAMPLE_KEY )}" )
-    appendWithLineBreak( "Codec: ${mediaMetadata.extras?.getString( CODEC_KEY )}" )
-    appendWithLineBreak( "Sampling rate: ${mediaMetadata.extras?.getLong( SAMPLING_RATE_KEY )}" )
-}.toString()
-
-fun StringBuilder.appendWithLineBreak( content: String ): StringBuilder = append( content + "\n" )
-
 val genreTagSeparators = setOf( "/", "," )
 
 const val UNKNOWN_LONG_VALUE = 0L
@@ -213,13 +160,10 @@ const val SONG_DURATION = "SONG-DURATION"
 const val DATE_KEY = "DATE"
 const val SIZE_KEY = "SIZE"
 const val PATH_KEY = "PATH"
-const val BITRATE_KEY = "BITRATE"
-const val BITS_PER_SAMPLE_KEY = "BITS_PER_SAMPLE"
-const val CODEC_KEY = "CODEC"
-const val SAMPLING_RATE_KEY = "SAMPLING_RATE"
 const val DISPLAY_TITLE_KEY = "DISPLAY-TITLE"
 const val TRACK_NUMBER_KEY = "TRACK-NUMBER"
 const val RELEASE_YEAR_KEY = "RELEASE-YEAR"
 const val ALBUM_TITLE_KEY = "ALBUM-TITLE"
 const val ARTIST_KEY = "ARTIST"
+const val MEDIA_ITEM_ID_KEY = "--ID--"
 const val TAG = "MEDIA-ITEM-BUILDER-FROM"

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
@@ -252,7 +253,7 @@ fun PlaylistBottomSheetMenu(
                 language = language,
                 fallbackResourceId = fallbackResourceId,
                 onDismissRequest = onDismissRequest,
-                onShufflePlay = onShufflePlay,
+//                onShufflePlay = onShufflePlay,
                 onPlayNext = onPlayNext,
                 onAddToQueue = onAddToQueue,
                 onAddSongsToPlaylist = onAddSongsToPlaylist,
@@ -261,7 +262,16 @@ fun PlaylistBottomSheetMenu(
                 onGetSongs = onGetSongs,
                 onGetSongsInPlaylist = onGetSongsInPlaylist,
                 onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-                additionalBottomSheetMenuItems = {
+                leadingBottomSheetMenuItem = {
+                    BottomSheetMenuItem(
+                        leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
+                        label = language.shufflePlay
+                    ) {
+                        onDismissRequest()
+                        onShufflePlay()
+                    }
+                },
+                trailingBottomSheetMenuItems = {
                     if ( playlistIsDeletable ) {
                         BottomSheetMenuItem(
                             leadingIcon = Icons.Default.Edit,

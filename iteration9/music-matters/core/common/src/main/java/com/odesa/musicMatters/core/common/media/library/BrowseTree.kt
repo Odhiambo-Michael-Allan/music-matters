@@ -55,10 +55,6 @@ class BrowseTree(
         addTrackMediaItemsTo( trackList )
         mediaIdToChildren[ MUSIC_MATTERS_TRACKS_ROOT ] = trackList
 
-        val genreList = mediaIdToChildren[ MUSIC_MATTERS_GENRES_ROOT ] ?: mutableListOf()
-        addGenreMediaItemsTo( genreList )
-        mediaIdToChildren[ MUSIC_MATTERS_GENRES_ROOT ] = genreList
-
         val albumList = mediaIdToChildren[ MUSIC_MATTERS_ALBUMS_ROOT ] ?: mutableListOf()
         addAlbumMediaItemsTo( albumList )
         mediaIdToChildren[ MUSIC_MATTERS_ALBUMS_ROOT ] = albumList
@@ -84,7 +80,6 @@ class BrowseTree(
     private fun addRootMediaItemsTo( rootList: MutableList<MediaItem> ) {
         addRecommendedMediaItemTo( rootList )
         addAlbumsMediaItemTo( rootList )
-        addGenresMediaItemTo( rootList )
     }
 
     private fun addRecommendedMediaItemTo( rootList: MutableList<MediaItem> ) {
@@ -113,23 +108,9 @@ class BrowseTree(
         }.build()
     }
 
-    private fun addGenresMediaItemTo( rootList: MutableList<MediaItem> ) {
-        val genresMetadata = MediaMetadata.Builder().apply {
-            setTitle( "GENRES" )
-            setIsPlayable( false )
-            setFolderType( MediaMetadata.FOLDER_TYPE_GENRES )
-        }.build()
-
-        rootList += MediaItem.Builder().apply {
-            setMediaId( MUSIC_MATTERS_GENRES_ROOT )
-                .setMediaMetadata( genresMetadata )
-        }.build()
-    }
-
     private fun addTrackMediaItemsTo( trackList: MutableList<MediaItem> ) {
         musicSource.forEach { mediaItem ->
             mediaIdToMediaItem[ mediaItem.mediaId ] = mediaItem
-//            Timber.tag( BROWSE_TREE_TAG ).d( mediaItem.stringRep() )
             trackList.add( mediaItem )
         }
     }
@@ -292,7 +273,6 @@ class BrowseTree(
 const val MUSIC_MATTERS_BROWSABLE_ROOT = "/"
 const val MUSIC_MATTERS_RECOMMENDED_ROOT = "__RECOMMENDED__"
 const val MUSIC_MATTERS_TRACKS_ROOT = "__TRACKS__"
-const val MUSIC_MATTERS_GENRES_ROOT = "__GENRES__"
 const val MUSIC_MATTERS_RECENT_SONGS_ROOT = "__RECENT_SONGS__"
 
 const val MUSIC_MATTERS_ARTISTS_ROOT = "__ARTISTS__"

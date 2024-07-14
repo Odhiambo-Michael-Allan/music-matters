@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
-import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.Favorite
@@ -80,8 +78,6 @@ fun SongCard(
 
     var showSongOptionsBottomSheet by remember { mutableStateOf( false ) }
     var showSongDetailsDialog by remember { mutableStateOf( false ) }
-    var showAddToPlaylistDialog by remember { mutableStateOf( false ) }
-    var showCreateNewPlaylistDialog by remember { mutableStateOf( false ) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -166,7 +162,11 @@ fun SongCard(
                                     onViewAlbum = onViewAlbum,
                                     onShareSong = onShareSong,
                                     onShowSongDetails = { showSongDetailsDialog = true },
-                                    onAddToPlaylist = { showAddToPlaylistDialog = true },
+                                    onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
+                                    onCreatePlaylist = onCreatePlaylist,
+                                    onAddSongsToPlaylist = onAddSongsToPlaylist,
+                                    onGetSongsInPlaylist = onGetSongsInPlaylist,
+                                    onGetPlaylists = { playlistInfos },
                                     onDismissRequest = {
                                         showSongOptionsBottomSheet = false
                                     }
@@ -187,31 +187,6 @@ fun SongCard(
                     showSongDetailsDialog = false
                 }
             }
-            if ( showAddToPlaylistDialog ) {
-                AddSongsToPlaylistDialog(
-                    songs = listOf( song ),
-                    onGetPlaylists = { playlistInfos },
-                    language = language,
-                    fallbackResourceId = fallbackResourceId,
-                    onGetSongsInPlaylist = onGetSongsInPlaylist,
-                    onAddDisplayedSongsToPlaylist = { onAddSongsToPlaylist( it, listOf( song ) ) },
-                    onCreateNewPlaylist = { showCreateNewPlaylistDialog = true },
-                    onDismissRequest = { showAddToPlaylistDialog = false }
-                )
-            }
-            if ( showCreateNewPlaylistDialog ) {
-                NewPlaylistDialog(
-                    language = language,
-                    fallbackResourceId = fallbackResourceId,
-                    initialSongsToAdd = listOf( song ),
-                    onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-                    onConfirmation = { playlistName, selectedSongs ->
-                        showCreateNewPlaylistDialog = false
-                        onCreatePlaylist( playlistName, selectedSongs )
-                    },
-                    onDismissRequest = { showCreateNewPlaylistDialog = false }
-                )
-            }
         }
     }
 }
@@ -230,86 +205,79 @@ fun SongOptionsBottomSheetMenu(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onShowSongDetails: () -> Unit,
-    onAddToPlaylist: () -> Unit,
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onSearchSongsMatchingQuery: (String ) -> List<Song>,
+    onCreatePlaylist: (String, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    BottomSheetMenuContent(
-        bottomSheetHeader = {
-            BottomSheetMenuHeader(
-                headerImage = ImageRequest.Builder( LocalContext.current ).apply {
-                    data( song.artworkUri )
-                    placeholder( fallbackResourceId )
-                    fallback( fallbackResourceId )
-                    error( fallbackResourceId )
-                    crossfade( true )
-                }.build(),
-                title = song.title,
-                titleIsHighlighted = isCurrentlyPlaying,
-                description = song.artists.joinToString()
-            )
-        }
-    ) {
-        BottomSheetMenuItem(
-            leadingIcon = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-            label = language.favorite
-        ) {
-            onFavorite( song.id )
-            onDismissRequest()
-        }
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
-            label = language.playNext
-        ) {
-            onDismissRequest()
-            onPlayNext( song )
-        }
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
-            label = language.addToQueue
-        ) {
-            onAddToQueue( song )
-            onDismissRequest()
-        }
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistAdd,
-            label = language.addToPlaylist
-        ) {
-            onDismissRequest()
-            onAddToPlaylist()
-        }
-        song.artists.forEach {
+    GenericOptionsBottomSheet(
+        headerImage = ImageRequest.Builder( LocalContext.current ).apply {
+            data( song.artworkUri )
+            placeholder( fallbackResourceId )
+            fallback( fallbackResourceId )
+            error( fallbackResourceId )
+            crossfade( true )
+        }.build(),
+        headerTitle = song.title,
+        titleIsHighlighted = isCurrentlyPlaying,
+        headerDescription = song.artists.joinToString(),
+        language = language,
+        fallbackResourceId = fallbackResourceId,
+        onDismissRequest = onDismissRequest,
+        onPlayNext = { onPlayNext( song ) },
+        onAddToQueue = { onAddToQueue( song ) },
+        onGetPlaylists = onGetPlaylists,
+        onGetSongsInPlaylist = onGetSongsInPlaylist,
+        onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
+        onCreatePlaylist = onCreatePlaylist,
+        onAddSongsToPlaylist = onAddSongsToPlaylist,
+        onGetSongs = { listOf( song ) },
+        leadingBottomSheetMenuItem = {
             BottomSheetMenuItem(
-                leadingIcon = Icons.Filled.Person,
-                label = "${language.viewArtist}: $it"
+                leadingIcon = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                label = language.favorite
+            ) {
+                onFavorite( song.id )
+                onDismissRequest()
+            }
+        },
+        trailingBottomSheetMenuItems = {
+            song.artists.forEach {
+                BottomSheetMenuItem(
+                    leadingIcon = Icons.Filled.Person,
+                    label = "${language.viewArtist}: $it"
+                ) {
+                    onDismissRequest()
+                    onViewArtist( it )
+                }
+            }
+            song.albumTitle?.let {
+                BottomSheetMenuItem(
+                    leadingIcon = Icons.Filled.Album,
+                    label = language.viewAlbum
+                ) {
+                    onDismissRequest()
+                    onViewAlbum( it )
+                }
+            }
+            BottomSheetMenuItem(
+                leadingIcon = Icons.Filled.Share,
+                label = language.shareSong
             ) {
                 onDismissRequest()
-                onViewArtist( it )
+                onShareSong( song.mediaUri )
             }
-        }
-        song.albumTitle?.let {
             BottomSheetMenuItem(
-                leadingIcon = Icons.Filled.Album,
-                label = language.viewAlbum
+                leadingIcon = Icons.Filled.Info,
+                label = language.details
             ) {
                 onDismissRequest()
-                onViewAlbum( it )
+                onShowSongDetails()
             }
         }
-        BottomSheetMenuItem(
-            leadingIcon = Icons.Filled.Share,
-            label = language.shareSong
-        ) {
-            onDismissRequest()
-            onShareSong( song.mediaUri )
-        }
-        BottomSheetMenuItem(
-            leadingIcon = Icons.Filled.Info,
-            label = language.details
-        ) {
-            onDismissRequest()
-            onShowSongDetails()
-        }
-    }
+    )
 }
 
 @Preview( showBackground = true )
@@ -328,7 +296,11 @@ fun SongOptionsBottomSheetContentPreview() {
         onViewAlbum = {},
         onShareSong = {},
         onShowSongDetails = {},
-        onAddToPlaylist = {},
+        onAddSongsToPlaylist = { _, _ -> },
+        onCreatePlaylist = { _, _ -> },
+        onGetPlaylists = { emptyList() },
+        onGetSongsInPlaylist = { emptyList() },
+        onSearchSongsMatchingQuery = { emptyList() },
         onDismissRequest = {}
     )
 }

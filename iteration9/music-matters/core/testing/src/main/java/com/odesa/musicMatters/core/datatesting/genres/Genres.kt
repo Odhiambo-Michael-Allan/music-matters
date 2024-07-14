@@ -1,33 +1,22 @@
 package com.odesa.musicMatters.core.datatesting.genres
 
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
-import com.odesa.musicMatters.core.common.media.extensions.toGenre
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
-import java.util.UUID
+import com.odesa.musicMatters.core.model.Genre
 
-val testGenreMediaItems: List<MediaItem> = listOf(
-    MediaItem.Builder().apply {
-        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata(
-            MediaMetadata.Builder().apply {
-                setTitle( "Hip Hop" )
-            }.build()
-        )
-    }.build(),
-    MediaItem.Builder().apply {
-        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata(
-            MediaMetadata.Builder().apply {
-                setTitle( "Pop" )
-            }.build()
-        )
-    }.build(),
-    MediaItem.Builder().apply {
-        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata(
-            MediaMetadata.Builder().apply {
-                setTitle( "Rock" )
-            }.build()
-        )
-    }.build(),
+val testGenres = listOf(
+    Genre(
+        name = "Hip Hop",
+        numberOfTracks = 50,
+        songsInGenre = testSongs
+    ),
+    Genre(
+        name = "Pop",
+        numberOfTracks = 35,
+        songsInGenre = testSongs
+    ),
+    Genre(
+        name = "Rock",
+        numberOfTracks = 37,
+        songsInGenre = testSongs
+    )
 )
-
-val testGenres = testGenreMediaItems.map { it.toGenre( testSongs ) }

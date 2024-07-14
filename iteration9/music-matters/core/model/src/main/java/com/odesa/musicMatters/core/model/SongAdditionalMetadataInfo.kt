@@ -8,7 +8,8 @@ data class SongAdditionalMetadataInfo(
     val codec: String,
     val bitsPerSample: String,
     val bitrate: String,
-    val samplingRate: String
+    val samplingRate: String,
+    val genre: String
 ) {
     fun toSamplingInfoString( language: Language ): String {
         val values = mutableListOf<String>()

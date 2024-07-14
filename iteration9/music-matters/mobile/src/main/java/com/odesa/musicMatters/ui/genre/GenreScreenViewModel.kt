@@ -26,7 +26,7 @@ class GenreScreenViewModel(
     private val musicServiceConnection: MusicServiceConnection,
     private val settingsRepository: SettingsRepository,
     private val playlistRepository: PlaylistRepository,
-    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
+    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 ) : BaseViewModel(
     musicServiceConnection = musicServiceConnection,
     settingsRepository = settingsRepository,
@@ -86,13 +86,17 @@ class GenreScreenViewModel(
         }
     }
 
-    private fun loadSongsInGenre( genreName: String ): List<Song> =
-        musicServiceConnection.cachedSongs.value
-            .filter { it.genre?.lowercase() == genreName.lowercase() }
-            .sortSongs(
+    private fun loadSongsInGenre( genreName: String ) =
+        musicServiceConnection
+            .cachedGenres
+            .value
+            .find { it.name == genreName }
+            ?.songsInGenre
+            ?.sortSongs(
                 sortSongsBy = settingsRepository.sortSongsBy.value,
                 reverse = settingsRepository.sortSongsInReverse.value
-            )
+            ) ?: emptyList()
+
 
     private suspend fun observeLanguageChange() {
         settingsRepository.language.collect {

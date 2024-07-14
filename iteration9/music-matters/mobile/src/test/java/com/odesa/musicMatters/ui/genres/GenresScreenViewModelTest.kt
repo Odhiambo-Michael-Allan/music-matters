@@ -1,9 +1,12 @@
 package com.odesa.musicMatters.ui.genres
 
 import com.odesa.musicMatters.core.data.preferences.SortGenresBy
+import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.connection.FakeMusicServiceConnection
+import com.odesa.musicMatters.core.datatesting.genres.testGenres
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
+import com.odesa.musicMatters.core.datatesting.repository.FakeSongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.datatesting.songs.testSongMediaItems
 import com.odesa.musicMatters.core.i8n.Belarusian
 import com.odesa.musicMatters.core.i8n.Chinese
@@ -26,25 +29,29 @@ class GenresScreenViewModelTest {
 
     private lateinit var musicServiceConnection: FakeMusicServiceConnection
     private lateinit var settingsRepository: SettingsRepository
+    private lateinit var songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
     private lateinit var viewModel: GenresScreenViewModel
 
     @Before
     fun setup() {
         musicServiceConnection = FakeMusicServiceConnection()
         settingsRepository = FakeSettingsRepository()
+        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         viewModel = GenresScreenViewModel(
             musicServiceConnection = musicServiceConnection,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
         )
         musicServiceConnection.setMediaItems( testSongMediaItems )
     }
 
     @Test
-    fun testGenresAreCorrectlyLoadedFromMusicServiceConnection() {
+    fun testGenresAreCorrectlyLoadedFromMusicServiceConnection() = runTest {
         assertTrue( viewModel.uiState.value.isLoading )
         musicServiceConnection.setIsInitialized()
+        assertTrue( viewModel.uiState.value.isLoading )
+        musicServiceConnection.setIsLoadingGenres( false )
         assertFalse( viewModel.uiState.value.isLoading )
-        assertEquals( 3, viewModel.uiState.value.genres.size )
+        assertEquals( testGenres.size, viewModel.uiState.value.genres.size )
     }
 
 
