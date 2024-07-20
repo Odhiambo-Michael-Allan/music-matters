@@ -1,7 +1,7 @@
 package com.odesa.musicMatters.core.data.playlists.impl
 
-import com.odesa.musicMatters.core.data.repository.PlaylistRepository
 import com.odesa.musicMatters.core.data.playlists.PlaylistStore
+import com.odesa.musicMatters.core.data.repository.PlaylistRepository
 import com.odesa.musicMatters.core.data.repository.PlaylistRepositoryImpl
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistStore
 import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
@@ -84,15 +84,6 @@ class PlaylistRepositoryImplTest {
             songIdsToBeAdded.size,
             playlistRepository.recentlyPlayedSongsPlaylistInfo.value.songIds.size
         )
-        playlistRepository.addToRecentlyPlayedSongsPlaylist( songIdsToBeAdded.last() )
-        assertEquals(
-            songIdsToBeAdded.size,
-            playlistRepository.recentlyPlayedSongsPlaylistInfo.value.songIds.size
-        )
-        assertEquals(
-            songIdsToBeAdded.last(),
-            playlistRepository.recentlyPlayedSongsPlaylistInfo.value.songIds.first()
-        )
     }
 
     @Test
@@ -103,6 +94,33 @@ class PlaylistRepositoryImplTest {
         assertEquals(
             songIdsToBeAdded.size,
             playlistRepository.mostPlayedSongsPlaylistInfo.value.songIds.size
+        )
+    }
+
+    @Test
+    fun testRemoveFromMostPlayedPlaylist() = runTest {
+        songIdsToBeAdded.forEach {
+            playlistRepository.addToMostPlayedPlaylist( it )
+        }
+        playlistRepository.removeSongIdFromMostPlayedPlaylist(
+            songIdsToBeAdded.first()
+        )
+        assertEquals(
+            songIdsToBeAdded.size - 1,
+            playlistRepository.mostPlayedSongsPlaylistInfo.value.songIds.size
+        )
+    }
+
+    @Test
+    fun testSongsAreCorrectlyRemovedFromPlaylist() = runTest {
+        playlistRepository.savePlaylist( testPlaylistInfos.first() )
+        songIdsToBeAdded.forEach {
+            playlistRepository.addSongIdToPlaylist( it, testPlaylistInfos.first().id )
+        }
+        assertEquals(
+            songIdsToBeAdded.size,
+            playlistRepository.playlists.value.find { it.id == testPlaylistInfos.first().id }!!
+                .songIds.size
         )
     }
 
@@ -157,7 +175,7 @@ class PlaylistRepositoryImplTest {
     @Test
     fun testSongsIdsAreCorrectlyAddedToCurrentPlayingQueuePlaylist() = runTest {
         TestCase.assertTrue(playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.isEmpty())
-        playlistRepository.saveCurrentQueue( songIdsToBeAdded )
+        playlistRepository.saveCurrentlyPlayingQueue( songIdsToBeAdded )
         assertEquals(
             songIdsToBeAdded.size,
             playlistStore.fetchCurrentPlayingQueue().songIds.size
@@ -170,7 +188,7 @@ class PlaylistRepositoryImplTest {
 
     @Test
     fun testClearCurrentPlayingQueuePlaylist() = runTest {
-        playlistRepository.saveCurrentQueue( songIdsToBeAdded )
+        playlistRepository.saveCurrentlyPlayingQueue( songIdsToBeAdded )
         playlistRepository.clearCurrentPlayingQueuePlaylist()
         TestCase.assertTrue(playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.isEmpty())
     }

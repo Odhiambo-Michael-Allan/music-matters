@@ -28,6 +28,7 @@ fun SongsScreen(
     onViewAlbum: (String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
     onSettingsClicked: () -> Unit,
     onNavigateToSearch: () -> Unit,
 ) {
@@ -61,7 +62,8 @@ fun SongsScreen(
         onGetPlaylists = { uiState.playlistInfos },
         onGetAdditionalMetadataForSongWithId = { songId ->
             uiState.songsAdditionalMetadataList.find { it.id == songId }
-        }
+        },
+        onDeleteSong = onDeleteSong
     )
 }
 
@@ -85,7 +87,8 @@ fun SongsScreenContent(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onGetPlaylists: () -> List<PlaylistInfo>,
     onNavigateToSearch: () -> Unit,
-    onGetAdditionalMetadataForSongWithId: ( String ) -> SongAdditionalMetadataInfo?
+    onGetAdditionalMetadataForSongWithId: ( String ) -> SongAdditionalMetadataInfo?,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
     val fallbackResourceId =
         if ( uiState.themeMode.isLight( LocalContext.current ) )
@@ -127,7 +130,8 @@ fun SongsScreenContent(
                 onAddSongsToPlaylist = onAddSongsToPlaylist,
                 onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                 onCreatePlaylist = onCreatePlaylist,
-                onGetAdditionalMetadataForSongWithId = onGetAdditionalMetadataForSongWithId
+                onGetAdditionalMetadataForSongWithId = onGetAdditionalMetadataForSongWithId,
+                onDeleteSong = onDeleteSong
             )
         }
     }
@@ -163,7 +167,8 @@ fun SongsScreenContentPreview() {
             onCreatePlaylist = { _, _ -> },
             onNavigateToSearch = {},
             onGetPlaylists = { emptyList() },
-            onGetAdditionalMetadataForSongWithId = { null }
+            onGetAdditionalMetadataForSongWithId = { null },
+            onDeleteSong = {}
         )
     }
 }

@@ -298,4 +298,7 @@
     <string name="post_notifications_permission">Post Notifications</string>
     <string name="post_notifications_prompt">The app needs this to create and display notifications on your device</string>
     <string name="lets_go">Let\'s go</string>
+
+    <string name="write_storage">Write Storage</string>
+    <string name="write_storage_description">The app needs this to delete songs on the device</string>
 </resources>

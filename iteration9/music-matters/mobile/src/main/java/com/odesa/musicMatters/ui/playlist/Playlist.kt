@@ -53,6 +53,7 @@ fun PlaylistScreen(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -92,7 +93,8 @@ fun PlaylistScreen(
         onDeletePlaylist = {
             onNavigateBack()
             viewModel.deletePlaylist( it )
-        }
+        },
+        onDeleteSong = onDeleteSong
     )
 }
 
@@ -112,16 +114,17 @@ fun PlaylistScreenContent(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: ( PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onNavigateBack: () -> Unit,
     onGetPlaylists: () -> List<PlaylistInfo>,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onGetSongsInPlaylist: ( PlaylistInfo ) -> List<Song>,
     onAddSongsInPlaylistToQueue: () -> Unit,
     onPlaySongsInPlaylistNext: () -> Unit,
-    onRenamePlaylist: (playlistInfo: PlaylistInfo, String ) -> Unit,
-    onDeletePlaylist: (PlaylistInfo ) -> Unit,
+    onRenamePlaylist: ( playlistInfo: PlaylistInfo, String ) -> Unit,
+    onDeletePlaylist: ( PlaylistInfo ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -201,7 +204,8 @@ fun PlaylistScreenContent(
                 onCreatePlaylist = onCreatePlaylist,
                 onGetAdditionalMetadataForSongWithId = { songId ->
                     uiState.songsAdditionalMetadataList.find { it.id == songId }
-                }
+                },
+                onDeleteSong = onDeleteSong,
             )
         }
     }
@@ -366,6 +370,7 @@ fun PlaylistScreenContentPreview() {
         onAddSongsInPlaylistToQueue = {},
         onPlaySongsInPlaylistNext = {},
         onRenamePlaylist = { _, _ -> },
-        onDeletePlaylist = {}
+        onDeletePlaylist = {},
+        onDeleteSong = {}
     )
 }

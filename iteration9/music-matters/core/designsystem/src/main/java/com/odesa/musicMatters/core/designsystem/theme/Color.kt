@@ -2,6 +2,10 @@ package com.odesa.musicMatters.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
+val GoogleRed = Color( 219, 68, 55 )
+val GoogleBlue = Color(  66, 133, 244 )
+val GoogleYellow = Color(  244, 180, 0 )
+val GoogleGreen = Color( 15, 157, 88 )
 
 enum class PrimaryThemeColors {
     Red,
@@ -30,17 +34,17 @@ enum class PrimaryThemeColors {
 }
 
 object ThemeColors {
-    val Red = Color(0xFFEF4444)
+    val Red = GoogleRed
     val Orange = Color(0xFFF97316)
     val Amber = Color(0xFFF59E0B)
-    val Yellow = Color(0xFFEAB308)
+    val Yellow = GoogleYellow
     val Lime = Color(0xFF84CC16)
-    val Green = Color(0xFF22C55E)
+    val Green = GoogleGreen
     val Emerald = Color(0xFF10B981)
     val Teal = Color(0xFF14B8A6)
     val Cyan = Color(0xFF06B6D4)
     val Sky = Color(0xFF0EA5E9)
-    val Blue = Color(0xFF3B82F6)
+    val Blue = GoogleBlue
     val Indigo = Color(0xFF6366f1)
     val Violet = Color(0xFF8B5CF6)
     val Purple = Color(0xFFA855F7)

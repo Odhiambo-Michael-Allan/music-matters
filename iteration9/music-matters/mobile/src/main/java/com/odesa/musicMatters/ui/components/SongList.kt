@@ -49,6 +49,7 @@ fun SongList(
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onGetAdditionalMetadataForSongWithId: ( String ) -> SongAdditionalMetadataInfo?,
+    onDeleteSong: ( Song ) -> Unit,
     leadingContent: ( LazyListScope.() -> Unit )? = null
 ) {
 
@@ -107,7 +108,10 @@ fun SongList(
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
                             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                             onCreatePlaylist = onCreatePlaylist,
-                            onGetSongAdditionalMetadata = { onGetAdditionalMetadataForSongWithId( song.id ) }
+                            onGetSongAdditionalMetadata = {
+                                onGetAdditionalMetadataForSongWithId( song.id )
+                            },
+                            onDeleteSong = onDeleteSong
                         )
                     }
                 }
@@ -156,7 +160,8 @@ fun SongListPreview() {
         onAddSongsToPlaylist = { _, _ -> },
         onSearchSongsMatchingQuery = { emptyList() },
         onCreatePlaylist = { _, _ -> },
-        onGetAdditionalMetadataForSongWithId = { null }
+        onGetAdditionalMetadataForSongWithId = { null },
+        onDeleteSong = {}
     )
 }
 

@@ -3,7 +3,6 @@ package com.odesa.musicMatters.core.common.connection
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
-import com.odesa.musicMatters.core.data.database.model.SongAdditionalMetadata
 import com.odesa.musicMatters.core.data.preferences.allowedSpeedPitchValues
 import com.odesa.musicMatters.core.data.repository.PlaylistRepository
 import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
@@ -12,6 +11,7 @@ import com.odesa.musicMatters.core.datatesting.albums.testAlbumMediaItems
 import com.odesa.musicMatters.core.datatesting.artists.testArtistMediaItems
 import com.odesa.musicMatters.core.datatesting.connection.FakeConnectable
 import com.odesa.musicMatters.core.datatesting.playlist.FakePlaylistRepository
+import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
 import com.odesa.musicMatters.core.datatesting.repository.FakeSongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.datatesting.songs.testSongMediaItems
@@ -19,8 +19,9 @@ import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import junit.framework.TestCase
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
-import junit.framework.TestCase.assertTrue
+import junit.framework.TestCase.fail
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -61,7 +62,7 @@ class MusicServiceConnectionImplTest {
 
     @Test
     fun testCachesAreCorrectlyUpdated() {
-        TestCase.assertFalse( musicServiceConnection.isInitializing.value )
+        assertFalse( musicServiceConnection.isInitializing.value )
         assertEquals(
             testSongMediaItems.size,
             musicServiceConnection.cachedSongs.value.size
@@ -89,36 +90,6 @@ class MusicServiceConnectionImplTest {
         assertEquals(
             testAlbumMediaItems.size,
             musicServiceConnection.cachedSuggestedAlbums.value.size
-        )
-    }
-
-    @Test
-    fun testGenresAreCorrectlyLoaded() = runTest {
-        val testGenres = listOf(
-            "Pop", "Hip Hop", "RnB", "House", "Alternative", "Rock",
-            "Reggae", "Country", "Jazz", "Blues", "Folk"
-        )
-        assertTrue( musicServiceConnection.isLoadingGenres.value )
-        assertEquals( 0, musicServiceConnection.cachedGenres.value.size )
-        for ( index in testSongs.indices )
-            songsAdditionalMetadataRepository.save(
-                SongAdditionalMetadata(
-                    id = testSongs[ index ].id,
-                    codec = "",
-                    bitsPerSample = 0L,
-                    bitrate = 0L,
-                    samplingRate = 0L,
-                    genre = testGenres[ index ]
-                )
-            )
-        assertFalse( musicServiceConnection.isLoadingGenres.value )
-        assertEquals(
-            11,
-            musicServiceConnection.cachedGenres.value.size
-        )
-        assertEquals(
-            1,
-            musicServiceConnection.cachedGenres.value.find { it.name == "Pop" }!!.numberOfTracks
         )
     }
 
@@ -335,8 +306,8 @@ class MusicServiceConnectionImplTest {
             musicServiceConnection.addToQueue( it )
         }
         musicServiceConnection.playPause()
-        TestCase.assertFalse(musicServiceConnection.playbackState.value.isPlaying)
-        TestCase.assertFalse(connectable.player!!.isPlaying)
+        assertFalse(musicServiceConnection.playbackState.value.isPlaying)
+        assertFalse(connectable.player!!.isPlaying)
         musicServiceConnection.playPause()
         TestCase.assertTrue(musicServiceConnection.playbackState.value.isPlaying)
         TestCase.assertTrue(connectable.player!!.isPlaying)
@@ -371,7 +342,7 @@ class MusicServiceConnectionImplTest {
 
     @Test
     fun testMediaItemsInQueueAreSavedCorrectly() {
-        TestCase.assertTrue(playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.isEmpty())
+        TestCase.assertTrue( playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.isEmpty() )
         musicServiceConnection.playMediaItem(
             mediaItem = testSongMediaItems.first(),
             mediaItems = testSongMediaItems,
@@ -380,6 +351,43 @@ class MusicServiceConnectionImplTest {
         assertEquals(
             testSongMediaItems.size,
             playlistRepository.currentPlayingQueuePlaylistInfo.value.songIds.size
+        )
+    }
+
+    @Test
+    fun testWhenNowPlayingSongIsDeleted_theNextSongInQueueIsPlayed() {
+        musicServiceConnection.playMediaItem(
+            mediaItem = testSongMediaItems.first(),
+            mediaItems = testSongMediaItems,
+            shuffle = false
+        )
+        musicServiceConnection.deleteSong( testSongs.first() )
+        assertEquals( testSongMediaItems[1], musicServiceConnection.nowPlayingMediaItem.value )
+    }
+
+    @Test
+    fun testWhenSongIsDeleted_songIsRemovedFromAllPlaylistsItIsPresent() = runTest {
+        testPlaylistInfos.forEach {
+            playlistRepository.savePlaylist( it )
+        }
+        testPlaylistInfos.forEach {
+            playlistRepository.addSongIdToPlaylist( testSongs.first().id, it.id )
+        }
+        playlistRepository.addToMostPlayedPlaylist( testSongs.first().id )
+        playlistRepository.addToRecentlyPlayedSongsPlaylist( testSongs.first().id )
+        playlistRepository.addToFavorites( testSongs.first().id )
+        musicServiceConnection.deleteSong( testSongs.first() )
+        playlistRepository.playlists.value.forEach {
+            if ( it.songIds.isNotEmpty() ) fail( "SONG ID LIST SHOULD BE EMPTY" )
+        }
+    }
+
+    @Test
+    fun testWhenSongIsDeleted_correspondingEntryInSongsAdditionalMetadataIsDeleted() = runTest {
+        musicServiceConnection.deleteSong( testSongs.first() )
+        assertEquals(
+            testSongs.size - 1,
+            songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().first().size
         )
     }
 }

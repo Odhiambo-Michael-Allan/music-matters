@@ -6,7 +6,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 
 class PlaylistRepositoryImpl(
@@ -42,33 +41,24 @@ class PlaylistRepositoryImpl(
     override fun isFavorite( songId: String ) = favoritesPlaylistInfo.value.songIds.contains( songId )
 
     override suspend fun addToFavorites( songId: String ) {
-        if ( isFavorite( songId ) ) playlistStore.removeSongIdFromFavoritesPlaylist( songId )
-        else playlistStore.addSongIdToFavoritesPlaylist( songId )
-        _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
-        _playlists.value = playlistStore.fetchAllPlaylists()
+        if ( isFavorite( songId ) ) removeSongIdFromPlaylist( songId, favoritesPlaylistInfo.value.id )
+        else addSongIdToPlaylist( songId, favoritesPlaylistInfo.value.id )
     }
 
     override suspend fun removeFromFavorites( songId: String ) {
-        playlistStore.removeSongIdFromFavoritesPlaylist( songId )
-        _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
-        _playlists.value = playlistStore.fetchAllPlaylists()
+        removeSongIdFromPlaylist( songId, favoritesPlaylistInfo.value.id )
     }
 
     override suspend fun addToRecentlyPlayedSongsPlaylist( songId: String ) {
-        Timber.tag( PLAYLIST_REPOSITORY_TAG ).d( "ADDING SONG TO RECENTLY PLAYED PLAYLIST. ID: $songId" )
-        playlistStore.addSongIdToRecentlyPlayedSongsPlaylist( songId )
-        val newSongIds = playlistStore.fetchRecentlyPlayedSongsPlaylist().songIds
-        _recentlyPlayedSongsPlaylist.value = _recentlyPlayedSongsPlaylist.value.copy(
-            songIds = newSongIds
-        )
-        _playlists.value = playlistStore.fetchAllPlaylists()
+        addSongIdToPlaylist( songId, recentlyPlayedSongsPlaylistInfo.value.id )
     }
 
     override suspend fun addToMostPlayedPlaylist( songId: String ) {
-        Timber.tag( PLAYLIST_REPOSITORY_TAG ).d( "ADDING SONG TO MOST PLAYED PLAYLIST. ID: $songId" )
-        playlistStore.addSongIdToMostPlayedSongsPlaylist( songId )
-        _playlists.value = playlistStore.fetchAllPlaylists()
-        _mostPlayedSongsPlaylist.value = playlistStore.fetchMostPlayedSongsPlaylist()
+        addSongIdToPlaylist( songId, mostPlayedSongsPlaylistInfo.value.id )
+    }
+
+    override suspend fun removeSongIdFromMostPlayedPlaylist( songId: String ) {
+        removeSongIdFromPlaylist( songId, mostPlayedSongsPlaylistInfo.value.id )
     }
 
     override suspend fun savePlaylist( playlistInfo: PlaylistInfo ) {
@@ -85,8 +75,20 @@ class PlaylistRepositoryImpl(
         _playlists.value.find { it.id == playlistId }?.let {
             playlistStore.addSongIdToPlaylist( songId, it )
             _playlists.value = playlistStore.fetchAllPlaylists()
-            if ( playlistId == _favoritesPlaylist.value.id )
-                _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
+            _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
+            _mostPlayedSongsPlaylist.value = playlistStore.fetchMostPlayedSongsPlaylist()
+            _recentlyPlayedSongsPlaylist.value = playlistStore.fetchRecentlyPlayedSongsPlaylist()
+
+        }
+    }
+
+    override suspend fun removeSongIdFromPlaylist( songId: String, playlistId: String ) {
+        _playlists.value.find { it.id == playlistId }?.let {
+            playlistStore.removeSongIdFromPlaylist( songId, it )
+            _playlists.value = playlistStore.fetchAllPlaylists()
+            _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
+            _mostPlayedSongsPlaylist.value = playlistStore.fetchMostPlayedSongsPlaylist()
+            _recentlyPlayedSongsPlaylist.value = playlistStore.fetchRecentlyPlayedSongsPlaylist()
         }
     }
 
@@ -95,7 +97,7 @@ class PlaylistRepositoryImpl(
         _playlists.value = playlistStore.fetchAllPlaylists()
     }
 
-    override suspend fun saveCurrentQueue( songIds: List<String> ) {
+    override suspend fun saveCurrentlyPlayingQueue(songIds: List<String> ) {
         songIds.forEach { playlistStore.addSongIdToCurrentPlayingQueue( it ) }
         _currentPlayingQueuePlaylist.value = playlistStore.fetchCurrentPlayingQueue()
     }

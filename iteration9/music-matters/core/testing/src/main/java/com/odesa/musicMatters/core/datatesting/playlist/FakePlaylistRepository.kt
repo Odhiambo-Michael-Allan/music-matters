@@ -94,6 +94,14 @@ class FakePlaylistRepository : PlaylistRepository {
         )
     }
 
+    override suspend fun removeSongIdFromMostPlayedPlaylist( songId: String ) {
+        val songIdsInMostPlayedSongsPlaylist = _mostPlayedSongsPlaylistInfo.value.songIds.toMutableList()
+        songIdsInMostPlayedSongsPlaylist.remove( songId )
+        _mostPlayedSongsPlaylistInfo.value = _mostPlayedSongsPlaylistInfo.value.copy(
+            songIds = songIdsInMostPlayedSongsPlaylist
+        )
+    }
+
     override suspend fun savePlaylist( playlistInfo: PlaylistInfo ) {
         val mutablePlaylist = _playlists.value.toMutableList()
         mutablePlaylist.add( playlistInfo )
@@ -118,6 +126,20 @@ class FakePlaylistRepository : PlaylistRepository {
         }
     }
 
+    override suspend fun removeSongIdFromPlaylist( songId: String, playlistId: String) {
+        _playlists.value.find { it.id == playlistId }?.let {
+            val currentPlaylists = _playlists.value.toMutableList()
+            currentPlaylists.remove( it )
+            val songIds = it.songIds.toMutableList()
+            songIds.remove( songId )
+            val modifiedPlaylist = it.copy(
+                songIds = songIds
+            )
+            currentPlaylists.add( modifiedPlaylist )
+            _playlists.value = currentPlaylists
+        }
+    }
+
     override suspend fun renamePlaylist( playlistInfo: PlaylistInfo, newTitle: String ) {
         _playlists.value.find { it.id == playlistInfo.id }?.let {
             val currentPlaylists = _playlists.value.toMutableList()
@@ -128,7 +150,7 @@ class FakePlaylistRepository : PlaylistRepository {
         }
     }
 
-    override suspend fun saveCurrentQueue( songIds: List<String> ) {
+    override suspend fun saveCurrentlyPlayingQueue(songIds: List<String> ) {
         val currentSongsIds = _currentPlayingQueuePlaylistInfo.value.songIds.toMutableList()
         songIds.forEach { currentSongsIds.add( it ) }
         _currentPlayingQueuePlaylistInfo.value = _currentPlayingQueuePlaylistInfo.value.copy(

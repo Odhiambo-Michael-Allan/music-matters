@@ -9,4 +9,5 @@ interface SongsAdditionalMetadataRepository {
     suspend fun fetchAdditionalMetadataForSongWithId( songId: String ): SongAdditionalMetadataInfo?
     suspend fun save( songAdditionalMetadata: SongAdditionalMetadata )
     suspend fun save( songAdditionalMetadata: List<SongAdditionalMetadata> )
+    suspend fun deleteEntryWithId( id: String )
 }

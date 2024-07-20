@@ -99,6 +99,8 @@ open class BaseViewModel(
         sortSongsByChangeListeners.add( listener )
     }
 
+//    fun deleteSong( song: Song ) {}
+
     fun setSortSongsBy( sortSongsBy: SortSongsBy ) {
         viewModelScope.launch { settingsRepository.setSortSongsBy( sortSongsBy ) }
     }

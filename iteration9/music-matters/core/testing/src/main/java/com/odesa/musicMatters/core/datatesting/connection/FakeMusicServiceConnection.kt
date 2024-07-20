@@ -57,6 +57,9 @@ class FakeMusicServiceConnection : MusicServiceConnection {
     override val isLoadingGenres = _isLoadingGenres.asStateFlow()
 
     override val currentPlaybackPosition = 0L
+    override fun deleteSong(song: Song) {
+        TODO("Not yet implemented")
+    }
 
     override fun playPause() {
         TODO("Not yet implemented")

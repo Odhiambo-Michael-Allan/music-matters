@@ -90,6 +90,7 @@ fun TreeSongList(
     onSortSongsInReverseChange: ( Boolean ) -> Unit,
     onSortPathsByChange: ( SortPathsBy ) -> Unit,
     onSortPathsInReverseChange: ( Boolean ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     MediaSortBarScaffold(
@@ -136,7 +137,8 @@ fun TreeSongList(
                 onCreatePlaylist = onCreatePlaylist,
                 onGetPlaylists = onGetPlaylists,
                 onGetSongsInPlaylist = onGetSongsInPlaylist,
-                onShufflePlay = onShufflePlay
+                onShufflePlay = onShufflePlay,
+                onDeleteSong = onDeleteSong,
             )
         }
     }
@@ -165,7 +167,8 @@ fun TreeSongListPreview() {
         onSortSongsByChange = {},
         onSortSongsInReverseChange = {},
         onSortPathsByChange = {},
-        onSortPathsInReverseChange = {}
+        onSortPathsInReverseChange = {},
+        onDeleteSong = {}
     )
 }
 
@@ -188,6 +191,7 @@ fun TreeSongListContent(
     onGetPlaylists: () -> List<PlaylistInfo>,
     onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onShufflePlay: ( List<Song> ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     val lazyListState = rememberLazyListState()
@@ -301,7 +305,8 @@ fun TreeSongListContent(
                         onGetSongsInPlaylist = onGetSongsInPlaylist,
                         onGetSongAdditionalMetadata = {
                             uiState.songsAdditionalMetadataList.find { it.id == song.id }
-                        }
+                        },
+                        onDeleteSong = onDeleteSong
                     )
                 }
             }
@@ -339,7 +344,8 @@ fun TreeSongListContentPreview() {
             onCreatePlaylist = { _, _ -> },
             onGetPlaylists = { emptyList() },
             onGetSongsInPlaylist = { emptyList() },
-            onShufflePlay = {}
+            onShufflePlay = {},
+            onDeleteSong = {}
         )
     }
 }

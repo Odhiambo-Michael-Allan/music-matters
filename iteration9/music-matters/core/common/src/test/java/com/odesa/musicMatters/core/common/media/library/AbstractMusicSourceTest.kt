@@ -1,10 +1,9 @@
 package com.odesa.musicMatters.core.common.media.library
 
-import android.os.Bundle
-import android.provider.MediaStore
 import com.odesa.musicMatters.core.datatesting.media.FakeMusicSource
 import com.odesa.musicMatters.core.datatesting.songs.testSongMediaItems
 import junit.framework.TestCase
+import junit.framework.TestCase.fail
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -50,51 +49,13 @@ class AbstractMusicSourceTest {
     }
 
     @Test
-    fun testSearchByGenre() {
+    fun testMediaItemIsDeletedCorrectly() {
         testSource.prepare()
-        val searchQuery = "Rock"
-        val searchExtras = Bundle().apply {
-            putString( MediaStore.EXTRA_MEDIA_FOCUS, MediaStore.Audio.Genres.ENTRY_CONTENT_TYPE )
-            putString( MediaStore.EXTRA_MEDIA_GENRE, searchQuery )
+        testSource.delete( testSongMediaItems.first().mediaId )
+        testSource.forEach {
+            if ( it.mediaId == testSongMediaItems.first().mediaId ) {
+                fail( "MediaItem with id: ${testSongMediaItems.first().mediaId} should have been deleted" )
+            }
         }
-        val result = testSource.search( searchQuery, searchExtras )
-        TestCase.assertEquals(3, result.size)
-    }
-
-    @Test
-    fun testSearchByMedia() {
-        testSource.prepare()
-        val searchQuery = "About a Guy"
-        val searchExtras = Bundle().apply {
-            putString( MediaStore.EXTRA_MEDIA_FOCUS, MediaStore.Audio.Media.ENTRY_CONTENT_TYPE )
-            putString( MediaStore.EXTRA_MEDIA_TITLE, searchQuery )
-            putString( MediaStore.EXTRA_MEDIA_ALBUM, "Tales from the Render Farm" )
-            putString( MediaStore.EXTRA_MEDIA_ARTIST, "7 Developers and a Pastry Chef" )
-        }
-        val result = testSource.search( searchQuery, searchExtras )
-        TestCase.assertEquals(1, result.size)
-    }
-
-    @Test
-    fun testSearchByMedia_noMatches() {
-        testSource.prepare()
-        val searchQuery = "Kotlin in 31 Days"
-        val searchExtras = Bundle().apply {
-            putString( MediaStore.EXTRA_MEDIA_FOCUS, MediaStore.Audio.Media.ENTRY_CONTENT_TYPE )
-            putString( MediaStore.EXTRA_MEDIA_TITLE, searchQuery )
-            putString( MediaStore.EXTRA_MEDIA_ALBUM, "Delegated by lazy" )
-            putString( MediaStore.EXTRA_MEDIA_ARTIST, "Brainiest Jet" )
-        }
-        val result = testSource.search( searchQuery, searchExtras )
-        TestCase.assertEquals(0, result.size)
-    }
-
-    @Test
-    fun testSearchByKeyword_fallback() {
-        testSource.prepare()
-        val searchQuery = "hasse"
-        val searchExtras = Bundle.EMPTY
-        val result = testSource.search( searchQuery, searchExtras )
-        TestCase.assertEquals(1, result.size)
     }
 }

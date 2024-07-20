@@ -26,7 +26,8 @@ fun TreeScreen(
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
     onNavigateToSearch: () -> Unit,
-    onSettingsClicked: () -> Unit
+    onSettingsClicked: () -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -52,7 +53,8 @@ fun TreeScreen(
         onSortSongsByChange = viewModel::setSortSongsBy,
         onSortSongsInReverseChange = viewModel::setSortSongsInReverse,
         onSortPathsByChange = viewModel::setSortPathsBy,
-        onSortPathsInReverseChange = viewModel::setSortPathsInReverse
+        onSortPathsInReverseChange = viewModel::setSortPathsInReverse,
+        onDeleteSong = onDeleteSong
     )
 }
 
@@ -79,6 +81,7 @@ fun TreeScreenContent(
     onSortSongsInReverseChange: ( Boolean ) -> Unit,
     onSortPathsByChange: ( SortPathsBy ) -> Unit,
     onSortPathsInReverseChange: ( Boolean ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -116,7 +119,8 @@ fun TreeScreenContent(
                 onSortSongsByChange = onSortSongsByChange,
                 onSortSongsInReverseChange = onSortSongsInReverseChange,
                 onSortPathsByChange = onSortPathsByChange,
-                onSortPathsInReverseChange = onSortPathsInReverseChange
+                onSortPathsInReverseChange = onSortPathsInReverseChange,
+                onDeleteSong = onDeleteSong,
             )
         }
     }
@@ -153,7 +157,8 @@ fun TreeScreenContentPreview() {
             onSortSongsByChange = {},
             onSortSongsInReverseChange = {},
             onSortPathsByChange = {},
-            onSortPathsInReverseChange = {}
+            onSortPathsInReverseChange = {},
+            onDeleteSong = {}
         )
     }
 }

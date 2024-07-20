@@ -1,11 +1,7 @@
 package com.odesa.musicMatters.core.common.media.library
 
-import android.os.Bundle
-import android.provider.MediaStore
-import android.provider.MediaStore.EXTRA_MEDIA_GENRE
 import androidx.annotation.IntDef
 import androidx.media3.common.MediaItem
-import com.odesa.musicMatters.core.common.media.extensions.containsIgnoreCase
 import timber.log.Timber
 
 /**
@@ -29,7 +25,7 @@ interface MusicSource : Iterable<MediaItem> {
      */
     fun whenReady( performAction: ( Boolean ) -> Unit ): Boolean
 
-    fun search( query: String, extras: Bundle ): List<MediaItem>
+    fun delete( mediaItemId: String )
 }
 
 @IntDef(
@@ -71,7 +67,7 @@ abstract class AbstractMusicSource : MusicSource {
         set( value ) {
             if ( value == STATE_INITIALIZED || value == STATE_ERROR ) {
                 synchronized( onReadyListeners ) {
-                    Timber.tag( BROWSE_TREE_TAG ).d( "STATE CHANGED, NOTIFYING LISTENERS" )
+                    Timber.tag( TAG ).d( "STATE CHANGED, NOTIFYING LISTENERS" )
                     field = value
                     onReadyListeners.forEach { listener ->
                         listener( state == STATE_INITIALIZED )
@@ -90,90 +86,19 @@ abstract class AbstractMusicSource : MusicSource {
     override fun whenReady( performAction: ( Boolean ) -> Unit ): Boolean {
         return when ( state ) {
             STATE_CREATED, STATE_INITIALIZING -> {
-                Timber.tag( BROWSE_TREE_TAG ).d( "ADDING ACTION TO BE PERFORMED LATER - whenReady" )
+                Timber.tag( TAG ).d( "ADDING ACTION TO BE PERFORMED LATER - whenReady" )
                 onReadyListeners += performAction
                 false
             }
 
             else -> {
-                Timber.tag(BROWSE_TREE_TAG).d( "PERFORMING ACTION IN - whenReady" )
+                Timber.tag( TAG ).d( "PERFORMING ACTION IN - whenReady" )
                 performAction( state != STATE_ERROR )
                 true
             }
         }
     }
 
-
-    override fun search( query: String, extras: Bundle ): List<MediaItem> {
-        // First attempt to search with the "focus" that's provided in the extras.
-        val focusSearchResult = when ( extras[ MediaStore.EXTRA_MEDIA_FOCUS ] ) {
-            MediaStore.Audio.Genres.ENTRY_CONTENT_TYPE -> {
-                // For a Genre focused search, only genre is set.
-                val genre = extras[ EXTRA_MEDIA_GENRE ]
-                Timber.tag( TAG ).d(  "Focused genre search: '$genre" )
-                filter { song ->
-                    song.mediaMetadata.genre?.toString() == genre
-                }
-            }
-            MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> {
-                // For an Artist focused search, only the artist is set.
-                val artist = extras[ MediaStore.EXTRA_MEDIA_ARTIST ]
-                Timber.tag( TAG ).d( "Focused artist search: artist = $artist" )
-                filter { song ->
-                    isArtist( song, artist )
-                }
-            }
-            MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE -> {
-                // For an album focused search, album and artist are set
-                val artist = extras[ MediaStore.EXTRA_MEDIA_ARTIST ]
-                val album = extras[ MediaStore.EXTRA_MEDIA_ALBUM ]
-                Timber.tag( TAG ).d( "Focused album search: album = '$album' artist = '$artist' ")
-                filter { song ->
-                    ( isArtist( song, artist ) && song.mediaMetadata.albumTitle?.toString() == album )
-                }
-            }
-            MediaStore.Audio.Media.ENTRY_CONTENT_TYPE -> {
-                // For a Song ( aka Media ) focused search, title, album and artist are set.
-                val title = extras[ MediaStore.EXTRA_MEDIA_TITLE ]
-                val album = extras[ MediaStore.EXTRA_MEDIA_ALBUM ]
-                val artist = extras[ MediaStore.EXTRA_MEDIA_ARTIST ]
-                Timber.tag( TAG ).d( "Focused media search: title = '$title' album = '$album' artist = '$artist'" )
-                filter { song ->
-                    isArtist( song, artist )
-                            && song.mediaMetadata.albumTitle?.toString() == album
-                            && song.mediaMetadata.title?.toString() == title
-                }
-            }
-            else -> {
-                // There isn't a focus, so no results yet.
-                emptyList()
-            }
-        }
-
-        // If there weren't any results from the focused search ( or if there wasn't a focus to
-        // begin with ), try to find any matches given the 'query' provided, searching against
-        // a few of the fields.
-        // In this example, we're just checking a few fields with the provided query, but in a
-        // more complex app, more logic could be used to find fuzzy matches, etc..
-        if ( focusSearchResult.isEmpty() ) {
-            return if ( query.isNotBlank() ) {
-                Timber.tag( TAG ).d( "Unfocused search for '$query'" )
-                filter { song ->
-                    song.mediaMetadata.title?.toString().containsIgnoreCase( query )
-                            || song.mediaMetadata.genre?.toString().containsIgnoreCase( query )
-                }
-            } else {
-                return focusSearchResult
-            }
-        }
-        return focusSearchResult
-    }
-
-}
-
-fun isArtist( mediaItem: MediaItem, artist: Any? ): Boolean {
-    return mediaItem.mediaMetadata.artist?.toString() == artist
-            || mediaItem.mediaMetadata.albumArtist?.toString() == artist
 }
 
 private const val TAG = "MUSIC-SOURCE"

@@ -76,7 +76,7 @@ class LocalPlaylistStore(
         .fetchEntries()
         .asPlaylist()
 
-    override suspend fun addSongIdToMostPlayedSongsPlaylist(songId: String ) {
+    override suspend fun addSongIdToMostPlayedSongsPlaylist( songId: String ) {
         songPlayCountEntryDao.getPlayCountBySongId( songId )?.let {
             songPlayCountEntryDao.incrementPlayCount( songId )
         } ?: run {
@@ -86,6 +86,10 @@ class LocalPlaylistStore(
                 )
             )
         }
+    }
+
+    override suspend fun removeSongIdFromMostPlayedSongsPlaylist( songId: String ) {
+        songPlayCountEntryDao.deleteEntryWithSongId( songId )
     }
 
     override suspend fun fetchEditablePlaylists() = playlistDao
@@ -118,6 +122,13 @@ class LocalPlaylistStore(
                 playlistId = playlistInfo.id,
                 songId = songId
             )
+        )
+    }
+
+    override suspend fun removeSongIdFromPlaylist( songId: String, playlistInfo: PlaylistInfo ) {
+        playlistEntryDao.deleteEntry(
+            playlistId = playlistInfo.id,
+            songId = songId
         )
     }
 

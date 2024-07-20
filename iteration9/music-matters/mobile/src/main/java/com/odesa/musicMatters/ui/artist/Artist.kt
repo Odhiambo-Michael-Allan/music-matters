@@ -41,6 +41,7 @@ fun ArtistScreen(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: (String ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
 
@@ -77,7 +78,8 @@ fun ArtistScreen(
         onAddSongsByArtistToQueue = viewModel::addSongsByArtistToQueue,
         onPlaySongsByArtistNext = viewModel::playSongsByArtistNext,
         onShuffleAndPlaySongsByArtist = viewModel::shufflePlaySongsByArtist,
-        onGetPlaylists = { uiState.playlistInfos }
+        onGetPlaylists = { uiState.playlistInfos },
+        onDeleteSong = onDeleteSong,
     )
 }
 
@@ -109,6 +111,7 @@ fun ArtistScreenContent(
     onPlaySongsByArtistNext: ( Artist ) -> Unit,
     onShuffleAndPlaySongsByArtist: ( Artist ) -> Unit,
     onGetPlaylists: () -> List<PlaylistInfo>,
+    onDeleteSong: ( Song ) -> Unit,
     ) {
 
     val fallbackResourceId =
@@ -152,6 +155,7 @@ fun ArtistScreenContent(
                 onGetAdditionalMetadataForSongWithId = { songId ->
                     uiState.songsAdditionalMetadataList.find { it.id == songId }
                 },
+                onDeleteSong = onDeleteSong,
                 leadingContent = {
                     item {
                         ArtistArtwork(
@@ -277,6 +281,7 @@ fun ArtistScreenContentPreview() {
         onAddSongsByArtistToQueue = {},
         onPlaySongsByArtistNext = {},
         onShuffleAndPlaySongsByArtist = {},
-        onGetPlaylists = { emptyList() }
+        onGetPlaylists = { emptyList() },
+        onDeleteSong = {}
     )
 }

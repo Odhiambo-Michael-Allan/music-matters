@@ -41,7 +41,7 @@ abstract class MusicMattersDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context = context.applicationContext,
                     MusicMattersDatabase::class.java,
-                    "music-matters-database-2"
+                    "music-matters-database-3"
                 ).build()
                 scope.launch { addInitialPlaylists( instance.playlistDao() ) }
                 INSTANCE = instance

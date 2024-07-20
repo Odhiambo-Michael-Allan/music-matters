@@ -3,6 +3,7 @@ package com.odesa.musicMatters.ui.navigation
 import android.content.Context
 import android.content.Intent
 import android.media.audiofx.AudioEffect
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.launch
@@ -15,7 +16,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -32,6 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.odesa.musicMatters.MainActivity
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
 import com.odesa.musicMatters.core.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.core.data.repository.PlaylistRepository
@@ -89,11 +95,13 @@ import com.odesa.musicMatters.ui.tree.TreeScreenViewModel
 import com.odesa.musicMatters.ui.tree.TreeViewModelFactory
 import com.odesa.musicMatters.ui.utils.getSearchFilterFrom
 import com.odesa.musicMatters.ui.utils.shareSong
+import com.odesa.musicMatters.utils.ScreenOrientation
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MusicMattersNavHost(
+    mainActivity: MainActivity,
     navController: NavHostController,
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
@@ -146,7 +154,18 @@ fun MusicMattersNavHost(
         }
     }
 
+    val adaptiveInfo = currentWindowAdaptiveInfo()
+    val screenOrientation = ScreenOrientation.fromConfiguration( LocalConfiguration.current)
+    val customNavSuiteType = with( adaptiveInfo ) {
+        if ( screenOrientation == ScreenOrientation.LANDSCAPE ) {
+            NavigationSuiteType.NavigationRail
+        } else {
+            NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo( adaptiveInfo )
+        }
+    }
+
     NavigationSuiteScaffold(
+        layoutType = customNavSuiteType,
         navigationSuiteItems = {
             TOP_LEVEL_DESTINATIONS.forEach { tab ->
                 val isSelected = currentTabName == tab.route.name
@@ -235,7 +254,10 @@ fun MusicMattersNavHost(
                         onViewAlbum = navController::navigateToAlbumScreen,
                         onViewArtist = navController::navigateToArtistScreen,
                         onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.SONG.name ) }
+                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.SONG.name ) },
+                        onDeleteSong = {
+                            mainActivity.deleteSong( it )
+                        }
                     )
                 }
                 composable(
@@ -284,6 +306,13 @@ fun MusicMattersNavHost(
                         onViewArtist = navController::navigateToArtistScreen,
                         onNavigateBack = { navController.navigateUp() },
                         onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                        onDeleteSong = {
+                            Toast.makeText(
+                                context,
+                                "Not yet implemented",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     )
                 }
                 composable(
@@ -333,6 +362,13 @@ fun MusicMattersNavHost(
                         onViewAlbum = navController::navigateToAlbumScreen,
                         onViewArtist = navController::navigateToArtistScreen,
                         onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                        onDeleteSong = {
+                            Toast.makeText(
+                                context,
+                                "Not yet implemented",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     )
                 }
                 composable(
@@ -379,6 +415,13 @@ fun MusicMattersNavHost(
                         onViewArtist = navController::navigateToArtistScreen,
                         onNavigateBack = { navController.navigateUp() },
                         onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                        onDeleteSong = {
+                            Toast.makeText(
+                                context,
+                                "Not yet implemented",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     )
                 }
                 composable(
@@ -430,6 +473,13 @@ fun MusicMattersNavHost(
                         onViewArtist = navController::navigateToArtistScreen,
                         onNavigateBack = { navController.navigateUp() },
                         onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                        onDeleteSong = {
+                            Toast.makeText(
+                                context,
+                                "Not yet implemented",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     )
                 }
                 composable(
@@ -451,7 +501,14 @@ fun MusicMattersNavHost(
                         onViewAlbum = navController::navigateToAlbumScreen,
                         onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
                         onNavigateToSearch = { navController.navigateToSearchScreen( "--" ) },
-                        onSettingsClicked = { navController.navigate( Route.Settings.name ) }
+                        onSettingsClicked = { navController.navigate( Route.Settings.name ) },
+                        onDeleteSong = {
+                            Toast.makeText(
+                                context,
+                                "Not yet implemented",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     )
                 }
                 composable(
@@ -581,6 +638,7 @@ fun MusicMattersNavHost(
         }
     }
 }
+
 
 
 

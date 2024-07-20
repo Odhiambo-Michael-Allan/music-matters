@@ -1,10 +1,12 @@
 package com.odesa.musicMatters.core.common.connection
 
+import android.os.Bundle
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
+import com.odesa.musicMatters.core.common.media.CUSTOM_COMMAND_DELETE_SONG
 import com.odesa.musicMatters.core.common.media.extensions.artistTagSeparators
 import com.odesa.musicMatters.core.common.media.extensions.move
 import com.odesa.musicMatters.core.common.media.extensions.toAlbum
@@ -137,13 +139,11 @@ class MusicServiceConnectionImpl(
     }
 
     private suspend fun observeSongsAdditionalMetadata() {
-        withContext( Dispatchers.IO ) {
-            songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().collect {
-                if ( it.size >= cachedSongs.value.size ) {
-                    // At this point, we are sure all additional metadata for each song has been loaded.
-                    _cachedGenres.value = constructGenresUsing( it )
-                    _isLoadingGenres.value = false
-                }
+        songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().collect {
+            if ( it.size >= cachedSongs.value.size ) {
+                // At this point, we are sure all additional metadata for each song has been loaded.
+                _cachedGenres.value = constructGenresUsing( it )
+                _isLoadingGenres.value = false
             }
         }
     }
@@ -157,7 +157,7 @@ class MusicServiceConnectionImpl(
                 name = genreName,
                 songsInGenre = cachedSongs
                     .value
-                    .filter { song -> songsInGenre.map { it.id }.contains( song.id ) },
+                    .filter { song -> songsInGenre.map { it.songId }.contains( song.id ) },
                 numberOfTracks = songsInGenre.size
             )
 
@@ -182,6 +182,28 @@ class MusicServiceConnectionImpl(
     }
 
     private fun getCurrentMediaItemIndex() = mediaItemsInQueue.value.indexOf( nowPlayingMediaItem.value )
+
+    override fun deleteSong( song: Song ) {
+        scope.launch {
+            connectable.sendCustomCommand(
+                command = CUSTOM_COMMAND_DELETE_SONG,
+                parameters = Bundle()
+                    .apply {
+                        putString( SONG_ID_KEY, song.id )
+                    },
+            )
+            if ( nowPlayingMediaItem.value == song.mediaItem ) playNextSong()
+            playlistRepository.apply {
+                playlists.value.forEach {
+                    removeSongIdFromPlaylist( song.id, it.id )
+                }
+            }
+            withContext( Dispatchers.IO ) {
+                songsAdditionalMetadataRepository.deleteEntryWithId( song.id )
+            }
+            updateMediaCaches()
+        }
+    }
 
     override fun addToQueue( mediaItem: MediaItem ) {
         if ( mediaItem.isPresentIn( _mediaItemsInQueue.value ) ) return // NO DUPLICATES!
@@ -362,7 +384,7 @@ class MusicServiceConnectionImpl(
         currentQueueSavingJob = scope.launch {
             Timber.tag( TAG ).d( "SAVING CURRENT QUEUE.." )
             playlistRepository.clearCurrentPlayingQueuePlaylist()
-            playlistRepository.saveCurrentQueue( mediaItemsInQueue.value.map{ it.mediaId } )
+            playlistRepository.saveCurrentlyPlayingQueue( mediaItemsInQueue.value.map{ it.mediaId } )
         }
     }
 
@@ -468,4 +490,5 @@ private fun Player.setPlaybackPitch( pitch: Float ) {
 const val CURRENTLY_PLAYING_MEDIA_ITEM_INDEX_UNDEFINED = -1
 val EMPTY_PLAYBACK_STATE: PlaybackState = PlaybackState()
 val NOTHING_PLAYING = MediaItem.EMPTY
+const val SONG_ID_KEY = "--SONG-ID-KEY--"
 private const val TAG = "MUSIC-SERVICE-CONNECTION-TAG"

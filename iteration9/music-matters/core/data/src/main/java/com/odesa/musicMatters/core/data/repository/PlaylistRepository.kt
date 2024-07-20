@@ -18,12 +18,15 @@ interface PlaylistRepository {
 
     suspend fun addToRecentlyPlayedSongsPlaylist( songId: String )
     suspend fun addToMostPlayedPlaylist( songId: String )
-    suspend fun savePlaylist( playlistInfo: PlaylistInfo )
+    suspend fun removeSongIdFromMostPlayedPlaylist( songId: String )
 
+    suspend fun savePlaylist( playlistInfo: PlaylistInfo )
     suspend fun deletePlaylist( playlistInfo: PlaylistInfo )
     suspend fun addSongIdToPlaylist( songId: String, playlistId: String )
-    suspend fun renamePlaylist( playlistInfo: PlaylistInfo, newTitle: String )
 
-    suspend fun saveCurrentQueue( songIds: List<String> )
+    suspend fun removeSongIdFromPlaylist( songId: String, playlistId: String )
+    suspend fun renamePlaylist( playlistInfo: PlaylistInfo, newTitle: String )
+    suspend fun saveCurrentlyPlayingQueue(songIds: List<String> )
+
     suspend fun clearCurrentPlayingQueuePlaylist()
 }

@@ -1,5 +1,6 @@
 package com.odesa.musicMatters.core.datatesting.connection
 
+import android.os.Bundle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import com.odesa.musicMatters.core.common.connection.Connectable
@@ -34,6 +35,11 @@ class FakeConnectable : Connectable {
             else -> emptyList()
         }
     }
+
+    override suspend fun sendCustomCommand(
+        command: String,
+        parameters: Bundle?,
+    ): Boolean = true
 
     override fun addDisconnectListener( disconnectListener: () -> Unit ) {
         onDisconnectListeners.add( disconnectListener )

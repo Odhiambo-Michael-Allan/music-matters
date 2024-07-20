@@ -27,6 +27,7 @@ fun GenreScreen(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
+    onDeleteSong: (Song ) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
 
@@ -57,7 +58,8 @@ fun GenreScreen(
         onCreatePlaylist = viewModel::createPlaylist,
         onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
         onGetPlaylists = { uiState.playlistInfos },
-        onGetSongsInPlaylist = viewModel::getSongsInPlaylist
+        onGetSongsInPlaylist = viewModel::getSongsInPlaylist,
+        onDeleteSong = onDeleteSong
     )
 }
 
@@ -80,7 +82,8 @@ fun GenreScreenContent(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onNavigateBack: () -> Unit,
     onGetPlaylists: () -> List<PlaylistInfo>,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>
+    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -123,7 +126,8 @@ fun GenreScreenContent(
                 onCreatePlaylist = onCreatePlaylist,
                 onGetAdditionalMetadataForSongWithId = { songId ->
                     uiState.songsAdditionalMetadataList.find { it.id == songId }
-                }
+                },
+                onDeleteSong = onDeleteSong
             )
         }
     }
@@ -157,7 +161,8 @@ fun GenreScreenContentPreview() {
             onSearchSongsMatchingQuery = { emptyList() },
             onCreatePlaylist = { _, _ -> },
             onGetPlaylists = { emptyList() },
-            onGetSongsInPlaylist = { emptyList() }
+            onGetSongsInPlaylist = { emptyList() },
+            onDeleteSong = {}
         )
     }
 }

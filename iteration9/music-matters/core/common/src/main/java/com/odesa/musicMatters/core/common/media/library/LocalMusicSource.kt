@@ -46,6 +46,10 @@ class LocalMusicSource(
         }
     }
 
+    override fun delete( mediaItemId: String ) {
+        musicCatalog = musicCatalog.filter { it.mediaId != mediaItemId }
+    }
+
     private suspend fun updateCatalog(): List<MediaItem>? {
         return withContext( Dispatchers.IO ) {
             Timber.tag( TAG ).d( "READING MEDIA ITEMS FROM STORAGE" )
@@ -98,7 +102,7 @@ class LocalMusicSource(
 
                 additionalMetadataList.add(
                     SongAdditionalMetadata(
-                        id = it.mediaId,
+                        songId = it.mediaId,
                         bitrate = bitrate,
                         bitsPerSample = bitsPerSample,
                         codec = codec,

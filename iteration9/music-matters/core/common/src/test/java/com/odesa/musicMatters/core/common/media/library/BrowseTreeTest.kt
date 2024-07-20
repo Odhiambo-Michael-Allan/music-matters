@@ -4,6 +4,7 @@ import com.odesa.musicMatters.core.common.media.extensions.toAlbum
 import com.odesa.musicMatters.core.datatesting.media.FakeMusicSource
 import com.odesa.musicMatters.core.datatesting.songs.testSongMediaItems
 import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,22 +26,22 @@ class BrowseTreeTest {
     fun testTracksAreCorrectlyConfigured() {
         val trackList = browseTree[ MUSIC_MATTERS_TRACKS_ROOT ]
         TestCase.assertNotNull(trackList)
-        TestCase.assertEquals(11, trackList!!.size)
+        assertEquals(11, trackList!!.size)
     }
 
     @Test
     fun testRecentlyAddedSongsAreCorrectlyConfigured() {
         val recentlyAddedSongs = browseTree[ MUSIC_MATTERS_RECENT_SONGS_ROOT ]
         TestCase.assertNotNull(recentlyAddedSongs)
-        TestCase.assertEquals(testSongMediaItems.size, recentlyAddedSongs!!.size)
-        TestCase.assertEquals("Don't Believe the Hype", recentlyAddedSongs[0].mediaMetadata.title)
+        assertEquals(testSongMediaItems.size, recentlyAddedSongs!!.size)
+        assertEquals("Don't Believe the Hype", recentlyAddedSongs[0].mediaMetadata.title)
     }
 
     @Test
     fun testAlbumsAreLoadedCorrectly() {
         val albums = browseTree[ MUSIC_MATTERS_ALBUMS_ROOT ]
         TestCase.assertNotNull(albums)
-        TestCase.assertEquals(5, albums!!.size)
+        assertEquals(5, albums!!.size)
         TestCase.assertTrue(albums.first().toAlbum(emptyList()).artists.isNotEmpty())
     }
 
@@ -48,20 +49,29 @@ class BrowseTreeTest {
     fun testSuggestedAlbumAreLoadedCorrectly() {
         val suggestedAlbums = browseTree[ MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT ]
         TestCase.assertNotNull(suggestedAlbums)
-        TestCase.assertEquals(5, suggestedAlbums!!.size)
+        assertEquals(5, suggestedAlbums!!.size)
     }
 
     @Test
     fun testArtistsAreLoadedCorrectly() {
         val artists = browseTree[ MUSIC_MATTERS_ARTISTS_ROOT ]
         TestCase.assertNotNull(artists)
-        TestCase.assertEquals(5, artists!!.size)
+        assertEquals(5, artists!!.size)
     }
 
     @Test
     fun testSuggestedArtistsAreLoadedCorrectly() {
         val suggestedArtists = browseTree[ MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT ]
         TestCase.assertNotNull(suggestedArtists)
-        TestCase.assertEquals(5, suggestedArtists!!.size)
+        assertEquals(5, suggestedArtists!!.size)
+    }
+
+    @Test
+    fun testSongIsDeletedCorrectly() {
+        browseTree.deleteMediaItemWithId( testSongMediaItems.first().mediaId )
+        assertEquals(
+            testSongMediaItems.size - 1,
+            browseTree[ MUSIC_MATTERS_TRACKS_ROOT ]!!.size
+        )
     }
 }

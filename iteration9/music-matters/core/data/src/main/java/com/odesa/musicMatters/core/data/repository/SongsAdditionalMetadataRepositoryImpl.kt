@@ -24,13 +24,17 @@ class SongsAdditionalMetadataRepositoryImpl(
     override suspend fun save( songAdditionalMetadata: List<SongAdditionalMetadata> ) {
         songAdditionalMetadataDao.insertAll( songAdditionalMetadata )
     }
+
+    override suspend fun deleteEntryWithId( id: String ) {
+        songAdditionalMetadataDao.deleteEntryWithId( id )
+    }
 }
 
 fun SongAdditionalMetadata?.asDomain(): SongAdditionalMetadataInfo? =
     if ( this == null ) null
     else
         SongAdditionalMetadataInfo(
-            id = id,
+            id = songId,
             codec = codec,
             bitsPerSample = bitsPerSample.toString(),
             bitrate = bitrate.toString(),

@@ -38,11 +38,10 @@ class SongAdditionalMetadataDaoTest : TestDatabase() {
         dao.insertAll( songsAdditionalMetadataList )
         dao.insert(
             SongAdditionalMetadata(
-                id = testSongs.first().id,
+                songId = testSongs.first().id,
                 codec = "mp3",
                 bitrate = 44000L,
-                bitsPerSample = 0L,
-                samplingRate = 0L
+                genre = "Pop"
             )
         )
         assertEquals(
@@ -56,5 +55,23 @@ class SongAdditionalMetadataDaoTest : TestDatabase() {
         assertTrue( dao.observeEntries().first().isEmpty() )
         dao.insertAll( songsAdditionalMetadataList )
         assertEquals( 2, dao.observeEntries().first().size )
+    }
+
+    @Test
+    fun testDelete() = runTest {
+        testSongs.forEach {
+            dao.insert(
+                SongAdditionalMetadata(
+                    songId = it.id,
+                    codec = "",
+                    genre = ""
+                )
+            )
+        }
+        dao.deleteEntryWithId( testSongs.first().id )
+        assertEquals(
+            testSongs.size - 1,
+            dao.observeEntries().first().size
+        )
     }
 }

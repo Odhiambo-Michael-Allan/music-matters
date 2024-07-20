@@ -6,10 +6,22 @@ import com.odesa.musicMatters.core.common.media.library.STATE_ERROR
 import com.odesa.musicMatters.core.common.media.library.STATE_INITIALIZED
 
 class FakeMusicSource (
-    private val music: List<MediaItem>
-) : AbstractMusicSource(), Iterable<MediaItem> by music {
+    music: List<MediaItem>
+) : AbstractMusicSource() {
+
+    private var musicCatalog = emptyList<MediaItem>()
+
+    init {
+        musicCatalog = music
+    }
 
     override suspend fun load() = Unit
+
+    override fun delete( mediaItemId: String ) {
+        musicCatalog = musicCatalog.filter { it.mediaId != mediaItemId }
+    }
+
+    override fun iterator() = musicCatalog.iterator()
 
     fun prepare() {
         state = STATE_INITIALIZED

@@ -8,10 +8,10 @@ import androidx.room.PrimaryKey
     tableName = "songs_additional_metadata",
 )
 data class SongAdditionalMetadata(
-    @PrimaryKey @ColumnInfo( name = "id" ) val id: String,
+    @PrimaryKey @ColumnInfo( name = "id" ) val songId: String,
     @ColumnInfo( name = "codec" ) val codec: String,
-    @ColumnInfo( name = "bits_per_sample" ) val bitsPerSample: Long,
-    @ColumnInfo( name = "bitrate" ) val bitrate: Long,
-    @ColumnInfo( name = "sampling_rate" ) val samplingRate: Long,
+    @ColumnInfo( name = "bits_per_sample" ) val bitsPerSample: Long = 0L,
+    @ColumnInfo( name = "bitrate" ) val bitrate: Long = 0L,
+    @ColumnInfo( name = "sampling_rate" ) val samplingRate: Long = 0L,
     @ColumnInfo( name = "genre" ) val genre: String
 )

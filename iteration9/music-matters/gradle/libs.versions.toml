@@ -21,7 +21,7 @@ composeBom = "2024.02.02"
 androidxCompose = "1.7.0-alpha07"
 compose-navigation = "2.7.7"
 
-compose-material = "1.6.7"
+compose-material = "1.6.8"
 coil = "2.5.0"
 media3Common = "1.2.1"
 
@@ -44,6 +44,8 @@ room = "2.6.1"
 # @pin When updating to AGP 7.4.0-alpha10 and up we can update this https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 jdkDesugar = "1.2.2"
 material3-adaptive-navigation-suite = "1.0.0-alpha07"
+
+material3-adaptive = "1.0.0-alpha12"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -99,6 +101,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 
 androidx-compose-material3-adaptive-navigation-suite = { module = "androidx.compose.material3:material3-adaptive-navigation-suite", version.ref = "material3-adaptive-navigation-suite" }
+androidx-compose-material3-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "material3-adaptive" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

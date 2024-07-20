@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Album
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -46,7 +47,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.core.common.media.extensions.formatMilliseconds
+import com.odesa.musicMatters.core.data.utils.VersionUtils
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
+import com.odesa.musicMatters.core.designsystem.theme.GoogleRed
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.PlaylistInfo
@@ -69,15 +72,17 @@ fun SongCard(
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onGetSongsInPlaylist: ( PlaylistInfo ) -> List<Song>,
+    onAddSongsToPlaylist: ( PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     var showSongOptionsBottomSheet by remember { mutableStateOf( false ) }
     var showSongDetailsDialog by remember { mutableStateOf( false ) }
+    var showDeleteSongDialog by remember { mutableStateOf( false ) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -167,6 +172,13 @@ fun SongCard(
                                     onAddSongsToPlaylist = onAddSongsToPlaylist,
                                     onGetSongsInPlaylist = onGetSongsInPlaylist,
                                     onGetPlaylists = { playlistInfos },
+                                    onDelete = {
+                                        if ( !VersionUtils.isQandAbove() ) {
+                                            showDeleteSongDialog = true
+                                        } else {
+                                            onDeleteSong( it )
+                                        }
+                                    },
                                     onDismissRequest = {
                                         showSongOptionsBottomSheet = false
                                     }
@@ -185,6 +197,15 @@ fun SongCard(
                     onGetSongAdditionalMetadata = onGetSongAdditionalMetadata
                 ) {
                     showSongDetailsDialog = false
+                }
+            }
+            if ( showDeleteSongDialog ) {
+                DeleteSongDialog(
+                    song = song,
+                    language = language,
+                    onDelete = { onDeleteSong( song ) }
+                ) {
+                    showDeleteSongDialog = false
                 }
             }
         }
@@ -210,6 +231,7 @@ fun SongOptionsBottomSheetMenu(
     onSearchSongsMatchingQuery: (String ) -> List<Song>,
     onCreatePlaylist: (String, List<Song> ) -> Unit,
     onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onDelete: ( Song ) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     GenericOptionsBottomSheet(
@@ -276,6 +298,14 @@ fun SongOptionsBottomSheetMenu(
                 onDismissRequest()
                 onShowSongDetails()
             }
+            BottomSheetMenuItem(
+                leadingIcon = Icons.Filled.Delete,
+                leadingIconTint = GoogleRed,
+                label = language.delete,
+            ) {
+                onDismissRequest()
+                onDelete( song )
+            }
         }
     )
 }
@@ -301,6 +331,7 @@ fun SongOptionsBottomSheetContentPreview() {
         onGetPlaylists = { emptyList() },
         onGetSongsInPlaylist = { emptyList() },
         onSearchSongsMatchingQuery = { emptyList() },
+        onDelete = {},
         onDismissRequest = {}
     )
 }
@@ -359,6 +390,7 @@ fun QueueSongCard(
             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
             onCreatePlaylist = onCreatePlaylist,
             onGetSongAdditionalMetadata = onGetSongAdditionalMetadata,
+            onDeleteSong = {}
         )
     }
 }
@@ -384,7 +416,8 @@ fun SongCardPreview() {
         onAddSongsToPlaylist = { _, _ -> },
         onSearchSongsMatchingQuery = { emptyList() },
         onCreatePlaylist = { _, _ -> },
-        onGetSongAdditionalMetadata = { null }
+        onGetSongAdditionalMetadata = { null },
+        onDeleteSong = {}
     )
 }
 

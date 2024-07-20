@@ -15,4 +15,7 @@ abstract class SongPlayCountEntryDao : BaseDao<SongPlayCountEntry> {
 
     @Query( "UPDATE song_play_count_entries SET number_of_times_played = number_of_times_played + 1 WHERE song_id = :songId" )
     abstract suspend fun incrementPlayCount( songId: String )
+
+    @Query( "DELETE FROM song_play_count_entries WHERE song_id = :songId" )
+    abstract suspend fun deleteEntryWithSongId( songId: String )
 }

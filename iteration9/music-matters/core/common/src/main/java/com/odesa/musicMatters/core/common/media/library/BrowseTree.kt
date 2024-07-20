@@ -9,6 +9,7 @@ import com.odesa.musicMatters.core.common.media.extensions.ARTIST_KEY
 import com.odesa.musicMatters.core.common.media.extensions.DATE_KEY
 import com.odesa.musicMatters.core.common.media.extensions.artistTagSeparators
 import com.odesa.musicMatters.core.common.media.extensions.parseArtistStringIntoIndividualArtists
+import timber.log.Timber
 import java.util.UUID
 
 /**
@@ -45,36 +46,36 @@ class BrowseTree(
      * children are each album included in the [MusicSource], and the children of each album are the
      * songs on that album. ( See [BrowseTree.buildAlbumRoot] for more details. )
      */
-    init {
+    init { buildTree() }
 
-        val rootList = mediaIdToChildren[ MUSIC_MATTERS_BROWSABLE_ROOT ] ?: mutableListOf()
+    fun buildTree() {
+        val rootList =  mutableListOf<MediaItem>()
         addRootMediaItemsTo( rootList )
         mediaIdToChildren[ MUSIC_MATTERS_BROWSABLE_ROOT ] = rootList
 
-        val trackList = mediaIdToChildren[ MUSIC_MATTERS_TRACKS_ROOT ] ?: mutableListOf()
+        val trackList = mutableListOf<MediaItem>()
         addTrackMediaItemsTo( trackList )
         mediaIdToChildren[ MUSIC_MATTERS_TRACKS_ROOT ] = trackList
 
-        val albumList = mediaIdToChildren[ MUSIC_MATTERS_ALBUMS_ROOT ] ?: mutableListOf()
+        val albumList = mutableListOf<MediaItem>()
         addAlbumMediaItemsTo( albumList )
         mediaIdToChildren[ MUSIC_MATTERS_ALBUMS_ROOT ] = albumList
 
-        val recentSongsList = mediaIdToChildren[ MUSIC_MATTERS_RECENT_SONGS_ROOT ] ?: mutableListOf()
+        val recentSongsList = mutableListOf<MediaItem>()
         addRecentSongMediaItemsTo( recentSongsList )
         mediaIdToChildren[ MUSIC_MATTERS_RECENT_SONGS_ROOT ] = recentSongsList
 
-        val suggestedAlbumList = mediaIdToChildren[ MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT ] ?: mutableListOf()
+        val suggestedAlbumList = mutableListOf<MediaItem>()
         addSuggestedAlbumMediaItemsTo( suggestedAlbumList )
         mediaIdToChildren[ MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT ] = suggestedAlbumList
 
-        val artistList = mediaIdToChildren[ MUSIC_MATTERS_ARTISTS_ROOT ] ?: mutableListOf()
+        val artistList = mutableListOf<MediaItem>()
         addArtistMediaItemsTo( artistList )
         mediaIdToChildren[ MUSIC_MATTERS_ARTISTS_ROOT ] = artistList
 
-        val suggestedArtistsList = mediaIdToChildren[ MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT ] ?: mutableListOf()
+        val suggestedArtistsList = mutableListOf<MediaItem>()
         addSuggestedArtistMediaItemsTo( suggestedArtistsList )
         mediaIdToChildren[ MUSIC_MATTERS_SUGGESTED_ARTISTS_ROOT ] = suggestedArtistsList
-
     }
 
     private fun addRootMediaItemsTo( rootList: MutableList<MediaItem> ) {
@@ -113,27 +114,6 @@ class BrowseTree(
             mediaIdToMediaItem[ mediaItem.mediaId ] = mediaItem
             trackList.add( mediaItem )
         }
-    }
-
-    private fun addGenreMediaItemsTo( genreList: MutableList<MediaItem> ) {
-        musicSource.forEach { mediaItem ->
-            val mediaItemGenre = mediaItem.mediaMetadata.genre ?: "<unknown>"
-            val loadedGenre = mediaItemGenre.toString()
-            val genreAlreadyExistsInGenreList = findGenreIn( genreList, loadedGenre )
-            if ( !genreAlreadyExistsInGenreList ) {
-                val genreMetadata = createGenreMetadataUsing( loadedGenre )
-                val genreMediaItem = createGenreMediaItemUsing( genreMetadata )
-                genreList.add( genreMediaItem )
-            }
-        }
-    }
-
-    private fun findGenreIn( genreList: MutableList<MediaItem>, genre: String ): Boolean {
-        genreList.forEach { genreMediaItem ->
-            if ( genreMediaItem.mediaMetadata.title.toString().lowercase() == genre.lowercase() )
-                return true
-        }
-        return false
     }
 
     private fun createGenreMetadataUsing( genre: String ) = MediaMetadata.Builder().apply {
@@ -268,6 +248,12 @@ class BrowseTree(
     /** Provides access to the media items by media id */
     fun getMediaItemById( mediaId: String ) = mediaIdToMediaItem[ mediaId ]
 
+    fun deleteMediaItemWithId( mediaId: String ) {
+        Timber.tag( TAG ).d( "DELETING MEDIA ITEM WITH ID: $mediaId" )
+        musicSource.delete( mediaId )
+        buildTree()
+    }
+
 }
 
 const val MUSIC_MATTERS_BROWSABLE_ROOT = "/"
@@ -282,5 +268,5 @@ const val MUSIC_MATTERS_ALBUMS_ROOT = "__ALBUMS__"
 const val MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT = "__SUGGESTED-ALBUMS__"
 
 const val MEDIA_SEARCH_SUPPORTED = "android.media.browse.SEARCH_SUPPORTED"
-const val BROWSE_TREE_TAG = "BROWSE-TREE-TAG"
+private const val TAG = "BROWSE-TREE-TAG"
 

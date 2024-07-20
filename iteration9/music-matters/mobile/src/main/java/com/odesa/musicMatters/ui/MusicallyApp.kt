@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.odesa.musicMatters.MainActivity
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
 import com.odesa.musicMatters.core.data.repository.PlaylistRepository
 import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
@@ -17,6 +18,7 @@ import com.odesa.musicMatters.ui.navigation.MusicMattersNavHost
 
 @Composable
 fun MusicallyApp(
+    mainActivity: MainActivity,
     navController: NavHostController = rememberNavController(),
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
@@ -25,6 +27,7 @@ fun MusicallyApp(
     musicServiceConnection: MusicServiceConnection,
 ) {
     MusicallyAppContent(
+        mainActivity = mainActivity,
         navController = navController,
         settingsRepository = settingsRepository,
         playlistRepository = playlistRepository,
@@ -36,6 +39,7 @@ fun MusicallyApp(
 
 @Composable
 fun MusicallyAppContent(
+    mainActivity: MainActivity,
     navController: NavHostController,
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
@@ -51,6 +55,7 @@ fun MusicallyAppContent(
         modifier = Modifier.fillMaxSize(),
     ) {
         MusicMattersNavHost(
+            mainActivity = mainActivity,
             navController = navController,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository,

@@ -2,13 +2,16 @@ package com.odesa.musicMatters.core.common.connection
 
 import android.content.ComponentName
 import android.content.Context
+import android.os.Bundle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.MediaBrowser
 import androidx.media3.session.MediaController
+import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionToken
 import com.google.common.collect.ImmutableList
 import kotlinx.coroutines.guava.await
+import timber.log.Timber
 
 class MediaBrowserAdapter(
     private val context: Context,
@@ -37,6 +40,16 @@ class MediaBrowserAdapter(
         return children ?: ImmutableList.of()
     }
 
+    override suspend fun sendCustomCommand(
+        command: String,
+        parameters: Bundle?,
+    ): Boolean = if ( browser?.isConnected == true ) {
+        Timber.tag( TAG ).d( "SENDING CUSTOM COMMAND: $command" )
+        val args = parameters ?: Bundle()
+        browser?.sendCustomCommand( SessionCommand( command, args ), args )?.await()
+        true
+    } else false
+
     override fun addDisconnectListener( disconnectListener: () -> Unit ) {
         disconnectListeners.add( disconnectListener )
     }
@@ -49,3 +62,5 @@ class MediaBrowserAdapter(
         }
     }
 }
+
+private const val TAG = "--MEDIA-BROWSER-ADAPTER-TAG--"

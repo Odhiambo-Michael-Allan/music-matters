@@ -5,7 +5,7 @@ import com.odesa.musicMatters.core.datatesting.songs.testSongs
 
 val songsAdditionalMetadataList = listOf(
     SongAdditionalMetadata(
-        id = testSongs.first().id,
+        songId = testSongs.first().id,
         codec = "mp3",
         bitrate = 0L,
         bitsPerSample = 0L,
@@ -13,7 +13,7 @@ val songsAdditionalMetadataList = listOf(
         genre = "Pop"
     ),
     SongAdditionalMetadata(
-        id = testSongs.last().id,
+        songId = testSongs.last().id,
         codec = "mp3",
         bitrate = 0L,
         bitsPerSample = 0L,

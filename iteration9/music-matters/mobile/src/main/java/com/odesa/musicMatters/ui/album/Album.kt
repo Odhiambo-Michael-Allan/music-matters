@@ -39,6 +39,7 @@ fun AlbumScreen(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -69,7 +70,8 @@ fun AlbumScreen(
         onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
         onGetPlaylists = { uiState.playlistInfos },
         onPlaySongsInAlbumNext = viewModel::playSongsInAlbumNext,
-        onGetSongsInPlaylist = viewModel::getSongsInPlaylist
+        onGetSongsInPlaylist = viewModel::getSongsInPlaylist,
+        onDeleteSong = onDeleteSong
     )
 }
 
@@ -94,6 +96,7 @@ fun AlbumScreenContent(
     onGetPlaylists: () -> List<PlaylistInfo>,
     onPlaySongsInAlbumNext: ( Album ) -> Unit,
     onGetSongsInPlaylist: ( PlaylistInfo ) -> List<Song>,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -137,6 +140,7 @@ fun AlbumScreenContent(
                 onGetAdditionalMetadataForSongWithId = { songId ->
                     uiState.songsAdditionalMetadataList.find { it.id == songId }
                 },
+                onDeleteSong = onDeleteSong,
                 leadingContent = {
                     item {
                         AlbumArtwork(
@@ -254,7 +258,8 @@ fun AlbumScreenContentPreview() {
             onCreatePlaylist = { _, _ -> },
             onGetPlaylists = { emptyList() },
             onGetSongsInPlaylist = { emptyList() },
-            onPlaySongsInAlbumNext = {}
+            onPlaySongsInAlbumNext = {},
+            onDeleteSong = {}
         )
     }
 }

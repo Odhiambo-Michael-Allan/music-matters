@@ -26,6 +26,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.odesa.musicMatters.core.common.MusicMattersMediaNotificationProvider
 import com.odesa.musicMatters.core.common.R
+import com.odesa.musicMatters.core.common.connection.SONG_ID_KEY
 import com.odesa.musicMatters.core.common.media.library.BrowseTree
 import com.odesa.musicMatters.core.common.media.library.LocalMusicSource
 import com.odesa.musicMatters.core.common.media.library.MEDIA_SEARCH_SUPPORTED
@@ -40,7 +41,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.Executors
-import kotlin.math.max
 
 /**
  * Service for browsing the catalogue and receiving  a [MediaController] from the app's UI
@@ -51,6 +51,7 @@ import kotlin.math.max
  *
  */
 
+@UnstableApi
 class MusicService : MediaLibraryService() {
 
     private val serviceJob = SupervisorJob()
@@ -108,6 +109,12 @@ class MusicService : MediaLibraryService() {
         ReplaceableForwardingPlayer( exoPlayer )
     }
 
+    private val sessionCommands =
+        MediaSession.ConnectionResult.DEFAULT_SESSION_AND_LIBRARY_COMMANDS.buildUpon()
+            .also { builder ->
+                builder.add( SessionCommand( CUSTOM_COMMAND_DELETE_SONG, Bundle.EMPTY ) )
+            }.build()
+
     /** @return the {@link MediaLibrarySessionCallback} to be used to build the media session */
     @OptIn(UnstableApi::class)
     fun getCallback(): MediaLibrarySession.Callback {
@@ -121,8 +128,8 @@ class MusicService : MediaLibraryService() {
             applicationContext,
             dispatcher = Dispatchers.Main
         )
-        mediaSession = with ( MediaLibrarySession.Builder(
-            this, replaceableForwardingPlayer, getCallback() )
+        mediaSession = with (
+            MediaLibrarySession.Builder(this, replaceableForwardingPlayer, getCallback() )
         ) {
             setId( packageName )
             packageManager?.getLaunchIntentForPackage( packageName )?.let { sessionIntent ->
@@ -215,6 +222,15 @@ class MusicService : MediaLibraryService() {
     @UnstableApi
     open inner class MusicServiceCallback : MediaLibrarySession.Callback {
 
+        override fun onConnect(
+            session: MediaSession,
+            controller: MediaSession.ControllerInfo
+        ): MediaSession.ConnectionResult {
+            return MediaSession.ConnectionResult.AcceptedResultBuilder( session )
+                .setAvailableSessionCommands( sessionCommands )
+                .build()
+        }
+
         @UnstableApi
         override fun onGetLibraryRoot(
             session: MediaLibrarySession, browser: MediaSession.ControllerInfo, params: LibraryParams?
@@ -265,37 +281,6 @@ class MusicService : MediaLibraryService() {
             }
         }
 
-        @UnstableApi
-        override fun onSearch(
-            session: MediaLibrarySession,
-            browser: MediaSession.ControllerInfo,
-            query: String,
-            params: LibraryParams?
-        ): ListenableFuture<LibraryResult<Void>> {
-            return callWhenMusicSourceIsReady {
-                val searchResult = musicSource.search( query, params?.extras ?: Bundle() )
-                mediaSession.notifySearchResultChanged( browser, query, searchResult.size, params )
-                LibraryResult.ofVoid()
-            }
-        }
-
-        @UnstableApi
-        override fun onGetSearchResult(
-            session: MediaLibrarySession,
-            browser: MediaSession.ControllerInfo,
-            query: String,
-            page: Int,
-            pageSize: Int,
-            params: LibraryParams?
-        ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
-            return callWhenMusicSourceIsReady {
-                val searchResult = musicSource.search( query, params?.extras ?: Bundle() )
-                val fromIndex = max( ( page - 1 ) * pageSize, searchResult.size - 1 )
-                val toIndex = max( fromIndex + pageSize, searchResult.size )
-                LibraryResult.ofItemList( searchResult.subList( fromIndex, toIndex ), params )
-            }
-        }
-
         override fun onAddMediaItems(
             mediaSession: MediaSession,
             controller: MediaSession.ControllerInfo,
@@ -312,6 +297,17 @@ class MusicService : MediaLibraryService() {
             customCommand: SessionCommand,
             args: Bundle
         ): ListenableFuture<SessionResult> {
+            Timber.tag( TAG ).d( "RECEIVED CUSTOM COMMAND ${customCommand.customAction}" )
+            if ( customCommand.customAction == CUSTOM_COMMAND_DELETE_SONG ) {
+                val extras = customCommand.customExtras
+                extras.getString( SONG_ID_KEY )?.let {
+                    browseTree.deleteMediaItemWithId( it )
+                    browseTree.buildTree()
+                }
+                return Futures.immediateFuture(
+                    SessionResult( SessionResult.RESULT_SUCCESS )
+                )
+            }
             return Futures.immediateFuture(
                 SessionResult( SessionResult.RESULT_ERROR_NOT_SUPPORTED ) )
         }
@@ -381,6 +377,7 @@ private const val CONTENT_STYLE_SUPPORTED = "android.media.browse.CONTENT_STYLE_
 private const val CONTENT_STYLE_LIST = 1
 private const val CONTENT_STYLE_GRID = 2
 
+val CUSTOM_COMMAND_DELETE_SONG = "com.odesa.musicmatters.delete_song"
 private const val TAG = "MUSIC SERVICE TAG"
 val EMPTY_MEDIA_ITEM = MediaItem.Builder()
     .setMediaId( UUID.randomUUID().toString() )

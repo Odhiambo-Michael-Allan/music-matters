@@ -1,8 +1,13 @@
 package com.odesa.musicMatters
 
+import android.Manifest
+import android.app.RecoverableSecurityException
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
@@ -11,7 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.odesa.musicMatters.core.common.media.MediaPermissionsManager
+import com.odesa.musicMatters.core.data.utils.VersionUtils
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
+import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.di.MobileDiModule
 import com.odesa.musicMatters.ui.MusicallyApp
 import com.odesa.musicMatters.ui.components.PermissionsScreen
@@ -21,10 +28,35 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var mobileDiModule: MobileDiModule
 
+    private var currentSongBeingDeleted: Song? = null // A bit ugly..
+
+    private val deleteResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        if ( result.resultCode == RESULT_OK ) deleteCurrentSong()
+        currentSongBeingDeleted = null
+    }
+
+    private val deleteResultLauncherForApiBelow29 = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if ( isGranted ) deleteCurrentSong()
+    }
+
+    private fun deleteCurrentSong() {
+        currentSongBeingDeleted?.let {
+            contentResolver.delete( it.mediaUri, null, null )
+            mobileDiModule.musicServiceConnection.deleteSong( it )
+            Toast.makeText(
+                applicationContext,
+                "Song Deleted",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
     override fun onCreate( savedInstanceState: Bundle? ) {
         super.onCreate( savedInstanceState )
-        // Allow app to draw behind system bar decorations (e.g.: navbar)
-//        WindowCompat.setDecorFitsSystemWindows( window, false )
         Timber.plant( Timber.DebugTree() )
         mobileDiModule = ( application as MusicMatters ).diModule
 
@@ -89,6 +121,7 @@ class MainActivity : ComponentActivity() {
                         }
                         else -> {
                             MusicallyApp(
+                                mainActivity = this,
                                 settingsRepository = mobileDiModule.settingsRepository,
                                 musicServiceConnection = mobileDiModule.musicServiceConnection,
                                 playlistRepository = mobileDiModule.playlistRepository,
@@ -101,4 +134,29 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    // https://medium.com/@vishrut.goyani9/scoped-storage-in-android-writing-deleting-media-files-ee6235d30117
+    fun deleteSong( song: Song ) {
+        currentSongBeingDeleted = song
+        if ( !VersionUtils.isQandAbove() ) {
+            deleteResultLauncherForApiBelow29.launch( Manifest.permission.WRITE_EXTERNAL_STORAGE )
+        }
+        try {
+            Timber.tag( TAG ).d( "SONG URI: ${song.mediaUri}" )
+            contentResolver.delete( song.mediaUri, null, null )
+            Timber.tag( TAG ).d( "DELETED IN CONTENT RESOLVER" )
+        } catch ( securityException: SecurityException ) {
+            if ( VersionUtils.isQandAbove() ) {
+                val recoverableSecurityException = securityException as RecoverableSecurityException
+                val actionIntent = recoverableSecurityException.userAction.actionIntent
+                val senderRequest = IntentSenderRequest.Builder(
+                    actionIntent.intentSender
+                ).build()
+                deleteResultLauncher.launch( senderRequest )
+            }
+        }
+    }
+
 }
+
+private const val TAG = "--MAIN ACTIVITY TAG--"
