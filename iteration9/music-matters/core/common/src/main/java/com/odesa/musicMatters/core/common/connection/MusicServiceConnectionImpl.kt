@@ -197,6 +197,7 @@ class MusicServiceConnectionImpl(
                 playlists.value.forEach {
                     removeSongIdFromPlaylist( song.id, it.id )
                 }
+                removeSongIdFromMostPlayedPlaylist( song.id )
             }
             withContext( Dispatchers.IO ) {
                 songsAdditionalMetadataRepository.deleteEntryWithId( song.id )

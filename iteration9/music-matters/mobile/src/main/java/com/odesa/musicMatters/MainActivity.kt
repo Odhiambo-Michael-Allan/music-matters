@@ -45,8 +45,8 @@ class MainActivity : ComponentActivity() {
 
     private fun deleteCurrentSong() {
         currentSongBeingDeleted?.let {
-            contentResolver.delete( it.mediaUri, null, null )
             mobileDiModule.musicServiceConnection.deleteSong( it )
+            contentResolver.delete( it.mediaUri, null, null )
             Toast.makeText(
                 applicationContext,
                 "Song Deleted",

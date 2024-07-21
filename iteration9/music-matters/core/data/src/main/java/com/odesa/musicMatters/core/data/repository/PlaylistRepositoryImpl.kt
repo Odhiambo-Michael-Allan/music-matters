@@ -41,24 +41,36 @@ class PlaylistRepositoryImpl(
     override fun isFavorite( songId: String ) = favoritesPlaylistInfo.value.songIds.contains( songId )
 
     override suspend fun addToFavorites( songId: String ) {
-        if ( isFavorite( songId ) ) removeSongIdFromPlaylist( songId, favoritesPlaylistInfo.value.id )
-        else addSongIdToPlaylist( songId, favoritesPlaylistInfo.value.id )
+        if ( isFavorite( songId ) ) removeFromFavorites( songId )
+        else {
+            playlistStore.addSongIdToFavoritesPlaylist( songId )
+            _playlists.value = playlistStore.fetchAllPlaylists()
+            _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
+        }
     }
 
     override suspend fun removeFromFavorites( songId: String ) {
-        removeSongIdFromPlaylist( songId, favoritesPlaylistInfo.value.id )
+        playlistStore.removeSongIdFromFavoritesPlaylist( songId )
+        _playlists.value = playlistStore.fetchAllPlaylists()
+        _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
     }
 
     override suspend fun addToRecentlyPlayedSongsPlaylist( songId: String ) {
-        addSongIdToPlaylist( songId, recentlyPlayedSongsPlaylistInfo.value.id )
+        playlistStore.addSongIdToRecentlyPlayedSongsPlaylist( songId )
+        _playlists.value = playlistStore.fetchAllPlaylists()
+        _recentlyPlayedSongsPlaylist.value = playlistStore.fetchRecentlyPlayedSongsPlaylist()
     }
 
     override suspend fun addToMostPlayedPlaylist( songId: String ) {
-        addSongIdToPlaylist( songId, mostPlayedSongsPlaylistInfo.value.id )
+        playlistStore.addSongIdToMostPlayedSongsPlaylist( songId )
+        _playlists.value = playlistStore.fetchAllPlaylists()
+        _mostPlayedSongsPlaylist.value = playlistStore.fetchMostPlayedSongsPlaylist()
     }
 
     override suspend fun removeSongIdFromMostPlayedPlaylist( songId: String ) {
-        removeSongIdFromPlaylist( songId, mostPlayedSongsPlaylistInfo.value.id )
+        playlistStore.removeSongIdFromMostPlayedSongsPlaylist( songId )
+        _playlists.value = playlistStore.fetchAllPlaylists()
+        _mostPlayedSongsPlaylist.value = playlistStore.fetchMostPlayedSongsPlaylist()
     }
 
     override suspend fun savePlaylist( playlistInfo: PlaylistInfo ) {
@@ -75,10 +87,6 @@ class PlaylistRepositoryImpl(
         _playlists.value.find { it.id == playlistId }?.let {
             playlistStore.addSongIdToPlaylist( songId, it )
             _playlists.value = playlistStore.fetchAllPlaylists()
-            _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
-            _mostPlayedSongsPlaylist.value = playlistStore.fetchMostPlayedSongsPlaylist()
-            _recentlyPlayedSongsPlaylist.value = playlistStore.fetchRecentlyPlayedSongsPlaylist()
-
         }
     }
 
@@ -86,9 +94,6 @@ class PlaylistRepositoryImpl(
         _playlists.value.find { it.id == playlistId }?.let {
             playlistStore.removeSongIdFromPlaylist( songId, it )
             _playlists.value = playlistStore.fetchAllPlaylists()
-            _favoritesPlaylist.value = playlistStore.fetchFavoritesPlaylist()
-            _mostPlayedSongsPlaylist.value = playlistStore.fetchMostPlayedSongsPlaylist()
-            _recentlyPlayedSongsPlaylist.value = playlistStore.fetchRecentlyPlayedSongsPlaylist()
         }
     }
 

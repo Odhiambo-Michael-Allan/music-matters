@@ -70,9 +70,9 @@ class PlaylistRepositoryImplTest {
         songIdsToBeAdded.forEach {
             playlistRepository.addToFavorites( it )
         }
-        TestCase.assertTrue(playlistRepository.isFavorite(songIdsToBeAdded.first()))
-        TestCase.assertTrue(playlistRepository.isFavorite(songIdsToBeAdded.last()))
-        TestCase.assertFalse(playlistRepository.isFavorite("random_string"))
+        TestCase.assertTrue( playlistRepository.isFavorite( songIdsToBeAdded.first() ) )
+        TestCase.assertTrue( playlistRepository.isFavorite(songIdsToBeAdded.last() ) )
+        TestCase.assertFalse( playlistRepository.isFavorite( "random_string" ) )
     }
 
     @Test

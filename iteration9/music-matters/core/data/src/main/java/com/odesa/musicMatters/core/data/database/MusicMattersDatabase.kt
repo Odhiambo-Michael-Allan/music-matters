@@ -41,7 +41,7 @@ abstract class MusicMattersDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context = context.applicationContext,
                     MusicMattersDatabase::class.java,
-                    "music-matters-database-3"
+                    "music-matters-database-4"
                 ).build()
                 scope.launch { addInitialPlaylists( instance.playlistDao() ) }
                 INSTANCE = instance
@@ -83,11 +83,11 @@ abstract class MusicMattersDatabase : RoomDatabase() {
 }
 
 
-internal const val FAVORITES_PLAYLIST_ID = "--MUSIC-MATTERS-FAVORITES-PLAYLIST-ID--"
+const val FAVORITES_PLAYLIST_ID = "--MUSIC-MATTERS-FAVORITES-PLAYLIST-ID--"
 internal const val FAVORITES_PLAYLIST_TITLE = "Favorites"
 
-internal const val RECENTLY_PLAYED_SONGS_PLAYLIST_ID = "--MUSIC-MATTERS-RECENTLY-PLAYED-SONGS-PLAYLIST-ID"
+const val RECENTLY_PLAYED_SONGS_PLAYLIST_ID = "--MUSIC-MATTERS-RECENTLY-PLAYED-SONGS-PLAYLIST-ID"
 internal const val RECENTLY_PLAYED_SONGS_PLAYLIST_TITLE = "Recently Played Songs"
 
-internal const val CURRENT_PLAYING_QUEUE_PLAYLIST_ID = "--MUSIC-MATTERS-CURRENT_PLAYING_QUEUE-PLAYLIST-ID--"
+const val CURRENT_PLAYING_QUEUE_PLAYLIST_ID = "--MUSIC-MATTERS-CURRENT_PLAYING_QUEUE-PLAYLIST-ID--"
 private const val TAG = "--MUSIC-MATTERS-DATABASE-TAG--"

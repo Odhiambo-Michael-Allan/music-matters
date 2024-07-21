@@ -44,10 +44,7 @@ class LocalPlaylistStore(
     }
 
     override suspend fun removeSongIdFromFavoritesPlaylist( songId: String ) {
-        playlistEntryDao.deleteEntry(
-            playlistId = FAVORITES_PLAYLIST_ID,
-            songId = songId
-        )
+        removeSongIdFromPlaylist( songId, FAVORITES_PLAYLIST_ID )
     }
 
     override suspend fun fetchRecentlyPlayedSongsPlaylist(): PlaylistInfo {
@@ -80,6 +77,7 @@ class LocalPlaylistStore(
         songPlayCountEntryDao.getPlayCountBySongId( songId )?.let {
             songPlayCountEntryDao.incrementPlayCount( songId )
         } ?: run {
+            Timber.tag( TAG ).d( "ADDING SONG ID: $songId TO MOST PLAYED SONGS PLAYLIST" )
             songPlayCountEntryDao.insert(
                 SongPlayCountEntry(
                     songId = songId
@@ -89,7 +87,9 @@ class LocalPlaylistStore(
     }
 
     override suspend fun removeSongIdFromMostPlayedSongsPlaylist( songId: String ) {
-        songPlayCountEntryDao.deleteEntryWithSongId( songId )
+        songPlayCountEntryDao.getPlayCountBySongId( songId )?.let {
+            songPlayCountEntryDao.deleteEntryWithSongId( songId )
+        }
     }
 
     override suspend fun fetchEditablePlaylists() = playlistDao
@@ -126,10 +126,7 @@ class LocalPlaylistStore(
     }
 
     override suspend fun removeSongIdFromPlaylist( songId: String, playlistInfo: PlaylistInfo ) {
-        playlistEntryDao.deleteEntry(
-            playlistId = playlistInfo.id,
-            songId = songId
-        )
+        removeSongIdFromPlaylist( songId, playlistInfo.id )
     }
 
     override suspend fun renamePlaylist( playlistInfo: PlaylistInfo, newTitle: String ) {
@@ -156,6 +153,14 @@ class LocalPlaylistStore(
     override suspend fun clearCurrentPlayingQueuePlaylist() {
         playlistEntryDao.removeEntriesForPlaylistWithId( CURRENT_PLAYING_QUEUE_PLAYLIST_ID )
     }
+
+    private suspend fun removeSongIdFromPlaylist( songId: String, playlistId: String ) {
+        playlistEntryDao.fetchEntriesForPlaylistWithId( playlistId ).find {
+            it.songId == songId
+        }?.let {
+            playlistEntryDao.deleteEntry( playlistId, songId )
+        }
+    }
 }
 
 private fun List<PlaylistWithEntries>.asDomain() = map { it.asDomain() }
@@ -181,3 +186,4 @@ private fun PlaylistInfo.asEntity() =
     )
 
 private const val MOST_PLAYED_SONGS_PLAYLIST_ID = "--MUSIC-MATTERS-MOST-PLAYED-SONGS-PLAYLIST-ID"
+private const val TAG = "--LOCAL PLAYLIST STORE TAG--"

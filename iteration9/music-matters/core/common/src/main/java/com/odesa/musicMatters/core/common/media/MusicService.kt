@@ -377,7 +377,7 @@ private const val CONTENT_STYLE_SUPPORTED = "android.media.browse.CONTENT_STYLE_
 private const val CONTENT_STYLE_LIST = 1
 private const val CONTENT_STYLE_GRID = 2
 
-val CUSTOM_COMMAND_DELETE_SONG = "com.odesa.musicmatters.delete_song"
+const val CUSTOM_COMMAND_DELETE_SONG = "com.odesa.musicmatters.delete_song"
 private const val TAG = "MUSIC SERVICE TAG"
 val EMPTY_MEDIA_ITEM = MediaItem.Builder()
     .setMediaId( UUID.randomUUID().toString() )
