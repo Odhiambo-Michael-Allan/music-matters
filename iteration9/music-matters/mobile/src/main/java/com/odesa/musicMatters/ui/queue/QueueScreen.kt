@@ -26,6 +26,7 @@ fun QueueScreen(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
     onNavigateBack: () -> Unit
 ) {
 
@@ -53,7 +54,8 @@ fun QueueScreen(
         },
         onSearchSongsMatchingQuery = viewModel::searchSongsMatching,
         onShareSong = { onShareSong( it, uiState.language.shareFailedX( "" ) ) },
-        onGetPlaylists = { uiState.playlistInfos }
+        onGetPlaylists = { uiState.playlistInfos },
+        onDeleteSong = onDeleteSong,
     )
 }
 
@@ -73,7 +75,8 @@ fun QueueScreenContent(
     onAddToQueue: ( Song ) -> Unit,
     onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
-    onGetPlaylists: () -> List<PlaylistInfo>
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     val fallbackResourceId =
@@ -114,7 +117,8 @@ fun QueueScreenContent(
                 onAddSongsToPlaylist = onAddSongsToPlaylist,
                 onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                 onCreatePlaylist = onCreatePlaylist,
-                onGetPlaylists = { onGetPlaylists() }
+                onGetPlaylists = { onGetPlaylists() },
+                onDeleteSong = onDeleteSong
             )
         }
 
@@ -144,7 +148,7 @@ fun QueueScreenContentPreview() {
         onClearQueue = {},
         onFavorite = {},
         playSong = {},
-        onMoveSong = { _, _ -> {} },
+        onMoveSong = { _, _ ->  },
         onPlayNext = {},
         onAddToQueue = {},
         onViewAlbum = {},
@@ -152,7 +156,8 @@ fun QueueScreenContentPreview() {
         onShareSong = {},
         onAddSongsToPlaylist = { _, _, -> },
         onSearchSongsMatchingQuery = { emptyList() },
-        onGetPlaylists = { emptyList() }
+        onGetPlaylists = { emptyList() },
+        onDeleteSong = {}
     )
 }
 

@@ -357,6 +357,7 @@ fun QueueSongCard(
     onSearchSongsMatchingQuery: (String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDragHandleClick: () -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
     onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?
 ) {
     Row (
@@ -390,7 +391,7 @@ fun QueueSongCard(
             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
             onCreatePlaylist = onCreatePlaylist,
             onGetSongAdditionalMetadata = onGetSongAdditionalMetadata,
-            onDeleteSong = {}
+            onDeleteSong = onDeleteSong
         )
     }
 }
@@ -443,6 +444,7 @@ fun QueueSongCardPreview() {
         onAddSongsToPlaylist = { _, _ -> },
         onSearchSongsMatchingQuery = { emptyList() },
         onCreatePlaylist = { _, _ -> },
+        onDeleteSong = {},
         onGetSongAdditionalMetadata = { null }
     )
 }

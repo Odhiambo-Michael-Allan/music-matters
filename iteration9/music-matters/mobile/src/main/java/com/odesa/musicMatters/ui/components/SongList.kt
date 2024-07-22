@@ -182,6 +182,7 @@ fun QueueSongList(
     onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
     onGetAdditionalMetadataForSongWithId: (String) -> SongAdditionalMetadataInfo?
 ) {
     when {
@@ -224,6 +225,7 @@ fun QueueSongList(
                         onDragHandleClick = {},
                         onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                         onCreatePlaylist = onCreatePlaylist,
+                        onDeleteSong = onDeleteSong,
                         onGetSongAdditionalMetadata = { onGetAdditionalMetadataForSongWithId( song.id ) }
                     )
                 }
@@ -251,6 +253,7 @@ fun QueueSongListPreview() {
         onAddSongsToPlaylist = { _, _ -> },
         onSearchSongsMatchingQuery = { emptyList() },
         onCreatePlaylist = { _, _ -> },
+        onDeleteSong = {},
         onGetAdditionalMetadataForSongWithId = { null }
     )
 }

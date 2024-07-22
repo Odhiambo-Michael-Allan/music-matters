@@ -3,7 +3,6 @@ package com.odesa.musicMatters.ui.navigation
 import android.content.Context
 import android.content.Intent
 import android.media.audiofx.AudioEffect
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.launch
@@ -156,12 +155,10 @@ fun MusicMattersNavHost(
 
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val screenOrientation = ScreenOrientation.fromConfiguration( LocalConfiguration.current)
-    val customNavSuiteType = with( adaptiveInfo ) {
-        if ( screenOrientation == ScreenOrientation.LANDSCAPE ) {
-            NavigationSuiteType.NavigationRail
-        } else {
-            NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo( adaptiveInfo )
-        }
+    val customNavSuiteType = if ( screenOrientation == ScreenOrientation.LANDSCAPE ) {
+        NavigationSuiteType.NavigationRail
+    } else {
+        NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo( adaptiveInfo )
     }
 
     NavigationSuiteScaffold(
@@ -307,11 +304,7 @@ fun MusicMattersNavHost(
                         onNavigateBack = { navController.navigateUp() },
                         onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
                         onDeleteSong = {
-                            Toast.makeText(
-                                context,
-                                "Not yet implemented",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            mainActivity.deleteSong( it )
                         }
                     )
                 }
@@ -363,11 +356,7 @@ fun MusicMattersNavHost(
                         onViewArtist = navController::navigateToArtistScreen,
                         onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
                         onDeleteSong = {
-                            Toast.makeText(
-                                context,
-                                "Not yet implemented",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            mainActivity.deleteSong( it )
                         }
                     )
                 }
@@ -416,11 +405,7 @@ fun MusicMattersNavHost(
                         onNavigateBack = { navController.navigateUp() },
                         onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
                         onDeleteSong = {
-                            Toast.makeText(
-                                context,
-                                "Not yet implemented",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            mainActivity.deleteSong( it )
                         }
                     )
                 }
@@ -474,11 +459,7 @@ fun MusicMattersNavHost(
                         onNavigateBack = { navController.navigateUp() },
                         onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
                         onDeleteSong = {
-                            Toast.makeText(
-                                context,
-                                "Not yet implemented",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            mainActivity.deleteSong( it )
                         }
                     )
                 }
@@ -503,11 +484,7 @@ fun MusicMattersNavHost(
                         onNavigateToSearch = { navController.navigateToSearchScreen( "--" ) },
                         onSettingsClicked = { navController.navigate( Route.Settings.name ) },
                         onDeleteSong = {
-                            Toast.makeText(
-                                context,
-                                "Not yet implemented",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            mainActivity.deleteSong( it )
                         }
                     )
                 }
@@ -529,7 +506,10 @@ fun MusicMattersNavHost(
                         onViewArtist = navController::navigateToArtistScreen,
                         onViewAlbum = navController::navigateToAlbumScreen,
                         onNavigateBack = navController::navigateUp,
-                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
+                        onShareSong = { uri, errorMessage ->
+                            shareSong( context, uri, errorMessage )
+                        },
+                        onDeleteSong = { mainActivity.deleteSong( it ) }
                     )
                 }
                 composable(

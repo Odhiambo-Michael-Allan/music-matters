@@ -185,25 +185,60 @@ class MusicServiceConnectionImpl(
 
     override fun deleteSong( song: Song ) {
         scope.launch {
-            connectable.sendCustomCommand(
-                command = CUSTOM_COMMAND_DELETE_SONG,
-                parameters = Bundle()
-                    .apply {
-                        putString( SONG_ID_KEY, song.id )
-                    },
-            )
-            if ( nowPlayingMediaItem.value == song.mediaItem ) playNextSong()
+            _isInitializing.value = true
+            sendDeleteCommandToMediaSessionUsing( song )
+            updateNowPlayingMediaItemUsing( song )
+            updatePlaylistRepositoryUsing( song )
+            updateSongsAdditionalMetadataRepositoryUsing( song )
+            updateMediaItemsInQueueAfterDeleting( song )
+            updateMediaCaches()
+            _isInitializing.value = false
+        }
+    }
+
+    private suspend fun sendDeleteCommandToMediaSessionUsing( song: Song ) {
+        connectable.sendCustomCommand(
+            command = CUSTOM_COMMAND_DELETE_SONG,
+            parameters = Bundle()
+                .apply {
+                    putString( SONG_ID_KEY, song.id )
+                },
+        )
+    }
+
+    private fun updateNowPlayingMediaItemUsing( song: Song ) {
+        if ( nowPlayingMediaItem.value.mediaId == song.mediaItem.mediaId ) {
+            if ( song.mediaItem.mediaId == mediaItemsInQueue.value.last().mediaId ) {
+                player?.stop()
+                player?.clearMediaItems()
+                _nowPlayingMediaItem.value = NOTHING_PLAYING
+            } else {
+                playNextSong()
+            }
+        }
+    }
+
+    private suspend fun updatePlaylistRepositoryUsing( song: Song ) {
+        withContext( Dispatchers.IO ) {
             playlistRepository.apply {
                 playlists.value.forEach {
                     removeSongIdFromPlaylist( song.id, it.id )
                 }
                 removeSongIdFromMostPlayedPlaylist( song.id )
             }
-            withContext( Dispatchers.IO ) {
-                songsAdditionalMetadataRepository.deleteEntryWithId( song.id )
-            }
-            updateMediaCaches()
         }
+    }
+
+    private suspend fun updateSongsAdditionalMetadataRepositoryUsing( song: Song ) {
+        withContext( Dispatchers.IO ) {
+            songsAdditionalMetadataRepository.deleteEntryWithId( song.id )
+        }
+    }
+
+    private fun updateMediaItemsInQueueAfterDeleting( song: Song ) {
+        val mediaItemsInQueueCopy = _mediaItemsInQueue.value.toMutableList()
+        mediaItemsInQueueCopy.removeIf { it.mediaId == song.mediaItem.mediaId }
+        updateMediaItemsInQueueWith( mediaItemsInQueueCopy )
     }
 
     override fun addToQueue( mediaItem: MediaItem ) {

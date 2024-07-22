@@ -37,7 +37,8 @@ fun QueueList(
     onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<PlaylistInfo>
+    onGetPlaylists: () -> List<PlaylistInfo>,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     val lazyListState = rememberLazyListState(
@@ -88,6 +89,7 @@ fun QueueList(
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
                             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                             onCreatePlaylist = onCreatePlaylist,
+                            onDeleteSong = onDeleteSong,
                             onGetSongAdditionalMetadata = {
                                 uiState.songsAdditionalMetadataList.find { it.id == song.id }
                             }

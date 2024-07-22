@@ -293,7 +293,7 @@ class MusicServiceConnectionImplTest {
 
     @Test
     fun testSetRepeatMode() {
-        assertEquals(Player.REPEAT_MODE_OFF, connectable.player!!.repeatMode)
+        assertEquals( Player.REPEAT_MODE_OFF, connectable.player!!.repeatMode )
         listOf( Player.REPEAT_MODE_OFF, Player.REPEAT_MODE_ONE, Player.REPEAT_MODE_ALL ).forEach {
             musicServiceConnection.setRepeatMode( it )
             assertEquals(it, connectable.player!!.repeatMode)
@@ -388,6 +388,24 @@ class MusicServiceConnectionImplTest {
         assertEquals(
             testSongs.size - 1,
             songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().first().size
+        )
+    }
+
+    @Test
+    fun testWhenSongIsDeleted_itIsRemovedFromQueue() = runTest {
+        musicServiceConnection.playMediaItem(
+            mediaItem = testSongMediaItems.first(),
+            mediaItems = testSongMediaItems,
+            shuffle = false
+        )
+        assertEquals(
+            testSongMediaItems.size,
+            musicServiceConnection.mediaItemsInQueue.value.size
+        )
+        musicServiceConnection.deleteSong( testSongs.first() )
+        assertEquals(
+            testSongMediaItems.size - 1,
+            musicServiceConnection.mediaItemsInQueue.value.size
         )
     }
 }

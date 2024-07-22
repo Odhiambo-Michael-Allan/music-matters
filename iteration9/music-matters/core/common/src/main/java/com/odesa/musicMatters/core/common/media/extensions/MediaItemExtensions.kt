@@ -8,7 +8,6 @@ import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
-import com.odesa.musicMatters.core.data.utils.MEDIA_ITEM_ID_KEY
 import com.odesa.musicMatters.core.model.Album
 import com.odesa.musicMatters.core.model.Artist
 import com.odesa.musicMatters.core.model.Song
@@ -166,4 +165,5 @@ const val TRACK_NUMBER_KEY = "TRACK-NUMBER"
 const val RELEASE_YEAR_KEY = "RELEASE-YEAR"
 const val ALBUM_TITLE_KEY = "ALBUM-TITLE"
 const val ARTIST_KEY = "ARTIST"
+const val MEDIA_ITEM_ID_KEY = "--MEDIA-ITEM-ID-KEY--"
 const val TAG = "MEDIA-ITEM-BUILDER-FROM"
