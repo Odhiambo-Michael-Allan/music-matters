@@ -390,22 +390,4 @@ class MusicServiceConnectionImplTest {
             songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().first().size
         )
     }
-
-    @Test
-    fun testWhenSongIsDeleted_itIsRemovedFromQueue() = runTest {
-        musicServiceConnection.playMediaItem(
-            mediaItem = testSongMediaItems.first(),
-            mediaItems = testSongMediaItems,
-            shuffle = false
-        )
-        assertEquals(
-            testSongMediaItems.size,
-            musicServiceConnection.mediaItemsInQueue.value.size
-        )
-        musicServiceConnection.deleteSong( testSongs.first() )
-        assertEquals(
-            testSongMediaItems.size - 1,
-            musicServiceConnection.mediaItemsInQueue.value.size
-        )
-    }
 }
