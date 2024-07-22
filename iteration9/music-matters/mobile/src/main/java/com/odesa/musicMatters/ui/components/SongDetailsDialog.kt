@@ -79,7 +79,7 @@ fun SongDetailsDialog(
                     HorizontalDivider()
                     Column (
                         modifier = Modifier
-                            .verticalScroll(rememberScrollState())
+                            .verticalScroll( rememberScrollState() )
                             .padding(0.dp, 4.dp)
                     ) {
                         SongDetailsItem(

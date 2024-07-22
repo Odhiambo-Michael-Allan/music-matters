@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,6 +56,7 @@ import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
+import com.odesa.musicMatters.utils.ScreenOrientation
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -150,6 +152,9 @@ fun SongCard(
                         )
                         if ( showSongOptionsBottomSheet ) {
                             ModalBottomSheet(
+                                modifier = if ( ScreenOrientation.fromConfiguration(
+                                        LocalConfiguration.current ).isLandscape
+                                    ) Modifier.padding( start = 50.dp ) else Modifier,
                                 onDismissRequest = {
                                     showSongOptionsBottomSheet = false
                                 }

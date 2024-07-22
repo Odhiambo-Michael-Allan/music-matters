@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,7 +46,7 @@ import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.ui.components.ScaffoldDialog
 import com.odesa.musicMatters.ui.settings.components.SettingsTileDefaults
-
+import com.odesa.musicMatters.utils.ScreenOrientation
 
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -147,6 +148,9 @@ fun NowPlayingBodyBottomBar(
 
     if ( showExtraOptions ) {
         ModalBottomSheet(
+            modifier = if ( ScreenOrientation.fromConfiguration(
+                    LocalConfiguration.current ).isLandscape )
+                Modifier.padding( start = 50.dp ) else Modifier,
             onDismissRequest = {
                 showExtraOptions = false
             }

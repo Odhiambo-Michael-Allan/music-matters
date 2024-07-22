@@ -41,6 +41,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -319,6 +320,7 @@ fun NowPlayingScreenContent(
             onToggleShuffleMode = onToggleShuffleMode,
             onPlayingSpeedChange = onPlayingSpeedChange,
             onPlayingPitchChange = onPlayingPitchChange,
+            onGetSongAdditionalMetadata = onGetSongAdditionalMetadata,
             onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
         )
     } else {
@@ -359,12 +361,15 @@ fun NowPlayingScreenContent(
             onToggleShuffleMode = onToggleShuffleMode,
             onPlayingSpeedChange = onPlayingSpeedChange,
             onPlayingPitchChange = onPlayingPitchChange,
+            onGetSongAdditionalMetadata = onGetSongAdditionalMetadata,
             onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
         )
     }
 
     if ( showOptionsMenu ) {
         ModalBottomSheet(
+            modifier = if ( screenOrientation.isLandscape )
+                Modifier.padding( start = 50.dp ) else Modifier,
             onDismissRequest = {
                 showOptionsMenu = false
             }
@@ -487,6 +492,7 @@ fun NowPlayingScreenContentPortrait(
     onToggleShuffleMode: () -> Unit,
     onPlayingSpeedChange: ( Float ) -> Unit,
     onPlayingPitchChange: ( Float ) -> Unit,
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
     onCreateEqualizerActivityContract: () -> Unit,
 ) {
     Column (
@@ -540,17 +546,26 @@ fun NowPlayingScreenContentPortrait(
                             if ( index != target.artists.size - 1 ) Text( text = ", " )
                         }
                     }
-//                    if ( showSamplingInfo ) {
-//                        target.toSamplingInfoString( language )?.let {
-//                            val localContentColor = LocalContentColor.current
-//                            Text(
-//                                text = it,
-//                                style = MaterialTheme.typography.labelSmall
-//                                    .copy( color = localContentColor.copy( alpha = 0.7f ) ),
-//                                modifier = Modifier.padding( top = 4.dp )
-//                            )
-//                        }
-//                    }
+                    if ( showSamplingInfo ) {
+                        onGetSongAdditionalMetadata()?.let {
+                            Text( text = it.toSamplingInfoString( language ) )
+                        } ?: run {
+                            Row (
+                                modifier = Modifier.padding( top = 8.dp, bottom = 4.dp ),
+                                horizontalArrangement = Arrangement.spacedBy( 4.dp ),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                CircularProgressIndicator(
+                                    strokeWidth = 2.dp,
+                                    modifier = Modifier.size( 12.dp )
+                                )
+                                Text(
+                                    text = language.loading,
+                                    style = MaterialTheme.typography.labelMedium
+                                )
+                            }
+                        }
+                    }
                 }
             }
             Row (
@@ -673,7 +688,8 @@ fun NowPlayingScreenPortraitPreview() {
         onToggleLoopMode = { /*TODO*/ },
         onToggleShuffleMode = { /*TODO*/ },
         onPlayingSpeedChange = {},
-        onPlayingPitchChange = {}
+        onPlayingPitchChange = {},
+        onGetSongAdditionalMetadata = { null }
     ) {}
 }
 
@@ -717,6 +733,7 @@ fun NowPlayingScreenLandscape(
     onPlayingSpeedChange: ( Float ) -> Unit,
     onPlayingPitchChange: ( Float ) -> Unit,
     onCreateEqualizerActivityContract: () -> Unit,
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?
 ) {
     Row (
         modifier = Modifier
@@ -769,17 +786,26 @@ fun NowPlayingScreenLandscape(
                                 if ( index != target.artists.size - 1 ) Text( text = ", " )
                             }
                         }
-//                    if ( showSamplingInfo ) {
-//                        target.toSamplingInfoString( language )?.let {
-//                            val localContentColor = LocalContentColor.current
-//                            Text(
-//                                text = it,
-//                                style = MaterialTheme.typography.labelSmall
-//                                    .copy( color = localContentColor.copy( alpha = 0.7f ) ),
-//                                modifier = Modifier.padding( top = 4.dp )
-//                            )
-//                        }
-//                    }
+                    if ( showSamplingInfo ) {
+                        onGetSongAdditionalMetadata()?.let {
+                            Text( text = it.toSamplingInfoString( language ) )
+                        } ?: run {
+                            Row (
+                                modifier = Modifier.padding( top = 8.dp, bottom = 4.dp ),
+                                horizontalArrangement = Arrangement.spacedBy( 4.dp ),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                CircularProgressIndicator(
+                                    strokeWidth = 2.dp,
+                                    modifier = Modifier.size( 12.dp )
+                                )
+                                Text(
+                                    text = language.loading,
+                                    style = MaterialTheme.typography.labelMedium
+                                )
+                            }
+                        }
+                    }
                     }
                 }
                 Row (
@@ -907,8 +933,10 @@ fun NowPlayingScreenLandscapePreview() {
         onToggleLoopMode = { /*TODO*/ },
         onToggleShuffleMode = { /*TODO*/ },
         onPlayingSpeedChange = {},
-        onPlayingPitchChange = {}
-    ) {}
+        onPlayingPitchChange = {},
+        onGetSongAdditionalMetadata = { null },
+        onCreateEqualizerActivityContract = {}
+    )
 }
 
 @Preview( showSystemUi = true )
@@ -1538,6 +1566,17 @@ private enum class NowPlayingControlButtonColors {
 private enum class NowPlayingControlButtonSize {
     Default,
     Large,
+}
+
+private fun SongAdditionalMetadataInfo.toSamplingInfoString( language: Language ): String {
+    val values = mutableListOf<String>()
+    values.apply {
+        add( codec )
+        add( language.xBit( bitsPerSample ) )
+        add( language.xKbps( bitrate ) )
+        add( language.xKHZ( samplingRate ) )
+    }
+    return values.joinToString( ", " )
 }
 
 
