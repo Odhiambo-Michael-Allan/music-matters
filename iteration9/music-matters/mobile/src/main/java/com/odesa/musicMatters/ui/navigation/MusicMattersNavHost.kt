@@ -9,6 +9,7 @@ import androidx.activity.result.launch
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -567,6 +568,8 @@ fun MusicMattersNavHost(
                 if ( showNowPlayingBottomSheet ) {
 
                     ModalBottomSheet(
+                        modifier = if ( screenOrientation.isLandscape )
+                            Modifier.padding( start = 50.dp ) else Modifier,
                         sheetState = nowPlayingBottomSheetState,
                         onDismissRequest = { showNowPlayingBottomSheet = false }
                     ) {

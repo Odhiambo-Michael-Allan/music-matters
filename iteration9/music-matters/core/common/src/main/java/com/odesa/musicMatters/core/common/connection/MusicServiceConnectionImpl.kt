@@ -113,8 +113,20 @@ class MusicServiceConnectionImpl(
             updateMediaItemsInQueueWith( fetchPreviouslySavedQueue() )
             _nowPlayingMediaItem.value = fetchNowPlayingMediaItem()
             _currentlyPlayingMediaItemIndex.value = getCurrentMediaItemIndex()
+            initializePlayer()
             _isInitializing.value = false
             observeSongsAdditionalMetadata()
+        }
+    }
+
+    private fun initializePlayer() {
+        player?.let {
+            it.setMediaItems(
+                mediaItemsInQueue.value,
+                currentlyPlayingMediaItemIndex.value,
+                C.TIME_UNSET
+            )
+            it.prepare()
         }
     }
 
@@ -258,6 +270,7 @@ class MusicServiceConnectionImpl(
     }
 
     override fun playNext( mediaItem: MediaItem ) {
+
         if ( nowPlayingMediaItem.value.mediaId == mediaItem.mediaId ) return
         if ( queueIsEmpty() ) {
             playMediaItem(
@@ -491,6 +504,7 @@ class MusicServiceConnectionImpl(
 
         private fun updateNowPlaying( player: Player ) {
             var mediaItem = player.currentMediaItem ?: NOTHING_PLAYING
+            Timber.tag( TAG ).d( "UPDATING NOW PLAYING MEDIA ITEM TO: ${mediaItem.mediaMetadata.title}.." )
             if ( mediaItem != NOTHING_PLAYING ) {
                 // The current media item from the CastPlayer may have lost some information
                 mediaItem = cachedSongs.value.find { it.mediaItem.mediaId == mediaItem.mediaId }!!.mediaItem

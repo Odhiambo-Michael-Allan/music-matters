@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -61,6 +62,7 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -88,6 +90,7 @@ import com.odesa.musicMatters.ui.components.PlaybackPosition
 import com.odesa.musicMatters.ui.components.SongDetailsDialog
 import com.odesa.musicMatters.ui.components.swipeable
 import com.odesa.musicMatters.ui.navigation.FadeTransition
+import com.odesa.musicMatters.utils.ScreenOrientation
 
 
 // Stateful
@@ -225,7 +228,7 @@ fun NowPlayingBottomSheetContent(
 }
 
 
-@OptIn( ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun NowPlayingScreenContent(
     currentlyPlayingSong: Song,
@@ -274,16 +277,227 @@ fun NowPlayingScreenContent(
     onHideNowPlayingBottomSheet: () -> Unit,
     onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?
 ) {
-
+    val screenOrientation = ScreenOrientation.fromConfiguration( LocalConfiguration.current )
     var showOptionsMenu by remember { mutableStateOf( false ) }
     var showSongDetailsDialog by remember { mutableStateOf( false ) }
 
+    if ( screenOrientation == ScreenOrientation.POTRAIT ) {
+        NowPlayingScreenContentPortrait(
+            currentLoopMode = currentLoopMode,
+            currentPlayingSpeed = currentPlayingSpeed,
+            currentPlayingPitch = currentPlayingPitch,
+            queueSize = queueSize,
+            currentlyPlayingSongIndex = currentlyPlayingSongIndex,
+            language = language,
+            shuffle = shuffle,
+            enableSeekControls = enableSeekControls,
+            isPlaying = isPlaying,
+            isFavorite = isFavorite,
+            showLyrics = showLyrics,
+            showSamplingInfo = showSamplingInfo,
+            currentlyPlayingSong = currentlyPlayingSong,
+            fallbackResourceId = fallbackResourceId,
+            durationFormatter = durationFormatter,
+            playbackPosition = playbackPosition,
+            controlsLayoutIsDefault = controlsLayoutIsDefault,
+            onFavorite = onFavorite,
+            onSwipeArtworkLeft = onSwipeArtworkLeft,
+            onSwipeArtworkRight = onSwipeArtworkRight,
+            onArtworkClicked = onArtworkClicked,
+            onArtistClicked = onArtistClicked,
+            onShowOptionsMenu = { showOptionsMenu = true },
+            onSeekStart = onSeekStart,
+            onSeekEnd = onSeekEnd,
+            onPausePlayButtonClick = onPausePlayButtonClick,
+            onPreviousButtonClick = onPreviousButtonClick,
+            onPlayNext = onPlayNext,
+            onFastRewindButtonClick = onFastRewindButtonClick,
+            onFastForwardButtonClick = onFastForwardButtonClick,
+            onQueueClicked = onQueueClicked,
+            onShowLyrics = onShowLyrics,
+            onToggleLoopMode = onToggleLoopMode,
+            onToggleShuffleMode = onToggleShuffleMode,
+            onPlayingSpeedChange = onPlayingSpeedChange,
+            onPlayingPitchChange = onPlayingPitchChange,
+            onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
+        )
+    } else {
+        NowPlayingScreenLandscape(
+            currentLoopMode = currentLoopMode,
+            currentPlayingSpeed = currentPlayingSpeed,
+            currentPlayingPitch = currentPlayingPitch,
+            queueSize = queueSize,
+            currentlyPlayingSongIndex = currentlyPlayingSongIndex,
+            language = language,
+            shuffle = shuffle,
+            enableSeekControls = enableSeekControls,
+            isPlaying = isPlaying,
+            isFavorite = isFavorite,
+            showLyrics = showLyrics,
+            showSamplingInfo = showSamplingInfo,
+            currentlyPlayingSong = currentlyPlayingSong,
+            fallbackResourceId = fallbackResourceId,
+            durationFormatter = durationFormatter,
+            playbackPosition = playbackPosition,
+            controlsLayoutIsDefault = controlsLayoutIsDefault,
+            onFavorite = onFavorite,
+            onSwipeArtworkLeft = onSwipeArtworkLeft,
+            onSwipeArtworkRight = onSwipeArtworkRight,
+            onArtworkClicked = onArtworkClicked,
+            onArtistClicked = onArtistClicked,
+            onShowOptionsMenu = { showOptionsMenu = true },
+            onSeekStart = onSeekStart,
+            onSeekEnd = onSeekEnd,
+            onPausePlayButtonClick = onPausePlayButtonClick,
+            onPreviousButtonClick = onPreviousButtonClick,
+            onPlayNext = onPlayNext,
+            onFastRewindButtonClick = onFastRewindButtonClick,
+            onFastForwardButtonClick = onFastForwardButtonClick,
+            onQueueClicked = onQueueClicked,
+            onShowLyrics = onShowLyrics,
+            onToggleLoopMode = onToggleLoopMode,
+            onToggleShuffleMode = onToggleShuffleMode,
+            onPlayingSpeedChange = onPlayingSpeedChange,
+            onPlayingPitchChange = onPlayingPitchChange,
+            onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
+        )
+    }
+
+    if ( showOptionsMenu ) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showOptionsMenu = false
+            }
+        ) {
+            GenericOptionsBottomSheet(
+                headerImage = ImageRequest.Builder( LocalContext.current ).apply {
+                    data( currentlyPlayingSong.artworkUri )
+                    placeholder( fallbackResourceId )
+                    fallback( fallbackResourceId )
+                    error( fallbackResourceId )
+                    crossfade( true )
+                }.build(),
+                headerTitle = currentlyPlayingSong.title,
+                titleIsHighlighted = true,
+                headerDescription = currentlyPlayingSong.artists.joinToString(),
+                language = language,
+                fallbackResourceId = fallbackResourceId,
+                onDismissRequest = { showOptionsMenu = false },
+                onPlayNext = {}, // No need to do anything as duplicates are not allowed in queue
+                onAddToQueue = {}, // No need to do anything as duplicates are not allowed in queue
+                onGetPlaylists = onGetPlaylists,
+                onGetSongsInPlaylist = onGetSongsInPlaylist,
+                onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
+                onCreatePlaylist = onCreatePlaylist,
+                onAddSongsToPlaylist = onAddSongsToPlaylist,
+                onGetSongs = { listOf( currentlyPlayingSong ) },
+                leadingBottomSheetMenuItem = { onDismissRequest ->
+                    BottomSheetMenuItem(
+                        leadingIcon = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        label = language.favorite,
+                        leadingIconTint = MaterialTheme.colorScheme.primary
+                    ) {
+                        onDismissRequest()
+                        onFavorite( currentlyPlayingSong.id )
+                    }
+                },
+                trailingBottomSheetMenuItems = { onDismissRequest ->
+                    currentlyPlayingSong.albumTitle?.let { albumTitle ->
+                        BottomSheetMenuItem(
+                            leadingIcon = Icons.Default.Album,
+                            label = "${language.viewAlbum}: $albumTitle"
+                        ) {
+                            onDismissRequest()
+                            onHideNowPlayingBottomSheet()
+                            onViewAlbum( albumTitle )
+                        }
+                    }
+                    currentlyPlayingSong.artists.forEach { artistName ->
+                        BottomSheetMenuItem(
+                            leadingIcon = Icons.Default.Person,
+                            label = "${language.viewArtist}: $artistName"
+                        ) {
+                            onDismissRequest()
+                            onHideNowPlayingBottomSheet()
+                            onViewArtist( artistName )
+                        }
+                    }
+                    BottomSheetMenuItem(
+                        leadingIcon = Icons.Default.Info,
+                        label = language.details
+                    ) {
+                        onDismissRequest()
+                        showSongDetailsDialog = true
+                    }
+                }
+            )
+        }
+    }
+
+    if ( showSongDetailsDialog ) {
+        SongDetailsDialog(
+            song = currentlyPlayingSong,
+            language = language,
+            durationFormatter = { it.formatMilliseconds() },
+            isLoadingSongAdditionalMetadata = false,
+            onGetSongAdditionalMetadata = onGetSongAdditionalMetadata
+        ) {
+            showSongDetailsDialog = false
+        }
+    }
+
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun NowPlayingScreenContentPortrait(
+    currentLoopMode: LoopMode,
+    currentPlayingSpeed: Float,
+    currentPlayingPitch: Float,
+    queueSize: Int,
+    currentlyPlayingSongIndex: Int,
+    language: Language,
+    shuffle: Boolean,
+    enableSeekControls: Boolean,
+    isPlaying: Boolean,
+    isFavorite: Boolean,
+    showLyrics: Boolean,
+    showSamplingInfo: Boolean,
+    currentlyPlayingSong: Song,
+    @DrawableRes fallbackResourceId: Int,
+    durationFormatter: ( Long ) -> String,
+    playbackPosition: PlaybackPosition,
+    controlsLayoutIsDefault: Boolean,
+    onFavorite: ( String ) -> Unit,
+    onSwipeArtworkLeft: () -> Unit,
+    onSwipeArtworkRight: () -> Unit,
+    onArtworkClicked: () -> Unit,
+    onArtistClicked: ( String ) -> Unit,
+    onShowOptionsMenu: () -> Unit,
+    onSeekStart: () -> Unit,
+    onSeekEnd: ( Long ) -> Unit,
+    onPausePlayButtonClick: () -> Unit,
+    onPreviousButtonClick: () -> Unit,
+    onPlayNext: () -> Unit,
+    onFastRewindButtonClick: () -> Unit,
+    onFastForwardButtonClick: () -> Unit,
+    onQueueClicked: () -> Unit,
+    onShowLyrics: () -> Unit,
+    onToggleLoopMode: () -> Unit,
+    onToggleShuffleMode: () -> Unit,
+    onPlayingSpeedChange: ( Float ) -> Unit,
+    onPlayingPitchChange: ( Float ) -> Unit,
+    onCreateEqualizerActivityContract: () -> Unit,
+) {
     Column (
         modifier = Modifier
-            .padding( start = 8.dp, end = 8.dp, top = 0.dp, bottom = 0.dp )
-            .verticalScroll( rememberScrollState() )
+            .padding(start = 8.dp, end = 8.dp, top = 0.dp, bottom = 0.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         NowPlayingArtwork(
+            modifier = Modifier
+                .padding(16.dp, 0.dp)
+                .fillMaxWidth(),
             showLyrics = showLyrics,
             artworkUri = currentlyPlayingSong.artworkUri,
             fallbackResourceId = fallbackResourceId,
@@ -326,7 +540,7 @@ fun NowPlayingScreenContent(
                             if ( index != target.artists.size - 1 ) Text( text = ", " )
                         }
                     }
-                    if ( showSamplingInfo ) {
+//                    if ( showSamplingInfo ) {
 //                        target.toSamplingInfoString( language )?.let {
 //                            val localContentColor = LocalContentColor.current
 //                            Text(
@@ -336,7 +550,7 @@ fun NowPlayingScreenContent(
 //                                modifier = Modifier.padding( top = 4.dp )
 //                            )
 //                        }
-                    }
+//                    }
                 }
             }
             Row (
@@ -359,84 +573,12 @@ fun NowPlayingScreenContent(
                     }
                 }
                 IconButton(
-                    onClick = {
-                        showOptionsMenu = !showOptionsMenu
-                    }
+                    onClick = onShowOptionsMenu
                 ) {
                     Icon(
                         imageVector = Icons.Filled.MoreVert,
                         contentDescription = null
                     )
-                    if ( showOptionsMenu ) {
-                        ModalBottomSheet(
-                            onDismissRequest = {
-                                showOptionsMenu = false
-                            }
-                        ) {
-                            GenericOptionsBottomSheet(
-                                headerImage = ImageRequest.Builder( LocalContext.current ).apply {
-                                    data( currentlyPlayingSong.artworkUri )
-                                    placeholder( fallbackResourceId )
-                                    fallback( fallbackResourceId )
-                                    error( fallbackResourceId )
-                                    crossfade( true )
-                                }.build(),
-                                headerTitle = currentlyPlayingSong.title,
-                                titleIsHighlighted = true,
-                                headerDescription = currentlyPlayingSong.artists.joinToString(),
-                                language = language,
-                                fallbackResourceId = fallbackResourceId,
-                                onDismissRequest = { showOptionsMenu = false },
-                                onPlayNext = {}, // No need to do anything as duplicates are not allowed in queue
-                                onAddToQueue = {}, // No need to do anything as duplicates are not allowed in queue
-                                onGetPlaylists = onGetPlaylists,
-                                onGetSongsInPlaylist = onGetSongsInPlaylist,
-                                onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-                                onCreatePlaylist = onCreatePlaylist,
-                                onAddSongsToPlaylist = onAddSongsToPlaylist,
-                                onGetSongs = { listOf( currentlyPlayingSong ) },
-                                leadingBottomSheetMenuItem = { onDismissRequest ->
-                                    BottomSheetMenuItem(
-                                        leadingIcon = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                                        label = language.favorite,
-                                        leadingIconTint = MaterialTheme.colorScheme.primary
-                                    ) {
-                                        onDismissRequest()
-                                        onFavorite( currentlyPlayingSong.id )
-                                    }
-                                },
-                                trailingBottomSheetMenuItems = { onDismissRequest ->
-                                    currentlyPlayingSong.albumTitle?.let { albumTitle ->
-                                        BottomSheetMenuItem(
-                                            leadingIcon = Icons.Default.Album,
-                                            label = "${language.viewAlbum}: $albumTitle"
-                                        ) {
-                                            onDismissRequest()
-                                            onHideNowPlayingBottomSheet()
-                                            onViewAlbum( albumTitle )
-                                        }
-                                    }
-                                    currentlyPlayingSong.artists.forEach { artistName ->
-                                        BottomSheetMenuItem(
-                                            leadingIcon = Icons.Default.Person,
-                                            label = "${language.viewArtist}: $artistName"
-                                        ) {
-                                            onDismissRequest()
-                                            onHideNowPlayingBottomSheet()
-                                            onViewArtist( artistName )
-                                        }
-                                    }
-                                    BottomSheetMenuItem(
-                                        leadingIcon = Icons.Default.Info,
-                                        label = language.details
-                                    ) {
-                                        onDismissRequest()
-                                        showSongDetailsDialog = true
-                                    }
-                                }
-                            )
-                        }
-                    }
                 }
             }
         }
@@ -488,20 +630,285 @@ fun NowPlayingScreenContent(
             onPitchChange = onPlayingPitchChange,
             onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
         )
-
-        if ( showSongDetailsDialog ) {
-            SongDetailsDialog(
-                song = currentlyPlayingSong,
-                language = language,
-                durationFormatter = { it.formatMilliseconds() },
-                isLoadingSongAdditionalMetadata = false,
-                onGetSongAdditionalMetadata = onGetSongAdditionalMetadata
-            ) {
-                showSongDetailsDialog = false
-            }
-        }
         Spacer( modifier = Modifier.size( 32.dp ) )
     }
+}
+
+@Preview( showSystemUi = true )
+@Composable
+fun NowPlayingScreenPortraitPreview() {
+    NowPlayingScreenContentPortrait(
+        currentLoopMode = SettingsDefaults.loopMode,
+        currentPlayingSpeed = SettingsDefaults.CURRENT_PLAYING_SPEED,
+        currentPlayingPitch = SettingsDefaults.CURRENT_PLAYING_PITCH,
+        queueSize = 50,
+        currentlyPlayingSongIndex = 0,
+        language = English,
+        shuffle = false,
+        enableSeekControls = true,
+        isPlaying = true,
+        isFavorite = true,
+        showLyrics = false,
+        showSamplingInfo = true,
+        currentlyPlayingSong = testSongs.first(),
+        fallbackResourceId = R.drawable.placeholder_light,
+        durationFormatter = { "01:00" },
+        playbackPosition = PlaybackPosition.zero,
+        controlsLayoutIsDefault = false,
+        onFavorite = {},
+        onSwipeArtworkLeft = { /*TODO*/ },
+        onSwipeArtworkRight = { /*TODO*/ },
+        onArtworkClicked = { /*TODO*/ },
+        onArtistClicked = {},
+        onShowOptionsMenu = { /*TODO*/ },
+        onSeekStart = { /*TODO*/ },
+        onSeekEnd = {},
+        onPausePlayButtonClick = { /*TODO*/ },
+        onPreviousButtonClick = { /*TODO*/ },
+        onPlayNext = { /*TODO*/ },
+        onFastRewindButtonClick = { /*TODO*/ },
+        onFastForwardButtonClick = { /*TODO*/ },
+        onQueueClicked = { /*TODO*/ },
+        onShowLyrics = { /*TODO*/ },
+        onToggleLoopMode = { /*TODO*/ },
+        onToggleShuffleMode = { /*TODO*/ },
+        onPlayingSpeedChange = {},
+        onPlayingPitchChange = {}
+    ) {}
+}
+
+@OptIn( ExperimentalLayoutApi::class )
+@Composable
+fun NowPlayingScreenLandscape(
+    currentLoopMode: LoopMode,
+    currentPlayingSpeed: Float,
+    currentPlayingPitch: Float,
+    queueSize: Int,
+    currentlyPlayingSongIndex: Int,
+    language: Language,
+    shuffle: Boolean,
+    enableSeekControls: Boolean,
+    isPlaying: Boolean,
+    isFavorite: Boolean,
+    showLyrics: Boolean,
+    showSamplingInfo: Boolean,
+    currentlyPlayingSong: Song,
+    @DrawableRes fallbackResourceId: Int,
+    durationFormatter: ( Long ) -> String,
+    playbackPosition: PlaybackPosition,
+    controlsLayoutIsDefault: Boolean,
+    onFavorite: ( String ) -> Unit,
+    onSwipeArtworkLeft: () -> Unit,
+    onSwipeArtworkRight: () -> Unit,
+    onArtworkClicked: () -> Unit,
+    onArtistClicked: ( String ) -> Unit,
+    onShowOptionsMenu: () -> Unit,
+    onSeekStart: () -> Unit,
+    onSeekEnd: ( Long ) -> Unit,
+    onPausePlayButtonClick: () -> Unit,
+    onPreviousButtonClick: () -> Unit,
+    onPlayNext: () -> Unit,
+    onFastRewindButtonClick: () -> Unit,
+    onFastForwardButtonClick: () -> Unit,
+    onQueueClicked: () -> Unit,
+    onShowLyrics: () -> Unit,
+    onToggleLoopMode: () -> Unit,
+    onToggleShuffleMode: () -> Unit,
+    onPlayingSpeedChange: ( Float ) -> Unit,
+    onPlayingPitchChange: ( Float ) -> Unit,
+    onCreateEqualizerActivityContract: () -> Unit,
+) {
+    Row (
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        NowPlayingArtwork(
+            modifier = Modifier
+                .padding( 16.dp, 16.dp ),
+            showLyrics = showLyrics,
+            artworkUri = currentlyPlayingSong.artworkUri,
+            fallbackResourceId = fallbackResourceId,
+            onSwipeLeft = onSwipeArtworkLeft,
+            onSwipeRight = onSwipeArtworkRight,
+            onArtworkClicked = onArtworkClicked
+        )
+        Column {
+            Row {
+                AnimatedContent(
+                    modifier = Modifier.weight( 1f ),
+                    label = "now-playing-body-content",
+                    targetState = currentlyPlayingSong,
+                    transitionSpec = {
+                        FadeTransition.enterTransition()
+                            .togetherWith( FadeTransition.exitTransition() )
+                    }
+                ) { target ->
+                    Column (
+                        modifier = Modifier.padding( 16.dp, 16.dp )
+                    ) {
+                        Text(
+                            text = target.title,
+                            style = MaterialTheme.typography.titleLarge
+                                .copy( fontWeight = FontWeight.Bold ),
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        FlowRow {
+                            target.artists.forEachIndexed { index, it ->
+                                Text(
+                                    text = it,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.pointerInput( Unit ) {
+                                        detectTapGestures { _ ->
+                                            onArtistClicked( it )
+                                        }
+                                    }
+                                )
+                                if ( index != target.artists.size - 1 ) Text( text = ", " )
+                            }
+                        }
+//                    if ( showSamplingInfo ) {
+//                        target.toSamplingInfoString( language )?.let {
+//                            val localContentColor = LocalContentColor.current
+//                            Text(
+//                                text = it,
+//                                style = MaterialTheme.typography.labelSmall
+//                                    .copy( color = localContentColor.copy( alpha = 0.7f ) ),
+//                                modifier = Modifier.padding( top = 4.dp )
+//                            )
+//                        }
+//                    }
+                    }
+                }
+                Row (
+                    modifier = Modifier.padding( 0.dp, 16.dp )
+                ) {
+                    IconButton(
+                        modifier = Modifier.offset( 4.dp ),
+                        onClick = { onFavorite( currentlyPlayingSong.id ) }
+                    ) {
+                        AnimatedContent(
+                            targetState = isFavorite,
+                            label = "now-playing-screen-is-favorite-icon"
+                        ) {
+                            Icon(
+                                imageVector = if ( it ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+
+                        }
+                    }
+                    IconButton(
+                        onClick = onShowOptionsMenu
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = null
+                        )
+                    }
+                }
+            }
+            Spacer( modifier = Modifier.height( 24.dp ) )
+            NowPlayingSeekBar(
+                playbackPosition = playbackPosition,
+                durationFormatter = durationFormatter,
+                onSeekStart = onSeekStart,
+                onSeekEnd = onSeekEnd
+            )
+            Spacer( modifier = Modifier.height( 24.dp ) )
+            when {
+                controlsLayoutIsDefault ->
+                    NowPlayingDefaultControlsLayout(
+                        isPlaying = isPlaying,
+                        enableSeekControls = enableSeekControls,
+                        onPausePlayButtonClick = onPausePlayButtonClick,
+                        onPreviousButtonClick = onPreviousButtonClick,
+                        onFastRewindButtonClick = onFastRewindButtonClick,
+                        onFastForwardButtonClick = onFastForwardButtonClick,
+                        onNextButtonClick = onPlayNext
+                    )
+                else ->
+                    NowPlayingTraditionalControlsLayout(
+                        enableSeekControls = enableSeekControls,
+                        isPlaying = isPlaying,
+                        onPreviousButtonClick = onPreviousButtonClick,
+                        onFastRewindButtonClick = onFastRewindButtonClick,
+                        onPausePlayButtonClick = onPausePlayButtonClick,
+                        onFastForwardButtonClick = onFastForwardButtonClick,
+                        onNextButtonClick = onPlayNext
+                    )
+            }
+            Spacer( modifier = Modifier.height( 16.dp ) )
+            NowPlayingBodyBottomBar(
+                language = language,
+                currentSongIndex = currentlyPlayingSongIndex,
+                queueSize = queueSize,
+                showLyrics = showLyrics,
+                currentLoopMode = currentLoopMode,
+                shuffle = shuffle,
+                currentSpeed = currentPlayingSpeed,
+                currentPitch = currentPlayingPitch,
+                onQueueClicked = onQueueClicked,
+                onShowLyrics = onShowLyrics,
+                onToggleLoopMode = onToggleLoopMode,
+                onToggleShuffleMode = onToggleShuffleMode,
+                onSpeedChange = onPlayingSpeedChange,
+                onPitchChange = onPlayingPitchChange,
+                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
+            )
+            Spacer( modifier = Modifier.size( 32.dp ) )
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    widthDp = 640,
+    heightDp = 360
+)
+@Composable
+fun NowPlayingScreenLandscapePreview() {
+    NowPlayingScreenLandscape(
+        currentLoopMode = SettingsDefaults.loopMode,
+        currentPlayingSpeed = SettingsDefaults.CURRENT_PLAYING_SPEED,
+        currentPlayingPitch = SettingsDefaults.CURRENT_PLAYING_PITCH,
+        queueSize = 50,
+        currentlyPlayingSongIndex = 0,
+        language = English,
+        shuffle = false,
+        enableSeekControls = true,
+        isPlaying = true,
+        isFavorite = true,
+        showLyrics = false,
+        showSamplingInfo = true,
+        currentlyPlayingSong = testSongs.first(),
+        fallbackResourceId = R.drawable.placeholder_light,
+        durationFormatter = { "01:00" },
+        playbackPosition = PlaybackPosition.zero,
+        controlsLayoutIsDefault = false,
+        onFavorite = {},
+        onSwipeArtworkLeft = { /*TODO*/ },
+        onSwipeArtworkRight = { /*TODO*/ },
+        onArtworkClicked = { /*TODO*/ },
+        onArtistClicked = {},
+        onShowOptionsMenu = { /*TODO*/ },
+        onSeekStart = { /*TODO*/ },
+        onSeekEnd = {},
+        onPausePlayButtonClick = { /*TODO*/ },
+        onPreviousButtonClick = { /*TODO*/ },
+        onPlayNext = { /*TODO*/ },
+        onFastRewindButtonClick = { /*TODO*/ },
+        onFastForwardButtonClick = { /*TODO*/ },
+        onQueueClicked = { /*TODO*/ },
+        onShowLyrics = { /*TODO*/ },
+        onToggleLoopMode = { /*TODO*/ },
+        onToggleShuffleMode = { /*TODO*/ },
+        onPlayingSpeedChange = {},
+        onPlayingPitchChange = {}
+    ) {}
 }
 
 @Preview( showSystemUi = true )
@@ -572,6 +979,7 @@ fun NowPlayingScreenContentPreview() {
 
 @Composable
 fun NowPlayingArtwork(
+    modifier: Modifier,
     showLyrics: Boolean,
     artworkUri: Uri?,
     @DrawableRes fallbackResourceId: Int,
@@ -580,10 +988,7 @@ fun NowPlayingArtwork(
     onArtworkClicked: () -> Unit
 ) {
     Box(
-        modifier = Modifier
-            .padding(16.dp, 0.dp)
-            .fillMaxWidth()
-
+        modifier = modifier
     ) {
         AnimatedContent(
             modifier = Modifier.align( Alignment.Center ),
@@ -625,6 +1030,9 @@ fun NowPlayingArtwork(
 @Composable
 fun NowPlayingArtworkPreview() {
     NowPlayingArtwork(
+        modifier = Modifier
+            .padding(16.dp, 0.dp)
+            .fillMaxWidth(),
         showLyrics = false,
         artworkUri = Uri.EMPTY,
         fallbackResourceId = R.drawable.placeholder_light,
@@ -1131,3 +1539,5 @@ private enum class NowPlayingControlButtonSize {
     Default,
     Large,
 }
+
+
