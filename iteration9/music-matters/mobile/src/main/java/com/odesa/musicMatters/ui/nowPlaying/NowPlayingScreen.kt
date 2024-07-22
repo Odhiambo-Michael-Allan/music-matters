@@ -548,7 +548,11 @@ fun NowPlayingScreenContentPortrait(
                     }
                     if ( showSamplingInfo ) {
                         onGetSongAdditionalMetadata()?.let {
-                            Text( text = it.toSamplingInfoString( language ) )
+                            Text(
+                                text = it.toSamplingInfoString( language ),
+                                style = MaterialTheme.typography.labelSmall
+                                    .copy( color = LocalContentColor.current.copy( alpha = 0.7f ) ),
+                            )
                         } ?: run {
                             Row (
                                 modifier = Modifier.padding( top = 8.dp, bottom = 4.dp ),
@@ -788,7 +792,11 @@ fun NowPlayingScreenLandscape(
                         }
                     if ( showSamplingInfo ) {
                         onGetSongAdditionalMetadata()?.let {
-                            Text( text = it.toSamplingInfoString( language ) )
+                            Text(
+                                text = it.toSamplingInfoString( language ),
+                                style = MaterialTheme.typography.labelSmall
+                                    .copy( color = LocalContentColor.current.copy( alpha = 0.7f ) ),
+                            )
                         } ?: run {
                             Row (
                                 modifier = Modifier.padding( top = 8.dp, bottom = 4.dp ),

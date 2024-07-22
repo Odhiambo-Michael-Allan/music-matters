@@ -103,7 +103,7 @@ class LocalMusicSource(
                 additionalMetadataList.add(
                     SongAdditionalMetadata(
                         songId = it.mediaId,
-                        bitrate = bitrate,
+                        bitrate = bitrate / 1000,
                         bitsPerSample = bitsPerSample,
                         codec = codec,
                         samplingRate = samplingRate,
