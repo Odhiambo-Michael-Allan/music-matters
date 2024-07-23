@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.RepeatOne
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material.icons.filled.Sort
-import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Speed
 import androidx.compose.material3.Card
@@ -55,13 +54,11 @@ fun NowPlayingBodyBottomBar(
     language: Language,
     currentSongIndex: Int,
     queueSize: Int,
-    showLyrics: Boolean,
     currentLoopMode: LoopMode,
     shuffle: Boolean,
     currentSpeed: Float,
     currentPitch: Float,
     onQueueClicked: () -> Unit,
-    onShowLyrics: () -> Unit,
     onToggleLoopMode: () -> Unit,
     onToggleShuffleMode: () -> Unit,
     onSpeedChange: ( Float ) -> Unit,
@@ -100,18 +97,6 @@ fun NowPlayingBodyBottomBar(
             )
         }
         Spacer( modifier = Modifier.weight( 1f ) )
-        IconButton(
-            onClick = onShowLyrics
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Article,
-                contentDescription = null,
-                tint = when {
-                    showLyrics -> MaterialTheme.colorScheme.primary
-                    else -> LocalContentColor.current
-                }
-            )
-        }
         IconButton(
             onClick = onToggleLoopMode
         ) {
@@ -278,13 +263,11 @@ fun NowPlayingBodyBottomBarPreview() {
         language = English,
         currentSongIndex = 3,
         queueSize = 126,
-        showLyrics = true,
         currentLoopMode = LoopMode.Song,
         shuffle = true,
         currentSpeed = 2f,
         currentPitch = 2f,
         onQueueClicked = {},
-        onShowLyrics = {},
         onToggleLoopMode = {},
         onToggleShuffleMode = {},
         onSpeedChange = {},
