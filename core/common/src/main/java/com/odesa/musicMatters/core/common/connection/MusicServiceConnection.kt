@@ -25,6 +25,7 @@ interface MusicServiceConnection {
     val currentPlaybackPosition: Long
     fun deleteSong( song: Song )
     fun playPause()
+    fun play()
     fun playPreviousSong(): Boolean
     fun playNextSong(): Boolean
     fun seekBack()

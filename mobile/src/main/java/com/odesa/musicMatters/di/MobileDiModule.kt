@@ -1,16 +1,18 @@
 package com.odesa.musicMatters.di
 
 import android.content.Context
+import androidx.media3.common.util.UnstableApi
 import com.odesa.musicMatters.core.common.di.CommonDiModule
 import com.odesa.musicMatters.core.data.di.DataDiModule
 import kotlinx.coroutines.Dispatchers
 
-class MobileDiModule( context: Context ) {
+@UnstableApi
+class MobileDiModule(context: Context ) {
     private val dataDiModule = DataDiModule.getInstance(
         context = context,
         dispatcher = Dispatchers.Main
     )
-    private val commonDiModule = CommonDiModule(
+    private val commonDiModule = CommonDiModule.getInstance(
         context = context,
         playlistRepository = dataDiModule.playlistRepository,
         settingsRepository = dataDiModule.settingsRepository,

@@ -401,6 +401,10 @@ class MusicServiceConnectionImpl(
         }
     }
 
+    override fun play() {
+        player?.play()
+    }
+
     override fun playPreviousSong(): Boolean {
         player?.let {
             it.seekToPrevious()

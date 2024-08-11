@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 
 
 @UnstableApi
-class CommonDiModule(
+class CommonDiModule private constructor (
     context: Context,
     playlistRepository: PlaylistRepository,
     settingsRepository: SettingsRepository,
@@ -40,5 +40,27 @@ class CommonDiModule(
             ),
             repeatMode = settingsRepository.currentLoopMode.value.toRepeatMode(),
         )
+
+    companion object {
+
+        @Volatile
+        private var INSTANCE: CommonDiModule? = null
+
+        fun getInstance(
+            context: Context,
+            settingsRepository: SettingsRepository,
+            playlistRepository: PlaylistRepository,
+            songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
+        ): CommonDiModule {
+            return INSTANCE ?: synchronized( this ) {
+                CommonDiModule(
+                    context = context,
+                    playlistRepository = playlistRepository,
+                    settingsRepository = settingsRepository,
+                    songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
+                )
+            }
+        }
+    }
 }
 
