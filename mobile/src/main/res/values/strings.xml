@@ -1,0 +1,304 @@
+<resources>
+    <string name="app_name">Music Matters</string>
+
+    <string name="hello_there">Hello there!</string>
+    <string name="introductory_message">
+        Thank you for being part of Musically open-beta. If you
+        encounter any bugs or want to suggest improvements, kindly open an issue in our Github
+        Repository. Join our Discord and Reddit community to share your feedback and to stay up-to-date
+        with the development. Musically is totally free-to-use and entirely supported by contributions
+        made by kindhearted individuals. Any contribution will be highly appreciated. Once again, thank
+        you for trying out Musically
+    </string>
+    <string name="songs">Songs</string>
+
+    <string name="artists">Artists</string>
+    <string name="albums">Albums</string>
+    <string name="settings">Settings</string>
+
+    <string name="details">Details</string>
+    <string name="path">Path</string>
+    <string name="filename">Filename</string>
+
+    <string name="size">Size</string>
+    <string name="date_added">Date Added</string>
+    <string name="last_modified">Last Modified</string>
+
+    <string name="length">Length</string>
+    <string name="bitrate">Bitrate</string>
+    <string name="track_name">Track Name</string>
+
+    <string name="artist">Artist</string>
+    <string name="album">Album</string>
+    <string name="album_artist">Album Artist</string>
+
+    <string name="composer">Composer</string>
+    <string name="nothing_is_being_played_right_now">Nothing is being played right now</string>
+    <string name="add_to_queue">Add to queue</string>
+
+    <string name="queue">Queue</string>
+    <string name="play_next">Play Next</string>
+    <string name="now_playing">Now Playing</string>
+
+    <string name="language">Language</string>
+    <string name="material_you">Material You</string>
+    <string name="system">System</string>
+
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="black">Black</string>
+
+    <string name="view_artist">View Artist</string>
+    <string name="title">Title</string>
+    <string name="duration">Duration</string>
+
+    <string name="year">Year</string>
+    <string name="view_album">View Album</string>
+    <string name="search_your_music">Search Your Music</string>
+
+    <string name="no_results_found">No results found</string>
+    <string name="album_count">Album Count</string>
+    <string name="track_count">Track Count</string>
+
+    <string name="filtering_results">Filtering results…</string>
+    <string name="appearance">Appearance</string>
+    <string name="about">About</string>
+
+    <string name="github">Github</string>
+    <string name="play">Play</string>
+    <string name="previous">Previous</string>
+
+    <string name="next">Next</string>
+    <string name="pause">Pause</string>
+    <string name="done">Done</string>
+
+    <string name="groove">Groove</string>
+    <string name="songs_filter_pattern">Songs filter pattern</string>
+    <string name="reset">Reset</string>
+
+    <string name="theme">Theme</string>
+    <string name="check_for_updates">Check for updates</string>
+    <string name="version">Version</string>
+
+    <string name="shuffle_play">Shuffle play</string>
+    <string name="view_album_artist">View album artist</string>
+    <string name="stop">Stop</string>
+
+    <string name="all">All</string>
+    <string name="fade_playback_in_out">Fade playback in-out</string>
+    <string name="require_audio_focus">Require audio focus</string>
+
+    <string name="ignore_audio_focus_loss">Ignore audio focus loss</string>
+    <string name="player">Player</string>
+    <string name="play_on_headphones_connect">Play on headphones connect</string>
+
+    <string name="pause_on_headphones_disconnect">Pause on headphones disconnect</string>
+    <string name="genre">Genre</string>
+    <string name="damn_this_is_so_empty">Damn, this is so empty</string>
+
+    <string name="primary_color">Primary color</string>
+    <string name="play_all">Play all</string>
+    <string name="for_you">For you</string>
+
+    <string name="suggested_albums">Suggested albums</string>
+    <string name="suggested_artists">Suggested artists</string>
+    <string name="recently_added_songs">Recently added songs</string>
+
+    <string name="sponsor_via_github">Sponsor via Github</string>
+    <string name="clear_song_cache">Clear song cache</string>
+    <string name="song_cache_cleared">Song cache cleared</string>
+
+    <string name="album_artists">Album artists</string>
+    <string name="genres">Genres</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="home_tabs">Home Tabs</string>
+    <string name="select_atleast_2_or_atmost_5_tabs">Select at least 2 or at most 5 tabs</string>
+    <string name="folders">Folders</string>
+
+    <string name="invisible">Invisible</string>
+    <string name="always_visible">Always visible</string>
+    <string name="visible_when_active">Visible when active</string>
+
+    <string name="bottom_bar_label_visibility">Bottom bar label visibility</string>
+    <string name="playlists">Playlists</string>
+    <string name="new_playlists">New playlist</string>
+
+    <string name="import_playlist">Import Playlist</string>
+    <string name="no_in_app_playlists_found">No in-app playlists found</string>
+    <string name="no_local_playlists_found">No local playlists found</string>
+
+    <string name="custom">Custom</string>
+    <string name="playlist">Playlist</string>
+    <string name="add_songs">Add songs</string>
+
+    <string name="add_to_playlist">Add to playlist</string>
+    <string name="is_local_playlist">Is local playlist?</string>
+    <string name="yes">Yes</string>
+
+    <string name="no">No</string>
+    <string name="manage_songs">Manage songs</string>
+    <string name="delete">Delete</string>
+
+    <string name="delete_playlist">Delete playlist</string>
+    <string name="track_number">Track Number</string>
+    <string name="tree">Tree</string>
+
+    <string name="loading">Loading…</string>
+    <string name="name">Name</string>
+    <string name="add_folder">Add Folder</string>
+
+    <string name="blacklist_folders">Blacklist folders</string>
+    <string name="whitelist_folders">Whitelist folders</string>
+    <string name="pick_folder">Pick folder</string>
+
+    <string name="invalid_m3u_file">Invalid M3U file</string>
+    <string name="discord">Discord</string>
+    <string name="reddit">Reddit</string>
+
+    <string name="report_an_issue">Report an issue</string>
+    <string name="no_folders_found">No folders found</string>
+    <string name="sleep_timer">Sleep timer</string>
+
+    <string name="hours">Hours</string>
+    <string name="minutes">Minutes</string>
+    <string name="quit_app_on_end">Quit app on end</string>
+
+    <string name="favorite">Favorite</string>
+    <string name="unfavorite">Unfavorite</string>
+    <string name="bit_depth">Bit depth</string>
+
+    <string name="sampling_rate">Sampling rate</string>
+    <string name="show_audio_information">Show audio information</string>
+    <string name="fast_rewind_duration">Fast-rewind duration</string>
+
+    <string name="fast_forward_information">Fast-forward information</string>
+    <string name="suggested_album_artists">Suggested album artists</string>
+    <string name="are_you_sure_you_want_to_delete_this_playlist">
+        Are you sure you want to delete this playlist?
+    </string>
+
+    <string name="remove_from_playlist">Remove frtom playlist</string>
+    <string name="speed">Speed</string>
+    <string name="pitch">Pitch</string>
+
+    <string name="persist_until_queue_end">Persist until queue end</string>
+    <string name="no_lyrics">No lyrics</string>
+    <string name="sponsor_via_patreon">Sponsor via Patreon</string>
+
+    <string name="f_droid">F-droid</string>
+    <string name="izzy_on_droid">IzzyOnDroid</string>
+    <string name="mini_player">Mini-player</string>
+
+    <string name="show_track_controls">Show track controls</string>
+    <string name="show_seek_controls">Show seek controls</string>
+    <string name="font">Font</string>
+
+    <string name="codec">Codec</string>
+    <string name="controls_layout">Controls layout</string>
+    <string name="Default">Default</string>
+
+    <string name="traditional">Traditional</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+
+    <string name="show_update_toast">Show update toast</string>
+    <string name="sponsor_via_kofi">Sponsor via Ko-fi</string>
+    <string name="playlist_location">Playlist Location</string>
+
+    <string name="app_built_in">Built-in</string>
+    <string name="local_storage">Local storage</string>
+    <string name="PlayingXofY">Playing {x} of {y}</string>
+
+    <string name="unknown_artist_x">Unknown artist ({x})</string>
+    <string name="x_songs">{x} songs</string>
+    <string name="unknown_album_id">Unknown album (ID: {id})</string>
+
+    <string name="x_artists">{x} artists</string>
+    <string name="x_albums">{x} albums</string>
+    <string name="made_by_x">Made by {x}</string>
+
+    <string name="new_version_available_x">New version available! ({x})</string>
+    <string name="x_kbps">{x} kbps</string>
+    <string name="x_secs">{x}s</string>
+
+    <string name="unknown_genre_x">Unknown genre ({x})</string>
+    <string name="x_genres">{x} genres</string>
+    <string name="x_folders_y_files">{x} folders, {y} files</string>
+
+    <string name="x_items">{x} items</string>
+    <string name="x_playlists">{x} playlists</string>
+    <string name="unknown_playlist_x">Unknown playlist (ID: {x})</string>
+
+    <string name="x_folders">{x} folders</string>
+    <string name="x_bit">{x}-bit</string>
+    <string name="x_KHz">{x} kHz</string>
+
+    <string name="system_light_dark">System (Light + Dark)</string>
+    <string name="system_light_black">System (Light + Black)</string>
+    <string name="font_scale">Font Scale</string>
+
+    <string name="content_scale">Content Scale</string>
+    <string name="view_genre">View Genre</string>
+    <string name="Interface">Interface</string>
+
+    <string name="re_scan">Re-scan</string>
+    <string name="updates">Updates</string>
+    <string name="consider_donating">Consider donating!</string>
+
+    <string name="help">Help</string>
+    <string name="share_song">Share song</string>
+    <string name="share_failed_x">Share failed (Error: {x})</string>
+
+    <string name="pause_on_current_song_end">Pause on current song end</string>
+    <string name="export">Export</string>
+    <string name="export_failed_x">Export failed (Error: {x})</string>
+
+    <string name="exported_x">Exported {x}</string>
+    <string name="rename_playlist">Rename playlist</string>
+    <string name="rename">Rename</string>
+
+    <string name="equalizer">Equalizer</string>
+    <string name="launching_equalizer_failed_x">
+        Launching equalizer failed (Error: {x})
+    </string>
+    <string name="consider_contributing">Consider contributing!</string>
+
+    <string name="lyrics">Lyrics</string>
+    <string name="lyrics_layout">Lyrics layout</string>
+    <string name="replace_artwork">Replace artwork</string>
+
+    <string name="separate_page">Separate page</string>
+    <string name="unknown_album_x">Unknown album ({x})</string>
+    <string name="copied_x_to_clipboard">Copied \'{x}\' to clipboard</string>
+
+    <string name="mini_player_text_marquee">Mini-player text marquee</string>
+    <string name="add_item">Add item</string>
+    <string name="artist_tag_value_separators">Artist tag value separators</string>
+
+    <string name="genre_tag_value_separators">Genre tag value separators</string>
+    <string name="disc_number">Disc number</string>
+
+    <string name="notification_channel">Now Playing</string>
+    <string name="notification_channel_description">Shows what music is currently playing in MUSIC MATTERS</string>
+    <string name="error_media_not_found">Could not locate requested media.</string>
+    <string name="generic_error">The application has encountered an unexpected error.</string>
+
+    <string name="storage_access">Storage Access</string>
+    <string name="grant_access">Grant access</string>
+    <string name="storage_access_prompt">The app needs permission to access your device storage for playing music</string>
+
+    <string name="welcome_message">Hello there! Welcome to</string>
+    <string name="read_media_audio">Read Media Audio</string>
+    <string name="read_media_audio_prompt">The app needs to read media and audio inorder to fetch and play audio files stored on your device</string>
+
+    <string name="ringtone_permission">Ringtone</string>
+    <string name="ringtone_permission_prompt">The app needs permission to access your device settings inorder to set music as ringtone</string>
+
+    <string name="post_notifications_permission">Post Notifications</string>
+    <string name="post_notifications_prompt">The app needs this to create and display notifications on your device</string>
+    <string name="lets_go">Let\'s go</string>
+
+    <string name="write_storage">Write Storage</string>
+    <string name="write_storage_description">The app needs this to delete songs on the device</string>
+</resources>
