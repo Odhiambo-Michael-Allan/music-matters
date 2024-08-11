@@ -65,6 +65,10 @@ class FakeMusicServiceConnection : MusicServiceConnection {
         TODO("Not yet implemented")
     }
 
+    override fun play() {
+        TODO("Not yet implemented")
+    }
+
     override fun playPreviousSong(): Boolean {
         TODO("Not yet implemented")
     }

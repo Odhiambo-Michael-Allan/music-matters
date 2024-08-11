@@ -1,7 +1,10 @@
 package com.odesa.musicMatters.core.common.media
 
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.ConditionVariable
 import android.widget.Toast
@@ -27,6 +30,7 @@ import com.google.common.util.concurrent.MoreExecutors
 import com.odesa.musicMatters.core.common.MusicMattersMediaNotificationProvider
 import com.odesa.musicMatters.core.common.R
 import com.odesa.musicMatters.core.common.connection.SONG_ID_KEY
+import com.odesa.musicMatters.core.common.di.CommonDiModule
 import com.odesa.musicMatters.core.common.media.library.BrowseTree
 import com.odesa.musicMatters.core.common.media.library.LocalMusicSource
 import com.odesa.musicMatters.core.common.media.library.MEDIA_SEARCH_SUPPORTED
@@ -60,6 +64,8 @@ class MusicService : MediaLibraryService() {
     private var currentMediaItemIndex: Int = 0
     private lateinit var musicSource: MusicSource
     private lateinit var dataDiModule: DataDiModule
+    private lateinit var commonDiModule: CommonDiModule
+    private val headsetReceiverIntentFilter = IntentFilter( Intent.ACTION_HEADSET_PLUG )
 
     private val catalogueRootMediaItem: MediaItem by lazy {
         MediaItem.Builder()
@@ -121,12 +127,40 @@ class MusicService : MediaLibraryService() {
         return MusicServiceCallback()
     }
 
+    private val headsetReceiver = object : BroadcastReceiver() {
+        override fun onReceive( context: Context?, intent: Intent? ) {
+            intent?.action?.let { action ->
+                if ( action == Intent.ACTION_HEADSET_PLUG ) {
+                    when ( intent.getIntExtra( "state", -1 ) ) {
+                        0 -> {
+                            Timber.tag(TAG).d( "HEADSET DISCONNECTED" )
+                            if ( !dataDiModule.settingsRepository.pauseOnHeadphonesDisconnect.value )
+                                commonDiModule.musicServiceConnection.play()
+                        }
+                        1 -> {
+                            Timber.tag(TAG).d( "HEADSET CONNECTED" )
+                            if ( dataDiModule.settingsRepository.playOnHeadphonesConnect.value )
+                                commonDiModule.musicServiceConnection.play()
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
     @UnstableApi
     override fun onCreate() {
         super.onCreate()
         dataDiModule = DataDiModule.getInstance(
-            applicationContext,
+            context = applicationContext,
             dispatcher = Dispatchers.Main
+        )
+        commonDiModule = CommonDiModule.getInstance(
+            context = applicationContext,
+            playlistRepository = dataDiModule.playlistRepository,
+            settingsRepository = dataDiModule.settingsRepository,
+            songsAdditionalMetadataRepository = dataDiModule.songsAdditionalMetadataRepository
         )
         mediaSession = with (
             MediaLibrarySession.Builder(this, replaceableForwardingPlayer, getCallback() )
@@ -157,6 +191,11 @@ class MusicService : MediaLibraryService() {
             }
         }
         setMediaNotificationProvider( MusicMattersMediaNotificationProvider( applicationContext ) )
+        registerHeadsetEvents()
+    }
+
+    private fun registerHeadsetEvents() {
+        registerReceiver( headsetReceiver, headsetReceiverIntentFilter )
     }
 
     override fun onGetSession( controllerInfo: MediaSession.ControllerInfo ): MediaLibrarySession? {
