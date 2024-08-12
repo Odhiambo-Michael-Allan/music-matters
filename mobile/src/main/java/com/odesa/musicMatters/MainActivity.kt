@@ -2,6 +2,10 @@ package com.odesa.musicMatters
 
 import android.Manifest
 import android.app.RecoverableSecurityException
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -15,6 +19,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.util.UnstableApi
+import com.odesa.musicMatters.core.common.media.MEDIA_STORE_UPDATED_INTENT
 import com.odesa.musicMatters.core.common.media.MediaPermissionsManager
 import com.odesa.musicMatters.core.data.utils.VersionUtils
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
@@ -22,8 +30,11 @@ import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.di.MobileDiModule
 import com.odesa.musicMatters.ui.MusicallyApp
 import com.odesa.musicMatters.ui.components.PermissionsScreen
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@UnstableApi
 class MainActivity : ComponentActivity() {
 
     private lateinit var mobileDiModule: MobileDiModule
@@ -43,15 +54,27 @@ class MainActivity : ComponentActivity() {
         if ( isGranted ) deleteCurrentSong()
     }
 
+    private val mediaStoreUpdateBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive( p0: Context?, p1: Intent? ) {
+            lifecycleScope.launch {
+                Timber.tag( TAG ).d( "RECEIVED MEDIA STORE UPDATE INTENT" )
+                mobileDiModule.musicServiceConnection.onMediaStoreChange()
+            }
+        }
+
+    }
+
     private fun deleteCurrentSong() {
-        currentSongBeingDeleted?.let {
-            mobileDiModule.musicServiceConnection.deleteSong( it )
-            contentResolver.delete( it.mediaUri, null, null )
-            Toast.makeText(
-                applicationContext,
-                "Song Deleted",
-                Toast.LENGTH_SHORT
-            ).show()
+        lifecycleScope.launch( Dispatchers.IO ) {
+            currentSongBeingDeleted?.let {
+                mobileDiModule.musicServiceConnection.deleteSong( it )
+                contentResolver.delete( it.mediaUri, null, null )
+                Toast.makeText(
+                    applicationContext,
+                    "Song Deleted",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -59,6 +82,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate( savedInstanceState )
         Timber.plant( Timber.DebugTree() )
         mobileDiModule = ( application as MusicMatters ).diModule
+
+        ContextCompat.registerReceiver( applicationContext, mediaStoreUpdateBroadcastReceiver, IntentFilter( MEDIA_STORE_UPDATED_INTENT ),
+            ContextCompat.RECEIVER_NOT_EXPORTED )
 
         MediaPermissionsManager.checkForPermissions( applicationContext )
         setContent {
@@ -155,6 +181,11 @@ class MainActivity : ComponentActivity() {
                 deleteResultLauncher.launch( senderRequest )
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver( mediaStoreUpdateBroadcastReceiver )
     }
 
 }

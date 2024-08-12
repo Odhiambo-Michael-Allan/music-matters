@@ -10,12 +10,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MediaStoreObserver.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/drawable/logo_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/drawable/logo_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/drawable/music_matters_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/drawable/music_matters_logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.4/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnection.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnection.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnectionImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnectionImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/di/CommonDiModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/di/CommonDiModule.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MusicService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MusicService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/extensions/MediaItemExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/extensions/MediaItemExtensions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/library/BrowseTree.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/library/BrowseTree.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/library/LocalMusicSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/library/LocalMusicSource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/common/src/test/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnectionImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/test/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnectionImplTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/connection/FakeConnectable.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/connection/FakeConnectable.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/connection/FakeMusicServiceConnection.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/connection/FakeMusicServiceConnection.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/di/MobileDiModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/di/MobileDiModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/songs/SongsScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/songs/SongsScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/drawable/music_player_logo_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/drawable/music_player_logo_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/drawable/music_player_logo_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/drawable/playlogo.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +57,33 @@
       <ProjectState />
     </projectState>
   </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="MusicMatters" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -45,6 +98,9 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Android App.mobile.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testOnMediaStoreChange.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testWhenSongIsDeleted_songIsRemovedFromAllPlaylistsItIsPresent.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
@@ -66,7 +122,7 @@
       <recent name="$PROJECT_DIR$/mobile/src/main/res/drawable" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Android App.mobile">
     <configuration name="mobile" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="MusicMatters.mobile.main" />
       <option name="DEPLOY" value="true" />
@@ -133,6 +189,85 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MusicServiceConnectionImplTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":core:common:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.odesa.musicMatters.core.common.connection.MusicServiceConnectionImplTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="MusicServiceConnectionImplTest.testOnMediaStoreChange" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":core:common:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.odesa.musicMatters.core.common.connection.MusicServiceConnectionImplTest.testOnMediaStoreChange&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="MusicServiceConnectionImplTest.testWhenSongIsDeleted_songIsRemovedFromAllPlaylistsItIsPresent" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":core:common:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.odesa.musicMatters.core.common.connection.MusicServiceConnectionImplTest.testWhenSongIsDeleted_songIsRemovedFromAllPlaylistsItIsPresent&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.MusicServiceConnectionImplTest" />
+        <item itemvalue="Gradle.MusicServiceConnectionImplTest.testOnMediaStoreChange" />
+        <item itemvalue="Gradle.MusicServiceConnectionImplTest.testWhenSongIsDeleted_songIsRemovedFromAllPlaylistsItIsPresent" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

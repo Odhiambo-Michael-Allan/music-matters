@@ -5,8 +5,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.database.ContentObserver
 import android.os.Bundle
 import android.os.ConditionVariable
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
@@ -149,6 +154,9 @@ class MusicService : MediaLibraryService() {
 
     }
 
+    private var mediaStoreObserverHandlerThread: HandlerThread? = null
+    private lateinit var mediaStoreObserver: ContentObserver
+
     @UnstableApi
     override fun onCreate() {
         super.onCreate()
@@ -192,6 +200,25 @@ class MusicService : MediaLibraryService() {
         }
         setMediaNotificationProvider( MusicMattersMediaNotificationProvider( applicationContext ) )
         registerHeadsetEvents()
+
+        mediaStoreObserverHandlerThread = HandlerThread( "MediaStoreObserverHandlerThread" )
+        mediaStoreObserverHandlerThread?.start()
+        mediaStoreObserver = MediaStoreObserver(
+            Handler( mediaStoreObserverHandlerThread!!.looper )
+        ) {
+            serviceScope.launch {
+                Timber.tag( TAG ).d( "MEDIA STORE CONTENT CHANGED" )
+                musicSource.load()
+                browseTree.buildTree()
+                val intent = Intent( MEDIA_STORE_UPDATED_INTENT )
+                sendBroadcast( intent )
+            }
+        }
+        contentResolver.registerContentObserver(
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            true,
+            mediaStoreObserver
+        )
     }
 
     private fun registerHeadsetEvents() {
@@ -216,6 +243,9 @@ class MusicService : MediaLibraryService() {
     override fun onDestroy() {
         super.onDestroy()
         releaseMediaSession()
+        unregisterReceiver( headsetReceiver )
+        contentResolver.unregisterContentObserver( mediaStoreObserver )
+        mediaStoreObserverHandlerThread?.quitSafely()
     }
 
     private fun releaseMediaSession() {
@@ -426,3 +456,5 @@ val EMPTY_MEDIA_ITEM = MediaItem.Builder()
             .setIsPlayable( false )
             .build()
     ).build()
+
+const val MEDIA_STORE_UPDATED_INTENT = "MEDIA_STORE_UPDATED_INTENT"
