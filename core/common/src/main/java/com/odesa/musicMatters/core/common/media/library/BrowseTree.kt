@@ -116,16 +116,6 @@ class BrowseTree(
         }
     }
 
-    private fun createGenreMetadataUsing( genre: String ) = MediaMetadata.Builder().apply {
-        setTitle( genre )
-        setIsPlayable( false )
-        setFolderType( MediaMetadata.FOLDER_TYPE_GENRES )
-    }.build()
-
-    private fun createGenreMediaItemUsing( genreMetadata: MediaMetadata ) = MediaItem.Builder().apply {
-        setMediaId( UUID.randomUUID().toString() ).setMediaMetadata( genreMetadata )
-    }.build()
-
     private fun addAlbumMediaItemsTo( albumList: MutableList<MediaItem> ) {
         musicSource.forEach {  mediaItem ->
             val mediaItemAlbum = mediaItem.mediaMetadata.extras?.getString( ALBUM_TITLE_KEY ) ?: "<unknown>"

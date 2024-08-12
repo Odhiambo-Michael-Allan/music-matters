@@ -131,6 +131,7 @@ class MusicServiceConnectionImpl(
     }
 
     private suspend fun updateMediaCaches() {
+        Timber.tag( TAG ).d( "UPDATING MEDIA CACHES" )
         _cachedSongs.value = connectable.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
             .map { it.toSong( artistTagSeparators ) }
         _cachedRecentlyAddedSongs.value = connectable.getChildren( MUSIC_MATTERS_RECENT_SONGS_ROOT )
@@ -195,17 +196,40 @@ class MusicServiceConnectionImpl(
 
     private fun getCurrentMediaItemIndex() = mediaItemsInQueue.value.indexOf( nowPlayingMediaItem.value )
 
-    override fun deleteSong( song: Song ) {
-        scope.launch {
-            _isInitializing.value = true
-            sendDeleteCommandToMediaSessionUsing( song )
-            updateNowPlayingMediaItemUsing( song )
-            updatePlaylistRepositoryUsing( song )
-            updateSongsAdditionalMetadataRepositoryUsing( song )
-            updateMediaItemsInQueueAfterDeleting( song )
+    override suspend fun onMediaStoreChange() {
+        val deletedSongsList = mutableListOf<Song>()
+        val refreshedSongs = connectable.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
+            .map { it.toSong( artistTagSeparators ) }
+        Timber.tag( TAG ).d( "REFRESHED SONGS SIZE: ${refreshedSongs.size}" )
+        Timber.tag( TAG ).d( "CACHED SONGS SIZE: ${_cachedSongs.value.size}" )
+        deletedSongsList.addAll(
+            _cachedSongs.value.filter { songInCachedSongs ->
+                refreshedSongs.none { songInRefreshedSongs ->
+                    songInCachedSongs.id == songInRefreshedSongs.id
+                }
+            }
+        )
+        Timber.tag( TAG ).d( "DELETED SONGS SIZE: ${deletedSongsList.size}" )
+        if ( deletedSongsList.isNotEmpty() ) {
+            deletedSongsList.forEach { updateAfterDeleting( it ) }
+        } else {
             updateMediaCaches()
-            _isInitializing.value = false
         }
+    }
+
+    override suspend fun deleteSong( song: Song ) {
+        _isInitializing.value = true
+        sendDeleteCommandToMediaSessionUsing( song )
+        updateAfterDeleting( song )
+        _isInitializing.value = false
+    }
+
+    private suspend fun updateAfterDeleting( song: Song ) {
+        updateNowPlayingMediaItemAfterDeleting( song )
+        updatePlaylistRepositoryAfterDeleting( song )
+        updateSongsAdditionalMetadataRepositoryAfterDeleting( song )
+        updateMediaItemsInQueueAfterDeleting( song )
+        updateMediaCaches()
     }
 
     private suspend fun sendDeleteCommandToMediaSessionUsing( song: Song ) {
@@ -218,7 +242,7 @@ class MusicServiceConnectionImpl(
         )
     }
 
-    private fun updateNowPlayingMediaItemUsing( song: Song ) {
+    private fun updateNowPlayingMediaItemAfterDeleting( song: Song ) {
         if ( nowPlayingMediaItem.value.mediaId == song.mediaItem.mediaId ) {
             if ( song.mediaItem.mediaId == mediaItemsInQueue.value.last().mediaId ) {
                 player?.stop()
@@ -230,7 +254,7 @@ class MusicServiceConnectionImpl(
         }
     }
 
-    private suspend fun updatePlaylistRepositoryUsing( song: Song ) {
+    private suspend fun updatePlaylistRepositoryAfterDeleting( song: Song ) {
         withContext( Dispatchers.IO ) {
             playlistRepository.apply {
                 playlists.value.forEach {
@@ -241,7 +265,7 @@ class MusicServiceConnectionImpl(
         }
     }
 
-    private suspend fun updateSongsAdditionalMetadataRepositoryUsing( song: Song ) {
+    private suspend fun updateSongsAdditionalMetadataRepositoryAfterDeleting( song: Song ) {
         withContext( Dispatchers.IO ) {
             songsAdditionalMetadataRepository.deleteEntryWithId( song.id )
         }

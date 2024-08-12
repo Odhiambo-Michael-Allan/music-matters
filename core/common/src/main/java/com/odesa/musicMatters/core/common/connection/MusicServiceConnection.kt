@@ -23,7 +23,7 @@ interface MusicServiceConnection {
     val cachedAlbums: StateFlow<List<Album>>
     val cachedSuggestedAlbums: StateFlow<List<Album>>
     val currentPlaybackPosition: Long
-    fun deleteSong( song: Song )
+    suspend fun deleteSong( song: Song )
     fun playPause()
     fun play()
     fun playPreviousSong(): Boolean
@@ -45,4 +45,5 @@ interface MusicServiceConnection {
     fun clearQueue()
     fun playNext( mediaItem: MediaItem )
     fun addToQueue( mediaItem: MediaItem )
+    suspend fun onMediaStoreChange()
 }

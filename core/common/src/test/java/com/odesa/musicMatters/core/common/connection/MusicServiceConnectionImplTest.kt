@@ -3,6 +3,7 @@ package com.odesa.musicMatters.core.common.connection
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
+import com.odesa.musicMatters.core.common.media.library.MUSIC_MATTERS_TRACKS_ROOT
 import com.odesa.musicMatters.core.data.preferences.allowedSpeedPitchValues
 import com.odesa.musicMatters.core.data.repository.PlaylistRepository
 import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
@@ -35,7 +36,7 @@ class MusicServiceConnectionImplTest {
     private val playbackPitch = 0.5f
     private val playbackSpeed = 0.5f
     private val currentRepeatMode = Player.REPEAT_MODE_OFF
-    private lateinit var connectable: Connectable
+    private lateinit var connectable: FakeConnectable
     private lateinit var playlistRepository: PlaylistRepository
     private lateinit var settingsRepository: SettingsRepository
     private lateinit var songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
@@ -355,7 +356,7 @@ class MusicServiceConnectionImplTest {
     }
 
     @Test
-    fun testWhenNowPlayingSongIsDeleted_theNextSongInQueueIsPlayed() {
+    fun testWhenNowPlayingSongIsDeleted_theNextSongInQueueIsPlayed() = runTest {
         musicServiceConnection.playMediaItem(
             mediaItem = testSongMediaItems.first(),
             mediaItems = testSongMediaItems,
@@ -389,5 +390,20 @@ class MusicServiceConnectionImplTest {
             testSongs.size - 1,
             songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().first().size
         )
+    }
+
+    @Test
+    fun testOnMediaStoreChange() = runTest {
+        assertEquals(
+            testSongMediaItems.size,
+            musicServiceConnection.cachedSongs.value.size
+        )
+        connectable.removeMediaItem( testSongMediaItems.first().mediaId )
+        musicServiceConnection.onMediaStoreChange()
+        assertEquals(
+            testSongMediaItems.size - 1,
+            musicServiceConnection.cachedSongs.value.size
+        )
+
     }
 }

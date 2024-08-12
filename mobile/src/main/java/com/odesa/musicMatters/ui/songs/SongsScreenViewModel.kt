@@ -20,6 +20,7 @@ import com.odesa.musicMatters.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class SongsScreenViewModel(
     private val settingsRepository: SettingsRepository,
@@ -78,6 +79,7 @@ class SongsScreenViewModel(
 
     private suspend fun observeSongs() {
         musicServiceConnection.cachedSongs.collect {
+            Timber.tag( "SONGS SCREEN VIEW MODEL" ).d( "SONGS CHANGED. SIZE: ${it.size}" )
             _uiState.value = _uiState.value.copy(
                 songs = it.sortSongs( settingsRepository.sortSongsBy.value, settingsRepository.sortSongsInReverse.value )
             )

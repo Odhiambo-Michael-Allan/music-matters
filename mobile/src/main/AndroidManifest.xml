@@ -17,9 +17,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/music_player_logo_1"
+        android:icon="@drawable/logo_2"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/music_player_logo_1"
+        android:roundIcon="@drawable/logo_2"
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicMatters"
         tools:targetApi="31">

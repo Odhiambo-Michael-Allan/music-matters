@@ -22,11 +22,13 @@ class FakeConnectable : Connectable {
     private val onDisconnectListeners: MutableList<()-> Unit> = mutableListOf()
     override val player = _player
 
+    private val tracks = testSongMediaItems.toMutableList()
+
     override suspend fun establishConnection() {}
 
-    override suspend fun getChildren(parentId: String ): List<MediaItem> {
+    override suspend fun getChildren( parentId: String ): List<MediaItem> {
         return when ( parentId ) {
-            MUSIC_MATTERS_TRACKS_ROOT -> testSongMediaItems
+            MUSIC_MATTERS_TRACKS_ROOT -> tracks
             MUSIC_MATTERS_ALBUMS_ROOT -> testAlbumMediaItems
             MUSIC_MATTERS_ARTISTS_ROOT -> testArtistMediaItems
             MUSIC_MATTERS_SUGGESTED_ALBUMS_ROOT -> testAlbumMediaItems
@@ -43,5 +45,9 @@ class FakeConnectable : Connectable {
 
     override fun addDisconnectListener( disconnectListener: () -> Unit ) {
         onDisconnectListeners.add( disconnectListener )
+    }
+
+    fun removeMediaItem( mediaItemId: String ) {
+        tracks.removeIf { it.mediaId == mediaItemId }
     }
 }

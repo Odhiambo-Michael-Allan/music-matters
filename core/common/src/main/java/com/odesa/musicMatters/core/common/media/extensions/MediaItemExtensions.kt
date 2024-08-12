@@ -31,39 +31,39 @@ fun MediaMetadata.Builder.from( cursor: Cursor ): MediaMetadata.Builder {
 
     val id = cursor.getLongFrom( AudioColumns._ID )
     val title = cursor.getStringFrom( AudioColumns.TITLE )
-    Timber.tag( TAG ).d( "Title: $title" )
+//    Timber.tag( TAG ).d( "Title: $title" )
 
     val trackNumber = cursor.getNullableIntFrom( AudioColumns.TRACK ) ?: UNKNOWN_INT_VALUE
-    Timber.tag( TAG ).d( "Track Number: $trackNumber" )
+//    Timber.tag( TAG ).d( "Track Number: $trackNumber" )
 
     val year = cursor.getNullableIntFrom( AudioColumns.YEAR ) ?: UNKNOWN_INT_VALUE
-    Timber.tag( TAG ).d( "Year: $year" )
+//    Timber.tag( TAG ).d( "Year: $year" )
 
     val duration = cursor.getLongFrom( AudioColumns.DURATION )
-    Timber.tag( TAG ).d( "Duration: $duration" )
+//    Timber.tag( TAG ).d( "Duration: $duration" )
 
     val albumTitle = cursor.getNullableStringFrom( AudioColumns.ALBUM ) ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Album: $albumTitle" )
+//    Timber.tag( TAG ).d( "Album: $albumTitle" )
 
     val artist = cursor.getNullableStringFrom( AudioColumns.ARTIST ) ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Artist: $artist" )
+//    Timber.tag( TAG ).d( "Artist: $artist" )
 
     val albumArtist = cursor.getNullableStringFrom( AudioColumns.ALBUM_ARTIST ) ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Album Artist: $albumArtist" )
+//    Timber.tag( TAG ).d( "Album Artist: $albumArtist" )
 
     val composer = cursor.getNullableStringFrom( AudioColumns.COMPOSER ) ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Composer: $composer" )
+//    Timber.tag( TAG ).d( "Composer: $composer" )
 
     val dateAdded = cursor.getLongFrom( AudioColumns.DATE_MODIFIED )
-    Timber.tag( TAG ).d( "Date Added: $dateAdded" )
+//    Timber.tag( TAG ).d( "Date Added: $dateAdded" )
 
     val dateModified = cursor.getLongFrom( AudioColumns.DATE_MODIFIED )
-    Timber.tag( TAG ).d( "Date Modified: $dateModified" )
+//    Timber.tag( TAG ).d( "Date Modified: $dateModified" )
 
     val size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: UNKNOWN_LONG_VALUE
-    Timber.tag( TAG ).d( "Size: $size" )
+//    Timber.tag( TAG ).d( "Size: $size" )
     val path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: UNKNOWN_STRING_VALUE
-    Timber.tag( TAG ).d( "Path: $path" )
+//    Timber.tag( TAG ).d( "Path: $path" )
 
     Timber.tag( TAG ).d( "------------------------------------------------------------------" )
 
