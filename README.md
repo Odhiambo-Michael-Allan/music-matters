@@ -26,6 +26,10 @@ If you'd like to contribute to Project Title, here are some guidelines:
 
 Music Matters adopted modularization strategies below: 
 * *Reusability*: Modularizing reusable codes properly enable opportunities for code sharing and limits code accessibility in other modules at the same time.
+* *Parallel Building*: Each module can be run in parallel and it reduces the build time.
+* *Strict visibility control*: Modules restrict exposing their dedicated from access outside the module.
+* *Decentralized focusing*: Each developer team can be assigned their dedicated module.
+For more information, check out the [Guide to Android app modularization](https://developer.android.com/topic/modularization) 
 
 ## **Find this repository useful?
 
