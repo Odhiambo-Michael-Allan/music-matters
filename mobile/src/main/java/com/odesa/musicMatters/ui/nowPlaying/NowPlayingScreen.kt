@@ -178,22 +178,8 @@ fun NowPlayingBottomSheetContent(
                 R.drawable.placeholder_dark
 
     NowPlayingScreenContent(
-        currentlyPlayingSong = uiState.currentlyPlayingSong!!,
-        currentlyPlayingSongIndex = uiState.currentlyPlayingSongIndex,
+        uiState = uiState,
         fallbackResourceId = fallbackResourceId,
-        queueSize = uiState.queueSize,
-        language = uiState.language,
-        isFavorite = uiState.currentlyPlayingSongIsFavorite,
-        controlsLayoutIsDefault = uiState.controlsLayoutIsDefault,
-        isPlaying = uiState.isPlaying,
-        enableSeekControls = uiState.showSeekControls,
-        showLyrics = uiState.showLyrics,
-        playbackPosition = uiState.playbackPosition,
-        shuffle = uiState.shuffle,
-        currentLoopMode = uiState.currentLoopMode,
-        currentPlayingSpeed = uiState.currentPlayingSpeed,
-        currentPlayingPitch = uiState.currentPlayingPitch,
-        showSamplingInfo = uiState.showSamplingInfo,
         durationFormatter = Long::formatMilliseconds,
         onArtistClicked = onArtistClicked,
         onFavorite = { onFavorite( it ) },
@@ -204,7 +190,7 @@ fun NowPlayingBottomSheetContent(
         onFastForwardButtonClick = fastForward,
         onSeekStart = onSeekStart,
         onSeekEnd = { onSeekEnd( it ) },
-        onArtworkClicked = { onArtworkClicked( uiState.currentlyPlayingSong.albumTitle!! ) },
+        onArtworkClicked = { onArtworkClicked( uiState.currentlyPlayingSong!!.albumTitle!! ) },
         onSwipeArtworkLeft = playPreviousSong,
         onSwipeArtworkRight = playNextSong,
         onQueueClicked = onQueueClicked,
@@ -232,22 +218,8 @@ fun NowPlayingBottomSheetContent(
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun NowPlayingScreenContent(
-    currentlyPlayingSong: Song,
-    currentlyPlayingSongIndex: Int,
+    uiState: NowPlayingScreenUiState,
     fallbackResourceId: Int,
-    queueSize: Int,
-    language: Language,
-    isFavorite: Boolean,
-    controlsLayoutIsDefault: Boolean,
-    isPlaying: Boolean,
-    enableSeekControls: Boolean,
-    showLyrics: Boolean,
-    playbackPosition: PlaybackPosition,
-    shuffle: Boolean,
-    currentLoopMode: LoopMode,
-    currentPlayingSpeed: Float,
-    currentPlayingPitch: Float,
-    showSamplingInfo: Boolean,
     durationFormatter: ( Long ) -> String,
     onArtistClicked: ( String ) -> Unit,
     onFavorite: ( String ) -> Unit,
@@ -284,23 +256,9 @@ fun NowPlayingScreenContent(
 
     if ( screenOrientation == ScreenOrientation.POTRAIT ) {
         NowPlayingScreenContentPortrait(
-            currentLoopMode = currentLoopMode,
-            currentPlayingSpeed = currentPlayingSpeed,
-            currentPlayingPitch = currentPlayingPitch,
-            queueSize = queueSize,
-            currentlyPlayingSongIndex = currentlyPlayingSongIndex,
-            language = language,
-            shuffle = shuffle,
-            enableSeekControls = enableSeekControls,
-            isPlaying = isPlaying,
-            isFavorite = isFavorite,
-            showLyrics = showLyrics,
-            showSamplingInfo = showSamplingInfo,
-            currentlyPlayingSong = currentlyPlayingSong,
+            uiState = uiState,
             fallbackResourceId = fallbackResourceId,
             durationFormatter = durationFormatter,
-            playbackPosition = playbackPosition,
-            controlsLayoutIsDefault = controlsLayoutIsDefault,
             onFavorite = onFavorite,
             onSwipeArtworkLeft = onSwipeArtworkLeft,
             onSwipeArtworkRight = onSwipeArtworkRight,
@@ -324,23 +282,9 @@ fun NowPlayingScreenContent(
         )
     } else {
         NowPlayingScreenLandscape(
-            currentLoopMode = currentLoopMode,
-            currentPlayingSpeed = currentPlayingSpeed,
-            currentPlayingPitch = currentPlayingPitch,
-            queueSize = queueSize,
-            currentlyPlayingSongIndex = currentlyPlayingSongIndex,
-            language = language,
-            shuffle = shuffle,
-            enableSeekControls = enableSeekControls,
-            isPlaying = isPlaying,
-            isFavorite = isFavorite,
-            showLyrics = showLyrics,
-            showSamplingInfo = showSamplingInfo,
-            currentlyPlayingSong = currentlyPlayingSong,
+            uiState = uiState,
             fallbackResourceId = fallbackResourceId,
             durationFormatter = durationFormatter,
-            playbackPosition = playbackPosition,
-            controlsLayoutIsDefault = controlsLayoutIsDefault,
             onFavorite = onFavorite,
             onSwipeArtworkLeft = onSwipeArtworkLeft,
             onSwipeArtworkRight = onSwipeArtworkRight,
@@ -355,7 +299,6 @@ fun NowPlayingScreenContent(
             onFastRewindButtonClick = onFastRewindButtonClick,
             onFastForwardButtonClick = onFastForwardButtonClick,
             onQueueClicked = onQueueClicked,
-            onShowLyrics = onShowLyrics,
             onToggleLoopMode = onToggleLoopMode,
             onToggleShuffleMode = onToggleShuffleMode,
             onPlayingSpeedChange = onPlayingSpeedChange,
@@ -375,16 +318,16 @@ fun NowPlayingScreenContent(
         ) {
             GenericOptionsBottomSheet(
                 headerImage = ImageRequest.Builder( LocalContext.current ).apply {
-                    data( currentlyPlayingSong.artworkUri )
+                    data( uiState.currentlyPlayingSong.artworkUri )
                     placeholder( fallbackResourceId )
                     fallback( fallbackResourceId )
                     error( fallbackResourceId )
                     crossfade( true )
                 }.build(),
-                headerTitle = currentlyPlayingSong.title,
+                headerTitle = uiState.currentlyPlayingSong.title,
                 titleIsHighlighted = true,
-                headerDescription = currentlyPlayingSong.artists.joinToString(),
-                language = language,
+                headerDescription = uiState.currentlyPlayingSong.artists.joinToString(),
+                language = uiState.language,
                 fallbackResourceId = fallbackResourceId,
                 onDismissRequest = { showOptionsMenu = false },
                 onPlayNext = {}, // No need to do anything as duplicates are not allowed in queue
@@ -394,32 +337,32 @@ fun NowPlayingScreenContent(
                 onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                 onCreatePlaylist = onCreatePlaylist,
                 onAddSongsToPlaylist = onAddSongsToPlaylist,
-                onGetSongs = { listOf( currentlyPlayingSong ) },
+                onGetSongs = { listOf( uiState.currentlyPlayingSong ) },
                 leadingBottomSheetMenuItem = { onDismissRequest ->
                     BottomSheetMenuItem(
-                        leadingIcon = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        label = language.favorite,
+                        leadingIcon = if ( uiState.currentlyPlayingSongIsFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        label = uiState.language.favorite,
                         leadingIconTint = MaterialTheme.colorScheme.primary
                     ) {
                         onDismissRequest()
-                        onFavorite( currentlyPlayingSong.id )
+                        onFavorite( uiState.currentlyPlayingSong.id )
                     }
                 },
                 trailingBottomSheetMenuItems = { onDismissRequest ->
-                    currentlyPlayingSong.albumTitle?.let { albumTitle ->
+                    uiState.currentlyPlayingSong.albumTitle?.let { albumTitle ->
                         BottomSheetMenuItem(
                             leadingIcon = Icons.Default.Album,
-                            label = "${language.viewAlbum}: $albumTitle"
+                            label = "${uiState.language.viewAlbum}: $albumTitle"
                         ) {
                             onDismissRequest()
                             onHideNowPlayingBottomSheet()
                             onViewAlbum( albumTitle )
                         }
                     }
-                    currentlyPlayingSong.artists.forEach { artistName ->
+                    uiState.currentlyPlayingSong.artists.forEach { artistName ->
                         BottomSheetMenuItem(
                             leadingIcon = Icons.Default.Person,
-                            label = "${language.viewArtist}: $artistName"
+                            label = "${uiState.language.viewArtist}: $artistName"
                         ) {
                             onDismissRequest()
                             onHideNowPlayingBottomSheet()
@@ -428,7 +371,7 @@ fun NowPlayingScreenContent(
                     }
                     BottomSheetMenuItem(
                         leadingIcon = Icons.Default.Info,
-                        label = language.details
+                        label = uiState.language.details
                     ) {
                         onDismissRequest()
                         showSongDetailsDialog = true
@@ -440,8 +383,8 @@ fun NowPlayingScreenContent(
 
     if ( showSongDetailsDialog ) {
         SongDetailsDialog(
-            song = currentlyPlayingSong,
-            language = language,
+            song = uiState.currentlyPlayingSong,
+            language = uiState.language,
             durationFormatter = { it.formatMilliseconds() },
             isLoadingSongAdditionalMetadata = false,
             onGetSongAdditionalMetadata = onGetSongAdditionalMetadata
@@ -455,23 +398,9 @@ fun NowPlayingScreenContent(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NowPlayingScreenContentPortrait(
-    currentLoopMode: LoopMode,
-    currentPlayingSpeed: Float,
-    currentPlayingPitch: Float,
-    queueSize: Int,
-    currentlyPlayingSongIndex: Int,
-    language: Language,
-    shuffle: Boolean,
-    enableSeekControls: Boolean,
-    isPlaying: Boolean,
-    isFavorite: Boolean,
-    showLyrics: Boolean,
-    showSamplingInfo: Boolean,
-    currentlyPlayingSong: Song,
+    uiState: NowPlayingScreenUiState,
     @DrawableRes fallbackResourceId: Int,
     durationFormatter: ( Long ) -> String,
-    playbackPosition: PlaybackPosition,
-    controlsLayoutIsDefault: Boolean,
     onFavorite: ( String ) -> Unit,
     onSwipeArtworkLeft: () -> Unit,
     onSwipeArtworkRight: () -> Unit,
@@ -502,8 +431,8 @@ fun NowPlayingScreenContentPortrait(
             modifier = Modifier
                 .padding(16.dp, 0.dp)
                 .fillMaxWidth(),
-            showLyrics = showLyrics,
-            artworkUri = currentlyPlayingSong.artworkUri,
+            showLyrics = uiState.showLyrics,
+            artworkUri = uiState.currentlyPlayingSong?.artworkUri,
             fallbackResourceId = fallbackResourceId,
             onSwipeLeft = onSwipeArtworkLeft,
             onSwipeRight = onSwipeArtworkRight,
@@ -513,7 +442,7 @@ fun NowPlayingScreenContentPortrait(
             AnimatedContent(
                 modifier = Modifier.weight( 1f ),
                 label = "now-playing-body-content",
-                targetState = currentlyPlayingSong,
+                targetState = uiState.currentlyPlayingSong!!,
                 transitionSpec = {
                     FadeTransition.enterTransition()
                         .togetherWith( FadeTransition.exitTransition() )
@@ -544,10 +473,10 @@ fun NowPlayingScreenContentPortrait(
                             if ( index != target.artists.size - 1 ) Text( text = ", " )
                         }
                     }
-                    if ( showSamplingInfo ) {
+                    if ( uiState.showSamplingInfo ) {
                         onGetSongAdditionalMetadata()?.let {
                             Text(
-                                text = it.toSamplingInfoString( language ),
+                                text = it.toSamplingInfoString( uiState.language ),
                                 style = MaterialTheme.typography.labelSmall
                                     .copy( color = LocalContentColor.current.copy( alpha = 0.7f ) ),
                             )
@@ -562,7 +491,7 @@ fun NowPlayingScreenContentPortrait(
                                     modifier = Modifier.size( 12.dp )
                                 )
                                 Text(
-                                    text = language.loading,
+                                    text = uiState.language.loading,
                                     style = MaterialTheme.typography.labelMedium
                                 )
                             }
@@ -575,10 +504,10 @@ fun NowPlayingScreenContentPortrait(
             ) {
                 IconButton(
                     modifier = Modifier.offset( 4.dp ),
-                    onClick = { onFavorite( currentlyPlayingSong.id ) }
+                    onClick = { onFavorite( uiState.currentlyPlayingSong.id ) }
                 ) {
                     AnimatedContent(
-                        targetState = isFavorite,
+                        targetState = uiState.currentlyPlayingSongIsFavorite,
                         label = "now-playing-screen-is-favorite-icon"
                     ) {
                         Icon(
@@ -601,17 +530,17 @@ fun NowPlayingScreenContentPortrait(
         }
         Spacer( modifier = Modifier.height( 24.dp ) )
         NowPlayingSeekBar(
-            playbackPosition = playbackPosition,
+            playbackPosition = uiState.playbackPosition,
             durationFormatter = durationFormatter,
             onSeekStart = onSeekStart,
             onSeekEnd = onSeekEnd
         )
         Spacer( modifier = Modifier.height( 24.dp ) )
         when {
-            controlsLayoutIsDefault ->
+            uiState.controlsLayoutIsDefault ->
                 NowPlayingDefaultControlsLayout(
-                    isPlaying = isPlaying,
-                    enableSeekControls = enableSeekControls,
+                    isPlaying = uiState.isPlaying,
+                    enableSeekControls = uiState.nowPlayingShowSeekControls,
                     onPausePlayButtonClick = onPausePlayButtonClick,
                     onPreviousButtonClick = onPreviousButtonClick,
                     onFastRewindButtonClick = onFastRewindButtonClick,
@@ -620,8 +549,8 @@ fun NowPlayingScreenContentPortrait(
                 )
             else ->
                 NowPlayingTraditionalControlsLayout(
-                    enableSeekControls = enableSeekControls,
-                    isPlaying = isPlaying,
+                    enableSeekControls = uiState.nowPlayingShowSeekControls,
+                    isPlaying = uiState.isPlaying,
                     onPreviousButtonClick = onPreviousButtonClick,
                     onFastRewindButtonClick = onFastRewindButtonClick,
                     onPausePlayButtonClick = onPausePlayButtonClick,
@@ -631,13 +560,13 @@ fun NowPlayingScreenContentPortrait(
         }
         Spacer( modifier = Modifier.height( 16.dp ) )
         NowPlayingBodyBottomBar(
-            language = language,
-            currentSongIndex = currentlyPlayingSongIndex,
-            queueSize = queueSize,
-            currentLoopMode = currentLoopMode,
-            shuffle = shuffle,
-            currentSpeed = currentPlayingSpeed,
-            currentPitch = currentPlayingPitch,
+            language = uiState.language,
+            currentSongIndex = uiState.currentlyPlayingSongIndex,
+            queueSize = uiState.queueSize,
+            currentLoopMode = uiState.currentLoopMode,
+            shuffle = uiState.shuffle,
+            currentSpeed = uiState.currentPlayingSpeed,
+            currentPitch = uiState.currentPlayingPitch,
             onQueueClicked = onQueueClicked,
             onToggleLoopMode = onToggleLoopMode,
             onToggleShuffleMode = onToggleShuffleMode,
@@ -653,23 +582,9 @@ fun NowPlayingScreenContentPortrait(
 @Composable
 fun NowPlayingScreenPortraitPreview() {
     NowPlayingScreenContentPortrait(
-        currentLoopMode = SettingsDefaults.loopMode,
-        currentPlayingSpeed = SettingsDefaults.CURRENT_PLAYING_SPEED,
-        currentPlayingPitch = SettingsDefaults.CURRENT_PLAYING_PITCH,
-        queueSize = 50,
-        currentlyPlayingSongIndex = 0,
-        language = English,
-        shuffle = false,
-        enableSeekControls = true,
-        isPlaying = true,
-        isFavorite = true,
-        showLyrics = false,
-        showSamplingInfo = true,
-        currentlyPlayingSong = testSongs.first(),
+        uiState = testNowPlayingScreenUiState,
         fallbackResourceId = R.drawable.placeholder_light,
         durationFormatter = { "01:00" },
-        playbackPosition = PlaybackPosition.zero,
-        controlsLayoutIsDefault = false,
         onFavorite = {},
         onSwipeArtworkLeft = { /*TODO*/ },
         onSwipeArtworkRight = { /*TODO*/ },
@@ -695,23 +610,9 @@ fun NowPlayingScreenPortraitPreview() {
 @OptIn( ExperimentalLayoutApi::class )
 @Composable
 fun NowPlayingScreenLandscape(
-    currentLoopMode: LoopMode,
-    currentPlayingSpeed: Float,
-    currentPlayingPitch: Float,
-    queueSize: Int,
-    currentlyPlayingSongIndex: Int,
-    language: Language,
-    shuffle: Boolean,
-    enableSeekControls: Boolean,
-    isPlaying: Boolean,
-    isFavorite: Boolean,
-    showLyrics: Boolean,
-    showSamplingInfo: Boolean,
-    currentlyPlayingSong: Song,
+    uiState: NowPlayingScreenUiState,
     @DrawableRes fallbackResourceId: Int,
     durationFormatter: ( Long ) -> String,
-    playbackPosition: PlaybackPosition,
-    controlsLayoutIsDefault: Boolean,
     onFavorite: ( String ) -> Unit,
     onSwipeArtworkLeft: () -> Unit,
     onSwipeArtworkRight: () -> Unit,
@@ -726,7 +627,6 @@ fun NowPlayingScreenLandscape(
     onFastRewindButtonClick: () -> Unit,
     onFastForwardButtonClick: () -> Unit,
     onQueueClicked: () -> Unit,
-    onShowLyrics: () -> Unit,
     onToggleLoopMode: () -> Unit,
     onToggleShuffleMode: () -> Unit,
     onPlayingSpeedChange: ( Float ) -> Unit,
@@ -742,8 +642,8 @@ fun NowPlayingScreenLandscape(
         NowPlayingArtwork(
             modifier = Modifier
                 .padding( 16.dp, 16.dp ),
-            showLyrics = showLyrics,
-            artworkUri = currentlyPlayingSong.artworkUri,
+            showLyrics = uiState.showLyrics,
+            artworkUri = uiState.currentlyPlayingSong?.artworkUri,
             fallbackResourceId = fallbackResourceId,
             onSwipeLeft = onSwipeArtworkLeft,
             onSwipeRight = onSwipeArtworkRight,
@@ -754,7 +654,7 @@ fun NowPlayingScreenLandscape(
                 AnimatedContent(
                     modifier = Modifier.weight( 1f ),
                     label = "now-playing-body-content",
-                    targetState = currentlyPlayingSong,
+                    targetState = uiState.currentlyPlayingSong!!,
                     transitionSpec = {
                         FadeTransition.enterTransition()
                             .togetherWith( FadeTransition.exitTransition() )
@@ -785,10 +685,10 @@ fun NowPlayingScreenLandscape(
                                 if ( index != target.artists.size - 1 ) Text( text = ", " )
                             }
                         }
-                    if ( showSamplingInfo ) {
+                    if ( uiState.showSamplingInfo ) {
                         onGetSongAdditionalMetadata()?.let {
                             Text(
-                                text = it.toSamplingInfoString( language ),
+                                text = it.toSamplingInfoString( uiState.language ),
                                 style = MaterialTheme.typography.labelSmall
                                     .copy( color = LocalContentColor.current.copy( alpha = 0.7f ) ),
                             )
@@ -803,7 +703,7 @@ fun NowPlayingScreenLandscape(
                                     modifier = Modifier.size( 12.dp )
                                 )
                                 Text(
-                                    text = language.loading,
+                                    text = uiState.language.loading,
                                     style = MaterialTheme.typography.labelMedium
                                 )
                             }
@@ -816,10 +716,10 @@ fun NowPlayingScreenLandscape(
                 ) {
                     IconButton(
                         modifier = Modifier.offset( 4.dp ),
-                        onClick = { onFavorite( currentlyPlayingSong.id ) }
+                        onClick = { onFavorite( uiState.currentlyPlayingSong.id ) }
                     ) {
                         AnimatedContent(
-                            targetState = isFavorite,
+                            targetState = uiState.currentlyPlayingSongIsFavorite,
                             label = "now-playing-screen-is-favorite-icon"
                         ) {
                             Icon(
@@ -842,17 +742,17 @@ fun NowPlayingScreenLandscape(
             }
             Spacer( modifier = Modifier.height( 24.dp ) )
             NowPlayingSeekBar(
-                playbackPosition = playbackPosition,
+                playbackPosition = uiState.playbackPosition,
                 durationFormatter = durationFormatter,
                 onSeekStart = onSeekStart,
                 onSeekEnd = onSeekEnd
             )
             Spacer( modifier = Modifier.height( 24.dp ) )
             when {
-                controlsLayoutIsDefault ->
+                uiState.controlsLayoutIsDefault ->
                     NowPlayingDefaultControlsLayout(
-                        isPlaying = isPlaying,
-                        enableSeekControls = enableSeekControls,
+                        isPlaying = uiState.isPlaying,
+                        enableSeekControls = uiState.nowPlayingShowSeekControls,
                         onPausePlayButtonClick = onPausePlayButtonClick,
                         onPreviousButtonClick = onPreviousButtonClick,
                         onFastRewindButtonClick = onFastRewindButtonClick,
@@ -861,8 +761,8 @@ fun NowPlayingScreenLandscape(
                     )
                 else ->
                     NowPlayingTraditionalControlsLayout(
-                        enableSeekControls = enableSeekControls,
-                        isPlaying = isPlaying,
+                        enableSeekControls = uiState.nowPlayingShowSeekControls,
+                        isPlaying = uiState.isPlaying,
                         onPreviousButtonClick = onPreviousButtonClick,
                         onFastRewindButtonClick = onFastRewindButtonClick,
                         onPausePlayButtonClick = onPausePlayButtonClick,
@@ -872,13 +772,13 @@ fun NowPlayingScreenLandscape(
             }
             Spacer( modifier = Modifier.height( 16.dp ) )
             NowPlayingBodyBottomBar(
-                language = language,
-                currentSongIndex = currentlyPlayingSongIndex,
-                queueSize = queueSize,
-                currentLoopMode = currentLoopMode,
-                shuffle = shuffle,
-                currentSpeed = currentPlayingSpeed,
-                currentPitch = currentPlayingPitch,
+                language = uiState.language,
+                currentSongIndex = uiState.currentlyPlayingSongIndex,
+                queueSize = uiState.queueSize,
+                currentLoopMode = uiState.currentLoopMode,
+                shuffle = uiState.shuffle,
+                currentSpeed = uiState.currentPlayingSpeed,
+                currentPitch = uiState.currentPlayingPitch,
                 onQueueClicked = onQueueClicked,
                 onToggleLoopMode = onToggleLoopMode,
                 onToggleShuffleMode = onToggleShuffleMode,
@@ -899,23 +799,9 @@ fun NowPlayingScreenLandscape(
 @Composable
 fun NowPlayingScreenLandscapePreview() {
     NowPlayingScreenLandscape(
-        currentLoopMode = SettingsDefaults.loopMode,
-        currentPlayingSpeed = SettingsDefaults.CURRENT_PLAYING_SPEED,
-        currentPlayingPitch = SettingsDefaults.CURRENT_PLAYING_PITCH,
-        queueSize = 50,
-        currentlyPlayingSongIndex = 0,
-        language = English,
-        shuffle = false,
-        enableSeekControls = true,
-        isPlaying = true,
-        isFavorite = true,
-        showLyrics = false,
-        showSamplingInfo = true,
-        currentlyPlayingSong = testSongs.first(),
+        uiState = testNowPlayingScreenUiState,
         fallbackResourceId = R.drawable.placeholder_light,
         durationFormatter = { "01:00" },
-        playbackPosition = PlaybackPosition.zero,
-        controlsLayoutIsDefault = false,
         onFavorite = {},
         onSwipeArtworkLeft = { /*TODO*/ },
         onSwipeArtworkRight = { /*TODO*/ },
@@ -930,7 +816,6 @@ fun NowPlayingScreenLandscapePreview() {
         onFastRewindButtonClick = { /*TODO*/ },
         onFastForwardButtonClick = { /*TODO*/ },
         onQueueClicked = { /*TODO*/ },
-        onShowLyrics = { /*TODO*/ },
         onToggleLoopMode = { /*TODO*/ },
         onToggleShuffleMode = { /*TODO*/ },
         onPlayingSpeedChange = {},
@@ -951,22 +836,8 @@ fun NowPlayingScreenContentPreview() {
         useMaterialYou = true
     ) {
         NowPlayingScreenContent(
-            currentlyPlayingSong = testSongs.first(),
-            language = English,
-            isFavorite = true,
-            controlsLayoutIsDefault = true,
-            isPlaying = true,
-            enableSeekControls = true,
-            showLyrics = false,
+            uiState = testNowPlayingScreenUiState,
             fallbackResourceId = R.drawable.placeholder_light,
-            playbackPosition = PlaybackPosition( 3, 5 ),
-            currentLoopMode = LoopMode.Song,
-            currentPlayingSpeed = 2f,
-            currentPlayingPitch = 2f,
-            currentlyPlayingSongIndex = 20,
-            queueSize = 100,
-            shuffle = true,
-            showSamplingInfo = false,
             durationFormatter = { "05:33" },
             onArtistClicked = {},
             onFavorite = {},
