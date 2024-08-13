@@ -38,5 +38,5 @@ Also, [follow me](https://github.com/Odhiambo-Michael-Allan) on Github for my ne
 
 ## **License**
 
-Project Title is released under the MIT License. See the **[LICENSE](https://www.blackbox.ai/share/LICENSE)** file for details.
+Project Title is released under the Apache 2.0 License. See the **[LICENSE]([https://www.blackbox.ai/share/LICENSE](https://www.apache.org/licenses/LICENSE-2.0))** file for details.
 
