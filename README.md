@@ -25,7 +25,7 @@ If you'd like to contribute to Project Title, here are some guidelines:
 ## **Modularization**
 
 Music Matters adopted modularization strategies below: 
-..* *Reusability*: Modularizing reusable codes properly enable opportunities for code sharing and limits code accessibility in other modules at the same time.
+* *Reusability*: Modularizing reusable codes properly enable opportunities for code sharing and limits code accessibility in other modules at the same time.
 
 ## **Find this repository useful?
 
