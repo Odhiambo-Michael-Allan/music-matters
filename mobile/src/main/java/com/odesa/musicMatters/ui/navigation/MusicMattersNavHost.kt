@@ -3,6 +3,7 @@ package com.odesa.musicMatters.ui.navigation
 import android.content.Context
 import android.content.Intent
 import android.media.audiofx.AudioEffect
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.launch
@@ -30,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -39,6 +41,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.odesa.musicMatters.MainActivity
+import com.odesa.musicMatters.R
 import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
 import com.odesa.musicMatters.core.data.preferences.HomePageBottomBarLabelVisibility
 import com.odesa.musicMatters.core.data.repository.PlaylistRepository
@@ -212,7 +215,7 @@ fun MusicMattersNavHost(
                 modifier = Modifier
                     .weight(1f),
                 navController = navController,
-                startDestination = Route.Songs.name
+                startDestination = Route.ForYou.name
             ) {
                 composable(
                     Route.ForYou.name,
@@ -556,7 +559,57 @@ fun MusicMattersNavHost(
                     )
                     SettingsScreen(
                         viewModel = settingsViewModel,
-                        onBackPressed = { navController.popBackStack() }
+                        onBackPressed = { navController.popBackStack() },
+                        goToRedditCommunity = {
+                            mainActivity.startActivity(
+                                Intent( Intent.ACTION_VIEW )
+                                    .setData(
+                                        Uri.parse(
+                                            mainActivity.getString( R.string.reddit_community )
+                                        )
+                                    )
+                            )
+                        },
+                        goToDiscordServer = {
+                            mainActivity.startActivity(
+                                Intent( Intent.ACTION_VIEW )
+                                    .setData(
+                                        Uri.parse(
+                                            mainActivity.getString( R.string.discord_server_url )
+                                        )
+                                    )
+                            )
+                        },
+                        goToTelegramChannel = {
+                            mainActivity.startActivity(
+                                Intent( Intent.ACTION_VIEW )
+                                    .setData(
+                                        Uri.parse(
+                                            mainActivity.getString( R.string.telegram_channel_link )
+                                        )
+                                    )
+                            )
+                        },
+                        goToGithubProfile = {
+                            mainActivity.startActivity(
+                                Intent( Intent.ACTION_VIEW )
+                                    .setData(
+                                        Uri.parse(
+                                            mainActivity.getString( R.string.github_profile_url )
+                                        )
+                                    )
+                            )
+                        },
+                        goToAppGithubRepository = {
+                            mainActivity.startActivity(
+                                Intent( Intent.ACTION_VIEW )
+                                    .setData(
+                                        Uri.parse(
+                                            mainActivity.getString( R.string.app_github_repo )
+                                        )
+                                    )
+                            )
+                        }
                     )
                 }
             }
