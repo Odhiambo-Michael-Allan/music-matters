@@ -6,11 +6,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ClearAll
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.ClearAll
+import androidx.compose.material.icons.rounded.Save
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -57,7 +62,7 @@ fun TopAppBar(
         navigationIcon = {
             IconButton( onClick = onNavigationIconClicked ) {
                 Icon(
-                    imageVector = Icons.Filled.Search,
+                    imageVector = Icons.Rounded.Search,
                     contentDescription = null
                 )
             }
@@ -82,7 +87,7 @@ fun TopAppBar(
                 onClick = onSettingsClicked
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Settings,
+                    imageVector = Icons.Rounded.Settings,
                     contentDescription = null
                 )
             }
@@ -119,7 +124,7 @@ fun MinimalAppBar(
         navigationIcon = {
             IconButton( onClick = onNavigationIconClicked ) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = null
                 )
             }
@@ -226,7 +231,7 @@ fun QueueScreenTopAppBar(
                 onClick = onSaveClick
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Save,
+                    imageVector = Icons.Rounded.Save,
                     contentDescription = null
                 )
             }
@@ -234,7 +239,7 @@ fun QueueScreenTopAppBar(
                 onClick = onClearClick
             ) {
                 Icon(
-                    imageVector = Icons.Default.ClearAll,
+                    imageVector = Icons.Rounded.ClearAll,
                     contentDescription = null
                 )
             }

@@ -2,6 +2,7 @@ package com.odesa.musicMatters.ui.settings.miniPlayer
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
+import androidx.compose.material.icons.rounded.KeyboardDoubleArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,7 +18,7 @@ fun TextMarquee(
     SettingsSwitchTile(
         icon = {
             Icon(
-                imageVector = Icons.Filled.KeyboardDoubleArrowRight,
+                imageVector = Icons.Rounded.KeyboardDoubleArrowRight,
                 contentDescription = null
             )
         },

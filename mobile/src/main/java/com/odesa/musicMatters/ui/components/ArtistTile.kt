@@ -63,64 +63,6 @@ fun ArtistTile(
     )
 }
 
-@Composable
-fun ArtistOptionsBottomSheetMenu(
-    artist: Artist,
-    language: Language,
-    @DrawableRes fallbackResourceId: Int,
-    onShufflePlay: () -> Unit,
-    onPlayNext: () -> Unit,
-    onAddToQueue: () -> Unit,
-    onAddToPlaylist: () -> Unit,
-    onDismissRequest: () -> Unit,
-) {
-    BottomSheetMenuContent(
-        bottomSheetHeader = {
-            BottomSheetMenuHeader(
-                headerImage = ImageRequest.Builder( LocalContext.current ).apply {
-                    data( artist.artworkUri )
-                    placeholder( fallbackResourceId )
-                    fallback( fallbackResourceId )
-                    error( fallbackResourceId )
-                    crossfade( true )
-                }.build(),
-                title = language.artist,
-                description = artist.name
-            )
-        }
-    ) {
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
-            label = language.shufflePlay
-        ) {
-            onDismissRequest()
-            onShufflePlay()
-        }
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
-            label = language.playNext
-        ) {
-            onDismissRequest()
-            onPlayNext()
-        }
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
-            label = language.addToQueue
-        ) {
-            onDismissRequest()
-            onAddToQueue()
-        }
-        BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistAdd,
-            label = language.addToPlaylist
-        ) {
-            onDismissRequest()
-            onAddToPlaylist()
-        }
-    }
-}
-
-
 @Preview( showBackground = true )
 @Composable
 fun ArtistTilePreview() {

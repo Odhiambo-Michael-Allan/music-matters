@@ -33,6 +33,11 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material.icons.rounded.FastForward
+import androidx.compose.material.icons.rounded.FastRewind
+import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.SkipNext
+import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -203,7 +208,7 @@ fun NowPlayingBottomBarContent(
                                 onClick = { previousSong() }
                             ) {
                                 Icon(
-                                    imageVector = Icons.Filled.SkipPrevious,
+                                    imageVector = Icons.Rounded.SkipPrevious,
                                     contentDescription = null
                                 )
                             }
@@ -213,7 +218,7 @@ fun NowPlayingBottomBarContent(
                                 onClick = seekBack
                             ) {
                                 Icon(
-                                    imageVector = Icons.Filled.FastRewind,
+                                    imageVector = Icons.Rounded.FastRewind,
                                     contentDescription = null
                                 )
                             }
@@ -224,7 +229,7 @@ fun NowPlayingBottomBarContent(
                                 label = "now-playing-bottom-bar-play-arrow"
                             ) {
                                 Icon(
-                                    imageVector = if ( it ) Icons.Filled.Pause else Icons.Filled.PlayArrow,
+                                    imageVector = if ( it ) Icons.Filled.Pause else Icons.Rounded.PlayArrow,
                                     contentDescription = null
                                 )
                             }
@@ -234,7 +239,7 @@ fun NowPlayingBottomBarContent(
                                 onClick = seekForward
                             ) {
                                 Icon(
-                                    imageVector = Icons.Filled.FastForward,
+                                    imageVector = Icons.Rounded.FastForward,
                                     contentDescription = null
                                 )
                             }
@@ -244,7 +249,7 @@ fun NowPlayingBottomBarContent(
                                 onClick = { nextSong() }
                             ) {
                                 Icon(
-                                    imageVector = Icons.Filled.SkipNext,
+                                    imageVector = Icons.Rounded.SkipNext,
                                     contentDescription = null
                                 )
                             }

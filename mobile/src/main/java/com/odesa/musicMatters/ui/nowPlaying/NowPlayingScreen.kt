@@ -41,6 +41,12 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material.icons.rounded.FastForward
+import androidx.compose.material.icons.rounded.FastRewind
+import androidx.compose.material.icons.rounded.Pause
+import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.SkipNext
+import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -1278,7 +1284,7 @@ private fun NowPlayingFastForwardButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Filled.FastForward,
+        icon = Icons.Rounded.FastForward,
         roundedCornerSizeDp = 30.dp
     ) {
         onClick()
@@ -1292,7 +1298,7 @@ private fun NowPlayingFastRewindButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Filled.FastRewind,
+        icon = Icons.Rounded.FastRewind,
         roundedCornerSizeDp = 30.dp
     ) {
         onClick()
@@ -1306,7 +1312,7 @@ private fun NowPlayingSkipNextButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Filled.SkipNext,
+        icon = Icons.Rounded.SkipNext,
         roundedCornerSizeDp = 30.dp
     ) {
         onClick()
@@ -1320,7 +1326,7 @@ private fun NowPlayingSkipPreviousButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Filled.SkipPrevious,
+        icon = Icons.Rounded.SkipPrevious,
         roundedCornerSizeDp = 30.dp
     ) {
         onClick()
@@ -1339,7 +1345,7 @@ private fun NowPlayingPlayPauseButton(
     ) {
         NowPlayingControlButton(
             style = style,
-            icon = if ( it ) Icons.Filled.Pause else Icons.Filled.PlayArrow,
+            icon = if ( it ) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
             roundedCornerSizeDp = 24.dp
         ) {
             onClick()

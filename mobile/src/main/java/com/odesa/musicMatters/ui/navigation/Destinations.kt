@@ -3,9 +3,11 @@ package com.odesa.musicMatters.ui.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.automirrored.outlined.PlaylistPlay
+import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.filled.AccountTree
 import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Face6
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.LibraryMusic
 import androidx.compose.material.icons.filled.MusicNote
@@ -16,6 +18,7 @@ import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.outlined.AccountTree
 import androidx.compose.material.icons.outlined.Album
 import androidx.compose.material.icons.outlined.Face
+import androidx.compose.material.icons.outlined.Face6
 import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.LibraryMusic
 import androidx.compose.material.icons.outlined.MusicNote
@@ -23,6 +26,8 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.QueueMusic
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material.icons.rounded.AccountTree
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -98,8 +103,8 @@ interface MusicMattersDestination {
  * Music Matters app navigation destinations
  */
 object ForYou : MusicMattersDestination {
-    override val selectedIcon = Icons.Filled.Face
-    override val unselectedIcon = Icons.Outlined.Face
+    override val selectedIcon = Icons.Filled.Face6
+    override val unselectedIcon = Icons.Outlined.Face6
     override val route = Route.ForYou
     override val iconContentDescription = "${English.forYou}-tab-icon"
 
@@ -187,8 +192,8 @@ object Genres : MusicMattersDestination {
 }
 
 object Genre : MusicMattersDestination {
-    override val selectedIcon = Icons.Filled.Tune
-    override val unselectedIcon = Icons.Outlined.Tune
+    override val selectedIcon = Icons.Rounded.Tune
+    override val unselectedIcon = Icons.Rounded.Tune
     override val route = Route.Genre
     override val iconContentDescription = ""
 
@@ -212,8 +217,8 @@ object Playlists : MusicMattersDestination {
 }
 
 object Playlist : MusicMattersDestination {
-    override val selectedIcon = Icons.AutoMirrored.Filled.PlaylistPlay
-    override val unselectedIcon = Icons.AutoMirrored.Outlined.PlaylistPlay
+    override val selectedIcon = Icons.AutoMirrored.Rounded.PlaylistPlay
+    override val unselectedIcon = Icons.AutoMirrored.Rounded.PlaylistPlay
     override val route = Route.Playlist
     override val iconContentDescription = ""
 
@@ -251,8 +256,8 @@ object Search : MusicMattersDestination {
 }
 
 object Tree : MusicMattersDestination {
-    override val selectedIcon = Icons.Filled.AccountTree
-    override val unselectedIcon = Icons.Outlined.AccountTree
+    override val selectedIcon = Icons.Rounded.AccountTree
+    override val unselectedIcon = Icons.Rounded.AccountTree
     override val route = Route.Tree
     override val iconContentDescription = "${English.tree}-tab-icon"
 

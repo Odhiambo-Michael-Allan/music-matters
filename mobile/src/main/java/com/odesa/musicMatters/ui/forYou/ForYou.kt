@@ -23,6 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Shuffle
+import androidx.compose.material.icons.rounded.Shuffle
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -217,7 +218,7 @@ fun ForYouScreenContent(
             onClick = onShuffleAndPlay
         ) {
             Icon(
-                imageVector = Icons.Default.Shuffle,
+                imageVector = Icons.Rounded.Shuffle,
                 contentDescription = null
             )
         }

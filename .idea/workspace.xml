@@ -17,15 +17,25 @@
       <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/AppBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/AppBar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/ArtistTile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/ArtistTile.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/MediaSortBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/MediaSortBar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/NowPlayingBottomBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/NowPlayingBottomBar.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/Tile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/Tile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/TreeSongList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/TreeSongList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/Settings.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/Settings.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/about/About.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/about/About.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/help/Help.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/help/Help.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/forYou/ForYou.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/forYou/ForYou.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/navigation/Destinations.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/navigation/Destinations.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/nowPlaying/NowPlayingBodyBottomBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/nowPlaying/NowPlayingBodyBottomBar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/nowPlaying/NowPlayingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/nowPlaying/NowPlayingScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/nowPlaying/NowPlayingViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/nowPlaying/NowPlayingViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/playlists/Playlists.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/playlists/Playlists.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/miniPlayer/ShowSeekControls.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/miniPlayer/ShowSeekControls.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/miniPlayer/ShowTrackControls.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/miniPlayer/ShowTrackControls.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/miniPlayer/TextMarquee.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/miniPlayer/TextMarquee.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/nowPlaying/ControlsLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/nowPlaying/ControlsLayout.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/FastForwardDuration.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/FastForwardDuration.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/FastRewindDuration.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/FastRewindDuration.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +102,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "Settings",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/michael-allan-odhiambo/AndroidStudioProjects/music-matters/mobile/src/main/res/drawable",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
