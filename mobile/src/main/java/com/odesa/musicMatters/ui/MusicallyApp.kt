@@ -1,11 +1,13 @@
 package com.odesa.musicMatters.ui
 
+import androidx.annotation.OptIn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.odesa.musicMatters.MainActivity
@@ -37,6 +39,7 @@ fun MusicallyApp(
     )
 }
 
+@OptIn( UnstableApi::class )
 @Composable
 fun MusicallyAppContent(
     mainActivity: MainActivity,

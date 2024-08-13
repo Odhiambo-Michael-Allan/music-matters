@@ -61,10 +61,9 @@ class NowPlayingViewModelTest {
 
     @Test
     fun testCurrentlyPlayingSongIsCorrectlyUpdated() {
-        assertNull( nowPlayingViewModel.uiState.value.currentlyPlayingSong )
         musicServiceConnection.setNowPlaying( testSongMediaItemsForId.first() )
         assertNotNull( nowPlayingViewModel.uiState.value.currentlyPlayingSong )
-        assertEquals( id1, nowPlayingViewModel.uiState.value.currentlyPlayingSong!!.id )
+        assertEquals( id1, nowPlayingViewModel.uiState.value.currentlyPlayingSong.id )
     }
 
     @Test
@@ -161,21 +160,21 @@ class NowPlayingViewModelTest {
     @Test
     fun testShowTrackControlsChange() = runTest {
         assertEquals( SettingsDefaults.MINI_PLAYER_SHOW_TRACK_CONTROLS,
-            nowPlayingViewModel.uiState.value.showTrackControls )
+            nowPlayingViewModel.uiState.value.miniPlayerShowTrackControls )
         settingsRepository.setMiniPlayerShowTrackControls( false )
-        assertFalse( nowPlayingViewModel.uiState.value.showTrackControls )
+        assertFalse( nowPlayingViewModel.uiState.value.miniPlayerShowTrackControls )
         settingsRepository.setMiniPlayerShowTrackControls( true )
-        assertTrue( nowPlayingViewModel.uiState.value.showTrackControls )
+        assertTrue( nowPlayingViewModel.uiState.value.miniPlayerShowTrackControls )
     }
 
     @Test
     fun testShowSeekControlsChange() = runTest {
         assertEquals( SettingsDefaults.MINI_PLAYERS_SHOW_SEEK_CONTROLS,
-            nowPlayingViewModel.uiState.value.showSeekControls )
+            nowPlayingViewModel.uiState.value.miniPlayerShowSeekControls )
         settingsRepository.setMiniPlayerShowSeekControls( true )
-        assertTrue( nowPlayingViewModel.uiState.value.showSeekControls )
+        assertTrue( nowPlayingViewModel.uiState.value.miniPlayerShowSeekControls )
         settingsRepository.setMiniPlayerShowSeekControls( false )
-        assertFalse( nowPlayingViewModel.uiState.value.showSeekControls )
+        assertFalse( nowPlayingViewModel.uiState.value.miniPlayerShowSeekControls )
     }
 
     @Test

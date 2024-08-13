@@ -51,8 +51,9 @@ class NowPlayingViewModel(
             currentlyPlayingSongIsFavorite = true,
             controlsLayoutIsDefault = settingsRepository.controlsLayoutIsDefault.value,
             isPlaying = musicServiceConnection.playbackState.value.isPlaying,
-            showTrackControls = settingsRepository.miniPlayerShowTrackControls.value,
-            showSeekControls = settingsRepository.miniPlayerShowSeekControls.value,
+            miniPlayerShowTrackControls = settingsRepository.miniPlayerShowTrackControls.value,
+            miniPlayerShowSeekControls = settingsRepository.miniPlayerShowSeekControls.value,
+            nowPlayingShowSeekControls = settingsRepository.showNowPlayingSeekControls.value,
             showLyrics = settingsRepository.showLyrics.value,
             shuffle = settingsRepository.shuffle.value,
             currentLoopMode = settingsRepository.currentLoopMode.value,
@@ -83,6 +84,7 @@ class NowPlayingViewModel(
         viewModelScope.launch { observeTextMarquee() }
         viewModelScope.launch { observeShowTrackControls() }
         viewModelScope.launch { observeShowSeekControls() }
+        viewModelScope.launch { observeNowPlayingShowSeekControls() }
         viewModelScope.launch { observeControlsLayoutIsDefault() }
         viewModelScope.launch { observeShowLyrics() }
         viewModelScope.launch { observeShuffle() }
@@ -210,7 +212,7 @@ class NowPlayingViewModel(
     private suspend fun observeShowTrackControls() {
         settingsRepository.miniPlayerShowTrackControls.collect {
             _uiState.value = _uiState.value.copy(
-                showTrackControls = it
+                miniPlayerShowTrackControls = it
             )
         }
     }
@@ -218,7 +220,15 @@ class NowPlayingViewModel(
     private suspend fun observeShowSeekControls() {
         settingsRepository.miniPlayerShowSeekControls.collect {
             _uiState.value = _uiState.value.copy(
-                showSeekControls = it
+                miniPlayerShowSeekControls = it
+            )
+        }
+    }
+
+    private suspend fun observeNowPlayingShowSeekControls() {
+        settingsRepository.showNowPlayingSeekControls.collect {
+            _uiState.value = _uiState.value.copy(
+                nowPlayingShowSeekControls = it
             )
         }
     }
@@ -354,11 +364,8 @@ class NowPlayingViewModel(
         _updatePlaybackPosition.value = false // Stop updating the position.
     }
 
-    private fun getCurrentlyPlayingSong(): Song? {
-        val nowPlaying = musicServiceConnection.nowPlayingMediaItem.value
-        return if ( nowPlaying == NOTHING_PLAYING ) null
-        else nowPlaying.toSong( artistTagSeparators )
-    }
+    private fun getCurrentlyPlayingSong() =
+        musicServiceConnection.nowPlayingMediaItem.value.toSong( artistTagSeparators )
 
 }
 
@@ -381,7 +388,7 @@ class NowPlayingViewModelFactory(
 }
 
 data class NowPlayingScreenUiState(
-    val currentlyPlayingSong: Song?,
+    val currentlyPlayingSong: Song,
     val playbackPosition: PlaybackPosition,
     val currentlyPlayingSongIndex: Int,
     val queueSize: Int,
@@ -389,8 +396,9 @@ data class NowPlayingScreenUiState(
     val currentlyPlayingSongIsFavorite: Boolean,
     val controlsLayoutIsDefault: Boolean,
     val isPlaying: Boolean,
-    val showTrackControls: Boolean,
-    val showSeekControls: Boolean,
+    val miniPlayerShowTrackControls: Boolean,
+    val miniPlayerShowSeekControls: Boolean,
+    val nowPlayingShowSeekControls: Boolean,
     val showLyrics: Boolean,
     val shuffle: Boolean,
     val currentLoopMode: LoopMode,
@@ -412,8 +420,9 @@ internal val testNowPlayingScreenUiState = NowPlayingScreenUiState(
     currentlyPlayingSongIsFavorite = true,
     controlsLayoutIsDefault = false,
     isPlaying = true,
-    showTrackControls = true,
-    showSeekControls = true,
+    miniPlayerShowTrackControls = true,
+    miniPlayerShowSeekControls = true,
+    nowPlayingShowSeekControls = false,
     showLyrics = false,
     shuffle = true,
     currentLoopMode = LoopMode.Song,

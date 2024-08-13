@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -98,6 +99,7 @@ import com.odesa.musicMatters.ui.utils.shareSong
 import com.odesa.musicMatters.utils.ScreenOrientation
 import timber.log.Timber
 
+@androidx.annotation.OptIn( UnstableApi::class )
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MusicMattersNavHost(

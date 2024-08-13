@@ -65,6 +65,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
+import com.odesa.musicMatters.core.common.connection.NOTHING_PLAYING
 import com.odesa.musicMatters.core.designsystem.theme.isLight
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.ui.navigation.FadeTransition
@@ -114,10 +115,10 @@ fun NowPlayingBottomBarContent(
         ) R.drawable.placeholder_light else R.drawable.placeholder_dark
 
     AnimatedVisibility(
-        visible = nowPlayingScreenUiState.currentlyPlayingSong != null,
+        visible = nowPlayingScreenUiState.currentlyPlayingSong.id != NOTHING_PLAYING.mediaId,
     ) {
 
-        nowPlayingScreenUiState.currentlyPlayingSong?.let { playingSong ->
+        nowPlayingScreenUiState.currentlyPlayingSong.let { playingSong ->
             Column (
                 modifier = Modifier
                     .background( MaterialTheme.colorScheme.surfaceColorAtElevation( 1.dp ) )
@@ -197,7 +198,7 @@ fun NowPlayingBottomBarContent(
                             )
                         }
                         Spacer( modifier = Modifier.width( 15.dp ) )
-                        AnimatedVisibility ( nowPlayingScreenUiState.showTrackControls ) {
+                        AnimatedVisibility ( nowPlayingScreenUiState.miniPlayerShowTrackControls ) {
                             IconButton(
                                 onClick = { previousSong() }
                             ) {
@@ -207,7 +208,7 @@ fun NowPlayingBottomBarContent(
                                 )
                             }
                         }
-                        AnimatedVisibility ( nowPlayingScreenUiState.showSeekControls ) {
+                        AnimatedVisibility ( nowPlayingScreenUiState.miniPlayerShowSeekControls ) {
                             IconButton(
                                 onClick = seekBack
                             ) {
@@ -228,7 +229,7 @@ fun NowPlayingBottomBarContent(
                                 )
                             }
                         }
-                        AnimatedVisibility ( nowPlayingScreenUiState.showSeekControls ) {
+                        AnimatedVisibility ( nowPlayingScreenUiState.miniPlayerShowSeekControls ) {
                             IconButton(
                                 onClick = seekForward
                             ) {
@@ -238,7 +239,7 @@ fun NowPlayingBottomBarContent(
                                 )
                             }
                         }
-                        AnimatedVisibility ( nowPlayingScreenUiState.showTrackControls ) {
+                        AnimatedVisibility ( nowPlayingScreenUiState.miniPlayerShowTrackControls ) {
                             IconButton(
                                 onClick = { nextSong() }
                             ) {
