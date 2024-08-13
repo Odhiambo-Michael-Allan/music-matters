@@ -10,38 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MediaStoreObserver.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/drawable/logo_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/drawable/logo_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/drawable/music_matters_icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/drawable/music_matters_logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnection.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnection.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnectionImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnectionImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MusicService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MusicService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/extensions/MediaItemExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/extensions/MediaItemExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/library/BrowseTree.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/library/BrowseTree.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MediaStoreObserver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MediaStoreObserver.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/library/LocalMusicSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/library/LocalMusicSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/test/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnectionImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/test/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnectionImplTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/connection/FakeConnectable.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/connection/FakeConnectable.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/connection/FakeMusicServiceConnection.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/connection/FakeMusicServiceConnection.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/songs/SongsScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/songs/SongsScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/drawable/music_player_logo_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/drawable/music_player_logo_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/drawable/music_player_logo_3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/drawable/playlogo.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

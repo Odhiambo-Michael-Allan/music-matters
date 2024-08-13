@@ -197,6 +197,7 @@ class MusicServiceConnectionImpl(
     private fun getCurrentMediaItemIndex() = mediaItemsInQueue.value.indexOf( nowPlayingMediaItem.value )
 
     override suspend fun onMediaStoreChange() {
+        _isInitializing.value = true
         val deletedSongsList = mutableListOf<Song>()
         val refreshedSongs = connectable.getChildren( MUSIC_MATTERS_TRACKS_ROOT )
             .map { it.toSong( artistTagSeparators ) }
@@ -215,6 +216,7 @@ class MusicServiceConnectionImpl(
         } else {
             updateMediaCaches()
         }
+        _isInitializing.value = false
     }
 
     override suspend fun deleteSong( song: Song ) {
@@ -531,12 +533,8 @@ class MusicServiceConnectionImpl(
         }
 
         private fun updateNowPlaying( player: Player ) {
-            var mediaItem = player.currentMediaItem ?: NOTHING_PLAYING
+            val mediaItem = player.currentMediaItem ?: NOTHING_PLAYING
             Timber.tag( TAG ).d( "UPDATING NOW PLAYING MEDIA ITEM TO: ${mediaItem.mediaMetadata.title}.." )
-            if ( mediaItem != NOTHING_PLAYING ) {
-                // The current media item from the CastPlayer may have lost some information
-                mediaItem = cachedSongs.value.find { it.mediaItem.mediaId == mediaItem.mediaId }!!.mediaItem
-            }
             _nowPlayingMediaItem.value = mediaItem
         }
     }

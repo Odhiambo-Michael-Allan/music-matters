@@ -85,31 +85,35 @@ class LocalMusicSource(
             val mediaMetadataRetriever = MediaMetadataRetriever()
             val additionalMetadataList = mutableListOf<SongAdditionalMetadata>()
             musicCatalog.forEach {
-                val uri = it.localConfiguration?.uri ?: Uri.EMPTY
+                try {
+                    val uri = it.localConfiguration?.uri ?: Uri.EMPTY
 //                Timber.tag(TAG).d( "FETCHING ADDITIONAL METADATA FOR SONG" +
 //                        " WITH URI: $uri AND TITLE: ${it.mediaMetadata.title}" )
-                mediaMetadataRetriever.setDataSource( context, uri )
-                val bitrate = extractBitrateUsing( mediaMetadataRetriever )
+                    mediaMetadataRetriever.setDataSource( context, uri )
+                    val bitrate = extractBitrateUsing( mediaMetadataRetriever )
 //                Timber.tag( TAG ).d( "Bitrate: $bitrate" )
-                val bitsPerSample = extractBitsPerSampleUsing( mediaMetadataRetriever )
+                    val bitsPerSample = extractBitsPerSampleUsing( mediaMetadataRetriever )
 //                Timber.tag( TAG ).d( "Bits Per Sample: $bitsPerSample" )
-                val codec = extractCodecUsing( mediaMetadataRetriever )
+                    val codec = extractCodecUsing( mediaMetadataRetriever )
 //                Timber.tag( TAG ).d( "Codec: $codec" )
-                val samplingRate = extractSamplingRateUsing( mediaMetadataRetriever )
+                    val samplingRate = extractSamplingRateUsing( mediaMetadataRetriever )
 //                Timber.tag( TAG ).d( "Sampling Rate: $samplingRate" )
-                val genre = extractGenreUsing( mediaMetadataRetriever )
+                    val genre = extractGenreUsing( mediaMetadataRetriever )
 //                Timber.tag( TAG ).d( "Genre: $genre" )
 
-                additionalMetadataList.add(
-                    SongAdditionalMetadata(
-                        songId = it.mediaId,
-                        bitrate = bitrate / 1000,
-                        bitsPerSample = bitsPerSample,
-                        codec = codec,
-                        samplingRate = samplingRate,
-                        genre = genre
+                    additionalMetadataList.add(
+                        SongAdditionalMetadata(
+                            songId = it.mediaId,
+                            bitrate = bitrate / 1000,
+                            bitsPerSample = bitsPerSample,
+                            codec = codec,
+                            samplingRate = samplingRate,
+                            genre = genre
+                        )
                     )
-                )
+                } catch ( e: Exception ) {
+                    Timber.tag( TAG ).d( "ERROR OCCURRED WHILE FETCHING ADDITIONAL METADATA FOR: ${it.mediaMetadata.title}" )
+                }
             }
             songsAdditionalMetadataRepository.save( additionalMetadataList )
             mediaMetadataRetriever.release()
