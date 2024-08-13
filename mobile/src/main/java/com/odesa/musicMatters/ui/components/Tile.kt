@@ -18,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -282,7 +283,7 @@ fun Tile(
                             onClick = onPlay
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.PlayArrow,
+                                imageVector = Icons.Rounded.PlayArrow,
                                 contentDescription = null
                             )
                         }

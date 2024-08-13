@@ -2,6 +2,7 @@ package com.odesa.musicMatters.ui.settings.miniPlayer
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,7 +18,7 @@ fun ShowTrackControls(
     SettingsSwitchTile(
         icon = {
             Icon(
-                imageVector = Icons.Filled.SkipNext,
+                imageVector = Icons.Rounded.SkipNext,
                 contentDescription = null
             )
         },

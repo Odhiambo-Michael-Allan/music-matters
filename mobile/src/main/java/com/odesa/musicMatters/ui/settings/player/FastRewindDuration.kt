@@ -2,6 +2,7 @@ package com.odesa.musicMatters.ui.settings.player
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FastRewind
+import androidx.compose.material.icons.rounded.FastRewind
 import androidx.compose.runtime.Composable
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.i8n.Language
@@ -17,7 +18,7 @@ fun FastRewindDuration(
     SettingsSliderTile(
         value = value,
         range = 3f..60f,
-        imageVector = Icons.Filled.FastRewind,
+        imageVector = Icons.Rounded.FastRewind,
         headlineContentText = language.fastRewindDuration,
         done = language.done,
         reset = language.reset,

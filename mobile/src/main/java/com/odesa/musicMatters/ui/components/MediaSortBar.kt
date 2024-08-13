@@ -13,6 +13,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Shuffle
+import androidx.compose.material.icons.rounded.ArrowDownward
+import androidx.compose.material.icons.rounded.ArrowUpward
+import androidx.compose.material.icons.rounded.Shuffle
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -62,7 +65,7 @@ fun <T : Enum<T>> MediaSortBar(
             ) {
                 Icon(
                     modifier = Modifier.size( 20.dp ),
-                    imageVector = if ( sortReverse ) Icons.Filled.ArrowUpward else Icons.Filled.ArrowDownward,
+                    imageVector = if ( sortReverse ) Icons.Rounded.ArrowUpward else Icons.Rounded.ArrowDownward,
                     contentDescription = null
                 )
             }
@@ -120,7 +123,7 @@ fun <T : Enum<T>> MediaSortBar(
                 ) {
                     Icon(
                         modifier = Modifier.size( 20.dp ),
-                        imageVector = Icons.Filled.Shuffle,
+                        imageVector = Icons.Rounded.Shuffle,
                         contentDescription = null
                     )
                 }

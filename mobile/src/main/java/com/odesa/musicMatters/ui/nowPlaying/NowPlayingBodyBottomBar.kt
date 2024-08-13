@@ -17,6 +17,9 @@ import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Speed
+import androidx.compose.material.icons.rounded.Repeat
+import androidx.compose.material.icons.rounded.RepeatOne
+import androidx.compose.material.icons.rounded.Shuffle
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -102,8 +105,8 @@ fun NowPlayingBodyBottomBar(
         ) {
             Icon(
                 imageVector = when ( currentLoopMode ) {
-                    LoopMode.Song -> Icons.Filled.RepeatOne
-                    else -> Icons.Filled.Repeat
+                    LoopMode.Song -> Icons.Rounded.RepeatOne
+                    else -> Icons.Rounded.Repeat
                 },
                 contentDescription = null,
                 tint = when ( currentLoopMode ) {
@@ -116,7 +119,7 @@ fun NowPlayingBodyBottomBar(
             onClick = onToggleShuffleMode
         ) {
             Icon(
-                imageVector = Icons.Filled.Shuffle,
+                imageVector = Icons.Rounded.Shuffle,
                 contentDescription = null,
                 tint = if ( shuffle ) MaterialTheme.colorScheme.primary else LocalContentColor.current
             )
