@@ -75,13 +75,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.core.common.media.extensions.formatMilliseconds
-import com.odesa.musicMatters.core.data.preferences.LoopMode
 import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
-import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.designsystem.theme.isLight
-import com.odesa.musicMatters.core.i8n.English
-import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.PlaylistInfo
 import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
@@ -190,11 +186,10 @@ fun NowPlayingBottomSheetContent(
         onFastForwardButtonClick = fastForward,
         onSeekStart = onSeekStart,
         onSeekEnd = { onSeekEnd( it ) },
-        onArtworkClicked = { onArtworkClicked( uiState.currentlyPlayingSong!!.albumTitle!! ) },
+        onArtworkClicked = { onArtworkClicked( uiState.currentlyPlayingSong.albumTitle!! ) },
         onSwipeArtworkLeft = playPreviousSong,
         onSwipeArtworkRight = playNextSong,
         onQueueClicked = onQueueClicked,
-        onShowLyrics = {},
         onToggleLoopMode = toggleLoopMode,
         onToggleShuffleMode = toggleShuffleMode,
         onPlayingSpeedChange = onPlayingSpeedChange,
@@ -234,7 +229,6 @@ fun NowPlayingScreenContent(
     onSwipeArtworkLeft: () -> Unit,
     onSwipeArtworkRight: () -> Unit,
     onQueueClicked: () -> Unit,
-    onShowLyrics: () -> Unit,
     onToggleLoopMode: () -> Unit,
     onToggleShuffleMode: () -> Unit,
     onPlayingSpeedChange: ( Float ) -> Unit,
@@ -432,7 +426,7 @@ fun NowPlayingScreenContentPortrait(
                 .padding(16.dp, 0.dp)
                 .fillMaxWidth(),
             showLyrics = uiState.showLyrics,
-            artworkUri = uiState.currentlyPlayingSong?.artworkUri,
+            artworkUri = uiState.currentlyPlayingSong.artworkUri,
             fallbackResourceId = fallbackResourceId,
             onSwipeLeft = onSwipeArtworkLeft,
             onSwipeRight = onSwipeArtworkRight,
@@ -442,7 +436,7 @@ fun NowPlayingScreenContentPortrait(
             AnimatedContent(
                 modifier = Modifier.weight( 1f ),
                 label = "now-playing-body-content",
-                targetState = uiState.currentlyPlayingSong!!,
+                targetState = uiState.currentlyPlayingSong,
                 transitionSpec = {
                     FadeTransition.enterTransition()
                         .togetherWith( FadeTransition.exitTransition() )
@@ -643,7 +637,7 @@ fun NowPlayingScreenLandscape(
             modifier = Modifier
                 .padding( 16.dp, 16.dp ),
             showLyrics = uiState.showLyrics,
-            artworkUri = uiState.currentlyPlayingSong?.artworkUri,
+            artworkUri = uiState.currentlyPlayingSong.artworkUri,
             fallbackResourceId = fallbackResourceId,
             onSwipeLeft = onSwipeArtworkLeft,
             onSwipeRight = onSwipeArtworkRight,
@@ -654,7 +648,7 @@ fun NowPlayingScreenLandscape(
                 AnimatedContent(
                     modifier = Modifier.weight( 1f ),
                     label = "now-playing-body-content",
-                    targetState = uiState.currentlyPlayingSong!!,
+                    targetState = uiState.currentlyPlayingSong,
                     transitionSpec = {
                         FadeTransition.enterTransition()
                             .togetherWith( FadeTransition.exitTransition() )
@@ -853,7 +847,6 @@ fun NowPlayingScreenContentPreview() {
             onPlayingSpeedChange = {},
             onPlayingPitchChange = {},
             onQueueClicked = {},
-            onShowLyrics = {},
             onToggleLoopMode = {},
             onToggleShuffleMode = {},
             onSeekStart = {},
@@ -1438,17 +1431,6 @@ private enum class NowPlayingControlButtonColors {
 private enum class NowPlayingControlButtonSize {
     Default,
     Large,
-}
-
-private fun SongAdditionalMetadataInfo.toSamplingInfoString( language: Language ): String {
-    val values = mutableListOf<String>()
-    values.apply {
-        add( codec )
-        add( language.xBit( bitsPerSample ) )
-        add( language.xKbps( bitrate ) )
-        add( language.xKHZ( samplingRate ) )
-    }
-    return values.joinToString( ", " )
 }
 
 

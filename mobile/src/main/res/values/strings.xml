@@ -301,4 +301,13 @@
 
     <string name="write_storage">Write Storage</string>
     <string name="write_storage_description">The app needs this to delete songs on the device</string>
+    <string name="telegram">Telegram</string>
+
+    <string name="my_name">Michael Allan Odhiambo</string>
+    <string name="app_github_repo">https://github.com/Odhiambo-Michael-Allan/music-matters</string>
+    <string name="github_profile_url">https://github.com/Odhiambo-Michael-Allan</string>
+
+    <string name="discord_server_url">https://discord.gg/EfruF8CP</string>
+    <string name="reddit_community">https://www.reddit.com/r/musicmattersappusers/</string>
+    <string name="telegram_channel_link">https://t.me/+58NS_CnxjD44YTI0</string>
 </resources>
