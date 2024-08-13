@@ -31,7 +31,7 @@ Music Matters adopted modularization strategies below:
 * *Decentralized focusing*: Each developer team can be assigned their dedicated module.
 For more information, check out the [Guide to Android app modularization](https://developer.android.com/topic/modularization) 
 
-## **Find this repository useful?
+## **Find this repository useful?**
 
 Support by joining the [stargazers](https://github.com/Odhiambo-Michael-Allan/music-matters/stargazers) for this repository
 Also, [follow me](https://github.com/Odhiambo-Michael-Allan) on Github for my next creations!
