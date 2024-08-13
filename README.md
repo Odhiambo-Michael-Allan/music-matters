@@ -22,6 +22,17 @@ If you'd like to contribute to Project Title, here are some guidelines:
 7. Push your changes to your forked repository.
 8. Submit a pull request.
 
-9. ## **Authors and Acknowledgment**
+## **Modularization**
 
-Project Title was created by **[Michael Allan Odhiambo](https://github.com/Odhiambo-Michael-Allan)**.
+Music Matters adopted modularization strategies below: 
+..* *Reusability*: Modularizing reusable codes properly enable opportunities for code sharing and limits code accessibility in other modules at the same time.
+
+## **Find this repository useful?
+
+Support by joining the [stargazers](https://github.com/Odhiambo-Michael-Allan/music-matters/stargazers) for this repository
+Also, [follow me](https://github.com/Odhiambo-Michael-Allan) on Github for my next creations!
+
+## **License**
+
+Project Title is released under the MIT License. See the **[LICENSE](https://www.blackbox.ai/share/LICENSE)** file for details.
+
