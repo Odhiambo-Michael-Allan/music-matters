@@ -210,7 +210,7 @@ fun MusicMattersNavHost(
                 modifier = Modifier
                     .weight(1f),
                 navController = navController,
-                startDestination = Route.ForYou.name
+                startDestination = Route.Songs.name
             ) {
                 composable(
                     Route.ForYou.name,

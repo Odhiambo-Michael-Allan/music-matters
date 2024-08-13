@@ -8,6 +8,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,45 +39,33 @@ fun LoaderScaffold(
     content: @Composable () -> Unit,
 ) {
     val density = LocalDensity.current
-    var height by remember { mutableIntStateOf( 0 ) }
 
     Box( modifier = Modifier.fillMaxSize() ) {
-        Box(
-            modifier = Modifier
-                .padding(
-                    bottom = with( density ) {
-                        if ( isLoading ) height.toDp() else 0.dp
-                    }
-                )
+        AnimatedVisibility(
+            visible = !isLoading,
+            enter = expandVertically( expandFrom = Alignment.Bottom ) + fadeIn(),
+            exit = shrinkVertically( shrinkTowards = Alignment.Bottom ) + fadeOut(),
         ) {
-            content()
+            Box {
+                content()
+            }
         }
         AnimatedVisibility(
             visible = isLoading,
             enter = expandVertically( expandFrom = Alignment.Bottom ) + fadeIn(),
             exit = shrinkVertically( shrinkTowards = Alignment.Bottom ) + fadeOut(),
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .onGloballyPositioned {
-                    height = it.size.height
-                }
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
-                        RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
-                    )
-                    .padding(16.dp, 12.dp)
+                    .fillMaxSize()
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy( 12.dp ),
-                    verticalAlignment = Alignment.CenterVertically
+                Column(
+                    modifier = Modifier
+                        .align( Alignment.Center ),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CircularProgressIndicator(
-                        strokeWidth = 2.dp,
-                        modifier = Modifier.size( 16.dp )
+                        modifier = Modifier.padding( 16.dp )
                     )
                     Text(
                         text = loading,

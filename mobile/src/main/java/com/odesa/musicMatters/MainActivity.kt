@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun deleteCurrentSong() {
-        lifecycleScope.launch( Dispatchers.IO ) {
+        lifecycleScope.launch {
             currentSongBeingDeleted?.let {
                 mobileDiModule.musicServiceConnection.deleteSong( it )
                 contentResolver.delete( it.mediaUri, null, null )
