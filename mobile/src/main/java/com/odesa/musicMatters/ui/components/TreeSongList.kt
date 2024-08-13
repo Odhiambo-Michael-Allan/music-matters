@@ -511,6 +511,7 @@ private fun TreeScreenSortOptionsBottomMenu(
                     }
                 )
             }
+            Spacer( modifier = Modifier.size( 32.dp ) )
         }
     }
 }

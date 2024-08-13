@@ -11,6 +11,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.ui.settings.components.SettingsTileDefaults
@@ -36,7 +37,11 @@ fun About(
                 Text( text = language.madeByX( stringResource( id = R.string.my_name ) ) )
             },
             supportingContent = {
-                Text( text = stringResource( id = R.string.github_profile_url ) )
+                Text(
+                    text = stringResource( id = R.string.github_profile_url ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         )
     }
@@ -55,7 +60,11 @@ fun About(
                 Text( text = stringResource( id = R.string.github ) )
             },
             supportingContent = {
-                Text( text = stringResource( id = R.string.app_github_repo ) )
+                Text(
+                    text = stringResource( id = R.string.app_github_repo ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         )
     }

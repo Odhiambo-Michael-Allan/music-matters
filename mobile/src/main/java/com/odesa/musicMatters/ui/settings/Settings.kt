@@ -172,49 +172,6 @@ fun SettingsScreenContent(
             modifier = Modifier.weight( 1f )
         ) {
             item {
-                val contentColor = MaterialTheme.colorScheme.onPrimary
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primary)
-                        .clickable { }
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp, 8.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = null,
-                            tint = contentColor,
-                            modifier = Modifier.size( 12.dp )
-                        )
-                        Spacer( modifier = Modifier.width( 4.dp ) )
-                        Text(
-                            text = uiState.language.considerContributing,
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = contentColor
-                            )
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(8.dp, 0.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.East,
-                            contentDescription = null,
-                            tint = contentColor,
-                            modifier = Modifier.size( 20.dp )
-                        )
-                    }
-                }
                 SettingsSideHeading( text = uiState.language.appearance )
                 Language(
                     language = uiState.language,
@@ -246,14 +203,14 @@ fun SettingsScreenContent(
                     onPrimaryColorChange = onPrimaryColorChange,
                     useMaterialYou = uiState.useMaterialYou
                 )
-                Divider( thickness = 0.5.dp )
+                HorizontalDivider( thickness = 0.5.dp )
                 SettingsSideHeading( text = uiState.language.Interface )
                 BottomBarLabelVisibility(
                     value = uiState.homePageBottomBarLabelVisibility,
                     language = uiState.language,
                     onValueChange = onHomePageBottomBarLabelVisibilityChange
                 )
-                Divider( thickness = 0.5.dp )
+                HorizontalDivider( thickness = 0.5.dp )
                 SettingsSideHeading( text = uiState.language.player )
                 FadePlayback(
                     language = uiState.language,
@@ -295,7 +252,7 @@ fun SettingsScreenContent(
                     value = uiState.fastForwardDuration.toFloat(),
                     onFastForwardDurationChange = onFastForwardDurationChange
                 )
-                Divider( thickness = 0.5.dp )
+                HorizontalDivider( thickness = 0.5.dp )
                 SettingsSideHeading( text = uiState.language.miniPlayer )
                 ShowTrackControls(
                     value = uiState.miniPlayerShowTrackControls,
@@ -312,7 +269,7 @@ fun SettingsScreenContent(
                     value = uiState.miniPlayerTextMarquee,
                     onValueChange = onMiniPlayerTextMarqueeChange
                 )
-                Divider( thickness = 0.5.dp )
+                HorizontalDivider( thickness = 0.5.dp )
                 SettingsSideHeading( text = uiState.language.nowPlaying )
                 ControlsLayout(
                     controlsLayoutIsDefault = uiState.controlsLayoutIsDefault,
