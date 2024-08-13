@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.odesa.musicMatters.R
 import com.odesa.musicMatters.ui.settings.components.SettingsTileDefaults
@@ -36,7 +37,11 @@ fun Help(
                 Text( text = stringResource( id = R.string.reddit ) )
             },
             supportingContent = {
-                Text( text = stringResource( id = R.string.reddit_community ) )
+                Text(
+                    text = stringResource( id = R.string.reddit_community ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         )
     }
@@ -56,7 +61,11 @@ fun Help(
                 Text( text = stringResource( id = R.string.discord ) )
             },
             supportingContent = {
-                Text( text = stringResource( id = R.string.discord_server_url ) )
+                Text(
+                    text = stringResource( id = R.string.discord_server_url ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         )
     }
@@ -76,7 +85,11 @@ fun Help(
                 Text( text = stringResource( id = R.string.telegram ) )
             },
             supportingContent = {
-                Text( text = stringResource( id = R.string.telegram_channel_link ) )
+                Text(
+                    text = stringResource( id = R.string.telegram_channel_link ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         )
     }

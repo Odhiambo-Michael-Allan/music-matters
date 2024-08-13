@@ -164,13 +164,6 @@ fun GenericOptionsBottomSheet(
         }
     ) {
         leadingBottomSheetMenuItem( onDismissRequest )
-//        BottomSheetMenuItem(
-//            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
-//            label = language.shufflePlay
-//        ) {
-//            onDismissRequest()
-//            onShufflePlay()
-//        }
         BottomSheetMenuItem(
             leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
             label = language.playNext
