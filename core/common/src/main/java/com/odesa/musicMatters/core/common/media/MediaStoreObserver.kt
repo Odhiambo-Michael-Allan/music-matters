@@ -12,7 +12,7 @@ class MediaStoreObserver(
         // post a new one. This is intended to prevent closely spaced
         // events from generating multiple refresh calls.
         handler.removeCallbacks( this )
-        handler.postDelayed( onContentChange, 500 )
+        handler.post( this )
     }
 
     override fun run() {
