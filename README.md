@@ -11,7 +11,7 @@ The development of Music Matters was driven by a desire to explore and understan
 
 ## **Contributing**
 
-If you'd like to contribute to Project Title, here are some guidelines:
+If you'd like to contribute to Project, here are some guidelines:
 
 1. Fork the repository.
 2. Create a new branch for your changes.
