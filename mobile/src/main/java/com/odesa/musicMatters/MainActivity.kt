@@ -24,6 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.odesa.musicMatters.core.common.media.MEDIA_STORE_UPDATED_INTENT
 import com.odesa.musicMatters.core.common.media.MediaPermissionsManager
+import com.odesa.musicMatters.core.common.media.MediaStoreUpdateBroadcastReceiver
 import com.odesa.musicMatters.core.data.utils.VersionUtils
 import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
 import com.odesa.musicMatters.core.model.Song
@@ -54,14 +55,11 @@ class MainActivity : ComponentActivity() {
         if ( isGranted ) deleteCurrentSong()
     }
 
-    private val mediaStoreUpdateBroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive( p0: Context?, p1: Intent? ) {
-            lifecycleScope.launch {
-                Timber.tag( TAG ).d( "RECEIVED MEDIA STORE UPDATE INTENT" )
-                mobileDiModule.musicServiceConnection.onMediaStoreChange()
-            }
+    private val mediaStoreUpdateBroadcastReceiver = MediaStoreUpdateBroadcastReceiver {
+        lifecycleScope.launch {
+            Timber.tag( TAG ).d( "RECEIVED MEDIA STORE UPDATE INTENT" )
+            mobileDiModule.musicServiceConnection.onMediaStoreChange()
         }
-
     }
 
     private fun deleteCurrentSong() {
@@ -83,8 +81,12 @@ class MainActivity : ComponentActivity() {
         Timber.plant( Timber.DebugTree() )
         mobileDiModule = ( application as MusicMatters ).diModule
 
-        ContextCompat.registerReceiver( applicationContext, mediaStoreUpdateBroadcastReceiver, IntentFilter( MEDIA_STORE_UPDATED_INTENT ),
-            ContextCompat.RECEIVER_NOT_EXPORTED )
+        ContextCompat.registerReceiver(
+            this,
+            mediaStoreUpdateBroadcastReceiver,
+            IntentFilter( MEDIA_STORE_UPDATED_INTENT ),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
 
         MediaPermissionsManager.checkForPermissions( applicationContext )
         setContent {

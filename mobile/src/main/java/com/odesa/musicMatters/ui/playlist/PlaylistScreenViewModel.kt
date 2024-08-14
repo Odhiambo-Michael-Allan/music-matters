@@ -9,6 +9,7 @@ import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.data.repository.PlaylistRepository
 import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
+import com.odesa.musicMatters.core.data.utils.sortSongs
 import com.odesa.musicMatters.core.datatesting.playlists.testPlaylistInfos
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
@@ -26,8 +27,8 @@ class PlaylistScreenViewModel(
     private val playlistId: String,
     private val musicServiceConnection: MusicServiceConnection,
     private val playlistRepository: PlaylistRepository,
+    private val settingsRepository: SettingsRepository,
     songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
-    settingsRepository: SettingsRepository,
 ) : BaseViewModel(
     musicServiceConnection = musicServiceConnection,
     settingsRepository = settingsRepository,
@@ -109,6 +110,10 @@ class PlaylistScreenViewModel(
                 playlistInfo = playlist,
                 songsInPlaylist = musicServiceConnection.cachedSongs.value
                     .filter { playlist.songIds.contains( it.id ) }
+                    .sortSongs(
+                        sortSongsBy = settingsRepository.sortSongsBy.value,
+                        reverse = settingsRepository.sortSongsInReverse.value
+                    )
             )
         }
     }

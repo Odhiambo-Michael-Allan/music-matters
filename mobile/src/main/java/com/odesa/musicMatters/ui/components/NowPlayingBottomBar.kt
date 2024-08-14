@@ -35,6 +35,7 @@ import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material.icons.rounded.FastForward
 import androidx.compose.material.icons.rounded.FastRewind
+import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.SkipPrevious
@@ -229,7 +230,7 @@ fun NowPlayingBottomBarContent(
                                 label = "now-playing-bottom-bar-play-arrow"
                             ) {
                                 Icon(
-                                    imageVector = if ( it ) Icons.Filled.Pause else Icons.Rounded.PlayArrow,
+                                    imageVector = if ( it ) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
                                     contentDescription = null
                                 )
                             }
