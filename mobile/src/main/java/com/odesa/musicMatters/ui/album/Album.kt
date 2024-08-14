@@ -207,7 +207,7 @@ private fun AlbumArtwork(
             album.artists.forEach { artistName ->
                 BottomSheetMenuItem(
                     leadingIcon = Icons.Default.Person,
-                    label = artistName
+                    label = "${language.viewArtist}: $artistName"
                 ) {
                     onDismissRequest()
                     onViewArtist( artistName )

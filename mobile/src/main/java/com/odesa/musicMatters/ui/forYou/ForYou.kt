@@ -23,6 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Shuffle
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Shuffle
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -470,7 +471,7 @@ fun ForYouSongCard(
                         ) {
                             Icon(
                                 modifier = Modifier.size( 20.dp ),
-                                imageVector = Icons.Filled.PlayArrow,
+                                imageVector = Icons.Rounded.PlayArrow,
                                 contentDescription = null
                             )
                         }
