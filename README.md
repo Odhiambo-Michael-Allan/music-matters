@@ -33,10 +33,10 @@ For more information, check out the [Guide to Android app modularization](https:
 
 ## **Find this repository useful?**
 
-Support by joining the [stargazers](https://github.com/Odhiambo-Michael-Allan/music-matters/stargazers) for this repository
+Support by joining the [stargazers](https://github.com/Odhiambo-Michael-Allan/music-matters/stargazers) for this repository.
 Also, [follow me](https://github.com/Odhiambo-Michael-Allan) on Github for my next creations!
 
 ## **License**
 
-Project Title is released under the Apache 2.0 License. See the **[LICENSE]([https://www.blackbox.ai/share/LICENSE](https://www.apache.org/licenses/LICENSE-2.0))** file for details.
+Project Title is released under the Apache 2.0 License. See the [LICENSE](https://www.apache.org/licenses/LICENSE-2.0) file for details.
 
