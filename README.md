@@ -14,6 +14,22 @@ Music Matters is a modern and intuitive music player app built using Jetpack Com
 
 The development of Music Matters was driven by a desire to explore and understand the intricacies of media handling on Android. This project served as a learning platform to deepen my knowledge of Jetpack Compose, enabling me to create a fluid and modern user interface. Ultimately, the goal is to leverage this experience to build a robust podcasting app, and Music Matters is a foundational step toward that vision. 
 
+## Tech stack & Open-source libraries
+- Minimum SDK level 24.
+- [Kotlin](https://kotlinlang.org/) based, utilizing [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) for asynchronous operations.
+- Jetpack Libraries:
+  - Jetpack Compose: Android’s modern toolkit for declarative UI development.
+  - Lifecycle: Observes Android lifecycles and manages UI states upon lifecycle changes.
+  - ViewModel: Manages UI-related data and is lifecycle-aware, ensuring data survival through configuration changes.
+  - Navigation: Facilitates screen navigation, complemented by [Hilt Navigation Compose](https://developer.android.com/jetpack/compose/libraries#hilt) for dependency injection.
+  - Room: Constructs a database with an SQLite abstraction layer for seamless database access.
+- Architecture:
+  - MVVM Architecture (View - ViewModel - Model): Facilitates separation of concerns and promotes maintainability.
+  - Repository Pattern: Acts as a mediator between different data sources and the application's business logic.
+
+- [ksp](https://github.com/google/ksp): Kotlin Symbol Processing API for code generation and analysis.
+
+
 ## **Contributing**
 
 If you'd like to contribute to Project, here are some guidelines:
