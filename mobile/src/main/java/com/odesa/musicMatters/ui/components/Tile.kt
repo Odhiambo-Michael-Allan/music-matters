@@ -16,8 +16,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
+import androidx.compose.material.icons.automirrored.rounded.PlaylistAdd
+import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -166,21 +169,21 @@ fun GenericOptionsBottomSheet(
     ) {
         leadingBottomSheetMenuItem( onDismissRequest )
         BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
+            leadingIcon = Icons.AutoMirrored.Rounded.PlaylistPlay,
             label = language.playNext
         ) {
             onDismissRequest()
             onPlayNext()
         }
         BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
+            leadingIcon = Icons.AutoMirrored.Rounded.PlaylistPlay,
             label = language.addToQueue
         ) {
             onDismissRequest()
             onAddToQueue()
         }
         BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Filled.PlaylistAdd,
+            leadingIcon = Icons.AutoMirrored.Rounded.PlaylistAdd,
             label = language.addToPlaylist
         ) {
             showAddToPlaylistDialog = true
@@ -260,7 +263,7 @@ fun Tile(
                             onClick = { showOptionsMenu = !showOptionsMenu }
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.MoreVert,
+                                imageVector = Icons.Rounded.MoreVert,
                                 contentDescription = null
                             )
                             options( showOptionsMenu ) {

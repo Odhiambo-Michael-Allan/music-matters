@@ -17,10 +17,13 @@ import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataReposi
 import com.odesa.musicMatters.core.data.search.SearchHistoryRepository
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.ui.navigation.MusicMattersNavHost
+import com.odesa.musicMatters.ui.nowPlaying.NowPlayingViewModel
 
+@OptIn(UnstableApi::class)
 @Composable
 fun MusicallyApp(
     mainActivity: MainActivity,
+    nowPlayingViewModel: NowPlayingViewModel,
     navController: NavHostController = rememberNavController(),
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
@@ -30,6 +33,7 @@ fun MusicallyApp(
 ) {
     MusicallyAppContent(
         mainActivity = mainActivity,
+        nowPlayingViewModel = nowPlayingViewModel,
         navController = navController,
         settingsRepository = settingsRepository,
         playlistRepository = playlistRepository,
@@ -43,6 +47,7 @@ fun MusicallyApp(
 @Composable
 fun MusicallyAppContent(
     mainActivity: MainActivity,
+    nowPlayingViewModel: NowPlayingViewModel,
     navController: NavHostController,
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
@@ -59,6 +64,7 @@ fun MusicallyAppContent(
     ) {
         MusicMattersNavHost(
             mainActivity = mainActivity,
+            nowPlayingViewModel = nowPlayingViewModel,
             navController = navController,
             settingsRepository = settingsRepository,
             playlistRepository = playlistRepository,

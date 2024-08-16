@@ -21,6 +21,11 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.DragHandle
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -273,7 +278,7 @@ fun SongOptionsBottomSheetMenu(
         trailingBottomSheetMenuItems = {
             song.artists.forEach {
                 BottomSheetMenuItem(
-                    leadingIcon = Icons.Filled.Person,
+                    leadingIcon = Icons.Rounded.Person,
                     label = "${language.viewArtist}: $it"
                 ) {
                     onDismissRequest()
@@ -290,21 +295,21 @@ fun SongOptionsBottomSheetMenu(
                 }
             }
             BottomSheetMenuItem(
-                leadingIcon = Icons.Filled.Share,
+                leadingIcon = Icons.Rounded.Share,
                 label = language.shareSong
             ) {
                 onDismissRequest()
                 onShareSong( song.mediaUri )
             }
             BottomSheetMenuItem(
-                leadingIcon = Icons.Filled.Info,
+                leadingIcon = Icons.Rounded.Info,
                 label = language.details
             ) {
                 onDismissRequest()
                 onShowSongDetails()
             }
             BottomSheetMenuItem(
-                leadingIcon = Icons.Filled.Delete,
+                leadingIcon = Icons.Rounded.Delete,
                 leadingIconTint = GoogleRed,
                 label = language.delete,
             ) {
@@ -373,7 +378,7 @@ fun QueueSongCard(
             onClick = onDragHandleClick
         ) {
             Icon(
-                imageVector = Icons.Default.DragHandle,
+                imageVector = Icons.Rounded.DragHandle,
                 contentDescription = null
             )
         }

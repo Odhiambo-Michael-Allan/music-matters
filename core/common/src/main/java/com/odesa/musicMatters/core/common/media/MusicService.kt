@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.os.ConditionVariable
 import android.os.Handler
 import android.os.HandlerThread
-import android.os.Looper
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.annotation.OptIn
@@ -208,10 +207,12 @@ class MusicService : MediaLibraryService() {
         ) {
             serviceScope.launch {
                 Timber.tag( TAG ).d( "MEDIA STORE CONTENT CHANGED" )
+                val mediaStoreRefreshStartedIntent = Intent( MEDIA_STORE_REFRESH_STARTED_INTENT )
+                sendBroadcast( mediaStoreRefreshStartedIntent )
                 musicSource.load()
                 browseTree.buildTree()
-                val intent = Intent( MEDIA_STORE_UPDATED_INTENT )
-                sendBroadcast( intent )
+                val mediaStoreRefreshEndedIntent = Intent( MEDIA_STORE_REFRESH_ENDED_INTENT )
+                sendBroadcast( mediaStoreRefreshEndedIntent )
             }
         }
         contentResolver.registerContentObserver(
@@ -457,4 +458,5 @@ val EMPTY_MEDIA_ITEM = MediaItem.Builder()
             .build()
     ).build()
 
-const val MEDIA_STORE_UPDATED_INTENT = "MEDIA_STORE_UPDATED_INTENT"
+const val MEDIA_STORE_REFRESH_ENDED_INTENT = "MEDIA_STORE_REFRESH_ENDED_INTENT"
+const val MEDIA_STORE_REFRESH_STARTED_INTENT = "MEDIA_STORE_REFRESH_STARTED_INTENT"

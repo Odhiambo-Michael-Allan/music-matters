@@ -1,8 +1,10 @@
 package com.odesa.musicMatters
 
 import android.app.Application
+import androidx.media3.common.util.UnstableApi
 import com.odesa.musicMatters.di.MobileDiModule
 
+@UnstableApi
 class MusicMatters : Application() {
 
     // AppContainer instance used by the rest of the classes to obtain dependencies

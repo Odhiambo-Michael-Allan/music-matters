@@ -23,6 +23,7 @@ import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
 import com.odesa.musicMatters.ui.BaseViewModel
 import com.odesa.musicMatters.ui.components.PlaybackPosition
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -73,6 +74,7 @@ class NowPlayingViewModel(
     var updatePlaybackPosition = _updatePlaybackPosition.asStateFlow()
 
     init {
+        Timber.tag( "NOW-PLAYING-VIEW-MODEL" ).d( "CREATING NOW PLAYING VIEW MODEL" )
         viewModelScope.launch { observeNowPlaying() }
         viewModelScope.launch { observePlaybackState() }
         viewModelScope.launch { observeUpdatePlaybackPosition() }
@@ -111,7 +113,7 @@ class NowPlayingViewModel(
             _uiState.value = _uiState.value.copy(
                 currentlyPlayingSong = song,
                 currentlyPlayingSongIsFavorite = playlistRepository.isFavorite(
-                    song?.id ?: ""
+                    song.id
                 )
             )
         }
@@ -289,7 +291,7 @@ class NowPlayingViewModel(
         playlistRepository.favoritesPlaylistInfo.collect {
             _uiState.value = _uiState.value.copy(
                 currentlyPlayingSongIsFavorite = playlistRepository.isFavorite(
-                    getCurrentlyPlayingSong()?.id ?: ""  )
+                    getCurrentlyPlayingSong().id )
             )
         }
     }
