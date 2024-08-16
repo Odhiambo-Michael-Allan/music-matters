@@ -3,6 +3,8 @@ package com.odesa.musicMatters.core.common.media
 import android.database.ContentObserver
 import android.os.Handler
 
+// Credits: https://github.com/RetroMusicPlayer/RetroMusicPlayer/blob/dev/app/src/main/java/code/name/monkey/retromusic/service/MediaStoreObserver.kt
+
 class MediaStoreObserver(
     private val handler: Handler,
     private val onContentChange: () -> Unit,
@@ -12,7 +14,7 @@ class MediaStoreObserver(
         // post a new one. This is intended to prevent closely spaced
         // events from generating multiple refresh calls.
         handler.removeCallbacks( this )
-        handler.post( this )
+        handler.postDelayed( this, 500 )
     }
 
     override fun run() {

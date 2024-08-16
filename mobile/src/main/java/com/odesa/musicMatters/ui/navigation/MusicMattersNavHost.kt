@@ -107,6 +107,7 @@ import timber.log.Timber
 @Composable
 fun MusicMattersNavHost(
     mainActivity: MainActivity,
+    nowPlayingViewModel: NowPlayingViewModel,
     navController: NavHostController,
     settingsRepository: SettingsRepository,
     playlistRepository: PlaylistRepository,
@@ -117,14 +118,6 @@ fun MusicMattersNavHost(
     labelVisibility: HomePageBottomBarLabelVisibility,
 ) {
 
-    val nowPlayingViewModel: NowPlayingViewModel = viewModel(
-        factory = NowPlayingViewModelFactory(
-            settingsRepository = settingsRepository,
-            playlistRepository = playlistRepository,
-            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-            musicServiceConnection = musicServiceConnection
-        )
-    )
     var currentTabName by rememberSaveable { mutableStateOf( ForYou.route.name ) }
     var currentlySelectedMoreTab by rememberSaveable { mutableStateOf( "" ) }
     val nowPlayingBottomSheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true )

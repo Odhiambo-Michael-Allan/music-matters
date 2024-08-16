@@ -2,9 +2,6 @@ package com.odesa.musicMatters
 
 import android.Manifest
 import android.app.RecoverableSecurityException
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.Toast
@@ -20,9 +17,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.UnstableApi
-import com.odesa.musicMatters.core.common.media.MEDIA_STORE_UPDATED_INTENT
+import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
+import com.odesa.musicMatters.core.common.media.MEDIA_STORE_REFRESH_ENDED_INTENT
+import com.odesa.musicMatters.core.common.media.MEDIA_STORE_REFRESH_STARTED_INTENT
 import com.odesa.musicMatters.core.common.media.MediaPermissionsManager
 import com.odesa.musicMatters.core.common.media.MediaStoreUpdateBroadcastReceiver
 import com.odesa.musicMatters.core.data.utils.VersionUtils
@@ -31,7 +34,8 @@ import com.odesa.musicMatters.core.model.Song
 import com.odesa.musicMatters.di.MobileDiModule
 import com.odesa.musicMatters.ui.MusicallyApp
 import com.odesa.musicMatters.ui.components.PermissionsScreen
-import kotlinx.coroutines.Dispatchers
+import com.odesa.musicMatters.ui.nowPlaying.NowPlayingViewModel
+import com.odesa.musicMatters.ui.nowPlaying.NowPlayingViewModelFactory
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -39,6 +43,9 @@ import timber.log.Timber
 class MainActivity : ComponentActivity() {
 
     private lateinit var mobileDiModule: MobileDiModule
+
+    private lateinit var mainActivityViewModel : MainActivityViewModel
+    private lateinit var nowPlayingViewModel: NowPlayingViewModel
 
     private var currentSongBeingDeleted: Song? = null // A bit ugly..
 
@@ -55,11 +62,14 @@ class MainActivity : ComponentActivity() {
         if ( isGranted ) deleteCurrentSong()
     }
 
-    private val mediaStoreUpdateBroadcastReceiver = MediaStoreUpdateBroadcastReceiver {
-        lifecycleScope.launch {
-            Timber.tag( TAG ).d( "RECEIVED MEDIA STORE UPDATE INTENT" )
-            mobileDiModule.musicServiceConnection.onMediaStoreChange()
-        }
+    private val mediaStoreRefreshStartedBroadcastReceiver = MediaStoreUpdateBroadcastReceiver {
+        Timber.tag( TAG ).d( "RECEIVED MEDIA STORE REFRESH STARTED BROADCAST" )
+        mainActivityViewModel.onMediaStoreRefreshStarted()
+    }
+
+    private val mediaStoreRefreshEndedBroadcastReceiver = MediaStoreUpdateBroadcastReceiver {
+        Timber.tag( TAG ).d( "RECEIVED MEDIA STORE REFRESH ENDED BROADCAST" )
+        mainActivityViewModel.onMediaStoreRefreshEnded()
     }
 
     private fun deleteCurrentSong() {
@@ -81,10 +91,38 @@ class MainActivity : ComponentActivity() {
         Timber.plant( Timber.DebugTree() )
         mobileDiModule = ( application as MusicMatters ).diModule
 
+        val mainActivityViewModelFactory = MainActivityViewModelFactory(
+            mobileDiModule.musicServiceConnection
+        )
+
+        mainActivityViewModel = ViewModelProvider(
+            this,
+            factory = mainActivityViewModelFactory
+        ).get( MainActivityViewModel::class.java )
+
+        val nowPlayingViewModelFactory = NowPlayingViewModelFactory(
+            settingsRepository = mobileDiModule.settingsRepository,
+            playlistRepository = mobileDiModule.playlistRepository,
+            songsAdditionalMetadataRepository = mobileDiModule.songsAdditionalMetadataRepository,
+            musicServiceConnection = mobileDiModule.musicServiceConnection
+        )
+
+        nowPlayingViewModel  = ViewModelProvider(
+            this,
+            factory = nowPlayingViewModelFactory
+        ).get( NowPlayingViewModel::class.java )
+
         ContextCompat.registerReceiver(
             this,
-            mediaStoreUpdateBroadcastReceiver,
-            IntentFilter( MEDIA_STORE_UPDATED_INTENT ),
+            mediaStoreRefreshStartedBroadcastReceiver,
+            IntentFilter( MEDIA_STORE_REFRESH_STARTED_INTENT ),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+
+        ContextCompat.registerReceiver(
+            this,
+            mediaStoreRefreshEndedBroadcastReceiver,
+            IntentFilter( MEDIA_STORE_REFRESH_ENDED_INTENT ),
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
 
@@ -150,6 +188,7 @@ class MainActivity : ComponentActivity() {
                         else -> {
                             MusicallyApp(
                                 mainActivity = this,
+                                nowPlayingViewModel = nowPlayingViewModel,
                                 settingsRepository = mobileDiModule.settingsRepository,
                                 musicServiceConnection = mobileDiModule.musicServiceConnection,
                                 playlistRepository = mobileDiModule.playlistRepository,
@@ -187,9 +226,35 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver( mediaStoreUpdateBroadcastReceiver )
+        unregisterReceiver( mediaStoreRefreshStartedBroadcastReceiver )
+        unregisterReceiver( mediaStoreRefreshEndedBroadcastReceiver )
     }
 
+}
+
+private class MainActivityViewModel(
+    private val musicServiceConnection: MusicServiceConnection
+) : ViewModel() {
+    fun onMediaStoreRefreshStarted() {
+        viewModelScope.launch {
+            musicServiceConnection.onMediaStoreRefreshStarted()
+        }
+    }
+
+    fun onMediaStoreRefreshEnded() {
+        viewModelScope.launch {
+            musicServiceConnection.onMediaStoreChange()
+        }
+    }
+}
+
+@Suppress( "UNCHECKED_CAST" )
+private class MainActivityViewModelFactory(
+    private val musicServiceConnection: MusicServiceConnection
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create( modelClass: Class<T> ): T {
+        return MainActivityViewModel( musicServiceConnection = musicServiceConnection ) as T
+    }
 }
 
 private const val TAG = "--MAIN ACTIVITY TAG--"

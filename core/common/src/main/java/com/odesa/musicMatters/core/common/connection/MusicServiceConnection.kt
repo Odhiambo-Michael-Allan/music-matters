@@ -45,5 +45,6 @@ interface MusicServiceConnection {
     fun clearQueue()
     fun playNext( mediaItem: MediaItem )
     fun addToQueue( mediaItem: MediaItem )
+    fun onMediaStoreRefreshStarted()
     suspend fun onMediaStoreChange()
 }

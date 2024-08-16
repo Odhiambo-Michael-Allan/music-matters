@@ -295,6 +295,10 @@ class MusicServiceConnectionImpl(
         }
     }
 
+    override fun onMediaStoreRefreshStarted() {
+        _isInitializing.value = true
+    }
+
     override fun playNext( mediaItem: MediaItem ) {
 
         if ( nowPlayingMediaItem.value.mediaId == mediaItem.mediaId ) return

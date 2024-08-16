@@ -134,6 +134,10 @@ class FakeMusicServiceConnection : MusicServiceConnection {
         TODO("Not yet implemented")
     }
 
+    override fun onMediaStoreRefreshStarted() {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun onMediaStoreChange() {
         TODO("Not yet implemented")
     }

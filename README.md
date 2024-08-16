@@ -1,4 +1,4 @@
-# **Music-Matters**
+<h1 align="center">Music Matters</h1>
 
 Music Matters is a modern and intuitive music player app built using Jetpack Compose. It offers a seamless and engaging listening experience with adaptive navigation and a clean, user-friendly interface. Whether you're shuffling through your favorite playlists or exploring new tracks, Music Matters is designed to make your music experience enjoyable and efficient.
 
