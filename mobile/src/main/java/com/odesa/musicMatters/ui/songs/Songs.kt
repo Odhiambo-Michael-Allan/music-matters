@@ -145,8 +145,8 @@ fun SongsScreenContentPreview() {
         themeMode = SettingsDefaults.themeMode,
         primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME,
         fontName = SettingsDefaults.font.name,
-        fontScale = 1.75f,
-        useMaterialYou = SettingsDefaults.USE_MATERIAL_YOU
+        fontScale = 1.0f,
+        useMaterialYou = true
     ) {
         SongsScreenContent(
             uiState = testSongsScreenUiState,

@@ -15,7 +15,7 @@ import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.datatesting.store.FakePreferencesStoreImpl
-import com.odesa.musicMatters.core.designsystem.theme.MusicallyFont
+import com.odesa.musicMatters.core.designsystem.theme.MusicMattersFont
 import com.odesa.musicMatters.core.designsystem.theme.MusicallyTypography
 import com.odesa.musicMatters.core.designsystem.theme.PrimaryThemeColors
 import com.odesa.musicMatters.core.designsystem.theme.SupportedFonts
@@ -70,7 +70,7 @@ class SettingsRepositoryImplTest {
         MusicallyTypography.all.values.forEach { changeFontTo( it ) }
     }
 
-    private fun changeFontTo( font: MusicallyFont) = runTest {
+    private fun changeFontTo( font: MusicMattersFont) = runTest {
         settingsRepository.setFont( font.name )
         TestCase.assertEquals( font.name, preferenceStore.getFontName() )
         val currentFont = settingsRepository.font.value

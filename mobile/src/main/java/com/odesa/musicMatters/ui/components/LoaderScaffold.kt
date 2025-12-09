@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.odesa.musicMatters.core.i8n.English
@@ -38,7 +39,6 @@ fun LoaderScaffold(
     loading: String,
     content: @Composable () -> Unit,
 ) {
-    val density = LocalDensity.current
 
     Box( modifier = Modifier.fillMaxSize() ) {
         AnimatedVisibility(
@@ -69,7 +69,9 @@ fun LoaderScaffold(
                     )
                     Text(
                         text = loading,
-                        style = MaterialTheme.typography.labelMedium
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        )
                     )
                 }
             }

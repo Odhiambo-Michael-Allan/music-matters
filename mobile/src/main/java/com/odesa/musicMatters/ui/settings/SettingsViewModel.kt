@@ -7,7 +7,7 @@ import com.odesa.musicMatters.core.data.preferences.HomePageBottomBarLabelVisibi
 import com.odesa.musicMatters.core.data.preferences.NowPlayingLyricsLayout
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.data.settings.impl.scalingPresets
-import com.odesa.musicMatters.core.designsystem.theme.MusicallyFont
+import com.odesa.musicMatters.core.designsystem.theme.MusicMattersFont
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Language
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -371,7 +371,7 @@ class SettingsViewModelFactory(
 
 data class SettingsScreenUiState(
     val language: Language,
-    val font: MusicallyFont,
+    val font: MusicMattersFont,
     val fontScale: Float,
     val themeMode: ThemeMode,
     val useMaterialYou: Boolean,

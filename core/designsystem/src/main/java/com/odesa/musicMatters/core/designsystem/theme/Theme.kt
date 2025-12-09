@@ -41,10 +41,6 @@ enum class ColorSchemeMode {
 
 @Composable
 fun MusicMattersTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-//    uiState: SettingsScreenUiState,
     themeMode: ThemeMode,
     primaryColorName: String,
     fontName: String,

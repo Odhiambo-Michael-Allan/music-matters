@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -72,14 +73,17 @@ fun BottomSheetMenuHeader(
                     color = when {
                         titleIsHighlighted -> MaterialTheme.colorScheme.primary
                         else -> LocalTextStyle.current.color
-                    }
+                    },
+                    fontWeight = FontWeight.SemiBold,
                 ),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
@@ -117,7 +121,8 @@ fun BottomSheetMenuItem(
                 contentDescription = leadingIconContentDescription
             )
             Text(
-                text = label
+                text = label,
+                fontWeight = FontWeight.SemiBold,
             )
         }
     }

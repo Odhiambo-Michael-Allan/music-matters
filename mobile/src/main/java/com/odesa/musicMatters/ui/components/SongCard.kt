@@ -46,6 +46,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,6 +57,12 @@ import com.odesa.musicMatters.core.common.media.extensions.formatMilliseconds
 import com.odesa.musicMatters.core.data.utils.VersionUtils
 import com.odesa.musicMatters.core.datatesting.songs.testSongs
 import com.odesa.musicMatters.core.designsystem.theme.GoogleRed
+import com.odesa.musicMatters.core.designsystem.theme.MusicMattersFont
+import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
+import com.odesa.musicMatters.core.designsystem.theme.PrimaryThemeColors
+import com.odesa.musicMatters.core.designsystem.theme.SupportedFonts
+import com.odesa.musicMatters.core.designsystem.theme.ThemeColors
+import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.English
 import com.odesa.musicMatters.core.i8n.Language
 import com.odesa.musicMatters.core.model.PlaylistInfo
@@ -117,18 +124,24 @@ fun SongCard(
                 Column( modifier = Modifier.weight( 1f ) ) {
                     Text(
                         text = song.title,
-                        style = MaterialTheme.typography.bodyMedium.copy(
+                        style = MaterialTheme.typography.bodyLarge.copy(
                             color = when {
                                 isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
                                 else -> LocalTextStyle.current.color
-                            }
+                            },
+                            fontWeight = FontWeight.SemiBold
                         ),
-                        maxLines = 2,
+                        maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = song.artists.joinToString(),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = LocalTextStyle.current.color.copy(
+                                alpha = 0.5f
+                            )
+                        ),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -320,32 +333,6 @@ fun SongOptionsBottomSheetMenu(
     )
 }
 
-@Preview( showBackground = true )
-@Composable
-fun SongOptionsBottomSheetContentPreview() {
-    SongOptionsBottomSheetMenu(
-        language = English,
-        song = testSongs.first(),
-        isFavorite = true,
-        isCurrentlyPlaying = true,
-        fallbackResourceId = R.drawable.placeholder_light,
-        onFavorite = {},
-        onAddToQueue = {},
-        onPlayNext = { /*TODO*/ },
-        onViewArtist = {},
-        onViewAlbum = {},
-        onShareSong = {},
-        onShowSongDetails = {},
-        onAddSongsToPlaylist = { _, _ -> },
-        onCreatePlaylist = { _, _ -> },
-        onGetPlaylists = { emptyList() },
-        onGetSongsInPlaylist = { emptyList() },
-        onSearchSongsMatchingQuery = { emptyList() },
-        onDelete = {},
-        onDismissRequest = {}
-    )
-}
-
 @Composable
 fun QueueSongCard(
     modifier: Modifier = Modifier,
@@ -408,53 +395,104 @@ fun QueueSongCard(
 
 @Preview( showBackground = true )
 @Composable
+fun SongOptionsBottomSheetContentPreview() {
+    MusicMattersTheme(
+        fontName = SupportedFonts.ProductSans.name,
+        useMaterialYou = true,
+        fontScale = 1.0f,
+        themeMode = ThemeMode.LIGHT,
+        primaryColorName = PrimaryThemeColors.Blue.name
+    ) {
+        SongOptionsBottomSheetMenu(
+            language = English,
+            song = testSongs.first(),
+            isFavorite = true,
+            isCurrentlyPlaying = true,
+            fallbackResourceId = R.drawable.placeholder_light,
+            onFavorite = {},
+            onAddToQueue = {},
+            onPlayNext = { /*TODO*/ },
+            onViewArtist = {},
+            onViewAlbum = {},
+            onShareSong = {},
+            onShowSongDetails = {},
+            onAddSongsToPlaylist = { _, _ -> },
+            onCreatePlaylist = { _, _ -> },
+            onGetPlaylists = { emptyList() },
+            onGetSongsInPlaylist = { emptyList() },
+            onSearchSongsMatchingQuery = { emptyList() },
+            onDelete = {},
+            onDismissRequest = {}
+        )
+    }
+
+}
+
+@Preview( showBackground = true )
+@Composable
 fun SongCardPreview() {
-    SongCard(
-        language = English,
-        song = testSongs.first(),
-        isCurrentlyPlaying = true,
-        isFavorite = true,
-        playlistInfos = emptyList(),
-        fallbackResourceId = R.drawable.placeholder_light,
-        onClick = {},
-        onFavorite = {},
-        onPlayNext = {},
-        onAddToQueue = {},
-        onViewArtist = {},
-        onViewAlbum = {},
-        onShareSong = {},
-        onGetSongsInPlaylist = { emptyList() },
-        onAddSongsToPlaylist = { _, _ -> },
-        onSearchSongsMatchingQuery = { emptyList() },
-        onCreatePlaylist = { _, _ -> },
-        onGetSongAdditionalMetadata = { null },
-        onDeleteSong = {}
-    )
+    MusicMattersTheme(
+        fontName = SupportedFonts.ProductSans.name,
+        useMaterialYou = true,
+        fontScale = 1.0f,
+        themeMode = ThemeMode.LIGHT,
+        primaryColorName = PrimaryThemeColors.Blue.name
+    ) {
+        SongCard(
+            language = English,
+            song = testSongs.first(),
+            isCurrentlyPlaying = true,
+            isFavorite = true,
+            playlistInfos = emptyList(),
+            fallbackResourceId = R.drawable.placeholder_light,
+            onClick = {},
+            onFavorite = {},
+            onPlayNext = {},
+            onAddToQueue = {},
+            onViewArtist = {},
+            onViewAlbum = {},
+            onShareSong = {},
+            onGetSongsInPlaylist = { emptyList() },
+            onAddSongsToPlaylist = { _, _ -> },
+            onSearchSongsMatchingQuery = { emptyList() },
+            onCreatePlaylist = { _, _ -> },
+            onGetSongAdditionalMetadata = { null },
+            onDeleteSong = {}
+        )
+    }
 }
 
 @Preview( showBackground = true )
 @Composable
 fun QueueSongCardPreview() {
-    QueueSongCard(
-        language = English,
-        song = testSongs.first(),
-        isCurrentlyPlaying = true,
-        isFavorite = true,
-        playlistInfos = emptyList(),
-        fallbackResourceId = R.drawable.placeholder_light,
-        onClick = {},
-        onFavorite = {},
-        onPlayNext = {},
-        onAddToQueue = {},
-        onViewArtist = {},
-        onViewAlbum = {},
-        onShareSong = {},
-        onGetSongsInPlaylist = { emptyList() },
-        onDragHandleClick = {},
-        onAddSongsToPlaylist = { _, _ -> },
-        onSearchSongsMatchingQuery = { emptyList() },
-        onCreatePlaylist = { _, _ -> },
-        onDeleteSong = {},
-        onGetSongAdditionalMetadata = { null }
-    )
+    MusicMattersTheme(
+        fontName = SupportedFonts.ProductSans.name,
+        useMaterialYou = true,
+        fontScale = 1.0f,
+        themeMode = ThemeMode.LIGHT,
+        primaryColorName = PrimaryThemeColors.Blue.name
+    ) {
+        QueueSongCard(
+            language = English,
+            song = testSongs.first(),
+            isCurrentlyPlaying = true,
+            isFavorite = true,
+            playlistInfos = emptyList(),
+            fallbackResourceId = R.drawable.placeholder_light,
+            onClick = {},
+            onFavorite = {},
+            onPlayNext = {},
+            onAddToQueue = {},
+            onViewArtist = {},
+            onViewAlbum = {},
+            onShareSong = {},
+            onGetSongsInPlaylist = { emptyList() },
+            onDragHandleClick = {},
+            onAddSongsToPlaylist = { _, _ -> },
+            onSearchSongsMatchingQuery = { emptyList() },
+            onCreatePlaylist = { _, _ -> },
+            onDeleteSong = {},
+            onGetSongAdditionalMetadata = { null }
+        )
+    }
 }
