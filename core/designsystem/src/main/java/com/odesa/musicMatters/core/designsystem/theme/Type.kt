@@ -7,12 +7,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
 import com.odesa.musicMatters.core.designsystem.R
 
-class MusicallyFont(
+class MusicMattersFont(
     val name: String,
     val fontFamily: FontFamily
 ) {
     companion object {
-        fun fromValue( fontName: String, fontFamily: FontFamily ) = MusicallyFont(
+        fun fromValue( fontName: String, fontFamily: FontFamily ) = MusicMattersFont(
             name = fontName,
             fontFamily = fontFamily
         )
@@ -20,7 +20,7 @@ class MusicallyFont(
 }
 
 object SupportedFonts {
-    val Inter = MusicallyFont.fromValue(
+    val Inter = MusicMattersFont.fromValue(
         fontName = "Inter",
         fontFamily = FontFamily(
             Font( R.font.inter_regular, FontWeight.Normal ),
@@ -28,7 +28,7 @@ object SupportedFonts {
         )
     )
 
-    val Poppins = MusicallyFont.fromValue(
+    val Poppins = MusicMattersFont.fromValue(
         fontName = "Poppins",
         fontFamily = FontFamily(
             Font( R.font.roboto_regular, FontWeight.Normal ),
@@ -36,7 +36,7 @@ object SupportedFonts {
         )
     )
 
-    val DMSans = MusicallyFont.fromValue(
+    val DMSans = MusicMattersFont.fromValue(
         fontName = "DM Sans",
         fontFamily = FontFamily(
             Font( R.font.dmsans_regular, FontWeight.Normal ),
@@ -44,7 +44,7 @@ object SupportedFonts {
         )
     )
 
-    val Roboto = MusicallyFont.fromValue(
+    val Roboto = MusicMattersFont.fromValue(
         fontName = "Roboto",
         fontFamily = FontFamily(
             Font( R.font.roboto_regular, FontWeight.Normal ),
@@ -52,7 +52,7 @@ object SupportedFonts {
         )
     )
 
-    val ProductSans = MusicallyFont.fromValue(
+    val ProductSans = MusicMattersFont.fromValue(
         fontName = "Product Sans",
         fontFamily = FontFamily(
             Font( R.font.productsans_regular, FontWeight.Normal ),
@@ -74,7 +74,7 @@ object MusicallyTypography {
 
     fun resolveFont( name: String? ) = all[ name ] ?: defaultFont
 
-    fun toTypography(font: MusicallyFont, textDirection: TextDirection ): Typography {
+    fun toTypography(font: MusicMattersFont, textDirection: TextDirection ): Typography {
         val fontFamily = font.fontFamily
 
         return Typography().run {

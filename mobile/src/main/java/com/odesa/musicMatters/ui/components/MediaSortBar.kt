@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -74,7 +75,9 @@ fun <T : Enum<T>> MediaSortBar(
                     onClick = { showDropdownMenu = !showDropdownMenu }
                 ) {
                     Text(
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
                         text = sortTypes[ sortType ]!!,
                     )
                 }
@@ -140,7 +143,7 @@ fun MediaSortBarPreview() {
         primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME,
         fontName = SettingsDefaults.font.name,
         fontScale = SettingsDefaults.FONT_SCALE,
-        useMaterialYou = SettingsDefaults.USE_MATERIAL_YOU
+        useMaterialYou = true
     ) {
         MediaSortBar(
             sortReverse = false,
@@ -148,7 +151,7 @@ fun MediaSortBarPreview() {
             sortType = SortSongsBy.TITLE,
             sortTypes = SortSongsBy.entries.associateBy( { it }, { it.sortSongsByLabel( English ) } ),
             onSortTypeChange = {},
-            label = { Text(text = English.xSongs( "42" ) ) }
+            label = { Text( text = English.xSongs( "42" ) ) }
         )
     }
 }

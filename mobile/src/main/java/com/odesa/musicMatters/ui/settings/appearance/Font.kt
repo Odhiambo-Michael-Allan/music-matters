@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.TextFormat
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.odesa.musicMatters.core.designsystem.theme.MusicallyFont
+import com.odesa.musicMatters.core.designsystem.theme.MusicMattersFont
 import com.odesa.musicMatters.core.designsystem.theme.MusicallyTypography
 import com.odesa.musicMatters.core.designsystem.theme.SupportedFonts
 import com.odesa.musicMatters.core.i8n.English
@@ -13,9 +13,9 @@ import com.odesa.musicMatters.ui.settings.components.SettingsOptionTile
 
 @Composable
 fun Font(
-    font: MusicallyFont,
+    font: MusicMattersFont,
     language: Language,
-    onFontChange: ( MusicallyFont ) -> Unit
+    onFontChange: (MusicMattersFont ) -> Unit
 ) {
     SettingsOptionTile(
         currentValue = font,

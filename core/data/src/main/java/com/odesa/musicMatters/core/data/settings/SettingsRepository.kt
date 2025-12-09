@@ -9,14 +9,14 @@ import com.odesa.musicMatters.core.data.preferences.SortGenresBy
 import com.odesa.musicMatters.core.data.preferences.SortPathsBy
 import com.odesa.musicMatters.core.data.preferences.SortPlaylistsBy
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
-import com.odesa.musicMatters.core.designsystem.theme.MusicallyFont
+import com.odesa.musicMatters.core.designsystem.theme.MusicMattersFont
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Language
 import kotlinx.coroutines.flow.StateFlow
 
 interface SettingsRepository {
     val language: StateFlow<Language>
-    val font: StateFlow<MusicallyFont>
+    val font: StateFlow<MusicMattersFont>
     val fontScale: StateFlow<Float>
 
     val themeMode: StateFlow<ThemeMode>

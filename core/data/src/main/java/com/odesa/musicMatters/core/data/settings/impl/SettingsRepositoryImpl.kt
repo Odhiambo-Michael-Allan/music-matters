@@ -11,7 +11,7 @@ import com.odesa.musicMatters.core.data.preferences.SortPathsBy
 import com.odesa.musicMatters.core.data.preferences.SortPlaylistsBy
 import com.odesa.musicMatters.core.data.preferences.SortSongsBy
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
-import com.odesa.musicMatters.core.designsystem.theme.MusicallyFont
+import com.odesa.musicMatters.core.designsystem.theme.MusicMattersFont
 import com.odesa.musicMatters.core.designsystem.theme.SupportedFonts
 import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
 import com.odesa.musicMatters.core.i8n.Belarusian
@@ -174,7 +174,7 @@ class SettingsRepositoryImpl( private val preferenceStore: PreferenceStore ) : S
         }
     }
 
-    private fun getFont( fontName: String ): MusicallyFont {
+    private fun getFont( fontName: String ): MusicMattersFont {
         return when( fontName ) {
             SupportedFonts.DMSans.name -> SupportedFonts.DMSans
             SupportedFonts.Inter.name -> SupportedFonts.Inter

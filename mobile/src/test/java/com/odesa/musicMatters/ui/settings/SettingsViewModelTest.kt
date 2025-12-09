@@ -7,7 +7,7 @@ import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
 import com.odesa.musicMatters.core.data.settings.SettingsRepository
 import com.odesa.musicMatters.core.data.settings.impl.scalingPresets
 import com.odesa.musicMatters.core.datatesting.repository.FakeSettingsRepository
-import com.odesa.musicMatters.core.designsystem.theme.MusicallyFont
+import com.odesa.musicMatters.core.designsystem.theme.MusicMattersFont
 import com.odesa.musicMatters.core.designsystem.theme.MusicallyTypography
 import com.odesa.musicMatters.core.designsystem.theme.PrimaryThemeColors
 import com.odesa.musicMatters.core.designsystem.theme.SupportedFonts
@@ -66,7 +66,7 @@ class SettingsViewModelTest {
     }
 
 
-    private fun changeFontTo( font: MusicallyFont ) = runTest {
+    private fun changeFontTo( font: MusicMattersFont ) = runTest {
         settingsRepository.setFont( font.name )
         val currentFont = settingsViewModel.uiState.value.font
         assertEquals( font.name, currentFont.name )
