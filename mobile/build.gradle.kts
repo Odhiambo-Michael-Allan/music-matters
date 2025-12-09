@@ -59,14 +59,14 @@ dependencies {
     implementation( platform( libs.androidx.compose.bom ) )
     implementation( libs.androidx.compose.ui )
     implementation( libs.androidx.compose.animation )
-    implementation( libs.androidx.ui.graphics )
+    implementation(libs.androidx.compose.ui.graphics)
     implementation( libs.androidx.lifecycle.runtime.compose )
 
 
-    implementation( libs.androidx.ui.tooling.preview )
+    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation( libs.androidx.material3 )
     implementation( libs.compose.material.icons.extended )
-    implementation( libs.compose.navigation )
+    implementation(libs.androidx.navigation.compose)
     implementation( libs.coil )
     implementation( libs.androidx.media )
     implementation( libs.timber )
@@ -101,12 +101,12 @@ dependencies {
     androidTestImplementation( libs.androidx.junit )
     androidTestImplementation( libs.androidx.espresso.core )
     androidTestImplementation( platform( libs.androidx.compose.bom ) )
-    androidTestImplementation( libs.androidx.ui.test.junit4 )
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation( libs.androidx.navigation.testing )
 
 
-    debugImplementation( libs.androidx.ui.tooling )
-    debugImplementation( libs.androidx.ui.test.manifest )
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     coreLibraryDesugaring( libs.core.jdk.desugaring )
 }
