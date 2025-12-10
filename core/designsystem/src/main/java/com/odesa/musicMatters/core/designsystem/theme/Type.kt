@@ -5,7 +5,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
-import com.odesa.musicMatters.core.designsystem.R
+import com.squad.musicMatters.core.designsystem.R
 
 class MusicMattersFont(
     val name: String,
@@ -23,7 +23,7 @@ object SupportedFonts {
     val Inter = MusicMattersFont.fromValue(
         fontName = "Inter",
         fontFamily = FontFamily(
-            Font( R.font.inter_regular, FontWeight.Normal ),
+            Font(R.font.inter_regular, FontWeight.Normal ),
             Font( R.font.inter_bold, FontWeight.Bold )
         )
     )

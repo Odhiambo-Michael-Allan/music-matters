@@ -20,7 +20,3 @@ val testPlaylistsForSorting = List( 20 ) {
         }
     )
 }.toMutableList()
-
-val testPlaylistEntities = List( 20 ) {
-
-}

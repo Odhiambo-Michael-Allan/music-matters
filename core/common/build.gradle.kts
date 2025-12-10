@@ -40,7 +40,7 @@ dependencies {
     implementation( libs.androidx.media )
 
     // Androidx Media3 Dependencies
-    implementation( libs.androidx.media3.common )
+    api( libs.androidx.media3.common )
     // For exposing and controlling media sessions
     implementation( libs.androidx.media3.session )
     // For media playback using ExoPlayer
