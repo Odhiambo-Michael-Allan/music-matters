@@ -13,9 +13,17 @@ android {
 }
 
 dependencies {
+    implementation( projects.core.designsystem )
+    implementation( projects.core.i8n )
+    implementation( projects.core.model )
+    implementation( projects.core.common )
+    implementation( projects.core.data )
+
     implementation( libs.androidx.core.ktx )
     implementation( libs.androidx.appcompat )
     implementation( libs.material )
+    implementation( libs.coil.kt.compose )
+    implementation( libs.androidx.media3.common )
 
     testImplementation( libs.junit )
 

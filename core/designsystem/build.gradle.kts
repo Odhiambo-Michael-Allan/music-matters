@@ -1,55 +1,32 @@
 plugins {
-    alias( libs.plugins.android.library )
-    alias( libs.plugins.jetbrains.kotlin.android )
-    alias( libs.plugins.compose.compiler )
+    alias( libs.plugins.musicmatters.android.library )
+    alias( libs.plugins.musicmatters.android.library.compose )
 }
 
 android {
-    namespace = "com.odesa.musicMatters.core.designsystem"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    namespace = "com.squad.musicMatters.core.designsystem"
 
     defaultConfig {
-        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    buildFeatures {
-        buildConfig = true
-        compose = true
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 }
 
 dependencies {
 
+    api( libs.androidx.compose.foundation )
+    api( libs.androidx.compose.material.iconsExtended )
+    api( libs.androidx.compose.material3 )
+    api( libs.androidx.compose.material3.adaptive )
+    api( libs.androidx.compose.material3.adaptive.navigation.suite )
+    api( libs.androidx.compose.runtime )
+    api( libs.androidx.compose.ui.tooling )
+
     implementation( libs.androidx.core.ktx )
     implementation( libs.androidx.appcompat )
-    implementation( libs.androidx.material3 )
-    implementation( libs.androidx.foundation.android )
-
-    implementation( libs.androidx.compose.runtime )
-    implementation( libs.androidx.activity.compose )
-    implementation( platform( libs.androidx.compose.bom ) )
-    implementation( libs.androidx.compose.ui )
-    implementation(libs.androidx.compose.ui.graphics)
+    implementation( libs.material )
+    implementation( libs.coil.kt.compose )
 
     implementation( projects.core.i8n )
 }
