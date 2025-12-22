@@ -23,6 +23,8 @@ dependencies {
     api( libs.androidx.compose.runtime )
     api( libs.androidx.compose.ui.tooling )
 
+    implementation( projects.core.model )
+
     implementation( libs.androidx.core.ktx )
     implementation( libs.androidx.appcompat )
     implementation( libs.material )

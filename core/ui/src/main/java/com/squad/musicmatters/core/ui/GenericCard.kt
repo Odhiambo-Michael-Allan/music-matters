@@ -1,5 +1,6 @@
 package com.squad.musicmatters.core.ui
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +36,7 @@ import coil.request.ImageRequest
 @Composable
 fun GenericCard(
     modifier: Modifier = Modifier,
-    imageRequest: ImageRequest?,
+    imageUri: Uri?,
     imageLabel: ( @Composable () -> Unit )? = null,
     title: @Composable () -> Unit,
     subtitle: ( @Composable () -> Unit )? = null,
@@ -53,14 +54,14 @@ fun GenericCard(
             Row (
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                imageRequest?.let {
+                imageUri?.let { imageUri ->
                     Box {
-                        AsyncImage(
+                        DynamicAsyncImage(
+                            imageUri = imageUri,
+                            contentDescription = null,
                             modifier = Modifier
-                                .size(45.dp)
-                                .clip(RoundedCornerShape(10.dp)),
-                            model = it,
-                            contentDescription = null
+                                .size( 45.dp )
+                                .clip( RoundedCornerShape( 10.dp ) )
                         )
                         imageLabel?.let {
                             Box(

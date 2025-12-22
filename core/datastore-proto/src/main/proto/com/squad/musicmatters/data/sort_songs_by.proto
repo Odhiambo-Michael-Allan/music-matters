@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "com.squad.musicmatters.core.datastore";
+option java_multiple_files = true;
+
+enum SortSongsByProto {
+  SORT_SONGS_UNSPECIFIED = 0;
+  SONGS_CUSTOM = 1;
+  SONGS_TITLE = 2;
+  SONGS_ARTIST = 3;
+  SONGS_ALBUM = 4;
+  SONGS_DURATION = 5;
+  SONGS_DATE_ADDED = 6;
+  SONGS_COMPOSER = 7;
+  SONGS_YEAR = 8;
+  SONGS_FILENAME = 9;
+  SONGS_TRACK_NUMBER = 10;
+}

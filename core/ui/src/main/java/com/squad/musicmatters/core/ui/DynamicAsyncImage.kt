@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.odesa.musicMatters.core.designsystem.component.ThemePreviews
-import com.odesa.musicMatters.core.designsystem.theme.LocalTintTheme
+import com.squad.musicmatters.core.designsystem.component.ThemePreviews
+import com.squad.musicmatters.core.designsystem.theme.LocalTintTheme
 
 
 @Composable

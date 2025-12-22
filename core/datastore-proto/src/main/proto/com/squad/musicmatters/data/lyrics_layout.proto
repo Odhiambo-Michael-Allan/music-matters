@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "com.squad.musicmatters.core.datastore";
+option java_multiple_files = true;
+
+enum LyricsLayoutProto {
+  LYRICS_LAYOUT_UNSPECIFIED = 0;
+  REPLACE_ARTWORK = 1;
+  SEPARATE_PAGE = 2;
+}

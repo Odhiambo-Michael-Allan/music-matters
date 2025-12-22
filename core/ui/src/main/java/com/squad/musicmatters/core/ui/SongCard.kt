@@ -40,26 +40,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.odesa.musicMatters.core.common.media.extensions.formatMilliseconds
-import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
-import com.odesa.musicMatters.core.data.utils.VersionUtils
-import com.odesa.musicMatters.core.designsystem.component.DevicePreviews
-import com.odesa.musicMatters.core.designsystem.theme.GoogleRed
-import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
-import com.odesa.musicMatters.core.designsystem.theme.PrimaryThemeColors
-import com.odesa.musicMatters.core.designsystem.theme.SupportedFonts
-import com.odesa.musicMatters.core.designsystem.theme.ThemeMode
-import com.odesa.musicMatters.core.i8n.English
-import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.PlaylistInfo
-import com.odesa.musicMatters.core.model.Song
-import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
+import androidx.core.net.toUri
+import com.squad.musicmatters.core.media.media.extensions.formatMilliseconds
+import com.squad.musicmatters.core.data.utils.VersionUtils
+import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.designsystem.theme.GoogleRed
+import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
+import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
+import com.squad.musicmatters.core.i8n.English
+import com.squad.musicmatters.core.i8n.Language
+import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.dialog.DeleteSongDialog
 import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
 
@@ -96,11 +94,11 @@ fun SongCard(
         colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
         onClick = onClick
     ) {
-        Box( modifier = Modifier.padding( 12.dp, 12.dp, 4.dp, 12.dp ) ) {
+        Box( modifier = Modifier.padding( 12.dp, 4.dp, 4.dp, 4.dp ) ) {
             Row( verticalAlignment = Alignment.CenterVertically ) {
                 Box {
                     DynamicAsyncImage(
-                        imageUri = song.artworkUri,
+                        imageUri = song.artworkUri?.toUri(),
                         contentDescription = song.title,
                         modifier = Modifier
                             .size( 45.dp )
@@ -111,7 +109,7 @@ fun SongCard(
                 Column( modifier = Modifier.weight( 1f ) ) {
                     Text(
                         text = song.title,
-                        style = MaterialTheme.typography.bodyLarge.copy(
+                        style = MaterialTheme.typography.titleMedium.copy(
                             color = when {
                                 isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
                                 else -> LocalTextStyle.current.color
@@ -125,11 +123,9 @@ fun SongCard(
                         text = song.artists.joinToString(),
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.SemiBold,
-                            color = LocalTextStyle.current.color.copy(
-                                alpha = 0.5f
-                            )
+                            color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
                         ),
-                        maxLines = 2,
+                        maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
@@ -245,12 +241,11 @@ fun SongOptionsBottomSheetMenu(
     onDismissRequest: () -> Unit,
 ) {
     GenericOptionsBottomSheet(
-        headerImageUri = song.artworkUri,
+        headerImageUri = song.artworkUri?.toUri(),
         headerTitle = song.title,
         titleIsHighlighted = isCurrentlyPlaying,
         headerDescription = song.artists.joinToString(),
         language = language,
-        fallbackResourceId = fallbackResourceId,
         onDismissRequest = onDismissRequest,
         onPlayNext = { onPlayNext( song ) },
         onAddToQueue = { onAddToQueue( song ) },
@@ -293,7 +288,7 @@ fun SongOptionsBottomSheetMenu(
                 label = language.shareSong
             ) {
                 onDismissRequest()
-                onShareSong( song.mediaUri )
+                onShareSong( song.mediaUri.toUri() )
             }
             BottomSheetMenuItem(
                 leadingIcon = Icons.Rounded.Info,
@@ -376,10 +371,7 @@ fun QueueSongCard(
 
 @Preview( showBackground = true )
 @Composable
-fun SongOptionsBottomSheetContentPreview(
-    @PreviewParameter(MusicMattersPreviewParametersProvider::class )
-    previewData: PreviewData
-) {
+fun SongOptionsBottomSheetContentPreview() {
     MusicMattersTheme(
         fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
@@ -389,7 +381,7 @@ fun SongOptionsBottomSheetContentPreview(
     ) {
         SongOptionsBottomSheetMenu(
             language = English,
-            song = previewData.songs.first(),
+            song = PreviewParameterData.songs.first(),
             isFavorite = true,
             isCurrentlyPlaying = true,
             fallbackResourceId = R.drawable.core_ui_placeholder_light,
@@ -413,10 +405,7 @@ fun SongOptionsBottomSheetContentPreview(
 
 @Preview( showBackground = true )
 @Composable
-fun SongCardPreview(
-    @PreviewParameter( MusicMattersPreviewParametersProvider::class )
-    previewData: PreviewData
-) {
+fun SongCardPreview() {
     MusicMattersTheme(
         fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
@@ -426,7 +415,7 @@ fun SongCardPreview(
     ) {
         SongCard(
             language = English,
-            song = previewData.songs.first(),
+            song = PreviewParameterData.songs.first(),
             isCurrentlyPlaying = true,
             isFavorite = true,
             playlistInfos = emptyList(),
@@ -451,20 +440,17 @@ fun SongCardPreview(
 
 @Preview( showBackground = true )
 @Composable
-fun QueueSongCardPreview(
-    @PreviewParameter( MusicMattersPreviewParametersProvider::class )
-    previewData: PreviewData
-) {
+fun QueueSongCardPreview() {
     MusicMattersTheme(
         fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
-        fontScale = SettingsDefaults.FONT_SCALE,
-        themeMode = SettingsDefaults.themeMode,
-        primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME
+        fontScale = DefaultPreferences.FONT_SCALE,
+        themeMode = DefaultPreferences.THEME_MODE,
+        primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME
     ) {
         QueueSongCard(
             language = English,
-            song = previewData.songs.first(),
+            song = PreviewParameterData.songs.first(),
             isCurrentlyPlaying = true,
             isFavorite = true,
             playlistInfos = emptyList(),

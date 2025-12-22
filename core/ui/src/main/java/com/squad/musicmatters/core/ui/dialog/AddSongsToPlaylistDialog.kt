@@ -1,5 +1,6 @@
 package com.squad.musicmatters.core.ui.dialog
 
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -29,28 +30,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import coil.request.ImageRequest
-import com.odesa.musicMatters.core.i8n.English
-import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.PlaylistInfo
-import com.odesa.musicMatters.core.model.Song
+import com.squad.musicmatters.core.i8n.English
+import com.squad.musicmatters.core.i8n.Language
+import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.GenericCard
-import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
-import com.squad.musicmatters.core.ui.PreviewData
+import com.squad.musicmatters.core.ui.PreviewParameterData
 import com.squad.musicmatters.core.ui.R
 import com.squad.musicmatters.core.ui.SubtleCaptionText
 
+@SuppressLint( "UnusedBoxWithConstraintsScope" )
 @Composable
 fun AddSongsToPlaylistDialog(
     songs: List<Song>,
     onGetPlaylists: () -> List<PlaylistInfo>,
     language: Language,
-    @DrawableRes fallbackResourceId: Int,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onAddDisplayedSongsToPlaylist: (PlaylistInfo) -> Unit,
+//    @DrawableRes fallbackResourceId: Int,
+    onGetSongsInPlaylist: ( PlaylistInfo ) -> List<Song>,
+    onAddDisplayedSongsToPlaylist: ( PlaylistInfo ) -> Unit,
     onCreateNewPlaylist: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -101,14 +102,8 @@ fun AddSongsToPlaylistDialog(
                             ) {
                                 items( onGetPlaylists() ) { playlist ->
                                     GenericCard(
-                                        imageRequest = ImageRequest.Builder( LocalContext.current ).apply {
-                                            data( onGetSongsInPlaylist( playlist ).firstOrNull { it.artworkUri != null }?.artworkUri )
-                                            placeholder( fallbackResourceId )
-                                            fallback( fallbackResourceId )
-                                            error( fallbackResourceId )
-                                            crossfade( true )
-                                            build()
-                                        }.build(),
+                                        imageUri = onGetSongsInPlaylist( playlist )
+                                            .firstOrNull { it.artworkUri != null }?.artworkUri?.toUri(),
                                         title = {
                                             Text( text = playlist.title )
                                         },
@@ -152,15 +147,12 @@ fun AddSongsToPlaylistDialog(
 
 @Preview( showSystemUi = true )
 @Composable
-fun AddToPlaylistDialogPreview(
-    @PreviewParameter( MusicMattersPreviewParametersProvider::class )
-    previewData: PreviewData
-) {
+fun AddToPlaylistDialogPreview() {
     AddSongsToPlaylistDialog(
-        songs = listOf( previewData.songs.first() ),
+        songs = PreviewParameterData.songs,
         onGetPlaylists = { emptyList() },
         language = English,
-        fallbackResourceId = R.drawable.core_ui_placeholder_light,
+//        fallbackResourceId = R.drawable.core_ui_placeholder_light,
         onGetSongsInPlaylist = { emptyList() },
         onAddDisplayedSongsToPlaylist = {},
         onCreateNewPlaylist = {},

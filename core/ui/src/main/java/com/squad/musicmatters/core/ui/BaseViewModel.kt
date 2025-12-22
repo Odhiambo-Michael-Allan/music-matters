@@ -3,128 +3,28 @@ package com.squad.musicmatters.core.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
-import com.odesa.musicMatters.core.common.connection.MusicServiceConnection
-import com.odesa.musicMatters.core.data.preferences.SortSongsBy
-import com.odesa.musicMatters.core.data.repository.PlaylistRepository
-import com.odesa.musicMatters.core.data.repository.SongsAdditionalMetadataRepository
-import com.odesa.musicMatters.core.data.repository.asDomain
-import com.odesa.musicMatters.core.data.settings.SettingsRepository
-import com.odesa.musicMatters.core.data.utils.FuzzySearchOption
-import com.odesa.musicMatters.core.data.utils.FuzzySearcher
-import com.odesa.musicMatters.core.model.Album
-import com.odesa.musicMatters.core.model.Artist
-import com.odesa.musicMatters.core.model.PlaylistInfo
-import com.odesa.musicMatters.core.model.Song
-import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
-import kotlinx.coroutines.Dispatchers
+import com.squad.musicmatters.core.media.connection.MusicServiceConnection
+import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.data.utils.FuzzySearchOption
+import com.squad.musicmatters.core.data.utils.FuzzySearcher
+import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.model.Album
+import com.squad.musicmatters.core.model.Artist
+import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.SortSongsBy
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.UUID
 
-open class BaseViewModel(
-    private val musicServiceConnection: MusicServiceConnection,
-    private val settingsRepository: SettingsRepository,
+abstract class BaseViewModel(
+    private val player: MusicServiceConnection,
+    private val preferencesDataSource: PreferencesDataSource,
     private val playlistRepository: PlaylistRepository,
     private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 ) : ViewModel() {
-
-    private val songsFuzzySearcher: FuzzySearcher<String> = FuzzySearcher(
-        options = listOf(
-            FuzzySearchOption({ v -> getSongWithId(v)?.title?.let { compareString(it) } }, 3),
-            FuzzySearchOption( { v -> getSongWithId( v )?.path?.let { compareString( it ) } }, 2 ),
-            FuzzySearchOption( { v -> getSongWithId( v )?.artists?.let { compareCollection( it ) } } ),
-            FuzzySearchOption( { v -> getSongWithId( v )?.albumTitle?.let { compareString( it ) } } )
-        )
-    )
-
-    private val playlistsChangeListeners: MutableList<( List<PlaylistInfo> )->Unit> = mutableListOf()
-    private val sortSongsByChangeListeners: MutableList<( SortSongsBy, Boolean )->Unit> = mutableListOf()
-    private val additionalMetadataListeners: MutableList<( List<SongAdditionalMetadataInfo> ) -> Unit> = mutableListOf()
-    private var songsAdditionalMetadataList = listOf<SongAdditionalMetadataInfo>()
-
-    init {
-        viewModelScope.launch { observePlaylists() }
-        viewModelScope.launch { observeSortSongsBy() }
-        viewModelScope.launch { observeSortSongsInReverse() }
-        viewModelScope.launch { observeSongsAdditionalMetadata() }
-    }
-
-    private suspend fun observePlaylists() {
-        playlistRepository.playlists.collect {
-            playlistsChangeListeners.forEach { listener ->
-                listener.invoke( getEditablePlaylists() )
-            }
-        }
-    }
-
-    private suspend fun observeSortSongsBy() {
-        settingsRepository.sortSongsBy.collect { sortSongsBy ->
-            sortSongsByChangeListeners.forEach { listener ->
-                listener.invoke( sortSongsBy, settingsRepository.sortSongsInReverse.value )
-            }
-        }
-    }
-
-    private suspend fun observeSortSongsInReverse() {
-        settingsRepository.sortSongsInReverse.collect { sortSongsInReverse ->
-            sortSongsByChangeListeners.forEach { listener ->
-                listener.invoke( settingsRepository.sortSongsBy.value, sortSongsInReverse )
-            }
-        }
-    }
-
-    private suspend fun observeSongsAdditionalMetadata() {
-        withContext( Dispatchers.IO ) {
-            songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().collect { additionalMetadata ->
-                songsAdditionalMetadataList = additionalMetadata.mapNotNull { it.asDomain() }
-                additionalMetadataListeners.forEach {
-                    it.invoke( songsAdditionalMetadataList )
-                }
-            }
-        }
-    }
-
-    fun addOnPlaylistsChangeListener( listener: ( List<PlaylistInfo>) -> Unit ) {
-        playlistsChangeListeners.add( listener )
-        // Supply the newly added listener with the currently editable playlists..
-        listener.invoke( getEditablePlaylists() )
-    }
-
-    fun addOnSongsMetadataListChangeListener( listener: ( List<SongAdditionalMetadataInfo>) -> Unit ) {
-        additionalMetadataListeners.add( listener )
-        listener.invoke( songsAdditionalMetadataList )
-    }
-
-    fun addOnSortSongsByChangeListener( listener: ( SortSongsBy, Boolean ) -> Unit ) {
-        sortSongsByChangeListeners.add( listener )
-    }
-
-//    fun deleteSong( song: Song ) {}
-
-    fun setSortSongsBy( sortSongsBy: SortSongsBy ) {
-        viewModelScope.launch { settingsRepository.setSortSongsBy( sortSongsBy ) }
-    }
-
-    fun setSortSongsInReverse( reverse: Boolean ) {
-        viewModelScope.launch { settingsRepository.setSortSongsInReverse( reverse ) }
-    }
-
-    fun isPlaylistDeletable(playlistInfo: PlaylistInfo ) = getDeletablePlaylists().contains( playlistInfo )
-
-    private fun getDeletablePlaylists(): List<PlaylistInfo> =
-        playlistRepository.playlists.value.filter {
-            it.id != playlistRepository.mostPlayedSongsPlaylistInfo.value.id &&
-                    it.id != playlistRepository.recentlyPlayedSongsPlaylistInfo.value.id &&
-                    it.id != playlistRepository.favoritesPlaylistInfo.value.id
-        }
-
-    fun renamePlaylist( playlistInfo: PlaylistInfo, newName: String ) {
-        viewModelScope.launch { playlistRepository.renamePlaylist( playlistInfo, newName ) }
-    }
-
-    fun deletePlaylist(playlistInfo: PlaylistInfo ) {
-        viewModelScope.launch { playlistRepository.deletePlaylist( playlistInfo ) }
-    }
 
     fun addToFavorites( songId: String ) {
         viewModelScope.launch { playlistRepository.addToFavorites( songId ) }
@@ -145,69 +45,30 @@ open class BaseViewModel(
         selectedSong: Song,
         songsInPlaylist: List<Song>
     ) {
-        musicServiceConnection.playMediaItem(
-            mediaItem = selectedSong.mediaItem,
-            mediaItems = songsInPlaylist.map { it.mediaItem },
-            shuffle = settingsRepository.shuffle.value
-        )
-    }
-
-    fun shufflePlaySongsInAlbum( album: Album ) {
-        shuffleAndPlay(
-            songs = getSongsInAlbum( album )
-        )
-    }
-
-    fun shufflePlaySongsByArtist( artist: Artist ) {
-        shuffleAndPlay(
-            songs = getSongsByArtist( artist )
-        )
+        viewModelScope.launch {
+            player.playSong(
+                song = selectedSong,
+                songs = songsInPlaylist,
+                shuffle = false
+            )
+        }
     }
 
     fun shuffleAndPlay(
         songs: List<Song>,
     ) {
         if ( songs.isEmpty() ) return
-        musicServiceConnection.shuffleAndPlay(
-            songs.map { it.mediaItem }
-        )
+        viewModelScope.launch { player.shuffleAndPlay( songs ) }
     }
 
     fun playSong( song: Song ) {
-        musicServiceConnection.playMediaItem(
-            mediaItem = song.mediaItem,
-            mediaItems = listOf( song.mediaItem ),
-            shuffle = false // Its only one, no need to shuffle..
-        )
-    }
-
-    fun playSongsNext( songs: List<Song> ) {
-        songs.forEach { playSongNext( it ) }
-    }
-
-    fun playSongNext(
-        song: Song
-    ) {
-        musicServiceConnection.playNext( song.mediaItem )
-    }
-
-    fun addSongsToQueue( songs: List<Song> ) {
-        songs.forEach { addSongToQueue( it ) }
-    }
-
-    fun addSongToQueue( song: Song ) {
-        musicServiceConnection.addToQueue( song.mediaItem )
-    }
-
-    fun searchSongsMatching( query: String ) =
-        songsFuzzySearcher.search(
-            terms = query,
-            entities = musicServiceConnection.cachedSongs.value.map { it.id }
-        ).mapNotNull { getSongWithId( it.entity ) }
-
-    private fun getEditablePlaylists() = playlistRepository.playlists.value.filter {
-        it.id != playlistRepository.mostPlayedSongsPlaylistInfo.value.id &&
-                it.id != playlistRepository.recentlyPlayedSongsPlaylistInfo.value.id
+        viewModelScope.launch {
+            player.playSong(
+                song = song,
+                songs = listOf( song ),
+                shuffle = false // Its only one, no need to shuffle..
+            )
+        }
     }
 
     fun createPlaylist(
@@ -219,112 +80,30 @@ open class BaseViewModel(
                 PlaylistInfo(
                     id = UUID.randomUUID().toString(),
                     title = playlistTitle,
-                    songIds = songsToAddToPlaylist.map { it.id }
+                    songIds = songsToAddToPlaylist.map { it.id }.toSet()
                 )
             )
         }
     }
 
-    private fun getSongWithId( id: String ) =
-        musicServiceConnection.cachedSongs.value.find { it.id == id }
-
-    fun playSongsInAlbum( album: Album ) {
-        playSongs(
-            songs = getSongsInAlbumAsMediaItems( album ),
-            shuffle = settingsRepository.shuffle.value
-        )
-    }
-
-    fun playSongsInAlbumNext( album: Album ) {
-        playMediaItemsNext( getSongsInAlbumAsMediaItems( album ) )
-    }
-
-
-    fun addSongsInAlbumToQueue( album: Album ) {
-        addMediaItemsToQueue( getSongsInAlbumAsMediaItems( album ) )
-    }
-
-    fun playSongsInPlaylist(playlistInfo: PlaylistInfo ) {
-        playSongs(
-            songs = getSongsInPlaylist( playlistInfo ).map { it.mediaItem },
-            shuffle = settingsRepository.shuffle.value
-        )
-    }
-
-    fun getSongsInPlaylist(playlistInfo: PlaylistInfo ) =
-        musicServiceConnection.cachedSongs.value.filter {
-            playlistInfo.songIds.contains( it.id )
-        }
-
-    fun playSongsByArtist(
-        artist: Artist
-    ) {
-        playSongsByArtist(
-            artist = artist,
-            shuffle = settingsRepository.shuffle.value
-        )
-    }
-
-    private fun playSongsByArtist(
-        artist: Artist,
-        shuffle: Boolean = false
-    ) {
-        playSongs(
-            songs = getSongsByArtistAsMediaItems( artist ),
-            shuffle = shuffle
-        )
-    }
-
-    fun addSongsByArtistToQueue( artist: Artist) {
-        addMediaItemsToQueue( getSongsByArtistAsMediaItems( artist ) )
-    }
-
-    private fun playSongs(
-        songs: List<MediaItem>,
-        shuffle: Boolean
-    ) {
-        if ( songs.isEmpty() ) return
-        musicServiceConnection.playMediaItem(
-            mediaItem = if( shuffle ) songs.random() else songs.first(),
-            mediaItems = songs,
-            shuffle = shuffle
-        )
-    }
-
-    private fun playMediaItemsNext(
-        songs: List<MediaItem>
-    ) {
-        songs.forEach {
-            musicServiceConnection.playNext( it )
+    fun setSortSongsBy( by: SortSongsBy ) {
+        viewModelScope.launch {
+            preferencesDataSource.setSortSongsBy( by )
         }
     }
 
-    fun playSongsByArtistNext( artist: Artist ) {
-        playMediaItemsNext(
-            songs = getSongsByArtistAsMediaItems( artist )
-        )
-    }
-
-    private fun addMediaItemsToQueue(
-        songs: List<MediaItem>
-    ) {
-        songs.forEach {
-            musicServiceConnection.addToQueue( it )
+    fun setSortSongsInReverse( sortSongsInReverse: Boolean ) {
+        viewModelScope.launch {
+            preferencesDataSource.setSortSongsInReverse( sortSongsInReverse )
         }
     }
 
-    private fun getSongsByArtistAsMediaItems( artist: Artist ) =
-        getSongsByArtist( artist )
-            .map { it.mediaItem }
+    fun playSongNext( song: Song ) {
+        viewModelScope.launch { player.playNext( song ) }
+    }
 
-    fun getSongsByArtist( artist: Artist ) =
-        musicServiceConnection.cachedSongs.value
-            .filter { it.artists.contains( artist.name ) }
+    fun addSongToQueue( song: Song ) {
+        viewModelScope.launch { player.addToQueue( song ) }
+    }
 
-    private fun getSongsInAlbumAsMediaItems( album: Album ) =
-        getSongsInAlbum( album ).map { it.mediaItem }
-
-    fun getSongsInAlbum( album: Album ) =
-        musicServiceConnection.cachedSongs.value
-            .filter{ it.albumTitle == album.title }
 }

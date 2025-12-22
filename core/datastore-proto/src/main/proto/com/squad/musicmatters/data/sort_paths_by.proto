@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "com.squad.musicmatters.core.datastore";
+option java_multiple_files = true;
+
+enum SortPathsByProto {
+  PATHS_UNSPECIFIED = 0;
+  PATHS_CUSTOM = 1;
+  PATHS_NAME = 2;
+  PATHS_TRACK_COUNT = 3;
+}

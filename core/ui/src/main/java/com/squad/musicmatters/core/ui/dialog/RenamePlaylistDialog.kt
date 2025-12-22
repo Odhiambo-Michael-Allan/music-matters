@@ -13,11 +13,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.odesa.musicMatters.core.i8n.English
-import com.odesa.musicMatters.core.i8n.Language
-import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
-import com.squad.musicmatters.core.ui.PreviewData
+import com.squad.musicmatters.core.i8n.English
+import com.squad.musicmatters.core.i8n.Language
+import com.squad.musicmatters.core.ui.PreviewParameterData
 
 @Composable
 fun RenamePlaylistDialog(
@@ -71,12 +69,9 @@ fun RenamePlaylistDialog(
 
 @Preview( showBackground = true )
 @Composable
-fun RenamePlaylistDialogPreview(
-    @PreviewParameter( MusicMattersPreviewParametersProvider::class )
-    previewData: PreviewData
-) {
+fun RenamePlaylistDialogPreview() {
     RenamePlaylistDialog(
-        playlistTitle = previewData.playlists.first().title,
+        playlistTitle = PreviewParameterData.playlistInfos.first().title,
         language = English,
         onRename = { /*TODO*/ },
         onDismissRequest = {}

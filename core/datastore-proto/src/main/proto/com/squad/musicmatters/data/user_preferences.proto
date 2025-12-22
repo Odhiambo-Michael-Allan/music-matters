@@ -1,0 +1,60 @@
+
+syntax = "proto3";
+
+import "com/squad/musicmatters/data/theme_mode.proto";
+import "com/squad/musicmatters/data/bottombar_label_visibility.proto";
+import "com/squad/musicmatters/data/lyrics_layout.proto";
+import "com/squad/musicmatters/data/loop_mode.proto";
+import "com/squad/musicmatters/data/sort_songs_by.proto";
+import "com/squad/musicmatters/data/sort_artists_by.proto";
+import "com/squad/musicmatters/data/sort_genres_by.proto";
+import "com/squad/musicmatters/data/sort_playlists_by.proto";
+import "com/squad/musicmatters/data/sort_albums_by.proto";
+import "com/squad/musicmatters/data/sort_paths_by.proto";
+
+option java_package = "com.squad.musicmatters.core.datastore";
+option java_multiple_files = true;
+
+message UserPreferences {
+  string font_name = 1;
+  float font_scale = 2;
+  ThemeModeProto theme_mode = 3;
+  bool use_material_you = 4;
+  string primary_color_name = 5;
+  BottomBarLabelVisibilityProto bottom_bar_label_visibility = 6;
+  bool fade_playback = 7;
+  float fade_playback_duration = 8;
+  bool require_audio_focus = 9;
+  bool ignore_audio_focus_loss = 10;
+  bool play_on_headphones_connect = 11;
+  bool pause_on_headphones_disconnect = 12;
+  int32 fast_rewind_duration = 13;
+  int32 fast_forward_duration = 14;
+  bool mini_player_show_track_controls = 15;
+  bool mini_player_show_seek_controls = 16;
+  bool mini_player_text_marquee = 17;
+  LyricsLayoutProto lyrics_layout = 18;
+  bool show_now_playing_audio_information = 19;
+  bool show_now_playing_seek_controls = 20;
+  float playback_speed = 21;
+  float playback_pitch = 22;
+  LoopModeProto loop_mode = 23;
+  bool shuffle = 24;
+  bool show_lyrics = 25;
+  bool now_playing_controls_layout_default = 26;
+  map<string, bool> disabled_tree_paths = 27;
+  SortSongsByProto sort_songs_by = 28;
+  bool sort_songs_reverse = 29;
+  SortArtistsByProto sort_artists_by = 30;
+  bool sort_artists_reverse = 31;
+  SortGenresByProto sort_genres_by = 32;
+  bool sort_genres_reverse = 33;
+  SortPlaylistsByProto sort_playlists_by = 34;
+  bool sort_playlists_reverse = 35;
+  SortAlbumsByProto sort_albums_by = 36;
+  bool sort_albums_reverse = 37;
+  SortPathsByProto sort_paths_by = 38;
+  bool sort_paths_reverse = 39;
+  string currently_playing_song_id = 40;
+  bool use_material_you_set = 41;
+}
