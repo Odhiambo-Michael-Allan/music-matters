@@ -16,7 +16,7 @@ dependencies {
     implementation( projects.core.designsystem )
     implementation( projects.core.i8n )
     implementation( projects.core.model )
-    implementation( projects.core.common )
+    implementation( projects.core.media )
     implementation( projects.core.data )
 
     implementation( libs.androidx.core.ktx )

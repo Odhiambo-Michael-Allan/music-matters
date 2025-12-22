@@ -81,7 +81,8 @@ fun BottomSheetMenuHeader(
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall.copy(
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
                 ),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis

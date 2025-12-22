@@ -1,5 +1,6 @@
 package com.squad.musicmatters.core.ui.dialog
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -21,23 +22,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.DefaultPathName
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.odesa.musicMatters.core.common.media.extensions.dateModifiedString
-import com.odesa.musicMatters.core.common.media.extensions.sizeString
-import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
-import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
-import com.odesa.musicMatters.core.i8n.English
-import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Song
-import com.odesa.musicMatters.core.model.SongAdditionalMetadataInfo
-import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
-import com.squad.musicmatters.core.ui.PreviewData
+import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.media.media.extensions.dateModifiedString
+import com.squad.musicmatters.core.media.media.extensions.sizeString
+import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import com.squad.musicmatters.core.i8n.English
+import com.squad.musicmatters.core.i8n.Language
+import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.ui.PreviewParameterData
 
 
+@SuppressLint( "UnusedBoxWithConstraintsScope" )
 @Composable
 fun SongDetailsDialog(
     song: Song,
@@ -73,7 +74,7 @@ fun SongDetailsDialog(
                     ) {
                         Text(
                             text = language.details,
-                            style = MaterialTheme.typography.titleSmall.copy(
+                            style = MaterialTheme.typography.titleLarge.copy(
                                 fontWeight = FontWeight.Bold
                             )
                         )
@@ -150,19 +151,19 @@ fun SongDetailsDialog(
                         )
                         SongDetailsItem(
                             key = language.bitrate,
-                            value = onGetSongAdditionalMetadata()?.let { language.xKbps( it.bitrate ) } ?: "",
+                            value = onGetSongAdditionalMetadata()?.let { language.xKbps( it.bitrate.toString() ) } ?: "",
                             language = language,
                             isLoadingValue = isLoadingSongAdditionalMetadata
                         )
                         SongDetailsItem(
                             key = language.bitDepth,
-                            value = onGetSongAdditionalMetadata()?.let { language.xBit( it.bitsPerSample ) } ?: "",
+                            value = onGetSongAdditionalMetadata()?.let { language.xBit( it.bitsPerSample.toString() ) } ?: "",
                             language = language,
                             isLoadingValue = isLoadingSongAdditionalMetadata
                         )
                         SongDetailsItem(
                             key = language.samplingRate,
-                            value = onGetSongAdditionalMetadata()?.let { language.xKHZ( it.samplingRate ) } ?: "",
+                            value = onGetSongAdditionalMetadata()?.let { language.xKHZ( it.samplingRate.toString() ) } ?: "",
                             language = language,
                             isLoadingValue = isLoadingSongAdditionalMetadata
                         )
@@ -191,7 +192,7 @@ fun SongDetailsItem(
     ) {
         Text(
             text = key,
-            style = MaterialTheme.typography.labelSmall.copy(
+            style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.SemiBold
             )
         )
@@ -206,7 +207,7 @@ fun SongDetailsItem(
                 )
                 Text(
                     text = language.loading,
-                    style = MaterialTheme.typography.labelMedium
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
         } else {
@@ -218,31 +219,28 @@ fun SongDetailsItem(
     }
 }
 
-@Preview( showSystemUi = true )
+@Preview
 @Composable
-fun SongDetailsDialogPreview(
-    @PreviewParameter(MusicMattersPreviewParametersProvider::class )
-    previewData: PreviewData
-) {
+fun SongDetailsDialogPreview() {
     MusicMattersTheme(
-        themeMode = SettingsDefaults.themeMode,
-        primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME,
-        fontName = SettingsDefaults.font.name,
-        fontScale = SettingsDefaults.FONT_SCALE,
+        themeMode = DefaultPreferences.THEME_MODE,
+        primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
+        fontName = DefaultPreferences.FONT_NAME,
+        fontScale = DefaultPreferences.FONT_SCALE,
         useMaterialYou = true
     ) {
         SongDetailsDialog(
-            song = previewData.songs.first(),
+            song = PreviewParameterData.songs.first(),
             language = English,
             durationFormatter = { "3:44" },
             isLoadingSongAdditionalMetadata = true,
             onGetSongAdditionalMetadata = {
                 SongAdditionalMetadataInfo(
-                    id = "",
+                    songId = "",
                     codec = "unknown",
-                    bitrate = "unknown",
-                    samplingRate = "unknown",
-                    bitsPerSample = "unknown",
+                    bitrate = 0,
+                    samplingRate = 0f,
+                    bitsPerSample = 0,
                     genre = "unknown"
                 )
             },

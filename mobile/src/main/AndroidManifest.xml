@@ -13,13 +13,13 @@
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
 
     <application
-        android:name=".MusicMatters"
+        android:name=".MusicMattersApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/logo_3"
+        android:icon="@drawable/play"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/logo_3"
+        android:roundIcon="@drawable/play"
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicMatters"
         tools:targetApi="31">
@@ -38,7 +38,7 @@
         Declare common MediaLibraryService for use in the mobile ap
         -->
         <service
-            android:name=".core.common.media.MusicService"
+            android:name=".core.media.media.MusicService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="mediaPlayback">

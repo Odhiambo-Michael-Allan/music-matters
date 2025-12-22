@@ -1,5 +1,6 @@
 package com.squad.musicmatters.core.ui.dialog
 
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -35,26 +36,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import coil.request.ImageRequest
-import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
-import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
-import com.odesa.musicMatters.core.i8n.English
-import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Song
+import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import com.squad.musicmatters.core.i8n.English
+import com.squad.musicmatters.core.i8n.Language
+import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.GenericCard
-import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
-import com.squad.musicmatters.core.ui.PreviewData
+import com.squad.musicmatters.core.ui.PreviewParameterData
 import com.squad.musicmatters.core.ui.R
 import com.squad.musicmatters.core.ui.SubtleCaptionText
 
+@SuppressLint( "UnusedBoxWithConstraintsScope" )
 @Composable
 fun ManagePlaylistSongsDialog(
     currentlySelectedSongs: List<Song>,
     language: Language,
-    @DrawableRes fallbackResourceId: Int,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onDismissRequest: ( List<Song> ) -> Unit,
     onCancel: () -> Unit,
@@ -138,14 +138,7 @@ fun ManagePlaylistSongsDialog(
                             ) {
                                 items( songsMatchingSearchQuery ) {
                                     GenericCard(
-                                        imageRequest = ImageRequest.Builder( LocalContext.current ).apply{
-                                            data( it.artworkUri )
-                                            placeholder( fallbackResourceId )
-                                            fallback( fallbackResourceId )
-                                            error( fallbackResourceId )
-                                            crossfade( true )
-                                            build()
-                                        }.build(),
+                                        imageUri = it.artworkUri?.toUri(),
                                         title = {
                                             Text( text = it.title )
                                         },
@@ -181,22 +174,18 @@ fun ManagePlaylistSongsDialog(
 
 @Preview( showSystemUi = true )
 @Composable
-fun ManagePlaylistSongsDialogPreview(
-    @PreviewParameter( MusicMattersPreviewParametersProvider::class )
-    previewData: PreviewData,
-) {
+fun ManagePlaylistSongsDialogPreview() {
     MusicMattersTheme(
-        themeMode = SettingsDefaults.themeMode,
-        primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME,
-        fontName = SettingsDefaults.font.name,
-        fontScale = SettingsDefaults.FONT_SCALE,
+        themeMode = DefaultPreferences.THEME_MODE,
+        primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
+        fontName = DefaultPreferences.FONT_NAME,
+        fontScale = DefaultPreferences.FONT_SCALE,
         useMaterialYou = true
     ) {
         ManagePlaylistSongsDialog(
-            currentlySelectedSongs = previewData.songs,
+            currentlySelectedSongs = PreviewParameterData.songs,
             language = English,
-            fallbackResourceId = R.drawable.core_ui_placeholder_light,
-            onSearchSongsMatchingQuery = { previewData.songs },
+            onSearchSongsMatchingQuery = { PreviewParameterData.songs },
             onDismissRequest = {},
             onCancel = {}
         )

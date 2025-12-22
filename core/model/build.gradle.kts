@@ -1,23 +1,14 @@
 
 plugins {
-    alias( libs.plugins.musicmatters.android.library )
+    id( "java-library" )
+    alias( libs.plugins.jetbrains.kotlin.jvm )
 }
 
-android {
-    namespace = "com.odesa.musicMatters.core.model"
-
-    defaultConfig {
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 dependencies {
-
-    implementation( libs.androidx.core.ktx )
-
-    // Androidx Media3 Dependencies
-    implementation( libs.androidx.media3.common )
     implementation( projects.core.i8n )
 }

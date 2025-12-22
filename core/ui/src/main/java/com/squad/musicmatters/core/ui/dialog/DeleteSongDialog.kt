@@ -8,14 +8,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
-import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
-import com.odesa.musicMatters.core.i8n.English
-import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Song
-import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
-import com.squad.musicmatters.core.ui.PreviewData
+import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import com.squad.musicmatters.core.i8n.English
+import com.squad.musicmatters.core.i8n.Language
+import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.ui.PreviewParameterData
 
 @Composable
 fun DeleteSongDialog(
@@ -59,19 +57,16 @@ fun DeleteSongDialog(
 
 @Preview( showBackground = true )
 @Composable
-fun DeleteSongDialogPreview(
-    @PreviewParameter( MusicMattersPreviewParametersProvider::class )
-    previewData: PreviewData
-) {
+fun DeleteSongDialogPreview() {
     MusicMattersTheme(
-        themeMode = SettingsDefaults.themeMode,
-        primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME,
-        fontName = SettingsDefaults.font.name,
-        fontScale = SettingsDefaults.FONT_SCALE,
+        themeMode = DefaultPreferences.THEME_MODE,
+        primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
+        fontName = DefaultPreferences.FONT_NAME,
+        fontScale = DefaultPreferences.FONT_SCALE,
         useMaterialYou = false
     ) {
         DeleteSongDialog(
-            song = previewData.songs.first(),
+            song = PreviewParameterData.songs.first(),
             language = English,
             onDelete = { /*TODO*/ }
         ) {}

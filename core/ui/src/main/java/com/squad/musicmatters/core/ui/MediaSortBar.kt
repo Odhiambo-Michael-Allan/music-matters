@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Shuffle
@@ -37,10 +34,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.odesa.musicMatters.core.data.preferences.SortSongsBy
-import com.odesa.musicMatters.core.data.preferences.impl.SettingsDefaults
-import com.odesa.musicMatters.core.designsystem.theme.MusicMattersTheme
-import com.odesa.musicMatters.core.i8n.English
+import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import com.squad.musicmatters.core.i8n.English
+import com.squad.musicmatters.core.model.SortSongsBy
 
 @Composable
 fun <T : Enum<T>> MediaSortBar(
@@ -91,13 +88,6 @@ fun <T : Enum<T>> MediaSortBar(
                             onSortTypeChange( it.key )
                         }
                         DropdownMenuItem(
-                            contentPadding = MenuDefaults.DropdownMenuItemContentPadding.run {
-                                val horizontalPadding = calculateLeftPadding( LayoutDirection.Ltr )
-                                PaddingValues(
-                                    start = horizontalPadding.div( 2 ),
-                                    end = horizontalPadding.times( 4 )
-                                )
-                            },
                             leadingIcon = {
                                 RadioButton(
                                     selected = it.key == sortType,
@@ -105,7 +95,10 @@ fun <T : Enum<T>> MediaSortBar(
                                 )
                             },
                             text = {
-                                Text( text = it.value )
+                                Text(
+                                    text = it.value,
+                                    fontWeight = FontWeight.SemiBold
+                                )
                             },
                             onClick = onClick,
                         )
@@ -139,10 +132,10 @@ fun <T : Enum<T>> MediaSortBar(
 @Composable
 fun MediaSortBarPreview() {
     MusicMattersTheme(
-        themeMode = SettingsDefaults.themeMode,
-        primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME,
-        fontName = SettingsDefaults.font.name,
-        fontScale = SettingsDefaults.FONT_SCALE,
+        themeMode = DefaultPreferences.THEME_MODE,
+        primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
+        fontName = DefaultPreferences.FONT_NAME,
+        fontScale = DefaultPreferences.FONT_SCALE,
         useMaterialYou = true
     ) {
         MediaSortBar(

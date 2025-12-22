@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "com.squad.musicmatters.core.datastore";
+option java_multiple_files = true;
+
+enum BottomBarLabelVisibilityProto {
+  VISIBILITY_UNSPECIFIED = 0;
+  ALWAYS_VISIBLE = 1;
+  VISIBLE_WHEN_ACTIVE = 2;
+  INVISIBLE = 3;
+}

@@ -20,15 +20,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.odesa.musicMatters.core.i8n.English
-import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.Song
+import com.squad.musicmatters.core.i8n.English
+import com.squad.musicmatters.core.i8n.Language
+import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.R
 
 @Composable
 fun NewPlaylistDialog(
     language: Language,
-    @DrawableRes fallbackResourceId: Int,
     initialSongsToAdd: List<Song> = emptyList(),
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onConfirmation: ( String, List<Song> ) -> Unit,
@@ -93,7 +92,6 @@ fun NewPlaylistDialog(
         ManagePlaylistSongsDialog(
             currentlySelectedSongs = currentlySelectedSongs,
             language = language,
-            fallbackResourceId = fallbackResourceId,
             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
             onDismissRequest = {
                 currentlySelectedSongs.clear()
@@ -110,7 +108,6 @@ fun NewPlaylistDialog(
 fun NewPlaylistDialogPreview() {
     NewPlaylistDialog(
         language = English,
-        fallbackResourceId = R.drawable.core_ui_placeholder_light,
         onSearchSongsMatchingQuery = { emptyList() },
         onConfirmation = { _, _ -> },
         onDismissRequest = {},

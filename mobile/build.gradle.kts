@@ -1,11 +1,14 @@
 plugins {
-    id( "com.android.application" )
-    id( "org.jetbrains.kotlin.android" )
+    alias( libs.plugins.android.application )
+    alias( libs.plugins.jetbrains.kotlin.android )
     alias( libs.plugins.compose.compiler )
+    alias( libs.plugins.hilt )
+    alias( libs.plugins.ksp )
+    alias( libs.plugins.kotlin.serialization )
 }
 
 android {
-    namespace = "com.odesa.musicMatters"
+    namespace = "com.squad.musicmatters"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -51,6 +54,17 @@ android {
 
 dependencies {
 
+    implementation( projects.feature.songs )
+    implementation( projects.feature.nowplaying )
+
+    implementation( projects.core.designsystem )
+    implementation( projects.core.media )
+    implementation( projects.core.data )
+    implementation( projects.core.database )
+    implementation( projects.core.testing )
+    implementation( projects.core.i8n )
+    implementation( projects.core.model )
+
     implementation( libs.androidx.core.ktx )
     implementation( libs.androidx.lifecycle.runtime.ktx )
 
@@ -84,14 +98,9 @@ dependencies {
     implementation( libs.androidx.compose.material3.adaptive )
     implementation( libs.androidx.compose.material3.adaptive.navigation.suite )
 
-
-
-    implementation( projects.core.designsystem )
-    implementation( projects.core.common )
-    implementation( projects.core.data )
-    implementation( projects.core.testing )
-    implementation( projects.core.i8n )
-    implementation( projects.core.model )
+    implementation( libs.hilt.core )
+    implementation( libs.hilt.android )
+    ksp( libs.hilt.compiler )
 
     testImplementation( libs.junit )
     testImplementation( libs.androidx.junit )

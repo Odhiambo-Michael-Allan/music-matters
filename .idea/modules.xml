@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/data/MusicMatters.core.data.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/data/MusicMatters.core.data.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.main.iml" filepath="$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/media/MusicMatters.core.media.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/media/MusicMatters.core.media.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/model/MusicMatters.core.model.test.iml" filepath="$PROJECT_DIR$/.idea/modules/core/model/MusicMatters.core.model.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.unitTest.iml" />
+    </modules>
+  </component>
+</project>

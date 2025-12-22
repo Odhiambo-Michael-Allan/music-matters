@@ -40,9 +40,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.odesa.musicMatters.core.i8n.Language
-import com.odesa.musicMatters.core.model.PlaylistInfo
-import com.odesa.musicMatters.core.model.Song
+import com.squad.musicmatters.core.i8n.Language
+import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.dialog.AddSongsToPlaylistDialog
 import com.squad.musicmatters.core.ui.dialog.NewPlaylistDialog
 
@@ -83,7 +83,6 @@ fun GenericTile(
                         headerTitle = title,
                         headerDescription = headerDescription,
                         language = language,
-                        fallbackResourceId = fallbackResourceId,
                         onDismissRequest = onDismissRequest,
                         onAddToQueue = onAddToQueue,
                         onPlayNext = onPlayNext,
@@ -137,7 +136,7 @@ fun GenericOptionsBottomSheet(
     titleIsHighlighted: Boolean = false,
     headerDescription: String,
     language: Language,
-    @DrawableRes fallbackResourceId: Int,
+//    @DrawableRes fallbackResourceId: Int,
     onDismissRequest: () -> Unit,
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
@@ -195,7 +194,7 @@ fun GenericOptionsBottomSheet(
             songs = onGetSongs(),
             onGetPlaylists = onGetPlaylists,
             language = language,
-            fallbackResourceId = fallbackResourceId,
+//            fallbackResourceId = fallbackResourceId,
             onGetSongsInPlaylist = onGetSongsInPlaylist,
             onAddDisplayedSongsToPlaylist = { onAddSongsToPlaylist( it, onGetSongs() ) },
             onCreateNewPlaylist = { showCreateNewPlaylistDialog = true },
@@ -205,7 +204,7 @@ fun GenericOptionsBottomSheet(
     if ( showCreateNewPlaylistDialog ) {
         NewPlaylistDialog(
             language = language,
-            fallbackResourceId = fallbackResourceId,
+//            fallbackResourceId = fallbackResourceId,
             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
             initialSongsToAdd = onGetSongs(),
             onConfirmation = { playlistName, selectedSongs ->
