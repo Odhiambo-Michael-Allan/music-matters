@@ -1,20 +1,18 @@
 package com.squad.musicmatters.navigation
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.media.audiofx.AudioEffect
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.launch
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -24,9 +22,11 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -36,29 +36,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import com.squad.musicmatters.MainActivity
-import com.squad.musicmatters.R
-import com.squad.musicmatters.core.media.connection.MusicServiceConnection
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
-import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
-import com.squad.musicmatters.core.data.search.SearchHistoryRepository
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
-import com.squad.musicmatters.core.model.SearchFilter
 import com.squad.musicmatters.feature.nowplaying.NowPlayingBottomBar
+import com.squad.musicmatters.feature.nowplaying.NowPlayingBottomSheet
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import com.squad.musicmatters.feature.songs.navigation.songsScreen
-import com.squad.musicmatters.ui.components.BottomSheetMenuItem
-import com.squad.musicmatters.ui.utils.getSearchFilterFrom
-import com.squad.musicmatters.ui.utils.shareSong
 import com.squad.musicmatters.utils.ScreenOrientation
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @androidx.annotation.OptIn( UnstableApi::class )
@@ -77,12 +65,13 @@ fun MusicMattersNavHost(
     labelVisibility: BottomBarLabelVisibility,
 ) {
 
+    val coroutineScope = rememberCoroutineScope()
     var currentTabName by rememberSaveable { mutableStateOf( Songs.route.name ) }
     var currentlySelectedMoreTab by rememberSaveable { mutableStateOf( "" ) }
-    val nowPlayingBottomSheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true )
+    val nowPlayingScreenBottomSheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true )
 
     var showMoreDestinationsBottomSheet by remember { mutableStateOf( false ) }
-    var showNowPlayingBottomSheet by remember { mutableStateOf( false ) }
+//    var showNowPlayingScreen by remember { mutableStateOf( false ) }
     val context = LocalContext.current
 
     val packageName = LocalContext.current.packageName
@@ -98,6 +87,11 @@ fun MusicMattersNavHost(
         override fun parseResult( resultCode: Int, intent: Intent? ) {}
 
     } ) {}
+
+    if ( nowPlayingScreenBottomSheetState.isVisible ) {
+        // This forces the Activity to Portrait as long as this block is in the composition
+        LockScreenOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT )
+    }
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
         TOP_LEVEL_DESTINATIONS.forEach {
@@ -122,7 +116,6 @@ fun MusicMattersNavHost(
     NavigationSuiteScaffold(
         navigationSuiteColors = NavigationSuiteDefaults.colors(
             navigationRailContainerColor = Color.Transparent,
-//            navigationBarContainerColor = Color.Transparent
         ),
         layoutType = customNavSuiteType,
         navigationSuiteItems = {
@@ -580,47 +573,49 @@ fun MusicMattersNavHost(
             }
 
             Column {
-                NowPlayingBottomBar { showNowPlayingBottomSheet = true }
+                NowPlayingBottomBar {
+                    coroutineScope.launch {
+                        nowPlayingScreenBottomSheetState.show()
+                    }
+                }
+
+                if ( nowPlayingScreenBottomSheetState.isVisible ) {
+                    ModalBottomSheet(
+                        sheetState = nowPlayingScreenBottomSheetState,
+                        onDismissRequest = {
+                            coroutineScope.launch {
+                                nowPlayingScreenBottomSheetState.hide()
+                            }
+                        },
+                        dragHandle = {}
+                    ) {
+                        NowPlayingBottomSheet(
+                            onViewAlbum = navController::navigateToAlbumScreen,
+                            onViewArtist = navController::navigateToArtistScreen,
+                            onHideBottomSheet = {
+                                coroutineScope.launch {
+                                    nowPlayingScreenBottomSheetState.hide()
+                                }
+                            },
+                            onNavigateToQueueScreen = {
+                                navController.navigate(Route.Queue.name) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onLaunchEqualizerActivity = {
+                                try {
+                                    equalizerActivity.launch()
+                                } catch (exception: Exception) {
+                                    Timber.tag("NOW-PLAYING-BOTTOM-BAR").d(
+                                        "Launching equalizer failed: $exception"
+                                    )
+                                }
+                            }
+                        )
+                    }
+                }
             }
 
-//            Column {
-//                NowPlayingBottomBar(
-//                    viewModel = nowPlayingViewModel
-//                ) {
-//                    showNowPlayingBottomSheet = true
-//                }
-//
-//                if ( showNowPlayingBottomSheet ) {
-//
-//                    ModalBottomSheet(
-//                        modifier = if ( screenOrientation.isLandscape )
-//                            Modifier.padding( start = 50.dp ) else Modifier,
-//                        sheetState = nowPlayingBottomSheetState,
-//                        onDismissRequest = { showNowPlayingBottomSheet = false }
-//                    ) {
-//                        NowPlayingBottomSheet(
-//                            viewModel = nowPlayingViewModel,
-//                            onViewAlbum = navController::navigateToAlbumScreen,
-//                            onViewArtist = navController::navigateToArtistScreen,
-//                            onHideBottomSheet = { showNowPlayingBottomSheet = false },
-//                            onNavigateToQueueScreen = {
-//                                navController.navigate( Route.Queue.name ) {
-//                                    launchSingleTop = true
-//                                }
-//                            },
-//                            onLaunchEqualizerActivity = {
-//                                try {
-//                                    equalizerActivity.launch()
-//                                } catch ( exception: Exception ) {
-//                                    Timber.tag( "NOW-PLAYING-BOTTOM-BAR" ).d(
-//                                        "Launching equalizer failed: $exception"
-//                                    )
-//                                }
-//                            }
-//                        )
-//                    }
-//                }
-//
 //                if ( showMoreDestinationsBottomSheet ) {
 //                    ModalBottomSheet(
 //                        sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
@@ -645,6 +640,31 @@ fun MusicMattersNavHost(
 //            }
         }
     }
+}
+
+@Composable
+private fun LockScreenOrientation( orientation: Int ) {
+    val context = LocalContext.current
+    DisposableEffect( orientation ) {
+        val activity = context.findActivity() ?: return@DisposableEffect onDispose {}
+
+        // Save the original orientation to restore it later
+        val originalOrientation = activity.requestedOrientation
+
+        // Force the new orientation
+        activity.requestedOrientation = orientation
+
+        onDispose {
+            // Restore to the original or "Unspecified" (auto-rotate)
+            activity.requestedOrientation = originalOrientation
+        }
+    }
+}
+
+private fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }
 
 

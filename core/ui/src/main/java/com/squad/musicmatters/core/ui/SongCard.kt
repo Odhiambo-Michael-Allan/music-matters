@@ -21,6 +21,7 @@ import androidx.compose.material.icons.rounded.DragHandle
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material.icons.rounded.ThumbUpAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -69,9 +70,8 @@ fun SongCard(
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
     playlistInfos: List<PlaylistInfo>,
-    @DrawableRes fallbackResourceId: Int,
     onClick: () -> Unit,
-    onFavorite: ( String ) -> Unit,
+    onFavorite: ( String, Boolean ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onViewArtist: ( String ) -> Unit,
@@ -133,11 +133,13 @@ fun SongCard(
                 Row {
                     if ( isFavorite ) {
                         IconButton(
-                            onClick = { onFavorite( song.id ) }
+                            onClick = {
+                                onFavorite( song.id, false )
+                            }
                         ) {
                             Icon(
                                 modifier = Modifier.size( 24.dp ),
-                                imageVector = Icons.Filled.Favorite,
+                                imageVector = Icons.Rounded.ThumbUpAlt,
                                 tint = MaterialTheme.colorScheme.primary,
                                 contentDescription = null
                             )
@@ -165,7 +167,6 @@ fun SongCard(
                                     song = song,
                                     isFavorite = isFavorite,
                                     isCurrentlyPlaying = isCurrentlyPlaying,
-                                    fallbackResourceId = fallbackResourceId,
                                     onFavorite = onFavorite,
                                     onAddToQueue = onAddToQueue,
                                     onPlayNext = onPlayNext,
@@ -224,8 +225,7 @@ fun SongOptionsBottomSheetMenu(
     song: Song,
     isFavorite: Boolean,
     isCurrentlyPlaying: Boolean,
-    @DrawableRes fallbackResourceId: Int,
-    onFavorite: ( String ) -> Unit,
+    onFavorite: ( String, Boolean ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
@@ -260,7 +260,7 @@ fun SongOptionsBottomSheetMenu(
                 leadingIcon = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                 label = language.favorite
             ) {
-                onFavorite( song.id )
+                onFavorite( song.id, !isFavorite )
                 onDismissRequest()
             }
         },
@@ -317,9 +317,8 @@ fun QueueSongCard(
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
     playlistInfos: List<PlaylistInfo>,
-    @DrawableRes fallbackResourceId: Int,
     onClick: () -> Unit,
-    onFavorite: ( String ) -> Unit,
+    onFavorite: ( String, Boolean ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onViewArtist: ( String ) -> Unit,
@@ -351,7 +350,6 @@ fun QueueSongCard(
             isCurrentlyPlaying = isCurrentlyPlaying,
             isFavorite = isFavorite,
             playlistInfos = playlistInfos,
-            fallbackResourceId = fallbackResourceId,
             onClick = onClick,
             onFavorite = onFavorite,
             onPlayNext = onPlayNext,
@@ -384,8 +382,7 @@ fun SongOptionsBottomSheetContentPreview() {
             song = PreviewParameterData.songs.first(),
             isFavorite = true,
             isCurrentlyPlaying = true,
-            fallbackResourceId = R.drawable.core_ui_placeholder_light,
-            onFavorite = {},
+            onFavorite = { _, _ -> },
             onAddToQueue = {},
             onPlayNext = { /*TODO*/ },
             onViewArtist = {},
@@ -419,9 +416,8 @@ fun SongCardPreview() {
             isCurrentlyPlaying = true,
             isFavorite = true,
             playlistInfos = emptyList(),
-            fallbackResourceId = R.drawable.core_ui_placeholder_light,
             onClick = {},
-            onFavorite = {},
+            onFavorite = { _, _ -> },
             onPlayNext = {},
             onAddToQueue = {},
             onViewArtist = {},
@@ -454,9 +450,8 @@ fun QueueSongCardPreview() {
             isCurrentlyPlaying = true,
             isFavorite = true,
             playlistInfos = emptyList(),
-            fallbackResourceId = R.drawable.core_ui_placeholder_light,
             onClick = {},
-            onFavorite = {},
+            onFavorite = { _, _ -> },
             onPlayNext = {},
             onAddToQueue = {},
             onViewArtist = {},

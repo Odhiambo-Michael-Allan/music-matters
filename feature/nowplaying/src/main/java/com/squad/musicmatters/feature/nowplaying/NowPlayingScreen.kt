@@ -34,19 +34,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.ThumbUpAlt
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.rounded.FastForward
 import androidx.compose.material.icons.rounded.FastRewind
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.SkipPrevious
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.rounded.ThumbUpAlt
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -71,7 +74,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -99,7 +101,7 @@ import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
 // Stateful
 @Composable
 fun NowPlayingBottomSheet(
-    viewModel: NowPlayingViewModel = hiltViewModel(),
+    viewModel: NowPlayingScreenViewModel = hiltViewModel(),
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onNavigateToQueueScreen: () -> Unit,
@@ -167,7 +169,7 @@ fun NowPlayingScreenContent(
     playbackPosition: PlaybackPosition,
     durationFormatter: ( Long ) -> String,
     onArtistClicked: ( String ) -> Unit,
-    onFavorite: ( String ) -> Unit,
+    onFavorite: ( String, Boolean ) -> Unit,
     onPausePlayButtonClick: () -> Unit,
     onPreviousButtonClick: () -> Unit,
     onPlayNext: () -> Unit,
@@ -323,7 +325,7 @@ fun NowPlayingScreenContent(
                                     leadingIconTint = MaterialTheme.colorScheme.primary
                                 ) {
                                     onDismissRequest()
-                                    onFavorite( song.id )
+                                    onFavorite( song.id, !uiState.currentlyPlayingSongIsFavorite )
                                 }
                             },
                             trailingBottomSheetMenuItems = { onDismissRequest ->
@@ -383,7 +385,7 @@ fun PortraitLayout(
     currentlyPlayingSong: Song,
     playbackPosition: PlaybackPosition,
     durationFormatter: ( Long ) -> String,
-    onFavorite: ( String ) -> Unit,
+    onFavorite: ( String, Boolean ) -> Unit,
     onSwipeArtworkLeft: () -> Unit,
     onSwipeArtworkRight: () -> Unit,
     onArtworkClicked: ( Song ) -> Unit,
@@ -406,12 +408,13 @@ fun PortraitLayout(
 ) {
     Column (
         modifier = Modifier
-            .padding(start = 8.dp, end = 8.dp, top = 0.dp, bottom = 0.dp)
-            .verticalScroll(rememberScrollState())
+            .fillMaxSize()
+            .padding( 24.dp )
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center
     ) {
         NowPlayingArtwork(
             modifier = Modifier
-                .padding(16.dp, 0.dp)
                 .fillMaxWidth(),
             artworkUri = currentlyPlayingSong.artworkUri?.toUri(),
             onSwipeLeft = onSwipeArtworkLeft,
@@ -429,7 +432,7 @@ fun PortraitLayout(
                 }
             ) { target ->
                 Column (
-                    modifier = Modifier.padding( 16.dp, 16.dp )
+                    modifier = Modifier.padding( 0.dp, 16.dp )
                 ) {
                     Text(
                         text = target.title,
@@ -444,6 +447,8 @@ fun PortraitLayout(
                                 text = it,
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.7f ),
                                 modifier = Modifier.pointerInput( Unit ) {
                                     detectTapGestures { _ ->
                                         onArtistClicked( it )
@@ -459,6 +464,7 @@ fun PortraitLayout(
                                 text = it.toSamplingInfoString( uiState.language ),
                                 style = MaterialTheme.typography.labelSmall
                                     .copy( color = LocalContentColor.current.copy( alpha = 0.7f ) ),
+                                maxLines = 3,
                             )
                         } ?: run {
                             Row (
@@ -484,14 +490,23 @@ fun PortraitLayout(
             ) {
                 IconButton(
                     modifier = Modifier.offset( 4.dp ),
-                    onClick = { onFavorite( currentlyPlayingSong.id ) }
+                    onClick = {
+                        onFavorite(
+                            currentlyPlayingSong.id,
+                            !uiState.currentlyPlayingSongIsFavorite
+                        )
+                    }
                 ) {
                     AnimatedContent(
                         targetState = uiState.currentlyPlayingSongIsFavorite,
                         label = "now-playing-screen-is-favorite-icon"
                     ) {
                         Icon(
-                            imageVector = if ( it ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            imageVector = if ( it ) {
+                                Icons.Rounded.ThumbUpAlt
+                            } else {
+                                Icons.Outlined.ThumbUpAlt
+                            },
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary
                         )
@@ -508,14 +523,14 @@ fun PortraitLayout(
                 }
             }
         }
-        Spacer( modifier = Modifier.height( 24.dp ) )
+//        Spacer( modifier = Modifier.height( 24.dp ) )
         NowPlayingSeekBar(
             playbackPosition = playbackPosition,
             durationFormatter = durationFormatter,
             onSeekStart = onSeekStart,
             onSeekEnd = onSeekEnd
         )
-        Spacer( modifier = Modifier.height( 24.dp ) )
+        Spacer( modifier = Modifier.height( 28.dp ) )
         when {
             uiState.userData.controlsLayoutDefault ->
                 NowPlayingDefaultControlsLayout(
@@ -541,20 +556,17 @@ fun PortraitLayout(
         Spacer( modifier = Modifier.height( 16.dp ) )
         NowPlayingBodyBottomBar(
             language = uiState.language,
-            currentSongIndex = uiState.queue.indexOfFirst { it.id == currentlyPlayingSong.id },
-            queueSize = uiState.queue.size,
             currentLoopMode = uiState.userData.loopMode,
             shuffle = uiState.userData.shuffle,
             currentSpeed = uiState.userData.playbackSpeed,
             currentPitch = uiState.userData.playbackPitch,
-            onQueueClicked = onQueueClicked,
+            onNavigateToQueue = onQueueClicked,
             onToggleLoopMode = onToggleLoopMode,
             onToggleShuffleMode = onToggleShuffleMode,
             onSpeedChange = onPlayingSpeedChange,
             onPitchChange = onPlayingPitchChange,
             onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
         )
-        Spacer( modifier = Modifier.size( 32.dp ) )
     }
 }
 
@@ -567,7 +579,7 @@ fun LandscapeLayout(
     currentlyPlayingSong: Song,
     playbackPosition: PlaybackPosition,
     durationFormatter: ( Long ) -> String,
-    onFavorite: ( String ) -> Unit,
+    onFavorite: ( String, Boolean ) -> Unit,
     onSwipeArtworkLeft: () -> Unit,
     onSwipeArtworkRight: () -> Unit,
     onArtworkClicked: ( Song ) -> Unit,
@@ -591,7 +603,7 @@ fun LandscapeLayout(
     Row (
         modifier = Modifier
             .fillMaxSize()
-            .padding( 24.dp ),
+            .padding(24.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -601,6 +613,7 @@ fun LandscapeLayout(
             onSwipeRight = onSwipeArtworkRight,
             onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
         )
+        Spacer( modifier = Modifier.width( 16.dp ) )
         Column {
             Row {
                 AnimatedContent(
@@ -628,6 +641,8 @@ fun LandscapeLayout(
                                     text = it,
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.7f ),
                                     modifier = Modifier.pointerInput( Unit ) {
                                         detectTapGestures { _ ->
                                             onArtistClicked( it )
@@ -668,18 +683,26 @@ fun LandscapeLayout(
                 ) {
                     IconButton(
                         modifier = Modifier.offset( 4.dp ),
-                        onClick = { onFavorite( currentlyPlayingSong.id ) }
+                        onClick = {
+                            onFavorite(
+                                currentlyPlayingSong.id,
+                                !uiState.currentlyPlayingSongIsFavorite
+                            )
+                        }
                     ) {
                         AnimatedContent(
                             targetState = uiState.currentlyPlayingSongIsFavorite,
                             label = "now-playing-screen-is-favorite-icon"
                         ) {
                             Icon(
-                                imageVector = if ( it ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                                imageVector = if ( it ) {
+                                    Icons.Rounded.ThumbUpAlt
+                                } else {
+                                    Icons.Outlined.ThumbUpAlt
+                                },
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.primary
                             )
-
                         }
                     }
                     IconButton(
@@ -725,13 +748,11 @@ fun LandscapeLayout(
             Spacer( modifier = Modifier.height( 16.dp ) )
             NowPlayingBodyBottomBar(
                 language = uiState.language,
-                currentSongIndex = uiState.queue.indexOfFirst { it.id == currentlyPlayingSong.id },
-                queueSize = uiState.queue.size,
                 currentLoopMode = uiState.userData.loopMode,
                 shuffle = uiState.userData.shuffle,
                 currentSpeed = uiState.userData.playbackSpeed,
                 currentPitch = uiState.userData.playbackPitch,
-                onQueueClicked = onQueueClicked,
+                onNavigateToQueue = onQueueClicked,
                 onToggleLoopMode = onToggleLoopMode,
                 onToggleShuffleMode = onToggleShuffleMode,
                 onSpeedChange = onPlayingSpeedChange,
@@ -767,9 +788,9 @@ fun NowPlayingArtwork(
                 imageUri = it,
                 contentDescription = "now-playing-artwork",
                 modifier = Modifier
-                    .sizeIn( maxWidth = 500.dp, maxHeight = 500.dp )
-                    .aspectRatio( 1f )
-                    .clip(MaterialTheme.shapes.medium )
+                    .sizeIn(maxWidth = 500.dp, maxHeight = 500.dp)
+                    .aspectRatio(1f)
+                    .clip(MaterialTheme.shapes.medium)
                     .swipeable(
                         minimumDragAmount = 100f,
                         onSwipeLeft = onSwipeLeft,
@@ -794,42 +815,51 @@ fun NowPlayingDefaultControlsLayout(
     onNextButtonClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.padding( 16.dp, 0.dp ),
-        horizontalArrangement = Arrangement.spacedBy( 12.dp )
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp, 0.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy( 12.dp ),
     ) {
-        NowPlayingPlayPauseButton(
+        PlayPauseButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Primary
+                color = NowPlayingControlButtonColors.Primary,
+                size = NowPlayingControlButtonSize.ExtraLarge
             ),
             isPlaying = isPlaying,
             onClick = onPausePlayButtonClick
         )
-        NowPlayingSkipPreviousButton(
+        PlayPreviousSongButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Surface
+                color = NowPlayingControlButtonColors.Transparent,
+                size = NowPlayingControlButtonSize.Large
             ),
             onClick = onPreviousButtonClick
         )
-        if ( enableSeekControls ) {
-            NowPlayingFastRewindButton(
-                style = NowPlayingControlButtonStyle(
-                    color = NowPlayingControlButtonColors.Surface
-                ),
-                onClick = onFastRewindButtonClick
-            )
-            NowPlayingFastForwardButton(
-                style = NowPlayingControlButtonStyle(
-                    color = NowPlayingControlButtonColors.Surface
-                ),
-                onClick = onFastForwardButtonClick
-            )
-        }
-        NowPlayingSkipNextButton(
+        PlayNextButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Surface
+                color = NowPlayingControlButtonColors.Transparent,
+                size = NowPlayingControlButtonSize.Large
             ),
             onClick = onNextButtonClick
         )
+        Spacer( modifier = Modifier.weight(0.8f ) )
+        IconButton(
+            onClick = {}
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Timer,
+                contentDescription = null,
+            )
+        }
+        IconButton(
+            onClick = {}
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Rounded.PlaylistPlay,
+                contentDescription = null,
+            )
+        }
     }
 }
 
@@ -850,25 +880,24 @@ fun NowPlayingTraditionalControlsLayout(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        NowPlayingSkipPreviousButton(
+        IconButton(
+            onClick = {}
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Rounded.PlaylistPlay,
+                contentDescription = null,
+            )
+        }
+        Spacer( modifier = Modifier.weight( 0.5f ) )
+        PlayPreviousSongButton(
             style = NowPlayingControlButtonStyle(
                 color = NowPlayingControlButtonColors.Transparent,
                 size = NowPlayingControlButtonSize.Large
             ),
             onClick = onPreviousButtonClick
         )
-        Spacer( modifier = Modifier.width( 4.dp ) )
-        if ( enableSeekControls ) {
-            NowPlayingFastRewindButton(
-                style = NowPlayingControlButtonStyle(
-                    color = NowPlayingControlButtonColors.Transparent,
-                    size = NowPlayingControlButtonSize.Large
-                ),
-                onClick = onFastRewindButtonClick
-            )
-            Spacer( modifier = Modifier.width( 4.dp ) )
-        }
-        NowPlayingPlayPauseButton(
+        Spacer( modifier = Modifier.width( 8.dp ) )
+        PlayPauseButton(
             style = NowPlayingControlButtonStyle(
                 color = NowPlayingControlButtonColors.Primary,
                 size = NowPlayingControlButtonSize.ExtraLarge
@@ -876,77 +905,78 @@ fun NowPlayingTraditionalControlsLayout(
             isPlaying = isPlaying,
             onClick = onPausePlayButtonClick
         )
-        Spacer( modifier = Modifier.width( 4.dp ) )
-        if ( enableSeekControls ) {
-            NowPlayingFastForwardButton(
-                style = NowPlayingControlButtonStyle(
-                    color = NowPlayingControlButtonColors.Transparent,
-                    size = NowPlayingControlButtonSize.Large
-                ),
-                onClick = onFastForwardButtonClick
-            )
-            Spacer( modifier = Modifier.width( 4.dp ) )
-        }
-        NowPlayingSkipNextButton(
+        Spacer( modifier = Modifier.width( 8.dp ) )
+        PlayNextButton(
             style = NowPlayingControlButtonStyle(
                 color = NowPlayingControlButtonColors.Transparent,
                 size = NowPlayingControlButtonSize.Large
             ),
             onClick = onNextButtonClick
         )
+        Spacer( modifier = Modifier.weight( 0.5f ) )
+        IconButton(
+            onClick = {}
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Timer,
+                contentDescription = null,
+            )
+        }
+
     }
 }
 
 @Composable
 fun NowPlayingSeekBar(
+    modifier: Modifier = Modifier,
     playbackPosition: PlaybackPosition,
     durationFormatter: (Long ) -> String,
     onSeekStart: () -> Unit,
     onSeekEnd: ( Long ) -> Unit
 ) {
 
-    Row (
-        modifier = Modifier.padding( 16.dp, 0.dp ),
-        horizontalArrangement = Arrangement.spacedBy( 8.dp ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    Column( modifier = modifier ) {
         var seekRatio by remember { mutableStateOf<Float?>( null ) }
 
-        NowPlayingPlaybackPositionText(
-            durationFormatter = durationFormatter,
-            duration = seekRatio?.let { it * playbackPosition.total }?.toLong()
-                ?: playbackPosition.played,
-            alignment = Alignment.CenterStart
+        NowPlayingSeekBar(
+            playbackPosition = playbackPosition,
+            onSeekStart = {
+                seekRatio = 0f
+                onSeekStart()
+            },
+            onSeek = { seekRatio = it },
+            onSeekEnd = {
+                onSeekEnd( ( it * playbackPosition.total ).toLong() )
+                seekRatio = null
+            },
+            onSeekCancel = { seekRatio = null }
         )
-        Box(
-            modifier = Modifier.weight( 1f )
+        Spacer( modifier = Modifier.height( 2.dp ) )
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            NowPlayingSeekBar(
-                ratio = playbackPosition.ratio,
-                onSeekStart = {
-                    seekRatio = 0f
-                    onSeekStart()
-                },
-                onSeek = { seekRatio = it },
-                onSeekEnd = {
-                    onSeekEnd( ( it * playbackPosition.total ).toLong() )
-                    seekRatio = null
-                },
-                onSeekCancel = { seekRatio = null }
+            NowPlayingPlaybackPositionText(
+                durationFormatter = durationFormatter,
+                duration = seekRatio?.let { it * playbackPosition.total }?.toLong()
+                    ?: playbackPosition.played,
+                alignment = Alignment.CenterStart
+            )
+
+            NowPlayingPlaybackPositionText(
+                durationFormatter = durationFormatter,
+                duration = playbackPosition.total,
+                alignment = Alignment.CenterEnd
             )
         }
-        NowPlayingPlaybackPositionText(
-            durationFormatter = durationFormatter,
-            duration = playbackPosition.total,
-            alignment = Alignment.CenterEnd
-        )
     }
+
 }
 
 @SuppressLint( "UnusedBoxWithConstraintsScope" )
 @Composable
 private fun NowPlayingSeekBar(
-    ratio: Float,
+    playbackPosition: PlaybackPosition,
     onSeekStart: () -> Unit,
     onSeek: ( Float ) -> Unit,
     onSeekEnd: (Float ) -> Unit,
@@ -963,21 +993,21 @@ private fun NowPlayingSeekBar(
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
-            .height(sliderHeight),
+            .height( sliderHeight ),
         contentAlignment = Alignment.Center
     ) {
         val sliderWidth = maxWidth
 
         Box(
             modifier = Modifier
-                .height( sliderHeight )
+                .height(sliderHeight)
                 .fillMaxWidth()
-                .pointerInput( Unit ) {
+                .pointerInput(Unit) {
                     detectTapGestures(
                         onTap = { offset ->
                             onSeekStart()
-                            val tapRatio = ( offset.x / sliderWidth.toPx() ).coerceIn( 0f..1f )
-                            onSeekEnd( tapRatio )
+                            val tapRatio = (offset.x / sliderWidth.toPx()).coerceIn(0f..1f)
+                            onSeekEnd(tapRatio)
                         }
                     )
                 }
@@ -990,7 +1020,7 @@ private fun NowPlayingSeekBar(
                             onSeekStart()
                         },
                         onDragEnd = {
-                            onSeekEnd( dragRatio )
+                            onSeekEnd(dragRatio)
                             offsetX = 0f
                             dragging = false
                             dragRatio = 0f
@@ -1004,26 +1034,34 @@ private fun NowPlayingSeekBar(
                         onHorizontalDrag = { pointer, dragAmount ->
                             pointer.consume()
                             offsetX += dragAmount
-                            dragRatio = ( offsetX / sliderWidth.toPx() ).coerceIn( 0f..1f )
-                            onSeek( dragRatio )
+                            dragRatio = (offsetX / sliderWidth.toPx()).coerceIn(0f..1f)
+                            onSeek(dragRatio)
                         }
                     )
                 }
         )
         Box(
             modifier = Modifier
-                .padding( thumbSizeHalf, 0.dp )
-                .height( trackHeight )
+                .height(trackHeight)
                 .fillMaxWidth()
                 .background(
                     MaterialTheme.colorScheme.surfaceVariant,
-                    RoundedCornerShape( thumbSizeHalf )
+                    RoundedCornerShape(thumbSizeHalf)
                 )
         ) {
             Box(
                 modifier = Modifier
-                    .height( trackHeight )
-                    .fillMaxWidth(if ( dragging ) dragRatio else ratio )
+                    .height(trackHeight)
+                    .fillMaxWidth( playbackPosition.bufferedRatio )
+                    .background(
+                        MaterialTheme.colorScheme.primary.copy( alpha = 0.5f ),
+                        RoundedCornerShape( thumbSizeHalf )
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .height(trackHeight)
+                    .fillMaxWidth(if ( dragging ) dragRatio else playbackPosition.playedRatio )
                     .background(
                         MaterialTheme.colorScheme.primary,
                         RoundedCornerShape( thumbSizeHalf )
@@ -1036,8 +1074,8 @@ private fun NowPlayingSeekBar(
                     .size( thumbSize )
                     .offset(
                         sliderWidth
-                            .minus( thumbSizeHalf.times( 2 ) )
-                            .times(if ( dragging ) dragRatio else ratio ),
+                            .minus(thumbSizeHalf.times( 2 ) )
+                            .times( if ( dragging ) dragRatio else playbackPosition.playedRatio ),
                         0.dp
                     )
                     .background( MaterialTheme.colorScheme.primary, CircleShape )
@@ -1058,11 +1096,15 @@ private fun NowPlayingPlaybackPositionText(
     Box( contentAlignment = alignment ) {
         Text(
             text = "0".repeat( durationFormatted.length ),
-            style = textStyle.copy( color = Color.Transparent )
+            style = textStyle.copy(
+                color = Color.Transparent,
+                fontWeight = FontWeight.SemiBold
+            )
         )
         Text(
             text = durationFormatted,
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold
         )
     }
 }
@@ -1096,7 +1138,7 @@ private fun NowPlayingFastRewindButton(
 }
 
 @Composable
-private fun NowPlayingSkipNextButton(
+private fun PlayNextButton(
     style: NowPlayingControlButtonStyle,
     onClick: () -> Unit
 ) {
@@ -1110,7 +1152,7 @@ private fun NowPlayingSkipNextButton(
 }
 
 @Composable
-private fun NowPlayingSkipPreviousButton(
+private fun PlayPreviousSongButton(
     style: NowPlayingControlButtonStyle,
     onClick: () -> Unit
 ) {
@@ -1124,7 +1166,7 @@ private fun NowPlayingSkipPreviousButton(
 }
 
 @Composable
-private fun NowPlayingPlayPauseButton(
+private fun PlayPauseButton(
     style: NowPlayingControlButtonStyle,
     isPlaying: Boolean,
     onClick: () -> Unit
@@ -1249,7 +1291,7 @@ fun NowPlayingScreenContentPreview() {
             playbackPosition = PlaybackPosition( 2L, 3L, 5L ),
             durationFormatter = { "05:33" },
             onArtistClicked = {},
-            onFavorite = {},
+            onFavorite = { _, _ -> },
             onPausePlayButtonClick = { /*TODO*/ },
             onPreviousButtonClick = { /*TODO*/ },
             onPlayNext = { /*TODO*/ },

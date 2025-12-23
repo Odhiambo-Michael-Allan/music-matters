@@ -26,8 +26,11 @@ abstract class BaseViewModel(
     private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 ) : ViewModel() {
 
-    fun addToFavorites( songId: String ) {
-        viewModelScope.launch { playlistRepository.addToFavorites( songId ) }
+    fun addToFavorites( songId: String, isFavorite: Boolean ) {
+        viewModelScope.launch {
+            if ( isFavorite ) playlistRepository.addToFavorites( songId )
+            else playlistRepository.removeFromFavorites( songId )
+        }
     }
 
     fun addSongsToPlaylist(

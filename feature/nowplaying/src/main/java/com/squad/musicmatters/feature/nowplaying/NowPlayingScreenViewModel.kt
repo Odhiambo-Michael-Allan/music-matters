@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NowPlayingViewModel @Inject constructor(
+class NowPlayingScreenViewModel @Inject constructor(
     private val player: MusicServiceConnection,
     private val preferencesDataSource: PreferencesDataSource,
     private val playlistRepository: PlaylistRepository,

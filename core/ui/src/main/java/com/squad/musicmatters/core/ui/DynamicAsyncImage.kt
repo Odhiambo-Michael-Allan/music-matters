@@ -3,6 +3,7 @@ package com.squad.musicmatters.core.ui
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,37 +34,41 @@ fun DynamicAsyncImage(
     val isLocalInspection = LocalInspectionMode.current
     val context = LocalContext.current
 
-    // Remember the ImageRequest based on the imageUri key.
-    val imageRequest = remember( imageUri ) {
-        ImageRequest.Builder( context )
-            .data( imageUri )
-            .crossfade( true )
+    val imageRequest = remember(imageUri) {
+        ImageRequest.Builder(context)
+            .data(imageUri)
+            .crossfade(true)
             .build()
     }
 
-    val painter = rememberAsyncImagePainter( model = imageRequest )
+    val painter = rememberAsyncImagePainter(model = imageRequest)
     val state = painter.state
     val isLoading = state is AsyncImagePainter.State.Loading
     val isError = state is AsyncImagePainter.State.Error
 
+    // Apply the external modifier (size, clip, swipeable) to the root Box only
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier,
+        modifier = modifier
     ) {
-        if ( isLoading || isError || isLocalInspection ) {
+        if (isLoading || isError || isLocalInspection) {
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = Color.LightGray
                 ),
-                modifier = modifier,
+                // Internal items should just fill the parent Box
+                modifier = Modifier.fillMaxSize()
             ) {}
         }
+
         Image(
             painter = painter,
-            contentScale = ContentScale.Crop,
+            // Use Fit to see the whole image, or Crop to fill the square
+            contentScale = ContentScale.Fit,
             contentDescription = contentDescription,
-            colorFilter = if ( iconTint != Color.Unspecified ) {
-                ColorFilter.tint( iconTint )
+            modifier = Modifier.fillMaxSize(), // Ensure image fills the Box
+            colorFilter = if (iconTint != Color.Unspecified) {
+                ColorFilter.tint(iconTint)
             } else null
         )
     }
