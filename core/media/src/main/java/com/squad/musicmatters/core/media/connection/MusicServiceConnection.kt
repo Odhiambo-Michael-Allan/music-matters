@@ -1,10 +1,7 @@
 package com.squad.musicmatters.core.media.connection
 
-import androidx.media3.common.MediaItem
-import com.squad.musicmatters.core.media.media.extensions.toMediaItem
 import com.squad.musicmatters.core.model.Song
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
 interface MusicServiceConnection {
 
@@ -42,7 +39,7 @@ data class PlaybackPosition(
     val buffered: Long,
     val total: Long,
 ) {
-    val ratio: Float
+    val playedRatio: Float
         get() = ( played.toFloat() / total ).takeIf { it.isFinite() } ?: 0f
 
     val bufferedRatio: Float

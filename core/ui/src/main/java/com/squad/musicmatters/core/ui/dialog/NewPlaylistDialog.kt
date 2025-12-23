@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
@@ -48,7 +49,8 @@ fun NewPlaylistDialog(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         title = {
             Text(
-                text = language.newPlaylist
+                text = language.newPlaylist,
+                fontWeight = FontWeight.SemiBold
             )
         },
         text = {

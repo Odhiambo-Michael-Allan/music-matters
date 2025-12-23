@@ -11,7 +11,6 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
@@ -58,7 +57,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -69,10 +67,8 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.datastore.DefaultPreferences
-import com.squad.musicmatters.core.designsystem.theme.GoogleBlue
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.media.connection.NOTHING_PLAYING
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
@@ -95,7 +91,7 @@ import kotlin.math.absoluteValue
 // Stateful
 @Composable
 fun NowPlayingBottomBar(
-    viewModel: NowPlayingViewModel = hiltViewModel(),
+    viewModel: NowPlayingScreenViewModel = hiltViewModel(),
     onShowNowPlayingBottomSheet: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -307,7 +303,7 @@ fun NowPlayingBottomBarContent(
                                 modifier = Modifier
                                     .align( Alignment.CenterStart )
                                     .background( MaterialTheme.colorScheme.primary )
-                                    .fillMaxWidth(  playbackPosition.ratio )
+                                    .fillMaxWidth(  playbackPosition.playedRatio )
                                     .fillMaxHeight()
                             )
                         }

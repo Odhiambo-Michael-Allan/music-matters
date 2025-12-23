@@ -10,688 +10,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/androidTestResultsUserPreferences.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/core/data/MusicMatters.core.data.androidTest.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.androidTest.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.unitTest.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/core/media/MusicMatters.core.media.androidTest.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/core/model/MusicMatters.core.model.test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.androidTest.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.unitTest.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/common/src/main/java/com/squad/musicmatters/core/common/MusicMattersDispatchers.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/common/src/main/java/com/squad/musicmatters/core/common/di/CoroutineScopesModule.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/common/src/main/java/com/squad/musicmatters/core/common/di/DispatchersModule.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/di/DataModule.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/di/SongsStoreModule.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/CompositeRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/MostPlayedSongsRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/PlayHistoryRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/QueueRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/SongsRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/CompositeRepositoryImpl.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/MostPlayedSongsRepositoryImpl.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/PlayHistoryRepositoryImpl.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/QueueRepositoryImpl.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImpl.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/songs/SongsStore.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/songs/SongsStoreListener.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/songs/impl/SongsStoreImpl.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/utils/Flows.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/CompositeRepositoryImplTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/MostPlayedSongsRepositoryImplTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/PlayHistoryRepositoryImplTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/PlaylistRepositoryImplTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/QueueRepositoryImplTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImplTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/TestPlayHistoryDao.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/TestPlaylistDao.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/TestPlaylistEntryDao.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/TestQueueDao.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/TestSongPlayCountEntryDao.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/src/androidTest/java/com/squad/musicmatters/core/database/PlayHistoryDaoTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/src/androidTest/java/com/squad/musicmatters/core/database/QueueDaoTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/src/main/AndroidManifest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/PlayHistoryDao.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/QueueDao.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/di/DaosModule.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/di/DatabaseModule.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/model/PlayHistoryEntity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/model/QueueEntity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/typeconverter/InstantConverter.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/consumer-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/proguard-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/AndroidManifest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/proto/com/squad/musicmatters/data/bottombar_label_visibility.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/proto/com/squad/musicmatters/data/loop_mode.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/proto/com/squad/musicmatters/data/lyrics_layout.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/proto/com/squad/musicmatters/data/sort_albums_by.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/proto/com/squad/musicmatters/data/sort_artists_by.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/proto/com/squad/musicmatters/data/sort_genres_by.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/proto/com/squad/musicmatters/data/sort_paths_by.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/proto/com/squad/musicmatters/data/sort_playlists_by.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/proto/com/squad/musicmatters/data/sort_songs_by.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/proto/com/squad/musicmatters/data/theme_mode.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore-proto/src/main/proto/com/squad/musicmatters/data/user_preferences.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/consumer-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/proguard-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/src/main/AndroidManifest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/src/main/java/com/squad/musicmatters/core/datastore/MusicMattersPreferencesDataSource.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/src/main/java/com/squad/musicmatters/core/datastore/PreferencesDataSource.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/src/main/java/com/squad/musicmatters/core/datastore/UserPreferencesSerializer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/src/main/java/com/squad/musicmatters/core/datastore/di/DataStoreModule.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/src/test/java/com/squad/musicmatters/core/datastore/MusicMattersPreferencesDataSourceTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/src/test/java/com/squad/musicmatters/core/datastore/TestPreferencesDataStore.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/datastore/src/test/java/com/squad/musicmatters/core/datastore/UserPreferencesSerializerTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/media/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/media/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/media/consumer-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/media/proguard-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/di/Binders.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/di/Providers.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/BottomBarLabelVisibility.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/LoopMode.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/LyricsLayout.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/NowPlayingLyricsLayout.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/SortAlbumsBy.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/SortArtistsBy.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/SortGenresBy.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/SortPathsBy.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/SortPlaylistsBy.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/SortSongsBy.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/ThemeMode.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/UserData.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/connection/FakeConnectable.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/connection/TestMusicServiceConnection.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/TestMostPlayedSongsRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/TestPlayHistoryRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/TestPlaylistRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/TestPreferencesDataSource.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/TestQueueRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/TestSongsAdditionalMetadataRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/TestSongsRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/rules/MainDispatcherRule.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/songs/Songs.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/Animation.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/LoadingWheel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/nowplaying/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/nowplaying/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/nowplaying/consumer-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/nowplaying/proguard-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/AndroidManifest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingBottomBar.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/PlaybackPositionUpdater.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/di/NowPlayingDiModule.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/nowplaying/src/test/java/com/squad/musicmatters/feature/nowplaying/NowPlayingViewModelTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/navigation/SongsScreenNavigation.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/MainActivityViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/ScaffoldDialog.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/songs/SongsScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/checksums/checksums.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/checksums/md5-checksums.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/checksums/sha1-checksums.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxActivityLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeMaterial3AdaptiveLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeMaterial3AdaptiveNavigationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeMaterial3LibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxCoreLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxEspressoLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxFoundationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxLifecycleLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxLifecycleRuntimeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxMaterial3LibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxMedia3LibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxNavigationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxRoomLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxUiLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxUiTestLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxUiToolingLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$ComposeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$ComposeMaterialIconsLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$ComposeMaterialLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$ComposePluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$ComposeVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$CoreJdkLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$CoreLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$KotlinxCoroutinesLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$KotlinxLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$Material3AdaptiveNavigationVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$Material3AdaptiveVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$Material3VersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxActivityLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeMaterial3AdaptiveLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeMaterial3AdaptiveNavigationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeMaterial3LibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxCoreLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxEspressoLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxFoundationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxLifecycleLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxLifecycleRuntimeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxMaterial3LibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxMedia3LibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxNavigationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxRoomLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxUiLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxUiTestLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxUiToolingLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$BundleAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$ComposeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$ComposeMaterialIconsLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$ComposeMaterialLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$ComposePluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$ComposeVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$CoreJdkLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$CoreLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$KotlinxCoroutinesLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$KotlinxLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$Material3AdaptiveNavigationVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$Material3AdaptiveVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$Material3VersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$PluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$VersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/46d4c88e92b57b7ecbe5788d46b8f493c2f1790b/sources/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/classes/org/gradle/accessors/dm/CoreProjectDependency.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/classes/org/gradle/accessors/dm/Core_CommonProjectDependency.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/classes/org/gradle/accessors/dm/Core_DataProjectDependency.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/classes/org/gradle/accessors/dm/Core_DesignsystemProjectDependency.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/classes/org/gradle/accessors/dm/Core_I8nProjectDependency.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/classes/org/gradle/accessors/dm/Core_ModelProjectDependency.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/classes/org/gradle/accessors/dm/Core_TestingProjectDependency.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/classes/org/gradle/accessors/dm/MobileProjectDependency.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/classes/org/gradle/accessors/dm/MusicMattersProjectDependency.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/classes/org/gradle/accessors/dm/RootProjectAccessor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/sources/org/gradle/accessors/dm/CoreProjectDependency.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/sources/org/gradle/accessors/dm/Core_CommonProjectDependency.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/sources/org/gradle/accessors/dm/Core_DataProjectDependency.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/sources/org/gradle/accessors/dm/Core_DesignsystemProjectDependency.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/sources/org/gradle/accessors/dm/Core_I8nProjectDependency.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/sources/org/gradle/accessors/dm/Core_ModelProjectDependency.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/sources/org/gradle/accessors/dm/Core_TestingProjectDependency.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/sources/org/gradle/accessors/dm/MobileProjectDependency.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/sources/org/gradle/accessors/dm/MusicMattersProjectDependency.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/95fb1637b5b41d853a76899829627a42cc1329f9/sources/org/gradle/accessors/dm/RootProjectAccessor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/executionHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AccompanistLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidPluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidToolsLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxActivityLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeFoundationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeMaterial3AdaptiveLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeMaterial3LibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeMaterialLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeRuntimeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeUiLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxComposeUiToolingLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxCoreLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxEspressoLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxFoundationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxHiltLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxHiltNavigationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxLifecycleLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxLifecycleRuntimeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxMedia3CommonLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxMedia3DatasourceLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxMedia3LibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxNavigationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxPagingLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxPagingRuntimeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxRoomLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxTestLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxTracingLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxUiLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxUiTestLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxUiToolingLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxWindowLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidxWorkLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$CoilKtLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$CoilLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$ComposeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$GoogleLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$GoogleOssLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$GoogleOssLicensesLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$HiltAndroidLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$HiltExtLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$HiltLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$JavaxLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$JetbrainsKotlinPluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$JetbrainsPluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$KotlinLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$KotlinPluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$KotlinxCoroutinesLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$KotlinxLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$KotlinxSerializationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$KspLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$OkhttpLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$PagingComposeVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$PagingVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$ProtobufKotlinLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$ProtobufLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$RetrofitKotlinLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$RetrofitLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$RoomLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$RoomPagingVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$RoomVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AccompanistLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidPluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidToolsLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxActivityLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeFoundationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeMaterial3AdaptiveLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeMaterial3LibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeMaterialLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeRuntimeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeUiLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxComposeUiToolingLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxCoreLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxEspressoLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxFoundationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxHiltLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxHiltNavigationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxLifecycleLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxLifecycleRuntimeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxMedia3CommonLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxMedia3DatasourceLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxMedia3LibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxNavigationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxPagingLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxPagingRuntimeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxRoomLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxTestLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxTracingLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxUiLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxUiTestLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxUiToolingLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxWindowLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidxWorkLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$BundleAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$CoilKtLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$CoilLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$ComposeLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$GoogleLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$GoogleOssLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$GoogleOssLicensesLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$HiltAndroidLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$HiltExtLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$HiltLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$JavaxLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$JetbrainsKotlinPluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$JetbrainsPluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$KotlinLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$KotlinPluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$KotlinxCoroutinesLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$KotlinxLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$KotlinxSerializationLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$KspLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$OkhttpLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$PagingComposeVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$PagingVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$PluginAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$ProtobufKotlinLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$ProtobufLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$RetrofitKotlinLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$RetrofitLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$RoomLibraryAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$RoomPagingVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$RoomVersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$VersionAccessors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/f688cdab0f210a2ae15097e8fe5e507f6dd93248/sources/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/dependencies-accessors/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/executionHistory/executionHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/executionHistory/executionHistory.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/fileHashes/resourceHashesCache.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.4/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/convention/src/main/java/AndroidFeatureConventionPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/convention/src/main/java/AndroidFeatureConventionPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/convention/src/main/java/AndroidRoomConventionPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/convention/src/main/java/AndroidRoomConventionPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/consumer-rules.pro" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/consumer-rules.pro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/proguard-rules.pro" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/proguard-rules.pro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/androidTest/java/com/odesa/musicMatters/core/common/ExampleInstrumentedTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/datastore/src/androidTest/java/com/squad/musicmatters/core/datastore/ExampleInstrumentedTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/MusicMattersMediaNotificationProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/MusicMattersMediaNotificationProvider.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/Connectable.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/connection/Connectable.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/MediaBrowserAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/connection/MediaBrowserAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnection.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/connection/MusicServiceConnection.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnectionImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/connection/MusicServiceConnectionImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/di/CommonDiModule.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MediaPermissionsManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/songs/MediaPermissionsManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MediaStoreObserver.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MediaStoreUpdateBroadcastReceiver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MediaStoreUpdateBroadcastReceiver.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/MusicService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MusicService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/ReplaceableForwardingPlayer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/ReplaceableForwardingPlayer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/extensions/CursorExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/extensions/CursorExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/extensions/JavaLangExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/extensions/JavaLangExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/extensions/MediaItemExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/extensions/MediaItemExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/extensions/PlayerExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/extensions/PlayerExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/extensions/SongExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/extensions/SongExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/library/BrowseTree.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/library/BrowseTree.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/library/LocalMusicSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/library/LocalMusicSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/odesa/musicMatters/core/common/media/library/MusicSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/library/MusicSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/res/drawable/notification_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/res/drawable/notification_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/test/java/com/odesa/musicMatters/core/common/ExampleUnitTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/test/java/com/odesa/musicMatters/core/common/connection/MusicServiceConnectionImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/test/java/com/squad/musicmatters/core/media/connection/MusicServiceConnectionImplTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/test/java/com/odesa/musicMatters/core/common/media/library/AbstractMusicSourceTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/common/src/test/java/com/odesa/musicMatters/core/common/media/library/BrowseTreeTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/test/java/com/squad/musicmatters/core/media/media/library/BrowseTreeTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/androidTest/java/com/odesa/musicMatters/core/data/ExampleInstrumentedTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/FileAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/FileAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/database/MusicMattersDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/MusicMattersDatabase.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/database/dao/BaseDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/BaseDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/database/dao/PlaylistDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/PlaylistDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/database/dao/PlaylistEntryDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/PlaylistEntryDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/database/dao/SongAdditionalMetadataDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/SongAdditionalMetadataDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/database/dao/SongPlayCountEntryDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/SongPlayCountEntryDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/database/model/Playlist.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/model/PlaylistEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/database/model/PlaylistEntry.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/model/PlaylistEntryEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/database/model/PlaylistWithEntries.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/model/PopulatedPlaylistEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/database/model/SongAdditionalMetadata.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/model/SongAdditionalMetadataEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/database/model/SongPlayCountEntry.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/model/SongPlayCountEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/di/DataDiModule.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/playlists/PlaylistStore.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/playlists/impl/LocalPlaylistStore.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/preferences/PreferenceStore.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/preferences/impl/PreferenceStoreImpl.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/repository/PlaylistRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/PlaylistRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/repository/PlaylistRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/PlaylistRepositoryImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/repository/SongMetadataRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/SongsAdditionalMetadataRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/repository/SongsAdditionalMetadataRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsAdditionalMetadataRepositoryImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/search/SearchHistoryRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/search/SearchHistoryRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/search/SearchHistoryStore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/search/SearchHistoryStore.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/search/impl/SearchHistoryRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/search/impl/SearchHistoryRepositoryImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/search/impl/SearchHistoryStoreImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/search/impl/SearchHistoryStoreImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/settings/SettingsRepository.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/settings/impl/SettingsRepositoryImpl.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/utils/FuzzySearcher.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/utils/FuzzySearcher.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/utils/ListUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/utils/ListUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/odesa/musicMatters/core/data/utils/VersionUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/utils/VersionUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/odesa/musicMatters/core/data/ExampleUnitTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/odesa/musicMatters/core/data/TestDatabase.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/odesa/musicMatters/core/data/database/dao/PlaylistDaoTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/androidTest/java/com/squad/musicmatters/core/database/PlaylistDaoTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/odesa/musicMatters/core/data/database/dao/PlaylistEntryDaoTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/androidTest/java/com/squad/musicmatters/core/database/PlaylistEntryDaoTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/odesa/musicMatters/core/data/database/dao/SongAdditionalMetadataDaoTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/androidTest/java/com/squad/musicmatters/core/database/SongAdditionalMetadataDaoTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/odesa/musicMatters/core/data/database/dao/SongPlayCountEntryDaoTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/androidTest/java/com/squad/musicmatters/core/database/SongPlayCountEntryDaoTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/odesa/musicMatters/core/data/playlists/impl/LocalPlaylistStoreTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/odesa/musicMatters/core/data/playlists/impl/PlaylistRepositoryImplTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/odesa/musicMatters/core/data/search/impl/SearchHistoryRepositoryImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/search/impl/SearchHistoryRepositoryImplTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/odesa/musicMatters/core/data/search/impl/SearchHistoryStoreImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/search/impl/SearchHistoryStoreImplTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/odesa/musicMatters/core/data/settings/impl/SettingsRepositoryImplTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/designsystem/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/odesa/musicMatters/core/designsystem/component/DevicePreviews.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/DevicePreviews.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/odesa/musicMatters/core/designsystem/component/LoadingWheel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/LoadingWheel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/odesa/musicMatters/core/designsystem/component/ThemePreviews.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/ThemePreviews.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/odesa/musicMatters/core/designsystem/theme/Color.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/theme/Color.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/odesa/musicMatters/core/designsystem/theme/ColorScheme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/theme/ColorScheme.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/odesa/musicMatters/core/designsystem/theme/Theme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/theme/Theme.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/odesa/musicMatters/core/designsystem/theme/Tint.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/theme/Tint.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/odesa/musicMatters/core/designsystem/theme/Type.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/theme/Type.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/designsystem/src/test/java/com/odesa/musicMatters/core/designsystem/ExampleUnitTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/test/java/com/squad/musicmatters/core/designsystem/ExampleUnitTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/src/androidTest/java/com/odesa/musicMatters/core/i8n/ExampleInstrumentedTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/androidTest/java/com/squad/musicmatters/core/i8n/ExampleInstrumentedTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/src/main/java/com/odesa/musicMatters/core/i8n/Belarusian.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/main/java/com/squad/musicmatters/core/i8n/Belarusian.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/src/main/java/com/odesa/musicMatters/core/i8n/Chinese.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/main/java/com/squad/musicmatters/core/i8n/Chinese.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/src/main/java/com/odesa/musicMatters/core/i8n/English.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/main/java/com/squad/musicmatters/core/i8n/English.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/src/main/java/com/odesa/musicMatters/core/i8n/French.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/main/java/com/squad/musicmatters/core/i8n/French.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/src/main/java/com/odesa/musicMatters/core/i8n/German.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/main/java/com/squad/musicmatters/core/i8n/German.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/src/main/java/com/odesa/musicMatters/core/i8n/Language.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/main/java/com/squad/musicmatters/core/i8n/Language.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/src/main/java/com/odesa/musicMatters/core/i8n/Spanish.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/main/java/com/squad/musicmatters/core/i8n/Spanish.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/src/main/java/com/odesa/musicMatters/core/i8n/SupportedLanguages.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/main/java/com/squad/musicmatters/core/i8n/SupportedLanguages.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/src/test/java/com/odesa/musicMatters/core/i8n/ExampleUnitTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/test/java/com/squad/musicmatters/core/i8n/ExampleUnitTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/model/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/model/src/androidTest/java/com/odesa/musicMatters/core/model/ExampleInstrumentedTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/androidTest/java/com/squad/musicmatters/feature/nowplaying/ExampleInstrumentedTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/model/src/main/java/com/odesa/musicMatters/core/model/Album.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/Album.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/model/src/main/java/com/odesa/musicMatters/core/model/Artist.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/Artist.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/model/src/main/java/com/odesa/musicMatters/core/model/Genre.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/Genre.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/model/src/main/java/com/odesa/musicMatters/core/model/PlaylistInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/PlaylistInfo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/model/src/main/java/com/odesa/musicMatters/core/model/SearchHistoryItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/SearchHistoryItem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/model/src/main/java/com/odesa/musicMatters/core/model/Song.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/Song.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/model/src/main/java/com/odesa/musicMatters/core/model/SongAdditionalMetadataInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/SongAdditionalMetadataInfo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/model/src/test/java/com/odesa/musicMatters/core/model/ExampleUnitTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/test/java/com/squad/musicmatters/core/database/ExampleUnitTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/androidTest/java/com/odesa/musicMatters/core/datatesting/ExampleInstrumentedTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/albums/Albums.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/artists/Artists.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/connection/FakeConnectable.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/connection/FakeMusicServiceConnection.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/genres/Genres.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/media/FakeMusicSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/media/FakeMusicSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/media/FakePlayer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/media/FakePlayer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/metadata/AdditionalMetadata.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/paths/Paths.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/paths/Paths.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/playlist/FakePlaylistRepository.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/playlist/FakePlaylistStore.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/playlists/Playlists.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/playlists/Playlists.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/repository/FakeSearchHistoryRepository.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/repository/FakeSettingsRepository.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/repository/FakeSongsAdditionalMetadataRepository.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/search/Search.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/songs/Songs.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/songs/additionalMetadata/AdditionalMetadata.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/store/FakePreferencesStoreImpl.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/store/FakeSearchHistoryStore.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/odesa/musicMatters/core/datatesting/tree/Tree.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/test/java/com/odesa/musicMatters/core/datatesting/ExampleUnitTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/AppBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/AppBar.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/BaseViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/BaseViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/BottomSheetMenu.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/BottomSheetMenu.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/DynamicAsyncImage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/DynamicAsyncImage.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/GenericCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/GenericCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/LoaderScaffold.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/LoaderScaffold.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/MediaSortBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/MediaSortBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/MusicMattersPreviewParametersProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/MusicMattersPreviewParametersProvider.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongCard.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/Tile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/Tile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/AddSongsToPlaylistDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/AddSongsToPlaylistDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/DeleteSongDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/DeleteSongDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/ManagePlaylistSongsDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/ManagePlaylistSongsDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/NewPlaylistDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/NewPlaylistDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/RenamePlaylistDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/RenamePlaylistDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/SongDetailsDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/SongDetailsDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/songs/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingBodyBottomBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingBodyBottomBar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingBottomBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingBottomBar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/test/java/com/squad/musicmatters/feature/nowplaying/NowPlayingViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/test/java/com/squad/musicmatters/feature/nowplaying/NowPlayingViewModelTest.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/songs/src/test/java/com/squad/musicmatters/feature/songs/ExampleUnitTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/androidTest/java/com/odesa/musicMatters/ExampleInstrumentedTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/androidTest/java/com/squad/musicmatters/ExampleInstrumentedTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/androidTest/java/com/odesa/musicMatters/data/FakeMusicServiceConnection.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/androidTest/java/com/squad/musicmatters/data/FakeMusicServiceConnection.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/androidTest/java/com/odesa/musicMatters/data/FakePlaylistRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/androidTest/java/com/squad/musicmatters/data/FakePlaylistRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/androidTest/java/com/odesa/musicMatters/data/FakeSearchHistoryRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/androidTest/java/com/squad/musicmatters/data/FakeSearchHistoryRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/androidTest/java/com/odesa/musicMatters/data/FakeSettingsRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/androidTest/java/com/squad/musicmatters/data/FakeSettingsRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/androidTest/java/com/odesa/musicMatters/ui/navigation/MusicallyNavHostKtTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/androidTest/java/com/squad/musicmatters/ui/navigation/MusicallyNavHostKtTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/MusicMatters.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/MusicMattersApplication.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/di/MobileDiModule.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/BaseViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/BaseViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/MusicallyApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/MusicMattersApp.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/album/Album.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/album/Album.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/album/AlbumScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/album/AlbumScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/albums/Albums.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/albums/Albums.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/albums/AlbumsScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/albums/AlbumsScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/artist/Artist.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/artist/Artist.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/artist/ArtistScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/artist/ArtistScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/artists/Artists.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/artists/Artists.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/artists/ArtistsScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/artists/ArtistsScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/AddSongsToPlaylistDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/AddSongsToPlaylistDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/AlbumGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/AlbumGrid.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/AlbumRow.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/AlbumRow.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/AlbumTile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/AlbumTile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/AppBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/AppBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/ArtistTile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/ArtistTile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/ArtistsGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/ArtistsGrid.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/ArtistsRow.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/ArtistsRow.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/Banner.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/Banner.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/BottomSheetMenu.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/BottomSheetMenu.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/ContentDrawScopeScrollBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/ContentDrawScopeScrollBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/DeleteSongDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/DeleteSongDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/GenericCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/GenericCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/GenreGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/GenreGrid.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/IconButtonPlaceholder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/IconButtonPlaceholder.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/IconTextBody.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/IconTextBody.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/LazyColumnScrollBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/LazyColumnScrollBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/LoaderScaffold.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/LoaderScaffold.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/ManagePlaylistSongsDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/ManagePlaylistSongsDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/MediaSortBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/MediaSortBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/MediaSortBarScaffold.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/MediaSortBarScaffold.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/NewPlaylistDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/NewPlaylistDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/NowPlayingBottomBar.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/PermissionCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/PermissionCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/PermissionsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/PermissionsScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/PlaylistGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/PlaylistGrid.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/PlaylistTile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/PlaylistTile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/RenamePlaylistDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/RenamePlaylistDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/ScaffoldDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/ScaffoldDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/SongCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/SongCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/SongDetailsDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/SongDetailsDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/SongList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/SongList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/SubtleCaptionText.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/SubtleCaptionText.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/Swipeable.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/Swipeable.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/Tile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/Tile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/components/TreeSongList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/components/TreeSongList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/forYou/ForYou.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/forYou/ForYou.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/forYou/ForYouScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/forYou/ForYouScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/genre/Genre.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/genre/Genre.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/genre/GenreScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/genre/GenreScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/genres/Genres.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/genres/Genres.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/genres/GenresScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/genres/GenresScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/navigation/Destinations.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/navigation/Destinations.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/navigation/MusicMattersNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/navigation/MusicMattersNavHost.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/navigation/Transitions.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/nowPlaying/NowPlayingBodyBottomBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingBodyBottomBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/nowPlaying/NowPlayingScreen.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/nowPlaying/NowPlayingViewModel.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/playlist/Playlist.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/playlist/Playlist.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/playlist/PlaylistScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/playlist/PlaylistScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/playlists/Playlists.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/playlists/Playlists.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/playlists/PlaylistsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/playlists/PlaylistsViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/queue/QueueList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/queue/QueueList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/queue/QueueScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/queue/QueueScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/queue/QueueScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/queue/QueueScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/search/Search.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/search/Search.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/search/SearchBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/search/SearchBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/search/SearchHistoryList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/search/SearchHistoryList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/search/SearchResultsList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/search/SearchResultsList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/search/SearchScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/search/SearchScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/Interface/BottomBarLabelVisibility.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/Interface/BottomBarLabelVisibility.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/Settings.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/Settings.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/SettingsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/SettingsViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/about/About.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/about/About.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/appearance/Font.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/appearance/Font.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/appearance/FontScale.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/appearance/FontScale.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/appearance/Language.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/appearance/Language.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/appearance/MaterialYou.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/appearance/MaterialYou.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/appearance/PrimaryColor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/appearance/PrimaryColor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/appearance/Theme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/appearance/Theme.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/components/SettingDialogOption.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/components/SettingDialogOption.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/components/SettingOptionTile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/components/SettingOptionTile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/components/SideHeading.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/components/SideHeading.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/components/SliderTile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/components/SliderTile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/components/SwitchTile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/components/SwitchTile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/components/Tile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/components/Tile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/help/Help.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/help/Help.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/miniPlayer/ShowSeekControls.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/miniPlayer/ShowSeekControls.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/miniPlayer/ShowTrackControls.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/miniPlayer/ShowTrackControls.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/miniPlayer/TextMarquee.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/miniPlayer/TextMarquee.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/nowPlaying/ControlsLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/nowPlaying/ControlsLayout.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/nowPlaying/LyricsLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/nowPlaying/LyricsLayout.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/nowPlaying/ShowAudioInformation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/nowPlaying/ShowAudioInformation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/FadePlayback.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/player/FadePlayback.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/FadePlaybackDuration.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/player/FadePlaybackDuration.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/FastForwardDuration.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/player/FastForwardDuration.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/FastRewindDuration.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/player/FastRewindDuration.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/IgnoreAudioFocusLoss.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/player/IgnoreAudioFocusLoss.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/PauseOnHeadphonesDisconnect.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/player/PauseOnHeadphonesDisconnect.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/PlayOnHeadphonesConnect.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/player/PlayOnHeadphonesConnect.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/settings/player/RequireAudioFocus.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/settings/player/RequireAudioFocus.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/songs/Songs.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/songs/SongsScreenViewModel.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/tree/Tree.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/tree/Tree.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/tree/TreeScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/tree/TreeScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/ui/utils/Utils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/utils/Utils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/utils/Float.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/utils/Float.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/utils/FuzzySearcher.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/utils/FuzzySearcher.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/utils/RangeUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/utils/RangeUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/utils/RunX.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/utils/RunX.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/odesa/musicMatters/utils/ScreenOrientation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/utils/ScreenOrientation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ExampleUnitTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ExampleUnitTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/MainCoroutineRule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/MainDispatcherRule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/BaseViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/BaseViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/album/AlbumScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/album/AlbumScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/albums/AlbumsScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/albums/AlbumsScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/artist/ArtistScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/artist/ArtistScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/artists/ArtistsViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/artists/ArtistsViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/forYou/ForYouScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/forYou/ForYouScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/genre/GenreScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/genre/GenreScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/genres/GenresScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/genres/GenresScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/nowPlaying/NowPlayingViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/nowPlaying/NowPlayingViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/playlist/PlaylistInfoScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/playlist/PlaylistInfoScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/playlists/PlaylistsViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/playlists/PlaylistsViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/queue/QueueScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/queue/QueueScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/search/SearchScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/search/SearchScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/settings/SettingsViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/settings/SettingsViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/songs/SongsScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/src/test/java/com/squad/musicmatters/feature/songs/SongsScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/test/java/com/odesa/musicMatters/ui/tree/TreeScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/test/java/com/squad/musicmatters/ui/tree/TreeScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/navigation/MusicMattersNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/navigation/MusicMattersNavHost.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -762,71 +102,71 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Android App.mobile.executor": "Run",
-    "Android Instrumented Tests.All Tests.executor": "Run",
-    "Android Instrumented Tests.PlayHistoryDaoTest.executor": "Run",
-    "Android Instrumented Tests.PlaylistDaoTest.executor": "Run",
-    "Android Instrumented Tests.QueueDaoTest.executor": "Run",
-    "Android Instrumented Tests.SongPlayCountEntryDaoTest.executor": "Run",
-    "Android Instrumented Tests.Tests in 'com.squad.musicmatters.core.database'.executor": "Run",
-    "Android Instrumented Tests.testAddSongIdToFavoriteSongsPlaylist().executor": "Run",
-    "ApkExportedModule": "MusicMatters.mobile",
-    "BundleExportedModule": "MusicMatters.mobile",
-    "ExportApk.ApkPathForMusicMatters.mobile": "/home/michael-allan-odhiambo/AndroidStudioProjects/music-matters/mobile",
-    "Gradle.CompositeRepositoryImplTest.executor": "Run",
-    "Gradle.MostPlayedSongsRepositoryImplTest.executor": "Run",
-    "Gradle.MusicMattersPreferencesDataSourceTest.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testClearQueue.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testOnMediaStoreChange.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testPlayNext.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testPlayPreviousSong.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testPlaybackParametersAreSetCorrectly.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testSetPlaybackSpeed.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testSetRepeatMode.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testShuffleSongsInQueue.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testWhenNowPlayingSongIsDeleted_theNextSongInQueueIsPlayed.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testWhenSongIsDeleted_songIsRemovedFromAllPlaylistsItIsPresent.executor": "Run",
-    "Gradle.NowPlayingViewModelTest.executor": "Run",
-    "Gradle.PlayHistoryRepositoryImplTest.executor": "Run",
-    "Gradle.PlaylistRepositoryImplTest.executor": "Run",
-    "Gradle.QueueRepositoryImplTest.executor": "Run",
-    "Gradle.SongsRepositoryImplTest (1).executor": "Run",
-    "Gradle.SongsRepositoryImplTest.executor": "Run",
-    "Gradle.SongsScreenViewModelTest.executor": "Run",
-    "Gradle.SongsScreenViewModelTest.testFavoriteSongsAreCorrectlyUpdated.executor": "Run",
-    "Gradle.SongsScreenViewModelTest.testPlayerStateIsCorrectlyUpdated.executor": "Run",
-    "Gradle.SongsScreenViewModelTest.testSongsAreCorrectlyLoadedFromTheMusicServiceConnection.executor": "Run",
-    "Gradle.SongsScreenViewModelTest.testUiStateIsUpdatedWhenThemeModeChanges.executor": "Run",
-    "Gradle.Tests in 'com.odesa.musicMatters'.executor": "Run",
-    "Gradle.Upgrade Gradle wrapper.executor": "Run",
-    "Gradle.UserPreferencesSerializerTest.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_directory_selection": "/Users/app/Desktop/android/projects/music-matters/feature/nowplaying/src/test/java/com/squad/musicmatters/feature/nowplaying",
-    "last_opened_file_path": "/Users/app/Desktop/android/projects/music-matters/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.17",
-    "project.structure.side.proportion": "0.32862645",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Android App.mobile.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.All Tests.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.PlayHistoryDaoTest.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.PlaylistDaoTest.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.QueueDaoTest.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.SongPlayCountEntryDaoTest.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.Tests in 'com.squad.musicmatters.core.database'.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.testAddSongIdToFavoriteSongsPlaylist().executor&quot;: &quot;Run&quot;,
+    &quot;ApkExportedModule&quot;: &quot;MusicMatters.mobile&quot;,
+    &quot;BundleExportedModule&quot;: &quot;MusicMatters.mobile&quot;,
+    &quot;ExportApk.ApkPathForMusicMatters.mobile&quot;: &quot;/home/michael-allan-odhiambo/AndroidStudioProjects/music-matters/mobile&quot;,
+    &quot;Gradle.CompositeRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MostPlayedSongsRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPreferencesDataSourceTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testClearQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testOnMediaStoreChange.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testPlayNext.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testPlayPreviousSong.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testPlaybackParametersAreSetCorrectly.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testSetPlaybackSpeed.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testSetRepeatMode.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testShuffleSongsInQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testWhenNowPlayingSongIsDeleted_theNextSongInQueueIsPlayed.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testWhenSongIsDeleted_songIsRemovedFromAllPlaylistsItIsPresent.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.NowPlayingViewModelTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PlayHistoryRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PlaylistRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.QueueRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsRepositoryImplTest (1).executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsScreenViewModelTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsScreenViewModelTest.testFavoriteSongsAreCorrectlyUpdated.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsScreenViewModelTest.testPlayerStateIsCorrectlyUpdated.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsScreenViewModelTest.testSongsAreCorrectlyLoadedFromTheMusicServiceConnection.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsScreenViewModelTest.testUiStateIsUpdatedWhenThemeModeChanges.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Tests in 'com.odesa.musicMatters'.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Upgrade Gradle wrapper.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.UserPreferencesSerializerTest.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;/Users/app/Desktop/android/projects/music-matters/feature/nowplaying/src/test/java/com/squad/musicmatters/feature/nowplaying&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/app/Desktop/android/projects/music-matters/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.32862645&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   },
-  "keyToStringList": {
-    "ExportApk.BuildVariants": [
-      "debug"
+  &quot;keyToStringList&quot;: {
+    &quot;ExportApk.BuildVariants&quot;: [
+      &quot;debug&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog" />
@@ -1083,7 +423,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt</url>
-          <line>151</line>
+          <line>150</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -1091,7 +431,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt</url>
-          <line>147</line>
+          <line>146</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -1099,7 +439,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt</url>
-          <line>143</line>
+          <line>142</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>

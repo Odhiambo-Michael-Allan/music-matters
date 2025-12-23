@@ -1,7 +1,6 @@
 package com.squad.musicmatters.feature.nowplaying
 
 import com.squad.castify.core.testing.rules.MainDispatcherRule
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
@@ -15,7 +14,6 @@ import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadat
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -31,7 +29,7 @@ class NowPlayingViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private lateinit var viewModel: NowPlayingViewModel
+    private lateinit var viewModel: NowPlayingScreenViewModel
     private lateinit var player: TestMusicServiceConnection
     private lateinit var playlistRepository: TestPlaylistRepository
     private lateinit var playbackPositionUpdater: TestPlaybackPositionUpdater
@@ -47,7 +45,7 @@ class NowPlayingViewModelTest {
         metadataRepository = TestSongsAdditionalMetadataRepository()
         queueRepository = TestQueueRepository()
         preferencesDataSource = TestPreferencesDataSource()
-        viewModel = NowPlayingViewModel(
+        viewModel = NowPlayingScreenViewModel(
             player = player,
             preferencesDataSource = preferencesDataSource,
             playlistRepository = playlistRepository,

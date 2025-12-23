@@ -22,6 +22,7 @@
         android:roundIcon="@drawable/play"
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicMatters"
+        android:configChanges="orientation|screenSize|screenLayout"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"

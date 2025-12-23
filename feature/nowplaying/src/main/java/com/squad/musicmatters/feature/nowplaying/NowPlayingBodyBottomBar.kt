@@ -3,6 +3,7 @@ package com.squad.musicmatters.feature.nowplaying
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,10 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.Sort
+import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Speed
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.rounded.Repeat
 import androidx.compose.material.icons.rounded.RepeatOne
 import androidx.compose.material.icons.rounded.Shuffle
@@ -24,12 +26,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,9 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
@@ -57,14 +54,13 @@ import com.squad.musicmatters.core.ui.dialog.ScaffoldDialog
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun NowPlayingBodyBottomBar(
+    modifier: Modifier = Modifier,
     language: Language,
-    currentSongIndex: Int,
-    queueSize: Int,
     currentLoopMode: LoopMode,
     shuffle: Boolean,
     currentSpeed: Float,
     currentPitch: Float,
-    onQueueClicked: () -> Unit,
+    onNavigateToQueue: () -> Unit,
     onToggleLoopMode: ( LoopMode ) -> Unit,
     onToggleShuffleMode: ( Boolean ) -> Unit,
     onSpeedChange: ( Float ) -> Unit,
@@ -77,7 +73,7 @@ fun NowPlayingBodyBottomBar(
     var showPitchDialog by remember { mutableStateOf( false ) }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(
                 start = 4.dp,
@@ -85,27 +81,8 @@ fun NowPlayingBodyBottomBar(
                 bottom = 4.dp
             ),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
-        TextButton(
-            onClick = onQueueClicked
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Rounded.Sort,
-                contentDescription = null
-            )
-            Spacer( modifier = Modifier.width( 4.dp ) )
-            Text(
-                text = language.playingXofY(
-                    ( currentSongIndex + 1 ).toString(),
-                    queueSize.toString()
-                ),
-                style = LocalTextStyle.current.copy(
-                    fontWeight = FontWeight.SemiBold
-                ),
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-        Spacer( modifier = Modifier.weight( 1f ) )
         IconButton(
             onClick = { onToggleLoopMode( currentLoopMode ) }
         ) {
@@ -280,13 +257,11 @@ fun NowPlayingBodyBottomBarPreview() {
     ) {
         NowPlayingBodyBottomBar(
             language = English,
-            currentSongIndex = 3,
-            queueSize = 126,
             currentLoopMode = LoopMode.Song,
             shuffle = true,
             currentSpeed = 2f,
             currentPitch = 2f,
-            onQueueClicked = {},
+            onNavigateToQueue = {},
             onToggleLoopMode = {},
             onToggleShuffleMode = {},
             onSpeedChange = {},
