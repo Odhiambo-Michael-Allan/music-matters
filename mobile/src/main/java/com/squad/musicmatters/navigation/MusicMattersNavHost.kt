@@ -106,7 +106,7 @@ fun MusicMattersNavHost(
     }
 
     val adaptiveInfo = currentWindowAdaptiveInfo()
-    val screenOrientation = ScreenOrientation.fromConfiguration( LocalConfiguration.current)
+    val screenOrientation = ScreenOrientation.fromConfiguration(  LocalConfiguration.current )
     val customNavSuiteType = if ( screenOrientation == ScreenOrientation.LANDSCAPE ) {
         NavigationSuiteType.NavigationRail
     } else {

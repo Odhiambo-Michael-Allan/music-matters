@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -441,23 +442,10 @@ fun PortraitLayout(
                         maxLines = 1,
                         modifier = Modifier.basicMarquee( iterations = Int.MAX_VALUE )
                     )
-                    FlowRow {
-                        target.artists.forEachIndexed { index, it ->
-                            Text(
-                                text = it,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.7f ),
-                                modifier = Modifier.pointerInput( Unit ) {
-                                    detectTapGestures { _ ->
-                                        onArtistClicked( it )
-                                    }
-                                }
-                            )
-                            if ( index != target.artists.size - 1 ) Text( text = ", " )
-                        }
-                    }
+                    ArtistsRow(
+                        artists = target.artists,
+                        onArtistClicked = onArtistClicked
+                    )
                     if ( uiState.userData.showNowPlayingAudioInformation ) {
                         onGetSongAdditionalMetadata()?.let {
                             Text(
@@ -635,23 +623,10 @@ fun LandscapeLayout(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
-                        FlowRow {
-                            target.artists.forEachIndexed { index, it ->
-                                Text(
-                                    text = it,
-                                    maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.7f ),
-                                    modifier = Modifier.pointerInput( Unit ) {
-                                        detectTapGestures { _ ->
-                                            onArtistClicked( it )
-                                        }
-                                    }
-                                )
-                                if ( index != target.artists.size - 1 ) Text( text = ", " )
-                            }
-                        }
+                        ArtistsRow(
+                            artists = target.artists,
+                            onArtistClicked = onArtistClicked
+                        )
                     if ( uiState.userData.showNowPlayingAudioInformation ) {
                         onGetSongAdditionalMetadata()?.let {
                             Text(
@@ -788,18 +763,46 @@ fun NowPlayingArtwork(
                 imageUri = it,
                 contentDescription = "now-playing-artwork",
                 modifier = Modifier
-                    .sizeIn(maxWidth = 500.dp, maxHeight = 500.dp)
-                    .aspectRatio(1f)
-                    .clip(MaterialTheme.shapes.medium)
+                    .sizeIn( maxWidth = 500.dp, maxHeight = 500.dp )
+                    .aspectRatio( 1f )
+                    .clip( MaterialTheme.shapes.medium )
                     .swipeable(
                         minimumDragAmount = 100f,
                         onSwipeLeft = onSwipeLeft,
                         onSwipeRight = onSwipeRight,
                     )
-                    .pointerInput(Unit) {
+                    .pointerInput( Unit ) {
                         detectTapGestures { _ -> onArtworkClicked() }
                     }
             )
+        }
+    }
+}
+
+@OptIn( ExperimentalLayoutApi::class )
+@Composable
+private fun ArtistsRow(
+    artists: Set<String>,
+    onArtistClicked: ( String ) -> Unit,
+) {
+    FlowRow(
+        maxLines = 1,
+        modifier = Modifier.basicMarquee( Int.MAX_VALUE ),
+    ) {
+        artists.forEachIndexed { index, it ->
+            Text(
+                text = it,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.7f ),
+                modifier = Modifier.pointerInput( Unit ) {
+                    detectTapGestures { _ ->
+                        onArtistClicked( it )
+                    }
+                }
+            )
+            if ( index != artists.size - 1 ) Text( text = ", " )
         }
     }
 }
@@ -1268,7 +1271,7 @@ fun NowPlayingScreenContentPreview() {
                         title = "Started From the Bottom",
                         displayTitle = "",
                         duration = 0L,
-                        artists = setOf( "Drake" ),
+                        artists = setOf( "Drake", "Disclosure", "London", "Grammar", "The Weekend", "Young thug" ),
                         size = 0L,
                         dateModified = 0L,
                         path = "",
