@@ -38,6 +38,7 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/nowplaying" />
+            <option value="$PROJECT_DIR$/feature/queue" />
             <option value="$PROJECT_DIR$/feature/songs" />
             <option value="$PROJECT_DIR$/mobile" />
           </set>

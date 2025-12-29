@@ -10,6 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/feature/queue/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/queue/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/queue/consumer-rules.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/queue/proguard-rules.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/queue/src/androidTest/java/com/squad/musicmatters/feature/queue/ExampleInstrumentedTest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/queue/src/main/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/queue/src/test/java/com/squad/musicmatters/feature/queue/ExampleUnitTest.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/fileHashes.bin" afterDir="false" />
@@ -17,21 +24,15 @@
       <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/BaseViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/BaseViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/DynamicAsyncImage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/DynamicAsyncImage.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingBodyBottomBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingBodyBottomBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingBottomBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingBottomBar.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/test/java/com/squad/musicmatters/feature/nowplaying/NowPlayingViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/test/java/com/squad/musicmatters/feature/nowplaying/NowPlayingViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/navigation/MusicMattersNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/navigation/MusicMattersNavHost.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +42,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=/Users/app/.android/avd/Pixel_9_Pro_XL.avd)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=/Users/app/.android/avd/Pixel_9_Pro_Fold.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -423,7 +424,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt</url>
-          <line>150</line>
+          <line>151</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -431,7 +432,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt</url>
-          <line>146</line>
+          <line>147</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -439,7 +440,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt</url>
-          <line>142</line>
+          <line>143</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -453,12 +454,12 @@
       <map>
         <entry key="com.odesa.musicMatters">
           <value>
-            <CheckInfo lastCheckTimestamp="1766323351860" />
+            <CheckInfo lastCheckTimestamp="1766495318428" />
           </value>
         </entry>
         <entry key="com.odesa.musicMatters.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1766323351860" />
+            <CheckInfo lastCheckTimestamp="1766495318428" />
           </value>
         </entry>
         <entry key="com.squad.musicmatters.core.ui.test">
