@@ -148,8 +148,6 @@ private fun SongsScreenContent(
             }
         }
     }
-
-    AnimatedLoadingWheel( isVisible = uiState is SongsScreenUiState.Loading )
 }
 
 

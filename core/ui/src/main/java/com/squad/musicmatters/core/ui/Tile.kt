@@ -1,7 +1,6 @@
 package com.squad.musicmatters.core.ui
 
 import android.net.Uri
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.PlaylistInfo
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.ui.dialog.AddSongsToPlaylistDialog
+import com.squad.musicmatters.core.ui.dialog.AddSongToPlaylistBottomSheet
 import com.squad.musicmatters.core.ui.dialog.NewPlaylistDialog
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -55,14 +55,13 @@ fun GenericTile(
     description: String? = null,
     headerDescription: String,
     language: Language,
-    @DrawableRes fallbackResourceId: Int,
+    playlists: List<PlaylistInfo>,
     onPlay: () -> Unit,
     onClick: () -> Unit,
     onShufflePlay: () -> Unit,
     onAddToQueue: () -> Unit,
     onPlayNext: () -> Unit,
     onGetSongs: () -> List<Song>,
-    onGetPlaylists: () -> List<PlaylistInfo>,
     onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
@@ -83,12 +82,12 @@ fun GenericTile(
                         headerTitle = title,
                         headerDescription = headerDescription,
                         language = language,
+                        playlists = playlists,
                         onDismissRequest = onDismissRequest,
                         onAddToQueue = onAddToQueue,
                         onPlayNext = onPlayNext,
                         onAddSongsToPlaylist = onAddSongsToPlaylist,
                         onCreatePlaylist = onCreatePlaylist,
-                        onGetPlaylists = onGetPlaylists,
                         onGetSongsInPlaylist = onGetSongsInPlaylist,
                         onGetSongs = onGetSongs,
                         onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
@@ -129,6 +128,7 @@ fun GenericTile(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GenericOptionsBottomSheet(
     headerImageUri: Uri? = null,
@@ -136,21 +136,20 @@ fun GenericOptionsBottomSheet(
     titleIsHighlighted: Boolean = false,
     headerDescription: String,
     language: Language,
-//    @DrawableRes fallbackResourceId: Int,
+    playlists: List<PlaylistInfo>,
     onDismissRequest: () -> Unit,
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
-    onGetPlaylists: () -> List<PlaylistInfo>,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onGetSongsInPlaylist: ( PlaylistInfo ) -> List<Song>,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: ( PlaylistInfo, List<Song> ) -> Unit,
     onGetSongs: () -> List<Song>,
-    leadingBottomSheetMenuItem: ( @Composable (() -> Unit ) -> Unit ),
-    trailingBottomSheetMenuItems: ( @Composable (() -> Unit ) -> Unit )? = null,
+    leadingBottomSheetMenuItem: ( @Composable ( () -> Unit ) -> Unit ),
+    trailingBottomSheetMenuItems: ( @Composable ( () -> Unit ) -> Unit )? = null,
 ) {
 
-    var showAddToPlaylistDialog by remember { mutableStateOf( false ) }
+    var showAddSongToPlaylistBottomSheet by remember { mutableStateOf( false ) }
     var showCreateNewPlaylistDialog by remember { mutableStateOf( false ) }
 
     BottomSheetMenuContent(
@@ -182,29 +181,32 @@ fun GenericOptionsBottomSheet(
             leadingIcon = Icons.AutoMirrored.Rounded.PlaylistAdd,
             label = language.addToPlaylist
         ) {
-            showAddToPlaylistDialog = true
+            showAddSongToPlaylistBottomSheet = true
         }
         trailingBottomSheetMenuItems?.let {
             it( onDismissRequest )
         }
         Spacer( modifier = Modifier.size( 32.dp ) )
     }
-    if ( showAddToPlaylistDialog ) {
-        AddSongsToPlaylistDialog(
-            songs = onGetSongs(),
-            onGetPlaylists = onGetPlaylists,
-            language = language,
-//            fallbackResourceId = fallbackResourceId,
-            onGetSongsInPlaylist = onGetSongsInPlaylist,
-            onAddDisplayedSongsToPlaylist = { onAddSongsToPlaylist( it, onGetSongs() ) },
-            onCreateNewPlaylist = { showCreateNewPlaylistDialog = true },
-            onDismissRequest = { showAddToPlaylistDialog = false }
-        )
+    if ( showAddSongToPlaylistBottomSheet ) {
+        ModalBottomSheet(
+            sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
+            onDismissRequest = { showAddSongToPlaylistBottomSheet = false }
+        ) {
+            AddSongToPlaylistBottomSheet(
+                songs = onGetSongs(),
+                playlists = playlists,
+                language = language,
+                onGetSongsInPlaylist = onGetSongsInPlaylist,
+                onAddDisplayedSongsToPlaylist = { onAddSongsToPlaylist( it, onGetSongs() ) },
+                onCreateNewPlaylist = { showCreateNewPlaylistDialog = true },
+                onDismissRequest = { showAddSongToPlaylistBottomSheet = false }
+            )
+        }
     }
     if ( showCreateNewPlaylistDialog ) {
         NewPlaylistDialog(
             language = language,
-//            fallbackResourceId = fallbackResourceId,
             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
             initialSongsToAdd = onGetSongs(),
             onConfirmation = { playlistName, selectedSongs ->
@@ -249,8 +251,8 @@ fun Tile(
                     )
                     Box(
                         modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(top = 4.dp)
+                            .align( Alignment.TopEnd )
+                            .padding( top = 4.dp )
                     ) {
                         var showOptionsMenu by remember { mutableStateOf( false ) }
 
@@ -268,16 +270,16 @@ fun Tile(
                     }
                     Box(
                         modifier = Modifier
-                            .align(Alignment.BottomStart)
-                            .padding(8.dp)
+                            .align( Alignment.BottomStart )
+                            .padding( 8.dp )
                     ) {
                         IconButton(
                             modifier = Modifier
                                 .background(
                                     MaterialTheme.colorScheme.surface,
-                                    RoundedCornerShape(12.dp)
+                                    RoundedCornerShape( 12.dp )
                                 )
-                                .then(Modifier.size(36.dp)),
+                                .then(Modifier.size( 36.dp ) ),
                             onClick = onPlay
                         ) {
                             Icon(

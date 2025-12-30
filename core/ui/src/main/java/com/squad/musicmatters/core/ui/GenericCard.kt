@@ -49,7 +49,7 @@ fun GenericCard(
         onClick = onClick
     ) {
         Box(
-            modifier = Modifier.padding( 12.dp, 12.dp, 4.dp, 12.dp )
+            modifier = Modifier.padding( 12.dp, 4.dp, 4.dp, 4.dp )
         ) {
             Row (
                 verticalAlignment = Alignment.CenterVertically
@@ -66,8 +66,8 @@ fun GenericCard(
                         imageLabel?.let {
                             Box(
                                 modifier = Modifier
-                                    .offset(y = 8.dp)
-                                    .align(Alignment.BottomCenter)
+                                    .offset( y = 8.dp )
+                                    .align( Alignment.BottomCenter )
                             ) {
                                 Box(
                                     modifier = Modifier
@@ -93,13 +93,9 @@ fun GenericCard(
                 Column (
                     modifier = Modifier.weight( 1f )
                 ) {
-                    ProvideTextStyle( value = MaterialTheme.typography.bodyMedium ) {
-                        title()
-                    }
+                    title()
                     subtitle?.let {
-                        ProvideTextStyle( value = MaterialTheme.typography.bodySmall ) {
-                            it()
-                        }
+                        it()
                     }
                 }
                 Spacer( modifier = Modifier.width( 15.dp ) )

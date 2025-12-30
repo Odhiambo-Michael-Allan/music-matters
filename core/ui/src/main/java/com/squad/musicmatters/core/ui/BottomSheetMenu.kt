@@ -103,7 +103,7 @@ fun BottomSheetMenuItem(
     Card (
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp),
+            .padding( start = 16.dp, end = 16.dp ),
         colors = CardDefaults.cardColors().copy(
             containerColor = if ( isSelected ) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent
         ),

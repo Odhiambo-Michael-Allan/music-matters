@@ -1,7 +1,6 @@
 package com.squad.musicmatters.core.ui
 
 import android.net.Uri
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,11 +12,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Album
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.ThumbUpAlt
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.DragHandle
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Share
@@ -48,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.squad.musicmatters.core.media.media.extensions.formatMilliseconds
 import com.squad.musicmatters.core.data.utils.VersionUtils
-import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.theme.GoogleRed
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
@@ -70,7 +66,7 @@ fun SongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
-    playlistInfos: List<PlaylistInfo>,
+    playlists: List<PlaylistInfo>,
     onClick: () -> Unit,
     onFavorite: ( String, Boolean ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
@@ -95,15 +91,17 @@ fun SongCard(
         colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
         onClick = onClick
     ) {
-        Box( modifier = Modifier.padding( 12.dp, 4.dp, 4.dp, 4.dp ) ) {
+        Box(
+            modifier = Modifier.padding( 12.dp, 4.dp, 4.dp, 4.dp )
+        ) {
             Row( verticalAlignment = Alignment.CenterVertically ) {
                 Box {
                     DynamicAsyncImage(
                         imageUri = song.artworkUri?.toUri(),
                         contentDescription = song.title,
                         modifier = Modifier
-                            .size( 45.dp )
-                            .clip( RoundedCornerShape( 10.dp ) )
+                            .size(45.dp)
+                            .clip(RoundedCornerShape(10.dp))
                     )
                 }
                 Spacer( modifier = Modifier.width( 16.dp ) )
@@ -168,6 +166,7 @@ fun SongCard(
                                     song = song,
                                     isFavorite = isFavorite,
                                     isCurrentlyPlaying = isCurrentlyPlaying,
+                                    playlists = playlists,
                                     onFavorite = onFavorite,
                                     onAddToQueue = onAddToQueue,
                                     onPlayNext = onPlayNext,
@@ -179,7 +178,6 @@ fun SongCard(
                                     onCreatePlaylist = onCreatePlaylist,
                                     onAddSongsToPlaylist = onAddSongsToPlaylist,
                                     onGetSongsInPlaylist = onGetSongsInPlaylist,
-                                    onGetPlaylists = { playlistInfos },
                                     onDelete = {
                                         if ( !VersionUtils.isQandAbove() ) {
                                             showDeleteSongDialog = true
@@ -226,6 +224,7 @@ fun SongOptionsBottomSheetMenu(
     song: Song,
     isFavorite: Boolean,
     isCurrentlyPlaying: Boolean,
+    playlists: List<PlaylistInfo>,
     onFavorite: ( String, Boolean ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onViewArtist: ( String ) -> Unit,
@@ -233,7 +232,6 @@ fun SongOptionsBottomSheetMenu(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onShowSongDetails: () -> Unit,
-    onGetPlaylists: () -> List<PlaylistInfo>,
     onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
     onSearchSongsMatchingQuery: (String ) -> List<Song>,
     onCreatePlaylist: (String, List<Song> ) -> Unit,
@@ -247,10 +245,10 @@ fun SongOptionsBottomSheetMenu(
         titleIsHighlighted = isCurrentlyPlaying,
         headerDescription = song.artists.joinToString(),
         language = language,
+        playlists = playlists,
         onDismissRequest = onDismissRequest,
         onPlayNext = { onPlayNext( song ) },
         onAddToQueue = { onAddToQueue( song ) },
-        onGetPlaylists = onGetPlaylists,
         onGetSongsInPlaylist = onGetSongsInPlaylist,
         onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
         onCreatePlaylist = onCreatePlaylist,
@@ -258,7 +256,11 @@ fun SongOptionsBottomSheetMenu(
         onGetSongs = { listOf( song ) },
         leadingBottomSheetMenuItem = {
             BottomSheetMenuItem(
-                leadingIcon = if ( isFavorite ) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                leadingIcon = if ( isFavorite ) {
+                    Icons.Rounded.ThumbUpAlt
+                } else {
+                    Icons.Filled.ThumbUpAlt
+                },
                 label = language.favorite
             ) {
                 onFavorite( song.id, !isFavorite )
@@ -314,7 +316,7 @@ fun SongOptionsBottomSheetMenu(
 @Composable
 private fun SongOptionsBottomSheetContentPreview() {
     MusicMattersTheme(
-        fontName = SupportedFonts.ProductSans.name,
+        fontName = SupportedFonts.GoogleSans.name,
         useMaterialYou = true,
         fontScale = 1.0f,
         themeMode = ThemeMode.LIGHT,
@@ -325,6 +327,7 @@ private fun SongOptionsBottomSheetContentPreview() {
             song = PreviewParameterData.songs.first(),
             isFavorite = true,
             isCurrentlyPlaying = true,
+            playlists = emptyList(),
             onFavorite = { _, _ -> },
             onAddToQueue = {},
             onPlayNext = { /*TODO*/ },
@@ -334,7 +337,6 @@ private fun SongOptionsBottomSheetContentPreview() {
             onShowSongDetails = {},
             onAddSongsToPlaylist = { _, _ -> },
             onCreatePlaylist = { _, _ -> },
-            onGetPlaylists = { emptyList() },
             onGetSongsInPlaylist = { emptyList() },
             onSearchSongsMatchingQuery = { emptyList() },
             onDelete = {},
@@ -358,7 +360,7 @@ private fun SongCardPreview() {
             song = PreviewParameterData.songs.first(),
             isCurrentlyPlaying = true,
             isFavorite = true,
-            playlistInfos = emptyList(),
+            playlists = emptyList(),
             onClick = {},
             onFavorite = { _, _ -> },
             onPlayNext = {},

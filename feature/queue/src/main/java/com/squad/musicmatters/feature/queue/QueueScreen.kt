@@ -120,46 +120,42 @@ private fun QueueScreenContent(
                 onNavigateUp()
             }
         )
-        LoaderScaffold(
-            isLoading = uiState is QueueScreenUiState.Loading
-        ) {
-            when ( uiState ) {
-                QueueScreenUiState.Loading -> {}
-                is QueueScreenUiState.Success -> {
-                    QueueList(
-                        songsInQueue = uiState.songsInQueue,
-                        currentlyPlayingSongId = uiState.currentlyPlayingSongId,
-                        songsAdditionalMetadata = uiState.songsAdditionalMetadata,
-                        language = uiState.language,
-                        favoriteSongIds = uiState.favoriteSongIds,
-                        onFavorite = onFavorite,
-                        playSong = playSong,
-                        onMove = onMoveSong,
-                        onPlayNext = onPlayNext,
-                        onAddToQueue = onAddToQueue,
-                        onShareSong = onShareSong,
-                        onViewAlbum = onViewAlbum,
-                        onViewArtist = onViewArtist,
-                        onAddSongsToPlaylist = onAddSongsToPlaylist,
-                        onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-                        onCreatePlaylist = onCreatePlaylist,
-                        onGetPlaylists = { onGetPlaylists() },
-                        onDeleteSong = onDeleteSong,
-                        onSaveQueue = onSaveQueue,
-                    )
+        when ( uiState ) {
+            QueueScreenUiState.Loading -> {}
+            is QueueScreenUiState.Success -> {
+                QueueList(
+                    songsInQueue = uiState.songsInQueue,
+                    currentlyPlayingSongId = uiState.currentlyPlayingSongId,
+                    songsAdditionalMetadata = uiState.songsAdditionalMetadata,
+                    language = uiState.language,
+                    favoriteSongIds = uiState.favoriteSongIds,
+                    onFavorite = onFavorite,
+                    playSong = playSong,
+                    onMove = onMoveSong,
+                    onPlayNext = onPlayNext,
+                    onAddToQueue = onAddToQueue,
+                    onShareSong = onShareSong,
+                    onViewAlbum = onViewAlbum,
+                    onViewArtist = onViewArtist,
+                    onAddSongsToPlaylist = onAddSongsToPlaylist,
+                    onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
+                    onCreatePlaylist = onCreatePlaylist,
+                    onGetPlaylists = { onGetPlaylists() },
+                    onDeleteSong = onDeleteSong,
+                    onSaveQueue = onSaveQueue,
+                )
 
-                    if ( showSaveDialog ) {
-                        NewPlaylistDialog(
-                            language = uiState.language,
-                            initialSongsToAdd = uiState.songsInQueue,
-                            onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-                            onConfirmation = { title, songs ->
-                                onCreatePlaylist( title, songs )
-                                showSaveDialog = false
-                            },
-                            onDismissRequest = { showSaveDialog = false }
-                        )
-                    }
+                if ( showSaveDialog ) {
+                    NewPlaylistDialog(
+                        language = uiState.language,
+                        initialSongsToAdd = uiState.songsInQueue,
+                        onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
+                        onConfirmation = { title, songs ->
+                            onCreatePlaylist( title, songs )
+                            showSaveDialog = false
+                        },
+                        onDismissRequest = { showSaveDialog = false }
+                    )
                 }
             }
         }

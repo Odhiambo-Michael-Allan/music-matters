@@ -305,10 +305,10 @@ private fun NowPlayingScreenContent(
                             titleIsHighlighted = true,
                             headerDescription = song.artists.joinToString(),
                             language = uiState.language,
+                            playlists = uiState.playlists,
                             onDismissRequest = { showOptionsMenu = false },
                             onPlayNext = {}, // No need to do anything as duplicates are not allowed in queue
                             onAddToQueue = {}, // No need to do anything as duplicates are not allowed in queue
-                            onGetPlaylists = onGetPlaylists,
                             onGetSongsInPlaylist = onGetSongsInPlaylist,
                             onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                             onCreatePlaylist = onCreatePlaylist,

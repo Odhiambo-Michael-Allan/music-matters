@@ -23,17 +23,15 @@ data class PreviewData(
     val playlists: List<PlaylistInfo>,
 )
 
-val calendar: Calendar = Calendar.getInstance()
-
 object PreviewParameterData {
     val songs = listOf(
         Song(
             id = "id1",
             mediaUri = "Uri.EMPTY",
-            title = "song-1",
+            title = "You're On ( feat. Kyan )",
             albumTitle = "D",
             artists = setOf( "A", "Michael Jackson" ),
-            artworkUri = null,
+            artworkUri = "/storage/Uri.Empty",
             composer = "A,B",
             dateModified = 354L,
             displayTitle = "song-1",
@@ -52,7 +50,7 @@ object PreviewParameterData {
             artworkUri = null,
             composer = "B,C",
             dateModified = 754L,
-            displayTitle = "song-2",
+            displayTitle = "Silk Music Showcase 07 ( Mixed by Jacob Henry & Tom Fall )",
             duration = 4L,
             trackNumber = 235,
             year = 2002,
@@ -62,9 +60,9 @@ object PreviewParameterData {
         Song(
             id = "id3",
             mediaUri = "Uri.EMPTY",
-            title = "song-3",
+            title = "Ric Flair Drip ( with Metro Boomin )",
             albumTitle = "B",
-            artists = setOf( "C", "Michael Jackson" ),
+            artists = setOf( "C", "Metro Boomin", "Offset", "Drake" ),
             artworkUri = null,
             composer = "C,D",
             dateModified = 7976L,
@@ -78,9 +76,9 @@ object PreviewParameterData {
         Song(
             id = "id4",
             mediaUri = "Uri.EMPTY",
-            title = "song-4",
+            title = "Dear Boy",
             albumTitle = "A",
-            artists = setOf( "D", "Michael Jackson" ),
+            artists = setOf( "D", "Avicii" ),
             artworkUri = null,
             composer = "D,E",
             dateModified = 200L,
@@ -94,9 +92,9 @@ object PreviewParameterData {
         Song(
             id = "id5",
             mediaUri = "Uri.EMPTY",
-            title = "song-5",
+            title = "The Days",
             albumTitle = "<unknown>",
-            artists = setOf( "E", "Michael Jackson" ),
+            artists = setOf( "E", "Avicii" ),
             artworkUri = null,
             composer = null,
             dateModified = 34245L,

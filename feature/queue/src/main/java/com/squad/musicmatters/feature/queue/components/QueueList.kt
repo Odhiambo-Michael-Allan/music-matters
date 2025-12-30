@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
@@ -34,7 +33,6 @@ import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.SongCard
 import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
-import sh.calvin.reorderable.rememberReorderableLazyColumnState
 
 @OptIn( ExperimentalFoundationApi::class )
 @Composable
@@ -177,7 +175,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
             song = song,
             isCurrentlyPlaying = isCurrentlyPlaying,
             isFavorite = isFavorite,
-            playlistInfos = playlistInfos,
+            playlists = playlistInfos,
             onClick = onClick,
             onFavorite = onFavorite,
             onPlayNext = onPlayNext,
@@ -202,7 +200,7 @@ private fun QueueListPreview(
     previewData: PreviewData
 ) {
     MusicMattersTheme(
-        fontName = SupportedFonts.ProductSans.name,
+        fontName = SupportedFonts.GoogleSans.name,
         useMaterialYou = true,
         fontScale = DefaultPreferences.FONT_SCALE,
         themeMode = DefaultPreferences.THEME_MODE,
