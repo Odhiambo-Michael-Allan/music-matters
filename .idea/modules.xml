@@ -3,13 +3,19 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/data/MusicMatters.core.data.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/data/MusicMatters.core.data.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/database/MusicMatters.core.database.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/database/MusicMatters.core.database.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.main.iml" filepath="$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/datastore-proto/MusicMatters.core.datastore-proto.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/datastore/MusicMatters.core.datastore.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/datastore/MusicMatters.core.datastore.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/designsystem/MusicMatters.core.designsystem.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/designsystem/MusicMatters.core.designsystem.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/media/MusicMatters.core.media.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/media/MusicMatters.core.media.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/model/MusicMatters.core.model.test.iml" filepath="$PROJECT_DIR$/.idea/modules/core/model/MusicMatters.core.model.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/nowplaying/MusicMatters.feature.nowplaying.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/nowplaying/MusicMatters.feature.nowplaying.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/queue/MusicMatters.feature.queue.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/queue/MusicMatters.feature.queue.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/songs/MusicMatters.feature.songs.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/songs/MusicMatters.feature.songs.androidTest.iml" />
     </modules>
   </component>
 </project>

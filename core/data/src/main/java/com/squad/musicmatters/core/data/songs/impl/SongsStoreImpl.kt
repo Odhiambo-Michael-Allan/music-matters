@@ -84,6 +84,7 @@ class SongsStoreImpl @Inject constructor(
         withContext( ioDispatcher )  {
             val mediaItemList = mutableListOf<MediaItem>()
             try {
+                Log.d( TAG, "FETCHING SONGS.." )
                 context.contentResolver.query(
                     collectionUri,
                     projection,

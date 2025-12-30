@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -101,11 +100,11 @@ import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
 
 // Stateful
 @Composable
-fun NowPlayingBottomSheet(
+fun NowPlayingBottomScreen(
     viewModel: NowPlayingScreenViewModel = hiltViewModel(),
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
-    onNavigateToQueueScreen: () -> Unit,
+    onNavigateToQueue: () -> Unit,
     onLaunchEqualizerActivity: () -> Unit,
     onHideBottomSheet: () -> Unit
 ) {
@@ -136,9 +135,9 @@ fun NowPlayingBottomSheet(
         onToggleShuffleMode = viewModel::setShuffleMode,
         onPlayingSpeedChange = viewModel::onPlayingSpeedChange,
         onPlayingPitchChange = viewModel::onPlayingPitchChange,
-        onQueueClicked = {
+        onNavigateToQueue = {
             onHideBottomSheet()
-            onNavigateToQueueScreen()
+            onNavigateToQueue()
         },
         onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
         onGetSongsInPlaylist = {
@@ -165,7 +164,7 @@ fun NowPlayingBottomSheet(
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
-fun NowPlayingScreenContent(
+private fun NowPlayingScreenContent(
     uiState: NowPlayingScreenUiState,
     playbackPosition: PlaybackPosition,
     durationFormatter: ( Long ) -> String,
@@ -181,7 +180,7 @@ fun NowPlayingScreenContent(
     onArtworkClicked: ( Song ) -> Unit,
     onSwipeArtworkLeft: () -> Unit,
     onSwipeArtworkRight: () -> Unit,
-    onQueueClicked: () -> Unit,
+    onNavigateToQueue: () -> Unit,
     onToggleLoopMode: ( LoopMode ) -> Unit,
     onToggleShuffleMode: ( Boolean ) -> Unit,
     onPlayingSpeedChange: ( Float ) -> Unit,
@@ -227,7 +226,7 @@ fun NowPlayingScreenContent(
                                 onPlayNext = onPlayNext,
                                 onFastRewindButtonClick = onFastRewindButtonClick,
                                 onFastForwardButtonClick = onFastForwardButtonClick,
-                                onQueueClicked = onQueueClicked,
+                                onNavigateToQueue = onNavigateToQueue,
                                 onToggleLoopMode = onToggleLoopMode,
                                 onToggleShuffleMode = onToggleShuffleMode,
                                 onPlayingSpeedChange = onPlayingSpeedChange,
@@ -254,7 +253,7 @@ fun NowPlayingScreenContent(
                                 onPlayNext = onPlayNext,
                                 onFastRewindButtonClick = onFastRewindButtonClick,
                                 onFastForwardButtonClick = onFastForwardButtonClick,
-                                onQueueClicked = onQueueClicked,
+                                onNavigateToQueue = onNavigateToQueue,
                                 onToggleLoopMode = onToggleLoopMode,
                                 onToggleShuffleMode = onToggleShuffleMode,
                                 onPlayingSpeedChange = onPlayingSpeedChange,
@@ -283,7 +282,7 @@ fun NowPlayingScreenContent(
                             onPlayNext = onPlayNext,
                             onFastRewindButtonClick = onFastRewindButtonClick,
                             onFastForwardButtonClick = onFastForwardButtonClick,
-                            onQueueClicked = onQueueClicked,
+                            onNavigateToQueue = onNavigateToQueue,
                             onToggleLoopMode = onToggleLoopMode,
                             onToggleShuffleMode = onToggleShuffleMode,
                             onPlayingSpeedChange = onPlayingSpeedChange,
@@ -381,7 +380,7 @@ fun NowPlayingScreenContent(
 
 @OptIn( ExperimentalLayoutApi::class )
 @Composable
-fun PortraitLayout(
+private fun PortraitLayout(
     uiState: NowPlayingScreenUiState.Success,
     currentlyPlayingSong: Song,
     playbackPosition: PlaybackPosition,
@@ -399,7 +398,7 @@ fun PortraitLayout(
     onPlayNext: () -> Unit,
     onFastRewindButtonClick: () -> Unit,
     onFastForwardButtonClick: () -> Unit,
-    onQueueClicked: () -> Unit,
+    onNavigateToQueue: () -> Unit,
     onToggleLoopMode: ( LoopMode ) -> Unit,
     onToggleShuffleMode: ( Boolean ) -> Unit,
     onPlayingSpeedChange: ( Float ) -> Unit,
@@ -528,7 +527,8 @@ fun PortraitLayout(
                     onPreviousButtonClick = onPreviousButtonClick,
                     onFastRewindButtonClick = onFastRewindButtonClick,
                     onFastForwardButtonClick = onFastForwardButtonClick,
-                    onNextButtonClick = onPlayNext
+                    onNextButtonClick = onPlayNext,
+                    onNavigateToQueue = onNavigateToQueue,
                 )
             else ->
                 NowPlayingTraditionalControlsLayout(
@@ -538,7 +538,8 @@ fun PortraitLayout(
                     onFastRewindButtonClick = onFastRewindButtonClick,
                     onPausePlayButtonClick = onPausePlayButtonClick,
                     onFastForwardButtonClick = onFastForwardButtonClick,
-                    onNextButtonClick = onPlayNext
+                    onNextButtonClick = onPlayNext,
+                    onNavigateToQueue = onNavigateToQueue,
                 )
         }
         Spacer( modifier = Modifier.height( 16.dp ) )
@@ -548,7 +549,6 @@ fun PortraitLayout(
             shuffle = uiState.userData.shuffle,
             currentSpeed = uiState.userData.playbackSpeed,
             currentPitch = uiState.userData.playbackPitch,
-            onNavigateToQueue = onQueueClicked,
             onToggleLoopMode = onToggleLoopMode,
             onToggleShuffleMode = onToggleShuffleMode,
             onSpeedChange = onPlayingSpeedChange,
@@ -562,7 +562,7 @@ fun PortraitLayout(
 
 @OptIn( ExperimentalLayoutApi::class )
 @Composable
-fun LandscapeLayout(
+private fun LandscapeLayout(
     uiState: NowPlayingScreenUiState.Success,
     currentlyPlayingSong: Song,
     playbackPosition: PlaybackPosition,
@@ -580,13 +580,13 @@ fun LandscapeLayout(
     onPlayNext: () -> Unit,
     onFastRewindButtonClick: () -> Unit,
     onFastForwardButtonClick: () -> Unit,
-    onQueueClicked: () -> Unit,
+    onNavigateToQueue: () -> Unit,
     onToggleLoopMode: ( LoopMode ) -> Unit,
     onToggleShuffleMode: ( Boolean ) -> Unit,
     onPlayingSpeedChange: ( Float ) -> Unit,
     onPlayingPitchChange: ( Float ) -> Unit,
     onCreateEqualizerActivityContract: () -> Unit,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
 ) {
     Row (
         modifier = Modifier
@@ -707,7 +707,8 @@ fun LandscapeLayout(
                         onPreviousButtonClick = onPreviousButtonClick,
                         onFastRewindButtonClick = onFastRewindButtonClick,
                         onFastForwardButtonClick = onFastForwardButtonClick,
-                        onNextButtonClick = onPlayNext
+                        onNextButtonClick = onPlayNext,
+                        onNavigateToQueue = onNavigateToQueue,
                     )
                 else ->
                     NowPlayingTraditionalControlsLayout(
@@ -717,7 +718,8 @@ fun LandscapeLayout(
                         onFastRewindButtonClick = onFastRewindButtonClick,
                         onPausePlayButtonClick = onPausePlayButtonClick,
                         onFastForwardButtonClick = onFastForwardButtonClick,
-                        onNextButtonClick = onPlayNext
+                        onNextButtonClick = onPlayNext,
+                        onNavigateToQueue = onNavigateToQueue,
                     )
             }
             Spacer( modifier = Modifier.height( 16.dp ) )
@@ -727,7 +729,6 @@ fun LandscapeLayout(
                 shuffle = uiState.userData.shuffle,
                 currentSpeed = uiState.userData.playbackSpeed,
                 currentPitch = uiState.userData.playbackPitch,
-                onNavigateToQueue = onQueueClicked,
                 onToggleLoopMode = onToggleLoopMode,
                 onToggleShuffleMode = onToggleShuffleMode,
                 onSpeedChange = onPlayingSpeedChange,
@@ -740,7 +741,7 @@ fun LandscapeLayout(
 }
 
 @Composable
-fun NowPlayingArtwork(
+private fun NowPlayingArtwork(
     modifier: Modifier = Modifier,
     artworkUri: Uri?,
     onSwipeLeft: () -> Unit,
@@ -808,14 +809,15 @@ private fun ArtistsRow(
 }
 
 @Composable
-fun NowPlayingDefaultControlsLayout(
+private fun NowPlayingDefaultControlsLayout(
     isPlaying: Boolean,
     enableSeekControls: Boolean,
     onPausePlayButtonClick: () -> Unit,
     onPreviousButtonClick: () -> Unit,
     onFastRewindButtonClick: () -> Unit,
     onFastForwardButtonClick: () -> Unit,
-    onNextButtonClick: () -> Unit
+    onNextButtonClick: () -> Unit,
+    onNavigateToQueue: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -856,7 +858,7 @@ fun NowPlayingDefaultControlsLayout(
             )
         }
         IconButton(
-            onClick = {}
+            onClick = onNavigateToQueue
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.PlaylistPlay,
@@ -867,14 +869,15 @@ fun NowPlayingDefaultControlsLayout(
 }
 
 @Composable
-fun NowPlayingTraditionalControlsLayout(
+private fun NowPlayingTraditionalControlsLayout(
     enableSeekControls: Boolean,
     isPlaying: Boolean,
     onPreviousButtonClick: () -> Unit,
     onFastRewindButtonClick: () -> Unit,
     onPausePlayButtonClick: () -> Unit,
     onFastForwardButtonClick: () -> Unit,
-    onNextButtonClick: () -> Unit
+    onNextButtonClick: () -> Unit,
+    onNavigateToQueue: () -> Unit,
 ) {
     Row (
         modifier = Modifier
@@ -884,7 +887,7 @@ fun NowPlayingTraditionalControlsLayout(
         horizontalArrangement = Arrangement.Center
     ) {
         IconButton(
-            onClick = {}
+            onClick = onNavigateToQueue,
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.PlaylistPlay,
@@ -930,7 +933,7 @@ fun NowPlayingTraditionalControlsLayout(
 }
 
 @Composable
-fun NowPlayingSeekBar(
+private fun NowPlayingSeekBar(
     modifier: Modifier = Modifier,
     playbackPosition: PlaybackPosition,
     durationFormatter: (Long ) -> String,
@@ -1248,7 +1251,7 @@ private enum class NowPlayingControlButtonSize {
 
 @DevicePreviews
 @Composable
-fun NowPlayingScreenContentPreview() {
+private fun NowPlayingScreenContentPreview() {
     MusicMattersTheme(
         themeMode = ThemeMode.LIGHT,
         primaryColorName = "Blue",
@@ -1306,7 +1309,7 @@ fun NowPlayingScreenContentPreview() {
             onSwipeArtworkRight = {},
             onPlayingSpeedChange = {},
             onPlayingPitchChange = {},
-            onQueueClicked = {},
+            onNavigateToQueue = {},
             onToggleLoopMode = {},
             onToggleShuffleMode = {},
             onSeekStart = {},

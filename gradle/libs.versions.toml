@@ -23,7 +23,7 @@ compose-navigation = "2.8.0"
 coil = "2.7.0"
 media3Version="1.4.0"
 
-reorderable = "1.5.0"
+reorderable = "3.0.0"
 robolectric = "4.11.1"
 
 appcompat = "1.7.0"
@@ -94,7 +94,7 @@ kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 
-reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
+sh-calvin-reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 

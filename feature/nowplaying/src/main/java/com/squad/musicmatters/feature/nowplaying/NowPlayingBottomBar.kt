@@ -112,7 +112,7 @@ fun NowPlayingBottomBar(
 
 // Stateless
 @Composable
-fun NowPlayingBottomBarContent(
+private fun NowPlayingBottomBarContent(
     uiState: NowPlayingScreenUiState,
     playbackPosition: PlaybackPosition,
     onNowPlayingBottomBarSwipeUp: () -> Unit,
@@ -448,7 +448,7 @@ private fun NowPlayingBottomBarContentText(
     }
 }
 
-fun Modifier.swipeable(
+internal fun Modifier.swipeable(
     minimumDragAmount: Float = 50f,
     onSwipeLeft: ( () -> Unit )? = null,
     onSwipeRight: ( () -> Unit )? = null,
@@ -484,7 +484,7 @@ fun Modifier.swipeable(
 
 @Preview( showBackground = true )
 @Composable
-fun NowPlayingBottomBarPreview() {
+private fun NowPlayingBottomBarPreview() {
     MusicMattersTheme(
         themeMode = ThemeMode.LIGHT,
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,

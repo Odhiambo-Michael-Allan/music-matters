@@ -53,14 +53,13 @@ import com.squad.musicmatters.core.ui.dialog.ScaffoldDialog
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
-fun NowPlayingBodyBottomBar(
+internal fun NowPlayingBodyBottomBar(
     modifier: Modifier = Modifier,
     language: Language,
     currentLoopMode: LoopMode,
     shuffle: Boolean,
     currentSpeed: Float,
     currentPitch: Float,
-    onNavigateToQueue: () -> Unit,
     onToggleLoopMode: ( LoopMode ) -> Unit,
     onToggleShuffleMode: ( Boolean ) -> Unit,
     onSpeedChange: ( Float ) -> Unit,
@@ -201,7 +200,7 @@ fun NowPlayingBodyBottomBar(
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
-fun NowPlayingOptionDialog(
+private fun NowPlayingOptionDialog(
     title: String,
     currentValue: Float,
     onValueChange: ( Float ) -> Unit,
@@ -247,7 +246,7 @@ fun NowPlayingOptionDialog(
 
 @DevicePreviews
 @Composable
-fun NowPlayingBodyBottomBarPreview() {
+private fun NowPlayingBodyBottomBarPreview() {
     MusicMattersTheme(
         themeMode = ThemeMode.LIGHT,
         useMaterialYou = true,
@@ -261,7 +260,6 @@ fun NowPlayingBodyBottomBarPreview() {
             shuffle = true,
             currentSpeed = 2f,
             currentPitch = 2f,
-            onNavigateToQueue = {},
             onToggleLoopMode = {},
             onToggleShuffleMode = {},
             onSpeedChange = {},
