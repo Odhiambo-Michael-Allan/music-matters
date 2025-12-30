@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -22,7 +23,8 @@ fun SubtleCaptionText(
         text = text,
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.bodyMedium.copy(
-            color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.7f )
+            color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.7f ),
+            fontWeight = FontWeight.SemiBold
         )
     )
 }

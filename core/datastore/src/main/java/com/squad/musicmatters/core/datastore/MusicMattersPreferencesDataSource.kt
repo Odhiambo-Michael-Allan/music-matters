@@ -495,7 +495,7 @@ class MusicMattersPreferencesDataSource @Inject constructor(
 }
 
 object DefaultPreferences {
-    const val FONT_NAME = "Product Sans"
+    const val FONT_NAME = "Google Sans"
     const val FONT_SCALE = 1.0f
     val THEME_MODE = ThemeMode.FOLLOW_SYSTEM
     const val PRIMARY_COLOR_NAME = "Blue"

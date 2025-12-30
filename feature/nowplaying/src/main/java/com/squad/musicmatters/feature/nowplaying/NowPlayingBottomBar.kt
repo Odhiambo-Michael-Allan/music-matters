@@ -399,6 +399,7 @@ private fun NowPlayingBottomBarContentText(
     textMarquee: Boolean
 ) {
     var showOverlay by remember { mutableStateOf( false ) }
+
     Box {
         Text(
             text = text,
@@ -435,7 +436,7 @@ private fun NowPlayingBottomBarContentText(
                 Spacer( modifier = Modifier.weight( 1f ) )
                 Box (
                     modifier = Modifier
-                        .width(12.dp)
+                        .width( 12.dp )
                         .fillMaxHeight()
                         .background(
                             brush = Brush.horizontalGradient(

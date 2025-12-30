@@ -22,7 +22,8 @@ class MusicMattersFont(
             SupportedFonts.Inter.name -> SupportedFonts.Inter
             SupportedFonts.Poppins.name -> SupportedFonts.Poppins
             SupportedFonts.Roboto.name -> SupportedFonts.Roboto
-            else -> SupportedFonts.ProductSans
+            SupportedFonts.ProductSans.name -> SupportedFonts.ProductSans
+            else -> SupportedFonts.GoogleSans
         }
     }
 }
@@ -68,22 +69,33 @@ object SupportedFonts {
         )
     )
 
+    val GoogleSans = MusicMattersFont.fromValue(
+        fontName = "Google Sans",
+        fontFamily = FontFamily(
+            Font( R.font.google_sans_medium, FontWeight.Medium ),
+            Font( R.font.google_sans_regular, FontWeight.Normal ),
+            Font( R.font.google_sans_semi_bold, FontWeight.SemiBold ),
+            Font( R.font.google_sans_bold, FontWeight.Bold ),
+        )
+    )
+
 }
 
 object MusicMattersTypography {
-    private val defaultFont = SupportedFonts.ProductSans
+    private val defaultFont = SupportedFonts.GoogleSans
 
     val all = mapOf(
         SupportedFonts.Inter.name to SupportedFonts.Inter,
         SupportedFonts.Poppins.name to SupportedFonts.Poppins,
         SupportedFonts.DMSans.name to SupportedFonts.DMSans,
         SupportedFonts.Roboto.name to SupportedFonts.Roboto,
-        SupportedFonts.ProductSans.name to SupportedFonts.ProductSans
+        SupportedFonts.ProductSans.name to SupportedFonts.ProductSans,
+        SupportedFonts.GoogleSans.name to SupportedFonts.GoogleSans
     )
 
     fun resolveFont( name: String? ) = all[ name ] ?: defaultFont
 
-    fun toTypography(font: MusicMattersFont, textDirection: TextDirection ): Typography {
+    fun toTypography( font: MusicMattersFont, textDirection: TextDirection ): Typography {
         val fontFamily = font.fontFamily
 
         return Typography().run {

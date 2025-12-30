@@ -1,7 +1,6 @@
 package com.squad.musicmatters.core.ui
 
 import android.net.Uri
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -106,7 +105,7 @@ fun SongList(
                             song = song,
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = isFavorite( songs[ index ].id ),
-                            playlistInfos = playlistInfos,
+                            playlists = playlistInfos,
                             onClick = { playSong( song, songs ) },
                             onFavorite = onFavorite,
                             onPlayNext = onPlayNext,
