@@ -28,7 +28,7 @@ import com.squad.musicmatters.core.ui.SongList
 import com.squad.musicmatters.core.ui.TopAppBar
 
 @Composable
-fun SongsScreen(
+internal fun SongsScreen(
     viewModel: SongsScreenViewModel = hiltViewModel(),
     onViewAlbum: (String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
@@ -84,7 +84,7 @@ fun SongsScreen(
 }
 
 @Composable
-fun SongsScreenContent(
+private fun SongsScreenContent(
     uiState: SongsScreenUiState,
     onSortReverseChange: ( Boolean ) -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
@@ -110,9 +110,6 @@ fun SongsScreenContent(
     when ( uiState ) {
         SongsScreenUiState.Loading -> {}
         is SongsScreenUiState.Success -> {
-            val fallbackResourceId =
-                if ( uiState.themeMode.isLight( LocalContext.current ) )
-                    com.squad.musicmatters.core.ui.R.drawable.core_ui_placeholder_light else com.squad.musicmatters.core.ui.R.drawable.core_ui_placeholder_dark
 
             Column (
                 modifier = Modifier.fillMaxSize()

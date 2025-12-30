@@ -39,10 +39,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navOptions
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.feature.nowplaying.NowPlayingBottomBar
-import com.squad.musicmatters.feature.nowplaying.NowPlayingBottomSheet
+import com.squad.musicmatters.feature.nowplaying.NowPlayingBottomScreen
+import com.squad.musicmatters.feature.queue.navigation.navigateToQueue
+import com.squad.musicmatters.feature.queue.navigation.queueScreen
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import com.squad.musicmatters.feature.songs.navigation.songsScreen
 import com.squad.musicmatters.utils.ScreenOrientation
@@ -196,31 +199,13 @@ fun MusicMattersNavHost(
                     onViewAlbum = {},
                     onNavigateToSettings = {}
                 )
-//                composable(
-//                    route = Route.Songs.name,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) {
-//                    val songsScreenViewModel: SongsScreenViewModel = viewModel(
-//                        factory = SongsViewModelFactory(
-//                            settingsRepository = settingsRepository,
-//                            playlistRepository = playlistRepository,
-//                            musicServiceConnection = musicServiceConnection,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-//                        )
-//                    )
-//                    SongsScreen(
-//                        viewModel = songsScreenViewModel,
-//                        onSettingsClicked = { navController.navigate( Route.Settings.name ) },
-//                        onViewAlbum = navController::navigateToAlbumScreen,
-//                        onViewArtist = navController::navigateToArtistScreen,
-//                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-//                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.SONG.name ) },
-//                        onDeleteSong = {
-//                            mainActivity.deleteSong( it )
-//                        }
-//                    )
-//                }
+                queueScreen(
+                    onViewAlbum = {},
+                    onViewArtist = {},
+                    onShareSong = { _, _ -> },
+                    onDeleteSong = {},
+                    onNavigateBack = { navController.navigateUp() }
+                )
 //                composable(
 //                    route = Route.Artists.name,
 //                    enterTransition = { SlideTransition.slideUp.enterTransition() },
@@ -453,30 +438,6 @@ fun MusicMattersNavHost(
 //                    )
 //                }
 //                composable(
-//                    route = Route.Queue.name,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) {
-//                    val queueScreenViewModel: QueueScreenViewModel = viewModel(
-//                        factory = QueueScreenViewModelFactory(
-//                            musicServiceConnection = musicServiceConnection,
-//                            settingsRepository = settingsRepository,
-//                            playlistRepository = playlistRepository,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
-//                        )
-//                    )
-//                    QueueScreen(
-//                        viewModel = queueScreenViewModel,
-//                        onViewArtist = navController::navigateToArtistScreen,
-//                        onViewAlbum = navController::navigateToAlbumScreen,
-//                        onNavigateBack = navController::navigateUp,
-//                        onShareSong = { uri, errorMessage ->
-//                            shareSong( context, uri, errorMessage )
-//                        },
-//                        onDeleteSong = { mainActivity.deleteSong( it ) }
-//                    )
-//                }
-//                composable(
 //                    route = Search.routeWithArgs,
 //                    enterTransition = { SlideTransition.slideUp.enterTransition() },
 //                    exitTransition = { FadeTransition.exitTransition() }
@@ -589,7 +550,7 @@ fun MusicMattersNavHost(
                         },
                         dragHandle = {}
                     ) {
-                        NowPlayingBottomSheet(
+                        NowPlayingBottomScreen(
                             onViewAlbum = navController::navigateToAlbumScreen,
                             onViewArtist = navController::navigateToArtistScreen,
                             onHideBottomSheet = {
@@ -597,16 +558,18 @@ fun MusicMattersNavHost(
                                     nowPlayingScreenBottomSheetState.hide()
                                 }
                             },
-                            onNavigateToQueueScreen = {
-                                navController.navigate(Route.Queue.name) {
-                                    launchSingleTop = true
-                                }
+                            onNavigateToQueue = {
+                                navController.navigateToQueue(
+                                    navOptions = navOptions {
+                                        launchSingleTop = true
+                                    }
+                                )
                             },
                             onLaunchEqualizerActivity = {
                                 try {
                                     equalizerActivity.launch()
-                                } catch (exception: Exception) {
-                                    Timber.tag("NOW-PLAYING-BOTTOM-BAR").d(
+                                } catch ( exception: Exception ) {
+                                    Timber.tag( "NOW-PLAYING-BOTTOM-BAR" ).d(
                                         "Launching equalizer failed: $exception"
                                     )
                                 }

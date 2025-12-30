@@ -91,18 +91,6 @@ fun TopAppBar(
     )
 }
 
-@Preview( showBackground = true )
-@Composable
-fun TopAppBarPreview() {
-    TopAppBar(
-        onNavigationIconClicked = { /*TODO*/ },
-        title = English.songs,
-        settings = English.settings
-    ) {
-
-    }
-}
-
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun MinimalAppBar(
@@ -179,76 +167,21 @@ fun TopAppBarMinimalTitle(
 
 @Preview( showBackground = true )
 @Composable
-fun TopAppBarMinimalAppBarPreview() {
+private fun TopAppBarMinimalAppBarPreview() {
     MinimalAppBar(
         onNavigationIconClicked = { /*TODO*/ },
         title = "Queue"
     )
 }
 
-@OptIn( ExperimentalMaterial3Api::class )
-@Composable
-fun QueueScreenTopAppBar(
-    modifier: Modifier = Modifier,
-    onBackArrowClick: () -> Unit,
-    onSaveClick: () -> Unit,
-    onClearClick: () -> Unit
-) {
-    CenterAlignedTopAppBar(
-        modifier = modifier,
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Transparent
-        ),
-        navigationIcon = {
-            IconButton( onClick = onBackArrowClick ) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = null
-                )
-            }
-        },
-        title = {
-            Crossfade(
-                targetState = stringResource( id = R.string.queue ),
-                label = "top-app-bar-title"
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    TopAppBarMinimalTitle {
-                        Text( text = it )
-                    }
-                }
-            }
-        },
-        actions = {
-            IconButton(
-                onClick = onSaveClick
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Save,
-                    contentDescription = null
-                )
-            }
-            IconButton(
-                onClick = onClearClick
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.ClearAll,
-                    contentDescription = null
-                )
-            }
-        }
-    )
-}
-
 @Preview( showBackground = true )
 @Composable
-fun QueueScreenTopAppBarPreview() {
-    QueueScreenTopAppBar(
-        onBackArrowClick = {},
-        onSaveClick = {},
-        onClearClick = {},
-    )
+private fun TopAppBarPreview() {
+    TopAppBar(
+        onNavigationIconClicked = { /*TODO*/ },
+        title = English.songs,
+        settings = English.settings
+    ) {
+
+    }
 }

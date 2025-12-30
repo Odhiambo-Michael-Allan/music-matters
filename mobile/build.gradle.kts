@@ -56,6 +56,7 @@ dependencies {
 
     implementation( projects.feature.songs )
     implementation( projects.feature.nowplaying )
+    implementation( projects.feature.queue )
 
     implementation( projects.core.designsystem )
     implementation( projects.core.media )
@@ -93,7 +94,7 @@ dependencies {
     // For media playback using ExoPlayer
     implementation( libs.androidx.media3.exoplayer )
 
-    implementation( libs.reorderable )
+//    implementation( libs.reorderable )
 
     implementation( libs.androidx.compose.material3.adaptive )
     implementation( libs.androidx.compose.material3.adaptive.navigation.suite )

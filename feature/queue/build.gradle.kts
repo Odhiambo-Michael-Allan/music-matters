@@ -21,7 +21,7 @@ dependencies {
     implementation( libs.androidx.appcompat )
     implementation( libs.material )
 
-
+    implementation( libs.sh.calvin.reorderable )
 
     testImplementation( libs.junit )
 }

@@ -23,55 +23,24 @@ import com.squad.musicmatters.core.i8n.English
 @Composable
 fun LoaderScaffold(
     isLoading: Boolean,
-    loading: String,
     content: @Composable () -> Unit,
 ) {
 
     Box( modifier = Modifier.fillMaxSize() ) {
-        AnimatedVisibility(
-            visible = !isLoading,
-            enter = expandVertically( expandFrom = Alignment.Bottom ) + fadeIn(),
-            exit = shrinkVertically( shrinkTowards = Alignment.Bottom ) + fadeOut(),
-        ) {
-            Box {
-                content()
-            }
-        }
-        AnimatedVisibility(
-            visible = isLoading,
-            enter = expandVertically( expandFrom = Alignment.Bottom ) + fadeIn(),
-            exit = shrinkVertically( shrinkTowards = Alignment.Bottom ) + fadeOut(),
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                Column(
-                    modifier = Modifier
-                        .align( Alignment.Center ),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.padding( 16.dp )
-                    )
-                    Text(
-                        text = loading,
-                        style = MaterialTheme.typography.labelMedium.copy(
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    )
-                }
-            }
+        content()
+        if ( isLoading ) {
+            LoadingWheel(
+                modifier = Modifier.align( Alignment.TopCenter )
+            )
         }
     }
 }
 
 @Preview( showSystemUi = true )
 @Composable
-fun LoaderScaffoldPreview() {
+private fun LoaderScaffoldPreview() {
     LoaderScaffold(
         isLoading = true,
-        loading = English.loading
     ) {
         Text( text = "Hello" )
     }

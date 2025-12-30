@@ -43,16 +43,19 @@ abstract class DataModule {
     ): PlayHistoryRepository
 
     @Binds
+    @Singleton
     internal abstract fun bindsPlaylistRepository(
         repository: PlaylistRepositoryImpl
     ): PlaylistRepository
 
     @Binds
+    @Singleton
     internal abstract fun bindsQueueRepository(
         repository: QueueRepositoryImpl
     ): QueueRepository
 
     @Binds
+    @Singleton
     internal abstract fun bindsSongsAdditionalMetadataRepository(
         repository: SongsAdditionalMetadataRepositoryImpl
     ): SongsAdditionalMetadataRepository

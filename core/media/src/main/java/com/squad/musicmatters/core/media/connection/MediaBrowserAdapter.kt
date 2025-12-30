@@ -3,6 +3,7 @@ package com.squad.musicmatters.core.media.connection
 import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.MediaBrowser
@@ -25,6 +26,7 @@ class MediaBrowserAdapter(
         get() = browser
 
     override suspend fun establishConnection() {
+        Timber.tag( TAG ).d( "ESTABLISHING NEW CONNECTION" )
         val newBrowser =
             MediaBrowser.Builder( context, SessionToken( context, serviceComponentName ) )
                 .setListener( BrowserListener() )

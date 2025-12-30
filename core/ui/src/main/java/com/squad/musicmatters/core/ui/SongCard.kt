@@ -65,6 +65,7 @@ import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun SongCard(
+    modifier: Modifier = Modifier,
     language: Language,
     song: Song,
     isCurrentlyPlaying: Boolean,
@@ -90,7 +91,7 @@ fun SongCard(
     var showDeleteSongDialog by remember { mutableStateOf( false ) }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
         onClick = onClick
     ) {
@@ -309,67 +310,9 @@ fun SongOptionsBottomSheetMenu(
     )
 }
 
-@Composable
-fun QueueSongCard(
-    modifier: Modifier = Modifier,
-    language: Language,
-    song: Song,
-    isCurrentlyPlaying: Boolean,
-    isFavorite: Boolean,
-    playlistInfos: List<PlaylistInfo>,
-    onClick: () -> Unit,
-    onFavorite: ( String, Boolean ) -> Unit,
-    onPlayNext: ( Song ) -> Unit,
-    onAddToQueue: ( Song ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
-    onViewAlbum: ( String ) -> Unit,
-    onShareSong: ( Uri ) -> Unit,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
-    onSearchSongsMatchingQuery: (String ) -> List<Song>,
-    onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onDragHandleClick: () -> Unit,
-    onDeleteSong: ( Song ) -> Unit,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?
-) {
-    Row (
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(
-            modifier = modifier,
-            onClick = onDragHandleClick
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.DragHandle,
-                contentDescription = null
-            )
-        }
-        SongCard(
-            language = language,
-            song = song,
-            isCurrentlyPlaying = isCurrentlyPlaying,
-            isFavorite = isFavorite,
-            playlistInfos = playlistInfos,
-            onClick = onClick,
-            onFavorite = onFavorite,
-            onPlayNext = onPlayNext,
-            onAddToQueue = onAddToQueue,
-            onViewArtist = onViewArtist,
-            onViewAlbum = onViewAlbum,
-            onShareSong = onShareSong,
-            onGetSongsInPlaylist = onGetSongsInPlaylist,
-            onAddSongsToPlaylist = onAddSongsToPlaylist,
-            onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-            onCreatePlaylist = onCreatePlaylist,
-            onGetSongAdditionalMetadata = onGetSongAdditionalMetadata,
-            onDeleteSong = onDeleteSong
-        )
-    }
-}
-
 @Preview( showBackground = true )
 @Composable
-fun SongOptionsBottomSheetContentPreview() {
+private fun SongOptionsBottomSheetContentPreview() {
     MusicMattersTheme(
         fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
@@ -402,7 +345,7 @@ fun SongOptionsBottomSheetContentPreview() {
 
 @Preview( showBackground = true )
 @Composable
-fun SongCardPreview() {
+private fun SongCardPreview() {
     MusicMattersTheme(
         fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
@@ -434,36 +377,3 @@ fun SongCardPreview() {
 }
 
 
-@Preview( showBackground = true )
-@Composable
-fun QueueSongCardPreview() {
-    MusicMattersTheme(
-        fontName = SupportedFonts.ProductSans.name,
-        useMaterialYou = true,
-        fontScale = DefaultPreferences.FONT_SCALE,
-        themeMode = DefaultPreferences.THEME_MODE,
-        primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME
-    ) {
-        QueueSongCard(
-            language = English,
-            song = PreviewParameterData.songs.first(),
-            isCurrentlyPlaying = true,
-            isFavorite = true,
-            playlistInfos = emptyList(),
-            onClick = {},
-            onFavorite = { _, _ -> },
-            onPlayNext = {},
-            onAddToQueue = {},
-            onViewArtist = {},
-            onViewAlbum = {},
-            onShareSong = {},
-            onGetSongsInPlaylist = { emptyList() },
-            onDragHandleClick = {},
-            onAddSongsToPlaylist = { _, _ -> },
-            onSearchSongsMatchingQuery = { emptyList() },
-            onCreatePlaylist = { _, _ -> },
-            onDeleteSong = {},
-            onGetSongAdditionalMetadata = { null }
-        )
-    }
-}

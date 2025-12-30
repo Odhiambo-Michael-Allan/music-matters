@@ -1,5 +1,6 @@
 package com.squad.musicmatters.core.media.connection
 
+import android.util.Log
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackParameters
@@ -19,9 +20,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.Collections
 import javax.inject.Inject
 
@@ -44,15 +47,17 @@ class MusicServiceConnectionImpl @Inject constructor(
     init {
         scope.launch {
             connectable.establishConnection()
-            connectable.addDisconnectListener { scope.cancel() }
+            connectable.addDisconnectListener {
+                scope.cancel()
+            }
             player = connectable.player?.apply {
                 initializePlayer( this )
             }
+            launch { observeQueue() }
+            launch { observePlaybackSpeed() }
+            launch { observePlaybackPitch() }
+            launch { observeLoopMode() }
         }
-        scope.launch { observeQueue() }
-        scope.launch { observePlaybackSpeed() }
-        scope.launch { observePlaybackPitch() }
-        scope.launch { observeLoopMode() }
     }
 
     override fun getCurrentPlaybackPosition(): PlaybackPosition =
@@ -90,13 +95,20 @@ class MusicServiceConnectionImpl @Inject constructor(
     }
 
     private suspend fun observeQueue() {
-        queueRepository.fetchSongsInQueueSortedByPosition().collect { newQueue ->
-            player?.let { player ->
-                player.syncWithQueue(
-                    newItems = newQueue.map { it.toMediaItem() },
-                    ignoreMetadataUpdates = false
-                )
-            }
+        queueRepository
+            .fetchSongsInQueueSortedByPosition()
+            .map { songs -> songs.map { it.id } } // Transform to just IDs
+            .distinctUntilChanged()               // Only continue if IDs or Order changed
+            .collect {
+                Timber.tag( TAG ).d( "QUEUE CHANGED" )
+                Timber.tag( TAG ).d( "PLAYER IS NULL ${player == null}" )
+                val newQueue = queueRepository.fetchSongsInQueueSortedByPosition().first()
+                player?.let { player ->
+                    player.syncWithQueue(
+                        newItems = newQueue.map { it.toMediaItem() },
+                        ignoreMetadataUpdates = false
+                    )
+                }
         }
     }
 
@@ -247,6 +259,7 @@ class MusicServiceConnectionImpl @Inject constructor(
     }
 
     override suspend fun moveSong( from: Int, to: Int ) {
+        println( "MOVING SONG.." )
         val currentQueue = queueRepository.fetchSongsInQueueSortedByPosition().first().toMutableList()
         currentQueue.move( from, to )
         updateQueueWith( currentQueue )
@@ -369,21 +382,25 @@ class DefaultSongToMediaItemConverter @Inject constructor() : SongToMediaItemCon
  */
 fun Player.syncWithQueue(
     newItems: List<MediaItem>,
-    ignoreMetadataUpdates: Boolean = false
+    ignoreMetadataUpdates: Boolean = true
 ) {
+    Timber.tag(TAG).d("SYNCING PLAYER WITH QUEUE")
     // 1. Remove items that no longer exist in the new list
     val newIds = newItems.map { it.mediaId }.toSet()
     var i = 0
     while ( i < mediaItemCount ) {
         val currentId = getMediaItemAt( i ).mediaId
         if ( !newIds.contains( currentId ) ) {
+            android.util.Log.d( TAG, "ITEM IS NEW" )
             removeMediaItem( i )
             // Don't increment i because the next item shifted into this index
         } else {
+            android.util.Log.d( TAG, "ITEM IS NOT NEW" )
             i++
         }
     }
 
+    Timber.tag(TAG).d("NUMBER OF NEW ITEMS: ${newItems.size}")
     // 2. Reorder and Add
     newItems.forEachIndexed { targetIndex, newItem ->
         val currentPlaylistIds = ( 0 until mediaItemCount )
@@ -420,4 +437,4 @@ private fun shouldUpdateItem( old: MediaItem, new: MediaItem ): Boolean {
 }
 
 val NOTHING_PLAYING = MediaItem.EMPTY
-private const val TAG = "MUSIC-SERVICE-CONNECTION-TAG"
+private const val TAG = "MUSIC-SERVICE-CONN"
