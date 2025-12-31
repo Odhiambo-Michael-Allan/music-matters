@@ -43,24 +43,17 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.squad.musicmatters.R
 import com.squad.musicmatters.core.media.media.extensions.formatMilliseconds
 import com.squad.musicmatters.core.data.utils.VersionUtils
 import com.squad.musicmatters.core.designsystem.theme.GoogleRed
-import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
-import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
-import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
-import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.utils.ScreenOrientation
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -70,7 +63,7 @@ fun SongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
-    playlistInfos: List<PlaylistInfo>,
+    playlists: List<Playlist>,
     @DrawableRes fallbackResourceId: Int,
     onClick: () -> Unit,
     onFavorite: ( String ) -> Unit,
@@ -79,8 +72,8 @@ fun SongCard(
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onGetSongsInPlaylist: ( PlaylistInfo ) -> List<Song>,
-    onAddSongsToPlaylist: ( PlaylistInfo, List<Song> ) -> Unit,
+    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
+    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
@@ -187,7 +180,7 @@ fun SongCard(
                                     onCreatePlaylist = onCreatePlaylist,
                                     onAddSongsToPlaylist = onAddSongsToPlaylist,
                                     onGetSongsInPlaylist = onGetSongsInPlaylist,
-                                    onGetPlaylists = { playlistInfos },
+                                    onGetPlaylists = { playlists },
                                     onDelete = {
                                         if ( !VersionUtils.isQandAbove() ) {
                                             showDeleteSongDialog = true
@@ -242,11 +235,11 @@ fun SongOptionsBottomSheetMenu(
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onShowSongDetails: () -> Unit,
-    onGetPlaylists: () -> List<PlaylistInfo>,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onGetPlaylists: () -> List<Playlist>,
+    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
     onSearchSongsMatchingQuery: (String ) -> List<Song>,
     onCreatePlaylist: (String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onDelete: ( Song ) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -333,7 +326,7 @@ fun QueueSongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
-    playlistInfos: List<PlaylistInfo>,
+    playlists: List<Playlist>,
     @DrawableRes fallbackResourceId: Int,
     onClick: () -> Unit,
     onFavorite: ( String ) -> Unit,
@@ -342,8 +335,8 @@ fun QueueSongCard(
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
+    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: (String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDragHandleClick: () -> Unit,
@@ -367,7 +360,7 @@ fun QueueSongCard(
             song = song,
             isCurrentlyPlaying = isCurrentlyPlaying,
             isFavorite = isFavorite,
-            playlistInfos = playlistInfos,
+            playlists = playlists,
             fallbackResourceId = fallbackResourceId,
             onClick = onClick,
             onFavorite = onFavorite,

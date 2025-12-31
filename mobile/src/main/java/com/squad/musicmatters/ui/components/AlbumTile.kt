@@ -1,19 +1,15 @@
 package com.squad.musicmatters.ui.components
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import coil.request.ImageRequest
-import com.squad.musicmatters.R
-import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Album
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 
 @Composable
@@ -29,9 +25,9 @@ fun AlbumTile(
     onViewArtist: ( String ) -> Unit,
     onClick: () -> Unit,
     onGetSongsInAlbum: ( Album ) -> List<Song>,
-    onGetPlaylists: () -> List<PlaylistInfo>,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onGetPlaylists: () -> List<Playlist>,
+    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
+    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
 ) {

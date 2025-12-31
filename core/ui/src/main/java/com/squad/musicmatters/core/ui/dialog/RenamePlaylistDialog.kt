@@ -71,7 +71,7 @@ fun RenamePlaylistDialog(
 @Composable
 fun RenamePlaylistDialogPreview() {
     RenamePlaylistDialog(
-        playlistTitle = PreviewParameterData.playlistInfos.first().title,
+        playlistTitle = PreviewParameterData.playlists.first().title,
         language = English,
         onRename = { /*TODO*/ },
         onDismissRequest = {}

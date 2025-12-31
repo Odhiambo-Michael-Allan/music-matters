@@ -2,20 +2,13 @@ package com.squad.musicmatters.core.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.media3.common.MediaItem
 import com.squad.musicmatters.core.media.connection.MusicServiceConnection
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
-import com.squad.musicmatters.core.data.utils.FuzzySearchOption
-import com.squad.musicmatters.core.data.utils.FuzzySearcher
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
-import com.squad.musicmatters.core.model.Album
-import com.squad.musicmatters.core.model.Artist
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -26,20 +19,20 @@ abstract class BaseViewModel(
     private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 ) : ViewModel() {
 
-    fun addToFavorites( songId: String, isFavorite: Boolean ) {
+    fun addToFavorites( song: Song, isFavorite: Boolean ) {
         viewModelScope.launch {
-            if ( isFavorite ) playlistRepository.addToFavorites( songId )
-            else playlistRepository.removeFromFavorites( songId )
+            if ( isFavorite ) playlistRepository.addToFavorites( song )
+            else playlistRepository.removeFromFavorites( song.id )
         }
     }
 
     fun addSongsToPlaylist(
-        playlistInfo: PlaylistInfo,
+        playlist: Playlist,
         songs: List<Song>
     ) {
         viewModelScope.launch {
             songs.forEach {
-                playlistRepository.addSongIdToPlaylist( it.id, playlistInfo.id )
+                playlistRepository.addSongToPlaylist( it, playlist.id )
             }
         }
     }
@@ -80,11 +73,9 @@ abstract class BaseViewModel(
     ) {
         viewModelScope.launch {
             playlistRepository.savePlaylist(
-                PlaylistInfo(
-                    id = UUID.randomUUID().toString(),
-                    title = playlistTitle,
-                    songIds = songsToAddToPlaylist.map { it.id }.toSet()
-                )
+                id = UUID.randomUUID().toString(),
+                playlistName = playlistTitle,
+                songsInPlaylist = songsToAddToPlaylist,
             )
         }
     }

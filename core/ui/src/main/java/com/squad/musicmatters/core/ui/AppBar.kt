@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.i8n.English
 
 
@@ -53,7 +54,7 @@ fun TopAppBar(
         navigationIcon = {
             IconButton( onClick = onNavigationIconClicked ) {
                 Icon(
-                    imageVector = Icons.Rounded.Search,
+                    imageVector = MusicMattersIcons.Search,
                     contentDescription = null
                 )
             }
@@ -78,7 +79,7 @@ fun TopAppBar(
                 onClick = onSettingsClicked
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Settings,
+                    imageVector = MusicMattersIcons.Settings,
                     contentDescription = null
                 )
             }
@@ -115,7 +116,7 @@ fun MinimalAppBar(
         navigationIcon = {
             IconButton( onClick = onNavigationIconClicked ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                    imageVector = MusicMattersIcons.NavigateBack,
                     contentDescription = null
                 )
             }
@@ -151,7 +152,6 @@ fun MinimalAppBar(
 @Composable
 fun TopAppBarMinimalTitle(
     modifier: Modifier = Modifier,
-    fillMaxWidth: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     Box(

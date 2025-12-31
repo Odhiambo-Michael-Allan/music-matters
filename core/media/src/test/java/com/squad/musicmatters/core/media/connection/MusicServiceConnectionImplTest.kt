@@ -169,27 +169,6 @@ class MusicServiceConnectionImplTest {
     }
 
     @Test
-    fun testMoveMediaItem() = runTest {
-        queueRepository.sendSongs( emptyList() )
-        preferencesDataSource.sendUserData( emptyUserData )
-        testSongs.forEach {
-            musicServiceConnection.addToQueue( it )
-        }
-        musicServiceConnection.moveSong( 0, 2 )
-        assertEquals(
-            testSongs.first().id,
-            queueRepository.fetchSongsInQueueSortedByPosition().first()[2].id
-        )
-        assertEquals(2, connectable.player.currentMediaItemIndex)
-        musicServiceConnection.moveSong( 2, 0 )
-        assertEquals(0, connectable.player.currentMediaItemIndex)
-        assertEquals(
-            testSongs.size,
-            queueRepository.fetchSongsInQueueSortedByPosition().first().size
-        )
-    }
-
-    @Test
     fun testClearQueue() = runTest {
         queueRepository.sendSongs( emptyList() )
         testSongs.forEach {

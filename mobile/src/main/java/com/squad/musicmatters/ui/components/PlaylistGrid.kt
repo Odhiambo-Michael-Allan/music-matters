@@ -15,16 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.squad.musicmatters.R
-import com.squad.musicmatters.core.testing.playlists.testPlaylistInfos
+import com.squad.musicmatters.core.testing.playlists.testPlaylists
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortPlaylistsBy
 
 @Composable
 fun PlaylistGrid(
-    playlistInfos: List<PlaylistInfo>,
+    playlists: List<Playlist>,
     isLoadingSongsInPlaylist: Boolean,
     language: Language,
     sortType: SortPlaylistsBy,
@@ -33,18 +33,18 @@ fun PlaylistGrid(
     onSortReverseChange: ( Boolean ) -> Unit,
     onSortTypeChange: ( SortPlaylistsBy ) -> Unit,
     onPlaylistClick: ( String, String ) -> Unit,
-    onPlaySongsInPlaylist: (PlaylistInfo ) -> Unit,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onPlaySongsInPlaylistNext: (PlaylistInfo ) -> Unit,
-    onAddSongsInPlaylistToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
-    onShufflePlaySongsInPlaylist: (PlaylistInfo ) -> Unit,
+    onPlaySongsInPlaylist: (Playlist ) -> Unit,
+    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
+    onPlaySongsInPlaylistNext: (Playlist ) -> Unit,
+    onAddSongsInPlaylistToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onShufflePlaySongsInPlaylist: (Playlist ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<PlaylistInfo>,
-    onAddSongsInPlaylistToQueue: (PlaylistInfo ) -> Unit,
+    onGetPlaylists: () -> List<Playlist>,
+    onAddSongsInPlaylistToQueue: (Playlist ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
-    onDeletePlaylist: (PlaylistInfo ) -> Unit,
-    playlistIsDeletable: (PlaylistInfo ) -> Boolean,
-    onRenamePlaylist: (PlaylistInfo, String ) -> Unit,
+    onDeletePlaylist: (Playlist ) -> Unit,
+    playlistIsDeletable: (Playlist ) -> Boolean,
+    onRenamePlaylist: (Playlist, String ) -> Unit,
 ) {
     MediaSortBarScaffold(
         mediaSortBar = {
@@ -56,7 +56,7 @@ fun PlaylistGrid(
                 onSortTypeChange = onSortTypeChange,
                 label = {
                     Text(
-                        text = language.xPlaylists( playlistInfos.size.toString() )
+                        text = language.xPlaylists( playlists.size.toString() )
                     )
                 }
             )
@@ -80,7 +80,7 @@ fun PlaylistGrid(
                     contentPadding = PaddingValues( start = 8.dp, end = 8.dp,
                         top = 8.dp, bottom = 150.dp )
                 ) {
-                    items( playlistInfos ) {
+                    items( playlists ) {
                         PlaylistTile(
                             modifier = Modifier.fillMaxWidth(),
                             playList = it,
@@ -117,7 +117,7 @@ fun SortPlaylistsBy.label(language: Language ) = when ( this ) {
 @Composable
 fun PlaylistGridPreview() {
     PlaylistGrid(
-        playlistInfos = testPlaylistInfos,
+        playlists = testPlaylists,
         isLoadingSongsInPlaylist = false,
         language = English,
         sortType = SortPlaylistsBy.CUSTOM,

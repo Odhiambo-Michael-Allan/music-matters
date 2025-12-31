@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MusicNote
-import androidx.compose.material.icons.rounded.DragHandle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -20,11 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
+import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
 import com.squad.musicmatters.core.ui.IconTextBody
@@ -42,18 +42,16 @@ internal fun QueueList(
     language: Language,
     songsAdditionalMetadata: List<SongAdditionalMetadataInfo>,
     favoriteSongIds: Set<String>,
-    onFavorite: ( String, Boolean ) -> Unit,
+    playlists: List<Playlist>,
+    onFavorite: ( Song, Boolean ) -> Unit,
     playSong: ( Song, List<Song> ) -> Unit,
-    onMove: ( Int, Int ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
-    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
+    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<PlaylistInfo>,
     onDeleteSong: ( Song ) -> Unit,
     onSaveQueue: ( List<Song> ) -> Unit,
 ) {
@@ -68,9 +66,6 @@ internal fun QueueList(
         listState = lazyListState,
         items = songsInQueue,
         itemKey = Song::id,
-        onMove = {
-//            hapticFeedback.performHapticFeedback(HapticFeedbackType.SegmentFrequentTick)
-        },
         onCommit = { orderedList ->
             onSaveQueue( orderedList )
         },
@@ -107,7 +102,7 @@ internal fun QueueList(
                             song = song,
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = favoriteSongIds.contains( song.id ),
-                            playlistInfos = onGetPlaylists(),
+                            playlists = playlists,
                             onClick = { playSong( song, songsInQueue ) },
                             onFavorite = onFavorite,
                             onPlayNext = onPlayNext,
@@ -116,11 +111,7 @@ internal fun QueueList(
                             onViewAlbum = onViewAlbum,
                             onShareSong = onShareSong,
                             onDragHandleClick = {},
-                            onGetSongsInPlaylist = { playlist ->
-                                songsInQueue.filter { song -> playlist.songIds.contains( song.id ) }
-                            },
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
-                            onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                             onCreatePlaylist = onCreatePlaylist,
                             onDeleteSong = onDeleteSong,
                             onGetSongAdditionalMetadata = {
@@ -141,17 +132,15 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
-    playlistInfos: List<PlaylistInfo>,
+    playlists: List<Playlist>,
     onClick: () -> Unit,
-    onFavorite: ( String, Boolean ) -> Unit,
+    onFavorite: ( Song, Boolean ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
-    onSearchSongsMatchingQuery: (String ) -> List<Song>,
+    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDragHandleClick: () -> Unit,
     onDeleteSong: ( Song ) -> Unit,
@@ -166,7 +155,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
             onClick = onDragHandleClick
         ) {
             Icon(
-                imageVector = Icons.Rounded.DragHandle,
+                imageVector = MusicMattersIcons.DragHandle,
                 contentDescription = null
             )
         }
@@ -175,7 +164,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
             song = song,
             isCurrentlyPlaying = isCurrentlyPlaying,
             isFavorite = isFavorite,
-            playlists = playlistInfos,
+            playlists = playlists,
             onClick = onClick,
             onFavorite = onFavorite,
             onPlayNext = onPlayNext,
@@ -183,9 +172,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
             onViewArtist = onViewArtist,
             onViewAlbum = onViewAlbum,
             onShareSong = onShareSong,
-            onGetSongsInPlaylist = onGetSongsInPlaylist,
             onAddSongsToPlaylist = onAddSongsToPlaylist,
-            onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
             onCreatePlaylist = onCreatePlaylist,
             onGetSongAdditionalMetadata = onGetSongAdditionalMetadata,
             onDeleteSong = onDeleteSong,
@@ -212,11 +199,10 @@ private fun QueueListPreview(
             songsAdditionalMetadata = emptyList(),
             currentlyPlayingSongId = previewData.songs.first().id,
             favoriteSongIds = setOf( previewData.songs.first().id ),
+            playlists = previewData.playlists,
             playSong = { _, _ -> },
             onPlayNext = {},
-            onGetPlaylists = { emptyList() },
             onAddToQueue = {},
-            onMove = { _, _ -> },
             onViewAlbum = {},
             onShareSong = {},
             onViewArtist = {},
@@ -224,7 +210,6 @@ private fun QueueListPreview(
             onFavorite = { _, _ -> },
             onCreatePlaylist = { _, _ -> },
             onAddSongsToPlaylist = { _, _ -> },
-            onSearchSongsMatchingQuery = { emptyList() },
             onSaveQueue = {}
         )
     }

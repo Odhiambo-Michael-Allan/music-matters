@@ -16,16 +16,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import coil.request.ImageRequest
 import com.squad.musicmatters.R
-import com.squad.musicmatters.core.testing.playlists.testPlaylistInfos
+import com.squad.musicmatters.core.testing.playlists.testPlaylists
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 
 @Composable
 fun PlaylistTile(
     modifier: Modifier,
-    playList: PlaylistInfo,
+    playList: Playlist,
     language: Language,
     @DrawableRes fallbackResourceId: Int,
     playlistIsDeletable: Boolean,
@@ -34,13 +34,13 @@ fun PlaylistTile(
     onShufflePlay: () -> Unit,
     onPlaylistClick: () -> Unit,
     onAddToQueue: () -> Unit,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onGetPlaylists: () -> List<PlaylistInfo>,
-    onAddSongsInPlaylistToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
+    onGetPlaylists: () -> List<Playlist>,
+    onAddSongsInPlaylistToPlaylist: (Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
-    onDeletePlaylist: (PlaylistInfo ) -> Unit,
-    onRenamePlaylist: (PlaylistInfo, String ) -> Unit,
+    onDeletePlaylist: (Playlist ) -> Unit,
+    onRenamePlaylist: (Playlist, String ) -> Unit,
 ) {
 
     var showRenamePlaylistDialog by remember { mutableStateOf( false ) }
@@ -105,7 +105,7 @@ fun PlaylistTile(
 fun PlaylistTilePreview() {
     PlaylistTile(
         modifier = Modifier.fillMaxWidth(),
-        playList = testPlaylistInfos.first(),
+        playList = testPlaylists.first(),
         language = English,
         fallbackResourceId = R.drawable.placeholder_light,
         playlistIsDeletable = true,

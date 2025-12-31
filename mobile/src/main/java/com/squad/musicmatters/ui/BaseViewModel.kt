@@ -1,24 +1,5 @@
 package com.squad.musicmatters.ui
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.media3.common.MediaItem
-import com.squad.musicmatters.core.media.connection.MusicServiceConnection
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
-import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
-import com.squad.musicmatters.core.media.media.extensions.toMediaItem
-import com.squad.musicmatters.core.model.Album
-import com.squad.musicmatters.core.model.Artist
-import com.squad.musicmatters.core.model.PlaylistInfo
-import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
-import com.squad.musicmatters.utils.FuzzySearchOption
-import com.squad.musicmatters.utils.FuzzySearcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.UUID
-
 //open class BaseViewModel(
 //    private val musicServiceConnection: MusicServiceConnection,
 //    private val settingsRepository: SettingsRepository,

@@ -12,7 +12,7 @@ import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.LoopMode
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
 import com.squad.musicmatters.core.model.UserData
@@ -149,7 +149,7 @@ sealed interface NowPlayingScreenUiState {
         val queue: List<Song>,
         val currentlyPlayingSongIsFavorite: Boolean,
         val playerState: PlayerState,
-        val playlists: List<PlaylistInfo>,
+        val playlists: List<Playlist>,
         val songsAdditionalMetadataList: List<SongAdditionalMetadataInfo>,
         val language: Language = English,
     ) : NowPlayingScreenUiState

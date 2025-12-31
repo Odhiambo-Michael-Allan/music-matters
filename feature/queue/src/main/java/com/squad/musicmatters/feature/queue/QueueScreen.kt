@@ -5,10 +5,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.rounded.ClearAll
-import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,11 +26,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
+import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.ui.LoaderScaffold
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.TopAppBarMinimalTitle
@@ -60,7 +56,6 @@ internal fun QueueScreen(
         onClearQueue = viewModel::clearQueue,
         onFavorite = viewModel::addToFavorites,
         playSong = viewModel::playSongs,
-        onMoveSong = viewModel::moveSong,
         onPlayNext = viewModel::playSongNext,
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
@@ -68,16 +63,8 @@ internal fun QueueScreen(
         onAddSongsToPlaylist = { playlist, songs ->
             viewModel.addSongsToPlaylist( playlist, songs )
         },
-        onSearchSongsMatchingQuery = {
-            emptyList<Song>()
-//            viewModel::searchSongsMatching
-        },
         onShareSong = {
 //            onShareSong( it, uiState.language.shareFailedX( "" ) )
-        },
-        onGetPlaylists = {
-            emptyList<PlaylistInfo>()
-//            uiState.playlistInfos
         },
         onDeleteSong = onDeleteSong,
         onSaveQueue = viewModel::saveQueue,
@@ -90,17 +77,14 @@ private fun QueueScreenContent(
     onNavigateUp: () -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onClearQueue: () -> Unit,
-    onFavorite: ( String, Boolean ) -> Unit,
+    onFavorite: ( Song, Boolean ) -> Unit,
     playSong: ( Song, List<Song> ) -> Unit,
-    onMoveSong: ( Int, Int ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
-    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
-    onGetPlaylists: () -> List<PlaylistInfo>,
+    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onSaveQueue: ( List<Song> ) -> Unit,
 ) {
@@ -129,18 +113,16 @@ private fun QueueScreenContent(
                     songsAdditionalMetadata = uiState.songsAdditionalMetadata,
                     language = uiState.language,
                     favoriteSongIds = uiState.favoriteSongIds,
+                    playlists = uiState.playlists,
                     onFavorite = onFavorite,
                     playSong = playSong,
-                    onMove = onMoveSong,
                     onPlayNext = onPlayNext,
                     onAddToQueue = onAddToQueue,
                     onShareSong = onShareSong,
                     onViewAlbum = onViewAlbum,
                     onViewArtist = onViewArtist,
                     onAddSongsToPlaylist = onAddSongsToPlaylist,
-                    onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                     onCreatePlaylist = onCreatePlaylist,
-                    onGetPlaylists = { onGetPlaylists() },
                     onDeleteSong = onDeleteSong,
                     onSaveQueue = onSaveQueue,
                 )
@@ -148,8 +130,7 @@ private fun QueueScreenContent(
                 if ( showSaveDialog ) {
                     NewPlaylistDialog(
                         language = uiState.language,
-                        initialSongsToAdd = uiState.songsInQueue,
-                        onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
+                        songsToAdd = uiState.songsInQueue,
                         onConfirmation = { title, songs ->
                             onCreatePlaylist( title, songs )
                             showSaveDialog = false
@@ -178,7 +159,7 @@ private fun QueueScreenTopAppBar(
         navigationIcon = {
             IconButton( onClick = onBackArrowClick ) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack,
+                    imageVector = MusicMattersIcons.NavigateBack,
                     contentDescription = null
                 )
             }
@@ -203,7 +184,7 @@ private fun QueueScreenTopAppBar(
                 onClick = onSaveClick
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.Save,
+                    imageVector = MusicMattersIcons.Save,
                     contentDescription = null
                 )
             }
@@ -211,7 +192,7 @@ private fun QueueScreenTopAppBar(
                 onClick = onClearClick
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.ClearAll,
+                    imageVector = MusicMattersIcons.Clear,
                     contentDescription = null
                 )
             }
@@ -255,15 +236,12 @@ private fun QueueScreenContentPreview(
             onClearQueue = {},
             onFavorite = { _, _ -> },
             playSong = { _, _ -> },
-            onMoveSong = { _, _ ->  },
             onPlayNext = {},
             onAddToQueue = {},
             onViewAlbum = {},
             onViewArtist = {},
             onShareSong = {},
             onAddSongsToPlaylist = { _, _, -> },
-            onSearchSongsMatchingQuery = { emptyList() },
-            onGetPlaylists = { emptyList() },
             onDeleteSong = {},
             onSaveQueue = {}
         )

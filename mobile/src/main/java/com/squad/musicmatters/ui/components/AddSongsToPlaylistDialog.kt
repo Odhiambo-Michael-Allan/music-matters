@@ -28,24 +28,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.request.ImageRequest
-import com.squad.musicmatters.R
-import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 
 @Composable
 fun AddSongsToPlaylistDialog(
     songs: List<Song>,
-    onGetPlaylists: () -> List<PlaylistInfo>,
+    onGetPlaylists: () -> List<Playlist>,
     language: Language,
     @DrawableRes fallbackResourceId: Int,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onAddDisplayedSongsToPlaylist: (PlaylistInfo) -> Unit,
+    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
+    onAddDisplayedSongsToPlaylist: (Playlist) -> Unit,
     onCreateNewPlaylist: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {

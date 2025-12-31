@@ -9,16 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
-import androidx.compose.material.icons.filled.GraphicEq
-import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.Speed
-import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material.icons.rounded.Repeat
-import androidx.compose.material.icons.rounded.RepeatOne
-import androidx.compose.material.icons.rounded.Shuffle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,9 +31,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.squad.musicMatters.core.designsystem.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
+import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
@@ -86,31 +82,45 @@ internal fun NowPlayingBodyBottomBar(
             onClick = { onToggleLoopMode( currentLoopMode ) }
         ) {
             Icon(
-                imageVector = when ( currentLoopMode ) {
-                    LoopMode.Song -> Icons.Rounded.RepeatOne
-                    else -> Icons.Rounded.Repeat
-                },
+                painter = painterResource(
+                    id = when ( currentLoopMode ) {
+                        LoopMode.Song -> R.drawable.repeat_current
+                        else -> R.drawable.repeat
+                    }
+                ),
                 contentDescription = null,
                 tint = when ( currentLoopMode ) {
                     LoopMode.None -> LocalContentColor.current
                     else -> MaterialTheme.colorScheme.primary
-                }
+                },
+                modifier = Modifier.size(
+                    MusicMattersIcons.Loop.defaultWidth,
+                    MusicMattersIcons.Loop.defaultHeight
+                )
             )
         }
         IconButton(
             onClick = { onToggleShuffleMode( !shuffle ) }
         ) {
             Icon(
-                imageVector = Icons.Rounded.Shuffle,
+                painter = painterResource( id = R.drawable.shuffle ),
                 contentDescription = null,
-                tint = if ( shuffle ) MaterialTheme.colorScheme.primary else LocalContentColor.current
+                tint = if ( shuffle ) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    LocalContentColor.current
+                },
+                modifier = Modifier.size(
+                    MusicMattersIcons.Shuffle.defaultWidth,
+                    MusicMattersIcons.Shuffle.defaultHeight,
+                )
             )
         }
         IconButton(
             onClick = { showExtraOptions = !showExtraOptions }
         ) {
             Icon(
-                imageVector = Icons.Outlined.MoreHoriz,
+                imageVector = MusicMattersIcons.MoreHorizontal,
                 contentDescription = null
             )
         }
@@ -134,9 +144,14 @@ internal fun NowPlayingBodyBottomBar(
                 ) {
                     ListItem(
                         leadingContent = {
-                            Icon( imageVector = Icons.Filled.GraphicEq, contentDescription = null )
+                            Icon( imageVector = MusicMattersIcons.Equalizer, contentDescription = null )
                         },
-                        headlineContent = { Text( text = language.equalizer ) }
+                        headlineContent = {
+                            Text(
+                                text = language.equalizer,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                     )
                 }
                 Card (
@@ -147,13 +162,19 @@ internal fun NowPlayingBodyBottomBar(
                 ) {
                     ListItem(
                         leadingContent = {
-                            Icon( imageVector = Icons.Outlined.Speed, contentDescription = null )
+                            Icon( imageVector = MusicMattersIcons.Speed, contentDescription = null )
                         },
                         headlineContent = {
-                            Text( text = language.speed )
+                            Text(
+                                text = language.speed,
+                                fontWeight = FontWeight.SemiBold
+                            )
                         },
                         supportingContent = {
-                            Text( text = "x$currentSpeed" )
+                            Text(
+                                text = "x$currentSpeed",
+                                fontWeight = FontWeight.SemiBold
+                            )
                         }
                     )
                 }
@@ -165,13 +186,19 @@ internal fun NowPlayingBodyBottomBar(
                 ) {
                     ListItem(
                         leadingContent = {
-                            Icon(imageVector = Icons.Outlined.Speed, contentDescription = null)
+                            Icon( imageVector = MusicMattersIcons.Speed, contentDescription = null)
                         },
                         headlineContent = {
-                            Text(text = language.pitch)
+                            Text(
+                                text = language.pitch,
+                                fontWeight = FontWeight.SemiBold
+                            )
                         },
                         supportingContent = {
-                            Text( text = "x$currentPitch" )
+                            Text(
+                                text = "x$currentPitch",
+                                fontWeight = FontWeight.SemiBold
+                            )
                         }
                     )
                 }

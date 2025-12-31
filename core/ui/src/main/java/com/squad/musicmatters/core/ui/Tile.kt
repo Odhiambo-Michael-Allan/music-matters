@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
-import androidx.compose.material.icons.automirrored.rounded.PlaylistAdd
-import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Card
@@ -40,10 +38,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.ui.dialog.AddSongToPlaylistBottomSheet
+import com.squad.musicmatters.core.ui.dialog.AddSongsToPlaylistBottomSheet
 import com.squad.musicmatters.core.ui.dialog.NewPlaylistDialog
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -55,17 +54,16 @@ fun GenericTile(
     description: String? = null,
     headerDescription: String,
     language: Language,
-    playlists: List<PlaylistInfo>,
+    playlists: List<Playlist>,
     onPlay: () -> Unit,
     onClick: () -> Unit,
     onShufflePlay: () -> Unit,
     onAddToQueue: () -> Unit,
     onPlayNext: () -> Unit,
     onGetSongs: () -> List<Song>,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
+    onShowSnackBar: ( String ) -> Unit,
     additionalBottomSheetMenuItems: ( @Composable ( () -> Unit ) -> Unit )? = null,
 ) {
 
@@ -88,9 +86,8 @@ fun GenericTile(
                         onPlayNext = onPlayNext,
                         onAddSongsToPlaylist = onAddSongsToPlaylist,
                         onCreatePlaylist = onCreatePlaylist,
-                        onGetSongsInPlaylist = onGetSongsInPlaylist,
                         onGetSongs = onGetSongs,
-                        onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
+                        onShowSnackBar = onShowSnackBar,
                         trailingBottomSheetMenuItems = additionalBottomSheetMenuItems,
                         leadingBottomSheetMenuItem = {
                             BottomSheetMenuItem(
@@ -136,15 +133,14 @@ fun GenericOptionsBottomSheet(
     titleIsHighlighted: Boolean = false,
     headerDescription: String,
     language: Language,
-    playlists: List<PlaylistInfo>,
+    playlists: List<Playlist>,
     onDismissRequest: () -> Unit,
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
-    onGetSongsInPlaylist: ( PlaylistInfo ) -> List<Song>,
-    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: ( PlaylistInfo, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onGetSongs: () -> List<Song>,
+    onShowSnackBar: ( String ) -> Unit,
     leadingBottomSheetMenuItem: ( @Composable ( () -> Unit ) -> Unit ),
     trailingBottomSheetMenuItems: ( @Composable ( () -> Unit ) -> Unit )? = null,
 ) {
@@ -164,21 +160,21 @@ fun GenericOptionsBottomSheet(
     ) {
         leadingBottomSheetMenuItem( onDismissRequest )
         BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Rounded.PlaylistPlay,
+            leadingIcon = MusicMattersIcons.Queue,
             label = language.playNext
         ) {
             onDismissRequest()
             onPlayNext()
         }
         BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Rounded.PlaylistPlay,
+            leadingIcon = MusicMattersIcons.PlaylistAdd,
             label = language.addToQueue
         ) {
             onDismissRequest()
             onAddToQueue()
         }
         BottomSheetMenuItem(
-            leadingIcon = Icons.AutoMirrored.Rounded.PlaylistAdd,
+            leadingIcon = MusicMattersIcons.PlaylistAdd,
             label = language.addToPlaylist
         ) {
             showAddSongToPlaylistBottomSheet = true
@@ -193,22 +189,25 @@ fun GenericOptionsBottomSheet(
             sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
             onDismissRequest = { showAddSongToPlaylistBottomSheet = false }
         ) {
-            AddSongToPlaylistBottomSheet(
-                songs = onGetSongs(),
+            AddSongsToPlaylistBottomSheet(
+                songsToAdd = onGetSongs(),
                 playlists = playlists,
                 language = language,
-                onGetSongsInPlaylist = onGetSongsInPlaylist,
-                onAddDisplayedSongsToPlaylist = { onAddSongsToPlaylist( it, onGetSongs() ) },
+                onAddSongsToPlaylist = { playlist, songs ->
+                    onAddSongsToPlaylist( playlist, songs )
+                },
                 onCreateNewPlaylist = { showCreateNewPlaylistDialog = true },
-                onDismissRequest = { showAddSongToPlaylistBottomSheet = false }
+                onDismissRequest = { message ->
+                    showAddSongToPlaylistBottomSheet = false
+                    onShowSnackBar( message )
+                }
             )
         }
     }
     if ( showCreateNewPlaylistDialog ) {
         NewPlaylistDialog(
             language = language,
-            onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-            initialSongsToAdd = onGetSongs(),
+            songsToAdd = onGetSongs(),
             onConfirmation = { playlistName, selectedSongs ->
                 showCreateNewPlaylistDialog = false
                 onCreatePlaylist( playlistName, selectedSongs )

@@ -181,6 +181,20 @@ class MusicServiceConnectionImpl @Inject constructor(
         }
     }
 
+    private suspend fun addSongToQueue(
+        song: Song,
+        position: Int
+    ) {
+        val songsInQueue = queueRepository.fetchSongsInQueueSortedByPosition().first().toMutableList()
+        if ( songsInQueue.contains( song ) ) {
+            val currentPositionOfSongInQueue = songsInQueue.indexOf( song )
+            moveSong( currentPositionOfSongInQueue, position )
+        } else {
+            songsInQueue.add( position, song )
+            updateQueueWith( songsInQueue )
+        }
+    }
+
     private suspend fun getPositionToPlaceSongToPlayNext( song: Song ): Int {
         val songsInQueue = queueRepository.fetchSongsInQueueSortedByPosition().first()
         val currentlyPlayingMediaItemIndex = player?.currentMediaItemIndex ?: 0
@@ -202,18 +216,10 @@ class MusicServiceConnectionImpl @Inject constructor(
         )
     }
 
-    private suspend fun addSongToQueue(
-        song: Song,
-        position: Int
-    ) {
-        val songsInQueue = queueRepository.fetchSongsInQueueSortedByPosition().first().toMutableList()
-        if ( songsInQueue.contains( song ) ) {
-            val currentPositionOfSongInQueue = songsInQueue.indexOf( song )
-            moveSong( currentPositionOfSongInQueue, position )
-        } else {
-            songsInQueue.add( position, song )
-            updateQueueWith( songsInQueue )
-        }
+    private suspend fun moveSong( from: Int, to: Int ) {
+        val currentQueue = queueRepository.fetchSongsInQueueSortedByPosition().first().toMutableList()
+        currentQueue.move( from, to )
+        updateQueueWith( currentQueue )
     }
 
     override suspend fun playSong(
@@ -256,13 +262,6 @@ class MusicServiceConnectionImpl @Inject constructor(
                 updateQueueWith( currentSongsInQueue )
             }
         }
-    }
-
-    override suspend fun moveSong( from: Int, to: Int ) {
-        println( "MOVING SONG.." )
-        val currentQueue = queueRepository.fetchSongsInQueueSortedByPosition().first().toMutableList()
-        currentQueue.move( from, to )
-        updateQueueWith( currentQueue )
     }
 
     override fun playNextSong(): Boolean {

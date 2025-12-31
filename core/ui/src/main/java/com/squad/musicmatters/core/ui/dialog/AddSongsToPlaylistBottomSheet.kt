@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,61 +16,67 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.GenericCard
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
-import com.squad.musicmatters.core.ui.PreviewParameterData
+import com.squad.musicmatters.core.ui.R
 import com.squad.musicmatters.core.ui.SubtleCaptionText
 
 @Composable
-internal fun AddSongToPlaylistBottomSheet(
-    songs: List<Song>,
-    playlists: List<PlaylistInfo>,
+internal fun AddSongsToPlaylistBottomSheet(
+    songsToAdd: List<Song>,
+    playlists: List<Playlist>,
     language: Language,
-    onGetSongsInPlaylist: ( PlaylistInfo ) -> List<Song>,
-    onAddDisplayedSongsToPlaylist: ( PlaylistInfo ) -> Unit,
+    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreateNewPlaylist: () -> Unit,
-    onDismissRequest: () -> Unit,
+    onDismissRequest: ( String ) -> Unit,
 ) {
+
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp, 4.dp)
+            .padding( 8.dp, 4.dp )
     ) {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding( 8.dp ),
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
                 text = language.addToPlaylist,
-                style = MaterialTheme.typography.titleMedium.copy(
+                style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 )
             )
         }
         HorizontalDivider( thickness = 1.dp )
+        Spacer( modifier = Modifier.height( 8.dp ) )
         when {
             playlists.isEmpty() -> SubtleCaptionText(
                 modifier = Modifier.weight( 1f ),
@@ -81,11 +89,14 @@ internal fun AddSongToPlaylistBottomSheet(
                 ) {
                     items( playlists ) { playlist ->
                         GenericCard(
-                            imageUri = onGetSongsInPlaylist( playlist )
-                                .firstOrNull { it.artworkUri != null }?.artworkUri?.toUri(),
+                            imageUri = playlist.artworkUri?.toUri(),
                             title = {
                                 Text(
-                                    text = playlist.title,
+                                    text = if ( playlist.id == FAVORITES_PLAYLIST_ID ) {
+                                        stringResource( id = R.string.core_ui_favorites )
+                                    } else {
+                                        playlist.title
+                                    },
                                     style = MaterialTheme.typography.titleMedium.copy(
                                         fontWeight = FontWeight.SemiBold
                                     ),
@@ -94,7 +105,9 @@ internal fun AddSongToPlaylistBottomSheet(
                                 )
                             },
                             imageLabel = {
-                                if ( songs.size == 1  && onGetSongsInPlaylist( playlist ).contains( songs.first() ) ) {
+                                if ( songsToAdd.size == 1
+                                    && playlist.songIds.contains( songsToAdd.first().id ) )
+                                {
                                     Icon(
                                         modifier = Modifier.size( 16.dp ),
                                         imageVector = Icons.Default.Check,
@@ -104,7 +117,7 @@ internal fun AddSongToPlaylistBottomSheet(
                             },
                             subtitle = {
                                 Text(
-                                    text = "${onGetSongsInPlaylist(playlist).size} songs",
+                                    text = "${playlist.songIds.size} songs",
                                     style = MaterialTheme.typography.bodySmall.copy(
                                         fontWeight = FontWeight.SemiBold,
                                         color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
@@ -114,8 +127,8 @@ internal fun AddSongToPlaylistBottomSheet(
                                 )
                             },
                             onClick = {
-                                onDismissRequest()
-                                onAddDisplayedSongsToPlaylist( playlist )
+                                onAddSongsToPlaylist( playlist, songsToAdd )
+                                onDismissRequest( playlist.title )
                             }
                         )
                     }
@@ -130,7 +143,7 @@ internal fun AddSongToPlaylistBottomSheet(
             ) {
                 Text(
                     text = language.newPlaylist,
-                    style = MaterialTheme.typography.bodySmall.copy(
+                    style = MaterialTheme.typography.bodyMedium.copy(
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -153,14 +166,13 @@ private fun AddToPlaylistBottomSheetPreview(
         themeMode = ThemeMode.LIGHT,
         primaryColorName = PrimaryThemeColors.Blue.name
     ) {
-        AddSongToPlaylistBottomSheet(
-            songs = previewData.songs,
+        AddSongsToPlaylistBottomSheet(
+            songsToAdd = previewData.songs,
             playlists = previewData.playlists,
-            onGetSongsInPlaylist = { previewData.songs },
             onCreateNewPlaylist = {},
             onDismissRequest = {},
             language = English,
-            onAddDisplayedSongsToPlaylist = {}
+            onAddSongsToPlaylist = { _, _ -> }
         )
     }
 }

@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.model.SortSongsBy
@@ -63,7 +64,11 @@ fun <T : Enum<T>> MediaSortBar(
             ) {
                 Icon(
                     modifier = Modifier.size( 20.dp ),
-                    imageVector = if ( sortReverse ) Icons.Rounded.ArrowUpward else Icons.Rounded.ArrowDownward,
+                    imageVector = if ( sortReverse ) {
+                        MusicMattersIcons.ArrowUpward
+                    } else {
+                        MusicMattersIcons.ArrowDownward
+                    },
                     contentDescription = null
                 )
             }
@@ -119,7 +124,7 @@ fun <T : Enum<T>> MediaSortBar(
                 ) {
                     Icon(
                         modifier = Modifier.size( 20.dp ),
-                        imageVector = Icons.Rounded.Shuffle,
+                        imageVector = MusicMattersIcons.Shuffle,
                         contentDescription = null
                     )
                 }

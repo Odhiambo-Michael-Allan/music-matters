@@ -19,9 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.squad.musicmatters.R
+import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 
 @Composable
@@ -40,13 +43,14 @@ fun PermissionCard(
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.labelLarge.copy(
+                style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold
                 )
             )
             Spacer( modifier = Modifier.height( 8.dp ) )
             Text(
-                text = description
+                text = description,
+                textAlign = TextAlign.Center,
             )
             Spacer( modifier = Modifier.height( 16.dp ) )
             TextButton(
@@ -62,8 +66,9 @@ fun PermissionCard(
                     contentDescription = null
                 )
                 Text(
+                    text = stringResource( id = R.string.grant_access ),
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding( 8.dp ),
-                    text = stringResource( id = R.string.grant_access )
                 )
                 if ( permissionGranted ) {
                     Icon(
@@ -78,21 +83,21 @@ fun PermissionCard(
     }
 }
 
-//@Preview( showBackground = true )
-//@Composable
-//fun PermissionCardPreview() {
-//    MusicMattersTheme(
-//        themeMode = SettingsDefaults.themeMode,
-//        primaryColorName = SettingsDefaults.PRIMARY_COLOR_NAME,
-//        fontName = SettingsDefaults.font,
-//        fontScale = SettingsDefaults.FONT_SCALE,
-//        useMaterialYou = SettingsDefaults.USE_MATERIAL_YOU
-//    ) {
-//        PermissionCard(
-//            title = stringResource( id = R.string.storage_access ),
-//            description = stringResource( id = R.string.storage_access_prompt ),
-//            permissionGranted = true,
-//            onClick = {}
-//        )
-//    }
-//}
+@DevicePreviews
+@Composable
+fun PermissionCardPreview() {
+    MusicMattersTheme(
+        themeMode = DefaultPreferences.THEME_MODE,
+        primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
+        fontName = DefaultPreferences.FONT_NAME,
+        fontScale = DefaultPreferences.FONT_SCALE,
+        useMaterialYou = true
+    ) {
+        PermissionCard(
+            title = stringResource( id = R.string.storage_access ),
+            description = stringResource( id = R.string.storage_access_prompt ),
+            permissionGranted = true,
+            onClick = {}
+        )
+    }
+}
