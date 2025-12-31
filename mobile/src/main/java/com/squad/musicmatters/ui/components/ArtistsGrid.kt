@@ -10,13 +10,10 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.squad.musicmatters.R
-import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Artist
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortArtistsBy
 
@@ -34,10 +31,10 @@ fun ArtistsGrid(
     onShufflePlaySongsByArtist: (Artist ) -> Unit,
     onAddSongsByArtistToQueue: (Artist ) -> Unit,
     onPlaySongsByArtistNext: (Artist ) -> Unit,
-    onAddSongsByArtistToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onAddSongsByArtistToPlaylist: (Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<PlaylistInfo>,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onGetPlaylists: () -> List<Playlist>,
+    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onGetSongsByArtist: ( Artist ) -> List<Song>,
 ) {

@@ -20,15 +20,21 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,19 +42,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.filled.Album
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.ThumbUpAlt
 import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material.icons.rounded.FastForward
-import androidx.compose.material.icons.rounded.FastRewind
-import androidx.compose.material.icons.rounded.Pause
-import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.SkipNext
-import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material.icons.rounded.ThumbUpAlt
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,6 +55,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -64,6 +66,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -82,12 +85,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
+import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.media.media.extensions.formatMilliseconds
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.LoopMode
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
 import com.squad.musicmatters.core.model.ThemeMode
@@ -96,6 +100,7 @@ import com.squad.musicmatters.core.ui.DynamicAsyncImage
 import com.squad.musicmatters.core.ui.FadeTransition
 import com.squad.musicmatters.core.ui.GenericOptionsBottomSheet
 import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
+import kotlinx.coroutines.launch
 
 
 // Stateful
@@ -109,67 +114,83 @@ fun NowPlayingBottomScreen(
     onHideBottomSheet: () -> Unit
 ) {
 
+    val snackBarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val playbackPosition by viewModel.playbackPosition.collectAsStateWithLifecycle()
 
-    NowPlayingScreenContent(
-        uiState = uiState,
-        playbackPosition = playbackPosition,
-        onFavorite = viewModel::addToFavorites,
-        onPausePlayButtonClick = viewModel::playPause,
-        onPreviousButtonClick = viewModel::playPreviousSong,
-        onPlayNext = viewModel::playNextSong,
-        onFastRewindButtonClick = viewModel::fastRewind,
-        onFastForwardButtonClick = viewModel::fastForward,
-        onSeekStart = viewModel::onSeekStarted,
-        onSeekEnd = viewModel::onSeekEnd,
-        onArtworkClicked = { song ->
-            onHideBottomSheet()
-            song.albumTitle?.let { onViewAlbum( it ) }
-        },
-        onArtistClicked = {
-            onHideBottomSheet()
-            onViewArtist( it )
-        },
-        onToggleLoopMode = viewModel::setLoopMode,
-        onToggleShuffleMode = viewModel::setShuffleMode,
-        onPlayingSpeedChange = viewModel::onPlayingSpeedChange,
-        onPlayingPitchChange = viewModel::onPlayingPitchChange,
-        onNavigateToQueue = {
-            onHideBottomSheet()
-            onNavigateToQueue()
-        },
-        onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
-        onGetSongsInPlaylist = {
-            emptyList()
-//            viewModel::getSongsInPlaylist
-        },
-        onSearchSongsMatchingQuery = {
-            emptyList()
-//            viewModel::searchSongsMatching
-        },
-        onGetPlaylists = { emptyList() },
-        durationFormatter = { it.formatMilliseconds() },
-        onGetSongAdditionalMetadata = { null },
-        onCreatePlaylist = viewModel::createPlaylist,
-        onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
-        onViewAlbum = onViewAlbum,
-        onViewArtist = onViewArtist,
-        onHideNowPlayingBottomSheet = onHideBottomSheet,
-        onSwipeArtworkLeft = viewModel::playNextSong,
-        onSwipeArtworkRight = viewModel::playPreviousSong
-    )
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                snackBarHostState,
+                modifier = Modifier.windowInsetsPadding(
+                    WindowInsets.safeDrawing.exclude(
+                        WindowInsets.ime,
+                    ),
+                ),
+            )
+        }
+    ) { innerPadding ->
+        NowPlayingScreenContent(
+            modifier = Modifier.consumeWindowInsets( innerPadding ),
+            uiState = uiState,
+            playbackPosition = playbackPosition,
+            onFavorite = viewModel::addToFavorites,
+            onPausePlayButtonClick = viewModel::playPause,
+            onPreviousButtonClick = viewModel::playPreviousSong,
+            onPlayNext = viewModel::playNextSong,
+            onFastRewindButtonClick = viewModel::fastRewind,
+            onFastForwardButtonClick = viewModel::fastForward,
+            onSeekStart = viewModel::onSeekStarted,
+            onSeekEnd = viewModel::onSeekEnd,
+            onArtworkClicked = { song ->
+                onHideBottomSheet()
+                song.albumTitle?.let { onViewAlbum( it ) }
+            },
+            onArtistClicked = {
+                onHideBottomSheet()
+                onViewArtist( it )
+            },
+            onToggleLoopMode = viewModel::setLoopMode,
+            onToggleShuffleMode = viewModel::setShuffleMode,
+            onPlayingSpeedChange = viewModel::onPlayingSpeedChange,
+            onPlayingPitchChange = viewModel::onPlayingPitchChange,
+            onNavigateToQueue = {
+                onHideBottomSheet()
+                onNavigateToQueue()
+            },
+            onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
+            durationFormatter = { it.formatMilliseconds() },
+            onGetSongAdditionalMetadata = { null },
+            onCreatePlaylist = viewModel::createPlaylist,
+            onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
+            onViewAlbum = onViewAlbum,
+            onViewArtist = onViewArtist,
+            onHideNowPlayingBottomSheet = onHideBottomSheet,
+            onSwipeArtworkLeft = viewModel::playNextSong,
+            onSwipeArtworkRight = viewModel::playPreviousSong,
+            onShowSnackBar = {
+                coroutineScope.launch {
+                    snackBarHostState.showSnackbar(
+                        message = "Added to $it",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+        )
+    }
 }
 
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 private fun NowPlayingScreenContent(
+    modifier: Modifier = Modifier,
     uiState: NowPlayingScreenUiState,
     playbackPosition: PlaybackPosition,
     durationFormatter: ( Long ) -> String,
     onArtistClicked: ( String ) -> Unit,
-    onFavorite: ( String, Boolean ) -> Unit,
+    onFavorite: ( Song, Boolean ) -> Unit,
     onPausePlayButtonClick: () -> Unit,
     onPreviousButtonClick: () -> Unit,
     onPlayNext: () -> Unit,
@@ -186,15 +207,13 @@ private fun NowPlayingScreenContent(
     onPlayingSpeedChange: ( Float ) -> Unit,
     onPlayingPitchChange: ( Float ) -> Unit,
     onCreateEqualizerActivityContract: () -> Unit,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<PlaylistInfo>,
+    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onHideNowPlayingBottomSheet: () -> Unit,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
     val currentWindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val currentConfiguration = LocalConfiguration.current
@@ -209,13 +228,15 @@ private fun NowPlayingScreenContent(
                     WindowWidthSizeClass.COMPACT, WindowWidthSizeClass.MEDIUM -> {
                         if ( currentConfiguration.orientation == Configuration.ORIENTATION_PORTRAIT ) {
                             PortraitLayout(
+                                modifier = modifier,
                                 uiState = uiState,
                                 currentlyPlayingSong = song,
                                 playbackPosition = playbackPosition,
                                 durationFormatter = durationFormatter,
                                 onFavorite = onFavorite,
-                                onSwipeArtworkLeft = onSwipeArtworkLeft,
-                                onSwipeArtworkRight = onSwipeArtworkRight,
+                                onArtworkSwipedLeft = onSwipeArtworkLeft,
+                                onArtworkSwipedRight = onSwipeArtworkRight,
+                                onArtworkSwipedDown = onHideNowPlayingBottomSheet,
                                 onArtworkClicked = onArtworkClicked,
                                 onArtistClicked = onArtistClicked,
                                 onShowOptionsMenu = { showOptionsMenu = true },
@@ -236,6 +257,7 @@ private fun NowPlayingScreenContent(
                             )
                         } else {
                             LandscapeLayout(
+                                modifier = modifier,
                                 uiState = uiState,
                                 currentlyPlayingSong = song,
                                 playbackPosition = playbackPosition,
@@ -244,6 +266,7 @@ private fun NowPlayingScreenContent(
                                 onSwipeArtworkLeft = onSwipeArtworkLeft,
                                 onSwipeArtworkRight = onSwipeArtworkRight,
                                 onArtworkClicked = onArtworkClicked,
+                                onArtworkSwipedDown = onHideNowPlayingBottomSheet,
                                 onArtistClicked = onArtistClicked,
                                 onShowOptionsMenu = { showOptionsMenu = true },
                                 onSeekStart = onSeekStart,
@@ -273,6 +296,7 @@ private fun NowPlayingScreenContent(
                             onSwipeArtworkLeft = onSwipeArtworkLeft,
                             onSwipeArtworkRight = onSwipeArtworkRight,
                             onArtworkClicked = onArtworkClicked,
+                            onArtworkSwipedDown = onHideNowPlayingBottomSheet,
                             onArtistClicked = onArtistClicked,
                             onShowOptionsMenu = { showOptionsMenu = true },
                             onSeekStart = onSeekStart,
@@ -309,25 +333,24 @@ private fun NowPlayingScreenContent(
                             onDismissRequest = { showOptionsMenu = false },
                             onPlayNext = {}, // No need to do anything as duplicates are not allowed in queue
                             onAddToQueue = {}, // No need to do anything as duplicates are not allowed in queue
-                            onGetSongsInPlaylist = onGetSongsInPlaylist,
-                            onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                             onCreatePlaylist = onCreatePlaylist,
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
                             onGetSongs = { listOf( song ) },
                             leadingBottomSheetMenuItem = { onDismissRequest ->
                                 BottomSheetMenuItem(
                                     leadingIcon = if ( uiState.currentlyPlayingSongIsFavorite ) {
-                                        Icons.Filled.Favorite
+                                        MusicMattersIcons.Favorite
                                     } else {
-                                        Icons.Filled.FavoriteBorder
+                                        MusicMattersIcons.FavoriteBorder
                                     },
                                     label = uiState.language.favorite,
                                     leadingIconTint = MaterialTheme.colorScheme.primary
                                 ) {
                                     onDismissRequest()
-                                    onFavorite( song.id, !uiState.currentlyPlayingSongIsFavorite )
+                                    onFavorite( song, !uiState.currentlyPlayingSongIsFavorite )
                                 }
                             },
+                            onShowSnackBar = onShowSnackBar,
                             trailingBottomSheetMenuItems = { onDismissRequest ->
                                 song.albumTitle?.let { albumTitle ->
                                     BottomSheetMenuItem(
@@ -381,13 +404,15 @@ private fun NowPlayingScreenContent(
 @OptIn( ExperimentalLayoutApi::class )
 @Composable
 private fun PortraitLayout(
+    modifier: Modifier = Modifier,
     uiState: NowPlayingScreenUiState.Success,
     currentlyPlayingSong: Song,
     playbackPosition: PlaybackPosition,
     durationFormatter: ( Long ) -> String,
-    onFavorite: ( String, Boolean ) -> Unit,
-    onSwipeArtworkLeft: () -> Unit,
-    onSwipeArtworkRight: () -> Unit,
+    onFavorite: ( Song, Boolean ) -> Unit,
+    onArtworkSwipedLeft: () -> Unit,
+    onArtworkSwipedRight: () -> Unit,
+    onArtworkSwipedDown: () -> Unit,
     onArtworkClicked: ( Song ) -> Unit,
     onArtistClicked: ( String ) -> Unit,
     onShowOptionsMenu: () -> Unit,
@@ -407,18 +432,19 @@ private fun PortraitLayout(
     onCreateEqualizerActivityContract: () -> Unit,
 ) {
     Column (
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding( 24.dp )
-            .verticalScroll(rememberScrollState()),
+            .padding( 20.dp )
+            .verticalScroll( rememberScrollState() ),
         verticalArrangement = Arrangement.Center
     ) {
         NowPlayingArtwork(
             modifier = Modifier
                 .fillMaxWidth(),
             artworkUri = currentlyPlayingSong.artworkUri?.toUri(),
-            onSwipeLeft = onSwipeArtworkLeft,
-            onSwipeRight = onSwipeArtworkRight,
+            onSwipeLeft = onArtworkSwipedLeft,
+            onSwipeRight = onArtworkSwipedRight,
+            onSwipeDown = onArtworkSwipedDown,
             onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
         )
         Row {
@@ -479,7 +505,7 @@ private fun PortraitLayout(
                     modifier = Modifier.offset( 4.dp ),
                     onClick = {
                         onFavorite(
-                            currentlyPlayingSong.id,
+                            currentlyPlayingSong,
                             !uiState.currentlyPlayingSongIsFavorite
                         )
                     }
@@ -510,7 +536,6 @@ private fun PortraitLayout(
                 }
             }
         }
-//        Spacer( modifier = Modifier.height( 24.dp ) )
         NowPlayingSeekBar(
             playbackPosition = playbackPosition,
             durationFormatter = durationFormatter,
@@ -563,15 +588,17 @@ private fun PortraitLayout(
 @OptIn( ExperimentalLayoutApi::class )
 @Composable
 private fun LandscapeLayout(
+    modifier: Modifier = Modifier,
     uiState: NowPlayingScreenUiState.Success,
     currentlyPlayingSong: Song,
     playbackPosition: PlaybackPosition,
     durationFormatter: ( Long ) -> String,
-    onFavorite: ( String, Boolean ) -> Unit,
+    onFavorite: ( Song, Boolean ) -> Unit,
     onSwipeArtworkLeft: () -> Unit,
     onSwipeArtworkRight: () -> Unit,
     onArtworkClicked: ( Song ) -> Unit,
     onArtistClicked: ( String ) -> Unit,
+    onArtworkSwipedDown: () -> Unit,
     onShowOptionsMenu: () -> Unit,
     onSeekStart: () -> Unit,
     onSeekEnd: ( Long ) -> Unit,
@@ -589,9 +616,9 @@ private fun LandscapeLayout(
     onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
 ) {
     Row (
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding( 20.dp ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -599,6 +626,7 @@ private fun LandscapeLayout(
             artworkUri = currentlyPlayingSong.artworkUri?.toUri(),
             onSwipeLeft = onSwipeArtworkLeft,
             onSwipeRight = onSwipeArtworkRight,
+            onSwipeDown = onArtworkSwipedDown,
             onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
         )
         Spacer( modifier = Modifier.width( 16.dp ) )
@@ -660,7 +688,7 @@ private fun LandscapeLayout(
                         modifier = Modifier.offset( 4.dp ),
                         onClick = {
                             onFavorite(
-                                currentlyPlayingSong.id,
+                                currentlyPlayingSong,
                                 !uiState.currentlyPlayingSongIsFavorite
                             )
                         }
@@ -671,9 +699,9 @@ private fun LandscapeLayout(
                         ) {
                             Icon(
                                 imageVector = if ( it ) {
-                                    Icons.Rounded.ThumbUpAlt
+                                    MusicMattersIcons.Favorite
                                 } else {
-                                    Icons.Outlined.ThumbUpAlt
+                                    MusicMattersIcons.FavoriteBorder
                                 },
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.primary
@@ -684,7 +712,7 @@ private fun LandscapeLayout(
                         onClick = onShowOptionsMenu
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.MoreVert,
+                            imageVector = MusicMattersIcons.MoreVertical,
                             contentDescription = null
                         )
                     }
@@ -746,6 +774,7 @@ private fun NowPlayingArtwork(
     artworkUri: Uri?,
     onSwipeLeft: () -> Unit,
     onSwipeRight: () -> Unit,
+    onSwipeDown: () -> Unit,
     onArtworkClicked: () -> Unit
 ) {
     Box(
@@ -771,8 +800,9 @@ private fun NowPlayingArtwork(
                         minimumDragAmount = 100f,
                         onSwipeLeft = onSwipeLeft,
                         onSwipeRight = onSwipeRight,
+                        onSwipeDown = onSwipeDown,
                     )
-                    .pointerInput( Unit ) {
+                    .pointerInput(Unit) {
                         detectTapGestures { _ -> onArtworkClicked() }
                     }
             )
@@ -890,7 +920,7 @@ private fun NowPlayingTraditionalControlsLayout(
             onClick = onNavigateToQueue,
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Rounded.PlaylistPlay,
+                imageVector = MusicMattersIcons.Queue,
                 contentDescription = null,
             )
         }
@@ -999,7 +1029,7 @@ private fun NowPlayingSeekBar(
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
-            .height( sliderHeight ),
+            .height(sliderHeight),
         contentAlignment = Alignment.Center
     ) {
         val sliderWidth = maxWidth
@@ -1058,33 +1088,33 @@ private fun NowPlayingSeekBar(
             Box(
                 modifier = Modifier
                     .height(trackHeight)
-                    .fillMaxWidth( playbackPosition.bufferedRatio )
+                    .fillMaxWidth(playbackPosition.bufferedRatio)
                     .background(
-                        MaterialTheme.colorScheme.primary.copy( alpha = 0.5f ),
-                        RoundedCornerShape( thumbSizeHalf )
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                        RoundedCornerShape(thumbSizeHalf)
                     )
             )
             Box(
                 modifier = Modifier
                     .height(trackHeight)
-                    .fillMaxWidth(if ( dragging ) dragRatio else playbackPosition.playedRatio )
+                    .fillMaxWidth(if (dragging) dragRatio else playbackPosition.playedRatio)
                     .background(
                         MaterialTheme.colorScheme.primary,
-                        RoundedCornerShape( thumbSizeHalf )
+                        RoundedCornerShape(thumbSizeHalf)
                     )
             )
         }
         Box( modifier = Modifier.fillMaxWidth() ) {
             Box(
                 modifier = Modifier
-                    .size( thumbSize )
+                    .size(thumbSize)
                     .offset(
                         sliderWidth
-                            .minus(thumbSizeHalf.times( 2 ) )
-                            .times( if ( dragging ) dragRatio else playbackPosition.playedRatio ),
+                            .minus(thumbSizeHalf.times(2))
+                            .times(if (dragging) dragRatio else playbackPosition.playedRatio),
                         0.dp
                     )
-                    .background( MaterialTheme.colorScheme.primary, CircleShape )
+                    .background(MaterialTheme.colorScheme.primary, CircleShape)
             )
         }
     }
@@ -1122,7 +1152,7 @@ private fun NowPlayingFastForwardButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Rounded.FastForward,
+        icon = MusicMattersIcons.FastForward,
         roundedCornerSizeDp = 30.dp
     ) {
         onClick()
@@ -1136,7 +1166,7 @@ private fun NowPlayingFastRewindButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Rounded.FastRewind,
+        icon = MusicMattersIcons.FastRewind,
         roundedCornerSizeDp = 30.dp
     ) {
         onClick()
@@ -1150,7 +1180,7 @@ private fun PlayNextButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Rounded.SkipNext,
+        icon = MusicMattersIcons.PlayNext,
         roundedCornerSizeDp = 30.dp
     ) {
         onClick()
@@ -1164,7 +1194,7 @@ private fun PlayPreviousSongButton(
 ) {
     NowPlayingControlButton(
         style = style,
-        icon = Icons.Rounded.SkipPrevious,
+        icon = MusicMattersIcons.PlayPrevious,
         roundedCornerSizeDp = 30.dp
     ) {
         onClick()
@@ -1184,7 +1214,11 @@ private fun PlayPauseButton(
         NowPlayingControlButton(
             modifier = Modifier.size( 60.dp ),
             style = style,
-            icon = if ( it ) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
+            icon = if ( it ) {
+                MusicMattersIcons.Pause
+            } else {
+                MusicMattersIcons.Play
+            },
             roundedCornerSizeDp = 24.dp
         ) {
             onClick()
@@ -1321,14 +1355,12 @@ private fun NowPlayingScreenContentPreview() {
                 }
             },
             onCreatePlaylist = { _, _ -> },
-            onSearchSongsMatchingQuery = { emptyList() },
-            onGetSongsInPlaylist = { emptyList() },
             onAddSongsToPlaylist = { _, _ -> },
-            onGetPlaylists = { emptyList() },
             onViewAlbum = {},
             onViewArtist = {},
             onHideNowPlayingBottomSheet = {},
-            onGetSongAdditionalMetadata = { null }
+            onGetSongAdditionalMetadata = { null },
+            onShowSnackBar = {},
         )
     }
 }

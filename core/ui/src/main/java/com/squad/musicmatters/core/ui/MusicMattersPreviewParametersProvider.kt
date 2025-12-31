@@ -2,9 +2,8 @@ package com.squad.musicmatters.core.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.squad.musicmatters.core.model.Song
-import java.util.Calendar
 import java.util.UUID
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 
 class MusicMattersPreviewParametersProvider : PreviewParameterProvider<PreviewData> {
 
@@ -12,7 +11,7 @@ class MusicMattersPreviewParametersProvider : PreviewParameterProvider<PreviewDa
         get() = sequenceOf(
             PreviewData(
                 songs = PreviewParameterData.songs,
-                playlists = PreviewParameterData.playlistInfos
+                playlists = PreviewParameterData.playlists
             )
         )
 
@@ -20,7 +19,7 @@ class MusicMattersPreviewParametersProvider : PreviewParameterProvider<PreviewDa
 
 data class PreviewData(
     val songs: List<Song>,
-    val playlists: List<PlaylistInfo>,
+    val playlists: List<Playlist>,
 )
 
 object PreviewParameterData {
@@ -107,11 +106,12 @@ object PreviewParameterData {
         ),
     )
 
-    val playlistInfos = List( 20 ) {
-        PlaylistInfo(
+    val playlists = List( 20 ) {
+        Playlist(
             id = UUID.randomUUID().toString() + "$it",
             title = "Playlist-$it",
-            songIds = emptySet()
+            songIds = emptySet(),
+            artworkUri = "",
         )
     }.toMutableList()
 }

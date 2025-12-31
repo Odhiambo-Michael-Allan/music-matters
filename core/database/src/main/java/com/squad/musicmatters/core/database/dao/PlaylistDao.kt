@@ -8,7 +8,7 @@ import com.squad.musicmatters.core.database.model.PopulatedPlaylistEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class PlaylistDao : BaseDao<PlaylistEntity> {
+abstract class  PlaylistDao : BaseDao<PlaylistEntity> {
     @Transaction
     @Query( "SELECT * FROM playlists" )
     abstract fun fetchPlaylists(): Flow<List<PopulatedPlaylistEntity>>

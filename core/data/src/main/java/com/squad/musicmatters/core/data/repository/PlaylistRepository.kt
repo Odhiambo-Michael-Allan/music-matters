@@ -1,24 +1,24 @@
 package com.squad.musicmatters.core.data.repository
 
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
+import com.squad.musicmatters.core.model.Song
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 interface PlaylistRepository {
 
-    fun fetchFavorites(): Flow<PlaylistInfo?>
-    fun fetchPlaylists(): Flow<List<PlaylistInfo>>
-    fun fetchPlaylistWithId( id: String ): Flow<PlaylistInfo?>
+    fun fetchFavorites(): Flow<Playlist?>
+    fun fetchPlaylists(): Flow<List<Playlist>>
+    fun fetchPlaylistWithId( id: String ): Flow<Playlist?>
 
     fun isFavorite( songId: String ): Flow<Boolean>
-    suspend fun addToFavorites( songId: String )
+    suspend fun addToFavorites( song: Song )
     suspend fun removeFromFavorites( songId: String )
 
-    suspend fun savePlaylist( playlistInfo: PlaylistInfo )
-    suspend fun deletePlaylist( playlistInfo: PlaylistInfo )
-    suspend fun addSongIdToPlaylist( songId: String, playlistId: String )
+    suspend fun savePlaylist( id: String, playlistName: String, songsInPlaylist: List<Song> )
+    suspend fun deletePlaylist(playlist: Playlist )
+    suspend fun addSongToPlaylist( song: Song, playlistId: String )
 
     suspend fun removeSongIdFromPlaylist( songId: String, playlistId: String )
-    suspend fun renamePlaylist( playlistInfo: PlaylistInfo, newTitle: String )
+    suspend fun renamePlaylist( playlist: Playlist, newTitle: String )
 
 }

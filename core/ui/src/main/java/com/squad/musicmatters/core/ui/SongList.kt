@@ -20,7 +20,7 @@ import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
 import com.squad.musicmatters.core.model.SortSongsBy
@@ -32,22 +32,20 @@ fun SongList(
     sortSongsBy: SortSongsBy,
     language: Language,
     songs: List<Song>,
-    playlistInfos: List<PlaylistInfo>,
+    playlists: List<Playlist>,
     onShufflePlay: () -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
     onSortReverseChange: ( Boolean ) -> Unit,
     currentlyPlayingSongId: String,
     playSong: ( Song, List<Song> ) -> Unit,
     isFavorite: ( String ) -> Boolean,
-    onFavorite: ( String, Boolean ) -> Unit,
+    onFavorite: ( Song, Boolean ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
-    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
+    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onGetAdditionalMetadataForSongWithId: ( String ) -> SongAdditionalMetadataInfo?,
     onDeleteSong: ( Song ) -> Unit,
@@ -105,7 +103,7 @@ fun SongList(
                             song = song,
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = isFavorite( songs[ index ].id ),
-                            playlists = playlistInfos,
+                            playlists = playlists,
                             onClick = { playSong( song, songs ) },
                             onFavorite = onFavorite,
                             onPlayNext = onPlayNext,
@@ -113,9 +111,7 @@ fun SongList(
                             onViewArtist = onViewArtist,
                             onViewAlbum = onViewAlbum,
                             onShareSong = onShareSong,
-                            onGetSongsInPlaylist = onGetSongsInPlaylist,
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
-                            onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                             onCreatePlaylist = onCreatePlaylist,
                             onGetSongAdditionalMetadata = {
                                 onGetAdditionalMetadataForSongWithId( song.id )
@@ -159,7 +155,7 @@ fun SongListPreview() {
             sortSongsBy = SortSongsBy.TITLE,
             language = English,
             songs = PreviewParameterData.songs,
-            playlistInfos = emptyList(),
+            playlists = emptyList(),
             onShufflePlay = {},
             onSortTypeChange = {},
             onSortReverseChange = {},
@@ -172,9 +168,7 @@ fun SongListPreview() {
             onShareSong = {},
             onPlayNext = {},
             onAddToQueue = {},
-            onGetSongsInPlaylist = { emptyList() },
             onAddSongsToPlaylist = { _, _ -> },
-            onSearchSongsMatchingQuery = { emptyList() },
             onCreatePlaylist = { _, _ -> },
             onGetAdditionalMetadataForSongWithId = { null },
             onDeleteSong = {}

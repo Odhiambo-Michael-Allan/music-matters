@@ -12,7 +12,7 @@ import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSongsForSorting
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.media.connection.PlayerState
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.model.ThemeMode
 import junit.framework.TestCase.assertEquals
@@ -198,7 +198,7 @@ class SongsScreenViewModelTest {
         songsAdditionalMetadataRepository.sendMetadata( emptyList() )
 
         testSongsForSorting.forEach {
-            playlistRepository.addToFavorites( it.id )
+            playlistRepository.addToFavorites( it )
         }
         assertEquals(
             SongsScreenUiState.Success(
@@ -210,7 +210,7 @@ class SongsScreenViewModelTest {
                 currentlyPlayingSongId = "",
                 favoriteSongIds = testSongsForSorting.map { it.id }.toSet(),
                 playlists = listOf(
-                    PlaylistInfo(
+                    Playlist(
                         id = FAVORITES_PLAYLIST_ID,
                         title = "",
                         songIds = testSongsForSorting.map { it.id }.toSet(),

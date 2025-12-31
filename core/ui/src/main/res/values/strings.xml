@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="core_ui_give_your_playlist_a_name">Give your playlist a name</string>
+    <string name="core_ui_playlist_name_placeholder">Jams</string>
+    <string name="core_ui_cancel">Cancel</string>
+    <string name="core_ui_favorites">Favorites</string>
+
+</resources>

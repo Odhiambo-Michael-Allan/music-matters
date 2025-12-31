@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.utils.ScreenOrientation
 
@@ -49,11 +49,11 @@ fun Banner(
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
     onGetSongs: () -> List<Song>,
-    onGetPlaylists: () -> List<PlaylistInfo>,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
+    onGetPlaylists: () -> List<Playlist>,
+    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     additionalBottomSheetMenuItems: ( @Composable ( () -> Unit ) -> Unit )? = null,
     content: @Composable () -> Unit
 ) {

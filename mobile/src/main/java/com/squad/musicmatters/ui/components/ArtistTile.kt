@@ -4,13 +4,10 @@ import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import coil.request.ImageRequest
-import com.squad.musicmatters.R
-import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Artist
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 
 
@@ -25,9 +22,9 @@ fun ArtistTile(
     onAddToQueue: () -> Unit,
     onViewArtist: () -> Unit,
     onGetSongsByArtist: ( Artist ) -> List<Song>,
-    onGetPlaylists: () -> List<PlaylistInfo>,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onAddSongsByArtistToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onGetPlaylists: () -> List<Playlist>,
+    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
+    onAddSongsByArtistToPlaylist: (Playlist, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
 ) {

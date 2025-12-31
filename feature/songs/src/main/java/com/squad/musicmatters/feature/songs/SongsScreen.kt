@@ -6,23 +6,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
-import com.squad.musicmatters.core.designsystem.theme.isLight
 import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.model.ThemeMode
-import com.squad.musicmatters.core.ui.AnimatedLoadingWheel
-import com.squad.musicmatters.core.ui.LoaderScaffold
-import com.squad.musicmatters.core.ui.LoadingWheel
 import com.squad.musicmatters.core.ui.PreviewParameterData
 import com.squad.musicmatters.core.ui.SongList
 import com.squad.musicmatters.core.ui.TopAppBar
@@ -53,16 +48,8 @@ internal fun SongsScreen(
         onViewArtist = onViewArtist,
         onPlayNext = viewModel::playSongNext,
         onAddToQueue = viewModel::addSongToQueue,
-        onGetSongsInPlaylist = {
-            emptyList<Song>()
-//            viewModel::getSongsInPlaylist
-        },
         onAddSongsToPlaylist = { playlist, songs ->
             viewModel.addSongsToPlaylist( playlist, songs )
-        },
-        onSearchSongsMatchingQuery = {
-            emptyList<Song>()
-//            viewModel::searchSongsMatching
         },
         onCreatePlaylist = { title, songs ->
             viewModel.createPlaylist( title, songs )
@@ -71,10 +58,6 @@ internal fun SongsScreen(
 //            onShareSong( it, uiState.language.shareFailedX( "" ) )
         },
         onNavigateToSearch = onNavigateToSearch,
-        onGetPlaylists = {
-            emptyList<PlaylistInfo>()
-//            uiState.playlistInfos
-        },
         onGetAdditionalMetadataForSongWithId = { songId ->
             null
 //            uiState.songsAdditionalMetadataList.find { it.songId == songId }
@@ -91,17 +74,14 @@ private fun SongsScreenContent(
     onSettingsClicked: () -> Unit,
     onShufflePlay: () -> Unit,
     playSong: ( Song, List<Song> ) -> Unit,
-    onFavorite: ( String, Boolean ) -> Unit,
+    onFavorite: ( Song, Boolean ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
-    onGetSongsInPlaylist: (PlaylistInfo) -> List<Song>,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
-    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
+    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<PlaylistInfo>,
     onNavigateToSearch: () -> Unit,
     onGetAdditionalMetadataForSongWithId: ( String ) -> SongAdditionalMetadataInfo?,
     onDeleteSong: ( Song ) -> Unit,
@@ -127,7 +107,7 @@ private fun SongsScreenContent(
                     onSortTypeChange = onSortTypeChange,
                     language = uiState.language,
                     songs = uiState.songs,
-                    playlistInfos = onGetPlaylists(),
+                    playlists = uiState.playlists,
                     onShufflePlay = onShufflePlay,
                     currentlyPlayingSongId = uiState.currentlyPlayingSongId,
                     playSong = playSong,
@@ -138,9 +118,7 @@ private fun SongsScreenContent(
                     onShareSong = onShareSong,
                     onPlayNext = onPlayNext,
                     onAddToQueue = onAddToQueue,
-                    onGetSongsInPlaylist = onGetSongsInPlaylist,
                     onAddSongsToPlaylist = onAddSongsToPlaylist,
-                    onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                     onCreatePlaylist = onCreatePlaylist,
                     onGetAdditionalMetadataForSongWithId = onGetAdditionalMetadataForSongWithId,
                     onDeleteSong = onDeleteSong
@@ -184,12 +162,9 @@ private fun SongsScreenContentPreview() {
             onShareSong = {},
             onPlayNext = {},
             onAddToQueue = {},
-            onGetSongsInPlaylist = { emptyList() },
             onAddSongsToPlaylist = { _, _ -> },
-            onSearchSongsMatchingQuery = { emptyList() },
             onCreatePlaylist = { _, _ -> },
             onNavigateToSearch = {},
-            onGetPlaylists = { emptyList() },
             onGetAdditionalMetadataForSongWithId = { null },
             onDeleteSong = {}
         )

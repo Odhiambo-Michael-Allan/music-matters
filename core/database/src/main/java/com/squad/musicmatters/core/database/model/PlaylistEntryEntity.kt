@@ -21,4 +21,5 @@ import androidx.room.PrimaryKey
 data class PlaylistEntryEntity(
     @ColumnInfo( name = "playlist_id" ) val playlistId: String,
     @ColumnInfo( name = "song_id" ) val songId: String,
+    @ColumnInfo( name = "song_artwork_uri" ) val artworkUri: String? = null,
 )

@@ -69,10 +69,6 @@ class TestMusicServiceConnection : MusicServiceConnection {
         TODO("Not yet implemented")
     }
 
-    override suspend fun moveSong(from: Int, to: Int) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun playNext(song: Song) {
         TODO("Not yet implemented")
     }

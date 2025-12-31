@@ -4,7 +4,7 @@ import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
 import com.squad.musicmatters.core.testing.connection.TestMusicServiceConnection
 import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
@@ -115,7 +115,7 @@ class NowPlayingViewModelTest {
         player.sendPlayerState( playerState )
         preferencesDataSource.sendUserData( emptyUserData )
         playlistRepository.sendPlaylists( emptyList() )
-        playlistRepository.addToFavorites( "song-id-2" )
+        playlistRepository.addToFavorites( testSong( "song-id-2" ) )
         metadataRepository.sendMetadata( metadataList )
         queueRepository.sendSongs( testSongs )
 
@@ -126,7 +126,7 @@ class NowPlayingViewModelTest {
                 currentlyPlayingSongIsFavorite = true,
                 playerState = playerState,
                 playlists = listOf(
-                    PlaylistInfo(
+                    Playlist(
                         id = FAVORITES_PLAYLIST_ID,
                         title = "",
                         songIds = setOf( "song-id-2" )

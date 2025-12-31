@@ -11,13 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Album
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.ThumbUpAlt
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.ThumbUpAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -45,13 +38,14 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.squad.musicmatters.core.media.media.extensions.formatMilliseconds
 import com.squad.musicmatters.core.data.utils.VersionUtils
+import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.GoogleRed
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
 import com.squad.musicmatters.core.model.ThemeMode
@@ -66,17 +60,15 @@ fun SongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
-    playlists: List<PlaylistInfo>,
+    playlists: List<Playlist>,
     onClick: () -> Unit,
-    onFavorite: ( String, Boolean ) -> Unit,
+    onFavorite: ( Song, Boolean ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onGetSongsInPlaylist: ( PlaylistInfo ) -> List<Song>,
-    onAddSongsToPlaylist: ( PlaylistInfo, List<Song> ) -> Unit,
-    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
+    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
     onDeleteSong: ( Song ) -> Unit,
@@ -133,7 +125,7 @@ fun SongCard(
                     if ( isFavorite ) {
                         IconButton(
                             onClick = {
-                                onFavorite( song.id, false )
+                                onFavorite( song, false )
                             }
                         ) {
                             Icon(
@@ -149,7 +141,7 @@ fun SongCard(
                     ) {
                         Icon(
                             modifier = Modifier.size( 24.dp ),
-                            imageVector = Icons.Filled.MoreVert,
+                            imageVector = MusicMattersIcons.MoreVertical,
                             contentDescription = null
                         )
                         if ( showSongOptionsBottomSheet ) {
@@ -174,10 +166,8 @@ fun SongCard(
                                     onViewAlbum = onViewAlbum,
                                     onShareSong = onShareSong,
                                     onShowSongDetails = { showSongDetailsDialog = true },
-                                    onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
                                     onCreatePlaylist = onCreatePlaylist,
                                     onAddSongsToPlaylist = onAddSongsToPlaylist,
-                                    onGetSongsInPlaylist = onGetSongsInPlaylist,
                                     onDelete = {
                                         if ( !VersionUtils.isQandAbove() ) {
                                             showDeleteSongDialog = true
@@ -224,18 +214,16 @@ fun SongOptionsBottomSheetMenu(
     song: Song,
     isFavorite: Boolean,
     isCurrentlyPlaying: Boolean,
-    playlists: List<PlaylistInfo>,
-    onFavorite: ( String, Boolean ) -> Unit,
+    playlists: List<Playlist>,
+    onFavorite: ( Song, Boolean ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onShowSongDetails: () -> Unit,
-    onGetSongsInPlaylist: (PlaylistInfo ) -> List<Song>,
-    onSearchSongsMatchingQuery: (String ) -> List<Song>,
     onCreatePlaylist: (String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: (PlaylistInfo, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onDelete: ( Song ) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -249,28 +237,27 @@ fun SongOptionsBottomSheetMenu(
         onDismissRequest = onDismissRequest,
         onPlayNext = { onPlayNext( song ) },
         onAddToQueue = { onAddToQueue( song ) },
-        onGetSongsInPlaylist = onGetSongsInPlaylist,
-        onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
         onCreatePlaylist = onCreatePlaylist,
         onAddSongsToPlaylist = onAddSongsToPlaylist,
         onGetSongs = { listOf( song ) },
         leadingBottomSheetMenuItem = {
             BottomSheetMenuItem(
                 leadingIcon = if ( isFavorite ) {
-                    Icons.Rounded.ThumbUpAlt
+                    MusicMattersIcons.Favorite
                 } else {
-                    Icons.Filled.ThumbUpAlt
+                    MusicMattersIcons.FavoriteBorder
                 },
                 label = language.favorite
             ) {
-                onFavorite( song.id, !isFavorite )
+                onFavorite( song, !isFavorite )
                 onDismissRequest()
             }
         },
+        onShowSnackBar = {},
         trailingBottomSheetMenuItems = {
             song.artists.forEach {
                 BottomSheetMenuItem(
-                    leadingIcon = Icons.Rounded.Person,
+                    leadingIcon = MusicMattersIcons.Artist,
                     label = "${language.viewArtist}: $it"
                 ) {
                     onDismissRequest()
@@ -279,7 +266,7 @@ fun SongOptionsBottomSheetMenu(
             }
             song.albumTitle?.let {
                 BottomSheetMenuItem(
-                    leadingIcon = Icons.Filled.Album,
+                    leadingIcon = MusicMattersIcons.Album,
                     label = language.viewAlbum
                 ) {
                     onDismissRequest()
@@ -287,21 +274,21 @@ fun SongOptionsBottomSheetMenu(
                 }
             }
             BottomSheetMenuItem(
-                leadingIcon = Icons.Rounded.Share,
+                leadingIcon = MusicMattersIcons.Share,
                 label = language.shareSong
             ) {
                 onDismissRequest()
                 onShareSong( song.mediaUri.toUri() )
             }
             BottomSheetMenuItem(
-                leadingIcon = Icons.Rounded.Info,
+                leadingIcon = MusicMattersIcons.SongDetails,
                 label = language.details
             ) {
                 onDismissRequest()
                 onShowSongDetails()
             }
             BottomSheetMenuItem(
-                leadingIcon = Icons.Rounded.Delete,
+                leadingIcon = MusicMattersIcons.Delete,
                 leadingIconTint = GoogleRed,
                 label = language.delete,
             ) {
@@ -325,7 +312,7 @@ private fun SongOptionsBottomSheetContentPreview() {
         SongOptionsBottomSheetMenu(
             language = English,
             song = PreviewParameterData.songs.first(),
-            isFavorite = true,
+            isFavorite = false,
             isCurrentlyPlaying = true,
             playlists = emptyList(),
             onFavorite = { _, _ -> },
@@ -337,8 +324,6 @@ private fun SongOptionsBottomSheetContentPreview() {
             onShowSongDetails = {},
             onAddSongsToPlaylist = { _, _ -> },
             onCreatePlaylist = { _, _ -> },
-            onGetSongsInPlaylist = { emptyList() },
-            onSearchSongsMatchingQuery = { emptyList() },
             onDelete = {},
             onDismissRequest = {}
         )
@@ -368,9 +353,7 @@ private fun SongCardPreview() {
             onViewArtist = {},
             onViewAlbum = {},
             onShareSong = {},
-            onGetSongsInPlaylist = { emptyList() },
             onAddSongsToPlaylist = { _, _ -> },
-            onSearchSongsMatchingQuery = { emptyList() },
             onCreatePlaylist = { _, _ -> },
             onGetSongAdditionalMetadata = { null },
             onDeleteSong = {}

@@ -1,33 +1,5 @@
 package com.squad.musicmatters.ui.album
 
-import android.net.Uri
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.request.ImageRequest
-import com.squad.musicmatters.R
-import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.designsystem.theme.isLight
-import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.Album
-import com.squad.musicmatters.core.model.PlaylistInfo
-import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.ui.components.Banner
-import com.squad.musicmatters.ui.components.BottomSheetMenuItem
-import com.squad.musicmatters.ui.components.LoaderScaffold
-import com.squad.musicmatters.ui.components.MinimalAppBar
-
 //@Composable
 //fun AlbumScreen(
 //    albumName: String,

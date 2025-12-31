@@ -1,6 +1,7 @@
 package com.squad.musicmatters.core.database
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -28,8 +29,11 @@ import com.squad.musicmatters.core.database.typeconverter.InstantConverter
         QueueEntity::class,
         PlayHistoryEntity::class,
     ],
-    version = 2,
-    exportSchema = false
+    autoMigrations = [
+//        AutoMigration( from = 2, to = 3 ),
+    ],
+    version = 1,
+    exportSchema = true
 )
 @TypeConverters(InstantConverter::class )
 abstract class MusicMattersDatabase : RoomDatabase() {

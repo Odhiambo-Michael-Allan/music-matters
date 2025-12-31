@@ -68,8 +68,8 @@ fun PermissionsScreen(
         Column (
             modifier = Modifier
                 .verticalScroll( rememberScrollState() )
-                .weight(1f)
-                .padding(16.dp),
+                .weight( 1f )
+                .padding( 16.dp ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer( modifier = Modifier.height( 48.dp ) )
@@ -79,11 +79,11 @@ fun PermissionsScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    modifier = Modifier.padding( end = 8.dp ),
                     text = stringResource( id = R.string.welcome_message ),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold
-                    )
+                    ),
+                    modifier = Modifier.padding( end = 8.dp ),
                 )
                 Text(
                     text = "Music",
@@ -150,7 +150,7 @@ fun PermissionsScreen(
 
 @PreviewScreenSizes
 @Composable
-fun PermissionsScreenPreview() {
+private fun PermissionsScreenPreview() {
     MusicMattersTheme(
         themeMode = DefaultPreferences.THEME_MODE,
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,

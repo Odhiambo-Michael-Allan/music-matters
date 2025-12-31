@@ -2,7 +2,7 @@ package com.squad.musicmatters.feature.queue
 
 import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.testing.connection.TestMusicServiceConnection
 import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
 import com.squad.musicmatters.core.testing.repository.TestPreferencesDataSource
@@ -71,7 +71,7 @@ class QueueScreenViewModelTest {
             emptyUserData.copy( currentlyPlayingSongId = "song-id-3" )
         )
         playlistRepository.sendPlaylists( emptyList() )
-        playlistRepository.addToFavorites( "song-id-3" )
+        playlistRepository.addToFavorites( testSong( "song-id-3" ) )
         metadataRepository.sendMetadata( emptyList() )
 
         assertEquals(
@@ -80,7 +80,7 @@ class QueueScreenViewModelTest {
                 currentlyPlayingSongId = "song-id-3",
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
-                    PlaylistInfo(
+                    Playlist(
                         id = FAVORITES_PLAYLIST_ID,
                         title = "",
                         songIds = setOf( "song-id-3" )
@@ -107,7 +107,7 @@ class QueueScreenViewModelTest {
             emptyUserData.copy( currentlyPlayingSongId = "song-id-3" )
         )
         playlistRepository.sendPlaylists( emptyList() )
-        playlistRepository.addToFavorites( "song-id-3" )
+        playlistRepository.addToFavorites( testSong( "song-id-3" ) )
         metadataRepository.sendMetadata( emptyList() )
 
         assertEquals(
@@ -116,7 +116,7 @@ class QueueScreenViewModelTest {
                 currentlyPlayingSongId = "song-id-3",
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
-                    PlaylistInfo(
+                    Playlist(
                         id = FAVORITES_PLAYLIST_ID,
                         title = "",
                         songIds = setOf( "song-id-3" )
@@ -135,7 +135,7 @@ class QueueScreenViewModelTest {
                 currentlyPlayingSongId = "song-id-3",
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
-                    PlaylistInfo(
+                    Playlist(
                         id = FAVORITES_PLAYLIST_ID,
                         title = "",
                         songIds = setOf( "song-id-3" )
@@ -162,7 +162,7 @@ class QueueScreenViewModelTest {
             emptyUserData.copy( currentlyPlayingSongId = "song-id-3" )
         )
         playlistRepository.sendPlaylists( emptyList() )
-        playlistRepository.addToFavorites( "song-id-3" )
+        playlistRepository.addToFavorites( testSong( "song-id-3" ) )
         metadataRepository.sendMetadata( emptyList() )
 
         assertEquals(
@@ -171,7 +171,7 @@ class QueueScreenViewModelTest {
                 currentlyPlayingSongId = "song-id-3",
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
-                    PlaylistInfo(
+                    Playlist(
                         id = FAVORITES_PLAYLIST_ID,
                         title = "",
                         songIds = setOf( "song-id-3" )
@@ -194,7 +194,7 @@ class QueueScreenViewModelTest {
                 currentlyPlayingSongId = "song-id-4",
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
-                    PlaylistInfo(
+                    Playlist(
                         id = FAVORITES_PLAYLIST_ID,
                         title = "",
                         songIds = setOf( "song-id-3" )
@@ -221,7 +221,7 @@ class QueueScreenViewModelTest {
             emptyUserData.copy( currentlyPlayingSongId = "song-id-3" )
         )
         playlistRepository.sendPlaylists( emptyList() )
-        playlistRepository.addToFavorites( "song-id-3" )
+        playlistRepository.addToFavorites( testSong( "song-id-3" ) )
         metadataRepository.sendMetadata( emptyList() )
 
         assertEquals(
@@ -230,7 +230,7 @@ class QueueScreenViewModelTest {
                 currentlyPlayingSongId = "song-id-3",
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
-                    PlaylistInfo(
+                    Playlist(
                         id = FAVORITES_PLAYLIST_ID,
                         title = "",
                         songIds = setOf( "song-id-3" )
@@ -249,7 +249,7 @@ class QueueScreenViewModelTest {
                 currentlyPlayingSongId = "song-id-3",
                 favoriteSongIds = emptySet(),
                 playlists = listOf(
-                    PlaylistInfo(
+                    Playlist(
                         id = FAVORITES_PLAYLIST_ID,
                         title = "",
                         songIds = emptySet()
@@ -276,7 +276,7 @@ class QueueScreenViewModelTest {
             emptyUserData.copy( currentlyPlayingSongId = "song-id-3" )
         )
         playlistRepository.sendPlaylists( emptyList() )
-        playlistRepository.addToFavorites( "song-id-3" )
+        playlistRepository.addToFavorites( testSong( "song-id-3" ) )
         metadataRepository.sendMetadata( emptyList() )
 
         assertEquals(
@@ -285,7 +285,7 @@ class QueueScreenViewModelTest {
                 currentlyPlayingSongId = "song-id-3",
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
-                    PlaylistInfo(
+                    Playlist(
                         id = FAVORITES_PLAYLIST_ID,
                         title = "",
                         songIds = setOf( "song-id-3" )
@@ -296,12 +296,16 @@ class QueueScreenViewModelTest {
             viewModel.uiState.value
         )
 
-        val additionalPlaylist = PlaylistInfo(
+        val additionalPlaylist = Playlist(
             id = "2",
             title = "Additional Playlist",
             songIds = setOf( "song-id-1" )
         )
-        playlistRepository.savePlaylist( additionalPlaylist )
+        playlistRepository.savePlaylist(
+            id = additionalPlaylist.id,
+            playlistName = additionalPlaylist.title,
+            songsInPlaylist = additionalPlaylist.songIds.map { id -> testSong( id ) }
+        )
 
         assertEquals(
             QueueScreenUiState.Success(
@@ -309,7 +313,7 @@ class QueueScreenViewModelTest {
                 currentlyPlayingSongId = "song-id-3",
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
-                    PlaylistInfo(
+                    Playlist(
                         id = FAVORITES_PLAYLIST_ID,
                         title = "",
                         songIds = setOf( "song-id-3" )

@@ -23,7 +23,6 @@ interface MusicServiceConnection {
     )
     suspend fun shuffleAndPlay( songs: List<Song> )
     suspend fun shuffleSongsInQueue()
-    suspend fun moveSong( from: Int, to: Int )
     suspend fun playNext( song: Song )
     suspend fun addToQueue( song: Song )
 }

@@ -1,6 +1,5 @@
 package com.squad.musicmatters.feature.songs
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.media.connection.MusicServiceConnection
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
@@ -9,7 +8,7 @@ import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
 import com.squad.musicmatters.core.model.SortSongsBy
@@ -18,9 +17,7 @@ import com.squad.musicmatters.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -89,7 +86,7 @@ sealed interface SongsScreenUiState {
         val themeMode: ThemeMode,
         val currentlyPlayingSongId: String,
         val favoriteSongIds: Set<String>,
-        val playlists: List<PlaylistInfo>,
+        val playlists: List<Playlist>,
         val songsAdditionalMetadata: List<SongAdditionalMetadataInfo>
     ) : SongsScreenUiState
 }

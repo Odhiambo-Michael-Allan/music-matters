@@ -8,7 +8,7 @@ import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataReposi
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
 import com.squad.musicmatters.core.ui.BaseViewModel
@@ -62,11 +62,6 @@ internal class QueueScreenViewModel @Inject constructor(
             initialValue = QueueScreenUiState.Loading
         )
 
-
-    fun moveSong( from: Int, to: Int ) {
-        viewModelScope.launch { player.moveSong( from, to ) }
-    }
-
     fun clearQueue() {
         viewModelScope.launch { queueRepository.clearQueue() }
     }
@@ -84,7 +79,7 @@ sealed interface QueueScreenUiState {
         val currentlyPlayingSongId: String,
         val language: Language = English,
         val favoriteSongIds: Set<String>,
-        val playlists: List<PlaylistInfo>,
+        val playlists: List<Playlist>,
         val songsAdditionalMetadata: List<SongAdditionalMetadataInfo>
     ): QueueScreenUiState
 

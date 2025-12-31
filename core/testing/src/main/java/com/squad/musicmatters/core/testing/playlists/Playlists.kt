@@ -1,10 +1,10 @@
 package com.squad.musicmatters.core.testing.playlists
 
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
 import java.util.UUID
 
-val testPlaylistInfos = List( 20 ) {
-    PlaylistInfo(
+val testPlaylists = List( 20 ) {
+    Playlist(
         id = UUID.randomUUID().toString() + "$it",
         title = "Playlist-$it",
         songIds = emptySet()
@@ -12,7 +12,7 @@ val testPlaylistInfos = List( 20 ) {
 }.toMutableList()
 
 val testPlaylistsForSorting = List( 20 ) {
-    PlaylistInfo(
+    Playlist(
         id = UUID.randomUUID().toString() + "$it",
         title = "Playlist-$it",
         songIds = List( it ) {

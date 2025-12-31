@@ -3,17 +3,17 @@ package com.squad.musicmatters.core.data.repository.impl
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.database.dao.PlaylistDao
 import com.squad.musicmatters.core.database.dao.PlaylistEntryDao
-import com.squad.musicmatters.core.database.dao.SongPlayCountEntryDao
 import com.squad.musicmatters.core.database.model.PlaylistEntity
 import com.squad.musicmatters.core.database.model.PlaylistEntryEntity
 import com.squad.musicmatters.core.database.model.PopulatedPlaylistEntity
-import com.squad.musicmatters.core.database.model.SongPlayCountEntity
-import com.squad.musicmatters.core.model.PlaylistInfo
+import com.squad.musicmatters.core.model.Playlist
+import com.squad.musicmatters.core.model.Song
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import java.util.UUID
 import javax.inject.Inject
+import kotlin.uuid.Uuid
 
 const val FAVORITES_PLAYLIST_ID = "--MUSIC-MATTERS-FAVORITES-PLAYLIST-ID--"
 
@@ -24,14 +24,14 @@ class PlaylistRepositoryImpl @Inject constructor(
 
     override fun fetchFavorites() = fetchPlaylistWithId( FAVORITES_PLAYLIST_ID )
 
-    override fun fetchPlaylistWithId( id: String ): Flow<PlaylistInfo?> =
+    override fun fetchPlaylistWithId( id: String ): Flow<Playlist?> =
         playlistDao
             .fetchPlaylistWithId( id )
             .map {
                 it?.asPlaylistInfo()
             }
 
-    override fun fetchPlaylists(): Flow<List<PlaylistInfo>> = playlistDao
+    override fun fetchPlaylists(): Flow<List<Playlist>> = playlistDao
         .fetchPlaylists()
         .map { playlists -> playlists.map { it.asPlaylistInfo() } }
 
@@ -44,21 +44,20 @@ class PlaylistRepositoryImpl @Inject constructor(
             } ?: false
         }
 
-    override suspend fun addToFavorites( songId: String ) {
+    override suspend fun addToFavorites( song: Song ) {
         val playlistEntity = PlaylistEntryEntity(
             playlistId = FAVORITES_PLAYLIST_ID,
-            songId = songId
+            songId = song.id,
+            artworkUri = song.artworkUri,
         )
         playlistDao
             .fetchPlaylistWithId( id = FAVORITES_PLAYLIST_ID )
             .first()?.let {
                 playlistEntryDao.insert( playlistEntity )
             } ?: savePlaylist(
-                PlaylistInfo(
-                    id = FAVORITES_PLAYLIST_ID,
-                    title = "",
-                    songIds = setOf( songId )
-                )
+                id = FAVORITES_PLAYLIST_ID,
+                playlistName = "",
+                songsInPlaylist = listOf( song )
             )
 
     }
@@ -70,27 +69,34 @@ class PlaylistRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun savePlaylist( playlistInfo: PlaylistInfo ) {
-        playlistDao.insert( playlistInfo.asEntity() )
-        playlistInfo.songIds.forEach {
+    override suspend fun savePlaylist( id: String, playlistName: String, songsInPlaylist: List<Song> ) {
+        val playlist = Playlist(
+            id = id,
+            title = playlistName,
+            songIds = songsInPlaylist.map { it.id }.toSet()
+        )
+        playlistDao.insert( playlist.asEntity() )
+        songsInPlaylist.forEach {
             playlistEntryDao.insert(
                 PlaylistEntryEntity(
-                    playlistId = playlistInfo.id,
-                    songId = it
+                    playlistId = playlist.id,
+                    artworkUri = it.artworkUri,
+                    songId = it.id
                 )
             )
         }
     }
 
-    override suspend fun deletePlaylist( playlistInfo: PlaylistInfo ) {
-        playlistDao.delete( playlistInfo.asEntity() )
+    override suspend fun deletePlaylist( playlist: Playlist ) {
+        playlistDao.delete( playlist.asEntity() )
     }
 
-    override suspend fun addSongIdToPlaylist( songId: String, playlistId: String ) {
+    override suspend fun addSongToPlaylist( song: Song, playlistId: String ) {
         playlistEntryDao.insert(
             PlaylistEntryEntity(
                 playlistId = playlistId,
-                songId = songId
+                songId = song.id,
+                artworkUri = song.artworkUri
             )
         )
     }
@@ -99,10 +105,10 @@ class PlaylistRepositoryImpl @Inject constructor(
         playlistEntryDao.deleteEntry( songId = songId, playlistId = playlistId )
     }
 
-    override suspend fun renamePlaylist( playlistInfo: PlaylistInfo, newTitle: String ) {
-        if ( playlistInfo.id == FAVORITES_PLAYLIST_ID ) return
+    override suspend fun renamePlaylist( playlist: Playlist, newTitle: String ) {
+        if ( playlist.id == FAVORITES_PLAYLIST_ID ) return
         playlistDao.update(
-            playlistInfo.asEntity().copy(
+            playlist.asEntity().copy(
                 title = newTitle
             )
         )
@@ -128,14 +134,15 @@ class PlaylistRepositoryImpl @Inject constructor(
     }
 }
 
-private fun PlaylistInfo.asEntity() = PlaylistEntity(
+private fun Playlist.asEntity() = PlaylistEntity(
     id = id,
     title = title
 )
 
-private fun PopulatedPlaylistEntity.asPlaylistInfo() = PlaylistInfo(
+private fun PopulatedPlaylistEntity.asPlaylistInfo() = Playlist(
     id = playlistEntity.id,
     title = playlistEntity.title,
+    artworkUri = entries.firstOrNull { it.artworkUri != null }?.artworkUri,
     songIds = entries.map { it.songId }.toSet()
 )
 
