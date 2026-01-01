@@ -5,7 +5,10 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.PlaylistAdd
 import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.filled.ThumbUpOffAlt
+import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.material.icons.outlined.VideoLibrary
 import androidx.compose.material.icons.rounded.Album
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
@@ -20,6 +23,7 @@ import androidx.compose.material.icons.rounded.IosShare
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.PlayArrow
@@ -33,6 +37,8 @@ import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material.icons.rounded.Speed
 import androidx.compose.material.icons.rounded.ThumbUpAlt
+import androidx.compose.material.icons.rounded.Timer
+import androidx.compose.material.icons.rounded.VideoLibrary
 
 object MusicMattersIcons {
     val Search = Icons.Rounded.Search
@@ -66,4 +72,10 @@ object MusicMattersIcons {
     val MoreVertical = Icons.Rounded.MoreVert
     val Save = Icons.Rounded.Save
     val Clear = Icons.Rounded.ClearAll
+    val Timer = Icons.Outlined.Timer
+    val TimerOn = Icons.Rounded.Timer
+    val MusicNote = Icons.Rounded.MusicNote
+    val MusicNoteOutlined = Icons.Outlined.MusicNote
+    val Library = Icons.Rounded.VideoLibrary
+    val LibraryUnselected = Icons.Outlined.VideoLibrary
 }

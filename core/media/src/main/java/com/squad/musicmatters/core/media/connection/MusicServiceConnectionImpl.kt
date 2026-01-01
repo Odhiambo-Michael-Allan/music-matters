@@ -19,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -26,7 +27,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Collections
+import java.util.Date
+import java.util.Timer
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class MusicServiceConnectionImpl @Inject constructor(
     private val connectable: Connectable,
@@ -43,6 +49,9 @@ class MusicServiceConnectionImpl @Inject constructor(
 
     private val _playerState = MutableStateFlow( PlayerState() )
     override val playerState = _playerState.asStateFlow()
+
+    private var _sleepTimer = MutableStateFlow<SleepTimer?>( null )
+    override val sleepTimer = _sleepTimer.asStateFlow()
 
     init {
         scope.launch {
@@ -308,6 +317,36 @@ class MusicServiceConnectionImpl @Inject constructor(
 
     private suspend fun updateQueueWith( songs: List<Song> ) {
         queueRepository.saveQueue( songs )
+    }
+
+    override fun setTimer( duration: Duration ) {
+        val endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS )
+            .plus( duration )
+        val timer = Timer()
+        timer.schedule(
+            kotlin.concurrent.timerTask {
+                scope.launch {
+                    stopSleepTimer()
+                    player?.pause()
+                }
+            },
+            Date.from(
+                java.time.Instant.ofEpochMilli(
+                    endsAt.inWholeMilliseconds
+                )
+            )
+        )
+        stopSleepTimer()
+        _sleepTimer.value = SleepTimer(
+            duration = duration,
+            endsAt = endsAt,
+            timer = timer
+        )
+    }
+
+    override fun stopSleepTimer() {
+        _sleepTimer.value?.timer?.cancel()
+        _sleepTimer.value = null
     }
 
 

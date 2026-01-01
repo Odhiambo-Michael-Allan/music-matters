@@ -26,7 +26,7 @@ import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.ui.IconTextBody
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
@@ -40,7 +40,7 @@ internal fun QueueList(
     songsInQueue: List<Song>,
     currentlyPlayingSongId: String,
     language: Language,
-    songsAdditionalMetadata: List<SongAdditionalMetadataInfo>,
+    songsAdditionalMetadata: List<SongAdditionalMetadata>,
     favoriteSongIds: Set<String>,
     playlists: List<Playlist>,
     onFavorite: ( Song, Boolean ) -> Unit,
@@ -54,6 +54,7 @@ internal fun QueueList(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onSaveQueue: ( List<Song> ) -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
 
     val lazyListState = rememberLazyListState(
@@ -103,6 +104,7 @@ internal fun QueueList(
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = favoriteSongIds.contains( song.id ),
                             playlists = playlists,
+                            songAdditionalMetadata = songsAdditionalMetadata.find { it.songId == song.id },
                             onClick = { playSong( song, songsInQueue ) },
                             onFavorite = onFavorite,
                             onPlayNext = onPlayNext,
@@ -114,9 +116,7 @@ internal fun QueueList(
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
                             onCreatePlaylist = onCreatePlaylist,
                             onDeleteSong = onDeleteSong,
-                            onGetSongAdditionalMetadata = {
-                                songsAdditionalMetadata.find { it.songId == song.id }
-                            },
+                            onShowSnackBar = onShowSnackBar,
                         )
                     }
                 }
@@ -132,6 +132,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
+    songAdditionalMetadata: SongAdditionalMetadata?,
     playlists: List<Playlist>,
     onClick: () -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
@@ -144,7 +145,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDragHandleClick: () -> Unit,
     onDeleteSong: ( Song ) -> Unit,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
     Row (
         verticalAlignment = Alignment.CenterVertically,
@@ -165,6 +166,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
             isCurrentlyPlaying = isCurrentlyPlaying,
             isFavorite = isFavorite,
             playlists = playlists,
+            songAdditionalMetadata = songAdditionalMetadata,
             onClick = onClick,
             onFavorite = onFavorite,
             onPlayNext = onPlayNext,
@@ -174,8 +176,8 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
             onShareSong = onShareSong,
             onAddSongsToPlaylist = onAddSongsToPlaylist,
             onCreatePlaylist = onCreatePlaylist,
-            onGetSongAdditionalMetadata = onGetSongAdditionalMetadata,
             onDeleteSong = onDeleteSong,
+            onShowSnackBar = onShowSnackBar,
         )
     }
 }
@@ -210,7 +212,8 @@ private fun QueueListPreview(
             onFavorite = { _, _ -> },
             onCreatePlaylist = { _, _ -> },
             onAddSongsToPlaylist = { _, _ -> },
-            onSaveQueue = {}
+            onSaveQueue = {},
+            onShowSnackBar = {},
         )
     }
 }

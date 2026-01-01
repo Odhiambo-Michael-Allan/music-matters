@@ -1,4 +1,4 @@
-package com.squad.musicmatters.feature.nowplaying
+package com.squad.musicmatters.feature.nowplaying.components
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
@@ -86,6 +86,8 @@ import com.squad.musicmatters.core.model.UserData
 import com.squad.musicmatters.core.ui.DynamicAsyncImage
 import com.squad.musicmatters.core.ui.FadeTransition
 import com.squad.musicmatters.core.ui.TransitionDurations
+import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
+import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenViewModel
 import kotlin.math.absoluteValue
 
 // Stateful
@@ -521,7 +523,7 @@ private fun NowPlayingBottomBarPreview() {
                     isBuffering = false,
                 ),
                 playlists = emptyList(),
-                songsAdditionalMetadataList = emptyList(),
+                songAdditionalMetadata = null,
             ),
             playbackPosition = PlaybackPosition(
                 played = 3L,

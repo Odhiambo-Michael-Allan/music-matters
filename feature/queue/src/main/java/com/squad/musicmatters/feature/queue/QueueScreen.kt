@@ -44,7 +44,8 @@ internal fun QueueScreen(
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -68,6 +69,7 @@ internal fun QueueScreen(
         },
         onDeleteSong = onDeleteSong,
         onSaveQueue = viewModel::saveQueue,
+        onShowSnackBar = onShowSnackBar,
     )
 }
 
@@ -87,6 +89,7 @@ private fun QueueScreenContent(
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onSaveQueue: ( List<Song> ) -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
 
     var showSaveDialog by remember { mutableStateOf( false ) }
@@ -125,6 +128,7 @@ private fun QueueScreenContent(
                     onCreatePlaylist = onCreatePlaylist,
                     onDeleteSong = onDeleteSong,
                     onSaveQueue = onSaveQueue,
+                    onShowSnackBar = onShowSnackBar,
                 )
 
                 if ( showSaveDialog ) {
@@ -243,7 +247,8 @@ private fun QueueScreenContentPreview(
             onShareSong = {},
             onAddSongsToPlaylist = { _, _, -> },
             onDeleteSong = {},
-            onSaveQueue = {}
+            onSaveQueue = {},
+            onShowSnackBar = {},
         )
     }
 }

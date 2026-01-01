@@ -3,7 +3,7 @@ package com.squad.musicmatters.core.model
 import com.squad.musicmatters.core.i8n.Language
 
 
-data class SongAdditionalMetadataInfo(
+data class SongAdditionalMetadata(
     val songId: String,
     val codec: String,
     val bitsPerSample: Long,

@@ -2,5 +2,12 @@
 <resources>
 
     <string name="feature_nowplaying_title">Now Playing</string>
+    <string name="feature_nowplaying_left">left</string>
+
+    <string name="feature_nowplaying_end_of_episode">End of currently playing song</string>
+    <string name="feature_nowplaying_turn_off_timer">Turn off timer</string>
+    <string name="feature_nowplaying_sleep_timer">Sleep timer</string>
+    <string name="feature_nowplaying_sleep_timer_set">Your sleep timer is set</string>
+    <string name="feature_nowplaying_sleep_timer_off">Your sleep timer is turned off</string>
 
 </resources>

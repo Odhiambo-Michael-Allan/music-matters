@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.DefaultPathName
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,7 +33,7 @@ import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.ui.PreviewParameterData
 
 
@@ -42,138 +41,150 @@ import com.squad.musicmatters.core.ui.PreviewParameterData
 @Composable
 fun SongDetailsDialog(
     song: Song,
+    metadata: SongAdditionalMetadata?,
     language: Language,
     durationFormatter: ( Long ) -> String,
-    isLoadingSongAdditionalMetadata: Boolean,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
     onDismissRequest: () -> Unit,
 ) {
     Dialog(
         onDismissRequest = onDismissRequest
     ) {
-        BoxWithConstraints {
-            val dialogWidth = maxWidth * 0.85f
-            val dialogHeight = maxHeight * 0.85f
-
-            Card (
+        Card (
+            shape = RoundedCornerShape( 16.dp )
+        ) {
+            Column (
                 modifier = Modifier
-                    .width(dialogWidth)
-                    .height(dialogHeight),
-                shape = RoundedCornerShape( 16.dp )
+                    .fillMaxSize()
+                    .padding( 8.dp )
             ) {
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = language.details,
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+                HorizontalDivider()
                 Column (
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp)
+                        .verticalScroll( rememberScrollState() )
+                        .padding( 0.dp, 4.dp )
                 ) {
-                    Row (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = language.details,
-                            style = MaterialTheme.typography.titleLarge.copy(
-                                fontWeight = FontWeight.Bold
-                            )
+
+                    SongDetailsItem(
+                        key = language.trackName,
+                        value = song.title,
+                        language = language
+                    )
+
+                    SongDetailsItem(
+                        key = language.artist,
+                        value = song.artists.joinToString(),
+                        language = language
+                    )
+
+                    song.albumTitle?.let {
+                        SongDetailsItem(
+                            key = language.album,
+                            value = it,
+                            language = language
                         )
                     }
-                    HorizontalDivider()
-                    Column (
-                        modifier = Modifier
-                            .verticalScroll( rememberScrollState() )
-                            .padding(0.dp, 4.dp)
-                    ) {
+
+                    song.composer?.let {
                         SongDetailsItem(
-                            key = language.trackName,
-                            value = song.title,
+                            key = language.composer,
+                            value = it,
                             language = language
                         )
-                        SongDetailsItem(
-                            key = language.artist,
-                            value = song.artists.joinToString(),
-                            language = language
-                        )
-                        song.albumTitle?.let {
-                            SongDetailsItem(
-                                key = language.album,
-                                value = it,
-                                language = language
-                            )
-                        }
-                        song.composer?.let {
-                            SongDetailsItem(
-                                key = language.composer,
-                                value = it,
-                                language = language
-                            )
-                        }
+                    }
+
+                    metadata?.genre?.let {
                         SongDetailsItem(
                             key = language.genre,
-                            value = onGetSongAdditionalMetadata()?.genre ?: "",
+                            value = it,
                             language = language,
-                            isLoadingValue = isLoadingSongAdditionalMetadata
-                        )
-                        song.year?.let {
-                            SongDetailsItem(
-                                key = language.year,
-                                value = it.toString(),
-                                language = language
-                            )
-                        }
-                        song.trackNumber?.let {
-                            SongDetailsItem(
-                                key = language.trackNumber,
-                                value = ( it % 1000 ).toString(),
-                                language = language
-                            )
-                        }
-                        SongDetailsItem(
-                            key = language.duration,
-                            value = durationFormatter( song.duration ),
-                            language = language
-                        )
-                        SongDetailsItem(
-                            key = language.path,
-                            value = song.path,
-                            language = language
-                        )
-                        SongDetailsItem(
-                            key = language.size,
-                            value = song.sizeString,
-                            language = language
-                        )
-                        SongDetailsItem(
-                            key = language.dateAdded,
-                            value = song.dateModifiedString,
-                            language = language
-                        )
-                        SongDetailsItem(
-                            key = language.bitrate,
-                            value = onGetSongAdditionalMetadata()?.let { language.xKbps( it.bitrate.toString() ) } ?: "",
-                            language = language,
-                            isLoadingValue = isLoadingSongAdditionalMetadata
-                        )
-                        SongDetailsItem(
-                            key = language.bitDepth,
-                            value = onGetSongAdditionalMetadata()?.let { language.xBit( it.bitsPerSample.toString() ) } ?: "",
-                            language = language,
-                            isLoadingValue = isLoadingSongAdditionalMetadata
-                        )
-                        SongDetailsItem(
-                            key = language.samplingRate,
-                            value = onGetSongAdditionalMetadata()?.let { language.xKHZ( it.samplingRate.toString() ) } ?: "",
-                            language = language,
-                            isLoadingValue = isLoadingSongAdditionalMetadata
-                        )
-                        SongDetailsItem(
-                            key = language.codec,
-                            value = onGetSongAdditionalMetadata()?.codec ?: "",
-                            language = language,
-                            isLoadingValue = isLoadingSongAdditionalMetadata
                         )
                     }
+
+                    song.year?.let {
+                        SongDetailsItem(
+                            key = language.year,
+                            value = it.toString(),
+                            language = language
+                        )
+                    }
+
+                    song.trackNumber?.let {
+                        SongDetailsItem(
+                            key = language.trackNumber,
+                            value = ( it % 1000 ).toString(),
+                            language = language
+                        )
+                    }
+
+                    SongDetailsItem(
+                        key = language.duration,
+                        value = durationFormatter( song.duration ),
+                        language = language
+                    )
+
+                    SongDetailsItem(
+                        key = language.path,
+                        value = song.path,
+                        language = language
+                    )
+
+                    SongDetailsItem(
+                        key = language.size,
+                        value = song.sizeString,
+                        language = language
+                    )
+
+                    SongDetailsItem(
+                        key = language.dateAdded,
+                        value = song.dateModifiedString,
+                        language = language
+                    )
+
+                    metadata?.bitrate?.let {
+                        SongDetailsItem(
+                            key = language.bitrate,
+                            value = language.xKbps( it.toString() ),
+                            language = language,
+                        )
+                    }
+
+                    metadata?.bitsPerSample?.let {
+                        SongDetailsItem(
+                            key = language.bitDepth,
+                            value = language.xBit( it.toString() ),
+                            language = language,
+                        )
+                    }
+
+                    metadata?.samplingRate?.let {
+                        SongDetailsItem(
+                            key = language.samplingRate,
+                            value = language.xKHZ( it.toString() ),
+                            language = language,
+                        )
+                    }
+
+                    metadata?.codec?.let {
+                        SongDetailsItem(
+                            key = language.codec,
+                            value = it,
+                            language = language,
+                        )
+                    }
+
                 }
             }
         }
@@ -184,8 +195,7 @@ fun SongDetailsDialog(
 fun SongDetailsItem(
     key: String,
     value: String,
-    language: Language,
-    isLoadingValue: Boolean = false
+    language: Language
 ) {
     Column (
         modifier = Modifier.padding( 0.dp, 4.dp )
@@ -196,26 +206,10 @@ fun SongDetailsItem(
                 fontWeight = FontWeight.SemiBold
             )
         )
-        if ( isLoadingValue ) {
-            Row (
-                horizontalArrangement = Arrangement.spacedBy( 4.dp ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                CircularProgressIndicator(
-                    strokeWidth = 2.dp,
-                    modifier = Modifier.size( 12.dp )
-                )
-                Text(
-                    text = language.loading,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-        } else {
-            Text(
-                text = value,
-                style = MaterialTheme.typography.labelMedium
-            )
-        }
+        Text(
+            text = value,
+            style = MaterialTheme.typography.labelMedium
+        )
     }
 }
 
@@ -233,17 +227,14 @@ fun SongDetailsDialogPreview() {
             song = PreviewParameterData.songs.first(),
             language = English,
             durationFormatter = { "3:44" },
-            isLoadingSongAdditionalMetadata = true,
-            onGetSongAdditionalMetadata = {
-                SongAdditionalMetadataInfo(
-                    songId = "",
-                    codec = "unknown",
-                    bitrate = 0,
-                    samplingRate = 0f,
-                    bitsPerSample = 0,
-                    genre = "unknown"
-                )
-            },
+            metadata = SongAdditionalMetadata(
+                songId = "",
+                codec = "unknown",
+                bitrate = 0,
+                samplingRate = 0f,
+                bitsPerSample = 0,
+                genre = "unknown"
+            ),
             onDismissRequest = {}
         )
     }

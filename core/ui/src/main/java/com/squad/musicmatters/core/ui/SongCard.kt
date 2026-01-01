@@ -47,7 +47,7 @@ import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.dialog.DeleteSongDialog
 import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
@@ -60,6 +60,7 @@ fun SongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
+    songAdditionalMetadata: SongAdditionalMetadata?,
     playlists: List<Playlist>,
     onClick: () -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
@@ -70,8 +71,8 @@ fun SongCard(
     onShareSong: ( Uri ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
     onDeleteSong: ( Song ) -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
 
     var showSongOptionsBottomSheet by remember { mutableStateOf( false ) }
@@ -177,7 +178,8 @@ fun SongCard(
                                     },
                                     onDismissRequest = {
                                         showSongOptionsBottomSheet = false
-                                    }
+                                    },
+                                    onShowSnackBar = onShowSnackBar,
                                 )
                             }
                         }
@@ -189,8 +191,7 @@ fun SongCard(
                     song = song,
                     language = language,
                     durationFormatter = { it.formatMilliseconds() },
-                    isLoadingSongAdditionalMetadata = onGetSongAdditionalMetadata() == null,
-                    onGetSongAdditionalMetadata = onGetSongAdditionalMetadata
+                    metadata = songAdditionalMetadata,
                 ) {
                     showSongDetailsDialog = false
                 }
@@ -226,6 +227,7 @@ fun SongOptionsBottomSheetMenu(
     onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onDelete: ( Song ) -> Unit,
     onDismissRequest: () -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
     GenericOptionsBottomSheet(
         headerImageUri = song.artworkUri?.toUri(),
@@ -253,7 +255,7 @@ fun SongOptionsBottomSheetMenu(
                 onDismissRequest()
             }
         },
-        onShowSnackBar = {},
+        onShowSnackBar = onShowSnackBar,
         trailingBottomSheetMenuItems = {
             song.artists.forEach {
                 BottomSheetMenuItem(
@@ -325,7 +327,8 @@ private fun SongOptionsBottomSheetContentPreview() {
             onAddSongsToPlaylist = { _, _ -> },
             onCreatePlaylist = { _, _ -> },
             onDelete = {},
-            onDismissRequest = {}
+            onDismissRequest = {},
+            onShowSnackBar = {},
         )
     }
 }
@@ -346,6 +349,7 @@ private fun SongCardPreview() {
             isCurrentlyPlaying = true,
             isFavorite = true,
             playlists = emptyList(),
+            songAdditionalMetadata = null,
             onClick = {},
             onFavorite = { _, _ -> },
             onPlayNext = {},
@@ -355,8 +359,8 @@ private fun SongCardPreview() {
             onShareSong = {},
             onAddSongsToPlaylist = { _, _ -> },
             onCreatePlaylist = { _, _ -> },
-            onGetSongAdditionalMetadata = { null },
-            onDeleteSong = {}
+            onDeleteSong = {},
+            onShowSnackBar = {},
         )
     }
 }

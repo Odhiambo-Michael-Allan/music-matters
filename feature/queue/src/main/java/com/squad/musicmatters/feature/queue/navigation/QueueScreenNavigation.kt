@@ -21,6 +21,7 @@ fun NavGraphBuilder.queueScreen(
     onShareSong: ( Uri, String ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onNavigateBack: () -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
     composable<QueueRoute>(
         enterTransition = { SlideTransition.slideUp.enterTransition() }
@@ -31,6 +32,7 @@ fun NavGraphBuilder.queueScreen(
             onViewArtist = onViewArtist,
             onDeleteSong = onDeleteSong,
             onNavigateBack = onNavigateBack,
+            onShowSnackBar = onShowSnackBar,
         )
     }
 }

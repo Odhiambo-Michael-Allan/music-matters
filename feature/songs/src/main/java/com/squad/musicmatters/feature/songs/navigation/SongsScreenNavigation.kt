@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.ui.FadeTransition
 import com.squad.musicmatters.core.ui.SlideTransition
 import com.squad.musicmatters.feature.songs.SongsScreen
 import kotlinx.serialization.Serializable
@@ -20,20 +21,18 @@ fun NavGraphBuilder.songsScreen(
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToSearch: () -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
     composable<SongsRoute>(
         enterTransition = { SlideTransition.slideUp.enterTransition() },
-//        exitTransition = { FadeTransition.exitTransition() }
+        exitTransition = { FadeTransition.exitTransition() }
     ) {
         SongsScreen(
             onViewAlbum = onViewAlbum,
             onViewArtist = onViewArtist,
             onShareSong = onShareSong,
             onDeleteSong = onDeleteSong,
-            onNavigateToSettings = onNavigateToSettings,
-            onNavigateToSearch = onNavigateToSearch,
+            onShowSnackBar = onShowSnackBar,
         )
     }
 }

@@ -22,16 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.squad.musicmatters.core.media.media.extensions.dateModifiedString
 import com.squad.musicmatters.core.media.media.extensions.sizeString
-import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 
 
 @Composable
@@ -40,7 +37,7 @@ fun SongDetailsDialog(
     language: Language,
     durationFormatter: ( Long ) -> String,
     isLoadingSongAdditionalMetadata: Boolean,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadata?,
     onDismissRequest: () -> Unit,
 ) {
     Dialog(

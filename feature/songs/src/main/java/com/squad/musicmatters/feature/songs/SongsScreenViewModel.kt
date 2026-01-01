@@ -10,7 +10,7 @@ import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.BaseViewModel
@@ -61,12 +61,9 @@ class SongsScreenViewModel @Inject constructor(
             sortSongsInReverse = userData.sortSongsReverse,
             themeMode = userData.themeMode,
             currentlyPlayingSongId = playerState.currentlyPlayingSongId ?: "",
-            favoriteSongIds =
-                favorites?.songIds ?: emptySet(),
-            playlists =
-                playlists,
-            songsAdditionalMetadata =
-                metadata
+            favoriteSongIds = favorites?.songIds ?: emptySet(),
+            playlists = playlists,
+            songsAdditionalMetadata = metadata
         )
     }.stateIn(
         scope = viewModelScope,
@@ -87,7 +84,7 @@ sealed interface SongsScreenUiState {
         val currentlyPlayingSongId: String,
         val favoriteSongIds: Set<String>,
         val playlists: List<Playlist>,
-        val songsAdditionalMetadata: List<SongAdditionalMetadataInfo>
+        val songsAdditionalMetadata: List<SongAdditionalMetadata>
     ) : SongsScreenUiState
 }
 

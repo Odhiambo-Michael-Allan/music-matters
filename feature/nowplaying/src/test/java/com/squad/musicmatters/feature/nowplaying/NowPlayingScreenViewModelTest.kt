@@ -5,7 +5,7 @@ import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.Playlist
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.testing.connection.TestMusicServiceConnection
 import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
 import com.squad.musicmatters.core.testing.repository.TestPreferencesDataSource
@@ -23,8 +23,10 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
-class NowPlayingViewModelTest {
+class NowPlayingScreenViewModelTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -81,7 +83,7 @@ class NowPlayingViewModelTest {
                 queue = emptyList(),
                 currentlyPlayingSongIsFavorite = false,
                 playlists = emptyList(),
-                songsAdditionalMetadataList = emptyList()
+                songAdditionalMetadata = null
             ),
             viewModel.uiState.value
         )
@@ -103,7 +105,7 @@ class NowPlayingViewModelTest {
             isBuffering = false,
         )
         val metadataList = listOf(
-            SongAdditionalMetadataInfo(
+            SongAdditionalMetadata(
                 songId = "song-id-1",
                 codec = "",
                 bitsPerSample = 0L,
@@ -132,7 +134,7 @@ class NowPlayingViewModelTest {
                         songIds = setOf( "song-id-2" )
                     )
                 ),
-                songsAdditionalMetadataList = metadataList
+                songAdditionalMetadata = null
             ),
             viewModel.uiState.value
         )
@@ -158,6 +160,33 @@ class NowPlayingViewModelTest {
             playbackPosition,
             viewModel.playbackPosition.value
         )
+    }
+
+    @Test
+    fun whenSleepTimerChanges_uiStateIsUpdated() = runTest {
+        backgroundScope.launch( UnconfinedTestDispatcher() ) { viewModel.uiState.collect() }
+
+        preferencesDataSource.sendUserData( emptyUserData )
+        playlistRepository.sendPlaylists( emptyList() )
+        metadataRepository.sendMetadata( emptyList() )
+        queueRepository.sendSongs( emptyList() )
+
+        assertEquals(
+            NowPlayingScreenUiState.Success(
+                playerState = PlayerState(),
+                userData = emptyUserData,
+                queue = emptyList(),
+                currentlyPlayingSongIsFavorite = false,
+                playlists = emptyList(),
+                songAdditionalMetadata = null,
+                sleepTimer = null,
+            ),
+            viewModel.uiState.value
+        )
+
+        viewModel.startSleepTimer( 500000L.toDuration( DurationUnit.MILLISECONDS ) )
+
+        assertNotNull( ( viewModel.uiState.value as? NowPlayingScreenUiState.Success )?.sleepTimer )
     }
 
 }

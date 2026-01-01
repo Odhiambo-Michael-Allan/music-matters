@@ -6,7 +6,7 @@ import com.squad.musicmatters.core.testing.repository.TestPlayHistoryRepository
 import com.squad.musicmatters.core.testing.repository.TestQueueRepository
 import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.testing.songs.testSong
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -48,7 +48,7 @@ class CompositeRepositoryImplTest {
         playHistoryRepository.sendSongs( songs )
         songsAdditionalMetadataRepository.sendMetadata(
             songs.map {
-                SongAdditionalMetadataInfo(
+                SongAdditionalMetadata(
                     songId = it.id,
                     codec = "",
                     bitrate = 0L,

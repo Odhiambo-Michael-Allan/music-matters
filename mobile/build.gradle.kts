@@ -103,6 +103,8 @@ dependencies {
     implementation( libs.hilt.android )
     ksp( libs.hilt.compiler )
 
+    implementation( libs.kotlinx.serialization.json )
+
     testImplementation( libs.junit )
     testImplementation( libs.androidx.junit )
     testImplementation( libs.robolectric )

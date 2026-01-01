@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -56,6 +57,7 @@ internal fun AddSongsToPlaylistBottomSheet(
     onCreateNewPlaylist: () -> Unit,
     onDismissRequest: ( String ) -> Unit,
 ) {
+    val context = LocalContext.current
 
     Column (
         modifier = Modifier
@@ -127,8 +129,25 @@ internal fun AddSongsToPlaylistBottomSheet(
                                 )
                             },
                             onClick = {
+                                val playlistTitle = if ( playlist.id == FAVORITES_PLAYLIST_ID ) {
+                                    context.getString( R.string.core_ui_favorites )
+                                } else {
+                                    playlist.title
+                                }
+                                val message = if ( songsToAdd.size > 1 ) {
+                                    context.getString(
+                                        R.string.core_ui_added_n_songs_to_playlist,
+                                        songsToAdd.size,
+                                        playlistTitle
+                                    )
+                                } else {
+                                    context.getString(
+                                        R.string.core_ui_added_song_to_playlist,
+                                        playlistTitle
+                                    )
+                                }
                                 onAddSongsToPlaylist( playlist, songsToAdd )
-                                onDismissRequest( playlist.title )
+                                onDismissRequest( message )
                             }
                         )
                     }

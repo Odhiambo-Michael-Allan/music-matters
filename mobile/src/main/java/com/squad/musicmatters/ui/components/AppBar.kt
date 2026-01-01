@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.squad.musicmatters.R
+import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.utils.runFunctionIfTrueElseReturnThisObject
 
@@ -41,9 +43,9 @@ import com.squad.musicmatters.utils.runFunctionIfTrueElseReturnThisObject
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun TopAppBar(
-    onNavigationIconClicked: () -> Unit,
     title: String,
-    settings: String,
+    topAppBarScrollBehavior: TopAppBarScrollBehavior,
+    onNavigationIconClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
 ) {
     
@@ -53,12 +55,13 @@ fun TopAppBar(
                 contentDescription = "top-app-bar"
             },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Transparent
+            containerColor = Color.Transparent,
+            scrolledContainerColor = Color.Transparent
         ),
         navigationIcon = {
             IconButton( onClick = onNavigationIconClicked ) {
                 Icon(
-                    imageVector = Icons.Rounded.Search,
+                    imageVector = MusicMattersIcons.Search,
                     contentDescription = null
                 )
             }
@@ -83,11 +86,12 @@ fun TopAppBar(
                 onClick = onSettingsClicked
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.Settings,
+                    imageVector = MusicMattersIcons.Settings,
                     contentDescription = null
                 )
             }
-        }
+        },
+        scrollBehavior = topAppBarScrollBehavior,
     )
 }
 
@@ -174,13 +178,14 @@ private fun TopAppBarMinimalAppBarPreview() {
     )
 }
 
+@OptIn( ExperimentalMaterial3Api::class )
 @Preview( showBackground = true )
 @Composable
 private fun TopAppBarPreview() {
     TopAppBar(
         onNavigationIconClicked = { /*TODO*/ },
         title = English.songs,
-        settings = English.settings
+        topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     ) {
 
     }

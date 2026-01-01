@@ -10,7 +10,7 @@ import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -80,7 +80,7 @@ sealed interface QueueScreenUiState {
         val language: Language = English,
         val favoriteSongIds: Set<String>,
         val playlists: List<Playlist>,
-        val songsAdditionalMetadata: List<SongAdditionalMetadataInfo>
+        val songsAdditionalMetadata: List<SongAdditionalMetadata>
     ): QueueScreenUiState
 
 }

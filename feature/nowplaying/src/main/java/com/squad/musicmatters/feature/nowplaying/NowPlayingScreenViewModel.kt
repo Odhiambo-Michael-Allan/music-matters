@@ -11,10 +11,11 @@ import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
+import com.squad.musicmatters.core.media.connection.SleepTimer
 import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.model.UserData
 import com.squad.musicmatters.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration
 
 @HiltViewModel
 class NowPlayingScreenViewModel @Inject constructor(
@@ -50,14 +52,16 @@ class NowPlayingScreenViewModel @Inject constructor(
                 playlistRepository.isFavorite( songId ?: "" )
             },
             playlistRepository.fetchPlaylists(),
-            songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries()
+            songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries(),
+            player.sleepTimer
         ) {
             playerState,
-                userData,
-                queue,
-                currentlyPlayingSongIsFavorite,
-                playlists,
-                metadata ->
+            userData,
+            queue,
+            currentlyPlayingSongIsFavorite,
+            playlists,
+            metadata,
+            sleepTimer ->
 
             NowPlayingScreenUiState.Success(
                 playerState = playerState,
@@ -65,7 +69,10 @@ class NowPlayingScreenViewModel @Inject constructor(
                 queue = queue,
                 currentlyPlayingSongIsFavorite = currentlyPlayingSongIsFavorite,
                 playlists = playlists,
-                songsAdditionalMetadataList = metadata
+                songAdditionalMetadata = metadata.find {
+                    it.songId == playerState.currentlyPlayingSongId
+                },
+                sleepTimer = sleepTimer
             )
         }.stateIn(
             scope = viewModelScope,
@@ -135,6 +142,14 @@ class NowPlayingScreenViewModel @Inject constructor(
         }
     }
 
+    fun startSleepTimer( duration: Duration ) {
+        player.setTimer( duration )
+    }
+
+    fun stopSleepTimer() {
+        player.stopSleepTimer()
+    }
+
     override fun onCleared() {
         super.onCleared()
         playbackPositionUpdater.cleanUp()
@@ -150,7 +165,8 @@ sealed interface NowPlayingScreenUiState {
         val currentlyPlayingSongIsFavorite: Boolean,
         val playerState: PlayerState,
         val playlists: List<Playlist>,
-        val songsAdditionalMetadataList: List<SongAdditionalMetadataInfo>,
+        val songAdditionalMetadata: SongAdditionalMetadata?,
         val language: Language = English,
+        val sleepTimer: SleepTimer? = null,
     ) : NowPlayingScreenUiState
 }

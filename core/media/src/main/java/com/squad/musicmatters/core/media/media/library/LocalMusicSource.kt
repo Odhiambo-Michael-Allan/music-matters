@@ -11,7 +11,7 @@ import com.squad.musicmatters.core.media.media.extensions.UNKNOWN_STRING_VALUE
 import com.squad.musicmatters.core.media.media.extensions.from
 import com.squad.musicmatters.core.media.media.extensions.genreTagSeparators
 import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -83,7 +83,7 @@ class LocalMusicSource(
     private suspend fun fetchMediaItemsAdditionalMetadata() {
         withContext( Dispatchers.IO ) {
             val mediaMetadataRetriever = MediaMetadataRetriever()
-            val additionalMetadataList = mutableListOf<SongAdditionalMetadataInfo>()
+            val additionalMetadataList = mutableListOf<SongAdditionalMetadata>()
             musicCatalog.forEach {
                 try {
                     val uri = it.localConfiguration?.uri ?: Uri.EMPTY
@@ -102,7 +102,7 @@ class LocalMusicSource(
 //                Timber.tag( TAG ).d( "Genre: $genre" )
 
                     additionalMetadataList.add(
-                        SongAdditionalMetadataInfo(
+                        SongAdditionalMetadata(
                             songId = it.mediaId,
                             bitrate = (bitrate / 1000),
                             bitsPerSample = bitsPerSample,

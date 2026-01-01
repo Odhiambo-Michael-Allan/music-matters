@@ -1,4 +1,4 @@
-package com.squad.musicmatters.feature.nowplaying
+package com.squad.musicmatters.feature.nowplaying.components
 
 import android.content.Context
 import android.content.Intent
