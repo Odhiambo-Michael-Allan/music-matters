@@ -646,7 +646,7 @@ fun MusicMattersAppContent(
                                     nowPlayingScreenBottomSheetState.hide()
                                 }
                             },
-                            dragHandle = {}
+                            dragHandle = null,
                         ) {
                             NowPlayingBottomScreen(
                                 onViewAlbum = {},

@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -16,12 +17,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.ThumbUpAlt
 import androidx.compose.material.icons.rounded.ThumbUpAlt
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -30,6 +35,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.squad.musicmatters.core.datastore.DefaultPreferences
@@ -48,7 +55,7 @@ import java.util.Timer
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-@OptIn( ExperimentalLayoutApi::class )
+@OptIn( ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 internal fun PortraitLayout(
     modifier: Modifier = Modifier,
@@ -77,12 +84,17 @@ internal fun PortraitLayout(
     onShowSleepTimerBottomSheet: () -> Unit,
 ) {
     Column (
+        verticalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
             .fillMaxSize()
-            .padding(20.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center
+            .padding( 20.dp ),
     ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            BottomSheetDefaults.DragHandle()
+        }
         NowPlayingArtwork(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -213,7 +225,7 @@ internal fun PortraitLayout(
     }
 }
 
-@DevicePreviews
+@PreviewScreenSizes
 @Composable
 private fun NowPlayingScreenContentPreview() {
     MusicMattersTheme(

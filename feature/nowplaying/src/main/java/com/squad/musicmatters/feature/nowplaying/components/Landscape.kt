@@ -65,7 +65,7 @@ internal fun LandscapeLayout(
             .fillMaxSize()
             .padding( 20.dp ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         NowPlayingArtwork(
             artworkUri = currentlyPlayingSong.artworkUri?.toUri(),
