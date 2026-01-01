@@ -9,6 +9,7 @@ import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -45,7 +46,7 @@ abstract class BaseViewModel(
             player.playSong(
                 song = selectedSong,
                 songs = songsInPlaylist,
-                shuffle = false
+                shuffle = preferencesDataSource.userData.first().shuffle
             )
         }
     }

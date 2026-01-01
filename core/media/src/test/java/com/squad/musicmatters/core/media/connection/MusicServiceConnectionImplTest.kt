@@ -13,14 +13,18 @@ import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
 import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class MusicServiceConnectionImplTest {
     private lateinit var connectable: FakeConnectable
@@ -29,7 +33,7 @@ class MusicServiceConnectionImplTest {
     private lateinit var songsAdditionalMetadataRepository: TestSongsAdditionalMetadataRepository
     private lateinit var queueRepository: TestQueueRepository
     private lateinit var preferencesDataSource: TestPreferencesDataSource
-    private lateinit var musicServiceConnection: MusicServiceConnection
+    private lateinit var subject: MusicServiceConnection
 
 
     @OptIn( ExperimentalCoroutinesApi::class )
@@ -41,7 +45,7 @@ class MusicServiceConnectionImplTest {
         songsAdditionalMetadataRepository = TestSongsAdditionalMetadataRepository()
         queueRepository = TestQueueRepository()
         preferencesDataSource = TestPreferencesDataSource()
-        musicServiceConnection = MusicServiceConnectionImpl(
+        subject = MusicServiceConnectionImpl(
             connectable = connectable,
             queueRepository = queueRepository,
             compositeRepository = CompositeRepositoryImpl(
@@ -61,9 +65,9 @@ class MusicServiceConnectionImplTest {
         queueRepository.sendSongs( emptyList() )
         preferencesDataSource.sendUserData( emptyUserData )
         testSongs.forEach {
-            musicServiceConnection.addToQueue( it )
+            subject.addToQueue( it )
         }
-        musicServiceConnection.addToQueue( testSongs.first() ) // NO DUPLICATES!
+        subject.addToQueue( testSongs.first() ) // NO DUPLICATES!
         assertEquals(
             testSongs.size,
             queueRepository.fetchSongsInQueueSortedByPosition().first().size
@@ -88,7 +92,7 @@ class MusicServiceConnectionImplTest {
         queueRepository.sendSongs( emptyList() )
         preferencesDataSource.sendUserData( emptyUserData )
         testSongs.forEach {
-            musicServiceConnection.playNext( it )
+            subject.playNext( it )
         }
         assertEquals(
             testSongs.size,
@@ -102,7 +106,7 @@ class MusicServiceConnectionImplTest {
             testSongs.first().id,
             queueRepository.fetchSongsInQueueSortedByPosition().first().first().id
         )
-        musicServiceConnection.playNext(
+        subject.playNext(
             testSongs.last()
         )
         assertEquals(
@@ -123,7 +127,7 @@ class MusicServiceConnectionImplTest {
     fun testShuffleAndPlay() = runTest {
         queueRepository.sendSongs( emptyList() )
         preferencesDataSource.sendUserData( emptyUserData )
-        musicServiceConnection.shuffleAndPlay( testSongs )
+        subject.shuffleAndPlay( testSongs )
         assertEquals(
             testSongs.size,
             queueRepository.fetchSongsInQueueSortedByPosition().first().size
@@ -139,12 +143,12 @@ class MusicServiceConnectionImplTest {
         queueRepository.sendSongs( emptyList() )
         preferencesDataSource.sendUserData( emptyUserData )
         testSongs.forEach {
-            musicServiceConnection.addToQueue( it )
+            subject.addToQueue( it )
         }
         assertEquals( 0, connectable.player.currentMediaItemIndex )
-        musicServiceConnection.playNextSong()
+        subject.playNextSong()
         assertEquals( 1, connectable.player.currentMediaItemIndex )
-        musicServiceConnection.playNextSong()
+        subject.playNextSong()
         assertEquals( 2, connectable.player.currentMediaItemIndex )
     }
 
@@ -153,10 +157,10 @@ class MusicServiceConnectionImplTest {
         queueRepository.sendSongs( emptyList() )
         preferencesDataSource.sendUserData( emptyUserData )
         testSongs.forEach {
-            musicServiceConnection.addToQueue( it )
+            subject.addToQueue( it )
         }
         connectable.player.seekToNext()  // testSongs[1] is currently playing
-        musicServiceConnection.shuffleSongsInQueue()
+        subject.shuffleSongsInQueue()
         assertEquals( 0, connectable.player.currentMediaItemIndex )
         assertEquals(
             testSongs[1].id,
@@ -172,7 +176,7 @@ class MusicServiceConnectionImplTest {
     fun testClearQueue() = runTest {
         queueRepository.sendSongs( emptyList() )
         testSongs.forEach {
-            musicServiceConnection.addToQueue( it )
+            subject.addToQueue( it )
         }
         queueRepository.clearQueue()
         assertEquals( 0, connectable.player.mediaItemCount )
@@ -211,21 +215,21 @@ class MusicServiceConnectionImplTest {
         queueRepository.sendSongs( emptyList() )
         preferencesDataSource.sendUserData( emptyUserData )
         testSongs.forEach {
-            musicServiceConnection.addToQueue( it )
+            subject.addToQueue( it )
         }
         assertEquals( 0, connectable.player.currentMediaItemIndex )
 
-        musicServiceConnection.playPreviousSong()
+        subject.playPreviousSong()
         assertEquals( 0, connectable.player.currentMediaItemIndex )
 
-        musicServiceConnection.playNextSong()
-        musicServiceConnection.playNextSong()
+        subject.playNextSong()
+        subject.playNextSong()
         assertEquals( 2, connectable.player.currentMediaItemIndex )
 
-        musicServiceConnection.playPreviousSong()
+        subject.playPreviousSong()
         assertEquals( 1, connectable.player.currentMediaItemIndex )
 
-        musicServiceConnection.playPreviousSong()
+        subject.playPreviousSong()
         assertEquals( 0, connectable.player.currentMediaItemIndex )
     }
 
@@ -236,7 +240,7 @@ class MusicServiceConnectionImplTest {
         playHistoryRepository.sendSongs( testSongs )
         songsAdditionalMetadataRepository.sendMetadata(
             testSongs.map {
-                SongAdditionalMetadataInfo(
+                SongAdditionalMetadata(
                     songId = it.id,
                     codec = "",
                     bitrate = 0L,
@@ -247,16 +251,24 @@ class MusicServiceConnectionImplTest {
             }
         )
         preferencesDataSource.sendUserData( emptyUserData )
-        musicServiceConnection.playSong(
+        subject.playSong(
             song = testSongs.first(),
             songs = testSongs,
             shuffle = false
         )
-        musicServiceConnection.deleteSong( testSongs.first() )
+        subject.deleteSong( testSongs.first() )
         assertEquals(
             testSongs[1].id,
             connectable.player.currentMediaItem?.mediaId
         )
+    }
+
+    @Test
+    fun testSleepTimerIsSetCorrectly() = runTest {
+        assertNull( subject.sleepTimer.first() )
+        val timerDuration = (5000L).toDuration( DurationUnit.MILLISECONDS )
+        subject.setTimer( timerDuration )
+        assertEquals( timerDuration, subject.sleepTimer.first()?.duration )
     }
 
 }

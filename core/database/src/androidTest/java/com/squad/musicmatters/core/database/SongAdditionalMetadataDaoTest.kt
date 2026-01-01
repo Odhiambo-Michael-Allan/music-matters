@@ -1,6 +1,5 @@
 package com.squad.musicmatters.core.database
 
-import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.squad.musicmatters.core.database.dao.SongAdditionalMetadataDao
@@ -75,7 +74,7 @@ class SongAdditionalMetadataDaoTest {
     fun testObserveTable() = runTest {
         val songId1 = "song-id-1"
         val songId2 = "song-id-2"
-        assertTrue( dao.observeEntries().first().isEmpty() )
+        assertTrue( dao.fetchEntries().first().isEmpty() )
         dao.insertAll(
             listOf( songId1, songId2 ).map {
                 SongAdditionalMetadataEntity(
@@ -85,7 +84,7 @@ class SongAdditionalMetadataDaoTest {
                 )
             }
         )
-        assertEquals( 2, dao.observeEntries().first().size )
+        assertEquals( 2, dao.fetchEntries().first().size )
     }
 
     @Test
@@ -104,7 +103,7 @@ class SongAdditionalMetadataDaoTest {
         dao.deleteEntryWithId( songId1 )
         assertEquals(
             1,
-            dao.observeEntries().first().size
+            dao.fetchEntries().first().size
         )
     }
 }

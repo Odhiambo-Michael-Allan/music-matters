@@ -57,7 +57,6 @@ class PlaybackPositionUpdaterImpl @Inject constructor(
     private fun update() {
         val currentPlaybackPosition = player.getCurrentPlaybackPosition()
         _playbackPosition.value = currentPlaybackPosition
-        Log.d( TAG, "CURRENT PLAYBACK POSITION: $currentPlaybackPosition" )
         if ( periodicUpdatesStarted ) {
             handler.removeCallbacksAndMessages( null )
             handler.postDelayed( this::update, DEFAULT_PLAYBACK_POSITION_UPDATE_INTERVAL )
@@ -67,12 +66,12 @@ class PlaybackPositionUpdaterImpl @Inject constructor(
 
     override fun stopPeriodicUpdates() {
         periodicUpdatesStarted = false
-//        /**
-//         * The updates may be stopping because the player is transitioning to another media item.
-//         * If that's the case, we need to report the total duration of playback of the previous
-//         * media item and then fetch the playback position of the current media item if a
-//         * transition occurred.
-//         */
+        /**
+         * The updates may be stopping because the player is transitioning to another media item.
+         * If that's the case, we need to report the total duration of playback of the previous
+         * media item and then fetch the playback position of the current media item if a
+         * transition occurred.
+         */
         _playbackPosition.value = player.getCurrentPlaybackPosition()
         handler.removeCallbacksAndMessages( null )
     }
@@ -84,4 +83,4 @@ class PlaybackPositionUpdaterImpl @Inject constructor(
 }
 
 private const val TAG = "PLAYBACK-POSITION-UPDATER"
-const val DEFAULT_PLAYBACK_POSITION_UPDATE_INTERVAL = 1000L
+const val DEFAULT_PLAYBACK_POSITION_UPDATE_INTERVAL = 500L

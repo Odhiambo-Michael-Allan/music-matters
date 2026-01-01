@@ -53,7 +53,7 @@ import com.squad.musicmatters.core.designsystem.theme.GoogleRed
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.utils.ScreenOrientation
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -76,7 +76,7 @@ fun SongCard(
     onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onSearchSongsMatchingQuery: ( String ) -> List<Song>,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadata?,
     onDeleteSong: ( Song ) -> Unit,
 ) {
 
@@ -341,7 +341,7 @@ fun QueueSongCard(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDragHandleClick: () -> Unit,
     onDeleteSong: ( Song ) -> Unit,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadata?
 ) {
     Row (
         verticalAlignment = Alignment.CenterVertically

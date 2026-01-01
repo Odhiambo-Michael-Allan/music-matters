@@ -15,7 +15,6 @@ import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.PreviewParameterData
@@ -29,8 +28,7 @@ internal fun SongsScreen(
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri, String ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToSearch: () -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -38,7 +36,6 @@ internal fun SongsScreen(
         uiState = uiState,
         onSortReverseChange = viewModel::setSortSongsInReverse,
         onSortTypeChange = viewModel::setSortSongsBy,
-        onSettingsClicked = onNavigateToSettings,
         onShufflePlay = {
 //            viewModel.shuffleAndPlay( songs = uiState.songs )
         },
@@ -57,12 +54,8 @@ internal fun SongsScreen(
         onShareSong = {
 //            onShareSong( it, uiState.language.shareFailedX( "" ) )
         },
-        onNavigateToSearch = onNavigateToSearch,
-        onGetAdditionalMetadataForSongWithId = { songId ->
-            null
-//            uiState.songsAdditionalMetadataList.find { it.songId == songId }
-        },
-        onDeleteSong = onDeleteSong
+        onDeleteSong = onDeleteSong,
+        onShowSnackBar = onShowSnackBar,
     )
 }
 
@@ -71,7 +64,6 @@ private fun SongsScreenContent(
     uiState: SongsScreenUiState,
     onSortReverseChange: ( Boolean ) -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
-    onSettingsClicked: () -> Unit,
     onShufflePlay: () -> Unit,
     playSong: ( Song, List<Song> ) -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
@@ -82,48 +74,37 @@ private fun SongsScreenContent(
     onAddToQueue: ( Song ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onNavigateToSearch: () -> Unit,
-    onGetAdditionalMetadataForSongWithId: ( String ) -> SongAdditionalMetadataInfo?,
     onDeleteSong: ( Song ) -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
 
     when ( uiState ) {
         SongsScreenUiState.Loading -> {}
         is SongsScreenUiState.Success -> {
-
-            Column (
-                modifier = Modifier.fillMaxSize()
-            ) {
-                TopAppBar(
-                    onNavigationIconClicked = onNavigateToSearch,
-                    title = uiState.language.songs,
-                    settings = uiState.language.settings,
-                    onSettingsClicked = onSettingsClicked
-                )
-                SongList(
-                    sortReverse = uiState.sortSongsInReverse,
-                    onSortReverseChange = onSortReverseChange,
-                    sortSongsBy = uiState.sortSongsBy,
-                    onSortTypeChange = onSortTypeChange,
-                    language = uiState.language,
-                    songs = uiState.songs,
-                    playlists = uiState.playlists,
-                    onShufflePlay = onShufflePlay,
-                    currentlyPlayingSongId = uiState.currentlyPlayingSongId,
-                    playSong = playSong,
-                    isFavorite = { uiState.favoriteSongIds.contains( it ) },
-                    onFavorite = onFavorite,
-                    onViewAlbum = onViewAlbum,
-                    onViewArtist = onViewArtist,
-                    onShareSong = onShareSong,
-                    onPlayNext = onPlayNext,
-                    onAddToQueue = onAddToQueue,
-                    onAddSongsToPlaylist = onAddSongsToPlaylist,
-                    onCreatePlaylist = onCreatePlaylist,
-                    onGetAdditionalMetadataForSongWithId = onGetAdditionalMetadataForSongWithId,
-                    onDeleteSong = onDeleteSong
-                )
-            }
+            SongList(
+                sortReverse = uiState.sortSongsInReverse,
+                onSortReverseChange = onSortReverseChange,
+                sortSongsBy = uiState.sortSongsBy,
+                onSortTypeChange = onSortTypeChange,
+                language = uiState.language,
+                songs = uiState.songs,
+                playlists = uiState.playlists,
+                onShufflePlay = onShufflePlay,
+                currentlyPlayingSongId = uiState.currentlyPlayingSongId,
+                playSong = playSong,
+                songsAdditionalMetadata = uiState.songsAdditionalMetadata,
+                isFavorite = { uiState.favoriteSongIds.contains( it ) },
+                onFavorite = onFavorite,
+                onViewAlbum = onViewAlbum,
+                onViewArtist = onViewArtist,
+                onShareSong = onShareSong,
+                onPlayNext = onPlayNext,
+                onAddToQueue = onAddToQueue,
+                onAddSongsToPlaylist = onAddSongsToPlaylist,
+                onCreatePlaylist = onCreatePlaylist,
+                onDeleteSong = onDeleteSong,
+                onShowSnackBar = onShowSnackBar,
+            )
         }
     }
 }
@@ -153,7 +134,6 @@ private fun SongsScreenContentPreview() {
             ),
             onSortReverseChange = {},
             onSortTypeChange = {},
-            onSettingsClicked = {},
             onShufflePlay = {},
             playSong = { _, _ -> },
             onFavorite = { _, _ -> },
@@ -164,9 +144,8 @@ private fun SongsScreenContentPreview() {
             onAddToQueue = {},
             onAddSongsToPlaylist = { _, _ -> },
             onCreatePlaylist = { _, _ -> },
-            onNavigateToSearch = {},
-            onGetAdditionalMetadataForSongWithId = { null },
-            onDeleteSong = {}
+            onDeleteSong = {},
+            onShowSnackBar = {},
         )
     }
 }

@@ -22,7 +22,7 @@ import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.model.ThemeMode
 
@@ -33,6 +33,7 @@ fun SongList(
     language: Language,
     songs: List<Song>,
     playlists: List<Playlist>,
+    songsAdditionalMetadata: List<SongAdditionalMetadata>,
     onShufflePlay: () -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
     onSortReverseChange: ( Boolean ) -> Unit,
@@ -47,8 +48,8 @@ fun SongList(
     onPlayNext: ( Song ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetAdditionalMetadataForSongWithId: ( String ) -> SongAdditionalMetadataInfo?,
     onDeleteSong: ( Song ) -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
     leadingContent: ( LazyListScope.() -> Unit )? = null
 ) {
 
@@ -104,6 +105,7 @@ fun SongList(
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = isFavorite( songs[ index ].id ),
                             playlists = playlists,
+                            songAdditionalMetadata = songsAdditionalMetadata.find { metadata -> metadata.songId == song.id },
                             onClick = { playSong( song, songs ) },
                             onFavorite = onFavorite,
                             onPlayNext = onPlayNext,
@@ -113,10 +115,8 @@ fun SongList(
                             onShareSong = onShareSong,
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
                             onCreatePlaylist = onCreatePlaylist,
-                            onGetSongAdditionalMetadata = {
-                                onGetAdditionalMetadataForSongWithId( song.id )
-                            },
-                            onDeleteSong = onDeleteSong
+                            onDeleteSong = onDeleteSong,
+                            onShowSnackBar = onShowSnackBar,
                         )
                     }
                 }
@@ -156,6 +156,7 @@ fun SongListPreview() {
             language = English,
             songs = PreviewParameterData.songs,
             playlists = emptyList(),
+            songsAdditionalMetadata = emptyList(),
             onShufflePlay = {},
             onSortTypeChange = {},
             onSortReverseChange = {},
@@ -170,8 +171,8 @@ fun SongListPreview() {
             onAddToQueue = {},
             onAddSongsToPlaylist = { _, _ -> },
             onCreatePlaylist = { _, _ -> },
-            onGetAdditionalMetadataForSongWithId = { null },
-            onDeleteSong = {}
+            onDeleteSong = {},
+            onShowSnackBar = {},
         )
     }
 }

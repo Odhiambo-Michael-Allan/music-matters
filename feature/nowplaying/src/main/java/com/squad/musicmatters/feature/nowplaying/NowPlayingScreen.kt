@@ -1,6 +1,5 @@
 package com.squad.musicmatters.feature.nowplaying
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -10,11 +9,10 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -36,7 +34,6 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -46,12 +43,12 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.ThumbUpAlt
-import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.rounded.ThumbUpAlt
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -59,11 +56,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -75,6 +72,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -90,17 +89,42 @@ import com.squad.musicmatters.core.media.media.extensions.formatMilliseconds
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
+import com.squad.musicmatters.core.media.connection.SleepTimer
 import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.DynamicAsyncImage
 import com.squad.musicmatters.core.ui.FadeTransition
 import com.squad.musicmatters.core.ui.GenericOptionsBottomSheet
 import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
+import com.squad.musicmatters.feature.nowplaying.components.ArtistsRow
+import com.squad.musicmatters.feature.nowplaying.components.LandscapeLayout
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingBodyBottomBar
+import com.squad.musicmatters.feature.nowplaying.components.MusicMattersSeekBar
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingArtwork
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingControlButtonColors
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingControlButtonSize
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingControlButtonStyle
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingDefaultControlsLayout
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingTraditionalControlsLayout
+import com.squad.musicmatters.feature.nowplaying.components.PlayNextButton
+import com.squad.musicmatters.feature.nowplaying.components.PlayPauseButton
+import com.squad.musicmatters.feature.nowplaying.components.PlayPreviousSongButton
+import com.squad.musicmatters.feature.nowplaying.components.PortraitLayout
+import com.squad.musicmatters.feature.nowplaying.components.SleepTimerButton
+import com.squad.musicmatters.feature.nowplaying.components.emptyUserData
+import com.squad.musicmatters.feature.nowplaying.components.swipeable
 import kotlinx.coroutines.launch
+import java.util.Locale
+import java.util.Timer
+import kotlin.time.Clock
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.ExperimentalTime
+import kotlin.time.toDuration
 
 
 // Stateful
@@ -139,8 +163,6 @@ fun NowPlayingBottomScreen(
             onPausePlayButtonClick = viewModel::playPause,
             onPreviousButtonClick = viewModel::playPreviousSong,
             onPlayNext = viewModel::playNextSong,
-            onFastRewindButtonClick = viewModel::fastRewind,
-            onFastForwardButtonClick = viewModel::fastForward,
             onSeekStart = viewModel::onSeekStarted,
             onSeekEnd = viewModel::onSeekEnd,
             onArtworkClicked = { song ->
@@ -161,7 +183,6 @@ fun NowPlayingBottomScreen(
             },
             onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
             durationFormatter = { it.formatMilliseconds() },
-            onGetSongAdditionalMetadata = { null },
             onCreatePlaylist = viewModel::createPlaylist,
             onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
             onViewAlbum = onViewAlbum,
@@ -169,10 +190,12 @@ fun NowPlayingBottomScreen(
             onHideNowPlayingBottomSheet = onHideBottomSheet,
             onSwipeArtworkLeft = viewModel::playNextSong,
             onSwipeArtworkRight = viewModel::playPreviousSong,
+            onStartSleepTimer = viewModel::startSleepTimer,
+            onStopSleepTimer = viewModel::stopSleepTimer,
             onShowSnackBar = {
                 coroutineScope.launch {
                     snackBarHostState.showSnackbar(
-                        message = "Added to $it",
+                        message = it,
                         duration = SnackbarDuration.Short
                     )
                 }
@@ -194,8 +217,6 @@ private fun NowPlayingScreenContent(
     onPausePlayButtonClick: () -> Unit,
     onPreviousButtonClick: () -> Unit,
     onPlayNext: () -> Unit,
-    onFastRewindButtonClick: () -> Unit,
-    onFastForwardButtonClick: () -> Unit,
     onSeekStart: () -> Unit,
     onSeekEnd: ( Long ) -> Unit,
     onArtworkClicked: ( Song ) -> Unit,
@@ -212,13 +233,15 @@ private fun NowPlayingScreenContent(
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onHideNowPlayingBottomSheet: () -> Unit,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
     onShowSnackBar: ( String ) -> Unit,
+    onStartSleepTimer: ( Duration ) -> Unit,
+    onStopSleepTimer: () -> Unit,
 ) {
     val currentWindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val currentConfiguration = LocalConfiguration.current
     var showOptionsMenu by remember { mutableStateOf( false ) }
     var showSongDetailsDialog by remember { mutableStateOf( false ) }
+    var showSleepTimerBottomSheet by remember { mutableStateOf( false ) }
 
     when ( uiState ) {
         NowPlayingScreenUiState.Loading -> {}
@@ -245,15 +268,13 @@ private fun NowPlayingScreenContent(
                                 onPausePlayButtonClick = onPausePlayButtonClick,
                                 onPreviousButtonClick = onPreviousButtonClick,
                                 onPlayNext = onPlayNext,
-                                onFastRewindButtonClick = onFastRewindButtonClick,
-                                onFastForwardButtonClick = onFastForwardButtonClick,
                                 onNavigateToQueue = onNavigateToQueue,
                                 onToggleLoopMode = onToggleLoopMode,
                                 onToggleShuffleMode = onToggleShuffleMode,
                                 onPlayingSpeedChange = onPlayingSpeedChange,
                                 onPlayingPitchChange = onPlayingPitchChange,
-                                onGetSongAdditionalMetadata = onGetSongAdditionalMetadata,
-                                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
+                                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
+                                onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true }
                             )
                         } else {
                             LandscapeLayout(
@@ -274,15 +295,13 @@ private fun NowPlayingScreenContent(
                                 onPausePlayButtonClick = onPausePlayButtonClick,
                                 onPreviousButtonClick = onPreviousButtonClick,
                                 onPlayNext = onPlayNext,
-                                onFastRewindButtonClick = onFastRewindButtonClick,
-                                onFastForwardButtonClick = onFastForwardButtonClick,
                                 onNavigateToQueue = onNavigateToQueue,
                                 onToggleLoopMode = onToggleLoopMode,
                                 onToggleShuffleMode = onToggleShuffleMode,
                                 onPlayingSpeedChange = onPlayingSpeedChange,
                                 onPlayingPitchChange = onPlayingPitchChange,
-                                onGetSongAdditionalMetadata = onGetSongAdditionalMetadata,
-                                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
+                                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
+                                onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true }
                             )
                         }
                     }
@@ -304,15 +323,13 @@ private fun NowPlayingScreenContent(
                             onPausePlayButtonClick = onPausePlayButtonClick,
                             onPreviousButtonClick = onPreviousButtonClick,
                             onPlayNext = onPlayNext,
-                            onFastRewindButtonClick = onFastRewindButtonClick,
-                            onFastForwardButtonClick = onFastForwardButtonClick,
                             onNavigateToQueue = onNavigateToQueue,
                             onToggleLoopMode = onToggleLoopMode,
                             onToggleShuffleMode = onToggleShuffleMode,
                             onPlayingSpeedChange = onPlayingSpeedChange,
                             onPlayingPitchChange = onPlayingPitchChange,
-                            onGetSongAdditionalMetadata = onGetSongAdditionalMetadata,
-                            onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
+                            onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
+                            onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true }
                         )
                     }
                 }
@@ -389,898 +406,167 @@ private fun NowPlayingScreenContent(
                         song = song,
                         language = uiState.language,
                         durationFormatter = { it.formatMilliseconds() },
-                        isLoadingSongAdditionalMetadata = false,
-                        onGetSongAdditionalMetadata = onGetSongAdditionalMetadata
+                        metadata = uiState.songAdditionalMetadata
                     ) {
                         showSongDetailsDialog = false
                     }
                 }
-            }
-        }
-    }
 
-}
-
-@OptIn( ExperimentalLayoutApi::class )
-@Composable
-private fun PortraitLayout(
-    modifier: Modifier = Modifier,
-    uiState: NowPlayingScreenUiState.Success,
-    currentlyPlayingSong: Song,
-    playbackPosition: PlaybackPosition,
-    durationFormatter: ( Long ) -> String,
-    onFavorite: ( Song, Boolean ) -> Unit,
-    onArtworkSwipedLeft: () -> Unit,
-    onArtworkSwipedRight: () -> Unit,
-    onArtworkSwipedDown: () -> Unit,
-    onArtworkClicked: ( Song ) -> Unit,
-    onArtistClicked: ( String ) -> Unit,
-    onShowOptionsMenu: () -> Unit,
-    onSeekStart: () -> Unit,
-    onSeekEnd: ( Long ) -> Unit,
-    onPausePlayButtonClick: () -> Unit,
-    onPreviousButtonClick: () -> Unit,
-    onPlayNext: () -> Unit,
-    onFastRewindButtonClick: () -> Unit,
-    onFastForwardButtonClick: () -> Unit,
-    onNavigateToQueue: () -> Unit,
-    onToggleLoopMode: ( LoopMode ) -> Unit,
-    onToggleShuffleMode: ( Boolean ) -> Unit,
-    onPlayingSpeedChange: ( Float ) -> Unit,
-    onPlayingPitchChange: ( Float ) -> Unit,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
-    onCreateEqualizerActivityContract: () -> Unit,
-) {
-    Column (
-        modifier = modifier
-            .fillMaxSize()
-            .padding( 20.dp )
-            .verticalScroll( rememberScrollState() ),
-        verticalArrangement = Arrangement.Center
-    ) {
-        NowPlayingArtwork(
-            modifier = Modifier
-                .fillMaxWidth(),
-            artworkUri = currentlyPlayingSong.artworkUri?.toUri(),
-            onSwipeLeft = onArtworkSwipedLeft,
-            onSwipeRight = onArtworkSwipedRight,
-            onSwipeDown = onArtworkSwipedDown,
-            onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
-        )
-        Row {
-            AnimatedContent(
-                modifier = Modifier.weight( 1f ),
-                label = "now-playing-body-content",
-                targetState = currentlyPlayingSong,
-                transitionSpec = {
-                    FadeTransition.enterTransition()
-                        .togetherWith( FadeTransition.exitTransition() )
-                }
-            ) { target ->
-                Column (
-                    modifier = Modifier.padding( 0.dp, 16.dp )
-                ) {
-                    Text(
-                        text = target.title,
-                        style = MaterialTheme.typography.titleLarge
-                            .copy( fontWeight = FontWeight.Bold ),
-                        maxLines = 1,
-                        modifier = Modifier.basicMarquee( iterations = Int.MAX_VALUE )
-                    )
-                    ArtistsRow(
-                        artists = target.artists,
-                        onArtistClicked = onArtistClicked
-                    )
-                    if ( uiState.userData.showNowPlayingAudioInformation ) {
-                        onGetSongAdditionalMetadata()?.let {
-                            Text(
-                                text = it.toSamplingInfoString( uiState.language ),
-                                style = MaterialTheme.typography.labelSmall
-                                    .copy( color = LocalContentColor.current.copy( alpha = 0.7f ) ),
-                                maxLines = 3,
-                            )
-                        } ?: run {
-                            Row (
-                                modifier = Modifier.padding( top = 8.dp, bottom = 4.dp ),
-                                horizontalArrangement = Arrangement.spacedBy( 4.dp ),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                CircularProgressIndicator(
-                                    strokeWidth = 2.dp,
-                                    modifier = Modifier.size( 12.dp )
-                                )
-                                Text(
-                                    text = uiState.language.loading,
-                                    style = MaterialTheme.typography.labelMedium
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            Row (
-                modifier = Modifier.padding( 0.dp, 16.dp )
-            ) {
-                IconButton(
-                    modifier = Modifier.offset( 4.dp ),
-                    onClick = {
-                        onFavorite(
-                            currentlyPlayingSong,
-                            !uiState.currentlyPlayingSongIsFavorite
-                        )
-                    }
-                ) {
-                    AnimatedContent(
-                        targetState = uiState.currentlyPlayingSongIsFavorite,
-                        label = "now-playing-screen-is-favorite-icon"
+                if ( showSleepTimerBottomSheet ) {
+                    ModalBottomSheet(
+                        onDismissRequest = { showSleepTimerBottomSheet = false }
                     ) {
-                        Icon(
-                            imageVector = if ( it ) {
-                                Icons.Rounded.ThumbUpAlt
-                            } else {
-                                Icons.Outlined.ThumbUpAlt
+                        val sleepTimerStartedMessage = stringResource(
+                            id = R.string.feature_nowplaying_sleep_timer_set
+                        )
+                        val sleepTimerStoppedMessage = stringResource(
+                            id = R.string.feature_nowplaying_sleep_timer_off
+                        )
+                        SleepTimerDialogContent(
+                            sleepTimer = uiState.sleepTimer,
+                            onStartSleepTimer = {
+                                onStartSleepTimer( it )
+                                onShowSnackBar( sleepTimerStartedMessage )
                             },
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
+                            onStartTimerToEndOfCurrentSong = {
+                                val duration = playbackPosition.total.minus(
+                                    playbackPosition.played
+                                )
+                                onStartSleepTimer(
+                                    duration.toDuration( DurationUnit.MILLISECONDS )
+                                )
+                                onShowSnackBar( sleepTimerStartedMessage )
+                            },
+                            onStopSleepTimer = {
+                                onStopSleepTimer()
+                                onShowSnackBar( sleepTimerStoppedMessage )
+                            },
+                            onDismissRequest = { showSleepTimerBottomSheet = false },
                         )
-
                     }
-                }
-                IconButton(
-                    onClick = onShowOptionsMenu
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.MoreVert,
-                        contentDescription = null
-                    )
                 }
             }
         }
-        NowPlayingSeekBar(
-            playbackPosition = playbackPosition,
-            durationFormatter = durationFormatter,
-            onSeekStart = onSeekStart,
-            onSeekEnd = onSeekEnd
-        )
-        Spacer( modifier = Modifier.height( 28.dp ) )
-        when {
-            uiState.userData.controlsLayoutDefault ->
-                NowPlayingDefaultControlsLayout(
-                    isPlaying = uiState.playerState.isPlaying,
-                    enableSeekControls = uiState.userData.showNowPlayingSeekControls,
-                    onPausePlayButtonClick = onPausePlayButtonClick,
-                    onPreviousButtonClick = onPreviousButtonClick,
-                    onFastRewindButtonClick = onFastRewindButtonClick,
-                    onFastForwardButtonClick = onFastForwardButtonClick,
-                    onNextButtonClick = onPlayNext,
-                    onNavigateToQueue = onNavigateToQueue,
-                )
-            else ->
-                NowPlayingTraditionalControlsLayout(
-                    enableSeekControls = uiState.userData.showNowPlayingSeekControls,
-                    isPlaying = uiState.playerState.isPlaying,
-                    onPreviousButtonClick = onPreviousButtonClick,
-                    onFastRewindButtonClick = onFastRewindButtonClick,
-                    onPausePlayButtonClick = onPausePlayButtonClick,
-                    onFastForwardButtonClick = onFastForwardButtonClick,
-                    onNextButtonClick = onPlayNext,
-                    onNavigateToQueue = onNavigateToQueue,
-                )
-        }
-        Spacer( modifier = Modifier.height( 16.dp ) )
-        NowPlayingBodyBottomBar(
-            language = uiState.language,
-            currentLoopMode = uiState.userData.loopMode,
-            shuffle = uiState.userData.shuffle,
-            currentSpeed = uiState.userData.playbackSpeed,
-            currentPitch = uiState.userData.playbackPitch,
-            onToggleLoopMode = onToggleLoopMode,
-            onToggleShuffleMode = onToggleShuffleMode,
-            onSpeedChange = onPlayingSpeedChange,
-            onPitchChange = onPlayingPitchChange,
-            onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
-        )
     }
+
 }
 
 
 
-@OptIn( ExperimentalLayoutApi::class )
-@Composable
-private fun LandscapeLayout(
-    modifier: Modifier = Modifier,
-    uiState: NowPlayingScreenUiState.Success,
-    currentlyPlayingSong: Song,
-    playbackPosition: PlaybackPosition,
-    durationFormatter: ( Long ) -> String,
-    onFavorite: ( Song, Boolean ) -> Unit,
-    onSwipeArtworkLeft: () -> Unit,
-    onSwipeArtworkRight: () -> Unit,
-    onArtworkClicked: ( Song ) -> Unit,
-    onArtistClicked: ( String ) -> Unit,
-    onArtworkSwipedDown: () -> Unit,
-    onShowOptionsMenu: () -> Unit,
-    onSeekStart: () -> Unit,
-    onSeekEnd: ( Long ) -> Unit,
-    onPausePlayButtonClick: () -> Unit,
-    onPreviousButtonClick: () -> Unit,
-    onPlayNext: () -> Unit,
-    onFastRewindButtonClick: () -> Unit,
-    onFastForwardButtonClick: () -> Unit,
-    onNavigateToQueue: () -> Unit,
-    onToggleLoopMode: ( LoopMode ) -> Unit,
-    onToggleShuffleMode: ( Boolean ) -> Unit,
-    onPlayingSpeedChange: ( Float ) -> Unit,
-    onPlayingPitchChange: ( Float ) -> Unit,
-    onCreateEqualizerActivityContract: () -> Unit,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadataInfo?,
-) {
-    Row (
-        modifier = modifier
-            .fillMaxSize()
-            .padding( 20.dp ),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        NowPlayingArtwork(
-            artworkUri = currentlyPlayingSong.artworkUri?.toUri(),
-            onSwipeLeft = onSwipeArtworkLeft,
-            onSwipeRight = onSwipeArtworkRight,
-            onSwipeDown = onArtworkSwipedDown,
-            onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
-        )
-        Spacer( modifier = Modifier.width( 16.dp ) )
-        Column {
-            Row {
-                AnimatedContent(
-                    modifier = Modifier.weight( 1f ),
-                    label = "now-playing-body-content",
-                    targetState = currentlyPlayingSong,
-                    transitionSpec = {
-                        FadeTransition.enterTransition()
-                            .togetherWith( FadeTransition.exitTransition() )
-                    }
-                ) { target ->
-                    Column (
-                        modifier = Modifier.padding( 16.dp, 16.dp )
-                    ) {
-                        Text(
-                            text = target.title,
-                            style = MaterialTheme.typography.titleLarge
-                                .copy( fontWeight = FontWeight.Bold ),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        ArtistsRow(
-                            artists = target.artists,
-                            onArtistClicked = onArtistClicked
-                        )
-                    if ( uiState.userData.showNowPlayingAudioInformation ) {
-                        onGetSongAdditionalMetadata()?.let {
-                            Text(
-                                text = it.toSamplingInfoString( uiState.language ),
-                                style = MaterialTheme.typography.labelSmall
-                                    .copy( color = LocalContentColor.current.copy( alpha = 0.7f ) ),
-                            )
-                        } ?: run {
-                            Row (
-                                modifier = Modifier.padding( top = 8.dp, bottom = 4.dp ),
-                                horizontalArrangement = Arrangement.spacedBy( 4.dp ),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                CircularProgressIndicator(
-                                    strokeWidth = 2.dp,
-                                    modifier = Modifier.size( 12.dp )
-                                )
-                                Text(
-                                    text = uiState.language.loading,
-                                    style = MaterialTheme.typography.labelMedium
-                                )
-                            }
-                        }
-                    }
-                    }
-                }
-                Row (
-                    modifier = Modifier.padding( 0.dp, 16.dp )
-                ) {
-                    IconButton(
-                        modifier = Modifier.offset( 4.dp ),
-                        onClick = {
-                            onFavorite(
-                                currentlyPlayingSong,
-                                !uiState.currentlyPlayingSongIsFavorite
-                            )
-                        }
-                    ) {
-                        AnimatedContent(
-                            targetState = uiState.currentlyPlayingSongIsFavorite,
-                            label = "now-playing-screen-is-favorite-icon"
-                        ) {
-                            Icon(
-                                imageVector = if ( it ) {
-                                    MusicMattersIcons.Favorite
-                                } else {
-                                    MusicMattersIcons.FavoriteBorder
-                                },
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    }
-                    IconButton(
-                        onClick = onShowOptionsMenu
-                    ) {
-                        Icon(
-                            imageVector = MusicMattersIcons.MoreVertical,
-                            contentDescription = null
-                        )
-                    }
-                }
-            }
-            Spacer( modifier = Modifier.height( 24.dp ) )
-            NowPlayingSeekBar(
-                playbackPosition = playbackPosition,
-                durationFormatter = durationFormatter,
-                onSeekStart = onSeekStart,
-                onSeekEnd = onSeekEnd
-            )
-            Spacer( modifier = Modifier.height( 24.dp ) )
-            when {
-                uiState.userData.controlsLayoutDefault ->
-                    NowPlayingDefaultControlsLayout(
-                        isPlaying = uiState.playerState.isPlaying,
-                        enableSeekControls = uiState.userData.showNowPlayingSeekControls,
-                        onPausePlayButtonClick = onPausePlayButtonClick,
-                        onPreviousButtonClick = onPreviousButtonClick,
-                        onFastRewindButtonClick = onFastRewindButtonClick,
-                        onFastForwardButtonClick = onFastForwardButtonClick,
-                        onNextButtonClick = onPlayNext,
-                        onNavigateToQueue = onNavigateToQueue,
-                    )
-                else ->
-                    NowPlayingTraditionalControlsLayout(
-                        enableSeekControls = uiState.userData.showNowPlayingSeekControls,
-                        isPlaying = uiState.playerState.isPlaying,
-                        onPreviousButtonClick = onPreviousButtonClick,
-                        onFastRewindButtonClick = onFastRewindButtonClick,
-                        onPausePlayButtonClick = onPausePlayButtonClick,
-                        onFastForwardButtonClick = onFastForwardButtonClick,
-                        onNextButtonClick = onPlayNext,
-                        onNavigateToQueue = onNavigateToQueue,
-                    )
-            }
-            Spacer( modifier = Modifier.height( 16.dp ) )
-            NowPlayingBodyBottomBar(
-                language = uiState.language,
-                currentLoopMode = uiState.userData.loopMode,
-                shuffle = uiState.userData.shuffle,
-                currentSpeed = uiState.userData.playbackSpeed,
-                currentPitch = uiState.userData.playbackPitch,
-                onToggleLoopMode = onToggleLoopMode,
-                onToggleShuffleMode = onToggleShuffleMode,
-                onSpeedChange = onPlayingSpeedChange,
-                onPitchChange = onPlayingPitchChange,
-                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
-            )
-            Spacer( modifier = Modifier.size( 32.dp ) )
-        }
-    }
-}
 
+
+@OptIn( ExperimentalTime::class )
 @Composable
-private fun NowPlayingArtwork(
+private fun SleepTimerDialogContent(
     modifier: Modifier = Modifier,
-    artworkUri: Uri?,
-    onSwipeLeft: () -> Unit,
-    onSwipeRight: () -> Unit,
-    onSwipeDown: () -> Unit,
-    onArtworkClicked: () -> Unit
+    sleepTimer: SleepTimer?,
+    onStartSleepTimer: (Duration ) -> Unit,
+    onStopSleepTimer: () -> Unit,
+    onStartTimerToEndOfCurrentSong: () -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
-    Box(
-        modifier = modifier
+
+    Column(
+        modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
     ) {
-        AnimatedContent(
-            modifier = Modifier.align( Alignment.Center ),
-            label = "now-playing-artwork",
-            targetState = artworkUri,
-            transitionSpec = {
-                FadeTransition.enterTransition()
-                    .togetherWith( FadeTransition.exitTransition() )
-            }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 8.dp),
         ) {
-            DynamicAsyncImage(
-                imageUri = it,
-                contentDescription = "now-playing-artwork",
-                modifier = Modifier
-                    .sizeIn( maxWidth = 500.dp, maxHeight = 500.dp )
-                    .aspectRatio( 1f )
-                    .clip( MaterialTheme.shapes.medium )
-                    .swipeable(
-                        minimumDragAmount = 100f,
-                        onSwipeLeft = onSwipeLeft,
-                        onSwipeRight = onSwipeRight,
-                        onSwipeDown = onSwipeDown,
-                    )
-                    .pointerInput(Unit) {
-                        detectTapGestures { _ -> onArtworkClicked() }
-                    }
-            )
-        }
-    }
-}
-
-@OptIn( ExperimentalLayoutApi::class )
-@Composable
-private fun ArtistsRow(
-    artists: Set<String>,
-    onArtistClicked: ( String ) -> Unit,
-) {
-    FlowRow(
-        maxLines = 1,
-        modifier = Modifier.basicMarquee( Int.MAX_VALUE ),
-    ) {
-        artists.forEachIndexed { index, it ->
             Text(
-                text = it,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.7f ),
-                modifier = Modifier.pointerInput( Unit ) {
-                    detectTapGestures { _ ->
-                        onArtistClicked( it )
+                text = sleepTimer?.let {
+                    val now = Clock.System.now().toEpochMilliseconds().toDuration( DurationUnit.MILLISECONDS )
+                    val durationLeft = it.endsAt.minus( now )
+                    buildString {
+                        append(
+                            durationFormatted(
+                                duration = durationLeft
+                            )
+
+                        )
+                        append( " " )
+                        append( stringResource( id = R.string.feature_nowplaying_left ) )
                     }
-                }
-            )
-            if ( index != artists.size - 1 ) Text( text = ", " )
-        }
-    }
-}
-
-@Composable
-private fun NowPlayingDefaultControlsLayout(
-    isPlaying: Boolean,
-    enableSeekControls: Boolean,
-    onPausePlayButtonClick: () -> Unit,
-    onPreviousButtonClick: () -> Unit,
-    onFastRewindButtonClick: () -> Unit,
-    onFastForwardButtonClick: () -> Unit,
-    onNextButtonClick: () -> Unit,
-    onNavigateToQueue: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp, 0.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy( 12.dp ),
-    ) {
-        PlayPauseButton(
-            style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Primary,
-                size = NowPlayingControlButtonSize.ExtraLarge
-            ),
-            isPlaying = isPlaying,
-            onClick = onPausePlayButtonClick
-        )
-        PlayPreviousSongButton(
-            style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent,
-                size = NowPlayingControlButtonSize.Large
-            ),
-            onClick = onPreviousButtonClick
-        )
-        PlayNextButton(
-            style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent,
-                size = NowPlayingControlButtonSize.Large
-            ),
-            onClick = onNextButtonClick
-        )
-        Spacer( modifier = Modifier.weight(0.8f ) )
-        IconButton(
-            onClick = {}
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Timer,
-                contentDescription = null,
+                } ?: stringResource( id = R.string.feature_nowplaying_sleep_timer ),
+                fontWeight = FontWeight.SemiBold,
             )
         }
-        IconButton(
-            onClick = onNavigateToQueue
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Rounded.PlaylistPlay,
-                contentDescription = null,
-            )
-        }
-    }
-}
-
-@Composable
-private fun NowPlayingTraditionalControlsLayout(
-    enableSeekControls: Boolean,
-    isPlaying: Boolean,
-    onPreviousButtonClick: () -> Unit,
-    onFastRewindButtonClick: () -> Unit,
-    onPausePlayButtonClick: () -> Unit,
-    onFastForwardButtonClick: () -> Unit,
-    onNextButtonClick: () -> Unit,
-    onNavigateToQueue: () -> Unit,
-) {
-    Row (
-        modifier = Modifier
-            .padding(16.dp, 0.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        IconButton(
-            onClick = onNavigateToQueue,
-        ) {
-            Icon(
-                imageVector = MusicMattersIcons.Queue,
-                contentDescription = null,
-            )
-        }
-        Spacer( modifier = Modifier.weight( 0.5f ) )
-        PlayPreviousSongButton(
-            style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent,
-                size = NowPlayingControlButtonSize.Large
-            ),
-            onClick = onPreviousButtonClick
+        HorizontalDivider(
+            thickness = 1.5.dp,
+            modifier = Modifier.padding( 8.dp )
         )
-        Spacer( modifier = Modifier.width( 8.dp ) )
-        PlayPauseButton(
-            style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Primary,
-                size = NowPlayingControlButtonSize.ExtraLarge
-            ),
-            isPlaying = isPlaying,
-            onClick = onPausePlayButtonClick
-        )
-        Spacer( modifier = Modifier.width( 8.dp ) )
-        PlayNextButton(
-            style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Transparent,
-                size = NowPlayingControlButtonSize.Large
-            ),
-            onClick = onNextButtonClick
-        )
-        Spacer( modifier = Modifier.weight( 0.5f ) )
-        IconButton(
-            onClick = {}
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Timer,
-                contentDescription = null,
-            )
-        }
-
-    }
-}
-
-@Composable
-private fun NowPlayingSeekBar(
-    modifier: Modifier = Modifier,
-    playbackPosition: PlaybackPosition,
-    durationFormatter: (Long ) -> String,
-    onSeekStart: () -> Unit,
-    onSeekEnd: ( Long ) -> Unit
-) {
-
-    Column( modifier = modifier ) {
-        var seekRatio by remember { mutableStateOf<Float?>( null ) }
-
-        NowPlayingSeekBar(
-            playbackPosition = playbackPosition,
-            onSeekStart = {
-                seekRatio = 0f
-                onSeekStart()
-            },
-            onSeek = { seekRatio = it },
-            onSeekEnd = {
-                onSeekEnd( ( it * playbackPosition.total ).toLong() )
-                seekRatio = null
-            },
-            onSeekCancel = { seekRatio = null }
-        )
-        Spacer( modifier = Modifier.height( 2.dp ) )
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            NowPlayingPlaybackPositionText(
-                durationFormatter = durationFormatter,
-                duration = seekRatio?.let { it * playbackPosition.total }?.toLong()
-                    ?: playbackPosition.played,
-                alignment = Alignment.CenterStart
-            )
-
-            NowPlayingPlaybackPositionText(
-                durationFormatter = durationFormatter,
-                duration = playbackPosition.total,
-                alignment = Alignment.CenterEnd
-            )
-        }
-    }
-
-}
-
-@SuppressLint( "UnusedBoxWithConstraintsScope" )
-@Composable
-private fun NowPlayingSeekBar(
-    playbackPosition: PlaybackPosition,
-    onSeekStart: () -> Unit,
-    onSeek: ( Float ) -> Unit,
-    onSeekEnd: (Float ) -> Unit,
-    onSeekCancel: () -> Unit
-) {
-    val sliderHeight = 12.dp
-    val thumbSize = 12.dp
-    val thumbSizeHalf = thumbSize.div( 2 )
-    val trackHeight = 4.dp
-
-    var dragging by remember { mutableStateOf( false ) }
-    var dragRatio by remember { mutableFloatStateOf( 0f ) }
-
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(sliderHeight),
-        contentAlignment = Alignment.Center
-    ) {
-        val sliderWidth = maxWidth
-
-        Box(
-            modifier = Modifier
-                .height(sliderHeight)
-                .fillMaxWidth()
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = { offset ->
-                            onSeekStart()
-                            val tapRatio = (offset.x / sliderWidth.toPx()).coerceIn(0f..1f)
-                            onSeekEnd(tapRatio)
-                        }
+        SLEEP_TIMER_VALUES.forEach {
+            ListItem(
+                headlineContent = {
+                    Text(
+                        text = durationFormatted( it ),
+                        fontWeight = FontWeight.SemiBold,
                     )
+                },
+                modifier = Modifier.clickable {
+                    onStartSleepTimer( it )
+                    onDismissRequest()
                 }
-                .pointerInput(Unit) {
-                    var offsetX = 0f
-                    detectHorizontalDragGestures(
-                        onDragStart = { offset ->
-                            offsetX = offset.x
-                            dragging = true
-                            onSeekStart()
-                        },
-                        onDragEnd = {
-                            onSeekEnd(dragRatio)
-                            offsetX = 0f
-                            dragging = false
-                            dragRatio = 0f
-                        },
-                        onDragCancel = {
-                            onSeekCancel()
-                            offsetX = 0f
-                            dragging = false
-                            dragRatio = 0f
-                        },
-                        onHorizontalDrag = { pointer, dragAmount ->
-                            pointer.consume()
-                            offsetX += dragAmount
-                            dragRatio = (offsetX / sliderWidth.toPx()).coerceIn(0f..1f)
-                            onSeek(dragRatio)
-                        }
-                    )
-                }
-        )
-        Box(
-            modifier = Modifier
-                .height(trackHeight)
-                .fillMaxWidth()
-                .background(
-                    MaterialTheme.colorScheme.surfaceVariant,
-                    RoundedCornerShape(thumbSizeHalf)
+            )
+        }
+        ListItem(
+            headlineContent = {
+                Text(
+                    text = stringResource( id = R.string.feature_nowplaying_end_of_episode ),
+                    fontWeight = FontWeight.SemiBold
                 )
-        ) {
-            Box(
-                modifier = Modifier
-                    .height(trackHeight)
-                    .fillMaxWidth(playbackPosition.bufferedRatio)
-                    .background(
-                        MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                        RoundedCornerShape(thumbSizeHalf)
-                    )
-            )
-            Box(
-                modifier = Modifier
-                    .height(trackHeight)
-                    .fillMaxWidth(if (dragging) dragRatio else playbackPosition.playedRatio)
-                    .background(
-                        MaterialTheme.colorScheme.primary,
-                        RoundedCornerShape(thumbSizeHalf)
-                    )
-            )
-        }
-        Box( modifier = Modifier.fillMaxWidth() ) {
-            Box(
-                modifier = Modifier
-                    .size(thumbSize)
-                    .offset(
-                        sliderWidth
-                            .minus(thumbSizeHalf.times(2))
-                            .times(if (dragging) dragRatio else playbackPosition.playedRatio),
-                        0.dp
-                    )
-                    .background(MaterialTheme.colorScheme.primary, CircleShape)
-            )
-        }
-    }
-}
-
-@Composable
-private fun NowPlayingPlaybackPositionText(
-    duration: Long,
-    durationFormatter: ( Long ) -> String,
-    alignment: Alignment
-) {
-    val textStyle = MaterialTheme.typography.labelMedium
-    val durationFormatted = durationFormatter( duration )
-
-    Box( contentAlignment = alignment ) {
-        Text(
-            text = "0".repeat( durationFormatted.length ),
-            style = textStyle.copy(
-                color = Color.Transparent,
-                fontWeight = FontWeight.SemiBold
-            )
-        )
-        Text(
-            text = durationFormatted,
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.SemiBold
-        )
-    }
-}
-
-@Composable
-private fun NowPlayingFastForwardButton(
-    style: NowPlayingControlButtonStyle,
-    onClick: () -> Unit
-) {
-    NowPlayingControlButton(
-        style = style,
-        icon = MusicMattersIcons.FastForward,
-        roundedCornerSizeDp = 30.dp
-    ) {
-        onClick()
-    }
-}
-
-@Composable
-private fun NowPlayingFastRewindButton(
-    style: NowPlayingControlButtonStyle,
-    onClick: () -> Unit
-) {
-    NowPlayingControlButton(
-        style = style,
-        icon = MusicMattersIcons.FastRewind,
-        roundedCornerSizeDp = 30.dp
-    ) {
-        onClick()
-    }
-}
-
-@Composable
-private fun PlayNextButton(
-    style: NowPlayingControlButtonStyle,
-    onClick: () -> Unit
-) {
-    NowPlayingControlButton(
-        style = style,
-        icon = MusicMattersIcons.PlayNext,
-        roundedCornerSizeDp = 30.dp
-    ) {
-        onClick()
-    }
-}
-
-@Composable
-private fun PlayPreviousSongButton(
-    style: NowPlayingControlButtonStyle,
-    onClick: () -> Unit
-) {
-    NowPlayingControlButton(
-        style = style,
-        icon = MusicMattersIcons.PlayPrevious,
-        roundedCornerSizeDp = 30.dp
-    ) {
-        onClick()
-    }
-}
-
-@Composable
-private fun PlayPauseButton(
-    style: NowPlayingControlButtonStyle,
-    isPlaying: Boolean,
-    onClick: () -> Unit
-) {
-    AnimatedContent(
-        targetState = isPlaying,
-        label = "now-playing-play-pause-button"
-    ) {
-        NowPlayingControlButton(
-            modifier = Modifier.size( 60.dp ),
-            style = style,
-            icon = if ( it ) {
-                MusicMattersIcons.Pause
-            } else {
-                MusicMattersIcons.Play
             },
-            roundedCornerSizeDp = 24.dp
-        ) {
-            onClick()
+            modifier = Modifier.clickable {
+                onStartTimerToEndOfCurrentSong()
+                onDismissRequest()
+            }
+        )
+        sleepTimer?.let {
+            ListItem(
+                headlineContent = {
+                    Text(
+                        text = stringResource( id = R.string.feature_nowplaying_turn_off_timer ),
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                },
+                modifier = Modifier.clickable {
+                    onStopSleepTimer()
+                    onDismissRequest()
+                }
+            )
         }
     }
 }
 
 @Composable
-private fun NowPlayingControlButton(
-    modifier: Modifier = Modifier,
-    style: NowPlayingControlButtonStyle,
-    icon: ImageVector,
-    roundedCornerSizeDp: Dp,
-    onClick: () -> Unit
-) {
-    val backgroundColor = when ( style.color ) {
-        NowPlayingControlButtonColors.Primary -> MaterialTheme.colorScheme.primary
-        NowPlayingControlButtonColors.Surface -> MaterialTheme.colorScheme.surfaceVariant
-        NowPlayingControlButtonColors.Transparent -> Color.Transparent
+private fun durationFormatted( duration: Duration ): String =
+    duration.toComponents { hours, minutes, seconds, _ ->
+        when {
+            hours > 0 -> {
+                if ( minutes > 0 ) {
+                    String.format( Locale.getDefault(), "%d hr %02d min", hours, minutes )
+                }
+                else {
+                    String.format( Locale.getDefault(), "%d hr", hours )
+                }
+            }
+            minutes > 0 -> String.format( Locale.getDefault(), "%d min", minutes )
+            else -> String.format( Locale.getDefault(), "%d sec", seconds )
+        }
     }
-    val contentColor = when ( style.color ) {
-        NowPlayingControlButtonColors.Primary -> MaterialTheme.colorScheme.onPrimary
-        else -> LocalContentColor.current
-    }
-    val iconSize = when ( style.size ) {
-        NowPlayingControlButtonSize.Default -> 24.dp
-        NowPlayingControlButtonSize.Large -> 32.dp
-        NowPlayingControlButtonSize.ExtraLarge -> 36.dp
-    }
-    IconButton(
-        modifier = modifier
-            .background(
-                backgroundColor,
-                RoundedCornerShape( roundedCornerSizeDp )
-            ),
-        onClick = onClick
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = contentColor,
-            modifier = Modifier.size( iconSize )
-        )
-    }
-}
 
-private data class NowPlayingControlButtonStyle(
-    val color: NowPlayingControlButtonColors,
-    val size: NowPlayingControlButtonSize = NowPlayingControlButtonSize.Default
+private val SLEEP_TIMER_VALUES = setOf(
+    5L.toDuration(DurationUnit.MINUTES ),
+    10L.toDuration( DurationUnit.MINUTES ),
+    15L.toDuration( DurationUnit.MINUTES ),
+    30L.toDuration( DurationUnit.MINUTES ),
+    45L.toDuration( DurationUnit.MINUTES ),
+    1L.toDuration( DurationUnit.HOURS )
 )
-
-private enum class NowPlayingControlButtonColors {
-    Primary,
-    Surface,
-    Transparent
-}
-
-private enum class NowPlayingControlButtonSize {
-    Default,
-    Large,
-    ExtraLarge,
-}
 
 
 @DevicePreviews
@@ -1299,7 +585,7 @@ private fun NowPlayingScreenContentPreview() {
                     miniPlayerShowTrackControls = false,
                     controlsLayoutDefault = false,
                     showNowPlayingSeekControls = true,
-                    loopMode = LoopMode.Queue
+                    loopMode = LoopMode.Queue,
                 ),
                 queue = listOf(
                     Song(
@@ -1326,17 +612,27 @@ private fun NowPlayingScreenContentPreview() {
                     isBuffering = false,
                 ),
                 playlists = emptyList(),
-                songsAdditionalMetadataList = emptyList(),
+                songAdditionalMetadata = SongAdditionalMetadata(
+                    songId = "",
+                    codec = "mp3",
+                    bitrate = 0,
+                    samplingRate = 0f,
+                    bitsPerSample = 0,
+                    genre = "Hip-Hop"
+                ),
+                sleepTimer = SleepTimer(
+                    duration = 300000L.toDuration( DurationUnit.MILLISECONDS ),
+                    endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS ),
+                    timer = Timer()
+                )
             ),
             playbackPosition = PlaybackPosition( 2L, 3L, 5L ),
             durationFormatter = { "05:33" },
             onArtistClicked = {},
             onFavorite = { _, _ -> },
-            onPausePlayButtonClick = { /*TODO*/ },
-            onPreviousButtonClick = { /*TODO*/ },
-            onPlayNext = { /*TODO*/ },
-            onFastRewindButtonClick = { /*TODO*/ },
-            onFastForwardButtonClick = { /*TODO*/ },
+            onPausePlayButtonClick = {},
+            onPreviousButtonClick = {},
+            onPlayNext = {},
             onSeekEnd = {},
             onArtworkClicked = {},
             onSwipeArtworkLeft = {},
@@ -1359,8 +655,9 @@ private fun NowPlayingScreenContentPreview() {
             onViewAlbum = {},
             onViewArtist = {},
             onHideNowPlayingBottomSheet = {},
-            onGetSongAdditionalMetadata = { null },
             onShowSnackBar = {},
+            onStopSleepTimer = {},
+            onStartSleepTimer = {},
         )
     }
 }

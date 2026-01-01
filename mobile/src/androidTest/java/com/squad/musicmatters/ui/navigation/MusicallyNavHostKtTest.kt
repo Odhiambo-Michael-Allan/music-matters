@@ -1,38 +1,5 @@
 package com.squad.musicmatters.ui.navigation
 
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.hasContentDescription
-import androidx.compose.ui.test.hasParent
-import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.printToLog
-import androidx.navigation.compose.ComposeNavigator
-import androidx.navigation.testing.TestNavHostController
-import com.squad.musicmatters.core.media.connection.MusicServiceConnection
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
-import com.squad.musicmatters.core.data.search.SearchHistoryRepository
-import com.squad.musicmatters.core.testing.connection.TestMusicServiceConnection
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.data.FakeSearchHistoryRepository
-import com.squad.musicmatters.navigation.Albums
-import com.squad.musicmatters.navigation.Artists
-import com.squad.musicmatters.navigation.ForYou
-import com.squad.musicmatters.navigation.Genres
-import com.squad.musicmatters.navigation.Library
-import com.squad.musicmatters.navigation.MusicMattersNavHost
-import com.squad.musicmatters.navigation.Playlists
-import com.squad.musicmatters.navigation.Songs
-import com.squad.musicmatters.navigation.Tree
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-
 //class MusicallyNavHostKtTest {
 //
 //    @get:Rule
