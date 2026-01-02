@@ -49,7 +49,29 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> =
-        flow { songsStore.fetchLyricsFor( song ) }
+    override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> = callbackFlow {
+        if ( song == null ) {
+            trySend( emptyList() )
+            close()
+            return@callbackFlow
+        }
+
+        suspend fun load() {
+            val result = songsStore.fetchLyricsFor( song )
+            trySend( result )
+        }
+
+        val listener = object : SongsStoreListener {
+            override fun onMediaStoreChanged() {
+                // Re-read the file if the media store notifies of a change
+                launch { load() }
+            }
+        }
+
+        songsStore.registerListener( listener )
+        launch { load() } // Initial load
+
+        awaitClose { songsStore.unregisterListener( listener ) }
+    }
 
 }

@@ -11,6 +11,7 @@ import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
 import com.squad.musicmatters.core.testing.repository.TestPreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.TestQueueRepository
 import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.testing.repository.TestSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +38,7 @@ class NowPlayingScreenViewModelTest {
     private lateinit var playbackPositionUpdater: TestPlaybackPositionUpdater
     private lateinit var metadataRepository: TestSongsAdditionalMetadataRepository
     private lateinit var queueRepository: TestQueueRepository
+    private lateinit var songsRepository: TestSongsRepository
     private lateinit var preferencesDataSource: TestPreferencesDataSource
 
     @Before
@@ -54,6 +56,7 @@ class NowPlayingScreenViewModelTest {
             playbackPositionUpdater = playbackPositionUpdater,
             songsAdditionalMetadataRepository = metadataRepository,
             queueRepository = queueRepository,
+            songsRepository = songsRepository,
         )
     }
 

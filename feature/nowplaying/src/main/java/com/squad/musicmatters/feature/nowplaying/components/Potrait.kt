@@ -8,16 +8,19 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -34,6 +37,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
@@ -46,11 +50,15 @@ import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.media.connection.SleepTimer
 import com.squad.musicmatters.core.model.LoopMode
+import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.FadeTransition
+import com.squad.musicmatters.core.ui.LyricsLayout
+import com.squad.musicmatters.feature.nowplaying.LyricsUiState
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
+import java.time.Duration
 import java.util.Timer
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -60,6 +68,7 @@ import kotlin.time.toDuration
 internal fun PortraitLayout(
     modifier: Modifier = Modifier,
     uiState: NowPlayingScreenUiState.Success,
+    lyricsUiState: LyricsUiState,
     currentlyPlayingSong: Song,
     playbackPosition: PlaybackPosition,
     durationFormatter: ( Long ) -> String,
@@ -97,15 +106,33 @@ internal fun PortraitLayout(
         ) {
             BottomSheetDefaults.DragHandle()
         }
-        NowPlayingArtwork(
+        Box(
             modifier = Modifier
-                .fillMaxWidth(),
-            artworkUri = currentlyPlayingSong.artworkUri?.toUri(),
-            onSwipeLeft = onArtworkSwipedLeft,
-            onSwipeRight = onArtworkSwipedRight,
-            onSwipeDown = onArtworkSwipedDown,
-            onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
-        )
+                .sizeIn( maxWidth = 400.dp, maxHeight = 400.dp )
+                .aspectRatio( 1f )
+                .clip( MaterialTheme.shapes.medium )
+        ) {
+            when ( lyricsUiState ) {
+                LyricsUiState.Loading -> {}
+                is LyricsUiState.Success -> {
+                    LyricsLayout(
+                        modifier = Modifier.fillMaxSize(),
+                        lyrics = lyricsUiState.lyrics,
+                        currentDurationInPlayback = Duration.ofMillis( playbackPosition.played ),
+                        onSeek = {}
+                    )
+                }
+            }
+        }
+//        NowPlayingArtwork(
+//            modifier = Modifier
+//                .fillMaxWidth(),
+//            artworkUri = currentlyPlayingSong.artworkUri?.toUri(),
+//            onSwipeLeft = onArtworkSwipedLeft,
+//            onSwipeRight = onArtworkSwipedRight,
+//            onSwipeDown = onArtworkSwipedDown,
+//            onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
+//        )
         Row {
             AnimatedContent(
                 modifier = Modifier.weight( 1f ),
@@ -290,6 +317,30 @@ private fun NowPlayingScreenContentPreview() {
                     endsAt = System.currentTimeMillis().toDuration(DurationUnit.MILLISECONDS),
                     timer = Timer()
                 )
+            ),
+            lyricsUiState = LyricsUiState.Success(
+                lyrics = listOf(
+                    Lyric(
+                        timeStamp = Duration.ofMinutes( 1 ),
+                        content = "Sometime say the magic you dey feel inside is like gold"
+                    ),
+                    Lyric(
+                        timeStamp = Duration.ofMinutes( 2 ),
+                        content = "Something like do re mi fa so lat ti do do (Yeah)"
+                    ),
+                    Lyric(
+                        timeStamp = Duration.ofMinutes( 3 ),
+                        content = "Make I sing for you la la do do"
+                    ),
+                    Lyric(
+                        timeStamp = Duration.ofMinutes( 4 ),
+                        content = "Make I sing your song"
+                    ),
+                    Lyric(
+                        timeStamp = Duration.ofMinutes( 5 ),
+                        content = "Make I sing make you wine am do do o"
+                    )
+                ),
             ),
             playbackPosition = PlaybackPosition(2L, 3L, 5L),
             durationFormatter = { "05:33" },

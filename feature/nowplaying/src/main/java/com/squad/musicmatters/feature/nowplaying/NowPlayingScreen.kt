@@ -141,6 +141,7 @@ fun NowPlayingBottomScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val lyricsUiState by viewModel.lyricsUiState.collectAsStateWithLifecycle()
     val playbackPosition by viewModel.playbackPosition.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -158,6 +159,7 @@ fun NowPlayingBottomScreen(
         NowPlayingScreenContent(
             modifier = Modifier.consumeWindowInsets( innerPadding ),
             uiState = uiState,
+            lyricsUiState = lyricsUiState,
             playbackPosition = playbackPosition,
             onFavorite = viewModel::addToFavorites,
             onPausePlayButtonClick = viewModel::playPause,
@@ -210,6 +212,7 @@ fun NowPlayingBottomScreen(
 private fun NowPlayingScreenContent(
     modifier: Modifier = Modifier,
     uiState: NowPlayingScreenUiState,
+    lyricsUiState: LyricsUiState,
     playbackPosition: PlaybackPosition,
     durationFormatter: ( Long ) -> String,
     onArtistClicked: ( String ) -> Unit,
@@ -253,6 +256,7 @@ private fun NowPlayingScreenContent(
                             PortraitLayout(
                                 modifier = modifier,
                                 uiState = uiState,
+                                lyricsUiState = lyricsUiState,
                                 currentlyPlayingSong = song,
                                 playbackPosition = playbackPosition,
                                 durationFormatter = durationFormatter,
@@ -626,6 +630,7 @@ private fun NowPlayingScreenContentPreview() {
                     timer = Timer()
                 )
             ),
+            lyricsUiState = LyricsUiState.Loading,
             playbackPosition = PlaybackPosition( 2L, 3L, 5L ),
             durationFormatter = { "05:33" },
             onArtistClicked = {},
