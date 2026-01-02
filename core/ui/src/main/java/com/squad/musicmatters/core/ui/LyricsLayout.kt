@@ -1,5 +1,10 @@
 package com.squad.musicmatters.core.ui
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.squad.musicmatters.core.datastore.DefaultPreferences
@@ -62,14 +68,38 @@ fun LyricsLayout(
     ) {
         itemsIndexed( lyrics ) { index, lyric ->
             val isActive = index == currentLyricIndex
+
+            val scale by animateFloatAsState(
+                targetValue = if ( isActive ) 1.15f else 1f,
+                animationSpec = spring( dampingRatio = Spring.DampingRatioLowBouncy ),
+                label = "LyricScale"
+            )
+
+            val color by animateColorAsState(
+                targetValue = if ( isActive ) MaterialTheme.colorScheme.primary else Color.Unspecified,
+                animationSpec = tween( durationMillis = 300 ),
+                label = "LyricColor"
+            )
+
+            val blurAlpha by animateFloatAsState(
+                targetValue = if ( isActive ) 1f else 0.5f,
+                animationSpec = tween( durationMillis = 300 ),
+                label = "LyricAlpha"
+            )
+
             Text(
                 text = lyric.content,
                 textAlign = TextAlign.Center,
-                color = if ( isActive ) MaterialTheme.colorScheme.primary else Color.Unspecified,
-                style = if ( isActive ) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.headlineMedium, // Keep style consistent to avoid layout jumps
+                color = color,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding( vertical = 8.dp )
+                    .padding( vertical = 12.dp, horizontal = 24.dp )
+                    .graphicsLayer {
+                        scaleX = scale
+                        scaleY = scale
+                        alpha = blurAlpha
+                    }
             )
         }
     }
