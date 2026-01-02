@@ -16,6 +16,7 @@ import androidx.annotation.WorkerThread
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
+import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
@@ -23,18 +24,15 @@ import com.squad.musicmatters.core.data.songs.SongsStore
 import com.squad.musicmatters.core.data.songs.SongsStoreListener
 import com.squad.musicmatters.core.data.utils.sortSongs
 import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.model.Lyric
+import com.squad.musicmatters.core.model.Lyrics
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.annotation.concurrent.Immutable
 import javax.inject.Inject
 
 class SongsStoreImpl @Inject constructor(
@@ -108,6 +106,28 @@ class SongsStoreImpl @Inject constructor(
                     )
             } catch ( exception: Exception ) {
                 exception.message?.let { Log.e( TAG, it ) }
+                return@withContext emptyList()
+            }
+        }
+
+    override suspend fun fetchLyricsFor( song: Song? ): List<Lyric> =
+        withContext( ioDispatcher ) {
+            try {
+                var content: String? = null
+                Log.d( TAG, "FETCHING LYRICS FOR: ${song.title}" )
+                song?.lyricPathUri()?.let { lyricsPathUri ->
+                    context.contentResolver.openInputStream( lyricsPathUri )?.use {
+                        content = String( it.readBytes() )
+                    }
+                }
+                content?.let { Lyrics.from( it ) } ?: emptyList()
+            } catch ( exception: Exception ) {
+                exception.message?.let {
+                    Log.e(
+                        TAG,
+                        "ERROR OCCURRED WHILE FETCHING LYRICS FOR: ${song.title}. MESSAGE: $it"
+                    )
+                }
                 return@withContext emptyList()
             }
         }
@@ -197,18 +217,18 @@ private fun MediaMetadata.Builder.from( cursor: Cursor ): MediaMetadata.Builder 
 
     setExtras(
         Bundle().apply {
-            putLong(SONG_DURATION, duration )
-            putLong(DATE_KEY, if ( dateAdded == UNKNOWN_LONG_VALUE) dateModified else dateAdded )
-            putLong(SIZE_KEY, size )
-            putString(PATH_KEY, path )
+            putLong( SONG_DURATION, duration )
+            putLong( DATE_KEY, if ( dateAdded == UNKNOWN_LONG_VALUE ) dateModified else dateAdded )
+            putLong( SIZE_KEY, size )
+            putString( PATH_KEY, path )
             // I don't know why these 5 values are not sent to the UI so i will just add them again
             // here as part of the extras.
-            putString(DISPLAY_TITLE_KEY, title )
-            putInt(TRACK_NUMBER_KEY, trackNumber )
-            putInt(RELEASE_YEAR_KEY, year )
-            putString(ALBUM_TITLE_KEY, albumTitle )
-            putString(ARTIST_KEY, artist )
-            putLong(MEDIA_ITEM_ID_KEY, id )
+            putString( DISPLAY_TITLE_KEY, title )
+            putInt( TRACK_NUMBER_KEY, trackNumber )
+            putInt( RELEASE_YEAR_KEY, year )
+            putString( ALBUM_TITLE_KEY, albumTitle )
+            putString( ARTIST_KEY, artist )
+            putLong( MEDIA_ITEM_ID_KEY, id )
         }
     )
     return this
@@ -231,7 +251,7 @@ private fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
     artworkUri = mediaMetadata.artworkUri.toString(),
 )
 
-private fun getArtworkUriWith(cursor: Cursor ): Uri? = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+private fun getArtworkUriWith( cursor: Cursor ): Uri? = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     .buildUpon()
     .run {
         appendPath( cursor.getLongFrom( AudioColumns._ID ).toString() )
@@ -240,7 +260,7 @@ private fun getArtworkUriWith(cursor: Cursor ): Uri? = MediaStore.Audio.Media.EX
     }
 
 private fun MediaItem.parseArtistStringIntoIndividualArtists( separators: Set<String> ): Set<String> {
-    val artistsSet = mediaMetadata.extras?.getString(ARTIST_KEY)?.split( *separators.toTypedArray() )
+    val artistsSet = mediaMetadata.extras?.getString( ARTIST_KEY )?.split( *separators.toTypedArray() )
         ?.mapNotNull { x -> x.trim().takeIf { it.isNotEmpty() } }
         ?.toSet() ?: setOf()
     return artistsSet
@@ -251,7 +271,7 @@ private fun Cursor.getLongFrom( columnName: String ): Long {
     return getLong( columnIndex )
 }
 
-private fun Cursor.getNullableLongFrom(columnName: String ): Long? {
+private fun Cursor.getNullableLongFrom( columnName: String ): Long? {
     val columnIndex = getColumnIndex( columnName )
     return getLongOrNull( columnIndex )
 }
@@ -269,6 +289,51 @@ private fun Cursor.getNullableStringFrom( columnName: String ): String? {
 private fun Cursor.getStringFrom( columnName: String ): String {
     val columnIndex = getColumnIndex( columnName );
     return getString( columnIndex )
+}
+
+private fun Song.lyricPathUri() =
+    SimplePath( path ).let {
+        it.parent?.join( it.nameWithoutExtension + ".lrc" )?.pathString
+    }?.toUri()
+@Immutable
+private class SimplePath( val parts: List<String> ) {
+    constructor( path: String ) : this( normalize ( p ( path ) ) )
+    constructor( path: SimplePath, vararg subParts: String ) :
+            this( normalize( path.parts + p( *subParts ) ) )
+
+    val name get() = parts.last()
+    val nameWithoutExtension get() = name.substringBeforeLast( "." )
+    val extension get() = name.substringAfterLast( ".", "" )
+    val parent get() = if ( parts.size > 1 ) {
+        SimplePath( parts.subList( 0, parts.lastIndex ) )
+    } else {
+        null
+    }
+    val size get() = parts.size
+    val pathString get() = parts.joinToString( "/" )
+
+    fun join( vararg nParts: String ) = SimplePath( this, *nParts )
+
+    override fun toString() = pathString
+
+    companion object {
+        private fun p( vararg path: String ) = path.fold( listOf<String>() ) { prev, curr ->
+            prev + curr.split( "/", "\\" )
+        }
+
+        private fun normalize( parts: List<String> ): List<String> {
+            val normalizedPath = mutableListOf<String>()
+            for ( part in parts ) {
+                when {
+                    part.isEmpty() -> {}
+                    part == "." -> {}
+                    part == ".." -> normalizedPath.removeAt( normalizedPath.lastIndex )
+                    else -> normalizedPath.add( part )
+                }
+            }
+            return normalizedPath
+        }
+    }
 }
 
 const val UNKNOWN_LONG_VALUE = 0L

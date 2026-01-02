@@ -1,0 +1,113 @@
+package com.squad.musicmatters.core.ui
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.designsystem.component.DevicePreviews
+import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import com.squad.musicmatters.core.model.Lyric
+import kotlinx.coroutines.launch
+import java.time.Duration
+
+@Composable
+fun LyricsLayout(
+    modifier: Modifier = Modifier,
+    lyrics: List<Lyric>,
+    currentDurationInPlayback: Duration,
+    onSeek: ( Int ) -> Unit,
+) {
+    val scrollState = rememberLazyListState()
+
+    // 1. Calculate the active lyric index based on time
+    // We use derivedStateOf so this only triggers a recomposition when the index actually changes
+    val currentLyricIndex by remember( lyrics, currentDurationInPlayback ) {
+        derivedStateOf {
+            lyrics.indexOfLast { it.timeStamp <= currentDurationInPlayback }
+                .coerceAtLeast( 0 )
+        }
+    }
+
+    // 2. Scroll whenever the index changes
+    LaunchedEffect( currentLyricIndex ) {
+        if ( lyrics.isNotEmpty() ) {
+            scrollState.animateScrollToItem( currentLyricIndex )
+        }
+    }
+
+    LazyColumn(
+        modifier = modifier,
+        state = scrollState,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        itemsIndexed( lyrics ) { index, lyric ->
+            val isActive = index == currentLyricIndex
+            Text(
+                text = lyric.content,
+                textAlign = TextAlign.Center,
+                color = if ( isActive ) MaterialTheme.colorScheme.primary else Color.Unspecified,
+                style = if ( isActive ) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding( vertical = 8.dp )
+            )
+        }
+    }
+}
+
+@DevicePreviews
+@Composable
+private fun LyricsLayoutPreview() {
+    MusicMattersTheme(
+        themeMode = DefaultPreferences.THEME_MODE,
+        fontName = DefaultPreferences.FONT_NAME,
+        primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
+        useMaterialYou = true,
+        fontScale = DefaultPreferences.FONT_SCALE
+    ) {
+        LyricsLayout(
+            modifier = Modifier.padding( 24.dp ),
+            lyrics = listOf(
+                Lyric(
+                    timeStamp = Duration.ofMinutes( 1 ),
+                    content = "Sometime say the magic you dey feel inside is like gold"
+                ),
+                Lyric(
+                    timeStamp = Duration.ofMinutes( 2 ),
+                    content = "Something like do re mi fa so lat ti do do (Yeah)"
+                ),
+                Lyric(
+                    timeStamp = Duration.ofMinutes( 3 ),
+                    content = "Make I sing for you la la do do"
+                ),
+                Lyric(
+                    timeStamp = Duration.ofMinutes( 4 ),
+                    content = "Make I sing your song"
+                ),
+                Lyric(
+                    timeStamp = Duration.ofMinutes( 5 ),
+                    content = "Make I sing make you wine am do do o"
+                )
+            ),
+            currentDurationInPlayback = Duration.ofMinutes( 2L ),
+            onSeek = {}
+        )
+    }
+}

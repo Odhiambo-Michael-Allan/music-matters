@@ -91,7 +91,9 @@ internal fun PortraitLayout(
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding( top = 8.dp )
         ) {
             BottomSheetDefaults.DragHandle()
         }
