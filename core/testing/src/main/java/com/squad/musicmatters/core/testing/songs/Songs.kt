@@ -1,7 +1,9 @@
 package com.squad.musicmatters.core.testing.songs
 
 import androidx.media3.common.MediaItem
+import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Song
+import java.time.Duration
 import java.util.UUID
 
 fun testSong(
@@ -22,6 +24,14 @@ fun testSong(
     albumTitle = null,
     composer = null,
     artworkUri = artworkUri,
+)
+
+fun testLyric(
+    content: String,
+    timeStamp: Duration = Duration.ZERO
+) = Lyric(
+    content = content,
+    timeStamp = timeStamp
 )
 
 val testSongsForSorting = listOf(

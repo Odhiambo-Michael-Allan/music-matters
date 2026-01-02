@@ -9,6 +9,7 @@ import android.media.audiofx.AudioEffect
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.launch
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -59,6 +60,7 @@ import com.squad.musicmatters.MainActivityUiState
 import com.squad.musicmatters.R
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
+import com.squad.musicmatters.core.ui.SlideTransition
 import com.squad.musicmatters.feature.nowplaying.NowPlayingBottomScreen
 import com.squad.musicmatters.feature.nowplaying.components.NowPlayingBottomBar
 import com.squad.musicmatters.feature.queue.navigation.navigateToQueue
@@ -225,12 +227,19 @@ fun MusicMattersAppContent(
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = stringResource( id = R.string.songs ),
-                    topAppBarScrollBehavior = topAppBarScrollBehavior,
-                    onNavigationIconClicked = {},
-                    onSettingsClicked = {}
-                )
+                AnimatedVisibility(
+                    visible = shouldShowTopAppBar,
+                    enter = SlideTransition.slideDown.enterTransition(),
+                    exit = SlideTransition.slideUp.exitTransition(),
+                ) {
+                    TopAppBar(
+                        title = stringResource( id = R.string.songs ),
+                        topAppBarScrollBehavior = topAppBarScrollBehavior,
+                        onNavigationIconClicked = {},
+                        onSettingsClicked = {}
+                    )
+                }
+
             },
             snackbarHost = {
                 SnackbarHost(

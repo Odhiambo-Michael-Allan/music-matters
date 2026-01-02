@@ -42,7 +42,7 @@ internal fun NowPlayingArtwork(
                 imageUri = it,
                 contentDescription = "now-playing-artwork",
                 modifier = Modifier
-                    .sizeIn( maxWidth = 500.dp, maxHeight = 500.dp )
+                    .sizeIn( maxWidth = 400.dp, maxHeight = 400.dp )
                     .aspectRatio( 1f )
                     .clip( MaterialTheme.shapes.medium )
                     .swipeable(

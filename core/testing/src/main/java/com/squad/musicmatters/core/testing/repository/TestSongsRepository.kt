@@ -3,6 +3,7 @@ package com.squad.musicmatters.core.testing.repository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.utils.sortSongs
 import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
 import kotlinx.coroutines.channels.BufferOverflow
@@ -15,6 +16,9 @@ class TestSongsRepository : SongsRepository {
     private val songsFlow: MutableSharedFlow<List<Song>> =
         MutableSharedFlow( replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST )
 
+    private val lyricsFlow: MutableSharedFlow<List<Lyric>> =
+        MutableSharedFlow( replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST )
+
     override fun fetchSongs(
         sortSongsBy: SortSongsBy?,
         sortSongsInReverse: Boolean?
@@ -25,11 +29,19 @@ class TestSongsRepository : SongsRepository {
         )
     }
 
+    override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> {
+        TODO("Not yet implemented")
+    }
+
     /**
      * A test-only API to allow controlling the list of songs from tests.
      */
     fun sendSongs( songs: List<Song> ) {
         songsFlow.tryEmit( songs )
+    }
+
+    fun sendLyrics( lyrics: List<Lyric> ) {
+        lyricsFlow.tryEmit( lyrics )
     }
 
 }

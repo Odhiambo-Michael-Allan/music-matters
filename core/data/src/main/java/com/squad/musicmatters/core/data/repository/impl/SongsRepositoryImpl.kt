@@ -3,12 +3,15 @@ package com.squad.musicmatters.core.data.repository.impl
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.songs.SongsStore
 import com.squad.musicmatters.core.data.songs.SongsStoreListener
+import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.time.Instant
 import javax.inject.Inject
@@ -45,5 +48,8 @@ class SongsRepositoryImpl @Inject constructor(
             songsStore.unregisterListener( storeListener )
         }
     }
+
+    override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> =
+        flow { songsStore.fetchLyricsFor( song ) }
 
 }

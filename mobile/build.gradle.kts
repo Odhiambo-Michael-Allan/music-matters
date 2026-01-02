@@ -65,6 +65,7 @@ dependencies {
     implementation( projects.core.testing )
     implementation( projects.core.i8n )
     implementation( projects.core.model )
+    implementation( projects.core.ui )
 
     implementation( libs.androidx.core.ktx )
     implementation( libs.androidx.lifecycle.runtime.ktx )
