@@ -16,7 +16,6 @@ import androidx.annotation.WorkerThread
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
-import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
@@ -32,6 +31,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import javax.annotation.concurrent.Immutable
 import javax.inject.Inject
 
@@ -110,27 +110,26 @@ class SongsStoreImpl @Inject constructor(
             }
         }
 
-    override suspend fun fetchLyricsFor( song: Song? ): List<Lyric> =
-        withContext( ioDispatcher ) {
-            try {
-                var content: String? = null
-                Log.d( TAG, "FETCHING LYRICS FOR: ${song.title}" )
-                song?.lyricPathUri()?.let { lyricsPathUri ->
-                    context.contentResolver.openInputStream( lyricsPathUri )?.use {
-                        content = String( it.readBytes() )
-                    }
-                }
-                content?.let { Lyrics.from( it ) } ?: emptyList()
-            } catch ( exception: Exception ) {
-                exception.message?.let {
-                    Log.e(
-                        TAG,
-                        "ERROR OCCURRED WHILE FETCHING LYRICS FOR: ${song.title}. MESSAGE: $it"
-                    )
-                }
+    override suspend fun fetchLyricsFor(song: Song?): List<Lyric> = withContext(ioDispatcher) {
+        try {
+            val path = song?.lyricPath() ?: return@withContext emptyList()
+            val lyricFile = File( path )
+
+            if ( !lyricFile.exists() ) {
+                Log.e( TAG, "Lyrics file does not exist at: $path" )
                 return@withContext emptyList()
             }
+            val content = lyricFile.bufferedReader( Charsets.UTF_8 ).use { it.readText() }
+
+            Lyrics.from( content )
+        } catch ( e: Exception ) {
+            Log.e(
+                TAG,
+                "Error occurred while fetching lyrics for: ${song?.title} ${e.message}"
+            )
+            emptyList()
         }
+    }
 
     override fun registerListener( listener: SongsStoreListener ) {
         listeners.add( listener )
@@ -291,10 +290,11 @@ private fun Cursor.getStringFrom( columnName: String ): String {
     return getString( columnIndex )
 }
 
-private fun Song.lyricPathUri() =
+private fun Song.lyricPath() =
     SimplePath( path ).let {
         it.parent?.join( it.nameWithoutExtension + ".lrc" )?.pathString
-    }?.toUri()
+    }
+
 @Immutable
 private class SimplePath( val parts: List<String> ) {
     constructor( path: String ) : this( normalize ( p ( path ) ) )

@@ -1,5 +1,6 @@
 package com.squad.musicmatters.core.ui
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -66,7 +67,9 @@ fun LyricsLayout(
                 textAlign = TextAlign.Center,
                 color = if ( isActive ) MaterialTheme.colorScheme.primary else Color.Unspecified,
                 style = if ( isActive ) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding( vertical = 8.dp )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding( vertical = 8.dp )
             )
         }
     }
