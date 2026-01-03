@@ -242,6 +242,7 @@ internal fun PortraitLayout(
             shuffle = uiState.userData.shuffle,
             currentSpeed = uiState.userData.playbackSpeed,
             currentPitch = uiState.userData.playbackPitch,
+            lyricsLayout = uiState.userData.lyricsLayout,
             onToggleLoopMode = onToggleLoopMode,
             onToggleShuffleMode = onToggleShuffleMode,
             onSpeedChange = onPlayingSpeedChange,

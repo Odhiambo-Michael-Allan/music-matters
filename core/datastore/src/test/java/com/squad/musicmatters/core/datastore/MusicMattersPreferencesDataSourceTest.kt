@@ -40,7 +40,7 @@ class MusicMattersPreferencesDataSourceTest {
 
     @Test
     fun testChangeFontName() = testScope.runTest {
-        assertEquals( "Product Sans", subject.userData.map { it.fontName }.first() )
+        assertEquals( "Google Sans", subject.userData.map { it.fontName }.first() )
         listOf(
             "font name 1",
             "font name 2",
