@@ -99,7 +99,7 @@ class SongsStoreImpl @Inject constructor(
                     }
                 }
                 return@withContext mediaItemList
-                    .map { it.toSong( artistTagSeparators ) }
+                    .map { it.toSong() }
                     .sortSongs(
                         sortSongsBy = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
                         reverse = sortSongsInReverse ?: false
@@ -233,7 +233,7 @@ private fun MediaMetadata.Builder.from( cursor: Cursor ): MediaMetadata.Builder 
     return this
 }
 
-private fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
+private fun MediaItem.toSong() = Song(
     id = mediaId,
     mediaUri = mediaId,
     title = mediaMetadata.title.toString(),
@@ -242,7 +242,7 @@ private fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
     year = mediaMetadata.extras?.getInt( RELEASE_YEAR_KEY ),
     duration = mediaMetadata.extras?.getLong( SONG_DURATION ) ?: UNKNOWN_LONG_VALUE,
     albumTitle = mediaMetadata.extras?.getString( ALBUM_TITLE_KEY ),
-    artists = parseArtistStringIntoIndividualArtists( artistTagSeparators ),
+    artists = parseArtistStringIntoIndividualArtists(),
     composer = mediaMetadata.composer.toString(),
     dateModified = mediaMetadata.extras?.getLong( DATE_KEY ) ?: UNKNOWN_LONG_VALUE ,
     size = mediaMetadata.extras?.getLong( SIZE_KEY ) ?: UNKNOWN_LONG_VALUE,
@@ -258,11 +258,20 @@ private fun getArtworkUriWith( cursor: Cursor ): Uri? = MediaStore.Audio.Media.E
         build()
     }
 
-private fun MediaItem.parseArtistStringIntoIndividualArtists( separators: Set<String> ): Set<String> {
-    val artistsSet = mediaMetadata.extras?.getString( ARTIST_KEY )?.split( *separators.toTypedArray() )
-        ?.mapNotNull { x -> x.trim().takeIf { it.isNotEmpty() } }
-        ?.toSet() ?: setOf()
-    return artistsSet
+private fun MediaItem.parseArtistStringIntoIndividualArtists(): Set<String> {
+    // 1. Get the raw string from extras
+    val rawArtists = mediaMetadata.extras?.getString(ARTIST_KEY) ?: return emptySet()
+    val regex = Regex(
+        // Match delimiters with optional surrounding whitespace
+        """\s*(?:feat\.?|ft\.?|&|and|with|vs\.?|[,;/])\s*""",
+        RegexOption.IGNORE_CASE
+    )
+
+    // 3. Split, trim, and filter in one pass
+    return rawArtists.split(regex)
+        .map { it.trim() }
+        .filter { it.isNotEmpty() }
+        .toSet()
 }
 
 private fun Cursor.getLongFrom( columnName: String ): Long {

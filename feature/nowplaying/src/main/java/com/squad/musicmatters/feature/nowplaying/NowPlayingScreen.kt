@@ -3,60 +3,34 @@ package com.squad.musicmatters.feature.nowplaying
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.exclude
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.ThumbUpAlt
-import androidx.compose.material.icons.rounded.ThumbUpAlt
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -65,18 +39,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -96,27 +62,11 @@ import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.BottomSheetMenuItem
-import com.squad.musicmatters.core.ui.DynamicAsyncImage
-import com.squad.musicmatters.core.ui.FadeTransition
 import com.squad.musicmatters.core.ui.GenericOptionsBottomSheet
 import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
-import com.squad.musicmatters.feature.nowplaying.components.ArtistsRow
 import com.squad.musicmatters.feature.nowplaying.components.LandscapeLayout
-import com.squad.musicmatters.feature.nowplaying.components.NowPlayingBodyBottomBar
-import com.squad.musicmatters.feature.nowplaying.components.MusicMattersSeekBar
-import com.squad.musicmatters.feature.nowplaying.components.NowPlayingArtwork
-import com.squad.musicmatters.feature.nowplaying.components.NowPlayingControlButtonColors
-import com.squad.musicmatters.feature.nowplaying.components.NowPlayingControlButtonSize
-import com.squad.musicmatters.feature.nowplaying.components.NowPlayingControlButtonStyle
-import com.squad.musicmatters.feature.nowplaying.components.NowPlayingDefaultControlsLayout
-import com.squad.musicmatters.feature.nowplaying.components.NowPlayingTraditionalControlsLayout
-import com.squad.musicmatters.feature.nowplaying.components.PlayNextButton
-import com.squad.musicmatters.feature.nowplaying.components.PlayPauseButton
-import com.squad.musicmatters.feature.nowplaying.components.PlayPreviousSongButton
 import com.squad.musicmatters.feature.nowplaying.components.PortraitLayout
-import com.squad.musicmatters.feature.nowplaying.components.SleepTimerButton
 import com.squad.musicmatters.feature.nowplaying.components.emptyUserData
-import com.squad.musicmatters.feature.nowplaying.components.swipeable
 import kotlinx.coroutines.launch
 import java.util.Locale
 import java.util.Timer
@@ -241,7 +191,6 @@ private fun NowPlayingScreenContent(
     onStopSleepTimer: () -> Unit,
 ) {
     val currentWindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-    val currentConfiguration = LocalConfiguration.current
     var showOptionsMenu by remember { mutableStateOf( false ) }
     var showSongDetailsDialog by remember { mutableStateOf( false ) }
     var showSleepTimerBottomSheet by remember { mutableStateOf( false ) }
@@ -252,62 +201,33 @@ private fun NowPlayingScreenContent(
             uiState.queue.firstOrNull { it.id == uiState.playerState.currentlyPlayingSongId }?.let { song ->
                 when ( currentWindowSizeClass.windowWidthSizeClass ) {
                     WindowWidthSizeClass.COMPACT, WindowWidthSizeClass.MEDIUM -> {
-                        if ( currentConfiguration.orientation == Configuration.ORIENTATION_PORTRAIT ) {
-                            PortraitLayout(
-                                modifier = modifier,
-                                uiState = uiState,
-                                lyricsUiState = lyricsUiState,
-                                currentlyPlayingSong = song,
-                                playbackPosition = playbackPosition,
-                                durationFormatter = durationFormatter,
-                                onFavorite = onFavorite,
-                                onArtworkSwipedLeft = onSwipeArtworkLeft,
-                                onArtworkSwipedRight = onSwipeArtworkRight,
-                                onArtworkSwipedDown = onHideNowPlayingBottomSheet,
-                                onArtworkClicked = onArtworkClicked,
-                                onArtistClicked = onArtistClicked,
-                                onShowOptionsMenu = { showOptionsMenu = true },
-                                onSeekStart = onSeekStart,
-                                onSeekEnd = onSeekEnd,
-                                onPausePlayButtonClick = onPausePlayButtonClick,
-                                onPreviousButtonClick = onPreviousButtonClick,
-                                onPlayNext = onPlayNext,
-                                onNavigateToQueue = onNavigateToQueue,
-                                onToggleLoopMode = onToggleLoopMode,
-                                onToggleShuffleMode = onToggleShuffleMode,
-                                onPlayingSpeedChange = onPlayingSpeedChange,
-                                onPlayingPitchChange = onPlayingPitchChange,
-                                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
-                                onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true }
-                            )
-                        } else {
-                            LandscapeLayout(
-                                modifier = modifier,
-                                uiState = uiState,
-                                currentlyPlayingSong = song,
-                                playbackPosition = playbackPosition,
-                                durationFormatter = durationFormatter,
-                                onFavorite = onFavorite,
-                                onSwipeArtworkLeft = onSwipeArtworkLeft,
-                                onSwipeArtworkRight = onSwipeArtworkRight,
-                                onArtworkClicked = onArtworkClicked,
-                                onArtworkSwipedDown = onHideNowPlayingBottomSheet,
-                                onArtistClicked = onArtistClicked,
-                                onShowOptionsMenu = { showOptionsMenu = true },
-                                onSeekStart = onSeekStart,
-                                onSeekEnd = onSeekEnd,
-                                onPausePlayButtonClick = onPausePlayButtonClick,
-                                onPreviousButtonClick = onPreviousButtonClick,
-                                onPlayNext = onPlayNext,
-                                onNavigateToQueue = onNavigateToQueue,
-                                onToggleLoopMode = onToggleLoopMode,
-                                onToggleShuffleMode = onToggleShuffleMode,
-                                onPlayingSpeedChange = onPlayingSpeedChange,
-                                onPlayingPitchChange = onPlayingPitchChange,
-                                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
-                                onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true }
-                            )
-                        }
+                        PortraitLayout(
+                            modifier = modifier,
+                            uiState = uiState,
+                            lyricsUiState = lyricsUiState,
+                            currentlyPlayingSong = song,
+                            playbackPosition = playbackPosition,
+                            durationFormatter = durationFormatter,
+                            onFavorite = onFavorite,
+                            onArtworkSwipedLeft = onSwipeArtworkLeft,
+                            onArtworkSwipedRight = onSwipeArtworkRight,
+                            onArtworkSwipedDown = onHideNowPlayingBottomSheet,
+                            onArtworkClicked = onArtworkClicked,
+                            onArtistClicked = onArtistClicked,
+                            onShowOptionsMenu = { showOptionsMenu = true },
+                            onSeekStart = onSeekStart,
+                            onSeekEnd = onSeekEnd,
+                            onPausePlayButtonClick = onPausePlayButtonClick,
+                            onPreviousButtonClick = onPreviousButtonClick,
+                            onPlayNext = onPlayNext,
+                            onNavigateToQueue = onNavigateToQueue,
+                            onToggleLoopMode = onToggleLoopMode,
+                            onToggleShuffleMode = onToggleShuffleMode,
+                            onPlayingSpeedChange = onPlayingSpeedChange,
+                            onPlayingPitchChange = onPlayingPitchChange,
+                            onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
+                            onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true }
+                        )
                     }
                     WindowWidthSizeClass.EXPANDED -> {
                         LandscapeLayout(

@@ -3,14 +3,17 @@ package com.squad.musicmatters.feature.nowplaying.components
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +37,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.squad.musicMatters.core.designsystem.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
@@ -49,7 +53,7 @@ import com.squad.musicmatters.core.ui.dialog.ScaffoldDialog
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
-internal fun NowPlayingBodyBottomBar(
+internal fun NowPlayingScreenBottomBar(
     modifier: Modifier = Modifier,
     language: Language,
     currentLoopMode: LoopMode,
@@ -100,21 +104,46 @@ internal fun NowPlayingBodyBottomBar(
             )
         }
         IconButton(
-            onClick = { onToggleShuffleMode( !shuffle ) }
+            onClick = {}
         ) {
             Icon(
-                painter = painterResource( id = R.drawable.shuffle ),
+                painter = painterResource(
+                    id = R.drawable.ic_lyrics_outline,
+                ),
                 contentDescription = null,
-                tint = if ( shuffle ) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    LocalContentColor.current
-                },
-                modifier = Modifier.size(
-                    MusicMattersIcons.Shuffle.defaultWidth,
-                    MusicMattersIcons.Shuffle.defaultHeight,
-                )
             )
+        }
+        AnimatedContent(
+            targetState = shuffle
+        ) {
+            IconButton(
+                onClick = { onToggleShuffleMode( !shuffle ) }
+            ) {
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painter = painterResource( id = R.drawable.shuffle ),
+                        contentDescription = null,
+                        tint = if ( it ) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            LocalContentColor.current
+                        },
+                        modifier = Modifier.size(
+                            MusicMattersIcons.Shuffle.defaultWidth,
+                            MusicMattersIcons.Shuffle.defaultHeight,
+                        )
+                    )
+                    if ( it ) {
+                        Text(
+                            text = "•",
+                            color = MaterialTheme.colorScheme.primary,
+                            lineHeight = 0.1.sp
+                        )
+                    }
+                }
+            }
         }
         IconButton(
             onClick = { showExtraOptions = !showExtraOptions }
@@ -273,7 +302,7 @@ private fun NowPlayingOptionDialog(
 
 @DevicePreviews
 @Composable
-private fun NowPlayingBodyBottomBarPreview() {
+private fun NowPlayingScreenBottomBarPreview() {
     MusicMattersTheme(
         themeMode = ThemeMode.LIGHT,
         useMaterialYou = true,
@@ -281,7 +310,7 @@ private fun NowPlayingBodyBottomBarPreview() {
         fontScale = DefaultPreferences.FONT_SCALE,
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME
     ) {
-        NowPlayingBodyBottomBar(
+        NowPlayingScreenBottomBar(
             language = English,
             currentLoopMode = LoopMode.Song,
             shuffle = true,

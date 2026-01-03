@@ -11,8 +11,10 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -177,7 +179,7 @@ private fun NowPlayingBottomBarContent(
                                     },
                                 ) { song ->
                                     DynamicAsyncImage(
-                                        imageUri = song?.artworkUri?.toUri(),
+                                        imageUri = song.artworkUri?.toUri(),
                                         contentDescription = null,
                                         modifier = Modifier
                                             .size(45.dp)
@@ -283,29 +285,29 @@ private fun NowPlayingBottomBarContent(
                         // ------------------------- Progress Bar ------------------------------
                         Box(
                             modifier = Modifier
-                                .height( 2.dp )
+                                .height(2.dp)
                                 .fillMaxWidth()
                         ) {
                             Box(
                                 modifier = Modifier
                                     .background(
-                                        MaterialTheme.colorScheme.primary.copy( 0.3f )
+                                        MaterialTheme.colorScheme.primary.copy(0.3f)
                                     )
                                     .fillMaxWidth()
                                     .fillMaxHeight()
                             )
                             Box(
                                 modifier = Modifier
-                                    .align( Alignment.CenterStart )
-                                    .background( MaterialTheme.colorScheme.primary.copy( alpha = 0.4f ) )
-                                    .fillMaxWidth(  playbackPosition.bufferedRatio )
+                                    .align(Alignment.CenterStart)
+                                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.4f))
+                                    .fillMaxWidth(playbackPosition.bufferedRatio)
                                     .fillMaxHeight()
                             )
                             Box(
                                 modifier = Modifier
-                                    .align( Alignment.CenterStart )
-                                    .background( MaterialTheme.colorScheme.primary )
-                                    .fillMaxWidth(  playbackPosition.playedRatio )
+                                    .align(Alignment.CenterStart)
+                                    .background(MaterialTheme.colorScheme.primary)
+                                    .fillMaxWidth(playbackPosition.playedRatio)
                                     .fillMaxHeight()
                             )
                         }
@@ -338,11 +340,11 @@ private fun NowPlayingBottomBarContent(
 
         Box(
             modifier = Modifier
-                .alpha( cardOpacity.value )
+                .alpha(cardOpacity.value)
                 .absoluteOffset {
-                    IntOffset( cardOffsetX.value.div( 2 ), 0 )
+                    IntOffset(cardOffsetX.value.div(2), 0)
                 }
-                .pointerInput( Unit ) {
+                .pointerInput(Unit) {
                     detectHorizontalDragGestures(
                         onDragEnd = {
                             val threshHold = cardWidthInPixels / 4
@@ -381,7 +383,7 @@ private fun NowPlayingBottomBarContent(
 
                 )
                 NowPlayingBottomBarContentText(
-                    song.artists.joinToString(),
+                    text = song.artists.first(),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
@@ -395,10 +397,12 @@ private fun NowPlayingBottomBarContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun NowPlayingBottomBarContentText(
+internal fun NowPlayingBottomBarContentText(
+    modifier: Modifier = Modifier,
     text: String,
     style: TextStyle,
-    textMarquee: Boolean
+    textMarquee: Boolean,
+    onClick: ( () -> Unit )? = null,
 ) {
     var showOverlay by remember { mutableStateOf( false ) }
 
@@ -411,11 +415,20 @@ private fun NowPlayingBottomBarContentText(
                 textMarquee -> TextOverflow.Clip
                 else -> TextOverflow.Ellipsis
             },
-            modifier = Modifier
+            modifier = modifier
+                .pointerInput( Unit ) {
+                    detectTapGestures { onClick?.let { it() } }
+                }
+                .then(
+                    if ( textMarquee ) {
+                        Modifier.basicMarquee( Int.MAX_VALUE )
+                    } else Modifier
+                )
                 .onGloballyPositioned {
                     val offsetX = it.boundsInParent().centerLeft.x
                     showOverlay = offsetX.absoluteValue != 0f
                 }
+
         )
         AnimatedVisibility(
             visible = showOverlay,
@@ -427,11 +440,11 @@ private fun NowPlayingBottomBarContentText(
             Row {
                 Box(
                     modifier = Modifier
-                        .width(12.dp)
+                        .width( 12.dp )
                         .fillMaxHeight()
                         .background(
                             brush = Brush.horizontalGradient(
-                                colors = listOf(backgroundColor, Color.Transparent)
+                                colors = listOf( backgroundColor, Color.Transparent )
                             )
                         )
                 )
@@ -442,7 +455,7 @@ private fun NowPlayingBottomBarContentText(
                         .fillMaxHeight()
                         .background(
                             brush = Brush.horizontalGradient(
-                                colors = listOf(Color.Transparent, backgroundColor)
+                                colors = listOf( Color.Transparent, backgroundColor )
                             )
                         )
                 )
@@ -497,15 +510,18 @@ private fun NowPlayingBottomBarPreview() {
     ) {
         NowPlayingBottomBarContent(
             uiState = NowPlayingScreenUiState.Success(
-                userData = emptyUserData.copy( miniPlayerShowTrackControls = false ),
+                userData = emptyUserData.copy(
+                    miniPlayerShowTrackControls = false,
+                    miniPlayerTextMarquee = true
+                ),
                 queue = listOf(
                     Song(
                         id = "song-id-1",
                         mediaUri = "Uri.EMPTY",
-                        title = "Started From the Bottom",
+                        title = "Started From the Bottom Now we Here",
                         displayTitle = "",
                         duration = 0L,
-                        artists = setOf( "Drake" ),
+                        artists = setOf( "Drake", "Majid Jordan" ),
                         size = 0L,
                         dateModified = 0L,
                         path = "",
