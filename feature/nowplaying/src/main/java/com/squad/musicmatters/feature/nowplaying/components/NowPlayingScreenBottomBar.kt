@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,6 +49,7 @@ import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.LoopMode
+import com.squad.musicmatters.core.model.LyricsLayout
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.ScreenOrientation
 import com.squad.musicmatters.core.ui.dialog.ScaffoldDialog
@@ -58,6 +62,7 @@ internal fun NowPlayingScreenBottomBar(
     language: Language,
     currentLoopMode: LoopMode,
     shuffle: Boolean,
+    lyricsLayout: LyricsLayout,
     currentSpeed: Float,
     currentPitch: Float,
     onToggleLoopMode: ( LoopMode ) -> Unit,
@@ -82,65 +87,84 @@ internal fun NowPlayingScreenBottomBar(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        IconButton(
-            onClick = { onToggleLoopMode( currentLoopMode ) }
-        ) {
-            Icon(
-                painter = painterResource(
-                    id = when ( currentLoopMode ) {
-                        LoopMode.Song -> R.drawable.repeat_current
-                        else -> R.drawable.repeat
-                    }
-                ),
-                contentDescription = null,
-                tint = when ( currentLoopMode ) {
-                    LoopMode.None -> LocalContentColor.current
-                    else -> MaterialTheme.colorScheme.primary
-                },
-                modifier = Modifier.size(
-                    MusicMattersIcons.Loop.defaultWidth,
-                    MusicMattersIcons.Loop.defaultHeight
-                )
-            )
-        }
-        IconButton(
-            onClick = {}
-        ) {
-            Icon(
-                painter = painterResource(
-                    id = R.drawable.ic_lyrics_outline,
-                ),
-                contentDescription = null,
-            )
-        }
         AnimatedContent(
-            targetState = shuffle
+            targetState = currentLoopMode
         ) {
             IconButton(
-                onClick = { onToggleShuffleMode( !shuffle ) }
+                onClick = { onToggleLoopMode( currentLoopMode ) }
             ) {
                 Column (
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Icon(
-                        painter = painterResource( id = R.drawable.shuffle ),
+                        painter = painterResource(
+                            id = when ( it ) {
+                                LoopMode.Song -> R.drawable.repeat_current
+                                else -> R.drawable.repeat
+                            }
+                        ),
                         contentDescription = null,
-                        tint = if ( it ) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            LocalContentColor.current
+                        tint = when ( currentLoopMode ) {
+                            LoopMode.None -> LocalContentColor.current
+                            else -> MaterialTheme.colorScheme.primary
                         },
+                        modifier = Modifier.size(
+                            MusicMattersIcons.Loop.defaultWidth,
+                            MusicMattersIcons.Loop.defaultHeight
+                        )
+                    )
+                    if ( it != LoopMode.None ) {
+                        OnIndicator()
+                    }
+                }
+            }
+        }
+        AnimatedContent(
+            targetState = lyricsLayout,
+            label = "LyricsLayoutAnimation"
+        ) {
+            IconButton(
+                onClick = {}
+            ) {
+                Icon(
+                    painter = painterResource(
+                        id = when ( it ) {
+                            LyricsLayout.REPLACE_ARTWORK -> R.drawable.ic_lyrics
+                            else -> R.drawable.ic_lyrics_outline
+                        },
+                    ),
+                    tint = when ( it ) {
+                        LyricsLayout.REPLACE_ARTWORK -> MaterialTheme.colorScheme.primary
+                        else -> LocalContentColor.current
+                    },
+                    contentDescription = null,
+                )
+            }
+        }
+        AnimatedContent(
+            targetState = shuffle,
+            label = "ShuffleAnimation"
+        ) { isShuffleEnabled ->
+            IconButton(
+                onClick = { onToggleShuffleMode(!isShuffleEnabled) }
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.shuffle),
+                        contentDescription = null,
+                        tint = if (isShuffleEnabled) MaterialTheme.colorScheme.primary else LocalContentColor.current,
                         modifier = Modifier.size(
                             MusicMattersIcons.Shuffle.defaultWidth,
                             MusicMattersIcons.Shuffle.defaultHeight,
                         )
                     )
-                    if ( it ) {
-                        Text(
-                            text = "•",
-                            color = MaterialTheme.colorScheme.primary,
-                            lineHeight = 0.1.sp
-                        )
+
+                    if ( isShuffleEnabled ) {
+                        OnIndicator()
                     }
                 }
             }
@@ -254,6 +278,19 @@ internal fun NowPlayingScreenBottomBar(
     }
 }
 
+@Composable
+private fun OnIndicator() {
+    Spacer( modifier = Modifier.height( 1.dp ) )
+    Box(
+        modifier = Modifier
+            .size( 4.dp ) // Exact size of the dot
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = CircleShape
+            )
+    )
+}
+
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 private fun NowPlayingOptionDialog(
@@ -314,6 +351,7 @@ private fun NowPlayingScreenBottomBarPreview() {
             language = English,
             currentLoopMode = LoopMode.Song,
             shuffle = true,
+            lyricsLayout = LyricsLayout.REPLACE_ARTWORK,
             currentSpeed = 2f,
             currentPitch = 2f,
             onToggleLoopMode = {},

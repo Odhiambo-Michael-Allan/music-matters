@@ -52,6 +52,7 @@ class MusicMattersPreferencesDataSource @Inject constructor(
             miniPlayerTextMarquee = it.miniPlayerTextMarquee,
             lyricsLayout = when ( it.lyricsLayout ) {
                 null, LyricsLayoutProto.LYRICS_LAYOUT_UNSPECIFIED, LyricsLayoutProto.UNRECOGNIZED -> DefaultPreferences.LYRICS_LAYOUT
+                LyricsLayoutProto.LYRICS_LAYOUT_NONE -> LyricsLayout.NONE
                 LyricsLayoutProto.REPLACE_ARTWORK -> LyricsLayout.REPLACE_ARTWORK
                 LyricsLayoutProto.SEPARATE_PAGE -> LyricsLayout.SEPARATE_PAGE
             },
@@ -274,6 +275,7 @@ class MusicMattersPreferencesDataSource @Inject constructor(
         userPreferencesDataStore.updateData {
             it.copy {
                 this.lyricsLayout = when ( lyricsLayout ) {
+                    LyricsLayout.NONE -> LyricsLayoutProto.LYRICS_LAYOUT_NONE
                     LyricsLayout.SEPARATE_PAGE -> LyricsLayoutProto.SEPARATE_PAGE
                     LyricsLayout.REPLACE_ARTWORK -> LyricsLayoutProto.REPLACE_ARTWORK
                 }

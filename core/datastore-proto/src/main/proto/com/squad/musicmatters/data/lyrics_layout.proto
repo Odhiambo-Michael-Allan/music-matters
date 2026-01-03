@@ -5,6 +5,7 @@ option java_multiple_files = true;
 
 enum LyricsLayoutProto {
   LYRICS_LAYOUT_UNSPECIFIED = 0;
-  REPLACE_ARTWORK = 1;
-  SEPARATE_PAGE = 2;
+  LYRICS_LAYOUT_NONE = 1;
+  REPLACE_ARTWORK = 2;
+  SEPARATE_PAGE = 3;
 }
