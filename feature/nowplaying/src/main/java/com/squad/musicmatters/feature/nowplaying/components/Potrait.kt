@@ -5,8 +5,8 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,12 +19,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.ThumbUpAlt
 import androidx.compose.material.icons.rounded.ThumbUpAlt
@@ -35,14 +31,16 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -119,7 +117,7 @@ internal fun PortraitLayout(
                         modifier = Modifier.fillMaxSize(),
                         lyrics = lyricsUiState.lyrics,
                         currentDurationInPlayback = Duration.ofMillis( playbackPosition.played ),
-                        onSeek = {}
+                        onSeekTo = { onSeekEnd( it.toMillis() ) }
                     )
                 }
             }
@@ -148,12 +146,11 @@ internal fun PortraitLayout(
                         .padding( 0.dp, 16.dp )
 
                 ) {
-                    Text(
+                    NowPlayingBottomBarContentText(
                         text = target.title,
                         style = MaterialTheme.typography.titleLarge
                             .copy( fontWeight = FontWeight.Bold ),
-                        maxLines = 1,
-                        modifier = Modifier.basicMarquee( iterations = Int.MAX_VALUE )
+                        textMarquee = true,
                     )
                     ArtistsRow(
                         artists = target.artists,
@@ -165,7 +162,7 @@ internal fun PortraitLayout(
                                 text = it.toSamplingInfoString( uiState.language ),
                                 style = MaterialTheme.typography.labelSmall
                                     .copy( color = LocalContentColor.current.copy( alpha = 0.7f ) ),
-                                maxLines = 3,
+                                maxLines = 1,
                             )
                         }
                     }
@@ -239,7 +236,7 @@ internal fun PortraitLayout(
                 )
         }
         Spacer( modifier = Modifier.height( 16.dp ) )
-        NowPlayingBodyBottomBar(
+        NowPlayingScreenBottomBar(
             language = uiState.language,
             currentLoopMode = uiState.userData.loopMode,
             shuffle = uiState.userData.shuffle,
@@ -254,7 +251,7 @@ internal fun PortraitLayout(
     }
 }
 
-@PreviewScreenSizes
+@Preview( showBackground = true )
 @Composable
 private fun NowPlayingScreenContentPreview() {
     MusicMattersTheme(
@@ -271,6 +268,7 @@ private fun NowPlayingScreenContentPreview() {
                     controlsLayoutDefault = false,
                     showNowPlayingSeekControls = true,
                     loopMode = LoopMode.Queue,
+                    shuffle = true,
                 ),
                 queue = listOf(
                     Song(
@@ -367,7 +365,7 @@ private fun NowPlayingScreenContentPreview() {
             currentlyPlayingSong = Song(
                 id = "song-id-1",
                 mediaUri = "Uri.EMPTY",
-                title = "Started From the Bottom",
+                title = "Started From the Bottom Now we Here",
                 displayTitle = "",
                 duration = 0L,
                 artists = setOf(

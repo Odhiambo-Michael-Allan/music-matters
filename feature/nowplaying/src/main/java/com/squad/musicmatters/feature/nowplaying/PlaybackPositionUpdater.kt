@@ -82,5 +82,4 @@ class PlaybackPositionUpdaterImpl @Inject constructor(
     }
 }
 
-private const val TAG = "PLAYBACK-POSITION-UPDATER"
-const val DEFAULT_PLAYBACK_POSITION_UPDATE_INTERVAL = 500L
+const val DEFAULT_PLAYBACK_POSITION_UPDATE_INTERVAL = 1000L

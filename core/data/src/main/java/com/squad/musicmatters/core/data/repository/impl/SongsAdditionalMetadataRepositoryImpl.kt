@@ -114,12 +114,19 @@ private fun extractSamplingRateUsing( mediaMetadataRetriever: MediaMetadataRetri
 
 private fun extractGenreUsing( mediaMetadataRetriever: MediaMetadataRetriever ): String {
     val genre = mediaMetadataRetriever.runCatching {
-        extractMetadata( MediaMetadataRetriever.METADATA_KEY_GENRE )
-    }.getOrNull() ?: UNKNOWN_STRING_VALUE
-    return genre.split( *genreTagSeparators.toTypedArray() ).first()
+        extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE)
+    }.getOrNull() ?: return UNKNOWN_STRING_VALUE
+
+    val genreSplitRegex = Regex(
+        """\s*(?:,|/|;|\\|&|and|//)\s*""",
+        RegexOption.IGNORE_CASE
+    )
+    val genreList = genre.split( genreSplitRegex )
+
+    // Return the first non-empty trimmed genre, or the unknown value if empty
+    return genreList.firstOrNull { it.isNotBlank() }?.trim() ?: UNKNOWN_STRING_VALUE
 }
 
-private val genreTagSeparators = setOf( "/", "," )
 private const val UNKNOWN_STRING_VALUE = "<unknown>"
 private const val TAG = "ADD-METADATA-REPO"
 

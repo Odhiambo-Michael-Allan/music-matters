@@ -197,7 +197,7 @@ internal fun LandscapeLayout(
                         )
                 }
                 Spacer( modifier = Modifier.height( 16.dp ) )
-                NowPlayingBodyBottomBar(
+                NowPlayingScreenBottomBar(
                     language = uiState.language,
                     currentLoopMode = uiState.userData.loopMode,
                     shuffle = uiState.userData.shuffle,
