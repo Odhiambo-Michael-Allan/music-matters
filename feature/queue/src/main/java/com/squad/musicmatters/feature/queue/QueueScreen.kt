@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
@@ -114,7 +115,6 @@ private fun QueueScreenContent(
                     songsInQueue = uiState.songsInQueue,
                     currentlyPlayingSongId = uiState.currentlyPlayingSongId,
                     songsAdditionalMetadata = uiState.songsAdditionalMetadata,
-                    language = uiState.language,
                     favoriteSongIds = uiState.favoriteSongIds,
                     playlists = uiState.playlists,
                     onFavorite = onFavorite,
@@ -133,7 +133,6 @@ private fun QueueScreenContent(
 
                 if ( showSaveDialog ) {
                     NewPlaylistDialog(
-                        language = uiState.language,
                         songsToAdd = uiState.songsInQueue,
                         onConfirmation = { title, songs ->
                             onCreatePlaylist( title, songs )
@@ -170,7 +169,7 @@ private fun QueueScreenTopAppBar(
         },
         title = {
             Crossfade(
-                targetState = stringResource( id = R.string.feature_queue_queue ),
+                targetState = stringResource( id = R.string.core_i8n_queue ),
                 label = "top-app-bar-title"
             ) {
                 Box(

@@ -1,10 +1,8 @@
 package com.squad.musicmatters.core.testing.repository
 
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
-import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.LoopMode
-import com.squad.musicmatters.core.model.LyricsLayout
 import com.squad.musicmatters.core.model.SortAlbumsBy
 import com.squad.musicmatters.core.model.SortArtistsBy
 import com.squad.musicmatters.core.model.SortGenresBy
@@ -194,36 +192,6 @@ class TestPreferencesDataSource : PreferencesDataSource {
             _userData.tryEmit(
                 current.copy(
                     miniPlayerShowTrackControls = miniPlayerShowTrackControls
-                )
-            )
-        }
-    }
-
-    override suspend fun setLyricsLayout( lyricsLayout: LyricsLayout ) {
-        currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    lyricsLayout = lyricsLayout
-                )
-            )
-        }
-    }
-
-    override suspend fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean ) {
-        currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    showNowPlayingAudioInformation = showNowPlayingAudioInformation
-                )
-            )
-        }
-    }
-
-    override suspend fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean ) {
-        currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    showNowPlayingSeekControls = showNowPlayingSeekControls
                 )
             )
         }
@@ -435,7 +403,6 @@ class TestPreferencesDataSource : PreferencesDataSource {
 }
 
 val emptyUserData = UserData(
-    language = English,
     fontName = "Product Sans",
     fontScale = 1f,
     themeMode = ThemeMode.FOLLOW_SYSTEM,
@@ -453,9 +420,6 @@ val emptyUserData = UserData(
     miniPlayerShowTrackControls = true,
     miniPlayerShowSeekControls = false,
     miniPlayerTextMarquee = true,
-    lyricsLayout = LyricsLayout.REPLACE_ARTWORK,
-    showNowPlayingAudioInformation = true,
-    showNowPlayingSeekControls = false,
     playbackSpeed = 1f,
     playbackPitch = 1f,
     loopMode = LoopMode.None,

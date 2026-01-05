@@ -285,32 +285,5 @@
     <string name="error_media_not_found">Could not locate requested media.</string>
     <string name="generic_error">The application has encountered an unexpected error.</string>
 
-    <string name="storage_access">Storage Access</string>
-    <string name="grant_access">Grant access</string>
-    <string name="storage_access_prompt">The app needs permission to access your device storage for playing music</string>
-
-    <string name="welcome_message">Hello there! Welcome to</string>
-    <string name="read_media_audio">Read Media Audio</string>
-    <string name="read_media_audio_prompt">The app needs to read media and audio inorder to fetch and play audio files stored on your device</string>
-
-    <string name="ringtone_permission">Ringtone</string>
-    <string name="ringtone_permission_prompt">The app needs permission to access your device settings inorder to set music as ringtone</string>
-
-    <string name="post_notifications_permission">Post Notifications</string>
-    <string name="post_notifications_prompt">The app needs this to create and display notifications on your device</string>
-    <string name="lets_go">Let\'s go</string>
-
-    <string name="write_storage">Write Storage</string>
-    <string name="write_storage_description">The app needs this to delete songs on the device</string>
-    <string name="telegram">Telegram</string>
-
-    <string name="my_name">Michael Allan Odhiambo</string>
-    <string name="app_github_repo">https://github.com/Odhiambo-Michael-Allan/music-matters</string>
-    <string name="github_profile_url">https://github.com/Odhiambo-Michael-Allan</string>
-
-    <string name="discord_server_url">https://discord.gg/EfruF8CP</string>
-    <string name="reddit_community">https://www.reddit.com/r/musicmattersappusers/</string>
-    <string name="telegram_channel_link">https://t.me/+58NS_CnxjD44YTI0</string>
-
     <string name="patreon_link">https://patreon.com/MichaelAllanOdhiambo?utm_medium=unknown&amp;utm_source=join_link&amp;utm_campaign=creatorshare_creator&amp;utm_content=copyLink</string>
 </resources>

@@ -5,11 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -18,10 +13,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.font.FontWeight
@@ -30,26 +27,28 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
-import com.squad.musicmatters.core.i8n.English
+
 
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun TopAppBar(
-    onNavigationIconClicked: () -> Unit,
     title: String,
-    settings: String,
+    topAppBarScrollBehavior: TopAppBarScrollBehavior,
+    onNavigationIconClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
 ) {
-    
+
     CenterAlignedTopAppBar(
         modifier = Modifier
             .clearAndSetSemantics {
                 contentDescription = "top-app-bar"
             },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Transparent
+            containerColor = Color.Transparent,
+            scrolledContainerColor = Color.Transparent
         ),
         navigationIcon = {
             IconButton( onClick = onNavigationIconClicked ) {
@@ -83,20 +82,9 @@ fun TopAppBar(
                     contentDescription = null
                 )
             }
-        }
+        },
+        scrollBehavior = topAppBarScrollBehavior,
     )
-}
-
-@Preview( showBackground = true )
-@Composable
-fun TopAppBarPreview() {
-    TopAppBar(
-        onNavigationIconClicked = { /*TODO*/ },
-        title = English.songs,
-        settings = English.settings
-    ) {
-
-    }
 }
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -106,7 +94,7 @@ fun MinimalAppBar(
     onNavigationIconClicked: () -> Unit,
     title: String,
     options: ( @Composable () -> Unit )? = null
-    
+
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
@@ -152,12 +140,13 @@ fun MinimalAppBar(
 @Composable
 fun TopAppBarMinimalTitle(
     modifier: Modifier = Modifier,
+    fillMaxWidth: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding( 8.dp ),
         contentAlignment = Alignment.Center
     ) {
         ProvideTextStyle(
@@ -174,9 +163,20 @@ fun TopAppBarMinimalTitle(
 
 @Preview( showBackground = true )
 @Composable
-fun TopAppBarMinimalAppBarPreview() {
+private fun TopAppBarMinimalAppBarPreview() {
     MinimalAppBar(
         onNavigationIconClicked = { /*TODO*/ },
         title = "Queue"
     )
+}
+
+@OptIn( ExperimentalMaterial3Api::class )
+@Preview( showBackground = true )
+@Composable
+private fun TopAppBarPreview() {
+    TopAppBar(
+        onNavigationIconClicked = { /*TODO*/ },
+        title = stringResource( id = R.string.core_i8n_songs ),
+        topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    ) {}
 }

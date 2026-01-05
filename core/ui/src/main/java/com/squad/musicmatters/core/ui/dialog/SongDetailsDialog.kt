@@ -22,16 +22,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.media.media.extensions.dateModifiedString
 import com.squad.musicmatters.core.media.media.extensions.sizeString
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.ui.PreviewParameterData
@@ -42,7 +42,6 @@ import com.squad.musicmatters.core.ui.PreviewParameterData
 fun SongDetailsDialog(
     song: Song,
     metadata: SongAdditionalMetadata?,
-    language: Language,
     durationFormatter: ( Long ) -> String,
     onDismissRequest: () -> Unit,
 ) {
@@ -64,7 +63,7 @@ fun SongDetailsDialog(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = language.details,
+                        text = stringResource( id = R.string.core_i8n_details ),
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold
                         )
@@ -78,110 +77,104 @@ fun SongDetailsDialog(
                 ) {
 
                     SongDetailsItem(
-                        key = language.trackName,
+                        key = stringResource( id = R.string.core_i8n_track_name ),
                         value = song.title,
-                        language = language
                     )
 
                     SongDetailsItem(
-                        key = language.artist,
+                        key = stringResource( id = R.string.core_i8n_artist ),
                         value = song.artists.joinToString(),
-                        language = language
                     )
 
                     song.albumTitle?.let {
                         SongDetailsItem(
-                            key = language.album,
+                            key = stringResource( id = R.string.core_i8n_album ),
                             value = it,
-                            language = language
                         )
                     }
 
                     song.composer?.let {
                         SongDetailsItem(
-                            key = language.composer,
+                            key = stringResource( id = R.string.core_i8n_composer ),
                             value = it,
-                            language = language
                         )
                     }
 
                     metadata?.genre?.let {
                         SongDetailsItem(
-                            key = language.genre,
+                            key = stringResource( id = R.string.core_i8n_genre ),
                             value = it,
-                            language = language,
                         )
                     }
 
                     song.year?.let {
                         SongDetailsItem(
-                            key = language.year,
+                            key = stringResource( id = R.string.core_i8n_year ),
                             value = it.toString(),
-                            language = language
                         )
                     }
 
                     song.trackNumber?.let {
                         SongDetailsItem(
-                            key = language.trackNumber,
+                            key = stringResource( id = R.string.core_i8n_track_number ),
                             value = ( it % 1000 ).toString(),
-                            language = language
                         )
                     }
 
                     SongDetailsItem(
-                        key = language.duration,
+                        key = stringResource( id = R.string.core_i8n_duration ),
                         value = durationFormatter( song.duration ),
-                        language = language
                     )
 
                     SongDetailsItem(
-                        key = language.path,
+                        key = stringResource( id = R.string.core_i8n_path ),
                         value = song.path,
-                        language = language
                     )
 
                     SongDetailsItem(
-                        key = language.size,
+                        key = stringResource( id = R.string.core_i8n_size ),
                         value = song.sizeString,
-                        language = language
                     )
 
                     SongDetailsItem(
-                        key = language.dateAdded,
+                        key = stringResource( id = R.string.core_i8n_date_added ),
                         value = song.dateModifiedString,
-                        language = language
                     )
 
                     metadata?.bitrate?.let {
                         SongDetailsItem(
-                            key = language.bitrate,
-                            value = language.xKbps( it.toString() ),
-                            language = language,
+                            key = stringResource( id = R.string.core_i8n_bitrate ),
+                            value = stringResource(
+                                id = R.string.core_i8n_xKbps,
+                                it.toString()
+                            )
                         )
                     }
 
                     metadata?.bitsPerSample?.let {
                         SongDetailsItem(
-                            key = language.bitDepth,
-                            value = language.xBit( it.toString() ),
-                            language = language,
+                            key = stringResource( id = R.string.core_i8n_bits_per_sample ),
+                            value = stringResource(
+                                id = R.string.core_i8n_xBit,
+                                it.toString()
+                            ),
                         )
                     }
 
                     metadata?.samplingRate?.let {
                         SongDetailsItem(
-                            key = language.samplingRate,
-                            value = language.xKHZ( it.toString() ),
-                            language = language,
+                            key = stringResource( id = R.string.core_i8n_sampling_rate ),
+                            value = stringResource(
+                                id = R.string.core_i8n_xKHZ,
+                                ( it.div(1000 ) ).toString()
+                            )
                         )
                     }
 
                     metadata?.codec?.let {
                         SongDetailsItem(
-                            key = language.codec,
+                            key = stringResource( id = R.string.core_i8n_codec ),
                             value = it,
-                            language = language,
                         )
                     }
 
@@ -195,7 +188,6 @@ fun SongDetailsDialog(
 fun SongDetailsItem(
     key: String,
     value: String,
-    language: Language
 ) {
     Column (
         modifier = Modifier.padding( 0.dp, 4.dp )
@@ -225,7 +217,6 @@ fun SongDetailsDialogPreview() {
     ) {
         SongDetailsDialog(
             song = PreviewParameterData.songs.first(),
-            language = English,
             durationFormatter = { "3:44" },
             metadata = SongAdditionalMetadata(
                 songId = "",

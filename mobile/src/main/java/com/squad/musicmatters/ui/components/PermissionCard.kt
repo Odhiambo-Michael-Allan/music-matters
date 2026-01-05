@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.squad.musicmatters.R
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -66,7 +66,7 @@ fun PermissionCard(
                     contentDescription = null
                 )
                 Text(
-                    text = stringResource( id = R.string.grant_access ),
+                    text = stringResource( id = R.string.core_i8n_grant_access ),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding( 8.dp ),
                 )
@@ -94,8 +94,8 @@ fun PermissionCardPreview() {
         useMaterialYou = true
     ) {
         PermissionCard(
-            title = stringResource( id = R.string.storage_access ),
-            description = stringResource( id = R.string.storage_access_prompt ),
+            title = stringResource( id = R.string.core_i8n_storage_access ),
+            description = stringResource( id = R.string.core_i8n_storage_access_prompt ),
             permissionGranted = true,
             onClick = {}
         )

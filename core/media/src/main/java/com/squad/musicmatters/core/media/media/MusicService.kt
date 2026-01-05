@@ -24,11 +24,11 @@ import androidx.media3.session.SessionCommand
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.common.di.ApplicationScope
 import com.squad.musicmatters.core.data.repository.MostPlayedSongsRepository
 import com.squad.musicmatters.core.data.repository.PlayHistoryRepository
 import com.squad.musicmatters.core.media.MusicMattersMediaNotificationProvider
-import com.squad.musicmatters.core.media.R
 import com.squad.musicmatters.core.media.media.library.MEDIA_SEARCH_SUPPORTED
 import com.squad.musicmatters.core.media.media.library.MUSIC_MATTERS_BROWSABLE_ROOT
 import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
@@ -285,11 +285,11 @@ class MusicService : MediaLibraryService() {
         }
 
         override fun onPlayerError( error: PlaybackException ) {
-            var message = R.string.generic_error
+            var message = R.string.core_i8n_generic_error
             Timber.tag( TAG ).d( "Player error: ${error.errorCodeName} ( ${error.errorCode} )" )
             if ( error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS
                 || error.errorCode == PlaybackException.ERROR_CODE_IO_FILE_NOT_FOUND ) {
-                message = R.string.error_media_not_found
+                message = R.string.core_i8n_error_media_not_found
             }
             Toast.makeText(
                 applicationContext,

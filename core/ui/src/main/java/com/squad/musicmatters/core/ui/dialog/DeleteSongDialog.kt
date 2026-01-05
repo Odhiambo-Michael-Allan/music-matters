@@ -7,18 +7,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.PreviewParameterData
 
 @Composable
 fun DeleteSongDialog(
     song: Song,
-    language: Language,
     onDelete: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -31,7 +30,12 @@ fun DeleteSongDialog(
             )
         },
         title = {
-            Text( text = "${language.delete}: ${song.title}" )
+            Text(
+                text = stringResource(
+                    id = R.string.core_i8n_delete_song,
+                    {song.title}
+                )
+            )
         },
         onDismissRequest = onDismissRequest,
         confirmButton = {
@@ -42,14 +46,14 @@ fun DeleteSongDialog(
                     onDismissRequest()
                 }
             ) {
-                Text( text = language.delete )
+                Text( text = stringResource( id = R.string.core_i8n_delete ) )
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onDismissRequest
             ) {
-                Text( text = language.cancel )
+                Text( text = stringResource( id = R.string.core_i8n_cancel ) )
             }
         }
     )
@@ -67,7 +71,6 @@ fun DeleteSongDialogPreview() {
     ) {
         DeleteSongDialog(
             song = PreviewParameterData.songs.first(),
-            language = English,
             onDelete = { /*TODO*/ }
         ) {}
     }

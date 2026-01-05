@@ -13,13 +13,13 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -30,7 +30,6 @@ import com.squad.musicmatters.core.model.ThemeMode
 fun SongList(
     sortReverse: Boolean,
     sortSongsBy: SortSongsBy,
-    language: Language,
     songs: List<Song>,
     playlists: List<Playlist>,
     songsAdditionalMetadata: List<SongAdditionalMetadata>,
@@ -60,12 +59,12 @@ fun SongList(
             sortType = sortSongsBy,
             sortTypes = SortSongsBy.entries.associateBy(
                     { it },
-                    { it.sortSongsByLabel( language ) }
+                    { it.sortSongsByLabelResId() }
                 ),
             onSortTypeChange = onSortTypeChange,
             label = {
                 Text(
-                    text = language.xSongs( songs.size.toString() ),
+                    text = stringResource( id = R.string.core_i8n_n_songs, songs.size ),
                     fontWeight = FontWeight.SemiBold,
                 )
             },
@@ -83,7 +82,7 @@ fun SongList(
                 },
                 content = {
                     Text(
-                        language.damnThisIsSoEmpty,
+                        text = stringResource( id = R.string.core_i8n_damn_this_is_so_empty ),
                         style = LocalTextStyle.current.copy(
                             fontWeight = FontWeight.SemiBold
                         )
@@ -100,7 +99,6 @@ fun SongList(
                     leadingContent?.invoke( this )
                     itemsIndexed( songs ) {  index, song ->
                         SongCard(
-                            language = language,
                             song = song,
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = isFavorite( songs[ index ].id ),
@@ -125,17 +123,17 @@ fun SongList(
     }
 }
 
-fun SortSongsBy.sortSongsByLabel(language: Language) = when ( this ) {
-    SortSongsBy.CUSTOM -> language.custom
-    SortSongsBy.TITLE -> language.title
-    SortSongsBy.ARTIST -> language.artist
-    SortSongsBy.ALBUM -> language.album
-    SortSongsBy.DURATION -> language.duration
-    SortSongsBy.DATE_ADDED -> language.dateAdded
-    SortSongsBy.COMPOSER -> language.composer
-    SortSongsBy.YEAR -> language.year
-    SortSongsBy.FILENAME -> language.filename
-    SortSongsBy.TRACK_NUMBER -> language.trackNumber
+fun SortSongsBy.sortSongsByLabelResId() = when ( this ) {
+    SortSongsBy.CUSTOM -> R.string.core_i8n_custom
+    SortSongsBy.TITLE -> R.string.core_i8n_title
+    SortSongsBy.ARTIST -> R.string.core_i8n_artist
+    SortSongsBy.ALBUM -> R.string.core_i8n_album
+    SortSongsBy.DURATION -> R.string.core_i8n_duration
+    SortSongsBy.DATE_ADDED -> R.string.core_i8n_date_added
+    SortSongsBy.COMPOSER -> R.string.core_i8n_composer
+    SortSongsBy.YEAR -> R.string.core_i8n_year
+    SortSongsBy.FILENAME -> R.string.core_i8n_file_name
+    SortSongsBy.TRACK_NUMBER -> R.string.core_i8n_track_number
 }
 
 
@@ -153,7 +151,6 @@ fun SongListPreview() {
         SongList(
             sortReverse = false,
             sortSongsBy = SortSongsBy.TITLE,
-            language = English,
             songs = PreviewParameterData.songs,
             playlists = emptyList(),
             songsAdditionalMetadata = emptyList(),

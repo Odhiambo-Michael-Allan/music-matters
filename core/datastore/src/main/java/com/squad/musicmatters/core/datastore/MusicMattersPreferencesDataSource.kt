@@ -1,10 +1,8 @@
 package com.squad.musicmatters.core.datastore
 
 import androidx.datastore.core.DataStore
-import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.LoopMode
-import com.squad.musicmatters.core.model.LyricsLayout
 import com.squad.musicmatters.core.model.SortAlbumsBy
 import com.squad.musicmatters.core.model.SortArtistsBy
 import com.squad.musicmatters.core.model.SortGenresBy
@@ -22,7 +20,6 @@ class MusicMattersPreferencesDataSource @Inject constructor(
 
     override val userData = userPreferencesDataStore.data.map {
         UserData(
-            language = English,
             fontName = it.fontName.takeIf { fontName -> fontName.isNotEmpty() } ?: DefaultPreferences.FONT_NAME,
             fontScale = it.fontScale.takeIf { fontScale -> fontScale > 0 } ?: DefaultPreferences.FONT_SCALE,
             themeMode = when ( it.themeMode ) {
@@ -50,14 +47,6 @@ class MusicMattersPreferencesDataSource @Inject constructor(
             miniPlayerShowTrackControls = it.miniPlayerShowTrackControls,
             miniPlayerShowSeekControls = it.miniPlayerShowSeekControls,
             miniPlayerTextMarquee = it.miniPlayerTextMarquee,
-            lyricsLayout = when ( it.lyricsLayout ) {
-                null, LyricsLayoutProto.LYRICS_LAYOUT_UNSPECIFIED, LyricsLayoutProto.UNRECOGNIZED -> DefaultPreferences.LYRICS_LAYOUT
-                LyricsLayoutProto.LYRICS_LAYOUT_NONE -> LyricsLayout.NONE
-                LyricsLayoutProto.REPLACE_ARTWORK -> LyricsLayout.REPLACE_ARTWORK
-                LyricsLayoutProto.SEPARATE_PAGE -> LyricsLayout.SEPARATE_PAGE
-            },
-            showNowPlayingAudioInformation = it.showNowPlayingAudioInformation,
-            showNowPlayingSeekControls = it.showNowPlayingSeekControls,
             playbackSpeed = it.playbackSpeed.takeIf { speed -> speed > 0 } ?: DefaultPreferences.PLAYBACK_SPEED,
             playbackPitch = it.playbackPitch.takeIf { pitch -> pitch > 0 } ?: DefaultPreferences.PLAYBACK_PITCH,
             loopMode = when ( it.loopMode ) {
@@ -271,34 +260,6 @@ class MusicMattersPreferencesDataSource @Inject constructor(
         }
     }
 
-    override suspend fun setLyricsLayout( lyricsLayout: LyricsLayout ) {
-        userPreferencesDataStore.updateData {
-            it.copy {
-                this.lyricsLayout = when ( lyricsLayout ) {
-                    LyricsLayout.NONE -> LyricsLayoutProto.LYRICS_LAYOUT_NONE
-                    LyricsLayout.SEPARATE_PAGE -> LyricsLayoutProto.SEPARATE_PAGE
-                    LyricsLayout.REPLACE_ARTWORK -> LyricsLayoutProto.REPLACE_ARTWORK
-                }
-            }
-        }
-    }
-
-    override suspend fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean ) {
-        userPreferencesDataStore.updateData {
-            it.copy {
-                this.showNowPlayingAudioInformation = showNowPlayingAudioInformation
-            }
-        }
-    }
-
-    override suspend fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean ) {
-        userPreferencesDataStore.updateData {
-            it.copy {
-                this.showNowPlayingSeekControls = showNowPlayingSeekControls
-            }
-        }
-    }
-
     override suspend fun setPlaybackSpeed( playbackSpeed: Float ) {
         userPreferencesDataStore.updateData {
             it.copy {
@@ -505,7 +466,6 @@ object DefaultPreferences {
     const val FADE_PLAYBACK_DURATION = 1f
     const val FAST_FORWARD_DURATION = 30
     const val FAST_REWIND_DURATION = 15
-    val LYRICS_LAYOUT = LyricsLayout.REPLACE_ARTWORK
     val SORT_SONGS_BY = SortSongsBy.TITLE
 
     val SORT_ARTISTS_BY = SortArtistsBy.ARTIST_NAME

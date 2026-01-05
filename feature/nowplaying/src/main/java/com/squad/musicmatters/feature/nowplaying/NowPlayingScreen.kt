@@ -2,7 +2,6 @@ package com.squad.musicmatters.feature.nowplaying
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,7 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -57,6 +55,7 @@ import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.media.connection.SleepTimer
 import com.squad.musicmatters.core.model.LoopMode
+import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -75,6 +74,8 @@ import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
+
+import com.squad.musicMatters.core.i8n.R as i8nR
 
 
 // Stateful
@@ -144,6 +145,7 @@ fun NowPlayingBottomScreen(
             onSwipeArtworkRight = viewModel::playPreviousSong,
             onStartSleepTimer = viewModel::startSleepTimer,
             onStopSleepTimer = viewModel::stopSleepTimer,
+            onShowLyrics = viewModel::onShowLyrics,
             onShowSnackBar = {
                 coroutineScope.launch {
                     snackBarHostState.showSnackbar(
@@ -189,6 +191,7 @@ private fun NowPlayingScreenContent(
     onShowSnackBar: ( String ) -> Unit,
     onStartSleepTimer: ( Duration ) -> Unit,
     onStopSleepTimer: () -> Unit,
+    onShowLyrics: (Boolean ) -> Unit,
 ) {
     val currentWindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     var showOptionsMenu by remember { mutableStateOf( false ) }
@@ -226,18 +229,20 @@ private fun NowPlayingScreenContent(
                             onPlayingSpeedChange = onPlayingSpeedChange,
                             onPlayingPitchChange = onPlayingPitchChange,
                             onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
-                            onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true }
+                            onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true },
+                            onShowLyrics = onShowLyrics,
                         )
                     }
                     WindowWidthSizeClass.EXPANDED -> {
                         LandscapeLayout(
                             uiState = uiState,
+                            lyricsUiState = lyricsUiState,
                             currentlyPlayingSong = song,
                             playbackPosition = playbackPosition,
                             durationFormatter = durationFormatter,
                             onFavorite = onFavorite,
-                            onSwipeArtworkLeft = onSwipeArtworkLeft,
-                            onSwipeArtworkRight = onSwipeArtworkRight,
+                            onArtworkSwipedLeft = onSwipeArtworkLeft,
+                            onArtworkSwipedRight = onSwipeArtworkRight,
                             onArtworkClicked = onArtworkClicked,
                             onArtworkSwipedDown = onHideNowPlayingBottomSheet,
                             onArtistClicked = onArtistClicked,
@@ -253,7 +258,8 @@ private fun NowPlayingScreenContent(
                             onPlayingSpeedChange = onPlayingSpeedChange,
                             onPlayingPitchChange = onPlayingPitchChange,
                             onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
-                            onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true }
+                            onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true },
+                            onShowLyrics = onShowLyrics,
                         )
                     }
                 }
@@ -269,7 +275,6 @@ private fun NowPlayingScreenContent(
                             headerTitle = song.title,
                             titleIsHighlighted = true,
                             headerDescription = song.artists.joinToString(),
-                            language = uiState.language,
                             playlists = uiState.playlists,
                             onDismissRequest = { showOptionsMenu = false },
                             onPlayNext = {}, // No need to do anything as duplicates are not allowed in queue
@@ -284,7 +289,7 @@ private fun NowPlayingScreenContent(
                                     } else {
                                         MusicMattersIcons.FavoriteBorder
                                     },
-                                    label = uiState.language.favorite,
+                                    label = stringResource( id = i8nR.string.core_i8n_favorite ),
                                     leadingIconTint = MaterialTheme.colorScheme.primary
                                 ) {
                                     onDismissRequest()
@@ -296,7 +301,10 @@ private fun NowPlayingScreenContent(
                                 song.albumTitle?.let { albumTitle ->
                                     BottomSheetMenuItem(
                                         leadingIcon = Icons.Default.Album,
-                                        label = "${uiState.language.viewAlbum}: $albumTitle"
+                                        label = stringResource(
+                                            id = i8nR.string.core_i8n_view_album,
+                                            albumTitle
+                                        )
                                     ) {
                                         onDismissRequest()
                                         onHideNowPlayingBottomSheet()
@@ -306,7 +314,10 @@ private fun NowPlayingScreenContent(
                                 song.artists.forEach { artistName ->
                                     BottomSheetMenuItem(
                                         leadingIcon = Icons.Default.Person,
-                                        label = "${uiState.language.viewArtist}: $artistName"
+                                        label = stringResource(
+                                            id = i8nR.string.core_i8n_view_artist,
+                                            artistName
+                                        )
                                     ) {
                                         onDismissRequest()
                                         onHideNowPlayingBottomSheet()
@@ -315,7 +326,7 @@ private fun NowPlayingScreenContent(
                                 }
                                 BottomSheetMenuItem(
                                     leadingIcon = Icons.Default.Info,
-                                    label = uiState.language.details
+                                    label = stringResource( id = i8nR.string.core_i8n_details )
                                 ) {
                                     onDismissRequest()
                                     showSongDetailsDialog = true
@@ -328,7 +339,6 @@ private fun NowPlayingScreenContent(
                 if ( showSongDetailsDialog ) {
                     SongDetailsDialog(
                         song = song,
-                        language = uiState.language,
                         durationFormatter = { it.formatMilliseconds() },
                         metadata = uiState.songAdditionalMetadata
                     ) {
@@ -341,10 +351,10 @@ private fun NowPlayingScreenContent(
                         onDismissRequest = { showSleepTimerBottomSheet = false }
                     ) {
                         val sleepTimerStartedMessage = stringResource(
-                            id = R.string.feature_nowplaying_sleep_timer_set
+                            id = i8nR.string.core_i8n_sleep_timer_set
                         )
                         val sleepTimerStoppedMessage = stringResource(
-                            id = R.string.feature_nowplaying_sleep_timer_off
+                            id = i8nR.string.core_i8n_sleep_timer_off
                         )
                         SleepTimerDialogContent(
                             sleepTimer = uiState.sleepTimer,
@@ -413,9 +423,9 @@ private fun SleepTimerDialogContent(
 
                         )
                         append( " " )
-                        append( stringResource( id = R.string.feature_nowplaying_left ) )
+                        append( stringResource( id = i8nR.string.core_i8n_left ) )
                     }
-                } ?: stringResource( id = R.string.feature_nowplaying_sleep_timer ),
+                } ?: stringResource( id = i8nR.string.core_i8n_sleep_timer ),
                 fontWeight = FontWeight.SemiBold,
             )
         }
@@ -440,7 +450,7 @@ private fun SleepTimerDialogContent(
         ListItem(
             headlineContent = {
                 Text(
-                    text = stringResource( id = R.string.feature_nowplaying_end_of_episode ),
+                    text = stringResource( id = i8nR.string.core_i8n_end_of_episode ),
                     fontWeight = FontWeight.SemiBold
                 )
             },
@@ -453,7 +463,7 @@ private fun SleepTimerDialogContent(
             ListItem(
                 headlineContent = {
                     Text(
-                        text = stringResource( id = R.string.feature_nowplaying_turn_off_timer ),
+                        text = stringResource( id = i8nR.string.core_i8n_turn_off_timer ),
                         fontWeight = FontWeight.SemiBold,
                     )
                 },
@@ -508,7 +518,6 @@ private fun NowPlayingScreenContentPreview() {
                 userData = emptyUserData.copy(
                     miniPlayerShowTrackControls = false,
                     controlsLayoutDefault = false,
-                    showNowPlayingSeekControls = true,
                     loopMode = LoopMode.Queue,
                 ),
                 queue = listOf(
@@ -550,7 +559,30 @@ private fun NowPlayingScreenContentPreview() {
                     timer = Timer()
                 )
             ),
-            lyricsUiState = LyricsUiState.Loading,
+            lyricsUiState = LyricsUiState.Success(
+                lyrics = listOf(
+                    Lyric(
+                        timeStamp = java.time.Duration.ofMinutes( 1 ),
+                        content = "Sometime say the magic you dey feel inside is like gold"
+                    ),
+                    Lyric(
+                        timeStamp = java.time.Duration.ofMinutes( 2 ),
+                        content = "Something like do re mi fa so lat ti do do (Yeah)"
+                    ),
+                    Lyric(
+                        timeStamp = java.time.Duration.ofMinutes( 3 ),
+                        content = "Make I sing for you la la do do"
+                    ),
+                    Lyric(
+                        timeStamp = java.time.Duration.ofMinutes( 4 ),
+                        content = "Make I sing your song"
+                    ),
+                    Lyric(
+                        timeStamp = java.time.Duration.ofMinutes( 5 ),
+                        content = "Make I sing make you wine am do do o"
+                    )
+                ),
+            ),
             playbackPosition = PlaybackPosition( 2L, 3L, 5L ),
             durationFormatter = { "05:33" },
             onArtistClicked = {},
@@ -583,6 +615,7 @@ private fun NowPlayingScreenContentPreview() {
             onShowSnackBar = {},
             onStopSleepTimer = {},
             onStartSleepTimer = {},
+            onShowLyrics = {}
         )
     }
 }

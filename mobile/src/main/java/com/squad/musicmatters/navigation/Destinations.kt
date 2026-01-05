@@ -1,38 +1,9 @@
 package com.squad.musicmatters.navigation
 
 import androidx.annotation.StringRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
-import androidx.compose.material.icons.filled.Album
-import androidx.compose.material.icons.filled.Face6
-import androidx.compose.material.icons.filled.Group
-import androidx.compose.material.icons.filled.LibraryMusic
-import androidx.compose.material.icons.filled.MusicNote
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.QueueMusic
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material.icons.outlined.Album
-import androidx.compose.material.icons.outlined.Face6
-import androidx.compose.material.icons.outlined.Group
-import androidx.compose.material.icons.outlined.LibraryMusic
-import androidx.compose.material.icons.outlined.MusicNote
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.QueueMusic
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material.icons.rounded.AccountTree
-import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import com.squad.musicmatters.R
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import kotlinx.serialization.Serializable
 
@@ -45,8 +16,8 @@ data object LibraryRoute
 enum class TopLevelDestination(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
-    @StringRes val iconTextId: Int,
-    @StringRes val titleTextId: Int,
+    @param:StringRes val iconTextId: Int,
+    @param:StringRes val titleTextId: Int,
     val route: KClass<*>
 ) {
     SONGS(

@@ -31,24 +31,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.ThemeMode
-import com.squad.musicmatters.core.ui.R
 
 @Composable
 fun NewPlaylistDialog(
-    language: Language,
     songsToAdd: List<Song> = emptyList(),
     onConfirmation: ( String, List<Song> ) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
 
-    val placeholder = stringResource( R.string.core_ui_playlist_name_placeholder )
+    val placeholder = stringResource( id = R.string.core_i8n_playlist_name_placeholder )
     var playlistName by remember {
         mutableStateOf(
             TextFieldValue(
@@ -71,7 +68,7 @@ fun NewPlaylistDialog(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         title = {
             Text(
-                text = language.newPlaylist,
+                text = stringResource( id = R.string.core_i8n_new_playlist),
                 fontWeight = FontWeight.SemiBold
             )
         },
@@ -111,7 +108,7 @@ fun NewPlaylistDialog(
                 }
             ) {
                 Text(
-                    text = language.done,
+                    text = stringResource( id = R.string.core_i8n_done ),
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -125,7 +122,7 @@ fun NewPlaylistDialog(
                     onClick = onDismissRequest
                 ) {
                     Text(
-                        text = stringResource( id = R.string.core_ui_cancel ),
+                        text = stringResource( id = R.string.core_i8n_cancel ),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -145,7 +142,6 @@ private fun NewPlaylistDialogPreview() {
         primaryColorName = PrimaryThemeColors.Blue.name
     ) {
         NewPlaylistDialog(
-            language = English,
             onConfirmation = { _, _ -> },
             onDismissRequest = {},
         )

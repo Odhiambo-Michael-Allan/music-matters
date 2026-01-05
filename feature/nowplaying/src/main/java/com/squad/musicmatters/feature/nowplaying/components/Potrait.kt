@@ -5,8 +5,6 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,21 +26,16 @@ import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.squad.musicmatters.core.datastore.DefaultPreferences
-import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
@@ -88,10 +81,12 @@ internal fun PortraitLayout(
     onPlayingSpeedChange: ( Float ) -> Unit,
     onPlayingPitchChange: ( Float ) -> Unit,
     onCreateEqualizerActivityContract: () -> Unit,
+    onShowLyrics: ( Boolean ) -> Unit,
     onShowSleepTimerBottomSheet: () -> Unit,
 ) {
     Column (
         verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
             .padding( 20.dp ),
@@ -110,27 +105,35 @@ internal fun PortraitLayout(
                 .aspectRatio( 1f )
                 .clip( MaterialTheme.shapes.medium )
         ) {
-            when ( lyricsUiState ) {
-                LyricsUiState.Loading -> {}
-                is LyricsUiState.Success -> {
-                    LyricsLayout(
-                        modifier = Modifier.fillMaxSize(),
-                        lyrics = lyricsUiState.lyrics,
-                        currentDurationInPlayback = Duration.ofMillis( playbackPosition.played ),
-                        onSeekTo = { onSeekEnd( it.toMillis() ) }
+            AnimatedContent(
+                targetState = uiState.userData.showLyrics
+            ) { showLyrics ->
+                if ( showLyrics ) {
+                    when ( lyricsUiState ) {
+                        LyricsUiState.Loading -> {}
+                        is LyricsUiState.Success -> {
+                            LyricsLayout(
+                                modifier = Modifier.fillMaxSize(),
+                                lyrics = lyricsUiState.lyrics,
+                                currentDurationInPlayback = Duration.ofMillis( playbackPosition.played ),
+                                onSeekTo = { onSeekEnd( it.toMillis() ) }
+                            )
+                        }
+                    }
+                } else {
+                    NowPlayingArtwork(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        artworkUri = currentlyPlayingSong.artworkUri?.toUri(),
+                        onSwipeLeft = onArtworkSwipedLeft,
+                        onSwipeRight = onArtworkSwipedRight,
+                        onSwipeDown = onArtworkSwipedDown,
+                        onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
                     )
                 }
             }
         }
-//        NowPlayingArtwork(
-//            modifier = Modifier
-//                .fillMaxWidth(),
-//            artworkUri = currentlyPlayingSong.artworkUri?.toUri(),
-//            onSwipeLeft = onArtworkSwipedLeft,
-//            onSwipeRight = onArtworkSwipedRight,
-//            onSwipeDown = onArtworkSwipedDown,
-//            onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
-//        )
+
         Row {
             AnimatedContent(
                 modifier = Modifier.weight( 1f ),
@@ -156,16 +159,6 @@ internal fun PortraitLayout(
                         artists = target.artists,
                         onArtistClicked = onArtistClicked
                     )
-                    if ( uiState.userData.showNowPlayingAudioInformation ) {
-                        uiState.songAdditionalMetadata?.let {
-                            Text(
-                                text = it.toSamplingInfoString( uiState.language ),
-                                style = MaterialTheme.typography.labelSmall
-                                    .copy( color = LocalContentColor.current.copy( alpha = 0.7f ) ),
-                                maxLines = 1,
-                            )
-                        }
-                    }
                 }
             }
             Row (
@@ -237,16 +230,16 @@ internal fun PortraitLayout(
         }
         Spacer( modifier = Modifier.height( 16.dp ) )
         NowPlayingScreenBottomBar(
-            language = uiState.language,
             currentLoopMode = uiState.userData.loopMode,
             shuffle = uiState.userData.shuffle,
+            showLyrics = uiState.userData.showLyrics,
             currentSpeed = uiState.userData.playbackSpeed,
             currentPitch = uiState.userData.playbackPitch,
-            lyricsLayout = uiState.userData.lyricsLayout,
             onToggleLoopMode = onToggleLoopMode,
             onToggleShuffleMode = onToggleShuffleMode,
             onSpeedChange = onPlayingSpeedChange,
             onPitchChange = onPlayingPitchChange,
+            onShowLyrics = onShowLyrics,
             onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
         )
     }
@@ -254,7 +247,7 @@ internal fun PortraitLayout(
 
 @Preview( showBackground = true )
 @Composable
-private fun NowPlayingScreenContentPreview() {
+private fun PortraitPreview() {
     MusicMattersTheme(
         themeMode = ThemeMode.LIGHT,
         primaryColorName = "Blue",
@@ -267,9 +260,9 @@ private fun NowPlayingScreenContentPreview() {
                 userData = emptyUserData.copy(
                     miniPlayerShowTrackControls = false,
                     controlsLayoutDefault = false,
-                    showNowPlayingSeekControls = true,
                     loopMode = LoopMode.Queue,
                     shuffle = true,
+                    showLyrics = true,
                 ),
                 queue = listOf(
                     Song(
@@ -391,6 +384,7 @@ private fun NowPlayingScreenContentPreview() {
             onArtworkSwipedDown = { TODO() },
             onShowOptionsMenu = { TODO() },
             onShowSleepTimerBottomSheet = { TODO() },
+            onShowLyrics = {}
         )
     }
 }

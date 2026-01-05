@@ -31,11 +31,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.media.media.extensions.formatMilliseconds
 import com.squad.musicmatters.core.data.utils.VersionUtils
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
@@ -43,8 +46,6 @@ import com.squad.musicmatters.core.designsystem.theme.GoogleRed
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -56,7 +57,6 @@ import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
 @Composable
 fun SongCard(
     modifier: Modifier = Modifier,
-    language: Language,
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
@@ -155,7 +155,6 @@ fun SongCard(
                                 }
                             ) {
                                 SongOptionsBottomSheetMenu(
-                                    language = language,
                                     song = song,
                                     isFavorite = isFavorite,
                                     isCurrentlyPlaying = isCurrentlyPlaying,
@@ -189,7 +188,6 @@ fun SongCard(
             if ( showSongDetailsDialog ) {
                 SongDetailsDialog(
                     song = song,
-                    language = language,
                     durationFormatter = { it.formatMilliseconds() },
                     metadata = songAdditionalMetadata,
                 ) {
@@ -199,7 +197,6 @@ fun SongCard(
             if ( showDeleteSongDialog ) {
                 DeleteSongDialog(
                     song = song,
-                    language = language,
                     onDelete = { onDeleteSong( song ) }
                 ) {
                     showDeleteSongDialog = false
@@ -211,7 +208,6 @@ fun SongCard(
 
 @Composable
 fun SongOptionsBottomSheetMenu(
-    language: Language,
     song: Song,
     isFavorite: Boolean,
     isCurrentlyPlaying: Boolean,
@@ -229,12 +225,13 @@ fun SongOptionsBottomSheetMenu(
     onDismissRequest: () -> Unit,
     onShowSnackBar: ( String ) -> Unit,
 ) {
+    val context = LocalContext.current
+
     GenericOptionsBottomSheet(
         headerImageUri = song.artworkUri?.toUri(),
         headerTitle = song.title,
         titleIsHighlighted = isCurrentlyPlaying,
         headerDescription = song.artists.joinToString(),
-        language = language,
         playlists = playlists,
         onDismissRequest = onDismissRequest,
         onPlayNext = { onPlayNext( song ) },
@@ -249,10 +246,15 @@ fun SongOptionsBottomSheetMenu(
                 } else {
                     MusicMattersIcons.FavoriteBorder
                 },
-                label = language.favorite
+                label = stringResource( id = R.string.core_i8n_favorite )
             ) {
+                val feedback = context.getString(
+                    if ( isFavorite ) R.string.core_i8n_removed_song_from_favorites
+                    else R.string.core_i8n_added_song_to_favorites
+                )
                 onFavorite( song, !isFavorite )
                 onDismissRequest()
+                onShowSnackBar( feedback )
             }
         },
         onShowSnackBar = onShowSnackBar,
@@ -260,7 +262,7 @@ fun SongOptionsBottomSheetMenu(
             song.artists.forEach {
                 BottomSheetMenuItem(
                     leadingIcon = MusicMattersIcons.Artist,
-                    label = "${language.viewArtist}: $it"
+                    label = stringResource( id = R.string.core_i8n_view_artist, it )
                 ) {
                     onDismissRequest()
                     onViewArtist( it )
@@ -269,7 +271,7 @@ fun SongOptionsBottomSheetMenu(
             song.albumTitle?.let {
                 BottomSheetMenuItem(
                     leadingIcon = MusicMattersIcons.Album,
-                    label = language.viewAlbum
+                    label = stringResource( id = R.string.core_i8n_view_album, it )
                 ) {
                     onDismissRequest()
                     onViewAlbum( it )
@@ -277,14 +279,14 @@ fun SongOptionsBottomSheetMenu(
             }
             BottomSheetMenuItem(
                 leadingIcon = MusicMattersIcons.Share,
-                label = language.shareSong
+                label = stringResource( id = R.string.core_i8n_share_song )
             ) {
                 onDismissRequest()
                 onShareSong( song.mediaUri.toUri() )
             }
             BottomSheetMenuItem(
                 leadingIcon = MusicMattersIcons.SongDetails,
-                label = language.details
+                label = stringResource( id = R.string.core_i8n_details )
             ) {
                 onDismissRequest()
                 onShowSongDetails()
@@ -292,7 +294,7 @@ fun SongOptionsBottomSheetMenu(
             BottomSheetMenuItem(
                 leadingIcon = MusicMattersIcons.Delete,
                 leadingIconTint = GoogleRed,
-                label = language.delete,
+                label = stringResource( id = R.string.core_i8n_delete ),
             ) {
                 onDismissRequest()
                 onDelete( song )
@@ -312,7 +314,6 @@ private fun SongOptionsBottomSheetContentPreview() {
         primaryColorName = PrimaryThemeColors.Blue.name
     ) {
         SongOptionsBottomSheetMenu(
-            language = English,
             song = PreviewParameterData.songs.first(),
             isFavorite = false,
             isCurrentlyPlaying = true,
@@ -344,7 +345,6 @@ private fun SongCardPreview() {
         primaryColorName = PrimaryThemeColors.Blue.name
     ) {
         SongCard(
-            language = English,
             song = PreviewParameterData.songs.first(),
             isCurrentlyPlaying = true,
             isFavorite = true,

@@ -20,7 +20,6 @@ dependencies {
     api( projects.core.common )
 
     implementation( libs.androidx.core.ktx )
-    implementation( projects.core.i8n )
 
     testImplementation( libs.kotlinx.coroutines.test )
     testImplementation( libs.junit )

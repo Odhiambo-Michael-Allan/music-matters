@@ -32,6 +32,8 @@ dependencies {
     implementation( libs.kotlinx.coroutines.guava )
     implementation( libs.timber )
 
+    implementation( libs.glide )
+
     testImplementation( libs.junit )
     testImplementation( projects.core.testing )
     testImplementation( libs.kotlinx.coroutines.test )

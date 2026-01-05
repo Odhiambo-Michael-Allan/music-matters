@@ -55,6 +55,7 @@ protobufPlugin = "0.9.4"
 
 androidxTestRules = "1.6.1"
 kotlinxSerializationJson = "1.9.0"
+glide_version = "4.15.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -137,6 +138,8 @@ room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", vers
 
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRules" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+# glide
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide_version" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

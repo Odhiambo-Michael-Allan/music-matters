@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import com.squad.musicmatters.R
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 
@@ -79,7 +79,7 @@ fun PermissionsScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = stringResource( id = R.string.welcome_message ),
+                    text = stringResource( id = R.string.core_i8n_welcome_message ),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold
                     ),
@@ -103,24 +103,30 @@ fun PermissionsScreen(
 
             if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ) {
                 PermissionCard(
-                    title = stringResource( id = R.string.read_media_audio ),
+                    title = stringResource( id = R.string.core_i8n_read_media_audio ),
                     permissionGranted = readMediaAudioPermissionGranted,
-                    description = stringResource( id = R.string.read_media_audio_prompt )
+                    description = stringResource(
+                        id = R.string.core_i8n_read_media_audio_prompt
+                    )
                 ) {
                     readMediaAudioPermissionRequestLauncher.launch( Manifest.permission.READ_MEDIA_AUDIO )
                 }
                 PermissionCard(
-                    title = stringResource( id = R.string.post_notifications_permission ),
+                    title = stringResource(
+                        id = R.string.core_i8n_post_notifications_permission
+                    ),
                     permissionGranted = postNotificationsPermissionGranted,
-                    description = stringResource( id = R.string.post_notifications_prompt )
+                    description = stringResource(
+                        id = R.string.core_i8n_post_notifications_prompt
+                    )
                 ) {
                     postNotificationsPermissionRequestLauncher.launch( Manifest.permission.POST_NOTIFICATIONS )
                 }
             }
             else {
                 PermissionCard(
-                    title = stringResource( id = R.string.storage_access ),
-                    description = stringResource( id = R.string.storage_access_prompt ),
+                    title = stringResource( id = R.string.core_i8n_storage_access ),
+                    description = stringResource( id = R.string.core_i8n_storage_access_prompt ),
                     permissionGranted = readExternalStoragePermissionsGranted,
                     onClick = {
                         readExternalStoragePermissionRequestLauncher.launch( Manifest.permission.READ_EXTERNAL_STORAGE )
@@ -140,7 +146,7 @@ fun PermissionsScreen(
             ) {
                 Text(
                     modifier = Modifier.padding( 8.dp ),
-                    text = stringResource( id = R.string.lets_go )
+                    text = stringResource( id = R.string.core_i8n_lets_go )
                 )
             }
         }

@@ -2,7 +2,6 @@ package com.squad.musicmatters.core.datastore
 
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.LoopMode
-import com.squad.musicmatters.core.model.LyricsLayout
 import com.squad.musicmatters.core.model.SortAlbumsBy
 import com.squad.musicmatters.core.model.SortArtistsBy
 import com.squad.musicmatters.core.model.SortGenresBy
@@ -232,36 +231,6 @@ class MusicMattersPreferencesDataSourceTest {
         assertTrue( subject.userData.map { it.miniPlayerShowTrackControls }.first() )
         subject.setMiniPlayerShowTrackControls( false )
         assertFalse( subject.userData.map { it.miniPlayerShowTrackControls }.first() )
-    }
-
-    @Test
-    fun testSetLyricsLayout() = runTest {
-        assertEquals(
-            DefaultPreferences.LYRICS_LAYOUT,
-            subject.userData.map { it.lyricsLayout }.first()
-        )
-        LyricsLayout.entries.forEach {
-            subject.setLyricsLayout( it )
-            assertEquals( it, subject.userData.map { it.lyricsLayout }.first() )
-        }
-    }
-
-    @Test
-    fun testSetShowNowPlayingAudioInformation() = runTest {
-        assertFalse( subject.userData.map { it.showNowPlayingAudioInformation }.first() )
-        subject.setShowNowPlayingAudioInformation( true )
-        assertTrue( subject.userData.map { it.showNowPlayingAudioInformation }.first() )
-        subject.setShowNowPlayingAudioInformation( false )
-        assertFalse( subject.userData.map { it.showNowPlayingAudioInformation }.first() )
-    }
-
-    @Test
-    fun testSetShowNowPlayingSeekControls() = runTest {
-        assertFalse( subject.userData.map { it.showNowPlayingSeekControls }.first() )
-        subject.setShowNowPlayingSeekControls( true )
-        assertTrue( subject.userData.map { it.showNowPlayingSeekControls }.first() )
-        subject.setShowNowPlayingSeekControls( false )
-        assertFalse( subject.userData.map { it.showNowPlayingSeekControls }.first() )
     }
 
     @Test

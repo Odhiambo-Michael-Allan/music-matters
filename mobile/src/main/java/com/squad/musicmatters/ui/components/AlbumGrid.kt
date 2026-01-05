@@ -13,99 +13,98 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortAlbumsBy
 
-@Composable
-fun AlbumGrid(
-    albums: List<Album>,
-    language: Language,
-    sortType: SortAlbumsBy,
-    sortReverse: Boolean,
-    @DrawableRes fallbackResourceId: Int,
-    onSortReverseChange: ( Boolean ) -> Unit,
-    onSortTypeChange: ( SortAlbumsBy ) -> Unit,
-    onAlbumClick: ( String ) -> Unit,
-    onPlayAlbum: ( Album ) -> Unit,
-    onAddToQueue: ( Album ) -> Unit,
-    onPlayNext: ( Album ) -> Unit,
-    onShufflePlay: ( Album ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
-    onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInAlbum: ( Album ) -> List<Song>,
-    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
-    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
-) {
-    MediaSortBarScaffold(
-        mediaSortBar = {
-            MediaSortBar(
-                sortReverse = sortReverse,
-                onSortReverseChange = onSortReverseChange,
-                sortType = sortType,
-                sortTypes = SortAlbumsBy.entries.associateBy( { it }, { it.sortAlbumByLabel( language ) } ),
-                onSortTypeChange = onSortTypeChange,
-                label = {
-                    Text(
-                        text = language.xAlbums( albums.size.toString() )
-                    )
-                }
-            )
-        }
-    ) {
-        when {
-            albums.isEmpty() -> IconTextBody(
-                icon = { modifier ->
-                    Icon(
-                        modifier = modifier,
-                        imageVector = Icons.Filled.Album,
-                        contentDescription = null
-                    )
-                }
-            ) {
-                Text( text = language.damnThisIsSoEmpty )
-            }
-            else -> {
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive( minSize = 128.dp ),
-                    contentPadding = PaddingValues( 8.dp )
-                ) {
-                    items( albums ) {  album ->
-                        AlbumTile(
-                            modifier = Modifier.fillMaxWidth(),
-                            album = album,
-                            language = language,
-                            fallbackResourceId = fallbackResourceId,
-                            onPlayAlbum = { onPlayAlbum( album ) },
-                            onAddToQueue = { onAddToQueue( album ) },
-                            onPlayNext = { onPlayNext( album ) },
-                            onShufflePlay = { onShufflePlay( album ) },
-                            onViewArtist = onViewArtist,
-                            onClick = { onAlbumClick( album.title ) },
-                            onAddSongsToPlaylist = onAddSongsToPlaylist,
-                            onCreatePlaylist = onCreatePlaylist,
-                            onGetPlaylists = onGetPlaylists,
-                            onGetSongsInAlbum = onGetSongsInAlbum,
-                            onGetSongsInPlaylist = onGetSongsInPlaylist,
-                            onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-fun SortAlbumsBy.sortAlbumByLabel( language: Language ) = when ( this ) {
-    SortAlbumsBy.ALBUM_NAME -> language.album
-    SortAlbumsBy.ARTIST_NAME -> language.artist
-    SortAlbumsBy.CUSTOM -> language.custom
-    SortAlbumsBy.TRACK_COUNT -> language.trackCount
-}
+//@Composable
+//fun AlbumGrid(
+//    albums: List<Album>,
+//    language: Language,
+//    sortType: SortAlbumsBy,
+//    sortReverse: Boolean,
+//    @DrawableRes fallbackResourceId: Int,
+//    onSortReverseChange: ( Boolean ) -> Unit,
+//    onSortTypeChange: ( SortAlbumsBy ) -> Unit,
+//    onAlbumClick: ( String ) -> Unit,
+//    onPlayAlbum: ( Album ) -> Unit,
+//    onAddToQueue: ( Album ) -> Unit,
+//    onPlayNext: ( Album ) -> Unit,
+//    onShufflePlay: ( Album ) -> Unit,
+//    onViewArtist: ( String ) -> Unit,
+//    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+//    onCreatePlaylist: ( String, List<Song> ) -> Unit,
+//    onGetPlaylists: () -> List<Playlist>,
+//    onGetSongsInAlbum: ( Album ) -> List<Song>,
+//    onGetSongsInPlaylist: (Playlist ) -> List<Song>,
+//    onSearchSongsMatchingQuery: ( String ) -> List<Song>,
+//) {
+//    MediaSortBarScaffold(
+//        mediaSortBar = {
+//            MediaSortBar(
+//                sortReverse = sortReverse,
+//                onSortReverseChange = onSortReverseChange,
+//                sortType = sortType,
+//                sortTypes = SortAlbumsBy.entries.associateBy( { it }, { it.sortAlbumByLabel( language ) } ),
+//                onSortTypeChange = onSortTypeChange,
+//                label = {
+//                    Text(
+//                        text = language.xAlbums( albums.size.toString() )
+//                    )
+//                }
+//            )
+//        }
+//    ) {
+//        when {
+//            albums.isEmpty() -> IconTextBody(
+//                icon = { modifier ->
+//                    Icon(
+//                        modifier = modifier,
+//                        imageVector = Icons.Filled.Album,
+//                        contentDescription = null
+//                    )
+//                }
+//            ) {
+//                Text( text = language.damnThisIsSoEmpty )
+//            }
+//            else -> {
+//                LazyVerticalGrid(
+//                    columns = GridCells.Adaptive( minSize = 128.dp ),
+//                    contentPadding = PaddingValues( 8.dp )
+//                ) {
+//                    items( albums ) {  album ->
+//                        AlbumTile(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            album = album,
+//                            language = language,
+//                            fallbackResourceId = fallbackResourceId,
+//                            onPlayAlbum = { onPlayAlbum( album ) },
+//                            onAddToQueue = { onAddToQueue( album ) },
+//                            onPlayNext = { onPlayNext( album ) },
+//                            onShufflePlay = { onShufflePlay( album ) },
+//                            onViewArtist = onViewArtist,
+//                            onClick = { onAlbumClick( album.title ) },
+//                            onAddSongsToPlaylist = onAddSongsToPlaylist,
+//                            onCreatePlaylist = onCreatePlaylist,
+//                            onGetPlaylists = onGetPlaylists,
+//                            onGetSongsInAlbum = onGetSongsInAlbum,
+//                            onGetSongsInPlaylist = onGetSongsInPlaylist,
+//                            onSearchSongsMatchingQuery = onSearchSongsMatchingQuery,
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//fun SortAlbumsBy.sortAlbumByLabel( language: Language ) = when ( this ) {
+//    SortAlbumsBy.ALBUM_NAME -> language.album
+//    SortAlbumsBy.ARTIST_NAME -> language.artist
+//    SortAlbumsBy.CUSTOM -> language.custom
+//    SortAlbumsBy.TRACK_COUNT -> language.trackCount
+//}
 
 //@Preview( showSystemUi = true )
 //@Composable

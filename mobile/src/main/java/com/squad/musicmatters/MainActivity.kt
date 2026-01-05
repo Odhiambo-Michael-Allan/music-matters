@@ -11,6 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -42,8 +43,20 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * For now, extend from AppCompatActivity. Otherwise, setApplicationLocales will do nothing.
+ * Extending from AppCompatActivity requires to use an AppCompat theme for the Activity. In
+ * the manifest, for the activity, use android:theme="@style/Theme.AppCompat". Otherwise,
+ * the application will crash.
+ *
+ * The alternative is to replace AppCompatDelegate with the Framework APIs. The Framework
+ * APIs are not backwards compatible, like AppCompatDelegate, and so work for T+.
+ * However, with the Framework APIs, you can use Compose themes and extend from
+ * ComponentActivity.
+ * Framework APIs: https://developer.android.com/about/versions/13/features/app-languages#framework-impl
+ */
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainActivityViewModel by viewModels()
 //    private lateinit var nowPlayingViewModel: NowPlayingViewModel
@@ -230,7 +243,8 @@ class MainActivity : ComponentActivity() {
                         }
                         else -> {
                             MusicMattersApp(
-                                uiState = uiState
+                                uiState = uiState,
+                                onDeleteSong = { deleteSong( it ) }
 //                                nowPlayingViewModel = nowPlayingViewModel,
 //                                settingsRepository = mobileDiModule.settingsRepository,
 //                                musicServiceConnection = musicServiceConnection,
@@ -246,7 +260,7 @@ class MainActivity : ComponentActivity() {
     }
 
     // https://medium.com/@vishrut.goyani9/scoped-storage-in-android-writing-deleting-media-files-ee6235d30117
-    fun deleteSong( song: Song ) {
+    private fun deleteSong( song: Song ) {
         currentSongBeingDeleted = song
         if ( !VersionUtils.isQandAbove() ) {
             deleteResultLauncherForApiBelow29.launch( Manifest.permission.WRITE_EXTERNAL_STORAGE )

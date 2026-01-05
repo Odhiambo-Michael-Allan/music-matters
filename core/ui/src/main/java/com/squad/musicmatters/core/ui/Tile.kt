@@ -35,11 +35,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.dialog.AddSongsToPlaylistBottomSheet
@@ -53,7 +55,6 @@ fun GenericTile(
     title: String,
     description: String? = null,
     headerDescription: String,
-    language: Language,
     playlists: List<Playlist>,
     onPlay: () -> Unit,
     onClick: () -> Unit,
@@ -79,7 +80,6 @@ fun GenericTile(
                         headerImageUri = imageUri,
                         headerTitle = title,
                         headerDescription = headerDescription,
-                        language = language,
                         playlists = playlists,
                         onDismissRequest = onDismissRequest,
                         onAddToQueue = onAddToQueue,
@@ -92,7 +92,7 @@ fun GenericTile(
                         leadingBottomSheetMenuItem = {
                             BottomSheetMenuItem(
                                 leadingIcon = Icons.AutoMirrored.Filled.PlaylistPlay,
-                                label = language.shufflePlay
+                                label = stringResource( id = R.string.core_i8n_shuffle_play )
                             ) {
                                 onDismissRequest()
                                 onShufflePlay()
@@ -132,7 +132,6 @@ fun GenericOptionsBottomSheet(
     headerTitle: String,
     titleIsHighlighted: Boolean = false,
     headerDescription: String,
-    language: Language,
     playlists: List<Playlist>,
     onDismissRequest: () -> Unit,
     onPlayNext: () -> Unit,
@@ -145,6 +144,7 @@ fun GenericOptionsBottomSheet(
     trailingBottomSheetMenuItems: ( @Composable ( () -> Unit ) -> Unit )? = null,
 ) {
 
+    val context = LocalContext.current
     var showAddSongToPlaylistBottomSheet by remember { mutableStateOf( false ) }
     var showCreateNewPlaylistDialog by remember { mutableStateOf( false ) }
 
@@ -161,21 +161,25 @@ fun GenericOptionsBottomSheet(
         leadingBottomSheetMenuItem( onDismissRequest )
         BottomSheetMenuItem(
             leadingIcon = MusicMattersIcons.Queue,
-            label = language.playNext
+            label = stringResource( id = R.string.core_i8n_play_next )
         ) {
+            val feedback = context.getString( R.string.core_i8n_song_will_play_next )
             onDismissRequest()
             onPlayNext()
+            onShowSnackBar( feedback )
         }
         BottomSheetMenuItem(
             leadingIcon = MusicMattersIcons.PlaylistAdd,
-            label = language.addToQueue
+            label = stringResource( id = R.string.core_i8n_add_to_queue )
         ) {
+            val feedback = context.getString( R.string.core_i8n_song_added_to_queue )
             onDismissRequest()
             onAddToQueue()
+            onShowSnackBar( feedback )
         }
         BottomSheetMenuItem(
             leadingIcon = MusicMattersIcons.PlaylistAdd,
-            label = language.addToPlaylist
+            label = stringResource( id = R.string.core_i8n_add_to_playlist )
         ) {
             showAddSongToPlaylistBottomSheet = true
         }
@@ -192,7 +196,6 @@ fun GenericOptionsBottomSheet(
             AddSongsToPlaylistBottomSheet(
                 songsToAdd = onGetSongs(),
                 playlists = playlists,
-                language = language,
                 onAddSongsToPlaylist = { playlist, songs ->
                     onAddSongsToPlaylist( playlist, songs )
                 },
@@ -206,7 +209,6 @@ fun GenericOptionsBottomSheet(
     }
     if ( showCreateNewPlaylistDialog ) {
         NewPlaylistDialog(
-            language = language,
             songsToAdd = onGetSongs(),
             onConfirmation = { playlistName, selectedSongs ->
                 showCreateNewPlaylistDialog = false

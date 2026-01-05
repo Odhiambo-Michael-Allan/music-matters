@@ -7,6 +7,14 @@ import androidx.annotation.ChecksSdkIntAtLeast
 object VersionUtils {
 
     /**
+     * @return true if device is running API >= 26
+     */
+    @ChecksSdkIntAtLeast( api = Build.VERSION_CODES.O )
+    fun hasOreo(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+    }
+
+    /**
      * @return true if the device is running API >= 25
      */
     @ChecksSdkIntAtLeast( api = Build.VERSION_CODES.N_MR1 )

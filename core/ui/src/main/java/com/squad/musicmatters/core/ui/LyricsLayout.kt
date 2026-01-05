@@ -38,8 +38,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -75,48 +77,61 @@ fun LyricsLayout(
     Box(
         modifier = modifier
     ) {
-        LazyColumn(
-            state = scrollState,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            itemsIndexed( lyrics ) { index, lyric ->
-                val isActive = index == currentLyricIndex
 
-                val scale by animateFloatAsState(
-                    targetValue = if ( isActive ) 1.15f else 1f,
-                    animationSpec = spring( dampingRatio = Spring.DampingRatioLowBouncy ),
-                    label = "LyricScale"
-                )
+        if ( lyrics.isEmpty() ) {
+            Text(
+                text = stringResource( R.string.core_i8n_no_lyrics_found ),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding( vertical = 12.dp, horizontal = 24.dp )
+                    .align( Alignment.Center )
+            )
+        } else {
+            LazyColumn(
+                state = scrollState,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                itemsIndexed( lyrics ) { index, lyric ->
+                    val isActive = index == currentLyricIndex
 
-                val color by animateColorAsState(
-                    targetValue = if ( isActive ) MaterialTheme.colorScheme.primary else Color.Unspecified,
-                    animationSpec = tween( durationMillis = 300 ),
-                    label = "LyricColor"
-                )
+                    val scale by animateFloatAsState(
+                        targetValue = if ( isActive ) 1.15f else 1f,
+                        animationSpec = spring( dampingRatio = Spring.DampingRatioLowBouncy ),
+                        label = "LyricScale"
+                    )
 
-                val blurAlpha by animateFloatAsState(
-                    targetValue = if ( isActive ) 1f else 0.5f,
-                    animationSpec = tween( durationMillis = 300 ),
-                    label = "LyricAlpha"
-                )
+                    val color by animateColorAsState(
+                        targetValue = if ( isActive ) MaterialTheme.colorScheme.primary else Color.Unspecified,
+                        animationSpec = tween( durationMillis = 300 ),
+                        label = "LyricColor"
+                    )
 
-                Text(
-                    text = lyric.content,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = color,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding( vertical = 12.dp, horizontal = 24.dp )
-                        .pointerInput( Unit ) {
-                            detectTapGestures { onSeekTo( lyric.timeStamp ) }
-                        }
-                        .graphicsLayer {
-                            scaleX = scale
-                            scaleY = scale
-                            alpha = blurAlpha
-                        }
-                )
+                    val blurAlpha by animateFloatAsState(
+                        targetValue = if ( isActive ) 1f else 0.5f,
+                        animationSpec = tween( durationMillis = 300 ),
+                        label = "LyricAlpha"
+                    )
+
+                    Text(
+                        text = lyric.content,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = color,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding( vertical = 12.dp, horizontal = 24.dp )
+                            .pointerInput( Unit ) {
+                                detectTapGestures { onSeekTo( lyric.timeStamp ) }
+                            }
+                            .graphicsLayer {
+                                scaleX = scale
+                                scaleY = scale
+                                alpha = blurAlpha
+                            }
+                    )
+                }
             }
         }
         Box(
@@ -133,13 +148,6 @@ fun LyricsLayout(
     }
 }
 
-@Composable
-private fun BottomGradientEdge(
-    color: Color,
-    isBottom: Boolean = true
-) {
-
-}
 
 @DevicePreviews
 @Composable
@@ -175,6 +183,25 @@ private fun LyricsLayoutPreview() {
                     content = "Make I sing make you wine am do do o"
                 )
             ),
+            currentDurationInPlayback = Duration.ofMinutes( 2L ),
+            onSeekTo = {}
+        )
+    }
+}
+
+@DevicePreviews
+@Composable
+private fun LyricsLayoutEmptyPreview() {
+    MusicMattersTheme(
+        themeMode = DefaultPreferences.THEME_MODE,
+        fontName = DefaultPreferences.FONT_NAME,
+        primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
+        useMaterialYou = true,
+        fontScale = DefaultPreferences.FONT_SCALE
+    ) {
+        LyricsLayout(
+            modifier = Modifier.padding( 24.dp ),
+            lyrics = emptyList(),
             currentDurationInPlayback = Duration.ofMinutes( 2L ),
             onSeekTo = {}
         )
