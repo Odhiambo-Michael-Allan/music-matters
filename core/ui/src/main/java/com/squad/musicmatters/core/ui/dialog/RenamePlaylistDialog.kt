@@ -12,15 +12,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.ui.PreviewParameterData
 
 @Composable
 fun RenamePlaylistDialog(
     playlistTitle: String,
-    language: Language,
     onRename: ( String ) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -34,7 +33,7 @@ fun RenamePlaylistDialog(
             )
         },
         title = {
-            Text( text = language.renamePlaylist )
+            Text( text = stringResource( id = R.string.core_i8n_rename_playlist ) )
         },
         text = {
             OutlinedTextField(
@@ -54,14 +53,14 @@ fun RenamePlaylistDialog(
                     onDismissRequest()
                 }
             ) {
-                Text( text = language.rename )
+                Text( text = stringResource( id = R.string.core_i8n_rename ) )
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onDismissRequest
             ) {
-                Text( text = language.cancel )
+                Text( text = stringResource( id = R.string.core_i8n_cancel ) )
             }
         }
     )
@@ -72,7 +71,6 @@ fun RenamePlaylistDialog(
 fun RenamePlaylistDialogPreview() {
     RenamePlaylistDialog(
         playlistTitle = PreviewParameterData.playlists.first().title,
-        language = English,
         onRename = { /*TODO*/ },
         onDismissRequest = {}
     )

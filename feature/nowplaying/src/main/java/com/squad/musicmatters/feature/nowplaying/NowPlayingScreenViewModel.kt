@@ -8,8 +8,6 @@ import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataReposi
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.utils.combine
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.media.connection.SleepTimer
@@ -168,6 +166,12 @@ class NowPlayingScreenViewModel @Inject constructor(
         }
     }
 
+    fun onShowLyrics( show: Boolean ) {
+        viewModelScope.launch {
+            preferencesDataSource.setShowLyrics( show )
+        }
+    }
+
     fun startSleepTimer( duration: Duration ) {
         player.setTimer( duration )
     }
@@ -192,7 +196,6 @@ sealed interface NowPlayingScreenUiState {
         val playerState: PlayerState,
         val playlists: List<Playlist>,
         val songAdditionalMetadata: SongAdditionalMetadata?,
-        val language: Language = English,
         val sleepTimer: SleepTimer? = null,
     ) : NowPlayingScreenUiState
 }

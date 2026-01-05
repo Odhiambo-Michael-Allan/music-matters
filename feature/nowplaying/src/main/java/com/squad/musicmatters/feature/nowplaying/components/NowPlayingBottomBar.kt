@@ -70,12 +70,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.LoopMode
-import com.squad.musicmatters.core.model.LyricsLayout
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortAlbumsBy
 import com.squad.musicmatters.core.model.SortArtistsBy
@@ -212,7 +210,8 @@ private fun NowPlayingBottomBarContent(
                                         song = it,
                                         nextSong = nextSong,
                                         previousSong = previousSong,
-                                        textMarquee = uiState.userData.miniPlayerTextMarquee
+                                        textMarquee = uiState.userData.miniPlayerTextMarquee,
+                                        onNowPlayingBottomBarClick = onNowPlayingBottomBarClick,
                                     )
                                 }
                                 Spacer( modifier = Modifier.width( 15.dp ) )
@@ -325,6 +324,7 @@ private fun NowPlayingBottomBarContent(
     nextSong: () -> Boolean,
     previousSong: () -> Boolean,
     textMarquee: Boolean,
+    onNowPlayingBottomBarClick: () -> Unit,
 ) {
     BoxWithConstraints {
         val cardWidthInPixels = constraints.maxWidth
@@ -379,7 +379,8 @@ private fun NowPlayingBottomBarContent(
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
-                    textMarquee = textMarquee
+                    textMarquee = textMarquee,
+                    onClick = onNowPlayingBottomBarClick,
 
                 )
                 NowPlayingBottomBarContentText(
@@ -388,7 +389,8 @@ private fun NowPlayingBottomBarContent(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
                     ),
-                    textMarquee = textMarquee
+                    textMarquee = textMarquee,
+                    onClick = onNowPlayingBottomBarClick,
                 )
             }
         }
@@ -558,7 +560,6 @@ private fun NowPlayingBottomBarPreview() {
 }
 
 val emptyUserData = UserData(
-    language = English,
     fontName = "Product Sans",
     fontScale = 1f,
     themeMode = ThemeMode.FOLLOW_SYSTEM,
@@ -576,9 +577,6 @@ val emptyUserData = UserData(
     miniPlayerShowTrackControls = true,
     miniPlayerShowSeekControls = false,
     miniPlayerTextMarquee = true,
-    lyricsLayout = LyricsLayout.REPLACE_ARTWORK,
-    showNowPlayingAudioInformation = true,
-    showNowPlayingSeekControls = false,
     playbackSpeed = 1f,
     playbackPitch = 1f,
     loopMode = LoopMode.None,

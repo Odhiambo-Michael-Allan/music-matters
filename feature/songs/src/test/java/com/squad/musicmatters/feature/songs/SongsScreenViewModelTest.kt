@@ -10,7 +10,6 @@ import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadat
 import com.squad.musicmatters.core.testing.repository.TestSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSongsForSorting
-import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SortSongsBy
@@ -75,7 +74,6 @@ class SongsScreenViewModelTest {
                 songs = emptyList(),
                 sortSongsBy = DefaultPreferences.SORT_SONGS_BY,
                 sortSongsInReverse = false,
-                language = English,
                 themeMode = DefaultPreferences.THEME_MODE,
                 currentlyPlayingSongId = "",
                 favoriteSongIds = emptySet(),
@@ -91,7 +89,6 @@ class SongsScreenViewModelTest {
                     songs = emptyList(),
                     sortSongsBy = DefaultPreferences.SORT_SONGS_BY,
                     sortSongsInReverse = false,
-                    language = English,
                     themeMode = it,
                     currentlyPlayingSongId = "",
                     favoriteSongIds = emptySet(),
@@ -156,7 +153,6 @@ class SongsScreenViewModelTest {
                 songs = emptyList(),
                 sortSongsBy = DefaultPreferences.SORT_SONGS_BY,
                 sortSongsInReverse = false,
-                language = English,
                 themeMode = DefaultPreferences.THEME_MODE,
                 currentlyPlayingSongId = "",
                 favoriteSongIds = emptySet(),
@@ -177,7 +173,6 @@ class SongsScreenViewModelTest {
                 songs = emptyList(),
                 sortSongsBy = DefaultPreferences.SORT_SONGS_BY,
                 sortSongsInReverse = false,
-                language = English,
                 themeMode = DefaultPreferences.THEME_MODE,
                 currentlyPlayingSongId = "song-id-1",
                 favoriteSongIds = emptySet(),
@@ -205,7 +200,6 @@ class SongsScreenViewModelTest {
                 songs = emptyList(),
                 sortSongsBy = DefaultPreferences.SORT_SONGS_BY,
                 sortSongsInReverse = false,
-                language = English,
                 themeMode = DefaultPreferences.THEME_MODE,
                 currentlyPlayingSongId = "",
                 favoriteSongIds = testSongsForSorting.map { it.id }.toSet(),

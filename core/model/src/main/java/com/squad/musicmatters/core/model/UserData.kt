@@ -1,9 +1,7 @@
 package com.squad.musicmatters.core.model
 
-import com.squad.musicmatters.core.i8n.Language
 
 data class UserData(
-    val language: Language,
     val fontName: String,
     val fontScale: Float,
     val themeMode: ThemeMode,
@@ -21,9 +19,6 @@ data class UserData(
     val miniPlayerShowTrackControls: Boolean,
     val miniPlayerShowSeekControls: Boolean,
     val miniPlayerTextMarquee: Boolean,
-    val lyricsLayout: LyricsLayout,
-    val showNowPlayingAudioInformation: Boolean,
-    val showNowPlayingSeekControls: Boolean,
     val playbackSpeed: Float,
     val playbackPitch: Float,
     val loopMode: LoopMode,

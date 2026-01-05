@@ -2,23 +2,17 @@ package com.squad.musicmatters.core.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowDownward
-import androidx.compose.material.icons.rounded.ArrowUpward
-import androidx.compose.material.icons.rounded.Shuffle
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -30,14 +24,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.i8n.English
 import com.squad.musicmatters.core.model.SortSongsBy
 
 @Composable
@@ -45,7 +38,7 @@ fun <T : Enum<T>> MediaSortBar(
     sortReverse: Boolean,
     onSortReverseChange: (Boolean ) -> Unit,
     sortType: T,
-    sortTypes: Map<T, String>,
+    sortTypes: Map<T, Int>,
     onSortTypeChange: (T ) -> Unit,
     label: @Composable () -> Unit,
     onShufflePlay: ( () -> Unit )? = null
@@ -80,7 +73,7 @@ fun <T : Enum<T>> MediaSortBar(
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
-                        text = sortTypes[ sortType ]!!,
+                        text = stringResource( id = sortTypes[ sortType ]!! ),
                     )
                 }
                 DropdownMenu(
@@ -101,7 +94,7 @@ fun <T : Enum<T>> MediaSortBar(
                             },
                             text = {
                                 Text(
-                                    text = it.value,
+                                    text = stringResource( id = it.value ),
                                     fontWeight = FontWeight.SemiBold
                                 )
                             },
@@ -147,9 +140,9 @@ fun MediaSortBarPreview() {
             sortReverse = false,
             onSortReverseChange = {},
             sortType = SortSongsBy.TITLE,
-            sortTypes = SortSongsBy.entries.associateBy( { it }, { it.sortSongsByLabel( English ) } ),
+            sortTypes = SortSongsBy.entries.associateBy( { it }, { it.sortSongsByLabelResId() } ),
             onSortTypeChange = {},
-            label = { Text( text = English.xSongs( "42" ) ) }
+            label = { Text( text = stringResource( id = com.squad.musicMatters.core.i8n.R.string.core_i8n_n_songs, 42 )) }
         )
     }
 }

@@ -6,8 +6,6 @@ import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -79,7 +77,6 @@ sealed interface SongsScreenUiState {
         val songs: List<Song>,
         val sortSongsBy: SortSongsBy,
         val sortSongsInReverse: Boolean,
-        val language: Language = English,
         val themeMode: ThemeMode,
         val currentlyPlayingSongId: String,
         val favoriteSongIds: Set<String>,

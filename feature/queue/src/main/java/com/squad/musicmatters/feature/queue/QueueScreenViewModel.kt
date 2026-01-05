@@ -6,8 +6,6 @@ import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -77,7 +75,6 @@ sealed interface QueueScreenUiState {
     data class Success(
         val songsInQueue: List<Song>,
         val currentlyPlayingSongId: String,
-        val language: Language = English,
         val favoriteSongIds: Set<String>,
         val playlists: List<Playlist>,
         val songsAdditionalMetadata: List<SongAdditionalMetadata>

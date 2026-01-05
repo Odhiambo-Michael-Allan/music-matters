@@ -16,14 +16,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -39,7 +39,6 @@ import sh.calvin.reorderable.ReorderableItem
 internal fun QueueList(
     songsInQueue: List<Song>,
     currentlyPlayingSongId: String,
-    language: Language,
     songsAdditionalMetadata: List<SongAdditionalMetadata>,
     favoriteSongIds: Set<String>,
     playlists: List<Playlist>,
@@ -82,7 +81,9 @@ internal fun QueueList(
                 )
             },
             content = {
-                Text( language.damnThisIsSoEmpty )
+                Text(
+                    text = stringResource( id = R.string.core_i8n_damn_this_is_so_empty )
+                )
             }
         )
         else -> {
@@ -99,7 +100,6 @@ internal fun QueueList(
                         key = song.id
                     ) {
                         QueueSongCard(
-                            language = language,
                             song = song,
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = favoriteSongIds.contains( song.id ),
@@ -128,7 +128,6 @@ internal fun QueueList(
 @Composable
 private fun ReorderableCollectionItemScope.QueueSongCard(
     modifier: Modifier = Modifier,
-    language: Language,
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
@@ -161,7 +160,6 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
             )
         }
         SongCard(
-            language = language,
             song = song,
             isCurrentlyPlaying = isCurrentlyPlaying,
             isFavorite = isFavorite,
@@ -197,7 +195,6 @@ private fun QueueListPreview(
     ) {
         QueueList(
             songsInQueue = previewData.songs,
-            language = English,
             songsAdditionalMetadata = emptyList(),
             currentlyPlayingSongId = previewData.songs.first().id,
             favoriteSongIds = setOf( previewData.songs.first().id ),

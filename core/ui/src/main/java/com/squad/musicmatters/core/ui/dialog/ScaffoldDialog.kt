@@ -27,8 +27,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.SupportedLanguages
 
 
 @Composable
@@ -91,39 +89,5 @@ fun ScaffoldDialog(
     }
 }
 
-@Preview( showBackground = true )
-@Composable
-fun ScaffoldDialogPreview() {
-    ScaffoldDialog(
-        title = { Text( text = "Language" ) },
-        topBar = {
-            Box(
-                modifier = Modifier
-                    .padding( start = 24.dp, end = 24.dp, top = 16.dp )
-                    .alpha( 0.7f )
-            ) {
-                ProvideTextStyle( value = MaterialTheme.typography.labelMedium ) {
-                    Text( text = English.selectAtleast2orAtmost5Tabs )
-                }
-            }
-        },
-        content = {
-            val values = SupportedLanguages
-
-            LazyColumn {
-                items( values ) {
-                    Row {
-                        RadioButton(
-                            selected = false,
-                            onClick = {}
-                        )
-                        Text( it.englishName )
-                    }
-                }
-            }
-        },
-        onDismissRequest = {}
-    )
-}
 
 

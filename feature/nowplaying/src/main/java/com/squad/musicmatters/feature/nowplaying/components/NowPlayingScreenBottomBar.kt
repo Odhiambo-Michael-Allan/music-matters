@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,29 +47,28 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.LoopMode
-import com.squad.musicmatters.core.model.LyricsLayout
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.ScreenOrientation
 import com.squad.musicmatters.core.ui.dialog.ScaffoldDialog
+
+import com.squad.musicMatters.core.i8n.R as i8nR
 
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 internal fun NowPlayingScreenBottomBar(
     modifier: Modifier = Modifier,
-    language: Language,
     currentLoopMode: LoopMode,
     shuffle: Boolean,
-    lyricsLayout: LyricsLayout,
+    showLyrics: Boolean,
     currentSpeed: Float,
     currentPitch: Float,
     onToggleLoopMode: ( LoopMode ) -> Unit,
     onToggleShuffleMode: ( Boolean ) -> Unit,
     onSpeedChange: ( Float ) -> Unit,
     onPitchChange: ( Float ) -> Unit,
+    onShowLyrics: ( Boolean ) -> Unit,
     onCreateEqualizerActivityContract: () -> Unit,
 ) {
 
@@ -100,8 +100,8 @@ internal fun NowPlayingScreenBottomBar(
                     Icon(
                         painter = painterResource(
                             id = when ( it ) {
-                                LoopMode.Song -> R.drawable.repeat_current
-                                else -> R.drawable.repeat
+                                LoopMode.Song -> R.drawable.ic_repeat_current
+                                else -> R.drawable.ic_repeat
                             }
                         ),
                         contentDescription = null,
@@ -121,23 +121,17 @@ internal fun NowPlayingScreenBottomBar(
             }
         }
         AnimatedContent(
-            targetState = lyricsLayout,
+            targetState = showLyrics,
             label = "LyricsLayoutAnimation"
         ) {
             IconButton(
-                onClick = {}
+                onClick = { onShowLyrics( !showLyrics ) }
             ) {
                 Icon(
                     painter = painterResource(
-                        id = when ( it ) {
-                            LyricsLayout.REPLACE_ARTWORK -> R.drawable.ic_lyrics
-                            else -> R.drawable.ic_lyrics_outline
-                        },
+                        id = if ( it ) R.drawable.ic_lyrics else R.drawable.ic_lyrics_outline,
                     ),
-                    tint = when ( it ) {
-                        LyricsLayout.REPLACE_ARTWORK -> MaterialTheme.colorScheme.primary
-                        else -> LocalContentColor.current
-                    },
+                    tint = if ( it ) MaterialTheme.colorScheme.primary else LocalContentColor.current,
                     contentDescription = null,
                 )
             }
@@ -154,7 +148,7 @@ internal fun NowPlayingScreenBottomBar(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.shuffle),
+                        painter = painterResource(id = R.drawable.ic_shuffle),
                         contentDescription = null,
                         tint = if (isShuffleEnabled) MaterialTheme.colorScheme.primary else LocalContentColor.current,
                         modifier = Modifier.size(
@@ -197,11 +191,14 @@ internal fun NowPlayingScreenBottomBar(
                 ) {
                     ListItem(
                         leadingContent = {
-                            Icon( imageVector = MusicMattersIcons.Equalizer, contentDescription = null )
+                            Icon(
+                                imageVector = MusicMattersIcons.Equalizer,
+                                contentDescription = null
+                            )
                         },
                         headlineContent = {
                             Text(
-                                text = language.equalizer,
+                                text = stringResource( id = i8nR.string.core_i8n_equalizer ),
                                 fontWeight = FontWeight.SemiBold
                             )
                         }
@@ -215,11 +212,14 @@ internal fun NowPlayingScreenBottomBar(
                 ) {
                     ListItem(
                         leadingContent = {
-                            Icon( imageVector = MusicMattersIcons.Speed, contentDescription = null )
+                            Icon(
+                                imageVector = MusicMattersIcons.Speed,
+                                contentDescription = null
+                            )
                         },
                         headlineContent = {
                             Text(
-                                text = language.speed,
+                                text = stringResource( id = i8nR.string.core_i8n_speed ),
                                 fontWeight = FontWeight.SemiBold
                             )
                         },
@@ -239,11 +239,14 @@ internal fun NowPlayingScreenBottomBar(
                 ) {
                     ListItem(
                         leadingContent = {
-                            Icon( imageVector = MusicMattersIcons.Speed, contentDescription = null)
+                            Icon(
+                                imageVector = MusicMattersIcons.Speed,
+                                contentDescription = null
+                            )
                         },
                         headlineContent = {
                             Text(
-                                text = language.pitch,
+                                text = stringResource( id = i8nR.string.core_i8n_pitch ),
                                 fontWeight = FontWeight.SemiBold
                             )
                         },
@@ -261,7 +264,7 @@ internal fun NowPlayingScreenBottomBar(
 
     if ( showSpeedDialog ) {
         NowPlayingOptionDialog(
-            title = language.speed,
+            title = stringResource( id = i8nR.string.core_i8n_speed ),
             currentValue = currentSpeed,
             onValueChange = onSpeedChange,
             onDismissRequest = { showSpeedDialog = false }
@@ -270,7 +273,7 @@ internal fun NowPlayingScreenBottomBar(
 
     if ( showPitchDialog ) {
         NowPlayingOptionDialog(
-            title = language.pitch,
+            title = stringResource( id = i8nR.string.core_i8n_pitch ),
             currentValue = currentPitch,
             onValueChange = onPitchChange,
             onDismissRequest = { showPitchDialog = false }
@@ -348,16 +351,16 @@ private fun NowPlayingScreenBottomBarPreview() {
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME
     ) {
         NowPlayingScreenBottomBar(
-            language = English,
             currentLoopMode = LoopMode.Song,
             shuffle = true,
-            lyricsLayout = LyricsLayout.REPLACE_ARTWORK,
+            showLyrics = true,
             currentSpeed = 2f,
             currentPitch = 2f,
             onToggleLoopMode = {},
             onToggleShuffleMode = {},
             onSpeedChange = {},
-            onPitchChange = {}
+            onPitchChange = {},
+            onShowLyrics = {}
         ) {
             object : ActivityResultContract<Unit, Unit>() {
                 override fun createIntent(

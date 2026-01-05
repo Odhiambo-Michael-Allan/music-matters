@@ -1,9 +1,13 @@
 plugins {
-    id( "java-library" )
-    alias( libs.plugins.jetbrains.kotlin.jvm )
+    alias( libs.plugins.musicmatters.android.library )
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+android {
+    namespace = "com.squad.musicMatters.core.i8n"
+
+    defaultConfig {
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
 }

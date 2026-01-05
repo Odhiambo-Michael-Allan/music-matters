@@ -2,7 +2,6 @@ package com.squad.musicmatters.core.datastore
 
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.LoopMode
-import com.squad.musicmatters.core.model.LyricsLayout
 import com.squad.musicmatters.core.model.SortAlbumsBy
 import com.squad.musicmatters.core.model.SortArtistsBy
 import com.squad.musicmatters.core.model.SortGenresBy
@@ -32,9 +31,6 @@ interface PreferencesDataSource {
     suspend fun setMiniPlayerTextMarquee( miniPlayerTextMarquee: Boolean )
     suspend fun setMiniPlayerShowSeekControls( miniPlayerShowSeekControls: Boolean )
     suspend fun setMiniPlayerShowTrackControls( miniPlayerShowTrackControls: Boolean )
-    suspend fun setLyricsLayout( lyricsLayout: LyricsLayout )
-    suspend fun setShowNowPlayingAudioInformation( showNowPlayingAudioInformation: Boolean )
-    suspend fun setShowNowPlayingSeekControls( showNowPlayingSeekControls: Boolean )
     suspend fun setPlaybackSpeed( playbackSpeed: Float )
     suspend fun setPlaybackPitch( playbackPitch: Float )
     suspend fun setLoopMode( loopMode: LoopMode )

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="core_i8n_give_your_playlist_a_name">Give your playlist a name</string>
+    <string name="core_i8n_playlist_name_placeholder">Jams</string>
+    <string name="core_i8n_cancel">Cancel</string>
+    <string name="core_i8n_favorites">Favorites</string>
+    <string name="core_i8n_added_n_songs_to_playlist">Added %d songs to %s</string>
+    <string name="core_i8n_added_song_to_playlist">Added to %s</string>
+    <string name="core_i8n_no_lyrics_found">No lyrics found</string>
+    <string name="core_i8n_error_media_not_found">Could not locate requested media.</string>
+    <string name="core_i8n_generic_error">The application has encountered an unexpected error.</string>
+    <string name="core_i8n_left">left</string>
+
+    <string name="core_i8n_end_of_episode">End of currently playing song</string>
+    <string name="core_i8n_turn_off_timer">Turn off timer</string>
+    <string name="core_i8n_sleep_timer">Sleep timer</string>
+    <string name="core_i8n_sleep_timer_set">Your sleep timer is set</string>
+    <string name="core_i8n_sleep_timer_off">Your sleep timer is turned off</string>
+
+    <string name="core_i8n_queue">Queue</string>
+    <string name="core_i8n_settings">Settings</string>
+    <string name="core_i8n_songs">Songs</string>
+    <string name="core_i8n_n_songs">%d songs</string>
+
+    <string name="core_i8n_custom">Custom</string>
+    <string name="core_i8n_title">Title</string>
+    <string name="core_i8n_artist">Artist</string>
+    <string name="core_i8n_album">Album</string>
+    <string name="core_i8n_duration">Duration</string>
+    <string name="core_i8n_date_added">Date Added</string>
+    <string name="core_i8n_composer">Composer</string>
+    <string name="core_i8n_year">Year</string>
+    <string name="core_i8n_file_name">FileName</string>
+    <string name="core_i8n_track_number">Track Number</string>
+
+    <string name="core_i8n_damn_this_is_so_empty">Damn this is so empty!!</string>
+    <string name="core_i8n_favorite">Favorite</string>
+    <string name="core_i8n_view_artist">View Artist: %s</string>
+    <string name="core_i8n_view_album">View Album: %s</string>
+
+    <string name="core_i8n_share_song">Share song</string>
+    <string name="core_i8n_details">Details</string>
+    <string name="core_i8n_delete">Delete</string>
+    <string name="core_i8n_play_next">Play Next</string>
+    <string name="core_i8n_add_to_queue">Add to queue</string>
+    <string name="core_i8n_add_to_playlist">Add to playlist</string>
+
+    <string name="core_i8n_no_playlists_found">No playlists found</string>
+    <string name="core_i8n_new_playlist">New playlist</string>
+    <string name="core_i8n_done">Done</string>
+    <string name="core_i8n_shuffle_play">Shuffle Play</string>
+
+    <string name="core_i8n_track_name">Track Name</string>
+    <string name="core_i8n_genre">Genre</string>
+    <string name="core_i8n_path">Path</string>
+    <string name="core_i8n_size">Size</string>
+
+    <string name="core_i8n_bitrate">Bitrate</string>
+    <string name="core_i8n_xKbps">%s kbps</string>
+    <string name="core_i8n_bits_per_sample">Bits per sample</string>
+    <string name="core_i8n_xBit">%s bits</string>
+    <string name="core_i8n_sampling_rate">Sampling Rate</string>
+    <string name="core_i8n_xKHZ">%s KHZ</string>
+    <string name="core_i8n_codec">Codec</string>
+    <string name="core_i8n_delete_song">Delete %s</string>
+
+    <string name="core_i8n_rename_playlist">Rename Playlist</string>
+    <string name="core_i8n_rename">Rename</string>
+    <string name="core_i8n_equalizer">Equalizer</string>
+    <string name="core_i8n_speed">Speed</string>
+    <string name="core_i8n_pitch">Pitch</string>
+
+    <string name="core_i8n_storage_access">Storage Access</string>
+    <string name="core_i8n_grant_access">Grant access</string>
+    <string name="core_i8n_storage_access_prompt">The app needs permission to access your device storage for playing music</string>
+
+    <string name="core_i8n_welcome_message">Hello there! Welcome to</string>
+    <string name="core_i8n_read_media_audio">Read Media Audio</string>
+    <string name="core_i8n_read_media_audio_prompt">The app needs to read media and audio inorder to fetch and play audio files stored on your device</string>
+
+    <string name="core_i8n_ringtone_permission">Ringtone</string>
+    <string name="core_i8n_ringtone_permission_prompt">The app needs permission to access your device settings inorder to set music as ringtone</string>
+
+    <string name="core_i8n_post_notifications_permission">Post Notifications</string>
+    <string name="core_i8n_post_notifications_prompt">The app needs this to create and display notifications on your device</string>
+    <string name="core_i8n_lets_go">Let\'s go</string>
+
+    <string name="core_i8n_write_storage">Write Storage</string>
+    <string name="core_i8n_write_storage_description">The app needs this to delete songs on the device</string>
+    <string name="core_i8n_telegram">Telegram</string>
+
+    <string name="core_i8n_my_name">Michael Allan Odhiambo</string>
+    <string name="core_i8n_app_github_repo">https://github.com/Odhiambo-Michael-Allan/music-matters</string>
+    <string name="core_i8n_github_profile_url">https://github.com/Odhiambo-Michael-Allan</string>
+
+    <string name="core_i8n_discord_server_url">https://discord.gg/EfruF8CP</string>
+    <string name="core_i8n_reddit_community">https://www.reddit.com/r/musicmattersappusers/</string>
+    <string name="core_i8n_telegram_channel_link">https://t.me/+58NS_CnxjD44YTI0</string>
+
+    <string name="core_i8n_added_song_to_favorites">Added Song To Favorites</string>
+    <string name="core_i8n_removed_song_from_favorites">Removed Song From Favorites</string>
+    <string name="core_i8n_song_added_to_queue">Song added to queue</string>
+    <string name="core_i8n_song_will_play_next">Song will play next</string>
+
+    <string name="core_i8n_playing_notification_name">Playing notification</string>
+    <string name="core_i8n_playing_notification_description">The playing notification provides actions for play/pause etc</string>
+</resources>

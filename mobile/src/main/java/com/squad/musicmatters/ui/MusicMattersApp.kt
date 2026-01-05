@@ -58,9 +58,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.squad.musicmatters.MainActivityUiState
 import com.squad.musicmatters.R
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
+import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.SlideTransition
+import com.squad.musicmatters.core.ui.TopAppBar
 import com.squad.musicmatters.feature.nowplaying.NowPlayingBottomScreen
 import com.squad.musicmatters.feature.nowplaying.components.NowPlayingBottomBar
 import com.squad.musicmatters.feature.queue.navigation.navigateToQueue
@@ -69,7 +70,6 @@ import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import com.squad.musicmatters.feature.songs.navigation.songsScreen
 import com.squad.musicmatters.navigation.LibraryDestinations
 import com.squad.musicmatters.navigation.TopLevelDestination
-import com.squad.musicmatters.ui.components.TopAppBar
 import com.squad.musicmatters.utils.ScreenOrientation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -81,10 +81,12 @@ import kotlin.OptIn
 fun MusicMattersApp(
     uiState: MainActivityUiState,
     navController: NavHostController = rememberNavController(),
+    onDeleteSong: ( Song ) -> Unit,
 ) {
     MusicMattersAppContent(
         uiState = uiState,
         navController = navController,
+        onDeleteSong = onDeleteSong,
     )
 }
 
@@ -92,6 +94,7 @@ fun MusicMattersApp(
 fun MusicMattersAppContent(
     uiState: MainActivityUiState,
     navController: NavHostController,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     Column(
@@ -102,8 +105,8 @@ fun MusicMattersAppContent(
             is MainActivityUiState.Success -> {
                 MusicMattersAppContent(
                     navController = navController,
-                    language = uiState.userData.language,
                     labelVisibility = uiState.userData.bottomBarLabelVisibility,
+                    onDeleteSong = onDeleteSong,
                 )
             }
         }
@@ -115,15 +118,16 @@ fun MusicMattersAppContent(
 @Composable
 fun MusicMattersAppContent(
     navController: NavHostController,
-    language: Language,
     labelVisibility: BottomBarLabelVisibility,
+    onDeleteSong: ( Song ) -> Unit,
 ) {
 
     val coroutineScope = rememberCoroutineScope()
     var currentTopLevelDestinationName by rememberSaveable { mutableStateOf( TopLevelDestination.SONGS.route.qualifiedName ) }
     var currentlySelectedLibraryDestinationName by rememberSaveable { mutableStateOf( "" ) }
 
-    val nowPlayingScreenBottomSheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true )
+//    val nowPlayingScreenBottomSheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true )
+    var showNowPlayingScreen by remember { mutableStateOf( false ) }
     var showMoreDestinationsBottomSheet by remember { mutableStateOf( false ) }
     var shouldShowTopAppBar by remember { mutableStateOf( false ) }
 
@@ -141,7 +145,7 @@ fun MusicMattersAppContent(
 
     } ) {}
 
-    if ( nowPlayingScreenBottomSheetState.isVisible ) {
+    if ( showNowPlayingScreen ) {
         // This forces the Activity to Portrait as long as this block is in the composition
         LockScreenOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT )
     }
@@ -290,7 +294,7 @@ fun MusicMattersAppContent(
 
                     songsScreen(
                         onShareSong = { _, _ -> },
-                        onDeleteSong = {},
+                        onDeleteSong = onDeleteSong,
                         onViewArtist = {},
                         onViewAlbum = {},
                         onShowSnackBar = {
@@ -304,7 +308,7 @@ fun MusicMattersAppContent(
                         onViewAlbum = {},
                         onViewArtist = {},
                         onShareSong = { _, _ -> },
-                        onDeleteSong = {},
+                        onDeleteSong = onDeleteSong,
                         onNavigateBack = { navController.navigateUp() },
                         onShowSnackBar = {
                             snackBarHostState.showSnackBar(
@@ -642,18 +646,14 @@ fun MusicMattersAppContent(
 
                 Column {
                     NowPlayingBottomBar {
-                        coroutineScope.launch {
-                            nowPlayingScreenBottomSheetState.show()
-                        }
+                        showNowPlayingScreen = true
                     }
 
-                    if ( nowPlayingScreenBottomSheetState.isVisible ) {
+                    if ( showNowPlayingScreen ) {
                         ModalBottomSheet(
-                            sheetState = nowPlayingScreenBottomSheetState,
+                            sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
                             onDismissRequest = {
-                                coroutineScope.launch {
-                                    nowPlayingScreenBottomSheetState.hide()
-                                }
+                                showNowPlayingScreen = false
                             },
                             dragHandle = null,
                         ) {
@@ -661,9 +661,7 @@ fun MusicMattersAppContent(
                                 onViewAlbum = {},
                                 onViewArtist = {},
                                 onHideBottomSheet = {
-                                    coroutineScope.launch {
-                                        nowPlayingScreenBottomSheetState.hide()
-                                    }
+                                    showNowPlayingScreen = false
                                 },
                                 onNavigateToQueue = {
                                     navController.navigateToQueue(

@@ -37,8 +37,6 @@ import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
-import com.squad.musicmatters.core.i8n.English
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.ThemeMode
@@ -48,11 +46,12 @@ import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.R
 import com.squad.musicmatters.core.ui.SubtleCaptionText
 
+import com.squad.musicMatters.core.i8n.R as i8nR
+
 @Composable
 internal fun AddSongsToPlaylistBottomSheet(
     songsToAdd: List<Song>,
     playlists: List<Playlist>,
-    language: Language,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreateNewPlaylist: () -> Unit,
     onDismissRequest: ( String ) -> Unit,
@@ -71,7 +70,7 @@ internal fun AddSongsToPlaylistBottomSheet(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = language.addToPlaylist,
+                text = stringResource( id = i8nR.string.core_i8n_add_to_playlist ),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 )
@@ -82,7 +81,7 @@ internal fun AddSongsToPlaylistBottomSheet(
         when {
             playlists.isEmpty() -> SubtleCaptionText(
                 modifier = Modifier.weight( 1f ),
-                text = language.noInAppPlaylistsFound
+                text = stringResource( id = i8nR.string.core_i8n_no_playlists_found )
             )
             else -> {
                 LazyColumn (
@@ -95,7 +94,7 @@ internal fun AddSongsToPlaylistBottomSheet(
                             title = {
                                 Text(
                                     text = if ( playlist.id == FAVORITES_PLAYLIST_ID ) {
-                                        stringResource( id = R.string.core_ui_favorites )
+                                        stringResource( id = i8nR.string.core_i8n_favorites )
                                     } else {
                                         playlist.title
                                     },
@@ -130,19 +129,19 @@ internal fun AddSongsToPlaylistBottomSheet(
                             },
                             onClick = {
                                 val playlistTitle = if ( playlist.id == FAVORITES_PLAYLIST_ID ) {
-                                    context.getString( R.string.core_ui_favorites )
+                                    context.getString( i8nR.string.core_i8n_favorites )
                                 } else {
                                     playlist.title
                                 }
                                 val message = if ( songsToAdd.size > 1 ) {
                                     context.getString(
-                                        R.string.core_ui_added_n_songs_to_playlist,
+                                        i8nR.string.core_i8n_added_n_songs_to_playlist,
                                         songsToAdd.size,
                                         playlistTitle
                                     )
                                 } else {
                                     context.getString(
-                                        R.string.core_ui_added_song_to_playlist,
+                                        i8nR.string.core_i8n_added_song_to_playlist,
                                         playlistTitle
                                     )
                                 }
@@ -161,7 +160,7 @@ internal fun AddSongsToPlaylistBottomSheet(
                 onClick = onCreateNewPlaylist
             ) {
                 Text(
-                    text = language.newPlaylist,
+                    text = stringResource( id = i8nR.string.core_i8n_new_playlist ),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold
@@ -190,7 +189,6 @@ private fun AddToPlaylistBottomSheetPreview(
             playlists = previewData.playlists,
             onCreateNewPlaylist = {},
             onDismissRequest = {},
-            language = English,
             onAddSongsToPlaylist = { _, _ -> }
         )
     }

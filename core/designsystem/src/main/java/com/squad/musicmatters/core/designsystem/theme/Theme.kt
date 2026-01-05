@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.Density
-import com.squad.musicmatters.core.i8n.Language
 import com.squad.musicmatters.core.model.ThemeMode
 
 const val contentScale = 1.0f
@@ -91,12 +90,12 @@ fun MusicMattersTheme(
     )
 }
 
-fun ThemeMode.resolveName( language: Language) = when ( this ) {
-    ThemeMode.FOLLOW_SYSTEM -> language.systemLightDark
-    ThemeMode.LIGHT -> language.light
-    ThemeMode.DARK -> language.dark
-    ThemeMode.BLACK -> language.black
-}
+//fun ThemeMode.resolveName( language: Language) = when ( this ) {
+//    ThemeMode.FOLLOW_SYSTEM -> language.systemLightDark
+//    ThemeMode.LIGHT -> language.light
+//    ThemeMode.DARK -> language.dark
+//    ThemeMode.BLACK -> language.black
+//}
 
 fun ThemeMode.toColorSchemeMode(isSystemInDarkTheme: Boolean ) = when ( this ) {
     ThemeMode.FOLLOW_SYSTEM -> if ( isSystemInDarkTheme ) ColorSchemeMode.DARK else ColorSchemeMode.LIGHT
