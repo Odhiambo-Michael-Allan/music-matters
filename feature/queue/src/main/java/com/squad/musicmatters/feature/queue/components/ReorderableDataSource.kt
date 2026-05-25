@@ -117,7 +117,7 @@ fun <T : Any, K : Any, I : Any, S : ReorderableLazyCollectionState<I>> rememberR
     // Keep the original items in an updated state
     val originalItems by rememberUpdatedState( items )
 
-    // Derive display items from all of the data
+    // Derive display items from all the data
     val display by remember {
         derivedStateOf {
             if ( sourceState == ReorderableDataSourceState.Normal ) {

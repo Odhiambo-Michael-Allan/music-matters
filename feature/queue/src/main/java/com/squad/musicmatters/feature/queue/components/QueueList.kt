@@ -23,7 +23,6 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -187,7 +186,7 @@ private fun QueueListPreview(
     previewData: PreviewData
 ) {
     MusicMattersTheme(
-        fontName = SupportedFonts.GoogleSans.name,
+//        fontName = SupportedFonts.GoogleSans.name,
         useMaterialYou = true,
         fontScale = DefaultPreferences.FONT_SCALE,
         themeMode = DefaultPreferences.THEME_MODE,

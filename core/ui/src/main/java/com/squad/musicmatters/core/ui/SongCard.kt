@@ -45,7 +45,6 @@ import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.GoogleRed
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
-import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -101,19 +100,19 @@ fun SongCard(
                 Column( modifier = Modifier.weight( 1f ) ) {
                     Text(
                         text = song.title,
-                        style = MaterialTheme.typography.titleMedium.copy(
+                        style = MaterialTheme.typography.bodyLarge.copy(
                             color = when {
                                 isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
                                 else -> LocalTextStyle.current.color
                             },
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.ExtraBold
                         ),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = song.artists.joinToString(),
-                        style = MaterialTheme.typography.bodySmall.copy(
+                        style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
                         ),
@@ -307,7 +306,7 @@ fun SongOptionsBottomSheetMenu(
 @Composable
 private fun SongOptionsBottomSheetContentPreview() {
     MusicMattersTheme(
-        fontName = SupportedFonts.GoogleSans.name,
+//        fontName = SupportedFonts.GoogleSans.name,
         useMaterialYou = true,
         fontScale = 1.0f,
         themeMode = ThemeMode.LIGHT,
@@ -338,7 +337,7 @@ private fun SongOptionsBottomSheetContentPreview() {
 @Composable
 private fun SongCardPreview() {
     MusicMattersTheme(
-        fontName = SupportedFonts.ProductSans.name,
+//        fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
         fontScale = 1.0f,
         themeMode = ThemeMode.LIGHT,

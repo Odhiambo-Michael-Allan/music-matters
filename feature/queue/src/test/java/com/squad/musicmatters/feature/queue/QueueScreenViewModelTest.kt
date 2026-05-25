@@ -2,8 +2,9 @@ package com.squad.musicmatters.feature.queue
 
 import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
+import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Playlist
-import com.squad.musicmatters.core.testing.connection.TestMusicServiceConnection
+import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
 import com.squad.musicmatters.core.testing.repository.TestPreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.TestQueueRepository
@@ -26,7 +27,7 @@ class QueueScreenViewModelTest {
 
     private lateinit var preferencesDataSource: TestPreferencesDataSource
     private lateinit var playlistRepository: TestPlaylistRepository
-    private lateinit var musicServiceConnection: TestMusicServiceConnection
+    private lateinit var musicServiceConnection: TestMusicMattersPlayer
     private lateinit var metadataRepository: TestSongsAdditionalMetadataRepository
     private lateinit var queueRepository: TestQueueRepository
     private lateinit var viewModel: QueueScreenViewModel
@@ -35,7 +36,7 @@ class QueueScreenViewModelTest {
     fun setup() {
         preferencesDataSource = TestPreferencesDataSource()
         playlistRepository = TestPlaylistRepository()
-        musicServiceConnection = TestMusicServiceConnection()
+        musicServiceConnection = TestMusicMattersPlayer()
         queueRepository = TestQueueRepository()
         metadataRepository = TestSongsAdditionalMetadataRepository()
         viewModel = QueueScreenViewModel(
@@ -78,6 +79,8 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
+                loopMode = LoopMode.None,
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
                     Playlist(
@@ -114,6 +117,8 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
+                loopMode = LoopMode.None,
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
                     Playlist(
@@ -133,6 +138,8 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = emptyList(),
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
+                loopMode = LoopMode.None,
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
                     Playlist(
@@ -169,6 +176,8 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
+                loopMode = LoopMode.None,
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
                     Playlist(
@@ -192,6 +201,8 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-4",
+                shuffle = false,
+                loopMode = LoopMode.None,
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
                     Playlist(
@@ -228,6 +239,8 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
+                loopMode = LoopMode.None,
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
                     Playlist(
@@ -247,6 +260,8 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
+                loopMode = LoopMode.None,
                 favoriteSongIds = emptySet(),
                 playlists = listOf(
                     Playlist(
@@ -283,6 +298,8 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
+                loopMode = LoopMode.None,
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
                     Playlist(
@@ -311,6 +328,8 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
+                loopMode = LoopMode.None,
                 favoriteSongIds = setOf( "song-id-3" ),
                 playlists = listOf(
                     Playlist(

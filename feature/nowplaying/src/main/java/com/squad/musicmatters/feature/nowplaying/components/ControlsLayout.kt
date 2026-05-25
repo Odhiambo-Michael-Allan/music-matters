@@ -36,7 +36,7 @@ internal fun NowPlayingDefaultControlsLayout(
     ) {
         PlayPauseButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Primary,
+                color = NowPlayingControlButtonColors.Transparent,
                 size = NowPlayingControlButtonSize.ExtraLarge
             ),
             isPlaying = isPlaying,
@@ -45,14 +45,14 @@ internal fun NowPlayingDefaultControlsLayout(
         PlayPreviousSongButton(
             style = NowPlayingControlButtonStyle(
                 color = NowPlayingControlButtonColors.Transparent,
-                size = NowPlayingControlButtonSize.Large
+                size = NowPlayingControlButtonSize.ExtraLarge
             ),
             onClick = onPreviousButtonClick
         )
         PlayNextButton(
             style = NowPlayingControlButtonStyle(
                 color = NowPlayingControlButtonColors.Transparent,
-                size = NowPlayingControlButtonSize.Large
+                size = NowPlayingControlButtonSize.ExtraLarge
             ),
             onClick = onNextButtonClick
         )
@@ -101,14 +101,14 @@ internal fun NowPlayingTraditionalControlsLayout(
         PlayPreviousSongButton(
             style = NowPlayingControlButtonStyle(
                 color = NowPlayingControlButtonColors.Transparent,
-                size = NowPlayingControlButtonSize.Large
+                size = NowPlayingControlButtonSize.ExtraLarge
             ),
             onClick = onPreviousButtonClick
         )
         Spacer( modifier = Modifier.width( 8.dp ) )
         PlayPauseButton(
             style = NowPlayingControlButtonStyle(
-                color = NowPlayingControlButtonColors.Primary,
+                color = NowPlayingControlButtonColors.Transparent,
                 size = NowPlayingControlButtonSize.ExtraLarge
             ),
             isPlaying = isPlaying,
@@ -118,7 +118,7 @@ internal fun NowPlayingTraditionalControlsLayout(
         PlayNextButton(
             style = NowPlayingControlButtonStyle(
                 color = NowPlayingControlButtonColors.Transparent,
-                size = NowPlayingControlButtonSize.Large
+                size = NowPlayingControlButtonSize.ExtraLarge
             ),
             onClick = onNextButtonClick
         )

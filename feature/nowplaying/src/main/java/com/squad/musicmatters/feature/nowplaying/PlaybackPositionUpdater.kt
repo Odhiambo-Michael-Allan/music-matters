@@ -2,10 +2,9 @@ package com.squad.musicmatters.feature.nowplaying
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import com.squad.musicmatters.core.common.Dispatcher
 import com.squad.musicmatters.core.common.MusicMattersDispatchers
-import com.squad.musicmatters.core.media.connection.MusicServiceConnection
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +27,7 @@ interface PlaybackPositionUpdater {
 
 class PlaybackPositionUpdaterImpl @Inject constructor(
     @Dispatcher( MusicMattersDispatchers.Main ) dispatcher: CoroutineDispatcher,
-    private val player: MusicServiceConnection
+    private val player: MusicMattersPlayer
 ) : PlaybackPositionUpdater {
 
     private val handler = Handler( Looper.getMainLooper() )
@@ -43,7 +42,18 @@ class PlaybackPositionUpdaterImpl @Inject constructor(
         coroutineScope.launch {
             player.playerState.collect {
                 if ( it.isPlaying ) startPeriodicUpdates()
-                else stopPeriodicUpdates()
+                else {
+                    if ( player.sleepTimer.value == null ) stopPeriodicUpdates()
+                }
+            }
+        }
+        coroutineScope.launch {
+            player.sleepTimer.collect {
+                it?.let {
+                    if ( periodicUpdatesStarted.not() ) startPeriodicUpdates()
+                } ?: run {
+                    if ( player.playerState.value.isPlaying.not() ) stopPeriodicUpdates()
+                }
             }
         }
     }

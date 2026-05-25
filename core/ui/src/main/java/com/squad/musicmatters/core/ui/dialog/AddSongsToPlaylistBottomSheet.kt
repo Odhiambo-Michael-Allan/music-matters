@@ -36,7 +36,6 @@ import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
-import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.ThemeMode
@@ -178,7 +177,7 @@ private fun AddToPlaylistBottomSheetPreview(
     previewData: PreviewData
 ) {
     MusicMattersTheme(
-        fontName = SupportedFonts.ProductSans.name,
+//        fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
         fontScale = 1.0f,
         themeMode = ThemeMode.LIGHT,

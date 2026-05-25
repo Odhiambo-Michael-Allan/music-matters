@@ -3,8 +3,8 @@ package com.squad.musicmatters.core.media.di
 import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
 import com.squad.musicmatters.core.media.connection.DefaultSongToMediaItemConverter
-import com.squad.musicmatters.core.media.connection.MusicServiceConnection
-import com.squad.musicmatters.core.media.connection.MusicServiceConnectionImpl
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayerImpl
 import com.squad.musicmatters.core.media.connection.SongToMediaItemConverter
 import dagger.Binds
 import dagger.Module
@@ -20,8 +20,8 @@ abstract class MediaDiModuleBinders {
     @Binds
     @Singleton // THIS IS CRUCIAL!!
     abstract fun bindsMusicServiceConnection(
-        connection: MusicServiceConnectionImpl
-    ): MusicServiceConnection
+        connection: MusicMattersPlayerImpl
+    ): MusicMattersPlayer
 
     @Binds
     abstract fun bindsSongToMediaItemConverter(

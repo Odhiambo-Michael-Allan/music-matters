@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -39,15 +40,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.window.core.layout.WindowWidthSizeClass
+import androidx.window.core.layout.WindowSizeClass
 import com.squad.musicmatters.core.datastore.DefaultPreferences
-import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.media.media.extensions.formatMilliseconds
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -63,8 +65,6 @@ import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.GenericOptionsBottomSheet
 import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
-import com.squad.musicmatters.feature.nowplaying.components.LandscapeLayout
-import com.squad.musicmatters.feature.nowplaying.components.PortraitLayout
 import com.squad.musicmatters.feature.nowplaying.components.emptyUserData
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -77,11 +77,19 @@ import kotlin.time.toDuration
 
 import com.squad.musicMatters.core.i8n.R as i8nR
 
+@Retention( AnnotationRetention.BINARY )
+@Target( AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION )
+@Preview( name = "Phone", device = "spec:width=411dp,height=891dp", showSystemUi = true )
+@Preview( name = "Unfolded Foldable", device = "spec:width=673dp,height=841dp", showSystemUi = true )
+@Preview( name = "Tablet", device = "spec:width=1280dp,height=800dp,dpi=240", showSystemUi = true )
+@Preview( name = "Desktop", device = "spec:width=1920dp,height=1080dp,dpi=160", showSystemUi = true )
+annotation class PreviewScreenSizesPortrait
 
 // Stateful
 @Composable
-fun NowPlayingBottomScreen(
+fun NowPlayingScreen(
     viewModel: NowPlayingScreenViewModel = hiltViewModel(),
+    backgroundColor: Color = Color.Unspecified,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onNavigateToQueue: () -> Unit,
@@ -111,7 +119,8 @@ fun NowPlayingBottomScreen(
             modifier = Modifier.consumeWindowInsets( innerPadding ),
             uiState = uiState,
             lyricsUiState = lyricsUiState,
-            playbackPosition = playbackPosition,
+            backgroundColor = backgroundColor,
+            onGetPlaybackPosition = { playbackPosition },
             onFavorite = viewModel::addToFavorites,
             onPausePlayButtonClick = viewModel::playPause,
             onPreviousButtonClick = viewModel::playPreviousSong,
@@ -126,16 +135,11 @@ fun NowPlayingBottomScreen(
                 onHideBottomSheet()
                 onViewArtist( it )
             },
-            onToggleLoopMode = viewModel::setLoopMode,
-            onToggleShuffleMode = viewModel::setShuffleMode,
-            onPlayingSpeedChange = viewModel::onPlayingSpeedChange,
-            onPlayingPitchChange = viewModel::onPlayingPitchChange,
             onNavigateToQueue = {
                 onHideBottomSheet()
                 onNavigateToQueue()
             },
             onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
-            durationFormatter = { it.formatMilliseconds() },
             onCreatePlaylist = viewModel::createPlaylist,
             onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
             onViewAlbum = onViewAlbum,
@@ -165,8 +169,8 @@ private fun NowPlayingScreenContent(
     modifier: Modifier = Modifier,
     uiState: NowPlayingScreenUiState,
     lyricsUiState: LyricsUiState,
-    playbackPosition: PlaybackPosition,
-    durationFormatter: ( Long ) -> String,
+    backgroundColor: Color = Color.Unspecified,
+    onGetPlaybackPosition: () -> PlaybackPosition,
     onArtistClicked: ( String ) -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
     onPausePlayButtonClick: () -> Unit,
@@ -178,10 +182,6 @@ private fun NowPlayingScreenContent(
     onSwipeArtworkLeft: () -> Unit,
     onSwipeArtworkRight: () -> Unit,
     onNavigateToQueue: () -> Unit,
-    onToggleLoopMode: ( LoopMode ) -> Unit,
-    onToggleShuffleMode: ( Boolean ) -> Unit,
-    onPlayingSpeedChange: ( Float ) -> Unit,
-    onPlayingPitchChange: ( Float ) -> Unit,
     onCreateEqualizerActivityContract: () -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
@@ -198,19 +198,32 @@ private fun NowPlayingScreenContent(
     var showSongDetailsDialog by remember { mutableStateOf( false ) }
     var showSleepTimerBottomSheet by remember { mutableStateOf( false ) }
 
+    // 1. Check for EXPANDED (Tablets, unfolded foldables in landscape)
+    // Checks if width is at least 840dp
+    val isExpanded = currentWindowSizeClass
+        .isWidthAtLeastBreakpoint( WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND )
+
+    // 2. Check for MEDIUM or higher (Small tablets, portrait foldables)
+    // Checks if width is at least 600dp
+    val isMediumOrWider = currentWindowSizeClass
+        .isWidthAtLeastBreakpoint( WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND )
+
+    // 3. Check for COMPACT (Standard phone portrait screens)
+    // Anything smaller than the medium breakpoint lower bound is compact
+    val isCompact = !isMediumOrWider
+
     when ( uiState ) {
         NowPlayingScreenUiState.Loading -> {}
         is NowPlayingScreenUiState.Success -> {
             uiState.queue.firstOrNull { it.id == uiState.playerState.currentlyPlayingSongId }?.let { song ->
-                when ( currentWindowSizeClass.windowWidthSizeClass ) {
-                    WindowWidthSizeClass.COMPACT, WindowWidthSizeClass.MEDIUM -> {
-                        PortraitLayout(
+                when {
+                    isExpanded || isMediumOrWider -> {
+                        ExpandedLayout(
                             modifier = modifier,
                             uiState = uiState,
                             lyricsUiState = lyricsUiState,
                             currentlyPlayingSong = song,
-                            playbackPosition = playbackPosition,
-                            durationFormatter = durationFormatter,
+                            onGetPlaybackPosition = onGetPlaybackPosition,
                             onFavorite = onFavorite,
                             onArtworkSwipedLeft = onSwipeArtworkLeft,
                             onArtworkSwipedRight = onSwipeArtworkRight,
@@ -224,27 +237,24 @@ private fun NowPlayingScreenContent(
                             onPreviousButtonClick = onPreviousButtonClick,
                             onPlayNext = onPlayNext,
                             onNavigateToQueue = onNavigateToQueue,
-                            onToggleLoopMode = onToggleLoopMode,
-                            onToggleShuffleMode = onToggleShuffleMode,
-                            onPlayingSpeedChange = onPlayingSpeedChange,
-                            onPlayingPitchChange = onPlayingPitchChange,
                             onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
                             onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true },
                             onShowLyrics = onShowLyrics,
                         )
                     }
-                    WindowWidthSizeClass.EXPANDED -> {
-                        LandscapeLayout(
+                    else -> {
+                        PortraitLayout(
+                            modifier = modifier,
                             uiState = uiState,
                             lyricsUiState = lyricsUiState,
                             currentlyPlayingSong = song,
-                            playbackPosition = playbackPosition,
-                            durationFormatter = durationFormatter,
+                            backgroundColor = backgroundColor,
+                            onGetPlaybackPosition = onGetPlaybackPosition,
                             onFavorite = onFavorite,
                             onArtworkSwipedLeft = onSwipeArtworkLeft,
                             onArtworkSwipedRight = onSwipeArtworkRight,
-                            onArtworkClicked = onArtworkClicked,
                             onArtworkSwipedDown = onHideNowPlayingBottomSheet,
+                            onArtworkClicked = onArtworkClicked,
                             onArtistClicked = onArtistClicked,
                             onShowOptionsMenu = { showOptionsMenu = true },
                             onSeekStart = onSeekStart,
@@ -253,10 +263,6 @@ private fun NowPlayingScreenContent(
                             onPreviousButtonClick = onPreviousButtonClick,
                             onPlayNext = onPlayNext,
                             onNavigateToQueue = onNavigateToQueue,
-                            onToggleLoopMode = onToggleLoopMode,
-                            onToggleShuffleMode = onToggleShuffleMode,
-                            onPlayingSpeedChange = onPlayingSpeedChange,
-                            onPlayingPitchChange = onPlayingPitchChange,
                             onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
                             onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true },
                             onShowLyrics = onShowLyrics,
@@ -363,8 +369,8 @@ private fun NowPlayingScreenContent(
                                 onShowSnackBar( sleepTimerStartedMessage )
                             },
                             onStartTimerToEndOfCurrentSong = {
-                                val duration = playbackPosition.total.minus(
-                                    playbackPosition.played
+                                val duration = onGetPlaybackPosition().total.minus(
+                                    onGetPlaybackPosition().played
                                 )
                                 onStartSleepTimer(
                                     duration.toDuration( DurationUnit.MILLISECONDS )
@@ -403,7 +409,7 @@ private fun SleepTimerDialogContent(
     Column(
         modifier
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll( rememberScrollState() )
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -413,7 +419,8 @@ private fun SleepTimerDialogContent(
         ) {
             Text(
                 text = sleepTimer?.let {
-                    val now = Clock.System.now().toEpochMilliseconds().toDuration( DurationUnit.MILLISECONDS )
+                    val now = Clock.System.now().toEpochMilliseconds()
+                        .toDuration( DurationUnit.MILLISECONDS )
                     val durationLeft = it.endsAt.minus( now )
                     buildString {
                         append(
@@ -441,6 +448,9 @@ private fun SleepTimerDialogContent(
                         fontWeight = FontWeight.SemiBold,
                     )
                 },
+                colors = ListItemDefaults.colors(
+                    containerColor = Color.Transparent
+                ),
                 modifier = Modifier.clickable {
                     onStartSleepTimer( it )
                     onDismissRequest()
@@ -454,6 +464,9 @@ private fun SleepTimerDialogContent(
                     fontWeight = FontWeight.SemiBold
                 )
             },
+            colors = ListItemDefaults.colors(
+                containerColor = Color.Transparent
+            ),
             modifier = Modifier.clickable {
                 onStartTimerToEndOfCurrentSong()
                 onDismissRequest()
@@ -467,6 +480,9 @@ private fun SleepTimerDialogContent(
                         fontWeight = FontWeight.SemiBold,
                     )
                 },
+                colors = ListItemDefaults.colors(
+                    containerColor = Color.Transparent
+                ),
                 modifier = Modifier.clickable {
                     onStopSleepTimer()
                     onDismissRequest()
@@ -503,7 +519,7 @@ private val SLEEP_TIMER_VALUES = setOf(
 )
 
 
-@DevicePreviews
+@PreviewScreenSizesPortrait
 @Composable
 private fun NowPlayingScreenContentPreview() {
     MusicMattersTheme(
@@ -541,7 +557,7 @@ private fun NowPlayingScreenContentPreview() {
                 currentlyPlayingSongIsFavorite = true,
                 playerState = PlayerState(
                     currentlyPlayingSongId = "song-id-1",
-                    isPlaying = false,
+                    isPlaying = true,
                     isBuffering = false,
                 ),
                 playlists = emptyList(),
@@ -583,8 +599,7 @@ private fun NowPlayingScreenContentPreview() {
                     )
                 ),
             ),
-            playbackPosition = PlaybackPosition( 2L, 3L, 5L ),
-            durationFormatter = { "05:33" },
+            onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
             onArtistClicked = {},
             onFavorite = { _, _ -> },
             onPausePlayButtonClick = {},
@@ -594,11 +609,7 @@ private fun NowPlayingScreenContentPreview() {
             onArtworkClicked = {},
             onSwipeArtworkLeft = {},
             onSwipeArtworkRight = {},
-            onPlayingSpeedChange = {},
-            onPlayingPitchChange = {},
             onNavigateToQueue = {},
-            onToggleLoopMode = {},
-            onToggleShuffleMode = {},
             onSeekStart = {},
             onCreateEqualizerActivityContract = {
                 object : ActivityResultContract<Unit, Unit>() {

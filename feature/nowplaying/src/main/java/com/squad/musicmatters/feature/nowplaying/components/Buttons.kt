@@ -121,9 +121,9 @@ private fun NowPlayingControlButton(
         else -> LocalContentColor.current
     }
     val iconSize = when ( style.size ) {
-        NowPlayingControlButtonSize.Default -> 24.dp
-        NowPlayingControlButtonSize.Large -> 32.dp
-        NowPlayingControlButtonSize.ExtraLarge -> 36.dp
+        NowPlayingControlButtonSize.Default -> 44.dp
+        NowPlayingControlButtonSize.Large -> 54.dp
+        NowPlayingControlButtonSize.ExtraLarge -> 64.dp
     }
     IconButton(
         modifier = modifier

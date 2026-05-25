@@ -19,7 +19,6 @@ import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
-import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -142,7 +141,7 @@ fun SortSongsBy.sortSongsByLabelResId() = when ( this ) {
 @Composable
 fun SongListPreview() {
     MusicMattersTheme(
-        fontName = SupportedFonts.ProductSans.name,
+//        fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
         fontScale = 1.25f,
         themeMode = ThemeMode.LIGHT,

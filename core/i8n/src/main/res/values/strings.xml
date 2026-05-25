@@ -17,6 +17,7 @@
     <string name="core_i8n_sleep_timer">Sleep timer</string>
     <string name="core_i8n_sleep_timer_set">Your sleep timer is set</string>
     <string name="core_i8n_sleep_timer_off">Your sleep timer is turned off</string>
+    <string name="core_i8n_sleep_timer_duration_left">Sleep Timer %s</string>
 
     <string name="core_i8n_queue">Queue</string>
     <string name="core_i8n_settings">Settings</string>

@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.RecoverableSecurityException
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,12 +25,10 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.media3.common.util.UnstableApi
 import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
 import com.squad.musicmatters.core.data.utils.VersionUtils
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.media.connection.MusicServiceConnection
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.ui.MusicMattersApp
@@ -41,7 +38,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * For now, extend from AppCompatActivity. Otherwise, setApplicationLocales will do nothing.

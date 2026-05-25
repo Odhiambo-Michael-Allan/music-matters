@@ -6,7 +6,7 @@ import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
-import com.squad.musicmatters.core.testing.connection.TestMusicServiceConnection
+import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
 import com.squad.musicmatters.core.testing.repository.TestPreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.TestQueueRepository
@@ -33,7 +33,7 @@ class NowPlayingScreenViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var viewModel: NowPlayingScreenViewModel
-    private lateinit var player: TestMusicServiceConnection
+    private lateinit var player: TestMusicMattersPlayer
     private lateinit var playlistRepository: TestPlaylistRepository
     private lateinit var playbackPositionUpdater: TestPlaybackPositionUpdater
     private lateinit var metadataRepository: TestSongsAdditionalMetadataRepository
@@ -43,7 +43,7 @@ class NowPlayingScreenViewModelTest {
 
     @Before
     fun setUp() {
-        player = TestMusicServiceConnection()
+        player = TestMusicMattersPlayer()
         playlistRepository = TestPlaylistRepository()
         playbackPositionUpdater = TestPlaybackPositionUpdater()
         metadataRepository = TestSongsAdditionalMetadataRepository()

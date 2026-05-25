@@ -9,8 +9,8 @@ import android.media.audiofx.AudioEffect
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.launch
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -42,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -51,19 +53,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import androidx.window.core.layout.WindowSizeClass
 import com.squad.musicmatters.MainActivityUiState
 import com.squad.musicmatters.R
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.ui.SlideTransition
 import com.squad.musicmatters.core.ui.TopAppBar
-import com.squad.musicmatters.feature.nowplaying.NowPlayingBottomScreen
-import com.squad.musicmatters.feature.nowplaying.components.NowPlayingBottomBar
+import com.squad.musicmatters.feature.nowplaying.NowPlayingScreen
+import com.squad.musicmatters.feature.nowplaying.components.MiniPlayer
 import com.squad.musicmatters.feature.queue.navigation.navigateToQueue
 import com.squad.musicmatters.feature.queue.navigation.queueScreen
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
@@ -127,7 +130,7 @@ fun MusicMattersAppContent(
     var currentlySelectedLibraryDestinationName by rememberSaveable { mutableStateOf( "" ) }
 
 //    val nowPlayingScreenBottomSheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true )
-    var showNowPlayingScreen by remember { mutableStateOf( false ) }
+    var showNowPlayingScreen by rememberSaveable { mutableStateOf( false ) }
     var showMoreDestinationsBottomSheet by remember { mutableStateOf( false ) }
     var shouldShowTopAppBar by remember { mutableStateOf( false ) }
 
@@ -147,7 +150,7 @@ fun MusicMattersAppContent(
 
     if ( showNowPlayingScreen ) {
         // This forces the Activity to Portrait as long as this block is in the composition
-        LockScreenOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT )
+        TransitionScreenToPortraitMode()
     }
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -178,9 +181,12 @@ fun MusicMattersAppContent(
     val snackBarHostState = remember { SnackbarHostState() }
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+
+
     NavigationSuiteScaffold(
         navigationSuiteColors = NavigationSuiteDefaults.colors(
             navigationRailContainerColor = Color.Transparent,
+            navigationBarContainerColor = Color.Transparent,
         ),
         layoutType = customNavSuiteType,
         navigationSuiteItems = {
@@ -231,11 +237,19 @@ fun MusicMattersAppContent(
 
         Scaffold(
             topBar = {
-                AnimatedVisibility(
-                    visible = shouldShowTopAppBar,
-                    enter = SlideTransition.slideDown.enterTransition(),
-                    exit = SlideTransition.slideUp.exitTransition(),
-                ) {
+//                AnimatedVisibility(
+//                    visible = shouldShowTopAppBar,
+//                    enter = SlideTransition.slideDown.enterTransition(),
+//                    exit = SlideTransition.slideUp.exitTransition(),
+//                ) {
+//                    TopAppBar(
+//                        title = stringResource( id = R.string.songs ),
+//                        topAppBarScrollBehavior = topAppBarScrollBehavior,
+//                        onNavigationIconClicked = {},
+//                        onSettingsClicked = {}
+//                    )
+//                }
+                if ( shouldShowTopAppBar ) {
                     TopAppBar(
                         title = stringResource( id = R.string.songs ),
                         topAppBarScrollBehavior = topAppBarScrollBehavior,
@@ -259,14 +273,14 @@ fun MusicMattersAppContent(
             modifier = Modifier
                 .nestedScroll( topAppBarScrollBehavior.nestedScrollConnection )
         ) { innerPadding ->
-            Column(
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
+                    .padding( innerPadding )
             ) {
                 NavHost(
-                    modifier = Modifier
-                        .weight( 1f ),
+                    modifier = Modifier.fillMaxSize(),
                     navController = navController,
                     startDestination = SongsRoute
                 ) {
@@ -644,45 +658,6 @@ fun MusicMattersAppContent(
 //                }
                 }
 
-                Column {
-                    NowPlayingBottomBar {
-                        showNowPlayingScreen = true
-                    }
-
-                    if ( showNowPlayingScreen ) {
-                        ModalBottomSheet(
-                            sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
-                            onDismissRequest = {
-                                showNowPlayingScreen = false
-                            },
-                            dragHandle = null,
-                        ) {
-                            NowPlayingBottomScreen(
-                                onViewAlbum = {},
-                                onViewArtist = {},
-                                onHideBottomSheet = {
-                                    showNowPlayingScreen = false
-                                },
-                                onNavigateToQueue = {
-                                    navController.navigateToQueue(
-                                        navOptions = navOptions {
-                                            launchSingleTop = true
-                                        }
-                                    )
-                                },
-                                onLaunchEqualizerActivity = {
-                                    try {
-                                        equalizerActivity.launch()
-                                    } catch ( exception: Exception ) {
-                                        Timber.tag( "NOW-PLAYING-BOTTOM-BAR" ).d(
-                                            "Launching equalizer failed: $exception"
-                                        )
-                                    }
-                                }
-                            )
-                        }
-                    }
-                }
 
 //                if ( showMoreDestinationsBottomSheet ) {
 //                    ModalBottomSheet(
@@ -706,6 +681,47 @@ fun MusicMattersAppContent(
 //                    }
 //                }
 //            }
+
+                MiniPlayer (
+                    onShowNowPlayingBottomSheet = { showNowPlayingScreen = true },
+                    modifier = Modifier.align( Alignment.BottomCenter ),
+                )
+
+                if ( showNowPlayingScreen ) {
+                    ModalBottomSheet(
+                        sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
+                        onDismissRequest = {
+                            showNowPlayingScreen = false
+                        },
+                        containerColor = CardDefaults.cardColors().containerColor,
+                        sheetMaxWidth = Dp.Unspecified
+                    ) {
+                        NowPlayingScreen(
+                            onViewAlbum = {},
+                            onViewArtist = {},
+                            onHideBottomSheet = {
+                                showNowPlayingScreen = false
+                            },
+
+                            onNavigateToQueue = {
+                                navController.navigateToQueue(
+                                    navOptions = navOptions {
+                                        launchSingleTop = true
+                                    }
+                                )
+                            },
+                            onLaunchEqualizerActivity = {
+                                try {
+                                    equalizerActivity.launch()
+                                } catch ( exception: Exception ) {
+                                    Timber.tag( "NOW-PLAYING-BOTTOM-BAR" ).d(
+                                        "Launching equalizer failed: $exception"
+                                    )
+                                }
+                            }
+                        )
+                    }
+                }
             }
         }
 
@@ -726,19 +742,33 @@ private fun SnackbarHostState.showSnackBar(
 }
 
 @Composable
-private fun LockScreenOrientation( orientation: Int ) {
+private fun TransitionScreenToPortraitMode() {
     val context = LocalContext.current
-    DisposableEffect( orientation ) {
-        val activity = context.findActivity() ?: return@DisposableEffect onDispose {}
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
-        // Save the original orientation to restore it later
+    // 1. Check if the screen is wide enough to be a tablet/foldable landscape view (>= 600dp)
+    val isMediumOrWiderWidth = windowSizeClass
+        .isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND )
+
+    // 2. Check if the screen is tall enough to be a standard portrait viewport (>= 480dp)
+    val isMediumOrTallerHeight = windowSizeClass
+        .isHeightAtLeastBreakpoint( WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND )
+
+    // 3. A window belongs to a normal mobile phone if:
+    //    - It's narrow in portrait (!isMediumOrWiderWidth)
+    //    - OR it's extremely short in landscape (!isMediumOrTallerHeight)
+    val isNormalPhone = !isMediumOrWiderWidth || !isMediumOrTallerHeight
+
+    DisposableEffect( isNormalPhone ) {
+        val activity = context.findActivity() ?: return@DisposableEffect onDispose {}
         val originalOrientation = activity.requestedOrientation
 
-        // Force the new orientation
-        activity.requestedOrientation = orientation
+        // Lock normal phones to portrait, but leave tablets/foldables alone
+        if (isNormalPhone) {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
 
         onDispose {
-            // Restore to the original or "Unspecified" (auto-rotate)
             activity.requestedOrientation = originalOrientation
         }
     }
@@ -749,6 +779,8 @@ private fun Context.findActivity(): Activity? = when (this) {
     is ContextWrapper -> baseContext.findActivity()
     else -> null
 }
+
+
 
 
 

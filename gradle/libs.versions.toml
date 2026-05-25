@@ -20,7 +20,7 @@ composeBom = "2024.09.00"
 androidxCompose = "1.7.0-alpha07"
 compose-navigation = "2.8.0"
 
-coil = "2.7.0"
+coil = "3.0.1"
 media3Version="1.4.0"
 
 reorderable = "3.0.0"
@@ -32,7 +32,7 @@ timber = "5.0.1"
 
 minSdk = "24"
 targetSdk = "33"
-compileSdk = "34"
+compileSdk = "36"
 
 room = "2.6.1"
 # @pin When updating to AGP 7.4.0-alpha10 and up we can update this https://developer.android.com/studio/write/java8-support#library-desugaring-versions
@@ -56,6 +56,14 @@ protobufPlugin = "0.9.4"
 androidxTestRules = "1.6.1"
 kotlinxSerializationJson = "1.9.0"
 glide_version = "4.15.1"
+
+kmpalette = "3.1.0"
+materialKolor = "2.0.0"
+scrollbars = "2.2.0"
+
+composeMaterial3 = "1.5.0-alpha13"
+playServicesCastFramework = "22.1.0"
+nanohttpd = "2.3.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -82,12 +90,12 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "androidxCompose" }
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "androidxCompose" }
 
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "androidxCompose" }
-coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coil-kt-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
@@ -127,6 +135,13 @@ protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref 
 androidx-dataStore = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
+
+kmpalette-core = { module = "com.kmpalette:kmpalette-core", version.ref = "kmpalette" }
+materialkolor = { group = "com.materialkolor", name = "material-kolor", version.ref = "materialKolor" }
+scrollbars = { group = "com.github.nanihadesuka", name = "LazyColumnScrollbar", version.ref = "scrollbars" }
+
+google-play-services-cast-framework = { module = "com.google.android.gms:play-services-cast-framework", version.ref = "playServicesCastFramework" }
+nanohttpd = { group = "org.nanohttpd", name = "nanohttpd", version.ref = "nanohttpd" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
