@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 import java.util.Timer
 import kotlin.time.Duration
 
-interface MusicServiceConnection {
+interface MusicMattersPlayer {
 
     val playerState: StateFlow<PlayerState>
     val sleepTimer: StateFlow<SleepTimer?>
@@ -42,6 +42,7 @@ data class PlaybackPosition(
     val played: Long,
     val buffered: Long,
     val total: Long,
+    val sleepTimerDurationLeft: Duration? = null
 ) {
     val playedRatio: Float
         get() = ( played.toFloat() / total ).takeIf { it.isFinite() } ?: 0f

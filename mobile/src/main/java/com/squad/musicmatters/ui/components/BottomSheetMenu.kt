@@ -26,104 +26,102 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 
 
-@Composable
-fun BottomSheetMenuContent(
-    bottomSheetHeader: @Composable () -> Unit,
-    bottomSheetContent: @Composable () -> Unit,
-) {
-    Column (
-        modifier = Modifier.verticalScroll( rememberScrollState() )
-    ) {
-        bottomSheetHeader()
-        HorizontalDivider( modifier = Modifier.padding( 32.dp, 0.dp ) )
-        bottomSheetContent()
-    }
-}
-
-@Composable
-fun BottomSheetMenuHeader(
-    headerImage: ImageRequest?,
-    title: String,
-    titleIsHighlighted: Boolean = false,
-    description: String,
-) {
-    Row (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(32.dp, 16.dp),
-        horizontalArrangement = Arrangement.spacedBy( 24.dp ),
-    ) {
-        headerImage?.let {
-            AsyncImage(
-                model = headerImage,
-                modifier = Modifier
-                    .size(45.dp)
-                    .clip(RoundedCornerShape(10.dp)),
-                contentDescription = null
-            )
-        }
-        Column {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = when {
-                        titleIsHighlighted -> MaterialTheme.colorScheme.primary
-                        else -> LocalTextStyle.current.color
-                    },
-                    fontWeight = FontWeight.SemiBold,
-                ),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontWeight = FontWeight.SemiBold
-                ),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
-
-@Composable
-fun BottomSheetMenuItem(
-    leadingIcon: ImageVector,
-    leadingIconTint: Color? = null,
-    leadingIconContentDescription: String = "",
-    label: String,
-    isSelected: Boolean = false,
-    onClick: () -> Unit,
-) {
-    Card (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp),
-        colors = CardDefaults.cardColors().copy(
-            containerColor = if ( isSelected ) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent
-        ),
-        shape = RoundedCornerShape( 32.dp ),
-        onClick = onClick
-    ) {
-        Row (
-            modifier = Modifier.padding( 16.dp ),
-            horizontalArrangement = Arrangement.spacedBy( 24.dp ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = leadingIcon,
-                tint = leadingIconTint ?: LocalContentColor.current,
-                contentDescription = leadingIconContentDescription
-            )
-            Text(
-                text = label,
-                fontWeight = FontWeight.SemiBold,
-            )
-        }
-    }
-}
+//@Composable
+//fun BottomSheetMenuContent(
+//    bottomSheetHeader: @Composable () -> Unit,
+//    bottomSheetContent: @Composable () -> Unit,
+//) {
+//    Column (
+//        modifier = Modifier.verticalScroll( rememberScrollState() )
+//    ) {
+//        bottomSheetHeader()
+//        HorizontalDivider( modifier = Modifier.padding( 32.dp, 0.dp ) )
+//        bottomSheetContent()
+//    }
+//}
+//
+//@Composable
+//fun BottomSheetMenuHeader(
+//    headerImage: ImageRequest?,
+//    title: String,
+//    titleIsHighlighted: Boolean = false,
+//    description: String,
+//) {
+//    Row (
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(32.dp, 16.dp),
+//        horizontalArrangement = Arrangement.spacedBy( 24.dp ),
+//    ) {
+//        headerImage?.let {
+//            AsyncImage(
+//                model = headerImage,
+//                modifier = Modifier
+//                    .size(45.dp)
+//                    .clip(RoundedCornerShape(10.dp)),
+//                contentDescription = null
+//            )
+//        }
+//        Column {
+//            Text(
+//                text = title,
+//                style = MaterialTheme.typography.bodyMedium.copy(
+//                    color = when {
+//                        titleIsHighlighted -> MaterialTheme.colorScheme.primary
+//                        else -> LocalTextStyle.current.color
+//                    },
+//                    fontWeight = FontWeight.SemiBold,
+//                ),
+//                maxLines = 2,
+//                overflow = TextOverflow.Ellipsis
+//            )
+//            Text(
+//                text = description,
+//                style = MaterialTheme.typography.bodySmall.copy(
+//                    fontWeight = FontWeight.SemiBold
+//                ),
+//                maxLines = 2,
+//                overflow = TextOverflow.Ellipsis
+//            )
+//        }
+//    }
+//}
+//
+//@Composable
+//fun BottomSheetMenuItem(
+//    leadingIcon: ImageVector,
+//    leadingIconTint: Color? = null,
+//    leadingIconContentDescription: String = "",
+//    label: String,
+//    isSelected: Boolean = false,
+//    onClick: () -> Unit,
+//) {
+//    Card (
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(start = 16.dp, end = 16.dp),
+//        colors = CardDefaults.cardColors().copy(
+//            containerColor = if ( isSelected ) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent
+//        ),
+//        shape = RoundedCornerShape( 32.dp ),
+//        onClick = onClick
+//    ) {
+//        Row (
+//            modifier = Modifier.padding( 16.dp ),
+//            horizontalArrangement = Arrangement.spacedBy( 24.dp ),
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Icon(
+//                imageVector = leadingIcon,
+//                tint = leadingIconTint ?: LocalContentColor.current,
+//                contentDescription = leadingIconContentDescription
+//            )
+//            Text(
+//                text = label,
+//                fontWeight = FontWeight.SemiBold,
+//            )
+//        }
+//    }
+//}

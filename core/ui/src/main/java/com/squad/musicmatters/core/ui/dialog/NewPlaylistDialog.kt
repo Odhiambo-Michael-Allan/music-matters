@@ -34,7 +34,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
-import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.ThemeMode
 
@@ -135,7 +134,7 @@ fun NewPlaylistDialog(
 @Composable
 private fun NewPlaylistDialogPreview() {
     MusicMattersTheme(
-        fontName = SupportedFonts.GoogleSans.name,
+//        fontName = SupportedFonts.GoogleSans.name,
         useMaterialYou = true,
         fontScale = 1.0f,
         themeMode = ThemeMode.LIGHT,

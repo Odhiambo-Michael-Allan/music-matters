@@ -1,56 +1,110 @@
-package com.squad.musicmatters.core.ui
+package com.squad.musicmatters.feature.nowplaying.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.squad.musicMatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.model.Lyric
-import kotlinx.coroutines.launch
+import com.squad.musicmatters.feature.nowplaying.LyricsUiState
 import java.time.Duration
 
+// Stateful
 @Composable
-fun LyricsLayout(
+internal fun LyricsLayout(
+    modifier: Modifier = Modifier,
+    lyricsUiState: LyricsUiState,
+    onGetPlaybackPosition: () -> PlaybackPosition,
+    onSeekEnd: ( Long ) -> Unit,
+) {
+    when ( lyricsUiState ) {
+        LyricsUiState.Loading -> {}
+        is LyricsUiState.Success -> {
+            val backgroundColor = CardDefaults.cardColors().containerColor
+            Box {
+                LyricsLayout(
+                    modifier = modifier.fillMaxSize(),
+                    lyrics = lyricsUiState.lyrics,
+                    currentDurationInPlayback = Duration.ofMillis(
+                        onGetPlaybackPosition().played
+                    ),
+                    onSeekTo = { onSeekEnd( it.toMillis() ) }
+                )
+                Column {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height( 12.dp )
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        backgroundColor,
+                                        Color.Transparent
+                                    ),
+                                    tileMode = TileMode.Mirror
+                                )
+                            )
+                    )
+                    Spacer( modifier = Modifier.weight( 1f ) )
+                    Box (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height( 150.dp )
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        backgroundColor
+                                    )
+                                )
+                            )
+                    )
+                }
+            }
+        }
+    }
+}
+
+// Stateless
+@Composable
+private fun LyricsLayout(
     modifier: Modifier = Modifier,
     lyrics: List<Lyric>,
     currentDurationInPlayback: Duration,
@@ -82,10 +136,11 @@ fun LyricsLayout(
             Text(
                 text = stringResource( R.string.core_i8n_no_lyrics_found ),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.displaySmall.copy(
+                    fontWeight = FontWeight.ExtraBold
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding( vertical = 12.dp, horizontal = 24.dp )
                     .align( Alignment.Center )
             )
         } else {
@@ -95,12 +150,6 @@ fun LyricsLayout(
             ) {
                 itemsIndexed( lyrics ) { index, lyric ->
                     val isActive = index == currentLyricIndex
-
-                    val scale by animateFloatAsState(
-                        targetValue = if ( isActive ) 1.15f else 1f,
-                        animationSpec = spring( dampingRatio = Spring.DampingRatioLowBouncy ),
-                        label = "LyricScale"
-                    )
 
                     val color by animateColorAsState(
                         targetValue = if ( isActive ) MaterialTheme.colorScheme.primary else Color.Unspecified,
@@ -116,35 +165,20 @@ fun LyricsLayout(
 
                     Text(
                         text = lyric.content,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineMedium,
+                        style = MaterialTheme.typography.displaySmall.copy(
+                            fontWeight = FontWeight.ExtraBold
+                        ),
                         color = color,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding( vertical = 12.dp, horizontal = 24.dp )
+                            .padding( vertical = 12.dp, horizontal = 0.dp )
                             .pointerInput( Unit ) {
                                 detectTapGestures { onSeekTo( lyric.timeStamp ) }
-                            }
-                            .graphicsLayer {
-                                scaleX = scale
-                                scaleY = scale
-                                alpha = blurAlpha
-                            }
+                            }.graphicsLayer { alpha = blurAlpha }
                     )
                 }
             }
         }
-        Box(
-            modifier = Modifier
-                .align( Alignment.BottomStart )
-                .fillMaxWidth()
-                .height( 16.dp )
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf( Color.Transparent, MaterialTheme.colorScheme.background )
-                    )
-                )
-        )
     }
 }
 
@@ -154,7 +188,6 @@ fun LyricsLayout(
 private fun LyricsLayoutPreview() {
     MusicMattersTheme(
         themeMode = DefaultPreferences.THEME_MODE,
-        fontName = DefaultPreferences.FONT_NAME,
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
         useMaterialYou = true,
         fontScale = DefaultPreferences.FONT_SCALE
@@ -194,7 +227,6 @@ private fun LyricsLayoutPreview() {
 private fun LyricsLayoutEmptyPreview() {
     MusicMattersTheme(
         themeMode = DefaultPreferences.THEME_MODE,
-        fontName = DefaultPreferences.FONT_NAME,
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
         useMaterialYou = true,
         fontScale = DefaultPreferences.FONT_SCALE

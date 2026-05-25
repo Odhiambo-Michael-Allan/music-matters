@@ -2,7 +2,7 @@ package com.squad.musicmatters.core.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.squad.musicmatters.core.media.connection.MusicServiceConnection
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 abstract class BaseViewModel(
-    private val player: MusicServiceConnection,
+    private val player: MusicMattersPlayer,
     private val preferencesDataSource: PreferencesDataSource,
     private val playlistRepository: PlaylistRepository,
     private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository

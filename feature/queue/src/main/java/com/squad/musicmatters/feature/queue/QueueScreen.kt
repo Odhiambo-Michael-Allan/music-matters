@@ -1,14 +1,23 @@
 package com.squad.musicmatters.feature.queue
 
 import android.net.Uri
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -19,9 +28,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicMatters.core.i8n.R
@@ -29,7 +40,7 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
+import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
@@ -55,7 +66,6 @@ internal fun QueueScreen(
         uiState = uiState,
         onNavigateUp = onNavigateBack,
         onCreatePlaylist = { title, songs -> viewModel.createPlaylist( title, songs ) },
-        onClearQueue = viewModel::clearQueue,
         onFavorite = viewModel::addToFavorites,
         playSong = viewModel::playSongs,
         onPlayNext = viewModel::playSongNext,
@@ -71,6 +81,8 @@ internal fun QueueScreen(
         onDeleteSong = onDeleteSong,
         onSaveQueue = viewModel::saveQueue,
         onShowSnackBar = onShowSnackBar,
+        onToggleLoopMode = viewModel::toggleLoopMode,
+        onToggleShuffleMode = viewModel::setShuffleMode
     )
 }
 
@@ -79,7 +91,6 @@ private fun QueueScreenContent(
     uiState: QueueScreenUiState,
     onNavigateUp: () -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onClearQueue: () -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
     playSong: ( Song, List<Song> ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
@@ -91,6 +102,8 @@ private fun QueueScreenContent(
     onDeleteSong: ( Song ) -> Unit,
     onSaveQueue: ( List<Song> ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
+    onToggleLoopMode: ( LoopMode ) -> Unit,
+    onToggleShuffleMode: ( Boolean ) -> Unit,
 ) {
 
     var showSaveDialog by remember { mutableStateOf( false ) }
@@ -99,14 +112,11 @@ private fun QueueScreenContent(
         modifier = Modifier.fillMaxSize()
     ) {
         QueueScreenTopAppBar(
+            loopMode = ( uiState as? QueueScreenUiState.Success )?.loopMode,
+            shuffle = ( uiState as? QueueScreenUiState.Success )?.shuffle ?: false,
             onBackArrowClick = onNavigateUp,
-            onSaveClick = {
-                showSaveDialog = !showSaveDialog
-            },
-            onClearClick = {
-                onClearQueue()
-                onNavigateUp()
-            }
+            onToggleLoopMode = onToggleLoopMode,
+            onToggleShuffleMode = onToggleShuffleMode,
         )
         when ( uiState ) {
             QueueScreenUiState.Loading -> {}
@@ -150,9 +160,11 @@ private fun QueueScreenContent(
 @Composable
 private fun QueueScreenTopAppBar(
     modifier: Modifier = Modifier,
+    loopMode: LoopMode?,
+    shuffle: Boolean,
     onBackArrowClick: () -> Unit,
-    onSaveClick: () -> Unit,
-    onClearClick: () -> Unit
+    onToggleLoopMode: ( LoopMode ) -> Unit,
+    onToggleShuffleMode: ( Boolean ) -> Unit,
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
@@ -168,38 +180,85 @@ private fun QueueScreenTopAppBar(
             }
         },
         title = {
-            Crossfade(
-                targetState = stringResource( id = R.string.core_i8n_queue ),
-                label = "top-app-bar-title"
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    TopAppBarMinimalTitle {
-                        Text( text = it )
-                    }
-                }
+            TopAppBarMinimalTitle {
+                Text( text = stringResource( id = R.string.core_i8n_queue ) )
             }
         },
         actions = {
-            IconButton(
-                onClick = onSaveClick
-            ) {
-                Icon(
-                    imageVector = MusicMattersIcons.Save,
-                    contentDescription = null
-                )
+            AnimatedContent(
+                targetState = shuffle,
+                label = "ShuffleAnimation"
+            ) { isShuffleEnabled ->
+                IconButton(
+                    onClick = { onToggleShuffleMode( !isShuffleEnabled ) }
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = com.squad.musicMatters.core.designsystem.R.drawable.ic_shuffle),
+                            contentDescription = null,
+                            tint = if ( isShuffleEnabled ) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+                            modifier = Modifier.size(
+                                MusicMattersIcons.Shuffle.defaultWidth,
+                                MusicMattersIcons.Shuffle.defaultHeight,
+                            )
+                        )
+
+                        if ( isShuffleEnabled ) {
+                            OnIndicator()
+                        }
+                    }
+                }
             }
-            IconButton(
-                onClick = onClearClick
+            AnimatedContent(
+                targetState = loopMode,
             ) {
-                Icon(
-                    imageVector = MusicMattersIcons.Clear,
-                    contentDescription = null
-                )
+                IconButton(
+                    onClick = { loopMode?.let { onToggleLoopMode( loopMode ) } }
+                ) {
+                    Column (
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(
+                                id = when ( it ) {
+                                    LoopMode.Song -> com.squad.musicMatters.core.designsystem.R.drawable.ic_repeat_current
+                                    else -> com.squad.musicMatters.core.designsystem.R.drawable.ic_repeat
+                                }
+                            ),
+                            contentDescription = null,
+                            tint = when ( loopMode ) {
+                                null, LoopMode.None -> LocalContentColor.current
+                                else -> MaterialTheme.colorScheme.primary
+                            },
+                            modifier = Modifier.size(
+                                MusicMattersIcons.Loop.defaultWidth,
+                                MusicMattersIcons.Loop.defaultHeight
+                            )
+                        )
+                        if ( it != LoopMode.None ) {
+                            OnIndicator()
+                        }
+                    }
+                }
             }
         }
+    )
+}
+
+@Composable
+private fun OnIndicator() {
+    Spacer( modifier = Modifier.height( 1.dp ) )
+    Box(
+        modifier = Modifier
+            .size( 4.dp ) // Exact size of the dot
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = CircleShape
+            )
     )
 }
 
@@ -207,9 +266,11 @@ private fun QueueScreenTopAppBar(
 @Composable
 private fun QueueScreenTopAppBarPreview() {
     QueueScreenTopAppBar(
+        loopMode = LoopMode.Queue,
+        shuffle = true,
         onBackArrowClick = {},
-        onSaveClick = {},
-        onClearClick = {},
+        onToggleLoopMode = {},
+        onToggleShuffleMode = {},
     )
 }
 
@@ -222,7 +283,7 @@ private fun QueueScreenContentPreview(
     MusicMattersTheme(
         themeMode = DefaultPreferences.THEME_MODE,
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
-        fontName = SupportedFonts.ProductSans.name,
+//        fontName = SupportedFonts.ProductSans.name,
         fontScale = 1.0f,
         useMaterialYou = true
     ) {
@@ -232,11 +293,12 @@ private fun QueueScreenContentPreview(
                 currentlyPlayingSongId = previewData.songs.first().id,
                 favoriteSongIds = setOf( previewData.songs.first().id ),
                 playlists = previewData.playlists,
-                songsAdditionalMetadata = emptyList()
+                songsAdditionalMetadata = emptyList(),
+                shuffle = true,
+                loopMode = LoopMode.Song,
             ),
             onNavigateUp = {},
             onCreatePlaylist = { _, _ -> },
-            onClearQueue = {},
             onFavorite = { _, _ -> },
             playSong = { _, _ -> },
             onPlayNext = {},
@@ -248,6 +310,8 @@ private fun QueueScreenContentPreview(
             onDeleteSong = {},
             onSaveQueue = {},
             onShowSnackBar = {},
+            onToggleLoopMode = {},
+            onToggleShuffleMode = {},
         )
     }
 }

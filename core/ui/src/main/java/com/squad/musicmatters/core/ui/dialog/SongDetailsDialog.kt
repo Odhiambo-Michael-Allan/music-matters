@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,7 +54,6 @@ fun SongDetailsDialog(
         ) {
             Column (
                 modifier = Modifier
-                    .fillMaxSize()
                     .padding( 8.dp )
             ) {
                 Row (
@@ -205,7 +205,7 @@ fun SongDetailsItem(
     }
 }
 
-@Preview
+@Preview( showSystemUi = true )
 @Composable
 fun SongDetailsDialogPreview() {
     MusicMattersTheme(

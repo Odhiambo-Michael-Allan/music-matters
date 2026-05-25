@@ -20,7 +20,7 @@ fun <T> List<T>.randomSubList( length: Int ): List<T> {
     return out
 }
 
-fun List<Song>.sortSongs(sortSongsBy: SortSongsBy, reverse: Boolean ): List<Song> {
+fun List<Song>.sortSongs( sortSongsBy: SortSongsBy, reverse: Boolean ): List<Song> {
     return when ( sortSongsBy ) {
         SortSongsBy.TITLE -> if ( reverse ) sortedByDescending { it.title } else sortedBy { it.title }
         SortSongsBy.ALBUM -> if ( reverse ) sortedByDescending { it.albumTitle } else sortedBy { it.albumTitle }

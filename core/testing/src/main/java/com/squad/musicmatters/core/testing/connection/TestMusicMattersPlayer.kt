@@ -1,6 +1,6 @@
 package com.squad.musicmatters.core.testing.connection
 
-import com.squad.musicmatters.core.media.connection.MusicServiceConnection
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.media.connection.SleepTimer
@@ -13,7 +13,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
-class TestMusicServiceConnection : MusicServiceConnection {
+class TestMusicMattersPlayer : MusicMattersPlayer {
 
     private val _playerState = MutableStateFlow( PlayerState() )
     override val playerState = _playerState.asStateFlow()

@@ -59,18 +59,8 @@ fun TopAppBar(
             }
         },
         title = {
-            Crossfade(
-                targetState = title,
-                label = "top-app-bar-title"
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    TopAppBarMinimalTitle {
-                        Text( text = it )
-                    }
-                }
+            TopAppBarMinimalTitle {
+                Text( text = title )
             }
         },
         actions = {

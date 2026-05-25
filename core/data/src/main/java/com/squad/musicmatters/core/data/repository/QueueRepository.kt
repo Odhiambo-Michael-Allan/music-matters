@@ -9,4 +9,5 @@ interface QueueRepository {
     suspend fun saveQueue( queue: List<Song> )
     suspend fun removeSongWithId( id: String )
     suspend fun clearQueue()
+
 }

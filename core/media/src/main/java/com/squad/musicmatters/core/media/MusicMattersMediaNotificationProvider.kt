@@ -68,12 +68,12 @@ class MusicMattersPlayingNotification(
     init {
         val clickIntent = context.openMainActivityPendingIntent()
         val quitAppIntent = context.createQuitAppIntent()
-        val favoriteAction = buildFavoriteAction( false )
+//        val favoriteAction = buildFavoriteAction( false )
     }
 
-    private fun buildFavoriteAction( isFavorite: Boolean ): NotificationCompat.Action {
-        val favoriteResId = if ( isFavorite ) R.ic_liked else R.drawable.ic_liked_border 
-    }
+//    private fun buildFavoriteAction( isFavorite: Boolean ): NotificationCompat.Action {
+//        val favoriteResId = if ( isFavorite ) R.drawable.thumbs_up_rounded else R.drawable.thumbs_up_rounded_outlined
+//    }
 
     companion object {
 

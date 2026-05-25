@@ -1,6 +1,5 @@
 package com.squad.musicmatters.core.media.connection
 
-import android.util.Log
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackParameters
@@ -19,14 +18,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.Collections
+import java.time.Clock
+import java.time.Instant
 import java.util.Date
 import java.util.Timer
 import javax.inject.Inject
@@ -34,14 +34,14 @@ import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-class MusicServiceConnectionImpl @Inject constructor(
+class MusicMattersPlayerImpl @Inject constructor(
     private val connectable: Connectable,
     private val queueRepository: QueueRepository,
     private val userPreferencesDataSource: PreferencesDataSource,
     private val compositeRepository: CompositeRepository,
     private val songToMediaItemConverter: SongToMediaItemConverter,
     @Dispatcher( MusicMattersDispatchers.Main ) dispatcher: CoroutineDispatcher
-) : MusicServiceConnection {
+) : MusicMattersPlayer {
 
     private val scope = CoroutineScope( dispatcher + SupervisorJob() )
     private val playerListener: PlayerListener = PlayerListener()
@@ -66,15 +66,23 @@ class MusicServiceConnectionImpl @Inject constructor(
             launch { observePlaybackSpeed() }
             launch { observePlaybackPitch() }
             launch { observeLoopMode() }
+//            launch { observeShuffleMode() }
         }
     }
 
     override fun getCurrentPlaybackPosition(): PlaybackPosition =
         player?.let {
+            val sleepTimerDurationLeft = sleepTimer.value?.let { sleepTimer ->
+                val now = Instant.now()
+                    .toEpochMilli()
+                    .toDuration( DurationUnit.MILLISECONDS )
+                sleepTimer.endsAt.minus( now )
+            }
             PlaybackPosition(
                 played = it.currentPosition,
                 buffered = it.bufferedPosition,
-                total = it.duration
+                total = it.duration,
+                sleepTimerDurationLeft = sleepTimerDurationLeft,
             )
         } ?: PlaybackPosition.ZERO
 
@@ -138,6 +146,12 @@ class MusicServiceConnectionImpl @Inject constructor(
             player?.setRepeatMode( loopMode )
         }
     }
+
+//    private suspend fun observeShuffleMode() {
+//        userPreferencesDataSource.userData.map { it.shuffle }.collect { shuffle ->
+//            if ( shuffle ) shuffleSongsInQueue()
+//        }
+//    }
 
     override suspend fun deleteSong( song: Song ) {
         compositeRepository.deleteSongWithId( song.id )

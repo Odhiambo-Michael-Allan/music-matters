@@ -19,21 +19,20 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-class MusicServiceConnectionImplTest {
+class MusicMattersPlayerImplTest {
     private lateinit var connectable: FakeConnectable
     private lateinit var mostPlayedSongsRepository: TestMostPlayedSongsRepository
     private lateinit var playHistoryRepository: TestPlayHistoryRepository
     private lateinit var songsAdditionalMetadataRepository: TestSongsAdditionalMetadataRepository
     private lateinit var queueRepository: TestQueueRepository
     private lateinit var preferencesDataSource: TestPreferencesDataSource
-    private lateinit var subject: MusicServiceConnection
+    private lateinit var subject: MusicMattersPlayer
 
 
     @OptIn( ExperimentalCoroutinesApi::class )
@@ -45,7 +44,7 @@ class MusicServiceConnectionImplTest {
         songsAdditionalMetadataRepository = TestSongsAdditionalMetadataRepository()
         queueRepository = TestQueueRepository()
         preferencesDataSource = TestPreferencesDataSource()
-        subject = MusicServiceConnectionImpl(
+        subject = MusicMattersPlayerImpl(
             connectable = connectable,
             queueRepository = queueRepository,
             compositeRepository = CompositeRepositoryImpl(

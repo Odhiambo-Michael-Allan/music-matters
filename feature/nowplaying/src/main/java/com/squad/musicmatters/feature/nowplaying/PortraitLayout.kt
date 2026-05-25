@@ -1,37 +1,30 @@
-package com.squad.musicmatters.feature.nowplaying.components
+package com.squad.musicmatters.feature.nowplaying
 
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.ThumbUpAlt
-import androidx.compose.material.icons.rounded.ThumbUpAlt
-import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Devices.FOLDABLE
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -45,10 +38,14 @@ import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.model.ThemeMode
-import com.squad.musicmatters.core.ui.FadeTransition
-import com.squad.musicmatters.core.ui.LyricsLayout
-import com.squad.musicmatters.feature.nowplaying.LyricsUiState
-import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
+import com.squad.musicmatters.feature.nowplaying.components.LyricsLayout
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingSongArtwork
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingDefaultControlsLayout
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingScreenBottomBar
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingSeekBar
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingTraditionalControlsLayout
+import com.squad.musicmatters.feature.nowplaying.components.TitleAndArtistSection
+import com.squad.musicmatters.feature.nowplaying.components.emptyUserData
 import java.time.Duration
 import java.util.Timer
 import kotlin.time.DurationUnit
@@ -61,8 +58,8 @@ internal fun PortraitLayout(
     uiState: NowPlayingScreenUiState.Success,
     lyricsUiState: LyricsUiState,
     currentlyPlayingSong: Song,
-    playbackPosition: PlaybackPosition,
-    durationFormatter: ( Long ) -> String,
+    backgroundColor: Color = Color.Unspecified,
+    onGetPlaybackPosition: () -> PlaybackPosition,
     onFavorite: ( Song, Boolean ) -> Unit,
     onArtworkSwipedLeft: () -> Unit,
     onArtworkSwipedRight: () -> Unit,
@@ -76,176 +73,104 @@ internal fun PortraitLayout(
     onPreviousButtonClick: () -> Unit,
     onPlayNext: () -> Unit,
     onNavigateToQueue: () -> Unit,
-    onToggleLoopMode: ( LoopMode ) -> Unit,
-    onToggleShuffleMode: ( Boolean ) -> Unit,
-    onPlayingSpeedChange: ( Float ) -> Unit,
-    onPlayingPitchChange: ( Float ) -> Unit,
     onCreateEqualizerActivityContract: () -> Unit,
     onShowLyrics: ( Boolean ) -> Unit,
     onShowSleepTimerBottomSheet: () -> Unit,
 ) {
-    Column (
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .fillMaxSize()
-            .padding( 20.dp ),
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = backgroundColor
+        ),
+        modifier = Modifier.fillMaxSize()
     ) {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding( top = 8.dp )
+        Column (
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+                .fillMaxSize()
+                .padding( 28.dp ),
         ) {
-            BottomSheetDefaults.DragHandle()
-        }
-        Box(
-            modifier = Modifier
-                .sizeIn( maxWidth = 400.dp, maxHeight = 400.dp )
-                .aspectRatio( 1f )
-                .clip( MaterialTheme.shapes.medium )
-        ) {
-            AnimatedContent(
-                targetState = uiState.userData.showLyrics
-            ) { showLyrics ->
-                if ( showLyrics ) {
-                    when ( lyricsUiState ) {
-                        LyricsUiState.Loading -> {}
-                        is LyricsUiState.Success -> {
-                            LyricsLayout(
-                                modifier = Modifier.fillMaxSize(),
-                                lyrics = lyricsUiState.lyrics,
-                                currentDurationInPlayback = Duration.ofMillis( playbackPosition.played ),
-                                onSeekTo = { onSeekEnd( it.toMillis() ) }
-                            )
-                        }
-                    }
-                } else {
-                    NowPlayingArtwork(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        artworkUri = currentlyPlayingSong.artworkUri?.toUri(),
-                        onSwipeLeft = onArtworkSwipedLeft,
-                        onSwipeRight = onArtworkSwipedRight,
-                        onSwipeDown = onArtworkSwipedDown,
-                        onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
-                    )
-                }
-            }
-        }
-
-        Row {
-            AnimatedContent(
-                modifier = Modifier.weight( 1f ),
-                label = "now-playing-body-content",
-                targetState = currentlyPlayingSong,
-                transitionSpec = {
-                    FadeTransition.enterTransition()
-                        .togetherWith( FadeTransition.exitTransition() )
-                }
-            ) { target ->
-                Column (
-                    modifier = Modifier
-                        .padding( 0.dp, 16.dp )
-
-                ) {
-                    NowPlayingBottomBarContentText(
-                        text = target.title,
-                        style = MaterialTheme.typography.titleLarge
-                            .copy( fontWeight = FontWeight.Bold ),
-                        textMarquee = true,
-                    )
-                    ArtistsRow(
-                        artists = target.artists,
-                        onArtistClicked = onArtistClicked
-                    )
-                }
-            }
-            Row (
-                modifier = Modifier.padding( 0.dp, 16.dp )
+            Box(
+                modifier = Modifier
+                    .sizeIn( maxWidth = 400.dp, maxHeight = 400.dp )
+                    .aspectRatio( 1f )
+                    .clip( MaterialTheme.shapes.medium )
             ) {
-                IconButton(
-                    modifier = Modifier.offset( 4.dp ),
-                    onClick = {
-                        onFavorite(
-                            currentlyPlayingSong,
-                            !uiState.currentlyPlayingSongIsFavorite
+                AnimatedContent(
+                    targetState = uiState.userData.showLyrics
+                ) { showLyrics ->
+                    if ( showLyrics ) {
+                        LyricsLayout(
+                            lyricsUiState = lyricsUiState,
+                            onGetPlaybackPosition = onGetPlaybackPosition,
+                            onSeekEnd = onSeekEnd,
                         )
-                    }
-                ) {
-                    AnimatedContent(
-                        targetState = uiState.currentlyPlayingSongIsFavorite,
-                        label = "now-playing-screen-is-favorite-icon"
-                    ) {
-                        Icon(
-                            imageVector = if ( it ) {
-                                Icons.Rounded.ThumbUpAlt
-                            } else {
-                                Icons.Outlined.ThumbUpAlt
+                    } else {
+                        NowPlayingSongArtwork(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            song = currentlyPlayingSong,
+                            isPlaying = { uiState.playerState.isPlaying
+                                    || uiState.playerState.isBuffering
                             },
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
+                            onSwipeLeft = onArtworkSwipedLeft,
+                            onSwipeRight = onArtworkSwipedRight,
+                            onSwipeDown = onArtworkSwipedDown,
+                            onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
                         )
-
                     }
-                }
-                IconButton(
-                    onClick = onShowOptionsMenu
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.MoreVert,
-                        contentDescription = null
-                    )
                 }
             }
+            TitleAndArtistSection(
+                currentlyPlayingSong = currentlyPlayingSong,
+                currentlyPlayingSongIsFavorite = uiState.currentlyPlayingSongIsFavorite,
+                onArtistClicked = onArtistClicked,
+                onFavorite = onFavorite,
+                onShowOptionsMenu = onShowOptionsMenu,
+            )
+            NowPlayingSeekBar(
+                onGetPlaybackPosition = onGetPlaybackPosition,
+                onSeekStart = onSeekStart,
+                onSeekEnd = onSeekEnd
+            )
+            Spacer( modifier = Modifier.height( 28.dp ) )
+            when {
+                uiState.userData.controlsLayoutDefault ->
+                    NowPlayingDefaultControlsLayout(
+                        isPlaying = uiState.playerState.isPlaying,
+                        sleepTimer = uiState.sleepTimer,
+                        onPausePlayButtonClick = onPausePlayButtonClick,
+                        onPreviousButtonClick = onPreviousButtonClick,
+                        onNextButtonClick = onPlayNext,
+                        onNavigateToQueue = onNavigateToQueue,
+                        onShowSleepTimerBottomSheet = onShowSleepTimerBottomSheet,
+                    )
+                else ->
+                    NowPlayingTraditionalControlsLayout(
+                        isPlaying = uiState.playerState.isPlaying,
+                        sleepTimer = uiState.sleepTimer,
+                        onPreviousButtonClick = onPreviousButtonClick,
+                        onPausePlayButtonClick = onPausePlayButtonClick,
+                        onNextButtonClick = onPlayNext,
+                        onNavigateToQueue = onNavigateToQueue,
+                        onShowSleepTimerBottomSheet = onShowSleepTimerBottomSheet,
+                    )
+            }
+            Spacer( modifier = Modifier.height( 16.dp ) )
+            NowPlayingScreenBottomBar(
+                showLyrics = uiState.userData.showLyrics,
+                onShowLyrics = onShowLyrics,
+                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
+            )
         }
-        MusicMattersSeekBar(
-            playbackPosition = playbackPosition,
-            durationFormatter = durationFormatter,
-            onSeekStart = onSeekStart,
-            onSeekEnd = onSeekEnd
-        )
-        Spacer( modifier = Modifier.height( 28.dp ) )
-        when {
-            uiState.userData.controlsLayoutDefault ->
-                NowPlayingDefaultControlsLayout(
-                    isPlaying = uiState.playerState.isPlaying,
-                    sleepTimer = uiState.sleepTimer,
-                    onPausePlayButtonClick = onPausePlayButtonClick,
-                    onPreviousButtonClick = onPreviousButtonClick,
-                    onNextButtonClick = onPlayNext,
-                    onNavigateToQueue = onNavigateToQueue,
-                    onShowSleepTimerBottomSheet = onShowSleepTimerBottomSheet,
-                )
-            else ->
-                NowPlayingTraditionalControlsLayout(
-                    isPlaying = uiState.playerState.isPlaying,
-                    sleepTimer = uiState.sleepTimer,
-                    onPreviousButtonClick = onPreviousButtonClick,
-                    onPausePlayButtonClick = onPausePlayButtonClick,
-                    onNextButtonClick = onPlayNext,
-                    onNavigateToQueue = onNavigateToQueue,
-                    onShowSleepTimerBottomSheet = onShowSleepTimerBottomSheet,
-                )
-        }
-        Spacer( modifier = Modifier.height( 16.dp ) )
-        NowPlayingScreenBottomBar(
-            currentLoopMode = uiState.userData.loopMode,
-            shuffle = uiState.userData.shuffle,
-            showLyrics = uiState.userData.showLyrics,
-            currentSpeed = uiState.userData.playbackSpeed,
-            currentPitch = uiState.userData.playbackPitch,
-            onToggleLoopMode = onToggleLoopMode,
-            onToggleShuffleMode = onToggleShuffleMode,
-            onSpeedChange = onPlayingSpeedChange,
-            onPitchChange = onPlayingPitchChange,
-            onShowLyrics = onShowLyrics,
-            onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
-        )
     }
 }
 
-@Preview( showBackground = true )
+@Preview(
+    name = "Tablet",
+    device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait",
+    showSystemUi = true,
+)
 @Composable
 private fun PortraitPreview() {
     MusicMattersTheme(
@@ -292,7 +217,7 @@ private fun PortraitPreview() {
                 currentlyPlayingSongIsFavorite = true,
                 playerState = PlayerState(
                     currentlyPlayingSongId = "song-id-1",
-                    isPlaying = false,
+                    isPlaying = true,
                     isBuffering = false,
                 ),
                 playlists = emptyList(),
@@ -306,7 +231,9 @@ private fun PortraitPreview() {
                 ),
                 sleepTimer = SleepTimer(
                     duration = 300000L.toDuration(DurationUnit.MILLISECONDS),
-                    endsAt = System.currentTimeMillis().toDuration(DurationUnit.MILLISECONDS),
+                    endsAt = System.currentTimeMillis().toDuration(
+                        DurationUnit.MILLISECONDS
+                    ),
                     timer = Timer()
                 )
             ),
@@ -334,8 +261,7 @@ private fun PortraitPreview() {
                     )
                 ),
             ),
-            playbackPosition = PlaybackPosition(2L, 3L, 5L),
-            durationFormatter = { "05:33" },
+            onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
             onArtistClicked = {},
             onFavorite = { _, _ -> },
             onPausePlayButtonClick = {},
@@ -343,11 +269,7 @@ private fun PortraitPreview() {
             onPlayNext = {},
             onSeekEnd = {},
             onArtworkClicked = {},
-            onPlayingSpeedChange = {},
-            onPlayingPitchChange = {},
             onNavigateToQueue = {},
-            onToggleLoopMode = {},
-            onToggleShuffleMode = {},
             onSeekStart = {},
             onCreateEqualizerActivityContract = {
                 object : ActivityResultContract<Unit, Unit>() {

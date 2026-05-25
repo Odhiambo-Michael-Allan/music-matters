@@ -33,7 +33,7 @@ enum class ColorSchemeMode {
 fun MusicMattersTheme(
     themeMode: ThemeMode,
     primaryColorName: String,
-    fontName: String,
+    fontName: String? = null,
     fontScale: Float,
     useMaterialYou: Boolean,
     content: @Composable () -> Unit
@@ -63,18 +63,18 @@ fun MusicMattersTheme(
         SideEffect {
             val window = ( view.context as Activity ).window
             window.statusBarColor = colorScheme.background.toArgb()
-            window.navigationBarColor = colorScheme.surfaceContainer.toArgb()
+//            window.navigationBarColor = colorScheme.surfaceContainer.toArgb()
         }
     }
 
-    val typography = MusicMattersTypography.toTypography(
-        MusicMattersTypography.resolveFont( fontName ),
-        TextDirection.Ltr
-    )
+//    val typography = MusicMattersTypography.toTypography(
+//        MusicMattersTypography.resolveFont( fontName ),
+//        TextDirection.Ltr
+//    )
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = typography,
+        typography = MusicMattersTypography,
         content = {
             CompositionLocalProvider(
                 LocalDensity provides Density(

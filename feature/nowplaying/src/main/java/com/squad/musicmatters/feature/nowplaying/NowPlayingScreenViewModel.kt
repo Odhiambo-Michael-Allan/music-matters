@@ -1,7 +1,7 @@
 package com.squad.musicmatters.feature.nowplaying
 
 import androidx.lifecycle.viewModelScope
-import com.squad.musicmatters.core.media.connection.MusicServiceConnection
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
@@ -21,7 +21,6 @@ import com.squad.musicmatters.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -32,7 +31,7 @@ import kotlin.time.Duration
 
 @HiltViewModel
 class NowPlayingScreenViewModel @Inject constructor(
-    private val player: MusicServiceConnection,
+    private val player: MusicMattersPlayer,
     private val preferencesDataSource: PreferencesDataSource,
     private val playlistRepository: PlaylistRepository,
     private val playbackPositionUpdater: PlaybackPositionUpdater,
@@ -138,20 +137,6 @@ class NowPlayingScreenViewModel @Inject constructor(
     fun onSeekEnd( position: Long ) {
         playbackPositionUpdater.startPeriodicUpdates()
         player.seekTo( position )
-    }
-
-    fun setLoopMode( currentLoopMode: LoopMode ) {
-        val currentLoopModePosition = LoopMode.entries.indexOf( currentLoopMode )
-        val nextLoopModePosition = ( currentLoopModePosition + 1 ) % LoopMode.entries.size
-        viewModelScope.launch {
-            preferencesDataSource.setLoopMode( LoopMode.entries[ nextLoopModePosition ] )
-        }
-    }
-
-    fun setShuffleMode( shuffle: Boolean ) {
-        viewModelScope.launch {
-            preferencesDataSource.setShuffle( shuffle )
-        }
     }
 
     fun onPlayingSpeedChange( speed: Float ) {
