@@ -10,8 +10,8 @@ interface SongsStore {
      * criteria.
      */
     suspend fun fetchSongs(
-        sortSongsBy: SortSongsBy?,
-        sortSongsInReverse: Boolean?
+        sortSongsBy: SortSongsBy? = null,
+        sortSongsInReverse: Boolean? = null,
     ): List<Song>
 
     suspend fun fetchLyricsFor( song: Song? ): List<Lyric>

@@ -32,6 +32,7 @@ class FakePlayer : Player {
     private val listeners: MutableList<Player.Listener> = mutableListOf()
     private val queue: MutableList<MediaItem> = mutableListOf()
     private var currentMediaItemIndex = 0
+    private var currentPositionInPlayback = 0L
     private var currentMediaItem: MediaItem? = null
     private var playbackParameters = PlaybackParameters( 1f, 1f )
     private var repeatMode: Int = REPEAT_MODE_OFF
@@ -73,46 +74,21 @@ class FakePlayer : Player {
         }
     }
 
-    /**
-     * Replaces the media items at the given range of the playlist.
-     * Implementations of this method may attempt to seamlessly continue
-     * playback if the currently playing media item is replaced with a
-     * compatible one (e.g. same URL, only metadata has changed).
-     * This method must only be called if COMMAND_CHANGE_MEDIA_ITEMS is available.
-     * Note that it is possible to replace a range with an arbitrary number
-     * of new items, so that the number of removed items defined by
-     * fromIndex and toIndex does not have to match the number of
-     * added items defined by mediaItems. As result, it may also
-     * change the index of subsequent items not touched by this operation.
-     * Specified by:
-     * replaceMediaItems in interface Player
-     * Params:
-     * fromIndex – The start of the range. If the index is larger
-     * than the size of the playlist, the request is ignored.
-     * toIndex – The first item not to be included in the range (exclusive).
-     * If the index is larger than the size of the playlist, items up to the
-     * end of the playlist are replaced
-     */
     override fun replaceMediaItems(
         fromIndex: Int,
         toIndex: Int,
         mediaItems: MutableList<MediaItem>
     ) {
-        queue.clear()
-        queue.addAll( mediaItems )
-        currentMediaItemIndex = mediaItems.indexOfFirst {
-            it.mediaId == currentMediaItem?.mediaId
-        }
-//        if ( fromIndex >= queue.size ) return
-//        var positionInNewList = 0
-//        for ( pos in fromIndex until toIndex ) {
-//            replaceMediaItem( pos, mediaItems[ positionInNewList++ ])
+//        queue.clear()
+//        queue.addAll( mediaItems )
+//        currentMediaItemIndex = mediaItems.indexOfFirst {
+//            it.mediaId == currentMediaItem?.mediaId
 //        }
     }
 
     override fun replaceMediaItem( index: Int, mediaItem: MediaItem ) {
-        queue.removeAt( index )
-        queue.add( index, mediaItem )
+//        queue.removeAt( index )
+//        queue.add( index, mediaItem )
         listeners.forEach {
 //            it.onEvents(
 //                this,
@@ -124,7 +100,7 @@ class FakePlayer : Player {
     }
 
     override fun clearMediaItems() {
-        queue.clear()
+        currentMediaItem = null
     }
 
     override fun setMediaItems(
@@ -139,19 +115,25 @@ class FakePlayer : Player {
         setMediaItems( mediaItems )
     }
 
+    override fun seekTo( positionMs: Long ) {
+        currentPositionInPlayback = positionMs
+    }
+
+    override fun getCurrentPosition(): Long = currentPositionInPlayback
+
     /**
      * Clears the playlist, adds the specified media items and resets the position to the
      * default position
      */
     override fun setMediaItems( mediaItems: MutableList<MediaItem> ) {
-        queue.clear()
-        queue.addAll( mediaItems )
+//        queue.clear()
+//        queue.addAll( mediaItems )
     }
 
     override fun play() {
         this.playbackState = STATE_READY
-        currentMediaItemIndex = 0
-        currentMediaItem = queue[ currentMediaItemIndex ]
+//        currentMediaItemIndex = 0
+//        currentMediaItem = queue[ currentMediaItemIndex ]
         listeners.forEach {
 //            it.onEvents(
 //                this,
@@ -169,10 +151,10 @@ class FakePlayer : Player {
     override fun getDuration() = 0L
 
     override fun addMediaItem( index: Int, mediaItem: MediaItem ) {
-        queue.add( index, mediaItem )
+//        queue.add( index, mediaItem )
     }
 
-    override fun getMediaItemCount() = queue.size
+    override fun getMediaItemCount() = 1
 
     override fun addListener( listener: Player.Listener ) {
         listeners.add( listener )
@@ -185,8 +167,8 @@ class FakePlayer : Player {
     override fun getMediaItemAt( index: Int ) = queue[ index ]
 
     override fun seekToNext() {
-        currentMediaItemIndex = ++currentMediaItemIndex
-        currentMediaItem = queue[ currentMediaItemIndex ]
+//        currentMediaItemIndex = ++currentMediaItemIndex
+//        currentMediaItem = queue[ currentMediaItemIndex ]
         listeners.forEach {
 //            it.onEvents(
 //                this,
@@ -216,9 +198,9 @@ class FakePlayer : Player {
     }
 
     override fun seekToPrevious() {
-        println( "FAKE PLAYER -> SEEKING TO PREVIOUS" )
-        currentMediaItemIndex = if ( currentMediaItemIndex > 0 ) --currentMediaItemIndex else currentMediaItemIndex
-        currentMediaItem = queue[ currentMediaItemIndex ]
+//        println( "FAKE PLAYER -> SEEKING TO PREVIOUS" )
+//        currentMediaItemIndex = if ( currentMediaItemIndex > 0 ) --currentMediaItemIndex else currentMediaItemIndex
+//        currentMediaItem = queue[ currentMediaItemIndex ]
         listeners.forEach {
 //            it.onEvents(
 //                this,
@@ -231,13 +213,13 @@ class FakePlayer : Player {
         }
     }
 
+    override fun setMediaItem( mediaItem: MediaItem ) {
+        currentMediaItem = mediaItem
+    }
+
     // -------------------------------------------------------------------------
 
     override fun getApplicationLooper(): Looper {
-        TODO("Not yet implemented")
-    }
-
-    override fun setMediaItem( mediaItem: MediaItem ) {
         TODO("Not yet implemented")
     }
 
@@ -249,7 +231,7 @@ class FakePlayer : Player {
         TODO("Not yet implemented")
     }
 
-    override fun addMediaItem(mediaItem: MediaItem) {
+    override fun addMediaItem( mediaItem: MediaItem ) {
         TODO("Not yet implemented")
     }
 
@@ -316,10 +298,6 @@ class FakePlayer : Player {
     }
 
     override fun seekToDefaultPosition(mediaItemIndex: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun seekTo(positionMs: Long) {
         TODO("Not yet implemented")
     }
 
@@ -456,10 +434,6 @@ class FakePlayer : Player {
     }
 
     override fun getPreviousMediaItemIndex(): Int {
-        TODO("Not yet implemented")
-    }
-
-    override fun getCurrentPosition(): Long {
         TODO("Not yet implemented")
     }
 

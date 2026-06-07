@@ -4,8 +4,8 @@ import android.content.ComponentName
 import android.content.Context
 import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
-import com.squad.musicmatters.core.media.connection.Connectable
-import com.squad.musicmatters.core.media.connection.MediaBrowserAdapter
+import com.squad.musicmatters.core.media.connection.PlayerConnector
+import com.squad.musicmatters.core.media.connection.RemotePlayerConnector
 import com.squad.musicmatters.core.media.media.MusicService
 import dagger.Module
 import dagger.Provides
@@ -22,7 +22,7 @@ object MediaDiModuleProviders {
     @Provides
     fun providesServiceConnector(
         @ApplicationContext context: Context,
-    ): Connectable = MediaBrowserAdapter(
+    ): PlayerConnector = RemotePlayerConnector(
         context = context,
         serviceComponentName = ComponentName(context, MusicService::class.java )
     )

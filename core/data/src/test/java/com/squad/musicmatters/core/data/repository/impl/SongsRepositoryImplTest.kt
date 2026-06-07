@@ -1,5 +1,6 @@
 package com.squad.musicmatters.core.data.repository.impl
 
+import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.songs.SongsStore
 import com.squad.musicmatters.core.data.songs.SongsStoreListener
@@ -8,14 +9,21 @@ import com.squad.musicmatters.core.testing.songs.testSong
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.testing.songs.testLyric
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class SongsRepositoryImplTest {
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var songsStore: TestSongsStore
     private lateinit var subject: SongsRepository
@@ -24,20 +32,16 @@ class SongsRepositoryImplTest {
     fun setUp() {
         songsStore = TestSongsStore()
         subject = SongsRepositoryImpl(
-            songsStore = songsStore
+            songsStore = songsStore,
+            applicationScope = TestScope()
         )
     }
 
     @Test
     fun testFetchSongs() = runTest {
-        var songs = emptyList<Song>()
         backgroundScope.launch(UnconfinedTestDispatcher() ) {
-            subject.fetchSongs( SortSongsBy.TITLE ).collect { currentSongs ->
-                songs = currentSongs
-            }
+            subject.fetchSongs( SortSongsBy.TITLE ).collect()
         }
-
-        assertTrue( songs.isEmpty() )
 
         val testSongs = listOf(
             testSong( id = "song-id-1" ),
@@ -48,9 +52,11 @@ class SongsRepositoryImplTest {
         )
 
         songsStore.sendSongs( testSongs )
-        println( "SONGS SIZE: ${songs.size}" )
 
-        assertEquals( testSongs.size, songs.size )
+        assertEquals(
+            testSongs.size,
+            subject.fetchSongs( SortSongsBy.TITLE ).first().size
+        )
     }
 
     @Test
@@ -93,7 +99,7 @@ private class TestSongsStore : SongsStore {
 
     fun sendSongs( newSongs: List<Song> ) {
         currentSongs = newSongs
-
+        println( "NEW SONGS SIZE: ${currentSongs.size}" )
         listeners.forEach {
             it.onMediaStoreChanged()
         }

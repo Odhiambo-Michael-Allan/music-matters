@@ -3,7 +3,7 @@ package com.squad.musicmatters.feature.songs
 import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.datastore.DefaultPreferences
-import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
+import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayerController
 import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
 import com.squad.musicmatters.core.testing.repository.TestPreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadataRepository
@@ -29,7 +29,7 @@ class SongsScreenViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var preferencesDataSource: TestPreferencesDataSource
-    private lateinit var musicServiceConnection: TestMusicMattersPlayer
+    private lateinit var musicServiceConnection: TestMusicMattersPlayerController
     private lateinit var viewModel: SongsScreenViewModel
     private lateinit var playlistRepository: TestPlaylistRepository
     private lateinit var songsRepository: TestSongsRepository
@@ -38,14 +38,14 @@ class SongsScreenViewModelTest {
     @Before
     fun setup() {
         preferencesDataSource = TestPreferencesDataSource()
-        musicServiceConnection = TestMusicMattersPlayer()
+        musicServiceConnection = TestMusicMattersPlayerController()
         songsAdditionalMetadataRepository = TestSongsAdditionalMetadataRepository()
         songsRepository = TestSongsRepository()
         playlistRepository = TestPlaylistRepository()
         viewModel = SongsScreenViewModel(
             songsRepository = songsRepository,
             preferencesDataSource = preferencesDataSource,
-            musicMattersPlayer = musicServiceConnection,
+            musicMattersPlayerController = musicServiceConnection,
             playlistRepository = playlistRepository,
             songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
         )

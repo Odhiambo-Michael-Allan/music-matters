@@ -47,7 +47,7 @@ fun <T : Any, K : Any, I : Any, S : ReorderableLazyCollectionState<I>> rememberR
     itemKey: ( T ) -> K,
     rememberState: @Composable ( onMove: CoroutineScope.( I, I ) -> Unit ) -> S,
     getIndex: ( I ) -> Int,
-    onCommit: ( List<T> ) -> Unit,
+    onCommit: ( Int, Int ) -> Unit,
     enabled: Boolean = true,
 ): Pair<List<T>, S> {
     // key -> element lookup for fast remapping
@@ -56,6 +56,10 @@ fun <T : Any, K : Any, I : Any, S : ReorderableLazyCollectionState<I>> rememberR
     // key order that mutates during drag
     var workingOrder by remember { mutableStateOf( listOf<K>() ) }
 
+    // Track the start nd end of the drag session
+    var sessionFromIndex by remember { mutableStateOf<Int?>( null ) }
+    var sessionToIndex by remember { mutableStateOf<Int?>( null ) }
+
     // Instantiate the reorderState
     val reorderState = rememberState { from, to ->
         // Reorder
@@ -63,6 +67,10 @@ fun <T : Any, K : Any, I : Any, S : ReorderableLazyCollectionState<I>> rememberR
             val toIndex = getIndex( to )
             val fromIndex = getIndex( from )
             try {
+                // If this is the very first move of the drag session, record the true origin
+                if ( sessionFromIndex == null ) sessionFromIndex = fromIndex
+                // Continually update the destination as they drag
+                sessionToIndex = toIndex
                 add( toIndex, removeAt( fromIndex ) )
             } catch ( e: Throwable ) {
                 Log.d( "ReorderableDataSource", "onMove failed: $e" ) // TODO: Replace with [Timber]
@@ -86,12 +94,20 @@ fun <T : Any, K : Any, I : Any, S : ReorderableLazyCollectionState<I>> rememberR
             if ( sourceState == ReorderableDataSourceState.Normal ) {
                 workingOrder = items.map( itemKey )
                 keyToItem = items.associateBy( itemKey )
+                // Reset session indices when a new drag starts
+                sessionFromIndex = null
+                sessionToIndex = null
             }
             // Update state
             sourceState = ReorderableDataSourceState.Dragging
         } else if ( sourceState == ReorderableDataSourceState.Dragging ) {
-            // Commit
-            onCommit( workingOrder.mapNotNull { keyToItem[it] })
+            // Commit the from/to indices if a valid move occurred
+            val finalFrom = sessionFromIndex
+            val finalTo = sessionToIndex
+            if ( finalFrom != null && finalTo != null && finalFrom != finalTo ) {
+                onCommit( finalFrom, finalTo )
+            }
+//            onCommit( workingOrder.mapNotNull { keyToItem[it] })
             sourceState = ReorderableDataSourceState.PendingRefresh
         }
     }
@@ -136,7 +152,7 @@ fun <T : Any, K : Any> rememberReorderableLazyListDataSource(
     listState: LazyListState,
     items: List<T>,
     itemKey: ( T ) -> K,
-    onCommit: ( List<T> ) -> Unit,
+    onCommit: ( Int, Int ) -> Unit,
     enabled: Boolean = true,
     onMove: ( () -> Unit )? = null,
 ) = rememberReorderableDataSource(

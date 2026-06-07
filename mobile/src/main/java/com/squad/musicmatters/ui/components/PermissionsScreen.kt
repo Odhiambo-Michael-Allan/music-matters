@@ -1,6 +1,7 @@
 package com.squad.musicmatters.ui.components
 
 import android.Manifest
+import android.content.Context
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,138 +20,228 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.squad.musicMatters.core.i8n.R
+import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import kotlinx.coroutines.CoroutineScope
+import com.squad.musicMatters.core.i8n.R as i8nR
+import kotlinx.coroutines.launch
+
 
 @OptIn( ExperimentalLayoutApi::class )
 @Composable
 fun PermissionsScreen(
-    allRequiredPermissionsHaveBeenGranted: Boolean,
-    readExternalStoragePermissionsGranted: Boolean,
-    onReadExternalStoragePermissionGranted: ( Boolean ) -> Unit,
-    readMediaAudioPermissionGranted: Boolean,
-    onReadMediaAudioPermissionGranted: ( Boolean ) -> Unit,
-    postNotificationsPermissionGranted: Boolean,
-    onPostNotificationsPermissionGranted: ( Boolean ) -> Unit,
+    onNavigateToApplicationDetailsSettings: () -> Unit,
     onLetsGo: () -> Unit,
 ) {
 
+    val context = LocalContext.current
+    val snackBarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
+    val allRequiredPermissionsHaveBeenGranted by MediaPermissionsManager
+        .hasAllRequiredPermissions
+        .collectAsState()
+    val postNotificationsPermissionGranted by MediaPermissionsManager
+        .postNotificationPermissionGranted
+        .collectAsState()
+    val readExternalStoragePermissionGranted by MediaPermissionsManager
+        .readExternalStoragePermissionGranted
+        .collectAsState()
+
+    val readMediaAudioPermissionGranted by MediaPermissionsManager
+        .readMediaAudioPermissionGranted
+        .collectAsState()
+
     val readExternalStoragePermissionRequestLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        onReadExternalStoragePermissionGranted( isGranted )
+    ) { granted ->
+        MediaPermissionsManager.readExternalStoragePermissionGranted(
+            isGranted = granted,
+            context = context,
+        )
+        coroutineScope.showSnackBar(
+            show = !granted,
+            context = context,
+            snackBarHostState = snackBarHostState,
+            message = context
+                .getString( i8nR.string.core_i8n_storage_access_permission_denied ),
+            onNavigateToApplicationDetailsSettings = onNavigateToApplicationDetailsSettings,
+        )
     }
 
     val readMediaAudioPermissionRequestLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        onReadMediaAudioPermissionGranted( isGranted )
+    ) { granted ->
+        MediaPermissionsManager.readMediaAudioPermissionGranted(
+            isGranted = granted,
+            context = context,
+        )
+        coroutineScope.showSnackBar(
+            show = granted.not(),
+            context = context,
+            snackBarHostState = snackBarHostState,
+            message = context
+                .getString( i8nR.string.core_i8n_read_media_audio_permission_denied ),
+            onNavigateToApplicationDetailsSettings = onNavigateToApplicationDetailsSettings,
+        )
     }
 
     val postNotificationsPermissionRequestLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        onPostNotificationsPermissionGranted( isGranted )
+    ) { granted ->
+        MediaPermissionsManager.postNotificationPermissionGranted(
+            isGranted = granted,
+            context = context,
+        )
+        coroutineScope.showSnackBar(
+            show = granted.not(),
+            context = context,
+            snackBarHostState = snackBarHostState,
+            message = context
+                .getString( i8nR.string.core_i8n_post_notifications_permission_denied ),
+            onNavigateToApplicationDetailsSettings = onNavigateToApplicationDetailsSettings,
+        )
     }
 
-    Column (
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Scaffold(
+        snackbarHost = { SnackbarHost( hostState = snackBarHostState ) }
+    ) { innerPadding ->
         Column (
             modifier = Modifier
-                .verticalScroll( rememberScrollState() )
-                .weight( 1f )
-                .padding( 16.dp ),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .padding(innerPadding)
         ) {
-            Spacer( modifier = Modifier.height( 48.dp ) )
-            FlowRow(
+            Column (
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .weight( 1f )
+                    .padding( 16.dp ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer( modifier = Modifier.height( 48.dp ) )
+                FlowRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = stringResource( id = R.string.core_i8n_welcome_message ),
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.padding( end = 8.dp ),
+                    )
+                    Text(
+                        text = "Music",
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                    Text(
+                        text = "Matters",
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+                HorizontalDivider()
+
+                if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ) {
+                    PermissionCard(
+                        title = stringResource( id = R.string.core_i8n_read_media_audio ),
+                        permissionGranted = readMediaAudioPermissionGranted,
+                        description = stringResource(
+                            id = R.string.core_i8n_read_media_audio_permission_prompt
+                        )
+                    ) {
+                        readMediaAudioPermissionRequestLauncher
+                            .launch( Manifest.permission.READ_MEDIA_AUDIO )
+                    }
+                    PermissionCard(
+                        title = stringResource(
+                            id = R.string.core_i8n_post_notifications_permission
+                        ),
+                        permissionGranted = postNotificationsPermissionGranted,
+                        description = stringResource(
+                            id = R.string.core_i8n_post_notifications_permission_prompt
+                        )
+                    ) {
+                        postNotificationsPermissionRequestLauncher
+                            .launch( Manifest.permission.POST_NOTIFICATIONS )
+                    }
+                }
+                else {
+                    PermissionCard(
+                        title = stringResource( id = R.string.core_i8n_storage_access ),
+                        description = stringResource( id = R.string.core_i8n_storage_access_permission_prompt ),
+                        permissionGranted = readExternalStoragePermissionGranted,
+                        onClick = {
+                            readExternalStoragePermissionRequestLauncher
+                                .launch( Manifest.permission.READ_EXTERNAL_STORAGE )
+                        }
+                    )
+                }
+            }
+            Row (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = stringResource( id = R.string.core_i8n_welcome_message ),
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.padding( end = 8.dp ),
-                )
-                Text(
-                    text = "Music",
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold
+                Button(
+                    enabled = allRequiredPermissionsHaveBeenGranted,
+                    onClick = onLetsGo
+                ) {
+                    Text(
+                        text = stringResource( id = R.string.core_i8n_lets_go ),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding( 8.dp ),
                     )
-                )
-                Text(
-                    text = "Matters",
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
+                }
             }
-            HorizontalDivider()
+            Spacer( modifier = Modifier.height( 50.dp ) )
+        }
+    }
+}
 
-            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ) {
-                PermissionCard(
-                    title = stringResource( id = R.string.core_i8n_read_media_audio ),
-                    permissionGranted = readMediaAudioPermissionGranted,
-                    description = stringResource(
-                        id = R.string.core_i8n_read_media_audio_prompt
-                    )
-                ) {
-                    readMediaAudioPermissionRequestLauncher.launch( Manifest.permission.READ_MEDIA_AUDIO )
-                }
-                PermissionCard(
-                    title = stringResource(
-                        id = R.string.core_i8n_post_notifications_permission
-                    ),
-                    permissionGranted = postNotificationsPermissionGranted,
-                    description = stringResource(
-                        id = R.string.core_i8n_post_notifications_prompt
-                    )
-                ) {
-                    postNotificationsPermissionRequestLauncher.launch( Manifest.permission.POST_NOTIFICATIONS )
-                }
-            }
-            else {
-                PermissionCard(
-                    title = stringResource( id = R.string.core_i8n_storage_access ),
-                    description = stringResource( id = R.string.core_i8n_storage_access_prompt ),
-                    permissionGranted = readExternalStoragePermissionsGranted,
-                    onClick = {
-                        readExternalStoragePermissionRequestLauncher.launch( Manifest.permission.READ_EXTERNAL_STORAGE )
-                    }
-                )
+private fun CoroutineScope.showSnackBar(
+    show: Boolean,
+    context: Context,
+    snackBarHostState: SnackbarHostState,
+    message: String,
+    onNavigateToApplicationDetailsSettings: () -> Unit,
+) {
+    if ( show ) {
+        snackBarHostState.currentSnackbarData?.dismiss()
+        launch {
+            val result = snackBarHostState.showSnackbar(
+                message = message,
+                actionLabel = context.getString( i8nR.string.core_i8n_settings ),
+            )
+            if ( result == SnackbarResult.ActionPerformed ) {
+                onNavigateToApplicationDetailsSettings()
             }
         }
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                enabled = allRequiredPermissionsHaveBeenGranted,
-                onClick = onLetsGo
-            ) {
-                Text(
-                    modifier = Modifier.padding( 8.dp ),
-                    text = stringResource( id = R.string.core_i8n_lets_go )
-                )
-            }
-        }
-        Spacer( modifier = Modifier.height( 50.dp ) )
     }
 }
 
@@ -165,13 +256,7 @@ private fun PermissionsScreenPreview() {
         useMaterialYou = true
     ) {
         PermissionsScreen(
-            allRequiredPermissionsHaveBeenGranted = true,
-            readMediaAudioPermissionGranted = true,
-            onReadExternalStoragePermissionGranted = {},
-            postNotificationsPermissionGranted = true,
-            onPostNotificationsPermissionGranted = {},
-            readExternalStoragePermissionsGranted = true,
-            onReadMediaAudioPermissionGranted = {},
+            onNavigateToApplicationDetailsSettings = {},
             onLetsGo = {}
         )
     }

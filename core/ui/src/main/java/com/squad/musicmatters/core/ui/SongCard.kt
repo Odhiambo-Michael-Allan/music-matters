@@ -1,6 +1,7 @@
 package com.squad.musicmatters.core.ui
 
 import android.net.Uri
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -59,6 +60,7 @@ fun SongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
+    showSongOptionsButton: Boolean = true,
     songAdditionalMetadata: SongAdditionalMetadata?,
     playlists: List<Playlist>,
     onClick: () -> Unit,
@@ -83,59 +85,60 @@ fun SongCard(
         colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
         onClick = onClick
     ) {
-        Box(
-            modifier = Modifier.padding( 12.dp, 4.dp, 4.dp, 4.dp )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding( 12.dp, 4.dp, 4.dp, 4.dp )
         ) {
-            Row( verticalAlignment = Alignment.CenterVertically ) {
-                Box {
-                    DynamicAsyncImage(
-                        imageUri = song.artworkUri?.toUri(),
-                        contentDescription = song.title,
-                        modifier = Modifier
-                            .size(45.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                    )
-                }
-                Spacer( modifier = Modifier.width( 16.dp ) )
-                Column( modifier = Modifier.weight( 1f ) ) {
-                    Text(
-                        text = song.title,
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            color = when {
-                                isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
-                                else -> LocalTextStyle.current.color
-                            },
-                            fontWeight = FontWeight.ExtraBold
-                        ),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = song.artists.joinToString(),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
-                        ),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                Spacer( modifier = Modifier.width( 15.dp ) )
-                Row {
-                    if ( isFavorite ) {
-                        IconButton(
-                            onClick = {
-                                onFavorite( song, false )
-                            }
-                        ) {
-                            Icon(
-                                modifier = Modifier.size( 24.dp ),
-                                imageVector = Icons.Rounded.ThumbUpAlt,
-                                tint = MaterialTheme.colorScheme.primary,
-                                contentDescription = null
-                            )
+            DynamicAsyncImage(
+                imageUri = song.artworkUri?.toUri(),
+                contentDescription = song.title,
+                modifier = Modifier
+                    .size( 45.dp )
+                    .clip( RoundedCornerShape( 10.dp ) )
+            )
+            Spacer( modifier = Modifier.width( 16.dp ) )
+            Column( modifier = Modifier.weight( 1f ) ) {
+                Text(
+                    text = song.title,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = when {
+                            isCurrentlyPlaying -> MaterialTheme.colorScheme.primary
+                            else -> LocalTextStyle.current.color
+                        },
+                        fontWeight = FontWeight.ExtraBold
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = song.artists.joinToString(),
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Spacer( modifier = Modifier.width( 15.dp ) )
+            Row {
+                if ( isFavorite ) {
+                    IconButton(
+                        onClick = {
+                            onFavorite( song, false )
                         }
+                    ) {
+                        Icon(
+                            modifier = Modifier.size( 24.dp ),
+                            imageVector = Icons.Rounded.ThumbUpAlt,
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = null
+                        )
                     }
+                }
+                if ( showSongOptionsButton ) {
                     IconButton(
                         onClick = { showSongOptionsBottomSheet = !showSongOptionsBottomSheet }
                     ) {
@@ -184,22 +187,22 @@ fun SongCard(
                     }
                 }
             }
-            if ( showSongDetailsDialog ) {
-                SongDetailsDialog(
-                    song = song,
-                    durationFormatter = { it.formatMilliseconds() },
-                    metadata = songAdditionalMetadata,
-                ) {
-                    showSongDetailsDialog = false
-                }
+        }
+        if ( showSongDetailsDialog ) {
+            SongDetailsDialog(
+                song = song,
+                durationFormatter = { it.formatMilliseconds() },
+                metadata = songAdditionalMetadata,
+            ) {
+                showSongDetailsDialog = false
             }
-            if ( showDeleteSongDialog ) {
-                DeleteSongDialog(
-                    song = song,
-                    onDelete = { onDeleteSong( song ) }
-                ) {
-                    showDeleteSongDialog = false
-                }
+        }
+        if ( showDeleteSongDialog ) {
+            DeleteSongDialog(
+                song = song,
+                onDelete = { onDeleteSong( song ) }
+            ) {
+                showDeleteSongDialog = false
             }
         }
     }

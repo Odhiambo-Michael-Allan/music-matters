@@ -77,7 +77,7 @@ class SongsStoreImpl @Inject constructor(
     @WorkerThread
     override suspend fun fetchSongs(
         sortSongsBy: SortSongsBy?,
-        sortSongsInReverse: Boolean?
+        sortSongsInReverse: Boolean?,
     ): List<Song> =
         withContext( ioDispatcher )  {
             val mediaItemList = mutableListOf<MediaItem>()
