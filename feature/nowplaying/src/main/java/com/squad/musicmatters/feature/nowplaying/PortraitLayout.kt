@@ -24,10 +24,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Devices.FOLDABLE
+import androidx.compose.ui.tooling.preview.Devices.PHONE
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
@@ -40,10 +39,9 @@ import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.feature.nowplaying.components.LyricsLayout
 import com.squad.musicmatters.feature.nowplaying.components.NowPlayingSongArtwork
-import com.squad.musicmatters.feature.nowplaying.components.NowPlayingDefaultControlsLayout
 import com.squad.musicmatters.feature.nowplaying.components.NowPlayingScreenBottomBar
 import com.squad.musicmatters.feature.nowplaying.components.NowPlayingSeekBar
-import com.squad.musicmatters.feature.nowplaying.components.NowPlayingTraditionalControlsLayout
+import com.squad.musicmatters.feature.nowplaying.components.NowPlayingPlayerControls
 import com.squad.musicmatters.feature.nowplaying.components.TitleAndArtistSection
 import com.squad.musicmatters.feature.nowplaying.components.emptyUserData
 import java.time.Duration
@@ -73,9 +71,9 @@ internal fun PortraitLayout(
     onPreviousButtonClick: () -> Unit,
     onPlayNext: () -> Unit,
     onNavigateToQueue: () -> Unit,
-    onCreateEqualizerActivityContract: () -> Unit,
     onShowLyrics: ( Boolean ) -> Unit,
-    onShowSleepTimerBottomSheet: () -> Unit,
+    onToggleLoopMode: ( LoopMode ) -> Unit,
+    onToggleShuffleMode: ( Boolean, Song ) -> Unit,
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -88,13 +86,13 @@ internal fun PortraitLayout(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
                 .fillMaxSize()
-                .padding( 28.dp ),
+                .padding(28.dp),
         ) {
             Box(
                 modifier = Modifier
-                    .sizeIn( maxWidth = 400.dp, maxHeight = 400.dp )
-                    .aspectRatio( 1f )
-                    .clip( MaterialTheme.shapes.medium )
+                    .sizeIn(maxWidth = 400.dp, maxHeight = 400.dp)
+                    .aspectRatio(1f)
+                    .clip(MaterialTheme.shapes.medium)
             ) {
                 AnimatedContent(
                     targetState = uiState.userData.showLyrics
@@ -134,33 +132,23 @@ internal fun PortraitLayout(
                 onSeekEnd = onSeekEnd
             )
             Spacer( modifier = Modifier.height( 28.dp ) )
-            when {
-                uiState.userData.controlsLayoutDefault ->
-                    NowPlayingDefaultControlsLayout(
-                        isPlaying = uiState.playerState.isPlaying,
-                        sleepTimer = uiState.sleepTimer,
-                        onPausePlayButtonClick = onPausePlayButtonClick,
-                        onPreviousButtonClick = onPreviousButtonClick,
-                        onNextButtonClick = onPlayNext,
-                        onNavigateToQueue = onNavigateToQueue,
-                        onShowSleepTimerBottomSheet = onShowSleepTimerBottomSheet,
-                    )
-                else ->
-                    NowPlayingTraditionalControlsLayout(
-                        isPlaying = uiState.playerState.isPlaying,
-                        sleepTimer = uiState.sleepTimer,
-                        onPreviousButtonClick = onPreviousButtonClick,
-                        onPausePlayButtonClick = onPausePlayButtonClick,
-                        onNextButtonClick = onPlayNext,
-                        onNavigateToQueue = onNavigateToQueue,
-                        onShowSleepTimerBottomSheet = onShowSleepTimerBottomSheet,
-                    )
-            }
+            NowPlayingPlayerControls(
+                isPlaying = uiState.playerState.isPlaying,
+                shuffle = uiState.userData.shuffle,
+                loopMode = uiState.userData.loopMode,
+                onPreviousButtonClick = onPreviousButtonClick,
+                onPausePlayButtonClick = onPausePlayButtonClick,
+                onNextButtonClick = onPlayNext,
+                onToggleLoopMode = onToggleLoopMode,
+                onToggleShuffleMode = { shuffle ->
+                    onToggleShuffleMode( shuffle, currentlyPlayingSong )
+                },
+            )
             Spacer( modifier = Modifier.height( 16.dp ) )
             NowPlayingScreenBottomBar(
                 showLyrics = uiState.userData.showLyrics,
                 onShowLyrics = onShowLyrics,
-                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract
+                onNavigateToQueueScreen = onNavigateToQueue,
             )
         }
     }
@@ -171,6 +159,7 @@ internal fun PortraitLayout(
     device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait",
     showSystemUi = true,
 )
+@Preview( name = "Phone", device = PHONE, showSystemUi = true )
 @Composable
 private fun PortraitPreview() {
     MusicMattersTheme(
@@ -189,30 +178,28 @@ private fun PortraitPreview() {
                     shuffle = true,
                     showLyrics = true,
                 ),
-                queue = listOf(
-                    Song(
-                        id = "song-id-1",
-                        mediaUri = "Uri.EMPTY",
-                        title = "Started From the Bottom",
-                        displayTitle = "",
-                        duration = 0L,
-                        artists = setOf(
-                            "Drake",
-                            "Disclosure",
-                            "London",
-                            "Grammar",
-                            "The Weekend",
-                            "Young thug"
-                        ),
-                        size = 0L,
-                        dateModified = 0L,
-                        path = "",
-                        trackNumber = null,
-                        year = null,
-                        albumTitle = null,
-                        composer = null,
-                        artworkUri = null,
-                    )
+                currentlyPlayingSong = Song(
+                    id = "song-id-1",
+                    mediaUri = "Uri.EMPTY",
+                    title = "Started From the Bottom",
+                    displayTitle = "",
+                    duration = 0L,
+                    artists = setOf(
+                        "Drake",
+                        "Disclosure",
+                        "London",
+                        "Grammar",
+                        "The Weekend",
+                        "Young thug"
+                    ),
+                    size = 0L,
+                    dateModified = 0L,
+                    path = "",
+                    trackNumber = null,
+                    year = null,
+                    albumTitle = null,
+                    composer = null,
+                    artworkUri = null,
                 ),
                 currentlyPlayingSongIsFavorite = true,
                 playerState = PlayerState(
@@ -271,13 +258,6 @@ private fun PortraitPreview() {
             onArtworkClicked = {},
             onNavigateToQueue = {},
             onSeekStart = {},
-            onCreateEqualizerActivityContract = {
-                object : ActivityResultContract<Unit, Unit>() {
-                    override fun createIntent(context: Context, input: Unit) = Intent()
-                    override fun parseResult(resultCode: Int, intent: Intent?) {}
-
-                }
-            },
             currentlyPlayingSong = Song(
                 id = "song-id-1",
                 mediaUri = "Uri.EMPTY",
@@ -305,8 +285,9 @@ private fun PortraitPreview() {
             onArtworkSwipedRight = { TODO() },
             onArtworkSwipedDown = { TODO() },
             onShowOptionsMenu = { TODO() },
-            onShowSleepTimerBottomSheet = { TODO() },
-            onShowLyrics = {}
+            onShowLyrics = {},
+            onToggleLoopMode = {},
+            onToggleShuffleMode = { _, _ -> },
         )
     }
 }

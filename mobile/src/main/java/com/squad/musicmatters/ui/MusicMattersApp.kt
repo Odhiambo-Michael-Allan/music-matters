@@ -319,17 +319,7 @@ fun MusicMattersAppContent(
                         }
                     )
                     queueScreen(
-                        onViewAlbum = {},
-                        onViewArtist = {},
-                        onShareSong = { _, _ -> },
-                        onDeleteSong = onDeleteSong,
                         onNavigateBack = { navController.navigateUp() },
-                        onShowSnackBar = {
-                            snackBarHostState.showSnackBar(
-                                coroutineScope,
-                                it
-                            )
-                        },
                     )
 //                composable(
 //                    route = Route.Artists.name,

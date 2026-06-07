@@ -42,7 +42,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.Instant
-import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -74,6 +73,10 @@ class MusicService : MediaLibraryService() {
     @Inject
     lateinit var playHistoryRepository: PlayHistoryRepository
 
+
+    /**
+     * [MediaSession] used to advertise playback and pass commands to the player.
+     */
     private lateinit var mediaSession: MediaLibrarySession
     private val headsetReceiverIntentFilter = IntentFilter( Intent.ACTION_HEADSET_PLUG )
 
@@ -100,7 +103,8 @@ class MusicService : MediaLibraryService() {
      * for details.
      */
     private val exoPlayer: Player by lazy {
-        val player = ExoPlayer.Builder( this ).build().apply {
+        val player = ExoPlayer.Builder( this ).build()
+            .apply {
             setAudioAttributes( musicallyAudioAttributes, true )
             setHandleAudioBecomingNoisy( true )
             addListener( playerListener )
@@ -184,7 +188,6 @@ class MusicService : MediaLibraryService() {
         MediaPermissionsManager.checkForPermissions( applicationContext )
         setMediaNotificationProvider( MusicMattersMediaNotificationProvider( applicationContext ) )
         registerHeadsetEvents()
-
     }
 
     private fun registerHeadsetEvents() {
@@ -309,14 +312,6 @@ private const val CONTENT_STYLE_GRID = 2
 
 const val CUSTOM_COMMAND_DELETE_SONG = "com.odesa.musicmatters.delete_song"
 private const val TAG = "MUSIC SERVICE TAG"
-val EMPTY_MEDIA_ITEM = MediaItem.Builder()
-    .setMediaId( UUID.randomUUID().toString() )
-    .setMediaMetadata(
-        MediaMetadata.Builder()
-            .setIsBrowsable( false )
-            .setIsPlayable( false )
-            .build()
-    ).build()
 
 const val MEDIA_STORE_REFRESH_ENDED_INTENT = "MEDIA_STORE_REFRESH_ENDED_INTENT"
 const val MEDIA_STORE_REFRESH_STARTED_INTENT = "MEDIA_STORE_REFRESH_STARTED_INTENT"

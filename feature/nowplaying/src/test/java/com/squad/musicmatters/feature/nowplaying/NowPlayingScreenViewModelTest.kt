@@ -6,7 +6,7 @@ import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
-import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
+import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayerController
 import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
 import com.squad.musicmatters.core.testing.repository.TestPreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.TestQueueRepository
@@ -33,7 +33,7 @@ class NowPlayingScreenViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var viewModel: NowPlayingScreenViewModel
-    private lateinit var player: TestMusicMattersPlayer
+    private lateinit var player: TestMusicMattersPlayerController
     private lateinit var playlistRepository: TestPlaylistRepository
     private lateinit var playbackPositionUpdater: TestPlaybackPositionUpdater
     private lateinit var metadataRepository: TestSongsAdditionalMetadataRepository
@@ -43,10 +43,11 @@ class NowPlayingScreenViewModelTest {
 
     @Before
     fun setUp() {
-        player = TestMusicMattersPlayer()
+        player = TestMusicMattersPlayerController()
         playlistRepository = TestPlaylistRepository()
         playbackPositionUpdater = TestPlaybackPositionUpdater()
         metadataRepository = TestSongsAdditionalMetadataRepository()
+        songsRepository = TestSongsRepository()
         queueRepository = TestQueueRepository()
         preferencesDataSource = TestPreferencesDataSource()
         viewModel = NowPlayingScreenViewModel(
@@ -77,13 +78,13 @@ class NowPlayingScreenViewModelTest {
         preferencesDataSource.sendUserData( emptyUserData )
         playlistRepository.sendPlaylists( emptyList() )
         metadataRepository.sendMetadata( emptyList() )
-        queueRepository.sendSongs( emptyList() )
+        songsRepository.sendSongs( emptyList() )
 
         assertEquals(
             NowPlayingScreenUiState.Success(
                 playerState = PlayerState(),
+                currentlyPlayingSong = null,
                 userData = emptyUserData,
-                queue = emptyList(),
                 currentlyPlayingSongIsFavorite = false,
                 playlists = emptyList(),
                 songAdditionalMetadata = null
@@ -122,12 +123,12 @@ class NowPlayingScreenViewModelTest {
         playlistRepository.sendPlaylists( emptyList() )
         playlistRepository.addToFavorites( testSong( "song-id-2" ) )
         metadataRepository.sendMetadata( metadataList )
-        queueRepository.sendSongs( testSongs )
+        songsRepository.sendSongs( testSongs )
 
         assertEquals(
             NowPlayingScreenUiState.Success(
+                currentlyPlayingSong = testSongs[1],
                 userData = emptyUserData,
-                queue = testSongs,
                 currentlyPlayingSongIsFavorite = true,
                 playerState = playerState,
                 playlists = listOf(
@@ -172,13 +173,13 @@ class NowPlayingScreenViewModelTest {
         preferencesDataSource.sendUserData( emptyUserData )
         playlistRepository.sendPlaylists( emptyList() )
         metadataRepository.sendMetadata( emptyList() )
-        queueRepository.sendSongs( emptyList() )
+        songsRepository.sendSongs( emptyList() )
 
         assertEquals(
             NowPlayingScreenUiState.Success(
                 playerState = PlayerState(),
+                currentlyPlayingSong = null,
                 userData = emptyUserData,
-                queue = emptyList(),
                 currentlyPlayingSongIsFavorite = false,
                 playlists = emptyList(),
                 songAdditionalMetadata = null,

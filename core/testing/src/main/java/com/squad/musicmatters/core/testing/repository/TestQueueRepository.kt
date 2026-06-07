@@ -38,6 +38,10 @@ class TestQueueRepository : QueueRepository {
         songsFlow.tryEmit( emptyList() )
     }
 
+    override suspend fun shuffleSongsInQueue(currentlyPlayingSong: Song) {
+        TODO("Not yet implemented")
+    }
+
     fun sendSongs( songs: List<Song> ) {
         songsFlow.tryEmit( songs )
     }

@@ -52,12 +52,7 @@ import com.squad.musicmatters.feature.queue.components.QueueList
 @Composable
 internal fun QueueScreen(
     viewModel: QueueScreenViewModel = hiltViewModel(),
-    onViewAlbum: ( String ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
-    onShareSong: ( Uri, String ) -> Unit,
-    onDeleteSong: ( Song ) -> Unit,
     onNavigateBack: () -> Unit,
-    onShowSnackBar: ( String ) -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -65,24 +60,23 @@ internal fun QueueScreen(
     QueueScreenContent(
         uiState = uiState,
         onNavigateUp = onNavigateBack,
-        onCreatePlaylist = { title, songs -> viewModel.createPlaylist( title, songs ) },
-        onFavorite = viewModel::addToFavorites,
+//        onCreatePlaylist = { title, songs -> viewModel.createPlaylist( title, songs ) },
+//        onFavorite = viewModel::addToFavorites,
         playSong = viewModel::playSongs,
-        onPlayNext = viewModel::playSongNext,
-        onViewAlbum = onViewAlbum,
-        onViewArtist = onViewArtist,
-        onAddToQueue = viewModel::addSongToQueue,
-        onAddSongsToPlaylist = { playlist, songs ->
-            viewModel.addSongsToPlaylist( playlist, songs )
-        },
-        onShareSong = {
+//        onPlayNext = viewModel::playSongNext,
+//        onViewAlbum = onViewAlbum,
+//        onViewArtist = onViewArtist,
+//        onAddToQueue = viewModel::addSongToQueue,
+//        onAddSongsToPlaylist = { playlist, songs ->
+//            viewModel.addSongsToPlaylist( playlist, songs )
+//        },
+//        onShareSong = {
 //            onShareSong( it, uiState.language.shareFailedX( "" ) )
-        },
-        onDeleteSong = onDeleteSong,
-        onSaveQueue = viewModel::saveQueue,
-        onShowSnackBar = onShowSnackBar,
-        onToggleLoopMode = viewModel::toggleLoopMode,
-        onToggleShuffleMode = viewModel::setShuffleMode
+//        },
+//        onDeleteSong = onDeleteSong,
+        onMoveSong = viewModel::moveSong,
+        onShuffle = viewModel::shuffle,
+//        onShowSnackBar = onShowSnackBar,
     )
 }
 
@@ -90,20 +84,9 @@ internal fun QueueScreen(
 private fun QueueScreenContent(
     uiState: QueueScreenUiState,
     onNavigateUp: () -> Unit,
-    onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onFavorite: ( Song, Boolean ) -> Unit,
     playSong: ( Song, List<Song> ) -> Unit,
-    onPlayNext: ( Song ) -> Unit,
-    onViewAlbum: ( String ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
-    onShareSong: ( Uri ) -> Unit,
-    onAddToQueue: ( Song ) -> Unit,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
-    onDeleteSong: ( Song ) -> Unit,
-    onSaveQueue: ( List<Song> ) -> Unit,
-    onShowSnackBar: ( String ) -> Unit,
-    onToggleLoopMode: ( LoopMode ) -> Unit,
-    onToggleShuffleMode: ( Boolean ) -> Unit,
+    onMoveSong: ( Int, Int ) -> Unit,
+    onShuffle: () -> Unit,
 ) {
 
     var showSaveDialog by remember { mutableStateOf( false ) }
@@ -112,11 +95,8 @@ private fun QueueScreenContent(
         modifier = Modifier.fillMaxSize()
     ) {
         QueueScreenTopAppBar(
-            loopMode = ( uiState as? QueueScreenUiState.Success )?.loopMode,
-            shuffle = ( uiState as? QueueScreenUiState.Success )?.shuffle ?: false,
             onBackArrowClick = onNavigateUp,
-            onToggleLoopMode = onToggleLoopMode,
-            onToggleShuffleMode = onToggleShuffleMode,
+            onShuffle = onShuffle,
         )
         when ( uiState ) {
             QueueScreenUiState.Loading -> {}
@@ -124,33 +104,9 @@ private fun QueueScreenContent(
                 QueueList(
                     songsInQueue = uiState.songsInQueue,
                     currentlyPlayingSongId = uiState.currentlyPlayingSongId,
-                    songsAdditionalMetadata = uiState.songsAdditionalMetadata,
-                    favoriteSongIds = uiState.favoriteSongIds,
-                    playlists = uiState.playlists,
-                    onFavorite = onFavorite,
                     playSong = playSong,
-                    onPlayNext = onPlayNext,
-                    onAddToQueue = onAddToQueue,
-                    onShareSong = onShareSong,
-                    onViewAlbum = onViewAlbum,
-                    onViewArtist = onViewArtist,
-                    onAddSongsToPlaylist = onAddSongsToPlaylist,
-                    onCreatePlaylist = onCreatePlaylist,
-                    onDeleteSong = onDeleteSong,
-                    onSaveQueue = onSaveQueue,
-                    onShowSnackBar = onShowSnackBar,
+                    onMoveSong = onMoveSong,
                 )
-
-                if ( showSaveDialog ) {
-                    NewPlaylistDialog(
-                        songsToAdd = uiState.songsInQueue,
-                        onConfirmation = { title, songs ->
-                            onCreatePlaylist( title, songs )
-                            showSaveDialog = false
-                        },
-                        onDismissRequest = { showSaveDialog = false }
-                    )
-                }
             }
         }
     }
@@ -160,11 +116,8 @@ private fun QueueScreenContent(
 @Composable
 private fun QueueScreenTopAppBar(
     modifier: Modifier = Modifier,
-    loopMode: LoopMode?,
-    shuffle: Boolean,
     onBackArrowClick: () -> Unit,
-    onToggleLoopMode: ( LoopMode ) -> Unit,
-    onToggleShuffleMode: ( Boolean ) -> Unit,
+    onShuffle: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
@@ -185,94 +138,19 @@ private fun QueueScreenTopAppBar(
             }
         },
         actions = {
-            AnimatedContent(
-                targetState = shuffle,
-                label = "ShuffleAnimation"
-            ) { isShuffleEnabled ->
-                IconButton(
-                    onClick = { onToggleShuffleMode( !isShuffleEnabled ) }
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = com.squad.musicMatters.core.designsystem.R.drawable.ic_shuffle),
-                            contentDescription = null,
-                            tint = if ( isShuffleEnabled ) MaterialTheme.colorScheme.primary else LocalContentColor.current,
-                            modifier = Modifier.size(
-                                MusicMattersIcons.Shuffle.defaultWidth,
-                                MusicMattersIcons.Shuffle.defaultHeight,
-                            )
-                        )
-
-                        if ( isShuffleEnabled ) {
-                            OnIndicator()
-                        }
-                    }
-                }
-            }
-            AnimatedContent(
-                targetState = loopMode,
+            IconButton(
+                onClick = onShuffle
             ) {
-                IconButton(
-                    onClick = { loopMode?.let { onToggleLoopMode( loopMode ) } }
-                ) {
-                    Column (
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(
-                                id = when ( it ) {
-                                    LoopMode.Song -> com.squad.musicMatters.core.designsystem.R.drawable.ic_repeat_current
-                                    else -> com.squad.musicMatters.core.designsystem.R.drawable.ic_repeat
-                                }
-                            ),
-                            contentDescription = null,
-                            tint = when ( loopMode ) {
-                                null, LoopMode.None -> LocalContentColor.current
-                                else -> MaterialTheme.colorScheme.primary
-                            },
-                            modifier = Modifier.size(
-                                MusicMattersIcons.Loop.defaultWidth,
-                                MusicMattersIcons.Loop.defaultHeight
-                            )
-                        )
-                        if ( it != LoopMode.None ) {
-                            OnIndicator()
-                        }
-                    }
-                }
+                Icon(
+                    imageVector = MusicMattersIcons.Shuffle,
+                    contentDescription = null,
+                )
             }
         }
     )
 }
 
-@Composable
-private fun OnIndicator() {
-    Spacer( modifier = Modifier.height( 1.dp ) )
-    Box(
-        modifier = Modifier
-            .size( 4.dp ) // Exact size of the dot
-            .background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = CircleShape
-            )
-    )
-}
 
-@Preview( showBackground = true )
-@Composable
-private fun QueueScreenTopAppBarPreview() {
-    QueueScreenTopAppBar(
-        loopMode = LoopMode.Queue,
-        shuffle = true,
-        onBackArrowClick = {},
-        onToggleLoopMode = {},
-        onToggleShuffleMode = {},
-    )
-}
 
 @DevicePreviews
 @Composable
@@ -283,7 +161,6 @@ private fun QueueScreenContentPreview(
     MusicMattersTheme(
         themeMode = DefaultPreferences.THEME_MODE,
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
-//        fontName = SupportedFonts.ProductSans.name,
         fontScale = 1.0f,
         useMaterialYou = true
     ) {
@@ -291,27 +168,11 @@ private fun QueueScreenContentPreview(
             uiState = QueueScreenUiState.Success(
                 songsInQueue = previewData.songs,
                 currentlyPlayingSongId = previewData.songs.first().id,
-                favoriteSongIds = setOf( previewData.songs.first().id ),
-                playlists = previewData.playlists,
-                songsAdditionalMetadata = emptyList(),
-                shuffle = true,
-                loopMode = LoopMode.Song,
             ),
             onNavigateUp = {},
-            onCreatePlaylist = { _, _ -> },
-            onFavorite = { _, _ -> },
             playSong = { _, _ -> },
-            onPlayNext = {},
-            onAddToQueue = {},
-            onViewAlbum = {},
-            onViewArtist = {},
-            onShareSong = {},
-            onAddSongsToPlaylist = { _, _, -> },
-            onDeleteSong = {},
-            onSaveQueue = {},
-            onShowSnackBar = {},
-            onToggleLoopMode = {},
-            onToggleShuffleMode = {},
+            onMoveSong = { _, _ -> },
+            onShuffle = {},
         )
     }
 }

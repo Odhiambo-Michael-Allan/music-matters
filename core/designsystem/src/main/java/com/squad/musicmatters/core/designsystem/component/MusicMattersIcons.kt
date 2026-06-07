@@ -6,6 +6,7 @@ import androidx.compose.material.icons.automirrored.rounded.PlaylistAdd
 import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material.icons.filled.CastConnected
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ThumbUpOffAlt
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Settings
@@ -82,4 +83,5 @@ object MusicMattersIcons {
     val LibraryUnselected = Icons.Outlined.VideoLibrary
     val Cast = Icons.Default.Cast
     val CastConnected = Icons.Default.CastConnected
+    val Info = Icons.Default.Info
 }

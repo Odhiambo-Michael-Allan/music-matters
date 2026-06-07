@@ -6,6 +6,7 @@ import com.squad.musicmatters.core.database.model.QueueEntity
 import com.squad.musicmatters.core.testing.repository.TestSongsRepository
 import com.squad.musicmatters.core.testing.songs.testSong
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
@@ -23,7 +24,8 @@ class QueueRepositoryImplTest {
         songsRepository = TestSongsRepository()
         subject = QueueRepositoryImpl(
             queueDao = queueDao,
-            songsRepository = songsRepository
+            songsRepository = songsRepository,
+            ioDispatcher = UnconfinedTestDispatcher()
         )
     }
 

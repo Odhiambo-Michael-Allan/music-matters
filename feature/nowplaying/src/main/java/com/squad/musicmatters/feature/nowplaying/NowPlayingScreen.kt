@@ -150,6 +150,8 @@ fun NowPlayingScreen(
             onStartSleepTimer = viewModel::startSleepTimer,
             onStopSleepTimer = viewModel::stopSleepTimer,
             onShowLyrics = viewModel::onShowLyrics,
+            onToggleLoopMode = viewModel::onToggleLoopMode,
+            onToggleShuffleMode = viewModel::onToggleShuffleMode,
             onShowSnackBar = {
                 coroutineScope.launch {
                     snackBarHostState.showSnackbar(
@@ -191,7 +193,9 @@ private fun NowPlayingScreenContent(
     onShowSnackBar: ( String ) -> Unit,
     onStartSleepTimer: ( Duration ) -> Unit,
     onStopSleepTimer: () -> Unit,
-    onShowLyrics: (Boolean ) -> Unit,
+    onShowLyrics: ( Boolean ) -> Unit,
+    onToggleShuffleMode: ( Boolean, Song ) -> Unit,
+    onToggleLoopMode: ( LoopMode ) -> Unit,
 ) {
     val currentWindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     var showOptionsMenu by remember { mutableStateOf( false ) }
@@ -208,14 +212,10 @@ private fun NowPlayingScreenContent(
     val isMediumOrWider = currentWindowSizeClass
         .isWidthAtLeastBreakpoint( WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND )
 
-    // 3. Check for COMPACT (Standard phone portrait screens)
-    // Anything smaller than the medium breakpoint lower bound is compact
-    val isCompact = !isMediumOrWider
-
     when ( uiState ) {
         NowPlayingScreenUiState.Loading -> {}
         is NowPlayingScreenUiState.Success -> {
-            uiState.queue.firstOrNull { it.id == uiState.playerState.currentlyPlayingSongId }?.let { song ->
+            uiState.currentlyPlayingSong?.let { song ->
                 when {
                     isExpanded || isMediumOrWider -> {
                         ExpandedLayout(
@@ -237,9 +237,9 @@ private fun NowPlayingScreenContent(
                             onPreviousButtonClick = onPreviousButtonClick,
                             onPlayNext = onPlayNext,
                             onNavigateToQueue = onNavigateToQueue,
-                            onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
-                            onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true },
                             onShowLyrics = onShowLyrics,
+                            onToggleShuffleMode = onToggleShuffleMode,
+                            onToggleLoopMode = onToggleLoopMode,
                         )
                     }
                     else -> {
@@ -263,9 +263,9 @@ private fun NowPlayingScreenContent(
                             onPreviousButtonClick = onPreviousButtonClick,
                             onPlayNext = onPlayNext,
                             onNavigateToQueue = onNavigateToQueue,
-                            onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
-                            onShowSleepTimerBottomSheet = { showSleepTimerBottomSheet = true },
                             onShowLyrics = onShowLyrics,
+                            onToggleShuffleMode = onToggleShuffleMode,
+                            onToggleLoopMode = onToggleLoopMode,
                         )
                     }
                 }
@@ -331,11 +331,30 @@ private fun NowPlayingScreenContent(
                                     }
                                 }
                                 BottomSheetMenuItem(
-                                    leadingIcon = Icons.Default.Info,
+                                    leadingIcon = MusicMattersIcons.Info,
                                     label = stringResource( id = i8nR.string.core_i8n_details )
                                 ) {
                                     onDismissRequest()
                                     showSongDetailsDialog = true
+                                }
+                                BottomSheetMenuItem(
+                                    leadingIcon = uiState.sleepTimer?.let {
+                                        MusicMattersIcons.TimerOn
+                                    } ?: MusicMattersIcons.Timer,
+                                    label = stringResource( id = i8nR.string.core_i8n_sleep_timer ),
+                                    leadingIconTint = uiState.sleepTimer?.let {
+                                        MaterialTheme.colorScheme.primary
+                                    }
+                                ) {
+                                    onDismissRequest()
+                                    showSleepTimerBottomSheet = true
+                                }
+                                BottomSheetMenuItem(
+                                    leadingIcon = MusicMattersIcons.Equalizer,
+                                    label = stringResource( id = i8nR.string.core_i8n_equalizer )
+                                ) {
+                                    onDismissRequest()
+                                    onCreateEqualizerActivityContract()
                                 }
                             }
                         )
@@ -536,23 +555,21 @@ private fun NowPlayingScreenContentPreview() {
                     controlsLayoutDefault = false,
                     loopMode = LoopMode.Queue,
                 ),
-                queue = listOf(
-                    Song(
-                        id = "song-id-1",
-                        mediaUri = "Uri.EMPTY",
-                        title = "Started From the Bottom",
-                        displayTitle = "",
-                        duration = 0L,
-                        artists = setOf( "Drake", "Disclosure", "London", "Grammar", "The Weekend", "Young thug" ),
-                        size = 0L,
-                        dateModified = 0L,
-                        path = "",
-                        trackNumber = null,
-                        year = null,
-                        albumTitle = null,
-                        composer = null,
-                        artworkUri = null,
-                    )
+                currentlyPlayingSong = Song(
+                    id = "song-id-1",
+                    mediaUri = "Uri.EMPTY",
+                    title = "Started From the Bottom",
+                    displayTitle = "",
+                    duration = 0L,
+                    artists = setOf( "Drake", "Disclosure", "London", "Grammar", "The Weekend", "Young thug" ),
+                    size = 0L,
+                    dateModified = 0L,
+                    path = "",
+                    trackNumber = null,
+                    year = null,
+                    albumTitle = null,
+                    composer = null,
+                    artworkUri = null,
                 ),
                 currentlyPlayingSongIsFavorite = true,
                 playerState = PlayerState(
@@ -626,7 +643,9 @@ private fun NowPlayingScreenContentPreview() {
             onShowSnackBar = {},
             onStopSleepTimer = {},
             onStartSleepTimer = {},
-            onShowLyrics = {}
+            onShowLyrics = {},
+            onToggleLoopMode = {},
+            onToggleShuffleMode = { _, _ -> },
         )
     }
 }

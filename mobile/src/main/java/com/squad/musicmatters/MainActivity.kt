@@ -2,7 +2,13 @@ package com.squad.musicmatters
 
 import android.Manifest
 import android.app.RecoverableSecurityException
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
+import android.net.Uri
 import android.os.Bundle
+import android.os.IBinder
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -10,6 +16,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +32,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.common.util.UnstableApi
 import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
 import com.squad.musicmatters.core.data.utils.VersionUtils
 import com.squad.musicmatters.core.datastore.DefaultPreferences
@@ -51,11 +59,11 @@ import timber.log.Timber
  * ComponentActivity.
  * Framework APIs: https://developer.android.com/about/versions/13/features/app-languages#framework-impl
  */
+@OptIn( UnstableApi::class )
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainActivityViewModel by viewModels()
-//    private lateinit var nowPlayingViewModel: NowPlayingViewModel
 
     private var currentSongBeingDeleted: Song? = null // A bit ugly..
 
@@ -71,16 +79,6 @@ class MainActivity : AppCompatActivity() {
     ) { isGranted ->
         if ( isGranted ) deleteCurrentSong()
     }
-
-//    private val mediaStoreRefreshStartedBroadcastReceiver = MediaStoreUpdateBroadcastReceiver {
-//        Timber.tag( TAG ).d( "RECEIVED MEDIA STORE REFRESH STARTED BROADCAST" )
-//        mainActivityViewModel.onMediaStoreRefreshStarted()
-//    }
-
-//    private val mediaStoreRefreshEndedBroadcastReceiver = MediaStoreUpdateBroadcastReceiver {
-//        Timber.tag( TAG ).d( "RECEIVED MEDIA STORE REFRESH ENDED BROADCAST" )
-//        mainActivityViewModel.onMediaStoreRefreshEnded()
-//    }
 
     private fun deleteCurrentSong() {
         lifecycleScope.launch {
@@ -111,44 +109,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        mobileDiModule = ( application as MusicMatters ).diModule
-
-//        val mainActivityViewModelFactory = MainActivityViewModelFactory(
-//            mobileDiModule.musicServiceConnection
-//        )
-
-//        mainActivityViewModel = ViewModelProvider(
-//            this,
-//            factory = mainActivityViewModelFactory
-//        ).get( MainActivityViewModel::class.java )
-
-//        val nowPlayingViewModelFactory = NowPlayingViewModelFactory(
-//            settingsRepository = mobileDiModule.settingsRepository,
-//            playlistRepository = mobileDiModule.playlistRepository,
-//            songsAdditionalMetadataRepository = mobileDiModule.songsAdditionalMetadataRepository,
-//            musicServiceConnection = mobileDiModule.musicServiceConnection
-//        )
-
-//        nowPlayingViewModel  = ViewModelProvider(
-//            this,
-//            factory = nowPlayingViewModelFactory
-//        ).get( NowPlayingViewModel::class.java )
-
-//        ContextCompat.registerReceiver(
-//            this,
-//            mediaStoreRefreshStartedBroadcastReceiver,
-//            IntentFilter( MEDIA_STORE_REFRESH_STARTED_INTENT ),
-//            ContextCompat.RECEIVER_NOT_EXPORTED
-//        )
-
-//        ContextCompat.registerReceiver(
-//            this,
-//            mediaStoreRefreshEndedBroadcastReceiver,
-//            IntentFilter( MEDIA_STORE_REFRESH_ENDED_INTENT ),
-//            ContextCompat.RECEIVER_NOT_EXPORTED
-//        )
-
-        MediaPermissionsManager.checkForPermissions( applicationContext )
+        MediaPermissionsManager.checkForPermissions( this )
 
         /**
          * Turn off the decor fitting system windows, which allows us to handle insets, including
@@ -180,23 +141,9 @@ class MainActivity : AppCompatActivity() {
                 )
                 onDispose {}
             }
-
-            val allRequiredPermissionsHaveBeenGranted by MediaPermissionsManager.hasAllRequiredPermissions.collectAsState()
-            val postNotificationsPermissionGranted by MediaPermissionsManager.postNotificationPermissionGranted.collectAsState()
-            val readExternalStoragePermissionGranted by MediaPermissionsManager.readExternalStoragePermissionGranted.collectAsState()
-
-            val readMediaAudioPermissionGranted by MediaPermissionsManager.readMediaAudioPermissionGranted.collectAsState()
             var displayPermissionsScreen by remember {
                 mutableStateOf( !MediaPermissionsManager.hasAllRequiredPermissions.value )
             }
-
-//            val settingsRepository = mobileDiModule.settingsRepository
-//            val themeMode by settingsRepository.themeMode.collectAsState()
-//            val primaryColorName by settingsRepository.primaryColorName.collectAsState()
-//
-//            val font by settingsRepository.font.collectAsState()
-//            val fontScale by settingsRepository.fontScale.collectAsState()
-//            val useMaterialYou by settingsRepository.useMaterialYou.collectAsState()
 
             MusicMattersTheme(
                 themeMode = getThemeMode( uiState ),
@@ -205,31 +152,20 @@ class MainActivity : AppCompatActivity() {
                 fontScale = getFontScale( uiState ),
                 useMaterialYou = useMaterialYou( uiState )
             ) {
-
                 Surface( color = MaterialTheme.colorScheme.background ) {
                     when {
                         displayPermissionsScreen -> {
                             PermissionsScreen(
-                                allRequiredPermissionsHaveBeenGranted = allRequiredPermissionsHaveBeenGranted,
-                                postNotificationsPermissionGranted = postNotificationsPermissionGranted,
-                                onPostNotificationsPermissionGranted = {
-                                    MediaPermissionsManager.postNotificationPermissionGranted(
-                                        isGranted = it,
-                                        context = applicationContext
-                                    )
-                                },
-                                readExternalStoragePermissionsGranted = readExternalStoragePermissionGranted,
-                                onReadExternalStoragePermissionGranted = {
-                                    MediaPermissionsManager.readExternalStoragePermissionGranted(
-                                        isGranted = it,
-                                        context = applicationContext
-                                    )
-                                },
-                                readMediaAudioPermissionGranted = readMediaAudioPermissionGranted,
-                                onReadMediaAudioPermissionGranted = {
-                                    MediaPermissionsManager.readMediaAudioPermissionGranted(
-                                        isGranted = it,
-                                        context = applicationContext
+                                onNavigateToApplicationDetailsSettings = {
+                                    startActivity(
+                                        Intent().apply {
+                                            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                                            data = Uri.fromParts(
+                                                "package",
+                                                this@MainActivity.packageName,
+                                                null
+                                            )
+                                        }
                                     )
                                 },
                                 onLetsGo = {
@@ -241,18 +177,17 @@ class MainActivity : AppCompatActivity() {
                             MusicMattersApp(
                                 uiState = uiState,
                                 onDeleteSong = { deleteSong( it ) }
-//                                nowPlayingViewModel = nowPlayingViewModel,
-//                                settingsRepository = mobileDiModule.settingsRepository,
-//                                musicServiceConnection = musicServiceConnection,
-//                                playlistRepository = mobileDiModule.playlistRepository,
-//                                searchHistoryRepository = mobileDiModule.searchHistoryRepository,
-//                                songsAdditionalMetadataRepository = mobileDiModule.songsAdditionalMetadataRepository,
                             )
                         }
                     }
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MediaPermissionsManager.checkForPermissions( this )
     }
 
     // https://medium.com/@vishrut.goyani9/scoped-storage-in-android-writing-deleting-media-files-ee6235d30117
@@ -279,36 +214,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-//        unregisterReceiver( mediaStoreRefreshStartedBroadcastReceiver )
-//        unregisterReceiver( mediaStoreRefreshEndedBroadcastReceiver )
     }
 
 }
-
-//private class MainActivityViewModel(
-//    private val musicServiceConnection: MusicServiceConnection
-//) : ViewModel() {
-//    fun onMediaStoreRefreshStarted() {
-//        viewModelScope.launch {
-//            musicServiceConnection.onMediaStoreRefreshStarted()
-//        }
-//    }
-//
-//    fun onMediaStoreRefreshEnded() {
-//        viewModelScope.launch {
-//            musicServiceConnection.onMediaStoreChange()
-//        }
-//    }
-//}
-
-//@Suppress( "UNCHECKED_CAST" )
-//private class MainActivityViewModelFactory(
-//    private val musicServiceConnection: MusicServiceConnection
-//) : ViewModelProvider.Factory {
-//    override fun <T : ViewModel> create( modelClass: Class<T> ): T {
-//        return MainActivityViewModel( musicServiceConnection = musicServiceConnection ) as T
-//    }
-//}
 
 /**
  * Returns 'true' if dark theme should be used, as a function of the [uiState] and the current

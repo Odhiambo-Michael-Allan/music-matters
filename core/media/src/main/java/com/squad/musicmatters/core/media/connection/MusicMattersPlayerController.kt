@@ -5,9 +5,10 @@ import kotlinx.coroutines.flow.StateFlow
 import java.util.Timer
 import kotlin.time.Duration
 
-interface MusicMattersPlayer {
+interface MusicMattersPlayerController {
 
     val playerState: StateFlow<PlayerState>
+    val queue: StateFlow<List<Song>>
     val sleepTimer: StateFlow<SleepTimer?>
 
     fun getCurrentPlaybackPosition(): PlaybackPosition
@@ -15,21 +16,24 @@ interface MusicMattersPlayer {
     fun playPause()
     fun play()
     fun playPreviousSong(): Boolean
-    fun playNextSong(): Boolean
+    fun playNextSong( ignoreLoopMode: Boolean = false ): Boolean
     fun seekBack()
     fun seekForward()
     fun seekTo( position: Long )
-    suspend fun playSong(
+    fun setTimer( duration: Duration )
+    fun stopSleepTimer()
+    fun playSong(
         song: Song,
         songs: List<Song>,
         shuffle: Boolean,
     )
-    suspend fun shuffleAndPlay( songs: List<Song> )
+    fun shuffleAndPlay( songs: List<Song> )
     suspend fun shuffleSongsInQueue()
-    suspend fun playNext( song: Song )
-    suspend fun addToQueue( song: Song )
-    fun setTimer( duration: Duration )
-    fun stopSleepTimer()
+    fun playSongNext(song: Song )
+    fun addToQueue( songToAdd: Song )
+    fun clearQueue()
+    fun moveSong( from: Int, to: Int )
+
 }
 
 data class PlayerState(

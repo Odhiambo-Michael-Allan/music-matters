@@ -1,7 +1,7 @@
 package com.squad.musicmatters.feature.nowplaying
 
 import androidx.lifecycle.viewModelScope
-import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayerController
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
@@ -31,25 +31,26 @@ import kotlin.time.Duration
 
 @HiltViewModel
 class NowPlayingScreenViewModel @Inject constructor(
-    private val player: MusicMattersPlayer,
+    private val player: MusicMattersPlayerController,
     private val preferencesDataSource: PreferencesDataSource,
     private val playlistRepository: PlaylistRepository,
     private val playbackPositionUpdater: PlaybackPositionUpdater,
+    private val queueRepository: QueueRepository,
     songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
-    queueRepository: QueueRepository,
     songsRepository: SongsRepository,
 ) : BaseViewModel(
     preferencesDataSource = preferencesDataSource,
     playlistRepository = playlistRepository,
     player = player,
-    songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
 ) {
 
     val uiState: StateFlow<NowPlayingScreenUiState> =
         combine(
             player.playerState,
+            player.playerState.map { it.currentlyPlayingSongId }.flatMapLatest { songId ->
+                songsRepository.fetchSongs().map { songs -> songs.firstOrNull { it.id == songId } }
+            },
             preferencesDataSource.userData,
-            queueRepository.fetchSongsInQueueSortedByPosition(),
             player.playerState.map { it.currentlyPlayingSongId }.flatMapLatest { songId ->
                 playlistRepository.isFavorite( songId ?: "" )
             },
@@ -58,17 +59,16 @@ class NowPlayingScreenViewModel @Inject constructor(
             player.sleepTimer
         ) {
             playerState,
+            currentlyPlayingSong,
             userData,
-            queue,
             currentlyPlayingSongIsFavorite,
             playlists,
             metadata,
             sleepTimer ->
-
             NowPlayingScreenUiState.Success(
                 playerState = playerState,
+                currentlyPlayingSong = currentlyPlayingSong,
                 userData = userData,
-                queue = queue,
                 currentlyPlayingSongIsFavorite = currentlyPlayingSongIsFavorite,
                 playlists = playlists,
                 songAdditionalMetadata = metadata.find {
@@ -119,7 +119,7 @@ class NowPlayingScreenViewModel @Inject constructor(
     }
 
     fun playNextSong(): Boolean {
-        return player.playNextSong()
+        return player.playNextSong( ignoreLoopMode = true )
     }
 
     fun fastRewind() {
@@ -170,13 +170,30 @@ class NowPlayingScreenViewModel @Inject constructor(
         playbackPositionUpdater.cleanUp()
     }
 
+    fun onToggleLoopMode( currentLoopMode: LoopMode ) {
+        val currentLoopModePosition = LoopMode.entries.indexOf( currentLoopMode )
+        val nextLoopModePosition = ( currentLoopModePosition + 1 ) % LoopMode.entries.size
+        viewModelScope.launch {
+            preferencesDataSource.setLoopMode( LoopMode.entries[ nextLoopModePosition ] )
+        }
+    }
+
+    fun onToggleShuffleMode( shuffle: Boolean, currentlyPlayingSong: Song ) {
+        viewModelScope.launch {
+            if ( shuffle ) {
+                queueRepository.shuffleSongsInQueue( currentlyPlayingSong )
+            }
+            preferencesDataSource.setShuffle( shuffle )
+        }
+    }
+
 }
 
 sealed interface NowPlayingScreenUiState {
     data object Loading : NowPlayingScreenUiState
     data class Success(
         val userData: UserData,
-        val queue: List<Song>,
+        val currentlyPlayingSong: Song?,
         val currentlyPlayingSongIsFavorite: Boolean,
         val playerState: PlayerState,
         val playlists: List<Playlist>,

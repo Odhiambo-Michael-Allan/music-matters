@@ -61,12 +61,8 @@ internal fun NowPlayingScreenBottomBar(
     modifier: Modifier = Modifier,
     showLyrics: Boolean,
     onShowLyrics: ( Boolean ) -> Unit,
-    onCreateEqualizerActivityContract: () -> Unit,
+    onNavigateToQueueScreen: () -> Unit,
 ) {
-
-//    var showExtraOptions by remember { mutableStateOf( false ) }
-//    var showSpeedDialog by remember { mutableStateOf( false ) }
-//    var showPitchDialog by remember { mutableStateOf( false ) }
 
     Row(
         modifier = modifier
@@ -96,121 +92,14 @@ internal fun NowPlayingScreenBottomBar(
             }
         }
         IconButton(
-            onClick = {}
+            onClick = onNavigateToQueueScreen,
         ) {
             Icon(
-                imageVector = MusicMattersIcons.Cast,
+                imageVector = MusicMattersIcons.Queue,
                 contentDescription = null,
             )
         }
     }
-
-//    if ( showExtraOptions ) {
-//        ModalBottomSheet(
-//            modifier = if ( ScreenOrientation.fromConfiguration(
-//                    LocalConfiguration.current ).isLandscape )
-//                Modifier.padding( start = 50.dp ) else Modifier,
-//            onDismissRequest = {
-//                showExtraOptions = false
-//            }
-//        ) {
-//            Column {
-//                Card (
-//                    onClick = {
-//                        showExtraOptions = false
-//                        onCreateEqualizerActivityContract()
-//                    }
-//                ) {
-//                    ListItem(
-//                        leadingContent = {
-//                            Icon(
-//                                imageVector = MusicMattersIcons.Equalizer,
-//                                contentDescription = null
-//                            )
-//                        },
-//                        headlineContent = {
-//                            Text(
-//                                text = stringResource( id = i8nR.string.core_i8n_equalizer ),
-//                                fontWeight = FontWeight.SemiBold
-//                            )
-//                        }
-//                    )
-//                }
-//                Card (
-//                    onClick = {
-//                        showExtraOptions = false
-//                        showSpeedDialog = !showSpeedDialog
-//                    }
-//                ) {
-//                    ListItem(
-//                        leadingContent = {
-//                            Icon(
-//                                imageVector = MusicMattersIcons.Speed,
-//                                contentDescription = null
-//                            )
-//                        },
-//                        headlineContent = {
-//                            Text(
-//                                text = stringResource( id = i8nR.string.core_i8n_speed ),
-//                                fontWeight = FontWeight.SemiBold
-//                            )
-//                        },
-//                        supportingContent = {
-//                            Text(
-//                                text = "x$currentSpeed",
-//                                fontWeight = FontWeight.SemiBold
-//                            )
-//                        }
-//                    )
-//                }
-//                Card (
-//                    onClick = {
-//                        showExtraOptions = false
-//                        showPitchDialog = !showPitchDialog
-//                    }
-//                ) {
-//                    ListItem(
-//                        leadingContent = {
-//                            Icon(
-//                                imageVector = MusicMattersIcons.Speed,
-//                                contentDescription = null
-//                            )
-//                        },
-//                        headlineContent = {
-//                            Text(
-//                                text = stringResource( id = i8nR.string.core_i8n_pitch ),
-//                                fontWeight = FontWeight.SemiBold
-//                            )
-//                        },
-//                        supportingContent = {
-//                            Text(
-//                                text = "x$currentPitch",
-//                                fontWeight = FontWeight.SemiBold
-//                            )
-//                        }
-//                    )
-//                }
-//            }
-//        }
-//    }
-
-//    if ( showSpeedDialog ) {
-//        NowPlayingOptionDialog(
-//            title = stringResource( id = i8nR.string.core_i8n_speed ),
-//            currentValue = currentSpeed,
-//            onValueChange = onSpeedChange,
-//            onDismissRequest = { showSpeedDialog = false }
-//        )
-//    }
-
-//    if ( showPitchDialog ) {
-//        NowPlayingOptionDialog(
-//            title = stringResource( id = i8nR.string.core_i8n_pitch ),
-//            currentValue = currentPitch,
-//            onValueChange = onPitchChange,
-//            onDismissRequest = { showPitchDialog = false }
-//        )
-//    }
 }
 
 
@@ -273,16 +162,8 @@ private fun NowPlayingScreenBottomBarPreview() {
     ) {
         NowPlayingScreenBottomBar(
             showLyrics = true,
-            onShowLyrics = {}
-        ) {
-            object : ActivityResultContract<Unit, Unit>() {
-                override fun createIntent(
-                    context: Context,
-                    input: Unit,
-                ) = Intent()
-
-                override fun parseResult(resultCode: Int, intent: Intent?) {}
-            }
-        }
+            onShowLyrics = {},
+            onNavigateToQueueScreen = {},
+        )
     }
 }

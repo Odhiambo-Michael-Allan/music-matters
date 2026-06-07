@@ -192,16 +192,12 @@ private fun MiniPlayerContent(
         NowPlayingScreenUiState.Loading -> {}
         is NowPlayingScreenUiState.Success -> {
 
-            val currentlyPlayingSong = uiState.queue.firstOrNull {
-                it.id == uiState.playerState.currentlyPlayingSongId
-            }
-
             AnimatedVisibility(
-                visible = currentlyPlayingSong != null,
+                visible = uiState.currentlyPlayingSong != null,
                 modifier = modifier,
             ) {
 
-                currentlyPlayingSong?.let { playingSong ->
+                uiState.currentlyPlayingSong?.let { playingSong ->
                     ElevatedCard (
                         colors = CardDefaults.cardColors(
                             containerColor = colorToApply
@@ -637,23 +633,21 @@ private fun MiniPlayerPreview() {
                         miniPlayerShowTrackControls = false,
                         miniPlayerTextMarquee = true
                     ),
-                    queue = listOf(
-                        Song(
-                            id = "song-id-1",
-                            mediaUri = "Uri.EMPTY",
-                            title = "Started From the Bottom Now we Here",
-                            displayTitle = "",
-                            duration = 0L,
-                            artists = setOf( "Drake", "Majid Jordan" ),
-                            size = 0L,
-                            dateModified = 0L,
-                            path = "",
-                            trackNumber = null,
-                            year = null,
-                            albumTitle = null,
-                            composer = null,
-                            artworkUri = null,
-                        )
+                    currentlyPlayingSong = Song(
+                        id = "song-id-1",
+                        mediaUri = "Uri.EMPTY",
+                        title = "Started From the Bottom Now we Here",
+                        displayTitle = "",
+                        duration = 0L,
+                        artists = setOf( "Drake", "Majid Jordan" ),
+                        size = 0L,
+                        dateModified = 0L,
+                        path = "",
+                        trackNumber = null,
+                        year = null,
+                        albumTitle = null,
+                        composer = null,
+                        artworkUri = null,
                     ),
                     currentlyPlayingSongIsFavorite = true,
                     playerState = PlayerState(

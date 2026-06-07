@@ -74,17 +74,19 @@
 
     <string name="core_i8n_storage_access">Storage Access</string>
     <string name="core_i8n_grant_access">Grant access</string>
-    <string name="core_i8n_storage_access_prompt">The app needs permission to access your device storage for playing music</string>
-
+    <string name="core_i8n_storage_access_permission_prompt">The app needs permission to access your device storage for playing music</string>
+    <string name="core_i8n_storage_access_permission_denied">Storage access denied</string>
     <string name="core_i8n_welcome_message">Hello there! Welcome to</string>
     <string name="core_i8n_read_media_audio">Read Media Audio</string>
-    <string name="core_i8n_read_media_audio_prompt">The app needs to read media and audio inorder to fetch and play audio files stored on your device</string>
+    <string name="core_i8n_read_media_audio_permission_prompt">The app needs to read media and audio inorder to fetch and play audio files stored on your device</string>
+    <string name="core_i8n_read_media_audio_permission_denied">Permission to read media and audio denied</string>
 
     <string name="core_i8n_ringtone_permission">Ringtone</string>
     <string name="core_i8n_ringtone_permission_prompt">The app needs permission to access your device settings inorder to set music as ringtone</string>
 
     <string name="core_i8n_post_notifications_permission">Post Notifications</string>
-    <string name="core_i8n_post_notifications_prompt">The app needs this to create and display notifications on your device</string>
+    <string name="core_i8n_post_notifications_permission_prompt">The app needs this to create and display notifications on your device</string>
+    <string name="core_i8n_post_notifications_permission_denied">Post notifications permission denied</string>
     <string name="core_i8n_lets_go">Let\'s go</string>
 
     <string name="core_i8n_write_storage">Write Storage</string>
@@ -106,4 +108,7 @@
 
     <string name="core_i8n_playing_notification_name">Playing notification</string>
     <string name="core_i8n_playing_notification_description">The playing notification provides actions for play/pause etc</string>
+    <string name="core_i8n_action_grant">Grant</string>
+
+    <string name="core_i8n_permission_bluetooth_denied">Nearby devices permission denied.</string>
 </resources>

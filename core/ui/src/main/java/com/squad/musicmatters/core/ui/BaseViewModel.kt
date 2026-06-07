@@ -1,10 +1,11 @@
 package com.squad.musicmatters.core.ui
 
+import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
+import androidx.media3.common.util.UnstableApi
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayerController
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
-import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
@@ -14,10 +15,9 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 abstract class BaseViewModel(
-    private val player: MusicMattersPlayer,
+    private val player: MusicMattersPlayerController,
     private val preferencesDataSource: PreferencesDataSource,
     private val playlistRepository: PlaylistRepository,
-    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 ) : ViewModel() {
 
     fun addToFavorites( song: Song, isFavorite: Boolean ) {
@@ -38,6 +38,7 @@ abstract class BaseViewModel(
         }
     }
 
+    @OptIn(UnstableApi::class)
     fun playSongs(
         selectedSong: Song,
         songsInPlaylist: List<Song>
@@ -63,7 +64,7 @@ abstract class BaseViewModel(
             player.playSong(
                 song = song,
                 songs = listOf( song ),
-                shuffle = false // Its only one, no need to shuffle..
+                shuffle = false // Its only one, no need to shuffle.
             )
         }
     }
@@ -94,7 +95,7 @@ abstract class BaseViewModel(
     }
 
     fun playSongNext( song: Song ) {
-        viewModelScope.launch { player.playNext( song ) }
+        viewModelScope.launch { player.playSongNext( song ) }
     }
 
     fun addSongToQueue( song: Song ) {

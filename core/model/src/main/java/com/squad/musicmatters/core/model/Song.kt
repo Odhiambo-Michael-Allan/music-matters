@@ -16,6 +16,27 @@ data class Song(
     val albumTitle: String?,
     val composer: String?,
     val artworkUri: String?,
-)
+) {
+    companion object {
+
+        @JvmStatic
+        val EMPTY = Song(
+            id = "-1",
+            title = "",
+            duration = -1,
+            dateModified = -1,
+            size = 0L,
+            path = "",
+            trackNumber = null,
+            year = null,
+            albumTitle = null,
+            artworkUri = null,
+            mediaUri = "",
+            displayTitle = "",
+            artists = emptySet(),
+            composer = ""
+        )
+    }
+}
 
 

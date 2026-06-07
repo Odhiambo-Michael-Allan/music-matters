@@ -4,10 +4,10 @@ import android.os.Bundle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import com.squad.musicmatters.core.testing.media.FakePlayer
-import com.squad.musicmatters.core.media.connection.Connectable
+import com.squad.musicmatters.core.media.connection.PlayerConnector
 
 @UnstableApi
-class FakeConnectable : Connectable {
+class FakePlayerConnector : PlayerConnector {
 
     private val _player = FakePlayer()
     private val onDisconnectListeners: MutableList<()-> Unit> = mutableListOf()
@@ -15,17 +15,21 @@ class FakeConnectable : Connectable {
 
     override suspend fun establishConnection() {}
 
-    override suspend fun getChildren( parentId: String ): List<MediaItem> {
-        return emptyList()
-    }
-
-    override suspend fun sendCustomCommand(
-        command: String,
-        parameters: Bundle?,
-    ): Boolean = true
+//    override suspend fun getChildren( parentId: String ): List<MediaItem> {
+//        return emptyList()
+//    }
+//
+//    override suspend fun sendCustomCommand(
+//        command: String,
+//        parameters: Bundle?,
+//    ): Boolean = true
 
     override fun addDisconnectListener( disconnectListener: () -> Unit ) {
         onDisconnectListeners.add( disconnectListener )
+    }
+
+    fun setCurrentDurationInPlayback( duration: Long ) {
+        _player.seekTo( duration )
     }
 
 }
