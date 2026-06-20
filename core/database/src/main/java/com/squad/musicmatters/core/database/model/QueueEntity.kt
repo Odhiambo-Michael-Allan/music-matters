@@ -12,5 +12,7 @@ data class QueueEntity(
     @ColumnInfo( "song_id" )
     val songId: String,
     @ColumnInfo( name = "position_in_queue" )
-    val positionInQueue: Int
+    val positionInQueue: Int,
+    @ColumnInfo( name = "original_position_in_queue" )
+    val originalPositionInQueue: Int,
 )

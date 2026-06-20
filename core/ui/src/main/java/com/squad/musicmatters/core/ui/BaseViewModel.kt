@@ -4,7 +4,7 @@ import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.util.UnstableApi
-import com.squad.musicmatters.core.media.connection.MusicMattersPlayerController
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.model.Playlist
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 abstract class BaseViewModel(
-    private val player: MusicMattersPlayerController,
+    private val player: MusicMattersPlayer,
     private val preferencesDataSource: PreferencesDataSource,
     private val playlistRepository: PlaylistRepository,
 ) : ViewModel() {

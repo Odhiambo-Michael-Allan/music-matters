@@ -1,7 +1,7 @@
 package com.squad.musicmatters.feature.nowplaying
 
 import androidx.lifecycle.viewModelScope
-import com.squad.musicmatters.core.media.connection.MusicMattersPlayerController
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
@@ -31,7 +31,7 @@ import kotlin.time.Duration
 
 @HiltViewModel
 class NowPlayingScreenViewModel @Inject constructor(
-    private val player: MusicMattersPlayerController,
+    private val player: MusicMattersPlayer,
     private val preferencesDataSource: PreferencesDataSource,
     private val playlistRepository: PlaylistRepository,
     private val playbackPositionUpdater: PlaybackPositionUpdater,
@@ -86,7 +86,7 @@ class NowPlayingScreenViewModel @Inject constructor(
         .map { it.currentlyPlayingSongId }
         .distinctUntilChanged()
         .flatMapLatest { songId ->
-            queueRepository.fetchSongsInQueueSortedByPosition().map { queue ->
+            queueRepository.fetchSongsSortedByCurrentPosition().map { queue ->
                 queue.find { it.id == songId }
             }
         }
@@ -119,7 +119,7 @@ class NowPlayingScreenViewModel @Inject constructor(
     }
 
     fun playNextSong(): Boolean {
-        return player.playNextSong( ignoreLoopMode = true )
+        return player.playNextSong()
     }
 
     fun fastRewind() {
@@ -137,18 +137,6 @@ class NowPlayingScreenViewModel @Inject constructor(
     fun onSeekEnd( position: Long ) {
         playbackPositionUpdater.startPeriodicUpdates()
         player.seekTo( position )
-    }
-
-    fun onPlayingSpeedChange( speed: Float ) {
-        viewModelScope.launch {
-            preferencesDataSource.setPlaybackSpeed( speed )
-        }
-    }
-
-    fun onPlayingPitchChange( pitch: Float ) {
-        viewModelScope.launch {
-            preferencesDataSource.setPlaybackPitch( pitch )
-        }
     }
 
     fun onShowLyrics( show: Boolean ) {
@@ -178,11 +166,9 @@ class NowPlayingScreenViewModel @Inject constructor(
         }
     }
 
-    fun onToggleShuffleMode( shuffle: Boolean, currentlyPlayingSong: Song ) {
+    fun onToggleShuffleMode( shuffle: Boolean ) {
         viewModelScope.launch {
-            if ( shuffle ) {
-                queueRepository.shuffleSongsInQueue( currentlyPlayingSong )
-            }
+            player.shuffleSongsInQueue( shuffle )
             preferencesDataSource.setShuffle( shuffle )
         }
     }

@@ -194,7 +194,7 @@ private fun NowPlayingScreenContent(
     onStartSleepTimer: ( Duration ) -> Unit,
     onStopSleepTimer: () -> Unit,
     onShowLyrics: ( Boolean ) -> Unit,
-    onToggleShuffleMode: ( Boolean, Song ) -> Unit,
+    onToggleShuffleMode: ( Boolean ) -> Unit,
     onToggleLoopMode: ( LoopMode ) -> Unit,
 ) {
     val currentWindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
@@ -283,8 +283,8 @@ private fun NowPlayingScreenContent(
                             headerDescription = song.artists.joinToString(),
                             playlists = uiState.playlists,
                             onDismissRequest = { showOptionsMenu = false },
-                            onPlayNext = {}, // No need to do anything as duplicates are not allowed in queue
-                            onAddToQueue = {}, // No need to do anything as duplicates are not allowed in queue
+                            onPlayNext = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
+                            onAddToQueue = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
                             onCreatePlaylist = onCreatePlaylist,
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
                             onGetSongs = { listOf( song ) },
@@ -645,7 +645,7 @@ private fun NowPlayingScreenContentPreview() {
             onStartSleepTimer = {},
             onShowLyrics = {},
             onToggleLoopMode = {},
-            onToggleShuffleMode = { _, _ -> },
+            onToggleShuffleMode = {},
         )
     }
 }

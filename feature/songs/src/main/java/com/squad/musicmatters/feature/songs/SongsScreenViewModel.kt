@@ -1,7 +1,7 @@
 package com.squad.musicmatters.feature.songs
 
 import androidx.lifecycle.viewModelScope
-import com.squad.musicmatters.core.media.connection.MusicMattersPlayerController
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
@@ -24,10 +24,10 @@ class SongsScreenViewModel @Inject constructor(
     songsRepository: SongsRepository,
     preferencesDataSource: PreferencesDataSource,
     playlistRepository: PlaylistRepository,
-    musicMattersPlayerController: MusicMattersPlayerController,
+    musicMattersPlayer: MusicMattersPlayer,
     songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
 ) : BaseViewModel(
-    player = musicMattersPlayerController,
+    player = musicMattersPlayer,
     preferencesDataSource = preferencesDataSource,
     playlistRepository = playlistRepository,
 ) {
@@ -40,7 +40,7 @@ class SongsScreenViewModel @Inject constructor(
             )
         },
         preferencesDataSource.userData,
-        musicMattersPlayerController.playerState,
+        musicMattersPlayer.playerState,
         playlistRepository.fetchFavorites(),
         playlistRepository.fetchPlaylists(),
         songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries()

@@ -6,6 +6,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.TextureView
 import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
 import androidx.media3.common.DeviceInfo
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
@@ -22,21 +23,63 @@ import androidx.media3.common.VideoSize
 import androidx.media3.common.text.CueGroup
 import androidx.media3.common.util.Size
 import androidx.media3.common.util.UnstableApi
-import kotlin.math.min
+import com.squad.musicmatters.core.data.repository.QueueRepository
+import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.media.connection.SongToMediaItemConverter
+import com.squad.musicmatters.core.media.media.extensions.getMediaItems
+import com.squad.musicmatters.core.media.media.extensions.move
+import com.squad.musicmatters.core.media.media.extensions.toMediaItem
+import com.squad.musicmatters.core.model.QueueEntry
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * A [Player] implementation that delegates to an actual [Player] implementation that is
  * replaceable by another instance by calling [setPlayer].
  */
-class ReplaceableForwardingPlayer( private var player: Player ) : Player {
+class ReplaceableForwardingPlayer(
+    private var player: Player,
+    private val coroutineScope: CoroutineScope,
+    private val queueRepository: QueueRepository,
+    private val userPreferences: PreferencesDataSource,
+    private val songToMediaItemConverter: SongToMediaItemConverter,
+) : Player {
 
     private val listeners: MutableList<Player.Listener> = arrayListOf()
-    private val playlist: MutableList<MediaItem> = arrayListOf()
+    private var originalPlaylist: MutableList<MediaItem> = arrayListOf()
     private var currentMediaItemIndex: Int = 0
     private val playerListener: Player.Listener = PlayerListener()
 
-    init {
-        player.addListener( playerListener )
+    init { player.addListener( playerListener ) }
+
+    suspend fun initialize() {
+        val songsSortedByOriginalPosition = queueRepository
+            .fetchSongsSortedByOriginalPosition()
+            .first()
+        originalPlaylist = ArrayList(
+            songsSortedByOriginalPosition.map { songToMediaItemConverter.convert( it ) }
+        )
+        val songsInQueue = if ( userPreferences.userData.first().shuffle ) {
+            queueRepository.fetchSongsSortedByCurrentPosition().first()
+        } else {
+            songsSortedByOriginalPosition
+        }
+        val previouslyPlayingSong = songsInQueue
+            .find { it.id == userPreferences.userData.first().currentlyPlayingSongId }
+        val indexOfPreviouslyPlayingSong = previouslyPlayingSong?.let {
+            songsInQueue.indexOfFirst { it.id == previouslyPlayingSong.id }
+        } ?: 0
+        player.setMediaItems(
+            songsInQueue.map {
+                songToMediaItemConverter.convert( it )
+            }.toMutableList(),
+            indexOfPreviouslyPlayingSong,
+            C.TIME_UNSET
+        )
+        player.prepare()
     }
 
     /**
@@ -60,7 +103,11 @@ class ReplaceableForwardingPlayer( private var player: Player ) : Player {
         player.playWhenReady = this.player.playWhenReady
 
         // Prepare the new player.
-        player.setMediaItems( playlist, currentMediaItemIndex, this.player.contentPosition )
+        player.setMediaItems(
+            this.player.getMediaItems(),
+            currentMediaItemIndex,
+            this.player.contentPosition
+        )
         player.prepare()
 
         // Stop the previous player. Don't release so it can be used again.
@@ -69,6 +116,83 @@ class ReplaceableForwardingPlayer( private var player: Player ) : Player {
 
         this.player = player
     }
+
+    // ---------------------- Start of modified methods ------------------------
+
+    override fun removeMediaItem( index: Int ) {
+        val mediaItemToRemove = player.getMediaItems()[ index ]
+        originalPlaylist.remove( mediaItemToRemove )
+        player.removeMediaItem( index )
+    }
+
+    override fun setMediaItems(
+        mediaItems: MutableList<MediaItem>,
+        startWindowIndex: Int,
+        startPositionMs: Long
+    ) {
+        originalPlaylist = ArrayList( mediaItems )
+        if ( this.player.shuffleModeEnabled ) {
+            mediaItems.apply {
+                val mediaItemToStartPlaying = removeAt( startWindowIndex )
+                shuffle()
+                add( 0, mediaItemToStartPlaying )
+            }
+        }
+        this.player.setMediaItems( mediaItems, startWindowIndex, startPositionMs )
+    }
+
+    override fun moveMediaItem( currentIndex: Int, newIndex: Int ) {
+        player.moveMediaItem( currentIndex, newIndex )
+        if ( player.shuffleModeEnabled.not() ) originalPlaylist.move( currentIndex, newIndex )
+    }
+
+    override fun clearMediaItems() {
+        player.clearMediaItems()
+        originalPlaylist.clear()
+    }
+
+    override fun addMediaItem( index: Int, mediaItem: MediaItem ) {
+        player.addMediaItem( index, mediaItem )
+        originalPlaylist.add( index, mediaItem )
+    }
+
+    override fun setShuffleModeEnabled( shuffleModeEnabled: Boolean ) {
+        if ( shuffleModeEnabled ) shuffleMediaItems()
+        else unshuffleMediaItems()
+    }
+
+    private fun shuffleMediaItems() {
+        player.let {
+            if ( it.mediaItemCount > 1 ) {
+                it.moveMediaItem( it.currentMediaItemIndex, 0 )
+                val queue = it.getMediaItems().toMutableList()
+                it.removeMediaItems( 1, it.mediaItemCount )
+                queue.removeAt( 0 )
+                queue.shuffle()
+                it.addMediaItems( queue )
+            }
+        }
+    }
+
+    private fun unshuffleMediaItems() {
+        player.let {
+            val positionOfCurrentMediaItemInOriginalQueue = originalPlaylist
+                .indexOfFirst { mediaItem -> mediaItem.mediaId == it.currentMediaItem!!.mediaId }
+            val tmp = originalPlaylist.removeAt( positionOfCurrentMediaItemInOriginalQueue )
+            it.moveMediaItem( it.currentMediaItemIndex, 0 )
+            it.removeMediaItems( 1, it.mediaItemCount )
+            it.addMediaItems( originalPlaylist )
+            it.moveMediaItem( 0, positionOfCurrentMediaItemInOriginalQueue )
+            originalPlaylist.add( positionOfCurrentMediaItemInOriginalQueue, tmp )
+        }
+    }
+
+    override fun addMediaItem( mediaItem: MediaItem ) {
+        player.addMediaItem( mediaItem )
+        originalPlaylist.add( mediaItem )
+    }
+
+    // ---------------------- End of modified methods --------------------------
 
     override fun getApplicationLooper(): Looper {
         return player.applicationLooper
@@ -86,76 +210,34 @@ class ReplaceableForwardingPlayer( private var player: Player ) : Player {
 
     override fun setMediaItems( mediaItems: MutableList<MediaItem> ) {
         player.setMediaItems( mediaItems )
-        playlist.clear()
-        playlist.addAll( mediaItems )
     }
 
     override fun setMediaItems( mediaItems: MutableList<MediaItem>, resetPosition: Boolean ) {
         player.setMediaItems( mediaItems, resetPosition )
-        playlist.clear()
-        playlist.addAll( mediaItems )
-    }
-
-    override fun setMediaItems(
-        mediaItems: MutableList<MediaItem>,
-        startWindowIndex: Int,
-        startPositionMs: Long
-    ) {
-        player.setMediaItems( mediaItems, startWindowIndex, startPositionMs )
-        playlist.clear()
-        playlist.addAll( mediaItems )
     }
 
     override fun setMediaItem( mediaItem: MediaItem ) {
         player.setMediaItem( mediaItem )
-        playlist.clear()
-        playlist.add( mediaItem )
     }
 
     override fun setMediaItem( mediaItem: MediaItem, startPositionMs: Long ) {
         player.setMediaItem( mediaItem, startPositionMs )
-        playlist.clear()
-        playlist.add( mediaItem )
     }
 
     override fun setMediaItem( mediaItem: MediaItem, resetPosition: Boolean ) {
         player.setMediaItem( mediaItem, resetPosition )
-        playlist.clear()
-        playlist.add( mediaItem )
-    }
-
-    override fun addMediaItem( mediaItem: MediaItem ) {
-        player.addMediaItem( mediaItem )
-        playlist.add( mediaItem )
-    }
-
-    override fun addMediaItem( index: Int, mediaItem: MediaItem ) {
-        player.addMediaItem( index, mediaItem )
-        playlist.add( index, mediaItem )
     }
 
     override fun addMediaItems( mediaItems: MutableList<MediaItem> ) {
         player.addMediaItems( mediaItems )
-        playlist.addAll( mediaItems )
     }
 
     override fun addMediaItems( index: Int, mediaItems: MutableList<MediaItem> ) {
         player.addMediaItems( index, mediaItems )
-        playlist.addAll( index, mediaItems )
-    }
-
-    override fun moveMediaItem( currentIndex: Int, newIndex: Int ) {
-        player.moveMediaItem( currentIndex, newIndex )
-        playlist.add( min( newIndex, playlist.size ), playlist.removeAt( currentIndex ) )
     }
 
     override fun moveMediaItems( fromIndex: Int, toIndex: Int, newIndex: Int ) {
-        val removedItems: ArrayDeque<MediaItem> = ArrayDeque()
-        val removedItemsLength = toIndex - fromIndex
-        for ( i in removedItemsLength - 1 downTo 0 ) {
-            removedItems.addFirst( playlist.removeAt( fromIndex + i ) )
-        }
-        playlist.addAll( min( newIndex, playlist.size ), removedItems )
+        player.moveMediaItems( fromIndex, toIndex, newIndex )
     }
 
     override fun replaceMediaItem( index: Int, mediaItem: MediaItem ) {
@@ -170,22 +252,8 @@ class ReplaceableForwardingPlayer( private var player: Player ) : Player {
         player.replaceMediaItems( fromIndex, toIndex, mediaItems )
     }
 
-    override fun removeMediaItem( index: Int ) {
-        player.removeMediaItem( index )
-        playlist.removeAt( index )
-    }
-
     override fun removeMediaItems( fromIndex: Int, toIndex: Int ) {
         player.removeMediaItems( fromIndex, toIndex )
-        val removedItemsLength = toIndex - fromIndex
-        for ( i in removedItemsLength - 1 downTo 0 ) {
-            playlist.removeAt( fromIndex + i )
-        }
-    }
-
-    override fun clearMediaItems() {
-        player.clearMediaItems()
-        playlist.clear()
     }
 
     override fun isCommandAvailable( command: Int ) = player.isCommandAvailable( command )
@@ -220,10 +288,6 @@ class ReplaceableForwardingPlayer( private var player: Player ) : Player {
     }
 
     override fun getRepeatMode() = player.repeatMode
-
-    override fun setShuffleModeEnabled( shuffleModeEnabled: Boolean ) {
-        player.shuffleModeEnabled = shuffleModeEnabled
-    }
 
     override fun getShuffleModeEnabled() = player.shuffleModeEnabled
     override fun isLoading() = player.isLoading
@@ -260,32 +324,8 @@ class ReplaceableForwardingPlayer( private var player: Player ) : Player {
         player.seekForward()
     }
 
-    @Deprecated( "Deprecated in Java" )
-    @UnstableApi
-    override fun hasPrevious(): Boolean {
-        return player.hasPrevious()
-    }
-
-    @Deprecated( "Deprecated in Java" )
-    @UnstableApi
-    override fun hasPreviousWindow(): Boolean {
-        return player.hasPreviousWindow()
-    }
-
     override fun hasPreviousMediaItem(): Boolean {
         return player.hasPreviousMediaItem()
-    }
-
-    @Deprecated( "Deprecated in Java" )
-    @UnstableApi
-    override fun previous() {
-        player.previous()
-    }
-
-    @Deprecated( "Deprecated in Java" )
-    @UnstableApi
-    override fun seekToPreviousWindow() {
-        player.seekToPreviousWindow()
     }
 
     override fun seekToPreviousMediaItem() {
@@ -300,32 +340,8 @@ class ReplaceableForwardingPlayer( private var player: Player ) : Player {
         player.seekToPrevious()
     }
 
-    @Deprecated( "Deprecated in Java" )
-    @UnstableApi
-    override fun hasNext(): Boolean {
-        return player.hasNext()
-    }
-
-    @Deprecated( "Deprecated in Java" )
-    @UnstableApi
-    override fun hasNextWindow(): Boolean {
-        return player.hasNextWindow()
-    }
-
     override fun hasNextMediaItem(): Boolean {
         return player.hasNextMediaItem()
-    }
-
-    @Deprecated( "Deprecated in Java" )
-    @UnstableApi
-    override fun next() {
-        player.next()
-    }
-
-    @Deprecated( "Deprecated in Java" )
-    @UnstableApi
-    override fun seekToNextWindow() {
-        player.seekToNextWindow()
     }
 
     override fun seekToNextMediaItem() {
@@ -354,7 +370,6 @@ class ReplaceableForwardingPlayer( private var player: Player ) : Player {
 
     override fun release() {
         player.release()
-        playlist.clear()
     }
 
     override fun getCurrentTracks(): Tracks {
@@ -526,6 +541,14 @@ class ReplaceableForwardingPlayer( private var player: Player ) : Player {
         return player.volume
     }
 
+    override fun mute() {
+        TODO("Not yet implemented")
+    }
+
+    override fun unmute() {
+        TODO("Not yet implemented")
+    }
+
     override fun clearVideoSurface() {
         player.clearVideoSurface()
     }
@@ -628,15 +651,40 @@ class ReplaceableForwardingPlayer( private var player: Player ) : Player {
     }
 
     private inner class PlayerListener : Player.Listener {
+
         override fun onEvents( player: Player, events: Player.Events ) {
+            if ( events.contains( Player.EVENT_TRACKS_CHANGED )
+                || events.contains( Player.EVENT_METADATA )
+                || events.contains( EVENT_MEDIA_METADATA_CHANGED )
+                || events.contains( Player.EVENT_PLAYLIST_METADATA_CHANGED )
+                || events.contains( EVENT_TIMELINE_CHANGED )
+            ) {
+                Timber.tag( TAG ).d( "SAVING QUEUE" )
+                val mediaItems = player.getMediaItems()
+                coroutineScope.launch {
+                    queueRepository.saveQueue(
+                        mediaItems.mapIndexed { index, item ->
+                            val positionOfItemInOriginalQueue = originalPlaylist
+                                .indexOfFirst { it.mediaId == item.mediaId }
+                            QueueEntry(
+                                songId = item.mediaId,
+                                currentPositionInQueue = index,
+                                originalPositionInQueue = positionOfItemInOriginalQueue
+                                    .takeIf { it != -1 } ?: index
+                            )
+                        }
+                    )
+                }
+            }
             if ( events.contains( EVENT_MEDIA_ITEM_TRANSITION )
                 && !events.contains( EVENT_MEDIA_METADATA_CHANGED ) ) {
                 // CastPlayer does not support onMetaDataChange. We can trigger this here when the
                 // media item changes.
-                if ( playlist.isNotEmpty() ) {
-                    for ( listener in listeners ) {
-                        listener.onMediaMetadataChanged(
-                            playlist[ player.currentMediaItemIndex ].mediaMetadata
+                val mediaItems = player.getMediaItems()
+                if ( mediaItems.isNotEmpty() ) {
+                    listeners.forEach {
+                        it.onMediaMetadataChanged(
+                            mediaItems[ player.currentMediaItemIndex ].mediaMetadata
                         )
                     }
                 }
@@ -649,5 +697,8 @@ class ReplaceableForwardingPlayer( private var player: Player ) : Player {
                 }
             }
         }
+
     }
 }
+
+private const val TAG = "REPLACEABLE-FORW-PLAYER"

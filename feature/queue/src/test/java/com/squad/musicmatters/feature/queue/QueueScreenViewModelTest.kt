@@ -1,9 +1,9 @@
 package com.squad.musicmatters.feature.queue
 
 import com.squad.castify.core.testing.rules.MainDispatcherRule
-import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayerController
-import com.squad.musicmatters.core.testing.repository.TestPreferencesDataSource
-import com.squad.musicmatters.core.testing.repository.TestQueueRepository
+import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
+import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.TestSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
 import junit.framework.TestCase.assertEquals
@@ -20,19 +20,20 @@ class QueueScreenViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private lateinit var preferencesDataSource: TestPreferencesDataSource
-    private lateinit var musicServiceConnection: TestMusicMattersPlayerController
-    private lateinit var queueRepository: TestQueueRepository
+    private lateinit var preferencesDataSource: FakePreferencesDataSource
+    private lateinit var player: TestMusicMattersPlayer
+    private lateinit var songsRepository: TestSongsRepository
     private lateinit var viewModel: QueueScreenViewModel
 
     @Before
     fun setup() {
-        preferencesDataSource = TestPreferencesDataSource()
-        musicServiceConnection = TestMusicMattersPlayerController()
-        queueRepository = TestQueueRepository()
+        preferencesDataSource = FakePreferencesDataSource()
+        player = TestMusicMattersPlayer()
+        songsRepository = TestSongsRepository()
         viewModel = QueueScreenViewModel(
+            songsRepository = songsRepository,
             preferencesDataSource = preferencesDataSource,
-            player = musicServiceConnection,
+            player = player,
         )
     }
 
@@ -59,7 +60,8 @@ class QueueScreenViewModelTest {
             testSong( id = "song-id-4" ),
             testSong( id = "song-id-5" )
         )
-        queueRepository.sendSongs( songs )
+        player.sendSongs( songs )
+        songsRepository.sendSongs( songs )
         preferencesDataSource.sendUserData(
             emptyUserData.copy( currentlyPlayingSongId = "song-id-3" )
         )
@@ -68,6 +70,7 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
             ),
             viewModel.uiState.value
         )
@@ -83,7 +86,8 @@ class QueueScreenViewModelTest {
             testSong( id = "song-id-4" ),
             testSong( id = "song-id-5" )
         )
-        queueRepository.sendSongs( songs )
+        player.sendSongs( songs )
+        songsRepository.sendSongs( songs )
         preferencesDataSource.sendUserData(
             emptyUserData.copy( currentlyPlayingSongId = "song-id-3" )
         )
@@ -92,16 +96,18 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
             ),
             viewModel.uiState.value
         )
 
-        queueRepository.clearQueue()
+        player.clearQueue()
 
         assertEquals(
             QueueScreenUiState.Success(
                 songsInQueue = emptyList(),
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
             ),
             viewModel.uiState.value
         )
@@ -117,7 +123,8 @@ class QueueScreenViewModelTest {
             testSong( id = "song-id-4" ),
             testSong( id = "song-id-5" )
         )
-        queueRepository.sendSongs( songs )
+        player.sendSongs( songs )
+        songsRepository.sendSongs( songs )
         preferencesDataSource.sendUserData(
             emptyUserData.copy( currentlyPlayingSongId = "song-id-3" )
         )
@@ -126,6 +133,7 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
+                shuffle = false,
             ),
             viewModel.uiState.value
         )
@@ -140,6 +148,7 @@ class QueueScreenViewModelTest {
             QueueScreenUiState.Success(
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-4",
+                shuffle = false,
             ),
             viewModel.uiState.value
         )

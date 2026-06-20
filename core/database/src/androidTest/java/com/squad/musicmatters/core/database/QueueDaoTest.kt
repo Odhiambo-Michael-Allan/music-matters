@@ -36,15 +36,18 @@ class QueueDaoTest {
         val queueEntities = listOf(
             QueueEntity(
                 songId = "song-id-1",
-                positionInQueue = 2
+                positionInQueue = 2,
+                originalPositionInQueue = 1,
             ),
             QueueEntity(
                 songId = "song-id-2",
-                positionInQueue = 0
+                positionInQueue = 0,
+                originalPositionInQueue = 2,
             ),
             QueueEntity(
                 songId = "song-id-3",
                 positionInQueue = 1,
+                originalPositionInQueue = 3,
             )
         )
         queueDao.upsertQueueEntities( queueEntities )
@@ -55,7 +58,16 @@ class QueueDaoTest {
                 "song-id-3",
                 "song-id-1"
             ),
-            queueDao.fetchQueueEntitiesSortedByPosition().first().map { it.songId }
+            queueDao.fetchEntitiesSortedByCurrentPositionInQueue().first().map { it.songId }
+        )
+
+        assertEquals(
+            listOf(
+                "song-id-1",
+                "song-id-2",
+                "song-id-3"
+            ),
+            queueDao.fetchEntitiesSortedByOriginalPositionInQueue().first().map { it.songId }
         )
     }
 
@@ -64,23 +76,29 @@ class QueueDaoTest {
         val queueEntities = listOf(
             QueueEntity(
                 songId = "song-id-1",
-                positionInQueue = 2
+                positionInQueue = 2,
+                originalPositionInQueue = 1
             ),
             QueueEntity(
                 songId = "song-id-2",
-                positionInQueue = 0
+                positionInQueue = 0,
+                originalPositionInQueue = 2,
             ),
             QueueEntity(
                 songId = "song-id-3",
                 positionInQueue = 1,
+                originalPositionInQueue = 3,
             )
         )
         queueDao.upsertQueueEntities( queueEntities )
 
         queueDao.deleteEntryWithId( "song-id-1" )
-        assertEquals( 2, queueDao.fetchQueueEntitiesSortedByPosition().first().size )
+        assertEquals(
+            2,
+            queueDao.fetchEntitiesSortedByCurrentPositionInQueue().first().size
+        )
 
         queueDao.clearQueue()
-        assertTrue( queueDao.fetchQueueEntitiesSortedByPosition().first().isEmpty() )
+        assertTrue( queueDao.fetchEntitiesSortedByCurrentPositionInQueue().first().isEmpty() )
     }
 }

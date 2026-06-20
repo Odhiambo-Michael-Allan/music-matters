@@ -73,7 +73,7 @@ internal fun PortraitLayout(
     onNavigateToQueue: () -> Unit,
     onShowLyrics: ( Boolean ) -> Unit,
     onToggleLoopMode: ( LoopMode ) -> Unit,
-    onToggleShuffleMode: ( Boolean, Song ) -> Unit,
+    onToggleShuffleMode: ( Boolean ) -> Unit,
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -140,9 +140,7 @@ internal fun PortraitLayout(
                 onPausePlayButtonClick = onPausePlayButtonClick,
                 onNextButtonClick = onPlayNext,
                 onToggleLoopMode = onToggleLoopMode,
-                onToggleShuffleMode = { shuffle ->
-                    onToggleShuffleMode( shuffle, currentlyPlayingSong )
-                },
+                onToggleShuffleMode = { shuffle -> onToggleShuffleMode( shuffle ) },
             )
             Spacer( modifier = Modifier.height( 16.dp ) )
             NowPlayingScreenBottomBar(
@@ -287,7 +285,7 @@ private fun PortraitPreview() {
             onShowOptionsMenu = { TODO() },
             onShowLyrics = {},
             onToggleLoopMode = {},
-            onToggleShuffleMode = { _, _ -> },
+            onToggleShuffleMode = {},
         )
     }
 }

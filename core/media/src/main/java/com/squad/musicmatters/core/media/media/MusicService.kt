@@ -17,6 +17,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.util.EventLogger
+import androidx.media3.session.DefaultMediaNotificationProvider
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
@@ -25,18 +26,27 @@ import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.squad.musicMatters.core.i8n.R
+import com.squad.musicmatters.core.common.Dispatcher
+import com.squad.musicmatters.core.common.MusicMattersDispatchers
 import com.squad.musicmatters.core.common.di.ApplicationScope
 import com.squad.musicmatters.core.data.repository.MostPlayedSongsRepository
 import com.squad.musicmatters.core.data.repository.PlayHistoryRepository
-import com.squad.musicmatters.core.media.MusicMattersMediaNotificationProvider
+import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.media.media.library.MEDIA_SEARCH_SUPPORTED
 import com.squad.musicmatters.core.media.media.library.MUSIC_MATTERS_BROWSABLE_ROOT
 import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
 import com.squad.musicmatters.core.data.songs.SongsStore
 import com.squad.musicmatters.core.data.songs.impl.SongsStoreImpl
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.media.connection.DefaultSongToMediaItemConverter
+import com.squad.musicmatters.core.media.media.extensions.getMediaItems
+import com.squad.musicmatters.core.media.media.extensions.toMediaItem
+import com.squad.musicmatters.core.model.LoopMode
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -62,6 +72,14 @@ class MusicService : MediaLibraryService() {
     lateinit var serviceScope: CoroutineScope
 
     @Inject
+    @Dispatcher( MusicMattersDispatchers.Main )
+    lateinit var mainDispatcher: CoroutineDispatcher
+
+    @Inject
+    @Dispatcher( MusicMattersDispatchers.IO )
+    lateinit var ioDispatcher: CoroutineDispatcher
+
+    @Inject
     lateinit var userPreferencesDataSource: PreferencesDataSource
 
     @Inject
@@ -72,6 +90,9 @@ class MusicService : MediaLibraryService() {
 
     @Inject
     lateinit var playHistoryRepository: PlayHistoryRepository
+
+    @Inject
+    lateinit var queueRepository: QueueRepository
 
 
     /**
@@ -114,7 +135,13 @@ class MusicService : MediaLibraryService() {
     }
 
     private val replaceableForwardingPlayer: ReplaceableForwardingPlayer by lazy {
-        ReplaceableForwardingPlayer( exoPlayer )
+        ReplaceableForwardingPlayer(
+            player = exoPlayer,
+            coroutineScope = serviceScope,
+            queueRepository = queueRepository,
+            userPreferences = userPreferencesDataSource,
+            songToMediaItemConverter = DefaultSongToMediaItemConverter()
+        )
     }
 
     private val sessionCommands =
@@ -143,7 +170,7 @@ class MusicService : MediaLibraryService() {
                                         .map { it.pauseOnHeadphonesDisconnect }
                                         .first()
                                 ) {
-                                    exoPlayer.pause()
+                                    replaceableForwardingPlayer.pause()
                                 }
                             }
                         }
@@ -156,7 +183,7 @@ class MusicService : MediaLibraryService() {
                                         .map { it.playOnHeadphonesConnect }
                                         .first()
                                 ) {
-                                    exoPlayer.play()
+                                    replaceableForwardingPlayer.play()
                                 }
                             }
                         }
@@ -169,8 +196,18 @@ class MusicService : MediaLibraryService() {
     @UnstableApi
     override fun onCreate() {
         super.onCreate()
+        serviceScope.launch(
+            mainDispatcher
+        ) {
+            replaceableForwardingPlayer.initialize()
+            observeLoopMode()
+        }
         mediaSession = with (
-            MediaLibrarySession.Builder(this, replaceableForwardingPlayer, getCallback() )
+            MediaLibrarySession.Builder(
+                this,
+                replaceableForwardingPlayer,
+                getCallback()
+            )
         ) {
             setId( packageName )
             packageManager?.getLaunchIntentForPackage( packageName )?.let { sessionIntent ->
@@ -185,9 +222,33 @@ class MusicService : MediaLibraryService() {
             }
             build()
         }
+        val notificationProvider = DefaultMediaNotificationProvider
+            .Builder( applicationContext )
+            .build()
         MediaPermissionsManager.checkForPermissions( applicationContext )
-        setMediaNotificationProvider( MusicMattersMediaNotificationProvider( applicationContext ) )
+        setMediaNotificationProvider( notificationProvider )
         registerHeadsetEvents()
+    }
+
+    private suspend fun initializePlayer() {
+//        replaceableForwardingPlayer.apply {
+//            val songsInQueue = queueRepository.fetchSongsInQueueSortedByPosition().first()
+//            val previouslyPlayingSong = songsInQueue
+//                .find { it.id == userPreferencesDataSource.userData.first().currentlyPlayingSongId }
+//            setMediaItems(
+//                songsInQueue.map { it.toMediaItem() }.toMutableList(),
+//                previouslyPlayingSong?.let { songsInQueue.indexOf( it ) } ?: 0,
+//                C.TIME_UNSET
+//            )
+//            prepare()
+//        }
+
+    }
+
+    private suspend fun observeLoopMode() {
+        userPreferencesDataSource.userData.map { it.loopMode }.collect {
+            replaceableForwardingPlayer.setRepeatMode( it )
+        }
     }
 
     private fun registerHeadsetEvents() {
@@ -210,6 +271,7 @@ class MusicService : MediaLibraryService() {
         releaseMediaSession()
         unregisterReceiver( headsetReceiver )
         ( songsStore as? SongsStoreImpl )?.release()
+        serviceScope.cancel()
     }
 
     private fun releaseMediaSession() {
@@ -236,7 +298,8 @@ class MusicService : MediaLibraryService() {
 
         @UnstableApi
         override fun onGetLibraryRoot(
-            session: MediaLibrarySession, browser: MediaSession.ControllerInfo, params: LibraryParams?
+            session: MediaLibrarySession,
+            browser: MediaSession.ControllerInfo, params: LibraryParams?
         ): ListenableFuture<LibraryResult<MediaItem>> {
             val isKnownCaller = true
             val rootExtras = Bundle().apply {
@@ -251,7 +314,9 @@ class MusicService : MediaLibraryService() {
             }  else {
                 catalogueRootMediaItem
             }
-            return Futures.immediateFuture( LibraryResult.ofItem( rootMediaItem, libraryParams ) )
+            return Futures.immediateFuture(
+                LibraryResult.ofItem( rootMediaItem, libraryParams )
+            )
         }
 
         override fun onGetChildren(
@@ -282,14 +347,18 @@ class MusicService : MediaLibraryService() {
                 serviceScope.launch {
                     userPreferencesDataSource.setCurrentlyPlayingSongId( it.mediaId )
                     mostPlayedSongsRepository.addSongId( it.mediaId )
-                    playHistoryRepository.upsertSongWithId( it.mediaId, Instant.now() )
+                    playHistoryRepository.upsertSongWithId(
+                        it.mediaId,
+                        Instant.now()
+                    )
                 }
             }
         }
 
         override fun onPlayerError( error: PlaybackException ) {
             var message = R.string.core_i8n_generic_error
-            Timber.tag( TAG ).d( "Player error: ${error.errorCodeName} ( ${error.errorCode} )" )
+            Timber.tag( TAG )
+                .d( "Player error: ${error.errorCodeName} ( ${error.errorCode} )" )
             if ( error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS
                 || error.errorCode == PlaybackException.ERROR_CODE_IO_FILE_NOT_FOUND ) {
                 message = R.string.core_i8n_error_media_not_found
@@ -301,6 +370,15 @@ class MusicService : MediaLibraryService() {
             ).show()
         }
     }
+
+}
+
+private fun Player.setRepeatMode( loopMode: LoopMode ) {
+    this.repeatMode = when ( loopMode ) {
+        LoopMode.None -> Player.REPEAT_MODE_OFF
+        LoopMode.Song -> Player.REPEAT_MODE_ONE
+        LoopMode.Queue -> Player.REPEAT_MODE_ALL
+    }
 }
 
 /** Content styling constants */
@@ -311,7 +389,7 @@ private const val CONTENT_STYLE_LIST = 1
 private const val CONTENT_STYLE_GRID = 2
 
 const val CUSTOM_COMMAND_DELETE_SONG = "com.odesa.musicmatters.delete_song"
-private const val TAG = "MUSIC SERVICE TAG"
+private const val TAG = "MUSIC-SERVICE-TAG"
 
 const val MEDIA_STORE_REFRESH_ENDED_INTENT = "MEDIA_STORE_REFRESH_ENDED_INTENT"
 const val MEDIA_STORE_REFRESH_STARTED_INTENT = "MEDIA_STORE_REFRESH_STARTED_INTENT"

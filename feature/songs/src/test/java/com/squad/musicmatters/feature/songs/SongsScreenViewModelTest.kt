@@ -3,9 +3,9 @@ package com.squad.musicmatters.feature.songs
 import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.datastore.DefaultPreferences
-import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayerController
+import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
-import com.squad.musicmatters.core.testing.repository.TestPreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.testing.repository.TestSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -28,8 +28,8 @@ class SongsScreenViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private lateinit var preferencesDataSource: TestPreferencesDataSource
-    private lateinit var musicServiceConnection: TestMusicMattersPlayerController
+    private lateinit var preferencesDataSource: FakePreferencesDataSource
+    private lateinit var musicServiceConnection: TestMusicMattersPlayer
     private lateinit var viewModel: SongsScreenViewModel
     private lateinit var playlistRepository: TestPlaylistRepository
     private lateinit var songsRepository: TestSongsRepository
@@ -37,15 +37,15 @@ class SongsScreenViewModelTest {
 
     @Before
     fun setup() {
-        preferencesDataSource = TestPreferencesDataSource()
-        musicServiceConnection = TestMusicMattersPlayerController()
+        preferencesDataSource = FakePreferencesDataSource()
+        musicServiceConnection = TestMusicMattersPlayer()
         songsAdditionalMetadataRepository = TestSongsAdditionalMetadataRepository()
         songsRepository = TestSongsRepository()
         playlistRepository = TestPlaylistRepository()
         viewModel = SongsScreenViewModel(
             songsRepository = songsRepository,
             preferencesDataSource = preferencesDataSource,
-            musicMattersPlayerController = musicServiceConnection,
+            musicMattersPlayer = musicServiceConnection,
             playlistRepository = playlistRepository,
             songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
         )
