@@ -4,7 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import com.squad.musicmatters.core.common.Dispatcher
 import com.squad.musicmatters.core.common.MusicMattersDispatchers
-import com.squad.musicmatters.core.media.connection.MusicMattersPlayerController
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +27,7 @@ interface PlaybackPositionUpdater {
 
 class PlaybackPositionUpdaterImpl @Inject constructor(
     @Dispatcher( MusicMattersDispatchers.Main ) dispatcher: CoroutineDispatcher,
-    private val player: MusicMattersPlayerController
+    private val player: MusicMattersPlayer
 ) : PlaybackPositionUpdater {
 
     private val handler = Handler( Looper.getMainLooper() )

@@ -24,37 +24,41 @@ import com.squad.musicmatters.core.media.media.MusicService
 
 import com.squad.musicMatters.core.i8n.R as i8nR
 
-private const val MUSIC_MATTERS_PACKAGE_NAME = "com.squad.musicmatters"
-private const val TARGET_ACTIVITY_NAME = "$MUSIC_MATTERS_PACKAGE_NAME.MainActivity"
-private const val ACTION_QUIT = "$MUSIC_MATTERS_PACKAGE_NAME.quit_service"
-
-@UnstableApi
-class MusicMattersMediaNotificationProvider( private val context: Context) : MediaNotification.Provider {
-
-    override fun createNotification(
-        mediaSession: MediaSession,
-        customLayout: ImmutableList<CommandButton>,
-        actionFactory: MediaNotification.ActionFactory,
-        onNotificationChangedCallback: MediaNotification.Provider.Callback
-    ): MediaNotification {
-        val defaultMediaNotificationProvider = DefaultMediaNotificationProvider( context )
-        defaultMediaNotificationProvider.setSmallIcon( R.drawable.notification_icon )
-        return defaultMediaNotificationProvider
-            .createNotification(
-                mediaSession,
-                customLayout,
-                actionFactory,
-                onNotificationChangedCallback
-            )
-    }
-
-    override fun handleCustomCommand(
-        session: MediaSession,
-        action: String,
-        extras: Bundle
-    ): Boolean {
-        return false
-    }
-}
+//private const val MUSIC_MATTERS_PACKAGE_NAME = "com.squad.musicmatters"
+//private const val TARGET_ACTIVITY_NAME = "$MUSIC_MATTERS_PACKAGE_NAME.MainActivity"
+//private const val ACTION_QUIT = "$MUSIC_MATTERS_PACKAGE_NAME.quit_service"
+//
+//@UnstableApi
+//class MusicMattersMediaNotificationProvider( private val context: Context) : MediaNotification.Provider {
+//
+//    override fun createNotification(
+//        mediaSession: MediaSession,
+//        customLayout: ImmutableList<CommandButton>,
+//        actionFactory: MediaNotification.ActionFactory,
+//        onNotificationChangedCallback: MediaNotification.Provider.Callback
+//    ): MediaNotification {
+//        val defaultMediaNotificationProvider = DefaultMediaNotificationProvider( context )
+//        defaultMediaNotificationProvider.setSmallIcon( R.drawable.notification_icon )
+//        return defaultMediaNotificationProvider
+//            .createNotification(
+//                mediaSession,
+//                customLayout,
+//                actionFactory,
+//                onNotificationChangedCallback
+//            )
+//    }
+//
+//    override fun handleCustomCommand(
+//        session: MediaSession,
+//        action: String,
+//        extras: Bundle
+//    ): Boolean {
+//        return false
+//    }
+//
+//    override fun getNotificationChannelInfo(): MediaNotification.Provider.NotificationChannelInfo? {
+//        TODO("Not yet implemented")
+//    }
+//}
 
 

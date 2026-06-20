@@ -10,9 +10,6 @@ import kotlinx.coroutines.flow.Flow
 interface QueueDao {
 
     @Upsert
-    suspend fun upsertQueueEntity( queueEntity: QueueEntity )
-
-    @Upsert
     suspend fun upsertQueueEntities( queueEntities: List<QueueEntity> )
 
     @Query(
@@ -21,7 +18,15 @@ interface QueueDao {
             ORDER BY position_in_queue ASC
         """
     )
-    fun fetchQueueEntitiesSortedByPosition(): Flow<List<QueueEntity>>
+    fun fetchEntitiesSortedByCurrentPositionInQueue(): Flow<List<QueueEntity>>
+
+    @Query(
+        value = """
+            SELECT * FROM queue
+            ORDER BY original_position_in_queue ASC
+        """
+    )
+    fun fetchEntitiesSortedByOriginalPositionInQueue(): Flow<List<QueueEntity>>
 
     @Query(
         value = """

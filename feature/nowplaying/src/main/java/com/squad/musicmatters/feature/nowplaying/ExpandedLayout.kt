@@ -64,7 +64,7 @@ internal fun ExpandedLayout(
     onNavigateToQueue: () -> Unit,
     onShowLyrics: ( Boolean ) -> Unit,
     onToggleLoopMode: ( LoopMode ) -> Unit,
-    onToggleShuffleMode: ( Boolean, Song ) -> Unit,
+    onToggleShuffleMode: ( Boolean ) -> Unit,
 ) {
 
     Card(
@@ -122,9 +122,7 @@ internal fun ExpandedLayout(
                         onPausePlayButtonClick = onPausePlayButtonClick,
                         onNextButtonClick = onPlayNext,
                         onToggleLoopMode = onToggleLoopMode,
-                        onToggleShuffleMode  = { shuffle ->
-                            onToggleShuffleMode( shuffle, currentlyPlayingSong )
-                        },
+                        onToggleShuffleMode  = { shuffle -> onToggleShuffleMode( shuffle ) },
                     )
                     NowPlayingScreenBottomBar(
                         showLyrics = uiState.userData.showLyrics,
@@ -277,7 +275,7 @@ private fun ExpandedLayoutPreview() {
             onArtworkSwipedDown = { TODO() },
             onShowOptionsMenu = { TODO() },
             onShowLyrics = {},
-            onToggleShuffleMode = { _, _ -> },
+            onToggleShuffleMode = {},
             onToggleLoopMode = {},
         )
     }

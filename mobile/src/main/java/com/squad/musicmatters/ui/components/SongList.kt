@@ -25,8 +25,8 @@ package com.squad.musicmatters.ui.components
 //import com.squad.musicmatters.core.model.SongAdditionalMetadataInfo
 //import com.squad.musicmatters.core.model.SortSongsBy
 //import com.squad.musicmatters.core.model.ThemeMode
-//import com.squad.musicmatters.ui.queue.QueueScreenUiState
-//import com.squad.musicmatters.ui.queue.testQueueScreenUiState
+//import com.squad.musicmatters.ui.idsOfSongsInQueue.QueueScreenUiState
+//import com.squad.musicmatters.ui.idsOfSongsInQueue.testQueueScreenUiState
 //
 //@Composable
 //fun SongList(

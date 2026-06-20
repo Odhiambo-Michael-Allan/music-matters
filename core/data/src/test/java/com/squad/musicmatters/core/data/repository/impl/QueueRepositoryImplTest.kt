@@ -3,10 +3,10 @@ package com.squad.musicmatters.core.data.repository.impl
 import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.data.testDoubles.TestQueueDao
 import com.squad.musicmatters.core.database.model.QueueEntity
+import com.squad.musicmatters.core.model.QueueEntry
 import com.squad.musicmatters.core.testing.repository.TestSongsRepository
 import com.squad.musicmatters.core.testing.songs.testSong
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
@@ -25,7 +25,6 @@ class QueueRepositoryImplTest {
         subject = QueueRepositoryImpl(
             queueDao = queueDao,
             songsRepository = songsRepository,
-            ioDispatcher = UnconfinedTestDispatcher()
         )
     }
 
@@ -39,16 +38,16 @@ class QueueRepositoryImplTest {
             testSong( id = "song-id-5" )
         )
         val queueEntities = listOf(
-            QueueEntity( songId = "song-id-1", positionInQueue = 3 ),
-            QueueEntity( songId = "song-id-2", positionInQueue = 0 ),
-            QueueEntity( songId = "song-id-3", positionInQueue = 2 ),
-            QueueEntity( songId = "song-id-4", positionInQueue = 1 ),
+            QueueEntity( songId = "song-id-1", positionInQueue = 3, originalPositionInQueue = 1 ),
+            QueueEntity( songId = "song-id-2", positionInQueue = 0, originalPositionInQueue = 2 ),
+            QueueEntity( songId = "song-id-3", positionInQueue = 2, originalPositionInQueue = 3 ),
+            QueueEntity( songId = "song-id-4", positionInQueue = 1, originalPositionInQueue = 4 ),
         )
         songsRepository.sendSongs( songs )
         queueDao.upsertQueueEntities( queueEntities )
 
         val songsInQueue = subject
-            .fetchSongsInQueueSortedByPosition()
+            .fetchSongsSortedByCurrentPosition()
             .first()
             .map { it.id }
 
@@ -64,39 +63,25 @@ class QueueRepositoryImplTest {
     }
 
     @Test
-    fun testUpsertSong() = runTest {
-        val songs = listOf(
-            testSong( id = "song-id-1" ),
-            testSong( id = "song-id-2" ),
-            testSong( id = "song-id-3" )
-        )
-        songsRepository.sendSongs( songs )
-        songs.forEachIndexed { index, song ->
-            subject.upsertSong(
-                song = song,
-                posInQueue = index
-            )
-        }
-
-        assertEquals(
-            3,
-            subject.fetchSongsInQueueSortedByPosition().first().size
-        )
-    }
-
-    @Test
     fun testSaveQueue() = runTest {
         val songs = listOf(
             testSong( id = "song-id-1" ),
             testSong( id = "song-id-2" ),
             testSong( id = "song-id-3" )
         )
+        val queueEntries = songs.mapIndexed { index, song ->
+            QueueEntry(
+                songId = song.id,
+                currentPositionInQueue = index,
+                originalPositionInQueue = index,
+            )
+        }
         songsRepository.sendSongs( songs )
-        subject.saveQueue( songs )
+        subject.saveQueue( queueEntries )
 
         assertEquals(
             3,
-            subject.fetchSongsInQueueSortedByPosition().first().size
+            subject.fetchSongsSortedByCurrentPosition().first().size
         )
     }
 
@@ -107,14 +92,21 @@ class QueueRepositoryImplTest {
             testSong( id = "song-id-2" ),
             testSong( id = "song-id-3" )
         )
+        val queueEntries = songs.mapIndexed { index, song ->
+            QueueEntry(
+                songId = song.id,
+                currentPositionInQueue = index,
+                originalPositionInQueue = index,
+            )
+        }
         songsRepository.sendSongs( songs )
-        subject.saveQueue( songs )
+        subject.saveQueue( queueEntries )
 
         subject.removeSongWithId( id = "song-id-2" )
 
         assertEquals(
             2,
-            subject.fetchSongsInQueueSortedByPosition().first().size
+            subject.fetchSongsSortedByCurrentPosition().first().size
         )
     }
 
@@ -125,12 +117,19 @@ class QueueRepositoryImplTest {
             testSong( id = "song-id-2" ),
             testSong( id = "song-id-3" )
         )
+        val queueEntries = songs.mapIndexed { index, song ->
+            QueueEntry(
+                songId = song.id,
+                currentPositionInQueue = index,
+                originalPositionInQueue = index,
+            )
+        }
         songsRepository.sendSongs( songs )
-        subject.saveQueue( songs )
+        subject.saveQueue( queueEntries )
 
-        assertEquals( 3, subject.fetchSongsInQueueSortedByPosition().first().size )
+        assertEquals( 3, subject.fetchSongsSortedByCurrentPosition().first().size )
         subject.clearQueue()
-        assertTrue( subject.fetchSongsInQueueSortedByPosition().first().isEmpty() )
+        assertTrue( subject.fetchSongsSortedByCurrentPosition().first().isEmpty() )
     }
 
 }

@@ -3,7 +3,7 @@ package com.squad.musicmatters.core.data.repository.impl
 import com.squad.musicmatters.core.data.repository.CompositeRepository
 import com.squad.musicmatters.core.testing.repository.TestMostPlayedSongsRepository
 import com.squad.musicmatters.core.testing.repository.TestPlayHistoryRepository
-import com.squad.musicmatters.core.testing.repository.TestQueueRepository
+import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
 import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.testing.songs.testSong
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -18,7 +18,7 @@ class CompositeRepositoryImplTest {
     private lateinit var mostPlayedSongsRepository: TestMostPlayedSongsRepository
     private lateinit var playHistoryRepository: TestPlayHistoryRepository
     private lateinit var songsAdditionalMetadataRepository: TestSongsAdditionalMetadataRepository
-    private lateinit var queueRepository: TestQueueRepository
+    private lateinit var queueRepository: FakeQueueRepository
     private lateinit var subject: CompositeRepository
 
     @Before
@@ -26,7 +26,7 @@ class CompositeRepositoryImplTest {
         mostPlayedSongsRepository = TestMostPlayedSongsRepository()
         playHistoryRepository = TestPlayHistoryRepository()
         songsAdditionalMetadataRepository = TestSongsAdditionalMetadataRepository()
-        queueRepository = TestQueueRepository()
+        queueRepository = FakeQueueRepository()
         subject = CompositeRepositoryImpl(
             mostPlayedSongsRepository = mostPlayedSongsRepository,
             playHistoryRepository = playHistoryRepository,
@@ -76,7 +76,7 @@ class CompositeRepositoryImplTest {
         )
         assertEquals(
             4,
-            queueRepository.fetchSongsInQueueSortedByPosition().first().size
+            queueRepository.fetchSongsSortedByCurrentPosition().first().size
         )
     }
 

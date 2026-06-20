@@ -24,54 +24,103 @@ import androidx.media3.common.VideoSize
 import androidx.media3.common.text.CueGroup
 import androidx.media3.common.util.Size
 import androidx.media3.common.util.UnstableApi
+import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.media.extensions.move
 
 @UnstableApi
 class FakePlayer : Player {
 
-    private val listeners: MutableList<Player.Listener> = mutableListOf()
     private val queue: MutableList<MediaItem> = mutableListOf()
     private var currentMediaItemIndex = 0
-    private var currentPositionInPlayback = 0L
     private var currentMediaItem: MediaItem? = null
-    private var playbackParameters = PlaybackParameters( 1f, 1f )
-    private var repeatMode: Int = REPEAT_MODE_OFF
-    private var playbackState = STATE_IDLE
+    private var shuffleEnabled: Boolean = false
 
-    override fun getCurrentMediaItemIndex() = currentMediaItemIndex
-
-    override fun getCurrentMediaItem(): MediaItem? = currentMediaItem
-
-    override fun setPlaybackParameters( playbackParameters: PlaybackParameters ) {
-        this.playbackParameters = playbackParameters
+    // ======================== Start of methods used in tests =============================
+    override fun setShuffleModeEnabled( shuffleModeEnabled: Boolean ) {
+        shuffleEnabled = shuffleModeEnabled
     }
 
-    override fun getPlaybackParameters() = playbackParameters
+    override fun getShuffleModeEnabled(): Boolean = shuffleEnabled
 
-    override fun setPlaybackSpeed( speed: Float ) {
-        this.playbackParameters = PlaybackParameters(
-            speed,
-            this.playbackParameters.pitch
-        )
+    override fun getMediaItemCount(): Int = queue.size
+
+    override fun setMediaItems(
+        mediaItems: MutableList<MediaItem>,
+        startIndex: Int,
+        startPositionMs: Long
+    ) {
+        queue.clear()
+        queue.addAll( mediaItems )
+        currentMediaItemIndex = startIndex
     }
 
-    override fun setRepeatMode( repeatMode: Int ) {
-        this.repeatMode = repeatMode
+    override fun getCurrentMediaItemIndex(): Int = currentMediaItemIndex
+
+    override fun addMediaItem( mediaItem: MediaItem ) {
+        println( "ADDING MEDIA ITEM WITH ID: ${mediaItem.mediaId}" )
+        queue.add( mediaItem )
     }
 
-    override fun getRepeatMode() = this.repeatMode
+    override fun getCurrentMediaItem(): MediaItem? = if ( queue.isNotEmpty() ) {
+        queue[ currentMediaItemIndex ]
+    } else null
+
+    override fun seekToNext() {
+        currentMediaItemIndex = ( currentMediaItemIndex + 1 )
+            .coerceAtMost( queue.size - 1 )
+    }
 
     override fun moveMediaItem( currentIndex: Int, newIndex: Int ) {
         queue.move( currentIndex, newIndex )
-        if ( currentIndex == currentMediaItemIndex ) currentMediaItemIndex = newIndex
-        listeners.forEach {
-//            it.onEvents(
-//                this,
-//                Player.Events(
-//                    FlagSet.Builder().add( EVENT_MEDIA_METADATA_CHANGED ).build()
-//                )
-//            )
+        if ( currentMediaItemIndex == currentIndex ) currentMediaItemIndex = newIndex
+    }
+
+    override fun removeMediaItems( fromIndex: Int, toIndex: Int ) {
+        val mediaItemsToRemove = mutableListOf<MediaItem>()
+        ( fromIndex until toIndex ).forEach { pos ->
+            mediaItemsToRemove.add( queue[ pos ] )
         }
+        queue.removeAll( mediaItemsToRemove )
+    }
+
+    override fun addMediaItems( mediaItems: MutableList<MediaItem> ) {
+        queue.addAll( mediaItems )
+    }
+
+    // ======================== End of methods used in tests   =============================
+
+    override fun addListener( listener: Player.Listener ) {}
+
+    override fun seekBack() {
+        TODO( "Not yet implemented" )
+    }
+
+    override fun removeMediaItem( index: Int ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun seekToPrevious() {
+        TODO("Not yet implemented")
+    }
+
+    override fun setPlaybackParameters( playbackParameters: PlaybackParameters ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getPlaybackParameters(): PlaybackParameters {
+        TODO("Not yet implemented")
+    }
+
+    override fun setPlaybackSpeed( speed: Float ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun setRepeatMode( repeatMode: Int ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getRepeatMode(): Int {
+        TODO("Not yet implemented")
     }
 
     override fun replaceMediaItems(
@@ -79,145 +128,64 @@ class FakePlayer : Player {
         toIndex: Int,
         mediaItems: MutableList<MediaItem>
     ) {
-//        queue.clear()
-//        queue.addAll( mediaItems )
-//        currentMediaItemIndex = mediaItems.indexOfFirst {
-//            it.mediaId == currentMediaItem?.mediaId
-//        }
+        TODO("Not yet implemented")
     }
 
     override fun replaceMediaItem( index: Int, mediaItem: MediaItem ) {
-//        queue.removeAt( index )
-//        queue.add( index, mediaItem )
-        listeners.forEach {
-//            it.onEvents(
-//                this,
-//                Player.Events(
-//                    FlagSet.Builder().add( EVENT_MEDIA_METADATA_CHANGED ).build()
-//                )
-//            )
-        }
+        TODO("Not yet implemented")
     }
 
     override fun clearMediaItems() {
-        currentMediaItem = null
-    }
-
-    override fun setMediaItems(
-        mediaItems: MutableList<MediaItem>,
-        startIndex: Int,
-        startPositionMs: Long
-    ) {
-        setMediaItems( mediaItems )
+        TODO("Not yet implemented")
     }
 
     override fun setMediaItems( mediaItems: MutableList<MediaItem>, resetPosition: Boolean ) {
-        setMediaItems( mediaItems )
+        TODO("Not yet implemented")
     }
 
     override fun seekTo( positionMs: Long ) {
-        currentPositionInPlayback = positionMs
+        TODO("Not yet implemented")
     }
 
-    override fun getCurrentPosition(): Long = currentPositionInPlayback
-
-    /**
-     * Clears the playlist, adds the specified media items and resets the position to the
-     * default position
-     */
+    override fun getCurrentPosition(): Long {
+        TODO("Not yet implemented")
+    }
     override fun setMediaItems( mediaItems: MutableList<MediaItem> ) {
-//        queue.clear()
-//        queue.addAll( mediaItems )
+        TODO("Not yet implemented")
     }
 
-    override fun play() {
-        this.playbackState = STATE_READY
-//        currentMediaItemIndex = 0
-//        currentMediaItem = queue[ currentMediaItemIndex ]
-        listeners.forEach {
-//            it.onEvents(
-//                this,
-//                Player.Events(
-//                    FlagSet.Builder().add( EVENT_PLAY_WHEN_READY_CHANGED ).build()
-//                )
-//            )
-        }
+    override fun play() {}
+
+    override fun getPlaybackState(): Int {
+        TODO("Not yet implemented")
     }
 
-    override fun getPlaybackState() = this.playbackState
-
-    override fun getPlayWhenReady() = getPlaybackState() == STATE_READY
+    override fun getPlayWhenReady(): Boolean {
+        TODO("Not yet implemented")
+    }
 
     override fun getDuration() = 0L
 
     override fun addMediaItem( index: Int, mediaItem: MediaItem ) {
-//        queue.add( index, mediaItem )
-    }
-
-    override fun getMediaItemCount() = 1
-
-    override fun addListener( listener: Player.Listener ) {
-        listeners.add( listener )
+        TODO("Not yet implemented")
     }
 
     override fun removeListener( listener: Player.Listener ) {
-        listeners.remove( listener )
+        TODO("Not yet implemented")
     }
 
     override fun getMediaItemAt( index: Int ) = queue[ index ]
 
-    override fun seekToNext() {
-//        currentMediaItemIndex = ++currentMediaItemIndex
-//        currentMediaItem = queue[ currentMediaItemIndex ]
-        listeners.forEach {
-//            it.onEvents(
-//                this,
-//                Player.Events(
-//                    FlagSet.Builder().add(
-//                        EVENT_MEDIA_ITEM_TRANSITION
-//                    ).build()
-//                )
-//            )
-        }
-    }
 
     override fun isPlaying() = this.playbackState == STATE_READY
 
     override fun pause() {
-        this.playbackState = STATE_IDLE
-        listeners.forEach {
-            it.onEvents(
-                this,
-                Player.Events(
-                    FlagSet.Builder().add(
-                        EVENT_PLAYBACK_STATE_CHANGED
-                    ).build()
-                )
-            )
-        }
-    }
-
-    override fun seekToPrevious() {
-//        println( "FAKE PLAYER -> SEEKING TO PREVIOUS" )
-//        currentMediaItemIndex = if ( currentMediaItemIndex > 0 ) --currentMediaItemIndex else currentMediaItemIndex
-//        currentMediaItem = queue[ currentMediaItemIndex ]
-        listeners.forEach {
-//            it.onEvents(
-//                this,
-//                Player.Events(
-//                    FlagSet.Builder().add(
-//                        EVENT_MEDIA_ITEM_TRANSITION
-//                    ).build()
-//                )
-//            )
-        }
+        TODO("Not yet implemented")
     }
 
     override fun setMediaItem( mediaItem: MediaItem ) {
         currentMediaItem = mediaItem
     }
-
-    // -------------------------------------------------------------------------
 
     override fun getApplicationLooper(): Looper {
         TODO("Not yet implemented")
@@ -231,27 +199,11 @@ class FakePlayer : Player {
         TODO("Not yet implemented")
     }
 
-    override fun addMediaItem( mediaItem: MediaItem ) {
-        TODO("Not yet implemented")
-    }
-
-    override fun addMediaItems(mediaItems: MutableList<MediaItem>) {
-        TODO("Not yet implemented")
-    }
-
     override fun addMediaItems(index: Int, mediaItems: MutableList<MediaItem>) {
         TODO("Not yet implemented")
     }
 
     override fun moveMediaItems(fromIndex: Int, toIndex: Int, newIndex: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun removeMediaItem(index: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun removeMediaItems(fromIndex: Int, toIndex: Int) {
         TODO("Not yet implemented")
     }
 
@@ -281,14 +233,6 @@ class FakePlayer : Player {
         TODO("Not yet implemented")
     }
 
-    override fun setShuffleModeEnabled(shuffleModeEnabled: Boolean) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getShuffleModeEnabled(): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override fun isLoading(): Boolean {
         TODO("Not yet implemented")
     }
@@ -309,10 +253,6 @@ class FakePlayer : Player {
         TODO("Not yet implemented")
     }
 
-    override fun seekBack() {
-        TODO("Not yet implemented")
-    }
-
     override fun getSeekForwardIncrement(): Long {
         TODO("Not yet implemented")
     }
@@ -321,23 +261,7 @@ class FakePlayer : Player {
         TODO("Not yet implemented")
     }
 
-    override fun hasPrevious(): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun hasPreviousWindow(): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override fun hasPreviousMediaItem(): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun previous() {
-        TODO("Not yet implemented")
-    }
-
-    override fun seekToPreviousWindow() {
         TODO("Not yet implemented")
     }
 
@@ -349,23 +273,7 @@ class FakePlayer : Player {
         TODO("Not yet implemented")
     }
 
-    override fun hasNext(): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun hasNextWindow(): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override fun hasNextMediaItem(): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun next() {
-        TODO("Not yet implemented")
-    }
-
-    override fun seekToNextWindow() {
         TODO("Not yet implemented")
     }
 
@@ -510,6 +418,14 @@ class FakePlayer : Player {
     }
 
     override fun getVolume(): Float {
+        TODO("Not yet implemented")
+    }
+
+    override fun mute() {
+        TODO("Not yet implemented")
+    }
+
+    override fun unmute() {
         TODO("Not yet implemented")
     }
 

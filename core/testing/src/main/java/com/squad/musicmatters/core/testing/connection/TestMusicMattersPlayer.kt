@@ -1,12 +1,11 @@
 package com.squad.musicmatters.core.testing.connection
 
-import com.squad.musicmatters.core.media.connection.MusicMattersPlayerController
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.media.connection.SleepTimer
 import com.squad.musicmatters.core.model.Song
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.Timer
 import kotlin.time.Duration
@@ -14,18 +13,23 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
-class TestMusicMattersPlayerController : MusicMattersPlayerController {
+class TestMusicMattersPlayer : MusicMattersPlayer {
 
     private val _playerState = MutableStateFlow( PlayerState() )
     override val playerState = _playerState.asStateFlow()
-    override val queue: StateFlow<List<Song>>
-        get() = TODO("Not yet implemented")
+
+    private val _idsOfSongsInQueue = MutableStateFlow( emptyList<String>() )
+    override val idsOfSongsInQueue = _idsOfSongsInQueue.asStateFlow()
 
     private val _sleepTimer = MutableStateFlow<SleepTimer?>( null )
     override val sleepTimer = _sleepTimer.asStateFlow()
 
     fun sendPlayerState( state: PlayerState ) {
         _playerState.value = state
+    }
+
+    fun sendSongs( songs: List<Song> ) {
+        _idsOfSongsInQueue.value = songs.map { it.id }
     }
 
     override fun getCurrentPlaybackPosition(): PlaybackPosition {
@@ -48,7 +52,7 @@ class TestMusicMattersPlayerController : MusicMattersPlayerController {
         TODO("Not yet implemented")
     }
 
-    override fun playNextSong( ignoreLoopMode: Boolean ): Boolean {
+    override fun playNextSong(): Boolean {
         TODO("Not yet implemented")
     }
 
@@ -76,7 +80,7 @@ class TestMusicMattersPlayerController : MusicMattersPlayerController {
         TODO("Not yet implemented")
     }
 
-    override suspend fun shuffleSongsInQueue() {
+    override suspend fun shuffleSongsInQueue( shuffle: Boolean ) {
         TODO("Not yet implemented")
     }
 
@@ -93,16 +97,12 @@ class TestMusicMattersPlayerController : MusicMattersPlayerController {
     }
 
     override fun clearQueue() {
-        TODO("Not yet implemented")
+        _idsOfSongsInQueue.value = emptyList<String>()
     }
 
-    override fun moveSong(from: Int, to: Int) {
+    override fun moveSong( from: Int, to: Int ) {
         TODO("Not yet implemented")
     }
-
-//    override fun moveSong(from: Int, to: Int) {
-//        TODO("Not yet implemented")
-//    }
 
     override fun setTimer( duration: Duration ) {
         val endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS )

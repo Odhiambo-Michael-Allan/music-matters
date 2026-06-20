@@ -12,15 +12,6 @@ class TestQueueDao : QueueDao {
     private val queueEntitiesFlow =
         MutableStateFlow( emptyList<QueueEntity>() )
 
-    override suspend fun upsertQueueEntity( queueEntity: QueueEntity ) {
-        queueEntitiesFlow.update { oldValues ->
-            // New values come first so they overwrite old values.
-            ( listOf( queueEntity ) + oldValues )
-                .distinctBy( QueueEntity::songId )
-                .sortedBy { it.positionInQueue }
-        }
-    }
-
     override suspend fun upsertQueueEntities( queueEntities: List<QueueEntity> ) {
         queueEntitiesFlow.update { oldValues ->
             ( queueEntities + oldValues )
@@ -29,10 +20,16 @@ class TestQueueDao : QueueDao {
         }
     }
 
-    override fun fetchQueueEntitiesSortedByPosition(): Flow<List<QueueEntity>> =
+    override fun fetchEntitiesSortedByCurrentPositionInQueue(): Flow<List<QueueEntity>> =
         queueEntitiesFlow.map { entities ->
             entities.sortedBy { it.positionInQueue }
         }
+
+    override fun fetchEntitiesSortedByOriginalPositionInQueue(): Flow<List<QueueEntity>> =
+        queueEntitiesFlow.map { entities ->
+            entities.sortedBy { it.originalPositionInQueue }
+        }
+
 
     override suspend fun deleteEntryWithId( songId: String ) {
         queueEntitiesFlow.update { oldValues ->

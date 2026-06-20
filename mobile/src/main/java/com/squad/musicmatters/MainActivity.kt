@@ -83,7 +83,6 @@ class MainActivity : AppCompatActivity() {
     private fun deleteCurrentSong() {
         lifecycleScope.launch {
             currentSongBeingDeleted?.let {
-//                mobileDiModule.musicServiceConnection.deleteSong( it )
                 contentResolver.delete( it.mediaUri.toUri(), null, null )
                 Toast.makeText(
                     applicationContext,

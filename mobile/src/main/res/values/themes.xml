@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.MusicMatters" parent="android:Theme.Material.Light.NoActionBar" />
+<!--    https://akobor.me/posts/the-curious-incident-of-google-cast-in-jetpack-compose-->
+
+    <style name="Theme.MusicMatters" parent="android:Theme.Material.Light.NoActionBar">
+<!--        Styling for google cast. Using an AppCompat based theme is a must, otherwise the -->
+<!--        built-in stuff from the Cast SDK won't work.-->
+        <item name="colorPrimary">#03535E</item>
+        <item name="mediaRouteButtonTint">#ffffff</item>
+    </style>
+
 </resources>

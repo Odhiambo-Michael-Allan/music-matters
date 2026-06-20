@@ -21,7 +21,7 @@ androidxCompose = "1.7.0-alpha07"
 compose-navigation = "2.8.0"
 
 coil = "3.0.1"
-media3Version="1.4.0"
+media3Version="1.10.0"
 
 reorderable = "3.0.0"
 robolectric = "4.11.1"
@@ -62,8 +62,9 @@ materialKolor = "2.0.0"
 scrollbars = "2.2.0"
 
 composeMaterial3 = "1.5.0-alpha13"
-playServicesCastFramework = "22.1.0"
+playServicesCastFramework = "22.3.1"
 nanohttpd = "2.3.1"
+mediaRouter = "1.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -139,8 +140,9 @@ androidx-test-runner = { group = "androidx.test", name = "runner", version.ref =
 kmpalette-core = { module = "com.kmpalette:kmpalette-core", version.ref = "kmpalette" }
 materialkolor = { group = "com.materialkolor", name = "material-kolor", version.ref = "materialKolor" }
 scrollbars = { group = "com.github.nanihadesuka", name = "LazyColumnScrollbar", version.ref = "scrollbars" }
+google-cast-framework = { module = "com.google.android.gms:play-services-cast-framework", version.ref = "playServicesCastFramework" }
+androidx-mediarouter = { module = "androidx.mediarouter:mediarouter", version.ref = "mediaRouter" }
 
-google-play-services-cast-framework = { module = "com.google.android.gms:play-services-cast-framework", version.ref = "playServicesCastFramework" }
 nanohttpd = { group = "org.nanohttpd", name = "nanohttpd", version.ref = "nanohttpd" }
 
 # Dependencies of the included build-logic

@@ -96,8 +96,6 @@ dependencies {
     // For media playback using ExoPlayer
     implementation( libs.androidx.media3.exoplayer )
 
-//    implementation( libs.reorderable )
-
     implementation( libs.androidx.compose.material3.adaptive )
     implementation( libs.androidx.compose.material3.adaptive.navigation.suite )
 
@@ -106,6 +104,10 @@ dependencies {
     ksp( libs.hilt.compiler )
 
     implementation( libs.kotlinx.serialization.json )
+
+    // Cast
+    implementation( libs.google.cast.framework )
+    implementation( libs.androidx.mediarouter )
 
     testImplementation( libs.junit )
     testImplementation( libs.androidx.junit )

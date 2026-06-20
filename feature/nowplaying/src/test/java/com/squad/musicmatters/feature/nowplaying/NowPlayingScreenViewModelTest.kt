@@ -6,10 +6,10 @@ import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
-import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayerController
+import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
-import com.squad.musicmatters.core.testing.repository.TestPreferencesDataSource
-import com.squad.musicmatters.core.testing.repository.TestQueueRepository
+import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
 import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.testing.repository.TestSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -33,23 +33,23 @@ class NowPlayingScreenViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var viewModel: NowPlayingScreenViewModel
-    private lateinit var player: TestMusicMattersPlayerController
+    private lateinit var player: TestMusicMattersPlayer
     private lateinit var playlistRepository: TestPlaylistRepository
     private lateinit var playbackPositionUpdater: TestPlaybackPositionUpdater
     private lateinit var metadataRepository: TestSongsAdditionalMetadataRepository
-    private lateinit var queueRepository: TestQueueRepository
+    private lateinit var queueRepository: FakeQueueRepository
     private lateinit var songsRepository: TestSongsRepository
-    private lateinit var preferencesDataSource: TestPreferencesDataSource
+    private lateinit var preferencesDataSource: FakePreferencesDataSource
 
     @Before
     fun setUp() {
-        player = TestMusicMattersPlayerController()
+        player = TestMusicMattersPlayer()
         playlistRepository = TestPlaylistRepository()
         playbackPositionUpdater = TestPlaybackPositionUpdater()
         metadataRepository = TestSongsAdditionalMetadataRepository()
         songsRepository = TestSongsRepository()
-        queueRepository = TestQueueRepository()
-        preferencesDataSource = TestPreferencesDataSource()
+        queueRepository = FakeQueueRepository()
+        preferencesDataSource = FakePreferencesDataSource()
         viewModel = NowPlayingScreenViewModel(
             player = player,
             preferencesDataSource = preferencesDataSource,

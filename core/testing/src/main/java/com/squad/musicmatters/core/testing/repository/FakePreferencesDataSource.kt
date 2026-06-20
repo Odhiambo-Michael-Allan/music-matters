@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 
-class TestPreferencesDataSource : PreferencesDataSource {
+class FakePreferencesDataSource : PreferencesDataSource {
 
     private val _userData = MutableSharedFlow<UserData>(
         replay = 1,

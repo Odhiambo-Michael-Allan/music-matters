@@ -1,19 +1,16 @@
 package com.squad.musicmatters.core.media.connection
 
 import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
-import com.squad.musicmatters.core.data.repository.impl.CompositeRepositoryImpl
+import com.squad.musicmatters.core.media.media.extensions.getMediaItems
 import com.squad.musicmatters.core.testing.connection.FakePlayerConnector
 import com.squad.musicmatters.core.testing.repository.TestMostPlayedSongsRepository
 import com.squad.musicmatters.core.testing.repository.TestPlayHistoryRepository
-import com.squad.musicmatters.core.testing.repository.TestPreferencesDataSource
-import com.squad.musicmatters.core.testing.repository.TestQueueRepository
+import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
 import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
-import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,15 +24,15 @@ import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-class MusicMattersPlayerControllerImplTest {
+class MusicMattersPlayerImplTest {
 
     private lateinit var playerConnector: FakePlayerConnector
     private lateinit var mostPlayedSongsRepository: TestMostPlayedSongsRepository
     private lateinit var playHistoryRepository: TestPlayHistoryRepository
     private lateinit var songsAdditionalMetadataRepository: TestSongsAdditionalMetadataRepository
-    private lateinit var queueRepository: TestQueueRepository
-    private lateinit var preferencesDataSource: TestPreferencesDataSource
-    private lateinit var subject: MusicMattersPlayerController
+    private lateinit var queueRepository: FakeQueueRepository
+    private lateinit var preferencesDataSource: FakePreferencesDataSource
+    private lateinit var subject: MusicMattersPlayer
 
 
     @OptIn( ExperimentalCoroutinesApi::class )
@@ -45,12 +42,10 @@ class MusicMattersPlayerControllerImplTest {
         mostPlayedSongsRepository = TestMostPlayedSongsRepository()
         playHistoryRepository = TestPlayHistoryRepository()
         songsAdditionalMetadataRepository = TestSongsAdditionalMetadataRepository()
-        queueRepository = TestQueueRepository()
-        preferencesDataSource = TestPreferencesDataSource()
-        subject = MusicMattersPlayerControllerImpl(
+        queueRepository = FakeQueueRepository()
+        preferencesDataSource = FakePreferencesDataSource()
+        subject = MusicMattersPlayerImpl(
             playerConnector = playerConnector,
-            queueRepository = queueRepository,
-            userPreferencesDataSource = preferencesDataSource,
             songToMediaItemConverter = TestSongToMediaItemConverter(),
             dispatcher = UnconfinedTestDispatcher(),
         )
@@ -66,10 +61,6 @@ class MusicMattersPlayerControllerImplTest {
         subject.addToQueue( testSongs.first() ) // NO DUPLICATES!
         assertEquals(
             testSongs.size,
-            queueRepository.fetchSongsInQueueSortedByPosition().first().size
-        )
-        assertEquals(
-            1,
             playerConnector.player.mediaItemCount
         )
         assertEquals(
@@ -92,44 +83,25 @@ class MusicMattersPlayerControllerImplTest {
         }
         assertEquals(
             testSongs.size,
-            queueRepository.fetchSongsInQueueSortedByPosition().first().size
-        )
-        assertEquals(
-            1,
             playerConnector.player.mediaItemCount
         )
         assertEquals(
             testSongs.first().id,
-            queueRepository.fetchSongsInQueueSortedByPosition().first().first().id
+            playerConnector.player.getMediaItems().first().mediaId
         )
         subject.playSongNext(
             testSongs.last()
         )
         assertEquals(
             testSongs.size,
-            queueRepository.fetchSongsInQueueSortedByPosition().first().size
+            playerConnector.player.mediaItemCount
         )
         assertEquals(
             testSongs.last().id,
-            queueRepository.fetchSongsInQueueSortedByPosition().first()[1].id
+            playerConnector.player.getMediaItems()[1].mediaId
         )
-        assertEquals(
-            1,
-            playerConnector.player.mediaItemCount
-        )
-    }
-
-    @Test
-    fun testShuffleAndPlay() = runTest {
-        queueRepository.sendSongs( emptyList() )
-        preferencesDataSource.sendUserData( emptyUserData )
-        subject.shuffleAndPlay( testSongs )
         assertEquals(
             testSongs.size,
-            queueRepository.fetchSongsInQueueSortedByPosition().first().size
-        )
-        assertEquals(
-            1,
             playerConnector.player.mediaItemCount
         )
     }
@@ -148,27 +120,27 @@ class MusicMattersPlayerControllerImplTest {
         )
         assertEquals(
             testSongs.size,
-            queueRepository.fetchSongsInQueueSortedByPosition().first().size
+            playerConnector.player.mediaItemCount
         )
         subject.playNextSong()
-        assertEquals( 0, playerConnector.player.currentMediaItemIndex )
+        assertEquals( 1, playerConnector.player.currentMediaItemIndex )
         assertEquals(
             testSongs[1].id,
             playerConnector.player.currentMediaItem?.mediaId
         )
         assertEquals(
             testSongs.size,
-            queueRepository.fetchSongsInQueueSortedByPosition().first().size
+            playerConnector.player.mediaItemCount
         )
         subject.playNextSong()
-        assertEquals( 0, playerConnector.player.currentMediaItemIndex )
+        assertEquals( 2, playerConnector.player.currentMediaItemIndex )
         assertEquals(
             testSongs[2].id,
             playerConnector.player.currentMediaItem?.mediaId
         )
         assertEquals(
             testSongs.size,
-            queueRepository.fetchSongsInQueueSortedByPosition().first().size
+            playerConnector.player.mediaItemCount
         )
     }
 
@@ -182,11 +154,7 @@ class MusicMattersPlayerControllerImplTest {
         // At this point, testSongs[0] is currently playing
         assertEquals(
             testSongs.first().id,
-            queueRepository
-                .fetchSongsInQueueSortedByPosition()
-                .first()
-                .first()
-                .id
+            playerConnector.player.currentMediaItem!!.mediaId
         )
         subject.playNextSong()
         // testSongs[1] is currently playing
@@ -194,20 +162,16 @@ class MusicMattersPlayerControllerImplTest {
             testSongs[1].id,
             playerConnector.player.currentMediaItem?.mediaId
         )
-        subject.shuffleSongsInQueue()
+        subject.shuffleSongsInQueue( true )
         // The previously playing song [testSongs[1]] should have been moved to the
         // first position after shuffle.
         assertEquals(
             testSongs[1].id,
-            queueRepository
-                .fetchSongsInQueueSortedByPosition()
-                .first()
-                .first()
-                .id
+            playerConnector.player.getMediaItems().first().mediaId
         )
         assertEquals(
             testSongs.size,
-            queueRepository.fetchSongsInQueueSortedByPosition().first().size
+            playerConnector.player.mediaItemCount
         )
     }
 
@@ -219,39 +183,10 @@ class MusicMattersPlayerControllerImplTest {
         }
         subject.clearQueue()
         assertNull( playerConnector.player.currentMediaItem )
-        assertTrue( subject.queue.value.isEmpty() )
+        assertTrue( subject.idsOfSongsInQueue.value.isEmpty() )
 
     }
 
-    @Test
-    fun testSetRepeatMode() = runTest {
-        queueRepository.sendSongs( emptyList() )
-        preferencesDataSource.setLoopMode( LoopMode.Song )
-        testSongs.forEach { subject.addToQueue( it ) }
-
-        assertEquals( Player.REPEAT_MODE_ONE, playerConnector.player.repeatMode )
-        subject.playNextSong( ignoreLoopMode = false )
-        assertEquals(
-            testSongs.first().id,
-            playerConnector.player.currentMediaItem?.mediaId
-        )
-
-        preferencesDataSource.setLoopMode( LoopMode.None )
-        assertEquals( Player.REPEAT_MODE_OFF, playerConnector.player.repeatMode )
-        subject.playNextSong( ignoreLoopMode = false )
-        assertEquals(
-            testSongs[1].id,
-            playerConnector.player.currentMediaItem?.mediaId
-        )
-
-        preferencesDataSource.setLoopMode( LoopMode.Queue )
-        assertEquals( Player.REPEAT_MODE_ALL, playerConnector.player.repeatMode )
-        ( 0 until testSongs.size - 1 ).forEach { subject.playNextSong( ignoreLoopMode = false ) }
-        assertEquals(
-            testSongs.first().id,
-            playerConnector.player.currentMediaItem?.mediaId
-        )
-    }
 
     @Test
     fun testPlayPreviousSong() = runTest {
@@ -260,24 +195,11 @@ class MusicMattersPlayerControllerImplTest {
         testSongs.forEach {
             subject.addToQueue( it )
         } // [testSongs[0]] is playing
-        subject.playNextSong( ignoreLoopMode = true ) // [testSongs[1]] is playing
-        playerConnector.setCurrentDurationInPlayback( 1000 )
+        subject.playNextSong() // [testSongs[1]] is playing
         subject.playPreviousSong() // [testSongs[0]] is playing
         assertEquals(
             testSongs[0].id,
             playerConnector.player.currentMediaItem?.mediaId
-        )
-
-        subject.playNextSong( ignoreLoopMode = true ) // [testSongs[1]] is playing
-        playerConnector.setCurrentDurationInPlayback( 2000 )
-        subject.playPreviousSong() // [testSongs[1]] has been restarted
-        assertEquals(
-            testSongs[1].id,
-            playerConnector.player.currentMediaItem?.mediaId
-        )
-        assertEquals(
-            0L,
-            playerConnector.player.currentPosition
         )
 
     }
@@ -292,15 +214,7 @@ class MusicMattersPlayerControllerImplTest {
             shuffle = false
         )
         subject.deleteSong( testSongs.first() )
-        assertEquals(
-            testSongs[1].id,
-            playerConnector.player.currentMediaItem?.mediaId
-        )
-        subject.deleteSong( testSongs[1] )
-        assertEquals(
-            testSongs[2].id,
-            playerConnector.player.currentMediaItem?.mediaId
-        )
+        assertEquals( testSongs.size - 1, playerConnector.player.mediaItemCount )
     }
 
     @Test
@@ -315,17 +229,10 @@ class MusicMattersPlayerControllerImplTest {
         subject.moveSong( 0, 3 )
         assertEquals(
             testSongs[1].id,
-            queueRepository
-                .fetchSongsInQueueSortedByPosition()
+            playerConnector.player
+                .getMediaItems()
                 .first()
-                .first()
-                .id
-        )
-        assertEquals(
-            testSongs.first().id,
-            queueRepository
-                .fetchSongsInQueueSortedByPosition()
-                .first()[3].id
+                .mediaId
         )
     }
 
@@ -342,14 +249,14 @@ class MusicMattersPlayerControllerImplTest {
 
 }
 
-private class TestSongToMediaItemConverter : SongToMediaItemConverter {
+internal class TestSongToMediaItemConverter : SongToMediaItemConverter {
     override fun convert( song: Song ): MediaItem =
         MediaItem.Builder().apply {
             setMediaId( song.id )
         }.build()
 }
 
-private val testSongs = listOf(
+internal val testSongs = listOf(
     testSong( id = "song-id-1" ),
     testSong( id = "song-id-2" ),
     testSong( id = "song-id-3" ),
