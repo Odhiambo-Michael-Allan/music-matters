@@ -3,7 +3,9 @@ package com.squad.musicmatters.feature.queue
 import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
-import com.squad.musicmatters.core.testing.repository.TestSongsRepository
+import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
 import junit.framework.TestCase.assertEquals
@@ -22,16 +24,22 @@ class QueueScreenViewModelTest {
 
     private lateinit var preferencesDataSource: FakePreferencesDataSource
     private lateinit var player: TestMusicMattersPlayer
-    private lateinit var songsRepository: TestSongsRepository
+    private lateinit var songsRepository: FakeSongsRepository
+    private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var songsAdditionalMetadataRepository: FakeSongsAdditionalMetadataRepository
     private lateinit var viewModel: QueueScreenViewModel
 
     @Before
     fun setup() {
         preferencesDataSource = FakePreferencesDataSource()
         player = TestMusicMattersPlayer()
-        songsRepository = TestSongsRepository()
+        songsRepository = FakeSongsRepository()
+        playlistRepository = FakePlaylistRepository()
+        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         viewModel = QueueScreenViewModel(
             songsRepository = songsRepository,
+            playlistRepository = playlistRepository,
+            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
             preferencesDataSource = preferencesDataSource,
             player = player,
         )
@@ -62,6 +70,8 @@ class QueueScreenViewModelTest {
         )
         player.sendSongs( songs )
         songsRepository.sendSongs( songs )
+        playlistRepository.sendPlaylists( emptyList() )
+        songsAdditionalMetadataRepository.sendMetadata( emptyList() )
         preferencesDataSource.sendUserData(
             emptyUserData.copy( currentlyPlayingSongId = "song-id-3" )
         )
@@ -71,6 +81,9 @@ class QueueScreenViewModelTest {
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
                 shuffle = false,
+                favoriteSongIds = emptySet(),
+                playlists = emptyList(),
+                songsAdditionalMetadata = emptyList()
             ),
             viewModel.uiState.value
         )
@@ -88,6 +101,8 @@ class QueueScreenViewModelTest {
         )
         player.sendSongs( songs )
         songsRepository.sendSongs( songs )
+        playlistRepository.sendPlaylists( emptyList() )
+        songsAdditionalMetadataRepository.sendMetadata( emptyList() )
         preferencesDataSource.sendUserData(
             emptyUserData.copy( currentlyPlayingSongId = "song-id-3" )
         )
@@ -97,6 +112,9 @@ class QueueScreenViewModelTest {
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
                 shuffle = false,
+                favoriteSongIds = emptySet(),
+                playlists = emptyList(),
+                songsAdditionalMetadata = emptyList()
             ),
             viewModel.uiState.value
         )
@@ -108,6 +126,9 @@ class QueueScreenViewModelTest {
                 songsInQueue = emptyList(),
                 currentlyPlayingSongId = "song-id-3",
                 shuffle = false,
+                favoriteSongIds = emptySet(),
+                playlists = emptyList(),
+                songsAdditionalMetadata = emptyList()
             ),
             viewModel.uiState.value
         )
@@ -125,6 +146,8 @@ class QueueScreenViewModelTest {
         )
         player.sendSongs( songs )
         songsRepository.sendSongs( songs )
+        playlistRepository.sendPlaylists( emptyList() )
+        songsAdditionalMetadataRepository.sendMetadata( emptyList() )
         preferencesDataSource.sendUserData(
             emptyUserData.copy( currentlyPlayingSongId = "song-id-3" )
         )
@@ -134,6 +157,9 @@ class QueueScreenViewModelTest {
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-3",
                 shuffle = false,
+                favoriteSongIds = emptySet(),
+                playlists = emptyList(),
+                songsAdditionalMetadata = emptyList()
             ),
             viewModel.uiState.value
         )
@@ -149,6 +175,9 @@ class QueueScreenViewModelTest {
                 songsInQueue = songs,
                 currentlyPlayingSongId = "song-id-4",
                 shuffle = false,
+                favoriteSongIds = emptySet(),
+                playlists = emptyList(),
+                songsAdditionalMetadata = emptyList()
             ),
             viewModel.uiState.value
         )

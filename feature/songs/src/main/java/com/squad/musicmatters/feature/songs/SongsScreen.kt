@@ -24,7 +24,7 @@ internal fun SongsScreen(
     viewModel: SongsScreenViewModel = hiltViewModel(),
     onViewAlbum: (String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
-    onShareSong: ( Uri, String ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
 ) {
@@ -34,24 +34,22 @@ internal fun SongsScreen(
         uiState = uiState,
         onSortReverseChange = viewModel::setSortSongsInReverse,
         onSortTypeChange = viewModel::setSortSongsBy,
-        onShufflePlay = {
-//            viewModel.shuffleAndPlay( songs = uiState.songs )
-        },
+        onShufflePlay = viewModel::shuffleAndPlay,
         playSong = viewModel::playSongs,
         onFavorite = viewModel::addToFavorites,
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
         onPlayNext = viewModel::playSongNext,
+        onSongIsPresentInQueue = viewModel::songIsPresentInQueue,
         onAddToQueue = viewModel::addSongToQueue,
+        onRemoveFromQueue = viewModel::removeSongFromQueue,
         onAddSongsToPlaylist = { playlist, songs ->
             viewModel.addSongsToPlaylist( playlist, songs )
         },
         onCreatePlaylist = { title, songs ->
             viewModel.createPlaylist( title, songs )
         },
-        onShareSong = {
-//            onShareSong( it, uiState.language.shareFailedX( "" ) )
-        },
+        onShareSong = onShareSong,
         onDeleteSong = onDeleteSong,
         onShowSnackBar = onShowSnackBar,
     )
@@ -62,14 +60,16 @@ private fun SongsScreenContent(
     uiState: SongsScreenUiState,
     onSortReverseChange: ( Boolean ) -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
-    onShufflePlay: () -> Unit,
+    onShufflePlay: ( List<Song> ) -> Unit,
     playSong: ( Song, List<Song> ) -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
+    onSongIsPresentInQueue: ( Song ) -> Boolean,
     onAddToQueue: ( Song ) -> Unit,
+    onRemoveFromQueue: ( Song ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
@@ -86,7 +86,7 @@ private fun SongsScreenContent(
                 onSortTypeChange = onSortTypeChange,
                 songs = uiState.songs,
                 playlists = uiState.playlists,
-                onShufflePlay = onShufflePlay,
+                onShufflePlay = { onShufflePlay( uiState.songs ) },
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
                 playSong = playSong,
                 songsAdditionalMetadata = uiState.songsAdditionalMetadata,
@@ -101,6 +101,8 @@ private fun SongsScreenContent(
                 onCreatePlaylist = onCreatePlaylist,
                 onDeleteSong = onDeleteSong,
                 onShowSnackBar = onShowSnackBar,
+                onSongIsPresentInQueue = onSongIsPresentInQueue,
+                onRemoveFromQueue = onRemoveFromQueue,
             )
         }
     }
@@ -113,7 +115,6 @@ private fun SongsScreenContentPreview() {
     MusicMattersTheme(
         themeMode = DefaultPreferences.THEME_MODE,
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
-//        fontName = SupportedFonts.ProductSans.name,
         fontScale = 1.0f,
         useMaterialYou = true
     ) {
@@ -142,6 +143,8 @@ private fun SongsScreenContentPreview() {
             onCreatePlaylist = { _, _ -> },
             onDeleteSong = {},
             onShowSnackBar = {},
+            onSongIsPresentInQueue = { true },
+            onRemoveFromQueue = {}
         )
     }
 }

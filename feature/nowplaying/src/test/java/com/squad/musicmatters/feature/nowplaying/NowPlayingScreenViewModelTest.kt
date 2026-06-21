@@ -7,11 +7,11 @@ import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
-import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
+import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
-import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadataRepository
-import com.squad.musicmatters.core.testing.repository.TestSongsRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,20 +34,20 @@ class NowPlayingScreenViewModelTest {
 
     private lateinit var viewModel: NowPlayingScreenViewModel
     private lateinit var player: TestMusicMattersPlayer
-    private lateinit var playlistRepository: TestPlaylistRepository
+    private lateinit var playlistRepository: FakePlaylistRepository
     private lateinit var playbackPositionUpdater: TestPlaybackPositionUpdater
-    private lateinit var metadataRepository: TestSongsAdditionalMetadataRepository
+    private lateinit var metadataRepository: FakeSongsAdditionalMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
-    private lateinit var songsRepository: TestSongsRepository
+    private lateinit var songsRepository: FakeSongsRepository
     private lateinit var preferencesDataSource: FakePreferencesDataSource
 
     @Before
     fun setUp() {
         player = TestMusicMattersPlayer()
-        playlistRepository = TestPlaylistRepository()
+        playlistRepository = FakePlaylistRepository()
         playbackPositionUpdater = TestPlaybackPositionUpdater()
-        metadataRepository = TestSongsAdditionalMetadataRepository()
-        songsRepository = TestSongsRepository()
+        metadataRepository = FakeSongsAdditionalMetadataRepository()
+        songsRepository = FakeSongsRepository()
         queueRepository = FakeQueueRepository()
         preferencesDataSource = FakePreferencesDataSource()
         viewModel = NowPlayingScreenViewModel(

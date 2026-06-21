@@ -12,7 +12,6 @@ interface MusicMattersPlayer {
     val sleepTimer: StateFlow<SleepTimer?>
 
     fun getCurrentPlaybackPosition(): PlaybackPosition
-    suspend fun deleteSong( song: Song )
     fun playPause()
     fun play()
     fun playPreviousSong(): Boolean
@@ -25,7 +24,6 @@ interface MusicMattersPlayer {
     fun playSong(
         song: Song,
         songs: List<Song>,
-        shuffle: Boolean,
     )
     fun shuffleAndPlay( songs: List<Song> )
     suspend fun shuffleSongsInQueue( shuffle: Boolean )
@@ -33,6 +31,8 @@ interface MusicMattersPlayer {
     fun addToQueue( songToAdd: Song )
     fun clearQueue()
     fun moveSong( from: Int, to: Int )
+    fun contains( song: Song ): Boolean
+    fun remove( song: Song )
 
 }
 

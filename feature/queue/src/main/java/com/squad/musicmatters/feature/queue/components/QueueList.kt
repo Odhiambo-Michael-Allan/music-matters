@@ -56,20 +56,23 @@ import sh.calvin.reorderable.ReorderableItem
 internal fun QueueList(
     songsInQueue: List<Song>,
     currentlyPlayingSongId: String,
-//    songsAdditionalMetadata: List<SongAdditionalMetadata>,
-//    playlists: List<Playlist>,
-//    onFavorite: ( Song, Boolean ) -> Unit,
+    songsAdditionalMetadata: List<SongAdditionalMetadata>,
+    playlists: List<Playlist>,
+    onFavorite: ( Song, Boolean ) -> Unit,
     playSong: ( Song, List<Song> ) -> Unit,
-//    onPlayNext: ( Song ) -> Unit,
-//    onAddToQueue: ( Song ) -> Unit,
-//    onViewArtist: ( String ) -> Unit,
-//    onViewAlbum: ( String ) -> Unit,
-//    onShareSong: ( Uri ) -> Unit,
-//    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
-//    onCreatePlaylist: ( String, List<Song> ) -> Unit,
-//    onDeleteSong: ( Song ) -> Unit,
+    onPlayNext: ( Song ) -> Unit,
+    onAddToQueue: ( Song ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
+    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onCreatePlaylist: ( String, List<Song> ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
     onMoveSong: ( Int, Int ) -> Unit,
-//    onShowSnackBar: ( String ) -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
+    isFavorite: ( Song ) -> Boolean,
+    onSongIsPresentInQueue: ( Song ) -> Boolean,
+    onRemoveFromQueue: ( Song ) -> Unit,
 ) {
 
     val lazyListState = rememberLazyListState(
@@ -118,8 +121,23 @@ internal fun QueueList(
                         QueueSongCard(
                             song = song,
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
+                            songsAdditionalMetadata = songsAdditionalMetadata,
+                            playlists = playlists,
                             onClick = { playSong( song, songsInQueue ) },
                             onDragHandleClick = {},
+                            onFavorite = onFavorite,
+                            onPlayNext = onPlayNext,
+                            onAddToQueue = onAddToQueue,
+                            onAddSongsToPlaylist = onAddSongsToPlaylist,
+                            onViewAlbum = onViewAlbum,
+                            onViewArtist = onViewArtist,
+                            onShareSong = onShareSong,
+                            onCreatePlaylist = onCreatePlaylist,
+                            onShowSnackBar = onShowSnackBar,
+                            onDeleteSong = onDeleteSong,
+                            isFavorite = isFavorite,
+                            onSongIsPresentInQueue = onSongIsPresentInQueue,
+                            onRemoveFromQueue = onRemoveFromQueue,
                         )
                     }
                 }
@@ -133,8 +151,23 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
     modifier: Modifier = Modifier,
     song: Song,
     isCurrentlyPlaying: Boolean,
+    songsAdditionalMetadata: List<SongAdditionalMetadata>,
+    playlists: List<Playlist>,
     onClick: () -> Unit,
     onDragHandleClick: () -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
+    onCreatePlaylist: ( String, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onAddToQueue: ( Song ) -> Unit,
+    onPlayNext: ( Song ) -> Unit,
+    onFavorite: ( Song, Boolean ) -> Unit,
+    isFavorite: ( Song ) -> Boolean,
+    onSongIsPresentInQueue: ( Song ) -> Boolean,
+    onRemoveFromQueue: ( Song ) -> Unit,
 ) {
     Card(
         colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
@@ -145,7 +178,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding( 12.dp, 4.dp, 4.dp, 4.dp )
+                .padding(12.dp, 4.dp, 4.dp, 4.dp)
         ) {
             IconButton(
                 modifier = modifier.draggableHandle(),
@@ -159,21 +192,22 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
             SongCard(
                 song = song,
                 isCurrentlyPlaying = isCurrentlyPlaying,
-                isFavorite = false,
-                songAdditionalMetadata = null,
-                playlists = emptyList(),
+                isFavorite = isFavorite( song ),
+                playlists = playlists,
+                songAdditionalMetadata = songsAdditionalMetadata.find { metadata -> metadata.songId == song.id },
                 onClick = onClick,
-                onFavorite = { _, _ -> },
-                onPlayNext = {},
-                onCreatePlaylist = { _, _ -> },
-                onDeleteSong = {},
-                onShareSong = {},
-                onAddToQueue = {},
-                onViewAlbum = {},
-                onViewArtist = {},
-                onAddSongsToPlaylist = {_, _ -> },
-                onShowSnackBar = {},
-                modifier = Modifier.weight( 0.9f ),
+                onFavorite = onFavorite,
+                onPlayNext = onPlayNext,
+                onAddToQueue = onAddToQueue,
+                onViewArtist = onViewArtist,
+                onViewAlbum = onViewAlbum,
+                onShareSong = onShareSong,
+                onAddSongsToPlaylist = onAddSongsToPlaylist,
+                onCreatePlaylist = onCreatePlaylist,
+                onDeleteSong = onDeleteSong,
+                onShowSnackBar = onShowSnackBar,
+                onSongIsPresentInQueue = onSongIsPresentInQueue,
+                onRemoveFromQueue = onRemoveFromQueue,
             )
         }
     }
@@ -186,7 +220,6 @@ private fun QueueListPreview(
     previewData: PreviewData
 ) {
     MusicMattersTheme(
-//        fontName = SupportedFonts.GoogleSans.name,
         useMaterialYou = true,
         fontScale = DefaultPreferences.FONT_SCALE,
         themeMode = DefaultPreferences.THEME_MODE,
@@ -197,6 +230,21 @@ private fun QueueListPreview(
             currentlyPlayingSongId = previewData.songs.first().id,
             playSong = { _, _ -> },
             onMoveSong = { _, _ -> },
+            songsAdditionalMetadata = emptyList(),
+            playlists = emptyList(),
+            onFavorite = { _, _ -> },
+            onPlayNext = {},
+            onAddToQueue = {},
+            onViewArtist = {},
+            onViewAlbum = {},
+            onShareSong = {},
+            onAddSongsToPlaylist = { _, _ -> },
+            onCreatePlaylist = { _, _ -> },
+            onDeleteSong = {},
+            onShowSnackBar = {},
+            isFavorite = { false },
+            onSongIsPresentInQueue = { true },
+            onRemoveFromQueue = {}
         )
     }
 }

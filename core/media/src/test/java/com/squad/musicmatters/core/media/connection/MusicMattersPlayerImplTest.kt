@@ -7,7 +7,7 @@ import com.squad.musicmatters.core.testing.repository.TestMostPlayedSongsReposit
 import com.squad.musicmatters.core.testing.repository.TestPlayHistoryRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
-import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
 import com.squad.musicmatters.core.model.Song
@@ -29,7 +29,7 @@ class MusicMattersPlayerImplTest {
     private lateinit var playerConnector: FakePlayerConnector
     private lateinit var mostPlayedSongsRepository: TestMostPlayedSongsRepository
     private lateinit var playHistoryRepository: TestPlayHistoryRepository
-    private lateinit var songsAdditionalMetadataRepository: TestSongsAdditionalMetadataRepository
+    private lateinit var songsAdditionalMetadataRepository: FakeSongsAdditionalMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
     private lateinit var preferencesDataSource: FakePreferencesDataSource
     private lateinit var subject: MusicMattersPlayer
@@ -41,7 +41,7 @@ class MusicMattersPlayerImplTest {
         playerConnector = FakePlayerConnector()
         mostPlayedSongsRepository = TestMostPlayedSongsRepository()
         playHistoryRepository = TestPlayHistoryRepository()
-        songsAdditionalMetadataRepository = TestSongsAdditionalMetadataRepository()
+        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         queueRepository = FakeQueueRepository()
         preferencesDataSource = FakePreferencesDataSource()
         subject = MusicMattersPlayerImpl(
@@ -205,15 +205,14 @@ class MusicMattersPlayerImplTest {
     }
 
     @Test
-    fun testWhenNowPlayingSongIsDeleted_theNextSongInQueueIsPlayed() = runTest {
+    fun testWhenNowPlayingSongIsRemoved_theNextSongInQueueIsPlayed() = runTest {
         queueRepository.sendSongs( testSongs )
         preferencesDataSource.sendUserData( emptyUserData )
         subject.playSong(
             song = testSongs.first(),
             songs = testSongs,
-            shuffle = false
         )
-        subject.deleteSong( testSongs.first() )
+        subject.remove( testSongs.first() )
         assertEquals( testSongs.size - 1, playerConnector.player.mediaItemCount )
     }
 
@@ -224,7 +223,6 @@ class MusicMattersPlayerImplTest {
         subject.playSong(
             song = testSongs.first(),
             songs = testSongs,
-            shuffle = false
         )
         subject.moveSong( 0, 3 )
         assertEquals(

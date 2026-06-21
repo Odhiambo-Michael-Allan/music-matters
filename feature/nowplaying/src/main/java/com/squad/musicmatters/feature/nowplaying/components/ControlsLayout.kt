@@ -22,7 +22,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.squad.musicmatters.core.designsystem.component.LoopModeButton
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
+import com.squad.musicmatters.core.designsystem.component.ShuffleButton
 import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicMatters.core.designsystem.R as designSystemR
 
@@ -44,37 +46,14 @@ internal fun NowPlayingPlayerControls(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        AnimatedContent(
-            targetState = shuffle,
-            label = "ShuffleAnimation"
-        ) { isShuffleEnabled ->
-            IconButton(
-                onClick = { onToggleShuffleMode( !isShuffleEnabled ) }
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        painter = painterResource( id = designSystemR.drawable.ic_shuffle ),
-                        contentDescription = null,
-                        tint = if ( isShuffleEnabled ) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            LocalContentColor.current
-                        },
-                        modifier = Modifier.size(
-                            MusicMattersIcons.Shuffle.defaultWidth,
-                            MusicMattersIcons.Shuffle.defaultHeight,
-                        )
-                    )
-
-                    if ( isShuffleEnabled ) {
-                        OnIndicator()
-                    }
-                }
-            }
-        }
+        ShuffleButton(
+            shuffleEnabled = shuffle,
+            onToggleShuffleMode = onToggleShuffleMode,
+            modifier = Modifier.size(
+                MusicMattersIcons.Shuffle.defaultWidth,
+                MusicMattersIcons.Shuffle.defaultHeight
+            )
+        )
         Spacer( modifier = Modifier.weight( 0.5f ) )
         PlayPreviousSongButton(
             style = NowPlayingControlButtonStyle(
@@ -101,51 +80,14 @@ internal fun NowPlayingPlayerControls(
             onClick = onNextButtonClick
         )
         Spacer( modifier = Modifier.weight( 0.5f ) )
-        AnimatedContent(
-            targetState = loopMode,
-        ) {
-            IconButton(
-                onClick = { loopMode.let { onToggleLoopMode( loopMode ) } }
-            ) {
-                Column (
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            id = when ( it ) {
-                                LoopMode.Song -> designSystemR.drawable.ic_repeat_current
-                                else -> designSystemR.drawable.ic_repeat
-                            }
-                        ),
-                        contentDescription = null,
-                        tint = when ( loopMode ) {
-                            LoopMode.None -> LocalContentColor.current
-                            else -> MaterialTheme.colorScheme.primary
-                        },
-                        modifier = Modifier.size(
-                            MusicMattersIcons.Loop.defaultWidth,
-                            MusicMattersIcons.Loop.defaultHeight
-                        )
-                    )
-                    if ( it != LoopMode.None ) {
-                        OnIndicator()
-                    }
-                }
-            }
-        }
+        LoopModeButton(
+            loopMode = loopMode,
+            onToggleLoopMode = onToggleLoopMode,
+            modifier = Modifier.size(
+                MusicMattersIcons.Shuffle.defaultWidth,
+                MusicMattersIcons.Shuffle.defaultHeight
+            )
+        )
     }
 }
 
-@Composable
-private fun OnIndicator() {
-    Spacer( modifier = Modifier.height( 1.dp ) )
-    Box(
-        modifier = Modifier
-            .size( 4.dp ) // Exact size of the dot
-            .background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = CircleShape
-            )
-    )
-}

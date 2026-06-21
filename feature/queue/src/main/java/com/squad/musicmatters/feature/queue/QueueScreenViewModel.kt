@@ -2,10 +2,15 @@ package com.squad.musicmatters.feature.queue
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,10 +25,16 @@ private const val TAG = "QUEUE-SCREEN-VIEW-MODEL"
 
 @HiltViewModel
 internal class QueueScreenViewModel @Inject constructor(
+    playlistRepository: PlaylistRepository,
+    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
     private val songsRepository: SongsRepository,
     private val player: MusicMattersPlayer,
     private val preferencesDataSource: PreferencesDataSource,
-) : ViewModel() {
+) : BaseViewModel(
+    player = player,
+    preferencesDataSource = preferencesDataSource,
+    playlistRepository = playlistRepository,
+) {
 
     
     val uiState: StateFlow<QueueScreenUiState> =
@@ -38,13 +49,22 @@ internal class QueueScreenViewModel @Inject constructor(
                 }
             },
             preferencesDataSource.userData,
+            playlistRepository.fetchFavorites(),
+            playlistRepository.fetchPlaylists(),
+            songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries()
         ) {
             songsInQueue,
-            userData ->
+            userData,
+            favoriteSongsPlaylist,
+            playlists,
+            metadata ->
             QueueScreenUiState.Success(
                 songsInQueue = songsInQueue,
                 currentlyPlayingSongId = userData.currentlyPlayingSongId,
-                shuffle = userData.shuffle
+                shuffle = userData.shuffle,
+                favoriteSongIds = favoriteSongsPlaylist?.songIds ?: emptySet(),
+                playlists = playlists,
+                songsAdditionalMetadata = metadata,
             )
         }.stateIn(
             scope = viewModelScope,
@@ -56,25 +76,14 @@ internal class QueueScreenViewModel @Inject constructor(
         viewModelScope.launch { player.moveSong( from, to ) }
     }
 
-    fun playSongs(
-        selectedSong: Song,
-        songsInPlaylist: List<Song>
-    ) {
-        viewModelScope.launch {
-            player.playSong(
-                song = selectedSong,
-                songs = songsInPlaylist,
-                shuffle = false,
-            )
-        }
-    }
-
     fun onToggleShuffleMode( shuffle: Boolean ) {
         viewModelScope.launch {
             player.shuffleSongsInQueue( shuffle )
             preferencesDataSource.setShuffle( shuffle )
         }
     }
+
+    fun clearQueue() { player.clearQueue() }
 
 }
 
@@ -84,6 +93,9 @@ sealed interface QueueScreenUiState {
         val songsInQueue: List<Song>,
         val currentlyPlayingSongId: String,
         val shuffle: Boolean,
+        val favoriteSongIds: Set<String>,
+        val playlists: List<Playlist>,
+        val songsAdditionalMetadata: List<SongAdditionalMetadata>,
     ): QueueScreenUiState
 
 }

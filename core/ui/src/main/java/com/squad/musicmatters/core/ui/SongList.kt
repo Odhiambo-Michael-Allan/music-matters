@@ -41,7 +41,9 @@ fun SongList(
     onFavorite: ( Song, Boolean ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
+    onSongIsPresentInQueue: ( Song ) -> Boolean,
     onAddToQueue: ( Song ) -> Unit,
+    onRemoveFromQueue: ( Song ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
@@ -114,6 +116,8 @@ fun SongList(
                             onCreatePlaylist = onCreatePlaylist,
                             onDeleteSong = onDeleteSong,
                             onShowSnackBar = onShowSnackBar,
+                            onRemoveFromQueue = onRemoveFromQueue,
+                            onSongIsPresentInQueue = onSongIsPresentInQueue,
                         )
                     }
                 }
@@ -169,6 +173,8 @@ fun SongListPreview() {
             onCreatePlaylist = { _, _ -> },
             onDeleteSong = {},
             onShowSnackBar = {},
+            onSongIsPresentInQueue = { true },
+            onRemoveFromQueue = {}
         )
     }
 }

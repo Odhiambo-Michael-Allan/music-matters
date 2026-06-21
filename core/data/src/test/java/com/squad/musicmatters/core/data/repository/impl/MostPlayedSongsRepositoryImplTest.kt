@@ -4,7 +4,7 @@ import com.squad.musicmatters.core.data.repository.MostPlayedSongsRepository
 import com.squad.musicmatters.core.data.testDoubles.TestSongPlayCountEntryDao
 import com.squad.musicmatters.core.database.dao.SongPlayCountEntryDao
 import com.squad.musicmatters.core.database.model.SongPlayCountEntity
-import com.squad.musicmatters.core.testing.repository.TestSongsRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.songs.testSong
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -15,13 +15,13 @@ import org.junit.Test
 class MostPlayedSongsRepositoryImplTest {
 
     private lateinit var songsPlayCountEntryDao: SongPlayCountEntryDao
-    private lateinit var songsRepository: TestSongsRepository
+    private lateinit var songsRepository: FakeSongsRepository
     private lateinit var subject: MostPlayedSongsRepository
 
     @Before
     fun setUp() {
         songsPlayCountEntryDao = TestSongPlayCountEntryDao()
-        songsRepository = TestSongsRepository()
+        songsRepository = FakeSongsRepository()
         subject = MostPlayedSongsRepositoryImpl(
             songsPlayCountEntryDao = songsPlayCountEntryDao,
             songsRepository = songsRepository,

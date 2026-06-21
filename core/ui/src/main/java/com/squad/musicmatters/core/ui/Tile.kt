@@ -60,6 +60,8 @@ fun GenericTile(
     onClick: () -> Unit,
     onShufflePlay: () -> Unit,
     onAddToQueue: () -> Unit,
+    onRemoveFromQueue: () -> Unit,
+    showAddToQueueOption: () -> Boolean,
     onPlayNext: () -> Unit,
     onGetSongs: () -> List<Song>,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
@@ -81,8 +83,10 @@ fun GenericTile(
                         headerTitle = title,
                         headerDescription = headerDescription,
                         playlists = playlists,
+                        songIsPresentInQueue = showAddToQueueOption,
                         onDismissRequest = onDismissRequest,
                         onAddToQueue = onAddToQueue,
+                        onRemoveFromQueue = onRemoveFromQueue,
                         onPlayNext = onPlayNext,
                         onAddSongsToPlaylist = onAddSongsToPlaylist,
                         onCreatePlaylist = onCreatePlaylist,
@@ -136,9 +140,11 @@ fun GenericOptionsBottomSheet(
     onDismissRequest: () -> Unit,
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
+    onRemoveFromQueue: () -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onGetSongs: () -> List<Song>,
+    songIsPresentInQueue: () -> Boolean,
     onShowSnackBar: ( String ) -> Unit,
     leadingBottomSheetMenuItem: ( @Composable ( () -> Unit ) -> Unit ),
     trailingBottomSheetMenuItems: ( @Composable ( () -> Unit ) -> Unit )? = null,
@@ -147,6 +153,7 @@ fun GenericOptionsBottomSheet(
     val context = LocalContext.current
     var showAddSongToPlaylistBottomSheet by remember { mutableStateOf( false ) }
     var showCreateNewPlaylistDialog by remember { mutableStateOf( false ) }
+    val songIsPresentInQueue = songIsPresentInQueue()
 
     BottomSheetMenuContent(
         bottomSheetHeader = {
@@ -170,11 +177,21 @@ fun GenericOptionsBottomSheet(
         }
         BottomSheetMenuItem(
             leadingIcon = MusicMattersIcons.PlaylistAdd,
-            label = stringResource( id = R.string.core_i8n_add_to_queue )
+            label = stringResource(
+                id = if ( songIsPresentInQueue ) {
+                    R.string.core_i8n_remove_from_queue
+                } else {
+                    R.string.core_i8n_add_to_queue
+                }
+            )
         ) {
-            val feedback = context.getString( R.string.core_i8n_song_added_to_queue )
+            val feedback = if ( songIsPresentInQueue ) {
+                context.getString( R.string.core_i8n_song_removed_from_queue )
+            } else {
+                context.getString( R.string.core_i8n_song_added_to_queue )
+            }
             onDismissRequest()
-            onAddToQueue()
+            if ( songIsPresentInQueue ) onRemoveFromQueue() else onAddToQueue()
             onShowSnackBar( feedback )
         }
         BottomSheetMenuItem(
@@ -231,7 +248,7 @@ fun Tile(
     Card(
         modifier = Modifier
             .wrapContentHeight()
-            .then( modifier ),
+            .then(modifier),
         colors = CardDefaults.cardColors( containerColor = Color.Transparent ),
         onClick = onClick
     ) {
@@ -246,14 +263,14 @@ fun Tile(
                         imageUri = imageUri,
                         contentDescription = imageUri?.toString(),
                         modifier = Modifier
-                            .aspectRatio( 1f )
+                            .aspectRatio(1f)
                             .fillMaxWidth()
-                            .clip( RoundedCornerShape( 10.dp ) )
+                            .clip(RoundedCornerShape(10.dp))
                     )
                     Box(
                         modifier = Modifier
-                            .align( Alignment.TopEnd )
-                            .padding( top = 4.dp )
+                            .align(Alignment.TopEnd)
+                            .padding(top = 4.dp)
                     ) {
                         var showOptionsMenu by remember { mutableStateOf( false ) }
 
@@ -271,16 +288,16 @@ fun Tile(
                     }
                     Box(
                         modifier = Modifier
-                            .align( Alignment.BottomStart )
-                            .padding( 8.dp )
+                            .align(Alignment.BottomStart)
+                            .padding(8.dp)
                     ) {
                         IconButton(
                             modifier = Modifier
                                 .background(
                                     MaterialTheme.colorScheme.surface,
-                                    RoundedCornerShape( 12.dp )
+                                    RoundedCornerShape(12.dp)
                                 )
-                                .then(Modifier.size( 36.dp ) ),
+                                .then(Modifier.size(36.dp)),
                             onClick = onPlay
                         ) {
                             Icon(

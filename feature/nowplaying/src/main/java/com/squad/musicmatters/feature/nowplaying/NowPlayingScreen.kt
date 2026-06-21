@@ -19,7 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Album
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -152,6 +151,7 @@ fun NowPlayingScreen(
             onShowLyrics = viewModel::onShowLyrics,
             onToggleLoopMode = viewModel::onToggleLoopMode,
             onToggleShuffleMode = viewModel::onToggleShuffleMode,
+            onRemoveFromQueue = viewModel::removeSongFromQueue,
             onShowSnackBar = {
                 coroutineScope.launch {
                     snackBarHostState.showSnackbar(
@@ -196,6 +196,7 @@ private fun NowPlayingScreenContent(
     onShowLyrics: ( Boolean ) -> Unit,
     onToggleShuffleMode: ( Boolean ) -> Unit,
     onToggleLoopMode: ( LoopMode ) -> Unit,
+    onRemoveFromQueue: ( Song ) -> Unit,
 ) {
     val currentWindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     var showOptionsMenu by remember { mutableStateOf( false ) }
@@ -303,6 +304,8 @@ private fun NowPlayingScreenContent(
                                 }
                             },
                             onShowSnackBar = onShowSnackBar,
+                            songIsPresentInQueue = { false },
+                            onRemoveFromQueue = { onRemoveFromQueue( song ) },
                             trailingBottomSheetMenuItems = { onDismissRequest ->
                                 song.albumTitle?.let { albumTitle ->
                                     BottomSheetMenuItem(
@@ -428,7 +431,7 @@ private fun SleepTimerDialogContent(
     Column(
         modifier
             .fillMaxWidth()
-            .verticalScroll( rememberScrollState() )
+            .verticalScroll(rememberScrollState())
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -646,6 +649,7 @@ private fun NowPlayingScreenContentPreview() {
             onShowLyrics = {},
             onToggleLoopMode = {},
             onToggleShuffleMode = {},
+            onRemoveFromQueue = {}
         )
     }
 }

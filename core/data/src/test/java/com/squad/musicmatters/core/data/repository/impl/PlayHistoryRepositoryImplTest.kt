@@ -4,7 +4,7 @@ import com.squad.musicmatters.core.data.repository.PlayHistoryRepository
 import com.squad.musicmatters.core.data.testDoubles.TestPlayHistoryDao
 import com.squad.musicmatters.core.database.dao.PlayHistoryDao
 import com.squad.musicmatters.core.database.model.PlayHistoryEntity
-import com.squad.musicmatters.core.testing.repository.TestSongsRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.songs.testSong
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -16,13 +16,13 @@ import java.time.Instant
 class PlayHistoryRepositoryImplTest {
 
     private lateinit var playHistoryDao: PlayHistoryDao
-    private lateinit var songsRepository: TestSongsRepository
+    private lateinit var songsRepository: FakeSongsRepository
     private lateinit var subject: PlayHistoryRepository
 
     @Before
     fun setUp() {
         playHistoryDao = TestPlayHistoryDao()
-        songsRepository = TestSongsRepository()
+        songsRepository = FakeSongsRepository()
         subject = PlayHistoryRepositoryImpl(
             playHistoryDao = playHistoryDao,
             songsRepository = songsRepository,

@@ -21,6 +21,7 @@ import androidx.media3.common.TrackSelectionParameters
 import androidx.media3.common.Tracks
 import androidx.media3.common.VideoSize
 import androidx.media3.common.text.CueGroup
+import androidx.media3.common.util.Log
 import androidx.media3.common.util.Size
 import androidx.media3.common.util.UnstableApi
 import com.squad.musicmatters.core.data.repository.QueueRepository
@@ -51,6 +52,7 @@ class ReplaceableForwardingPlayer(
     private val listeners: MutableList<Player.Listener> = arrayListOf()
     private var originalPlaylist: MutableList<MediaItem> = arrayListOf()
     private var currentMediaItemIndex: Int = 0
+    private var shuffleEnabled = false
     private val playerListener: Player.Listener = PlayerListener()
 
     init { player.addListener( playerListener ) }
@@ -62,7 +64,8 @@ class ReplaceableForwardingPlayer(
         originalPlaylist = ArrayList(
             songsSortedByOriginalPosition.map { songToMediaItemConverter.convert( it ) }
         )
-        val songsInQueue = if ( userPreferences.userData.first().shuffle ) {
+        shuffleEnabled = userPreferences.userData.first().shuffle
+        val songsInQueue = if ( shuffleEnabled ) {
             queueRepository.fetchSongsSortedByCurrentPosition().first()
         } else {
             songsSortedByOriginalPosition
@@ -131,19 +134,29 @@ class ReplaceableForwardingPlayer(
         startPositionMs: Long
     ) {
         originalPlaylist = ArrayList( mediaItems )
-        if ( this.player.shuffleModeEnabled ) {
-            mediaItems.apply {
+        var indexOfSongToStartPlaybackFrom = startWindowIndex
+        val mediaItemsCopy = mediaItems.toMutableList()
+        if ( this.shuffleEnabled ) {
+            mediaItemsCopy.apply {
                 val mediaItemToStartPlaying = removeAt( startWindowIndex )
                 shuffle()
                 add( 0, mediaItemToStartPlaying )
+                indexOfSongToStartPlaybackFrom = 0
             }
         }
-        this.player.setMediaItems( mediaItems, startWindowIndex, startPositionMs )
+        player.setMediaItems(
+            mediaItemsCopy,
+            indexOfSongToStartPlaybackFrom,
+            startPositionMs
+        )
+
+        player.prepare()
+        player.play()
     }
 
     override fun moveMediaItem( currentIndex: Int, newIndex: Int ) {
         player.moveMediaItem( currentIndex, newIndex )
-        if ( player.shuffleModeEnabled.not() ) originalPlaylist.move( currentIndex, newIndex )
+        if ( shuffleEnabled.not() ) originalPlaylist.move( currentIndex, newIndex )
     }
 
     override fun clearMediaItems() {
@@ -157,6 +170,7 @@ class ReplaceableForwardingPlayer(
     }
 
     override fun setShuffleModeEnabled( shuffleModeEnabled: Boolean ) {
+        this.shuffleEnabled = shuffleModeEnabled
         if ( shuffleModeEnabled ) shuffleMediaItems()
         else unshuffleMediaItems()
     }

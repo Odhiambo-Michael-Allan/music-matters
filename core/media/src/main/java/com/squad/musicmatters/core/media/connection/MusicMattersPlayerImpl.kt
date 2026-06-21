@@ -16,6 +16,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.Instant
 import java.util.Date
 import java.util.Timer
@@ -78,7 +79,6 @@ class MusicMattersPlayerImpl @Inject constructor(
                 playSong(
                     song = songToAdd,
                     songs = listOf( songToAdd ),
-                    shuffle = false,
                 )
             } else {
                 addSongToQueue(
@@ -92,24 +92,14 @@ class MusicMattersPlayerImpl @Inject constructor(
     override fun playSong(
         song: Song,
         songs: List<Song>,
-        shuffle: Boolean
     ) {
         player?.let { player ->
-//            val songsCopy = songs.toMutableList()
-//            if ( shuffle ) {
-//                songsCopy.apply {
-//                    remove( song )
-//                    shuffle()
-//                    add( 0, song )
-//                }
-//            }
+            Timber.tag( TAG ).d( "INDEX OF SONG TO PLAY: ${songs.indexOf( song )}" )
             player.setMediaItems(
                 songs.map { songToMediaItemConverter.convert( it ) },
                 songs.indexOf( song ),
                 C.TIME_UNSET
             )
-            player.prepare()
-            player.play()
         }
     }
 
@@ -120,7 +110,6 @@ class MusicMattersPlayerImpl @Inject constructor(
                 playSong(
                     song = song,
                     songs = listOf( song ),
-                    shuffle = false
                 )
             } else {
                 addSongToQueue(
@@ -161,21 +150,12 @@ class MusicMattersPlayerImpl @Inject constructor(
     override fun shuffleAndPlay( songs: List<Song> ) {
         playSong(
             song = songs.random(),
-            songs = songs,
-            shuffle = true
+            songs = songs.shuffled(),
         )
     }
 
     override suspend fun shuffleSongsInQueue( shuffle: Boolean ) {
-        player?.let {
-            it.shuffleModeEnabled = shuffle
-//            it.moveMediaItem( it.currentMediaItemIndex, 0 )
-//            val queue = it.getMediaItems().toMutableList()
-//            it.removeMediaItems( 1, it.mediaItemCount )
-//            queue.removeAt( 0 )
-//            queue.shuffle()
-//            it.addMediaItems( queue )
-        }
+        player?.let { it.shuffleModeEnabled = shuffle }
     }
 
     override fun playNextSong(): Boolean {
@@ -218,7 +198,10 @@ class MusicMattersPlayerImpl @Inject constructor(
         player?.moveMediaItem( from, to )
     }
 
-    override suspend fun deleteSong( song: Song ) {
+    override fun contains( song: Song ): Boolean = player?.getMediaItems()
+        ?.firstOrNull { mediaItem -> mediaItem.mediaId == song.id } != null
+
+    override fun remove( song: Song ) {
         player?.let {
             val indexOfDeletedSong = it.getMediaItems()
                 .indexOfFirst { mediaItem -> mediaItem.mediaId == song.id }

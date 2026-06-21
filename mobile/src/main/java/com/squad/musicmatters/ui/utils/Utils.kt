@@ -12,7 +12,7 @@ internal fun displayToastWithMessage(context: Context, message: String ) = Toast
     Toast.LENGTH_SHORT
 ).show()
 
-internal fun shareSong(context: Context, uri: Uri, localizedErrorMessage: String ) {
+internal fun shareSong( context: Context, uri: Uri, localizedErrorMessage: String ) {
     try {
         val intent = createShareSongIntent( context, uri )
         context.startActivity( intent )

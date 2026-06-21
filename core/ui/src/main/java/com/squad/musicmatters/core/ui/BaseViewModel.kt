@@ -43,13 +43,10 @@ abstract class BaseViewModel(
         selectedSong: Song,
         songsInPlaylist: List<Song>
     ) {
-        viewModelScope.launch {
-            player.playSong(
-                song = selectedSong,
-                songs = songsInPlaylist,
-                shuffle = preferencesDataSource.userData.first().shuffle
-            )
-        }
+        player.playSong(
+            song = selectedSong,
+            songs = songsInPlaylist,
+        )
     }
 
     fun shuffleAndPlay(
@@ -60,13 +57,10 @@ abstract class BaseViewModel(
     }
 
     fun playSong( song: Song ) {
-        viewModelScope.launch {
-            player.playSong(
-                song = song,
-                songs = listOf( song ),
-                shuffle = false // Its only one, no need to shuffle.
-            )
-        }
+        player.playSong(
+            song = song,
+            songs = listOf( song ),
+        )
     }
 
     fun createPlaylist(
@@ -95,11 +89,17 @@ abstract class BaseViewModel(
     }
 
     fun playSongNext( song: Song ) {
-        viewModelScope.launch { player.playSongNext( song ) }
+        player.playSongNext( song )
     }
 
     fun addSongToQueue( song: Song ) {
-        viewModelScope.launch { player.addToQueue( song ) }
+        player.addToQueue( song )
     }
+
+    fun removeSongFromQueue( song: Song ) {
+        player.remove( song )
+    }
+
+    fun songIsPresentInQueue( song: Song ) = player.contains( song )
 
 }
