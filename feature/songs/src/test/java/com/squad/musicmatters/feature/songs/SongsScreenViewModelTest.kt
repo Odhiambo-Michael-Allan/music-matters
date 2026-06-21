@@ -4,10 +4,10 @@ import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
-import com.squad.musicmatters.core.testing.repository.TestPlaylistRepository
+import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
-import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadataRepository
-import com.squad.musicmatters.core.testing.repository.TestSongsRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSongsForSorting
 import com.squad.musicmatters.core.media.connection.PlayerState
@@ -31,17 +31,17 @@ class SongsScreenViewModelTest {
     private lateinit var preferencesDataSource: FakePreferencesDataSource
     private lateinit var musicServiceConnection: TestMusicMattersPlayer
     private lateinit var viewModel: SongsScreenViewModel
-    private lateinit var playlistRepository: TestPlaylistRepository
-    private lateinit var songsRepository: TestSongsRepository
-    private lateinit var songsAdditionalMetadataRepository: TestSongsAdditionalMetadataRepository
+    private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var songsRepository: FakeSongsRepository
+    private lateinit var songsAdditionalMetadataRepository: FakeSongsAdditionalMetadataRepository
 
     @Before
     fun setup() {
         preferencesDataSource = FakePreferencesDataSource()
         musicServiceConnection = TestMusicMattersPlayer()
-        songsAdditionalMetadataRepository = TestSongsAdditionalMetadataRepository()
-        songsRepository = TestSongsRepository()
-        playlistRepository = TestPlaylistRepository()
+        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
+        songsRepository = FakeSongsRepository()
+        playlistRepository = FakePlaylistRepository()
         viewModel = SongsScreenViewModel(
             songsRepository = songsRepository,
             preferencesDataSource = preferencesDataSource,

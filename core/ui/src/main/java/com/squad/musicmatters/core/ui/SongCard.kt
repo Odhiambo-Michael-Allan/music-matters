@@ -1,8 +1,6 @@
 package com.squad.musicmatters.core.ui
 
 import android.net.Uri
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -60,13 +58,14 @@ fun SongCard(
     song: Song,
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
-    showSongOptionsButton: Boolean = true,
+    onSongIsPresentInQueue: ( Song ) -> Boolean,
     songAdditionalMetadata: SongAdditionalMetadata?,
     playlists: List<Playlist>,
     onClick: () -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
+    onRemoveFromQueue: ( Song ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
@@ -138,51 +137,51 @@ fun SongCard(
                         )
                     }
                 }
-                if ( showSongOptionsButton ) {
-                    IconButton(
-                        onClick = { showSongOptionsBottomSheet = !showSongOptionsBottomSheet }
-                    ) {
-                        Icon(
-                            modifier = Modifier.size( 24.dp ),
-                            imageVector = MusicMattersIcons.MoreVertical,
-                            contentDescription = null
-                        )
-                        if ( showSongOptionsBottomSheet ) {
-                            ModalBottomSheet(
-                                modifier = if ( ScreenOrientation.fromConfiguration(
-                                        LocalConfiguration.current ).isLandscape
-                                ) Modifier.padding( start = 50.dp ) else Modifier,
+                IconButton(
+                    onClick = { showSongOptionsBottomSheet = !showSongOptionsBottomSheet }
+                ) {
+                    Icon(
+                        modifier = Modifier.size( 24.dp ),
+                        imageVector = MusicMattersIcons.MoreVertical,
+                        contentDescription = null
+                    )
+                    if ( showSongOptionsBottomSheet ) {
+                        ModalBottomSheet(
+                            modifier = if ( ScreenOrientation.fromConfiguration(
+                                    LocalConfiguration.current ).isLandscape
+                            ) Modifier.padding( start = 50.dp ) else Modifier,
+                            onDismissRequest = {
+                                showSongOptionsBottomSheet = false
+                            }
+                        ) {
+                            SongOptionsBottomSheetMenu(
+                                song = song,
+                                isFavorite = isFavorite,
+                                isCurrentlyPlaying = isCurrentlyPlaying,
+                                playlists = playlists,
+                                onFavorite = onFavorite,
+                                onAddToQueue = onAddToQueue,
+                                onRemoveFromQueue = onRemoveFromQueue,
+                                onSongIsPresentInQueue = onSongIsPresentInQueue,
+                                onPlayNext = onPlayNext,
+                                onViewArtist = onViewArtist,
+                                onViewAlbum = onViewAlbum,
+                                onShareSong = onShareSong,
+                                onShowSongDetails = { showSongDetailsDialog = true },
+                                onCreatePlaylist = onCreatePlaylist,
+                                onAddSongsToPlaylist = onAddSongsToPlaylist,
+                                onDelete = {
+                                    if ( !VersionUtils.isQandAbove() ) {
+                                        showDeleteSongDialog = true
+                                    } else {
+                                        onDeleteSong( it )
+                                    }
+                                },
                                 onDismissRequest = {
                                     showSongOptionsBottomSheet = false
-                                }
-                            ) {
-                                SongOptionsBottomSheetMenu(
-                                    song = song,
-                                    isFavorite = isFavorite,
-                                    isCurrentlyPlaying = isCurrentlyPlaying,
-                                    playlists = playlists,
-                                    onFavorite = onFavorite,
-                                    onAddToQueue = onAddToQueue,
-                                    onPlayNext = onPlayNext,
-                                    onViewArtist = onViewArtist,
-                                    onViewAlbum = onViewAlbum,
-                                    onShareSong = onShareSong,
-                                    onShowSongDetails = { showSongDetailsDialog = true },
-                                    onCreatePlaylist = onCreatePlaylist,
-                                    onAddSongsToPlaylist = onAddSongsToPlaylist,
-                                    onDelete = {
-                                        if ( !VersionUtils.isQandAbove() ) {
-                                            showDeleteSongDialog = true
-                                        } else {
-                                            onDeleteSong( it )
-                                        }
-                                    },
-                                    onDismissRequest = {
-                                        showSongOptionsBottomSheet = false
-                                    },
-                                    onShowSnackBar = onShowSnackBar,
-                                )
-                            }
+                                },
+                                onShowSnackBar = onShowSnackBar,
+                            )
                         }
                     }
                 }
@@ -216,6 +215,8 @@ fun SongOptionsBottomSheetMenu(
     playlists: List<Playlist>,
     onFavorite: ( Song, Boolean ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
+    onRemoveFromQueue: ( Song ) -> Unit,
+    onSongIsPresentInQueue: ( Song ) -> Boolean,
     onViewArtist: ( String ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
@@ -235,9 +236,11 @@ fun SongOptionsBottomSheetMenu(
         titleIsHighlighted = isCurrentlyPlaying,
         headerDescription = song.artists.joinToString(),
         playlists = playlists,
+        songIsPresentInQueue = { onSongIsPresentInQueue( song ) },
         onDismissRequest = onDismissRequest,
         onPlayNext = { onPlayNext( song ) },
         onAddToQueue = { onAddToQueue( song ) },
+        onRemoveFromQueue = { onRemoveFromQueue( song ) },
         onCreatePlaylist = onCreatePlaylist,
         onAddSongsToPlaylist = onAddSongsToPlaylist,
         onGetSongs = { listOf( song ) },
@@ -332,6 +335,8 @@ private fun SongOptionsBottomSheetContentPreview() {
             onDelete = {},
             onDismissRequest = {},
             onShowSnackBar = {},
+            onRemoveFromQueue = {},
+            onSongIsPresentInQueue = { false }
         )
     }
 }
@@ -363,6 +368,8 @@ private fun SongCardPreview() {
             onCreatePlaylist = { _, _ -> },
             onDeleteSong = {},
             onShowSnackBar = {},
+            onSongIsPresentInQueue = { true },
+            onRemoveFromQueue = {}
         )
     }
 }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 
-class TestSongsRepository : SongsRepository {
+class FakeSongsRepository : SongsRepository {
 
     private val songsFlow: MutableSharedFlow<List<Song>> =
         MutableSharedFlow( replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST )

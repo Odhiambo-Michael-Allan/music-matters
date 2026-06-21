@@ -4,7 +4,7 @@ import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.data.testDoubles.TestQueueDao
 import com.squad.musicmatters.core.database.model.QueueEntity
 import com.squad.musicmatters.core.model.QueueEntry
-import com.squad.musicmatters.core.testing.repository.TestSongsRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.songs.testSong
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -15,13 +15,13 @@ import org.junit.Test
 class QueueRepositoryImplTest {
 
     private lateinit var queueDao: TestQueueDao
-    private lateinit var songsRepository: TestSongsRepository
+    private lateinit var songsRepository: FakeSongsRepository
     private lateinit var subject: QueueRepository
 
     @Before
     fun setUp() {
         queueDao = TestQueueDao()
-        songsRepository = TestSongsRepository()
+        songsRepository = FakeSongsRepository()
         subject = QueueRepositoryImpl(
             queueDao = queueDao,
             songsRepository = songsRepository,

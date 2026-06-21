@@ -4,7 +4,7 @@ import com.squad.musicmatters.core.data.repository.CompositeRepository
 import com.squad.musicmatters.core.testing.repository.TestMostPlayedSongsRepository
 import com.squad.musicmatters.core.testing.repository.TestPlayHistoryRepository
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
-import com.squad.musicmatters.core.testing.repository.TestSongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.testing.songs.testSong
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import kotlinx.coroutines.flow.first
@@ -17,7 +17,7 @@ class CompositeRepositoryImplTest {
 
     private lateinit var mostPlayedSongsRepository: TestMostPlayedSongsRepository
     private lateinit var playHistoryRepository: TestPlayHistoryRepository
-    private lateinit var songsAdditionalMetadataRepository: TestSongsAdditionalMetadataRepository
+    private lateinit var songsAdditionalMetadataRepository: FakeSongsAdditionalMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
     private lateinit var subject: CompositeRepository
 
@@ -25,7 +25,7 @@ class CompositeRepositoryImplTest {
     fun setUp() {
         mostPlayedSongsRepository = TestMostPlayedSongsRepository()
         playHistoryRepository = TestPlayHistoryRepository()
-        songsAdditionalMetadataRepository = TestSongsAdditionalMetadataRepository()
+        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         queueRepository = FakeQueueRepository()
         subject = CompositeRepositoryImpl(
             mostPlayedSongsRepository = mostPlayedSongsRepository,

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class TestSongsAdditionalMetadataRepository : SongsAdditionalMetadataRepository {
+class FakeSongsAdditionalMetadataRepository : SongsAdditionalMetadataRepository {
 
     private val metadataFlow: MutableSharedFlow<List<SongAdditionalMetadata>> =
         MutableSharedFlow( replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST )

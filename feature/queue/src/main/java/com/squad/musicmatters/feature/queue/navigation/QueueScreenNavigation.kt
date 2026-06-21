@@ -17,12 +17,22 @@ fun NavController.navigateToQueue( navOptions: NavOptions ) =
 
 fun NavGraphBuilder.queueScreen(
     onNavigateBack: () -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
     composable<QueueRoute>(
         enterTransition = { SlideTransition.slideUp.enterTransition() }
     ) {
         QueueScreen(
             onNavigateBack = onNavigateBack,
+            onViewAlbum = onViewAlbum,
+            onViewArtist = onViewArtist,
+            onShareSong = onShareSong,
+            onDeleteSong = onDeleteSong,
+            onShowSnackBar = onShowSnackBar,
         )
     }
 }

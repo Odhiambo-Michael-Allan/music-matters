@@ -73,11 +73,13 @@ import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import com.squad.musicmatters.feature.songs.navigation.songsScreen
 import com.squad.musicmatters.navigation.LibraryDestinations
 import com.squad.musicmatters.navigation.TopLevelDestination
+import com.squad.musicmatters.ui.utils.shareSong
 import com.squad.musicmatters.utils.ScreenOrientation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.OptIn
+import com.squad.musicMatters.core.i8n.R as i8nR
 
 
 @Composable
@@ -125,6 +127,7 @@ fun MusicMattersAppContent(
     onDeleteSong: ( Song ) -> Unit,
 ) {
 
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     var currentTopLevelDestinationName by rememberSaveable { mutableStateOf( TopLevelDestination.SONGS.route.qualifiedName ) }
     var currentlySelectedLibraryDestinationName by rememberSaveable { mutableStateOf( "" ) }
@@ -307,7 +310,14 @@ fun MusicMattersAppContent(
 //                }
 
                     songsScreen(
-                        onShareSong = { _, _ -> },
+                        onShareSong = {
+                            shareSong(
+                                context = context,
+                                uri = it,
+                                localizedErrorMessage = context
+                                    .getString( i8nR.string.core_i8n_sharing_song_failed )
+                            )
+                        },
                         onDeleteSong = onDeleteSong,
                         onViewArtist = {},
                         onViewAlbum = {},
@@ -320,6 +330,23 @@ fun MusicMattersAppContent(
                     )
                     queueScreen(
                         onNavigateBack = { navController.navigateUp() },
+                        onShareSong = {
+                            shareSong(
+                                context = context,
+                                uri = it,
+                                localizedErrorMessage = context
+                                    .getString( i8nR.string.core_i8n_sharing_song_failed )
+                            )
+                        },
+                        onDeleteSong = onDeleteSong,
+                        onViewArtist = {},
+                        onViewAlbum = {},
+                        onShowSnackBar = {
+                            snackBarHostState.showSnackBar(
+                                coroutineScope,
+                                it
+                            )
+                        }
                     )
 //                composable(
 //                    route = Route.Artists.name,

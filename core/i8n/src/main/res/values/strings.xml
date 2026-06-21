@@ -45,6 +45,7 @@
     <string name="core_i8n_delete">Delete</string>
     <string name="core_i8n_play_next">Play Next</string>
     <string name="core_i8n_add_to_queue">Add to queue</string>
+    <string name="core_i8n_remove_from_queue">Remove from queue</string>
     <string name="core_i8n_add_to_playlist">Add to playlist</string>
 
     <string name="core_i8n_no_playlists_found">No playlists found</string>
@@ -104,6 +105,7 @@
     <string name="core_i8n_added_song_to_favorites">Added Song To Favorites</string>
     <string name="core_i8n_removed_song_from_favorites">Removed Song From Favorites</string>
     <string name="core_i8n_song_added_to_queue">Song added to queue</string>
+    <string name="core_i8n_song_removed_from_queue">Song removed from queue</string>
     <string name="core_i8n_song_will_play_next">Song will play next</string>
 
     <string name="core_i8n_playing_notification_name">Playing notification</string>
@@ -111,4 +113,5 @@
     <string name="core_i8n_action_grant">Grant</string>
 
     <string name="core_i8n_permission_bluetooth_denied">Nearby devices permission denied.</string>
+    <string name="core_i8n_sharing_song_failed">Sharing song failed</string>
 </resources>

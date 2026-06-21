@@ -36,10 +36,6 @@ class TestMusicMattersPlayer : MusicMattersPlayer {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteSong(song: Song) {
-        TODO("Not yet implemented")
-    }
-
     override fun playPause() {
         TODO("Not yet implemented")
     }
@@ -71,7 +67,6 @@ class TestMusicMattersPlayer : MusicMattersPlayer {
     override fun playSong(
         song: Song,
         songs: List<Song>,
-        shuffle: Boolean
     ) {
         TODO("Not yet implemented")
     }
@@ -83,10 +78,6 @@ class TestMusicMattersPlayer : MusicMattersPlayer {
     override suspend fun shuffleSongsInQueue( shuffle: Boolean ) {
         TODO("Not yet implemented")
     }
-
-//    override suspend fun shuffleSongsInQueue(currentlyPlayingSong: Song) {
-//        TODO("Not yet implemented")
-//    }
 
     override fun playSongNext(song: Song) {
         TODO("Not yet implemented")
@@ -101,6 +92,14 @@ class TestMusicMattersPlayer : MusicMattersPlayer {
     }
 
     override fun moveSong( from: Int, to: Int ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun contains(song: Song): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun remove(song: Song) {
         TODO("Not yet implemented")
     }
 

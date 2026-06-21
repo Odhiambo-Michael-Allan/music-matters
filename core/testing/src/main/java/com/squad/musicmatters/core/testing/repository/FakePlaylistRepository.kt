@@ -9,9 +9,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import java.util.UUID
 
-class TestPlaylistRepository : PlaylistRepository {
+class FakePlaylistRepository : PlaylistRepository {
 
     private val playlistsFlow: MutableSharedFlow<List<Playlist>> =
         MutableSharedFlow( replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST )
