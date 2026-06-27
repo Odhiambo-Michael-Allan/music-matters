@@ -37,7 +37,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import com.squad.musicMatters.core.i8n.R
+import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.media.media.extensions.formatMilliseconds
 import com.squad.musicmatters.core.data.utils.VersionUtils
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons

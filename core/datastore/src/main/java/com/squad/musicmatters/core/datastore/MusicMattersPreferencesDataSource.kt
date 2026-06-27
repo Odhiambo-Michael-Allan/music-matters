@@ -42,13 +42,7 @@ class MusicMattersPreferencesDataSource @Inject constructor(
             ignoreAudioFocusLoss = it.ignoreAudioFocusLoss,
             playOnHeadphonesConnect = it.playOnHeadphonesConnect,
             pauseOnHeadphonesDisconnect = it.pauseOnHeadphonesDisconnect,
-            fastRewindDuration = it.fastRewindDuration.takeIf { duration -> duration > 0 } ?: DefaultPreferences.FAST_REWIND_DURATION,
-            fastForwardDuration = it.fastForwardDuration.takeIf { duration -> duration > 0 } ?: DefaultPreferences.FAST_FORWARD_DURATION,
-            miniPlayerShowTrackControls = it.miniPlayerShowTrackControls,
-            miniPlayerShowSeekControls = it.miniPlayerShowSeekControls,
             miniPlayerTextMarquee = it.miniPlayerTextMarquee,
-            playbackSpeed = it.playbackSpeed.takeIf { speed -> speed > 0 } ?: DefaultPreferences.PLAYBACK_SPEED,
-            playbackPitch = it.playbackPitch.takeIf { pitch -> pitch > 0 } ?: DefaultPreferences.PLAYBACK_PITCH,
             loopMode = when ( it.loopMode ) {
                 null, LoopModeProto.LOOP_MODE_UNSPECIFIED, LoopModeProto.UNRECOGNIZED -> DefaultPreferences.LOOP_MODE
                 LoopModeProto.NONE -> LoopMode.None
@@ -57,7 +51,6 @@ class MusicMattersPreferencesDataSource @Inject constructor(
             },
             shuffle = it.shuffle,
             showLyrics = it.showLyrics,
-            controlsLayoutDefault = it.nowPlayingControlsLayoutDefault,
             currentlyDisabledTreePaths = it.disabledTreePathsMap.keys,
             sortSongsBy = when ( it.sortSongsBy ) {
                 null, SortSongsByProto.SORT_SONGS_UNSPECIFIED, SortSongsByProto.UNRECOGNIZED -> DefaultPreferences.SORT_SONGS_BY
@@ -111,6 +104,7 @@ class MusicMattersPreferencesDataSource @Inject constructor(
             },
             sortPathsReverse = it.sortPathsReverse,
             currentlyPlayingSongId = it.currentlyPlayingSongId,
+            showLyricsOnSeparateScreen = it.showLyricsOnSeparateScreen
         )
     }
 
@@ -143,7 +137,7 @@ class MusicMattersPreferencesDataSource @Inject constructor(
         }
     }
 
-    override suspend fun useMaterialYou( useMaterialYou: Boolean ) {
+    override suspend fun setUseMaterialYou(useMaterialYou: Boolean ) {
         userPreferencesDataStore.updateData {
             it.copy {
                 this.useMaterialYou = useMaterialYou
@@ -220,58 +214,10 @@ class MusicMattersPreferencesDataSource @Inject constructor(
         }
     }
 
-    override suspend fun setFastRewindDuration( fastRewindDuration: Int ) {
-        userPreferencesDataStore.updateData {
-            it.copy {
-                this.fastRewindDuration = fastRewindDuration
-            }
-        }
-    }
-
-    override suspend fun setFastForwardDuration( fastForwardDuration: Int ) {
-        userPreferencesDataStore.updateData {
-            it.copy {
-                this.fastForwardDuration = fastForwardDuration
-            }
-        }
-    }
-
     override suspend fun setMiniPlayerTextMarquee( miniPlayerTextMarquee: Boolean ) {
         userPreferencesDataStore.updateData {
             it.copy {
                 this.miniPlayerTextMarquee = miniPlayerTextMarquee
-            }
-        }
-    }
-
-    override suspend fun setMiniPlayerShowSeekControls( miniPlayerShowSeekControls: Boolean ) {
-        userPreferencesDataStore.updateData {
-            it.copy {
-                this.miniPlayerShowSeekControls = miniPlayerShowSeekControls
-            }
-        }
-    }
-
-    override suspend fun setMiniPlayerShowTrackControls( miniPlayerShowTrackControls: Boolean ) {
-        userPreferencesDataStore.updateData {
-            it.copy {
-                this.miniPlayerShowTrackControls = miniPlayerShowTrackControls
-            }
-        }
-    }
-
-    override suspend fun setPlaybackSpeed( playbackSpeed: Float ) {
-        userPreferencesDataStore.updateData {
-            it.copy {
-                this.playbackSpeed = playbackSpeed
-            }
-        }
-    }
-
-    override suspend fun setPlaybackPitch( playbackPitch: Float ) {
-        userPreferencesDataStore.updateData {
-            it.copy {
-                this.playbackPitch = playbackPitch
             }
         }
     }
@@ -299,12 +245,6 @@ class MusicMattersPreferencesDataSource @Inject constructor(
     override suspend fun setShowLyrics( showLyrics: Boolean ) {
         userPreferencesDataStore.updateData {
             it.copy { this.showLyrics = showLyrics }
-        }
-    }
-
-    override suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean ) {
-        userPreferencesDataStore.updateData {
-            it.copy { this.nowPlayingControlsLayoutDefault = controlsLayoutIsDefault }
         }
     }
 
@@ -455,6 +395,10 @@ class MusicMattersPreferencesDataSource @Inject constructor(
         }
     }
 
+    override suspend fun setShowLyricsOnSeparateScreen(showLyricsOnSeparateScreen: Boolean) {
+        TODO("Not yet implemented")
+    }
+
 }
 
 object DefaultPreferences {
@@ -476,4 +420,5 @@ object DefaultPreferences {
     val SORT_PLAYLISTS_BY = SortPlaylistsBy.TITLE
     val SORT_ALBUMS_BY = SortAlbumsBy.ALBUM_NAME
     val SORT_PATHS_BY = SortPathsBy.NAME
+    val SHOW_LYRICS_ON_SEPARATE_SCREEN = false
 }

@@ -24,10 +24,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.squad.musicMatters.core.i8n.R
+import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
-import com.squad.musicmatters.core.designsystem.component.LoopModeButton
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.component.ShuffleButton
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme

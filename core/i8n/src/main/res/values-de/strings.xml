@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_i8n_give_your_playlist_a_name">Gib deiner Playlist einen Namen</string>
+    <string name="core_i8n_playlist_name_placeholder">Hits</string>
+    <string name="core_i8n_cancel">Abbrechen</string>
+    <string name="core_i8n_favorites">Favoriten</string>
+    <string name="core_i8n_added_n_songs_to_playlist">%1$d Songs zu %2$s hinzugefügt</string>
+    <string name="core_i8n_added_song_to_playlist">Zu %s hinzugefügt</string>
+    <string name="core_i8n_no_lyrics_found">Kein Songtext gefunden</string>
+    <string name="core_i8n_error_media_not_found">Die angeforderte Mediendatei konnte nicht gefunden werden.</string>
+    <string name="core_i8n_generic_error">In der Anwendung ist ein unerwarteter Fehler aufgetreten.</string>
+    <string name="core_i8n_left">verbleibend</string>
+
+    <string name="core_i8n_end_of_episode">Am Ende des aktuellen Songs</string>
+    <string name="core_i8n_turn_off_timer">Timer ausschalten</string>
+    <string name="core_i8n_sleep_timer">Sleep-Timer</string>
+    <string name="core_i8n_sleep_timer_set">Dein Sleep-Timer ist gestellt</string>
+    <string name="core_i8n_sleep_timer_off">Dein Sleep-Timer ist ausgeschaltet</string>
+    <string name="core_i8n_sleep_timer_duration_left">Sleep-Timer %s</string>
+
+    <string name="core_i8n_queue">Warteschlange</string>
+    <string name="core_i8n_settings">Einstellungen</string>
+    <string name="core_i8n_songs">Songs</string>
+    <string name="core_i8n_n_songs">%d Songs</string>
+
+    <string name="core_i8n_custom">Benutzerdefiniert</string>
+    <string name="core_i8n_title">Titel</string>
+    <string name="core_i8n_artist">Künstler</string>
+    <string name="core_i8n_album">Album</string>
+    <string name="core_i8n_duration">Dauer</string>
+    <string name="core_i8n_date_added">Hinzugefügt am</string>
+    <string name="core_i8n_composer">Komponist</string>
+    <string name="core_i8n_year">Jahr</string>
+    <string name="core_i8n_file_name">Dateiname</string>
+    <string name="core_i8n_track_number">Titelnummer</string>
+
+    <string name="core_i8n_damn_this_is_so_empty">Verdammt, hier ist es so leer!!</string>
+    <string name="core_i8n_favorite">Favorit</string>
+    <string name="core_i8n_view_artist">Künstler anzeigen: %s</string>
+    <string name="core_i8n_view_album">Album anzeigen: %s</string>
+
+    <string name="core_i8n_share_song">Song teilen</string>
+    <string name="core_i8n_details">Details</string>
+    <string name="core_i8n_delete">Löschen</string>
+    <string name="core_i8n_play_next">Als Nächstes spielen</string>
+    <string name="core_i8n_add_to_queue">In die Warteschlange</string>
+    <string name="core_i8n_remove_from_queue">Aus Warteschlange entfernen</string>
+    <string name="core_i8n_add_to_playlist">Zu Playlist hinzufügen</string>
+
+    <string name="core_i8n_no_playlists_found">Keine Playlists gefunden</string>
+    <string name="core_i8n_new_playlist">Neue Playlist</string>
+    <string name="core_i8n_done">Fertig</string>
+    <string name="core_i8n_shuffle_play">Zufallswiedergabe</string>
+
+    <string name="core_i8n_track_name">Titelname</string>
+    <string name="core_i8n_genre">Genre</string>
+    <string name="core_i8n_path">Pfad</string>
+    <string name="core_i8n_size">Größe</string>
+
+    <string name="core_i8n_bitrate">Bitrate</string>
+    <string name="core_i8n_xKbps">%s kbps</string>
+    <string name="core_i8n_bits_per_sample">Bits pro Sample</string>
+    <string name="core_i8n_xBit">%s Bits</string>
+    <string name="core_i8n_sampling_rate">Abtastrate</string>
+    <string name="core_i8n_xKHZ">%s KHZ</string>
+    <string name="core_i8n_codec">Codec</string>
+    <string name="core_i8n_delete_song">%s löschen</string>
+
+    <string name="core_i8n_rename_playlist">Playlist umbenennen</string>
+    <string name="core_i8n_rename">Umbenennen</string>
+    <string name="core_i8n_equalizer">Equalizer</string>
+    <string name="core_i8n_speed">Geschwindigkeit</string>
+    <string name="core_i8n_pitch">Tonhöhe</string>
+
+    <string name="core_i8n_storage_access">Speicherzugriff</string>
+    <string name="core_i8n_grant_access">Zugriff erlauben</string>
+    <string name="core_i8n_storage_access_permission_prompt">Die App benötigt Zugriff auf deinen Gerätespeicher, um Musik abzuspielen</string>
+    <string name="core_i8n_storage_access_permission_denied">Speicherzugriff verweigert</string>
+    <string name="core_i8n_welcome_message">Hallo! Willkommen bei</string>
+    <string name="core_i8n_read_media_audio">Audiodateien lesen</string>
+    <string name="core_i8n_read_media_audio_permission_prompt">Die App muss Medien und Audio abrufen, um auf deinem Gerät gespeicherte Audiodateien abzuspielen</string>
+    <string name="core_i8n_read_media_audio_permission_denied">Berechtigung zum Lesen von Medien und Audio verweigert</string>
+
+    <string name="core_i8n_ringtone_permission">Klingelton</string>
+    <string name="core_i8n_ringtone_permission_prompt">Die App benötigt Zugriff auf die Systemeinstellungen, um Musik als Klingelton einzurichten</string>
+
+    <string name="core_i8n_post_notifications_permission">Benachrichtigungen senden</string>
+    <string name="core_i8n_post_notifications_permission_prompt">Die App benötigt dies, um Benachrichtigungen auf deinem Gerät anzuzeigen</string>
+    <string name="core_i8n_post_notifications_permission_denied">Berechtigung für Benachrichtigungen verweigert</string>
+    <string name="core_i8n_lets_go">Los geht\'s</string>
+
+    <string name="core_i8n_write_storage">Speicher beschreiben</string>
+    <string name="core_i8n_write_storage_description">Die App benötigt dies, um Songs auf dem Gerät zu löschen</string>
+    <string name="core_i8n_telegram">Telegram</string>
+
+    <string name="core_i8n_my_name">Michael Allan Odhiambo</string>
+    <string name="core_i8n_app_github_repo_url">https://github.com/Odhiambo-Michael-Allan/music-matters</string>
+    <string name="core_i8n_github_profile_url">https://github.com/Odhiambo-Michael-Allan</string>
+
+    <string name="core_i8n_discord_server_url">https://discord.gg/EfruF8CP</string>
+    <string name="core_i8n_reddit_community_url">https://www.reddit.com/r/musicmattersappusers/</string>
+    <string name="core_i8n_telegram_channel_link">https://t.me/+58NS_CnxjD44YTI0</string>
+
+    <string name="core_i8n_added_song_to_favorites">Song zu Favoriten hinzugefügt</string>
+    <string name="core_i8n_removed_song_from_favorites">Song aus Favoriten entfernt</string>
+    <string name="core_i8n_song_added_to_queue">Song zur Warteschlange hinzugefügt</string>
+    <string name="core_i8n_song_removed_from_queue">Song aus Warteschlange entfernt</string>
+    <string name="core_i8n_song_will_play_next">Song wird als Nächstes gespielt</string>
+
+    <string name="core_i8n_playing_notification_name">Wiedergabe-Benachrichtigung</string>
+    <string name="core_i8n_playing_notification_description">Die Wiedergabe-Benachrichtigung ermöglicht Aktionen wie Wiedergabe/Pause usw.</string>
+    <string name="core_i8n_action_grant">Zulassen</string>
+
+    <string name="core_i8n_permission_bluetooth_denied">Berechtigung für Geräte in der Nähe verweigert.</string>
+    <string name="core_i8n_sharing_song_failed">Teilen des Songs fehlgeschlagen</string>
+    <string name="core_i8n_appearance">Erscheinungsbild</string>
+
+    <string name="core_i8n_language">Sprache</string>
+    <string name="core_i8n_english">Englisch</string>
+    <string name="core_i8n_german">Deutsch</string>
+    <string name="core_i8n_french">Französisch</string>
+    <string name="core_i8n_japanese">Japanisch</string>
+    <string name="core_i8n_portuguese_portugal">Portugiesisch (Portugal)</string>
+    <string name="core_i8n_portuguese_brazil">Portugiesisch (Brasilien)</string>
+    <string name="core_i8n_hindi">Hindi</string>
+</resources>

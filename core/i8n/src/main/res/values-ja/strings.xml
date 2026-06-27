@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_i8n_give_your_playlist_a_name">プレイリストに名前を入力してください</string>
+    <string name="core_i8n_playlist_name_placeholder">お気に入り曲</string>
+    <string name="core_i8n_cancel">キャンセル</string>
+    <string name="core_i8n_favorites">お気に入り</string>
+    <string name="core_i8n_added_n_songs_to_playlist">%1$d曲を%2$sに追加しました</string>
+    <string name="core_i8n_added_song_to_playlist">%sに追加しました</string>
+    <string name="core_i8n_no_lyrics_found">歌詞が見つかりません</string>
+    <string name="core_i8n_error_media_not_found">要求されたメディアが見つかりませんでした。</string>
+    <string name="core_i8n_generic_error">予期しないエラーが発生しました。</string>
+    <string name="core_i8n_left">残り</string>
+
+    <string name="core_i8n_end_of_episode">再生中の曲の終了時</string>
+    <string name="core_i8n_turn_off_timer">タイマーをオフにする</string>
+    <string name="core_i8n_sleep_timer">スリープタイマー</string>
+    <string name="core_i8n_sleep_timer_set">スリープタイマーを設定しました</string>
+    <string name="core_i8n_sleep_timer_off">スリープタイマーをオフにしました</string>
+    <string name="core_i8n_sleep_timer_duration_left">スリープタイマー %s</string>
+
+    <string name="core_i8n_queue">再生キュー</string>
+    <string name="core_i8n_settings">設定</string>
+    <string name="core_i8n_songs">曲</string>
+    <string name="core_i8n_n_songs">%d曲</string>
+
+    <string name="core_i8n_custom">カスタム</string>
+    <string name="core_i8n_title">タイトル</string>
+    <string name="core_i8n_artist">アーティスト</string>
+    <string name="core_i8n_album">アルバム</string>
+    <string name="core_i8n_duration">長さ</string>
+    <string name="core_i8n_date_added">追加日</string>
+    <string name="core_i8n_composer">作曲者</string>
+    <string name="core_i8n_year">リリース年</string>
+    <string name="core_i8n_file_name">ファイル名</string>
+    <string name="core_i8n_track_number">トラック番号</string>
+
+    <string name="core_i8n_damn_this_is_so_empty">ここには何もありません！</string>
+    <string name="core_i8n_favorite">お気に入りに追加</string>
+    <string name="core_i8n_view_artist">アーティストを表示: %s</string>
+    <string name="core_i8n_view_album">アルバムを表示: %s</string>
+
+    <string name="core_i8n_share_song">曲を共有</string>
+    <string name="core_i8n_details">詳細</string>
+    <string name="core_i8n_delete">削除</string>
+    <string name="core_i8n_play_next">次に再生</string>
+    <string name="core_i8n_add_to_queue">キューに追加</string>
+    <string name="core_i8n_remove_from_queue">キューから削除</string>
+    <string name="core_i8n_add_to_playlist">プレイリストに追加</string>
+
+    <string name="core_i8n_no_playlists_found">プレイリストが見つかりません</string>
+    <string name="core_i8n_new_playlist">新規プレイリスト</string>
+    <string name="core_i8n_done">完了</string>
+    <string name="core_i8n_shuffle_play">シャッフル再生</string>
+
+    <string name="core_i8n_track_name">トラック名</string>
+    <string name="core_i8n_genre">ジャンル</string>
+    <string name="core_i8n_path">パス</string>
+    <string name="core_i8n_size">サイズ</string>
+
+    <string name="core_i8n_bitrate">ビットレート</string>
+    <string name="core_i8n_xKbps">%s kbps</string>
+    <string name="core_i8n_bits_per_sample">サンプルあたりのビット数</string>
+    <string name="core_i8n_xBit">%s ビット</string>
+    <string name="core_i8n_sampling_rate">サンプリングレート</string>
+    <string name="core_i8n_xKHZ">%s KHZ</string>
+    <string name="core_i8n_codec">コーデック</string>
+    <string name="core_i8n_delete_song">%s を削除</string>
+
+    <string name="core_i8n_rename_playlist">プレイリストの名前変更</string>
+    <string name="core_i8n_rename">名前変更</string>
+    <string name="core_i8n_equalizer">イコライザー</string>
+    <string name="core_i8n_speed">速度</string>
+    <string name="core_i8n_pitch">ピッチ</string>
+
+    <string name="core_i8n_storage_access">ストレージへのアクセス</string>
+    <string name="core_i8n_grant_access">アクセスを許可</string>
+    <string name="core_i8n_storage_access_permission_prompt">音楽を再生するために、アプリがデバイスのストレージにアクセスする権限が必要です</string>
+    <string name="core_i8n_storage_access_permission_denied">ストレージへのアクセスが拒否されました</string>
+    <string name="core_i8n_welcome_message">こんにちは！ようこそ</string>
+    <string name="core_i8n_read_media_audio">メディアオーディオの読み込み</string>
+    <string name="core_i8n_read_media_audio_permission_prompt">デバイスに保存されているオーディオファイルを取得して再生するために、アプリがメディアとオーディオを読み込む権限が必要です</string>
+    <string name="core_i8n_read_media_audio_permission_denied">メディアとオーディオの読み込み権限が拒否されました</string>
+
+    <string name="core_i8n_ringtone_permission">着信音</string>
+    <string name="core_i8n_ringtone_permission_prompt">音楽を着信音として設定するために、アプリがデバイスの設定にアクセスする権限が必要です</string>
+
+    <string name="core_i8n_post_notifications_permission">通知の送信</string>
+    <string name="core_i8n_post_notifications_permission_prompt">アプリがデバイスに通知を作成して表示するためにこの権限が必要です</string>
+    <string name="core_i8n_post_notifications_permission_denied">通知の送信権限が拒否されました</string>
+    <string name="core_i8n_lets_go">始める</string>
+
+    <string name="core_i8n_write_storage">ストレージへの書き込み</string>
+    <string name="core_i8n_write_storage_description">デバイスから曲を削除するためにこの権限が必要です</string>
+    <string name="core_i8n_telegram">Telegram</string>
+
+    <string name="core_i8n_my_name">Michael Allan Odhiambo</string>
+    <string name="core_i8n_app_github_repo_url">https://github.com/Odhiambo-Michael-Allan/music-matters</string>
+    <string name="core_i8n_github_profile_url">https://github.com/Odhiambo-Michael-Allan</string>
+
+    <string name="core_i8n_discord_server_url">https://discord.gg/EfruF8CP</string>
+    <string name="core_i8n_reddit_community_url">https://www.reddit.com/r/musicmattersappusers/</string>
+    <string name="core_i8n_telegram_channel_link">https://t.me/+58NS_CnxjD44YTI0</string>
+
+    <string name="core_i8n_added_song_to_favorites">曲をお気に入りに追加しました</string>
+    <string name="core_i8n_removed_song_from_favorites">曲をお気に入りから削除しました</string>
+    <string name="core_i8n_song_added_to_queue">曲をキューに追加しました</string>
+    <string name="core_i8n_song_removed_from_queue">曲をキューから削除しました</string>
+    <string name="core_i8n_song_will_play_next">次にこの曲が再生されます</string>
+
+    <string name="core_i8n_playing_notification_name">再生コントロール通知</string>
+    <string name="core_i8n_playing_notification_description">再生通知から再生/一時停止などの操作を行えます</string>
+    <string name="core_i8n_action_grant">許可する</string>
+
+    <string name="core_i8n_permission_bluetooth_denied">付近のデバイスへのアクセス権限が拒否されました。</string>
+    <string name="core_i8n_sharing_song_failed">曲の共有に失敗しました</string>
+    <string name="core_i8n_appearance">外観</string>
+
+    <string name="core_i8n_language">言語</string>
+    <string name="core_i8n_english">英語</string>
+    <string name="core_i8n_german">ドイツ語</string>
+    <string name="core_i8n_french">フランス語</string>
+    <string name="core_i8n_japanese">日本語</string>
+    <string name="core_i8n_portuguese_portugal">ポルトガル語（ポルトガル）</string>
+    <string name="core_i8n_portuguese_brazil">ポルトガル語（ブラジル）</string>
+    <string name="core_i8n_hindi">ヒンディー語</string>
+</resources>

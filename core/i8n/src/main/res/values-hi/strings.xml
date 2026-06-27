@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_i8n_give_your_playlist_a_name">अपनी प्लेलिस्ट को एक नाम दें</string>
+    <string name="core_i8n_playlist_name_placeholder">गानों की महफ़िल</string>
+    <string name="core_i8n_cancel">रद्द करें</string>
+    <string name="core_i8n_favorites">पसंदीदा</string>
+    <string name="core_i8n_added_n_songs_to_playlist">%2$s में %1$d गाने जोड़े गए</string>
+    <string name="core_i8n_added_song_to_playlist">%s में जोड़ा गया</string>
+    <string name="core_i8n_no_lyrics_found">कोई बोल (लिरिक्स) नहीं मिले</string>
+    <string name="core_i8n_error_media_not_found">अनुरोधित मीडिया नहीं मिल सका।</string>
+    <string name="core_i8n_generic_error">एप्लिकेशन में एक अप्रत्याशित त्रुटि आई है।</string>
+    <string name="core_i8n_left">शेष</string>
+
+    <string name="core_i8n_end_of_episode">वर्तमान में चल रहे गाने के अंत में</string>
+    <string name="core_i8n_turn_off_timer">टाइमर बंद करें</string>
+    <string name="core_i8n_sleep_timer">स्लीप टाइमर</string>
+    <string name="core_i8n_sleep_timer_set">आपका स्लीप टाइमर सेट हो गया है</string>
+    <string name="core_i8n_sleep_timer_off">आपका स्लीप टाइमर बंद कर दिया गया है</string>
+    <string name="core_i8n_sleep_timer_duration_left">स्लीप टाइमर %s</string>
+
+    <string name="core_i8n_queue">कतार</string>
+    <string name="core_i8n_settings">सेटिंग्स</string>
+    <string name="core_i8n_songs">गाने</string>
+    <string name="core_i8n_n_songs">%d गाने</string>
+
+    <string name="core_i8n_custom">कस्टम</string>
+    <string name="core_i8n_title">शीर्षक</string>
+    <string name="core_i8n_artist">कलाकार</string>
+    <string name="core_i8n_album">एल्बम</string>
+    <string name="core_i8n_duration">अवधि</string>
+    <string name="core_i8n_date_added">जोड़ने की तिथि</string>
+    <string name="core_i8n_composer">संगीतकार</string>
+    <string name="core_i8n_year">वर्ष</string>
+    <string name="core_i8n_file_name">फ़ाइल का नाम</string>
+    <string name="core_i8n_track_number">ट्रैक नंबर</string>
+
+    <string name="core_i8n_damn_this_is_so_empty">अरे, यहाँ तो कुछ भी नहीं है!!</string>
+    <string name="core_i8n_favorite">पसंदीदा बनाएं</string>
+    <string name="core_i8n_view_artist">कलाकार देखें: %s</string>
+    <string name="core_i8n_view_album">एल्बम देखें: %s</string>
+
+    <string name="core_i8n_share_song">गाना साझा करें</string>
+    <string name="core_i8n_details">विवरण</string>
+    <string name="core_i8n_delete">हटाएं</string>
+    <string name="core_i8n_play_next">अगला चलाएं</string>
+    <string name="core_i8n_add_to_queue">कतार में जोड़ें</string>
+    <string name="core_i8n_remove_from_queue">कतार से हटाएं</string>
+    <string name="core_i8n_add_to_playlist">प्लेलिस्ट में जोड़ें</string>
+
+    <string name="core_i8n_no_playlists_found">कोई प्लेलिस्ट नहीं मिली</string>
+    <string name="core_i8n_new_playlist">नई प्लेलिस्ट</string>
+    <string name="core_i8n_done">हो गया</string>
+    <string name="core_i8n_shuffle_play">शफल चलाएं</string>
+
+    <string name="core_i8n_track_name">ट्रैक का नाम</string>
+    <string name="core_i8n_genre">जोनर (शैली)</string>
+    <string name="core_i8n_path">पाथ (पथ)</string>
+    <string name="core_i8n_size">साइज़ (आकार)</string>
+
+    <string name="core_i8n_bitrate">बिटरेट</string>
+    <string name="core_i8n_xKbps">%s kbps</string>
+    <string name="core_i8n_bits_per_sample">बिट्स प्रति सैंपल</string>
+    <string name="core_i8n_xBit">%s bits</string>
+    <string name="core_i8n_sampling_rate">सैंपलिंग रेट</string>
+    <string name="core_i8n_xKHZ">%s KHZ</string>
+    <string name="core_i8n_codec">कोडेक</string>
+    <string name="core_i8n_delete_song">%s हटाएं</string>
+
+    <string name="core_i8n_rename_playlist">प्लेलिस्ट का नाम बदलें</string>
+    <string name="core_i8n_rename">नाम बदलें</string>
+    <string name="core_i8n_equalizer">इक्वलाइज़र</string>
+    <string name="core_i8n_speed">गति (स्पीड)</string>
+    <string name="core_i8n_pitch">पिच</string>
+
+    <string name="core_i8n_storage_access">स्टोरेज एक्सेस</string>
+    <string name="core_i8n_grant_access">एक्सेस की अनुमति दें</string>
+    <string name="core_i8n_storage_access_permission_prompt">संगीत चलाने के लिए ऐप को आपके डिवाइस स्टोरेज तक पहुंचने की अनुमति चाहिए</string>
+    <string name="core_i8n_storage_access_permission_denied">स्टोरेज एक्सेस अस्वीकार कर दिया गया</string>
+    <string name="core_i8n_welcome_message">नमस्ते! आपका स्वागत है</string>
+    <string name="core_i8n_read_media_audio">मीडिया ऑडियो पढ़ें</string>
+    <string name="core_i8n_read_media_audio_permission_prompt">आपके डिवाइस पर सहेजी गई ऑडियो फ़ाइलों को खोजने और चलाने के लिए ऐप को मीडिया और ऑडियो पढ़ने की अनुमति चाहिए</string>
+    <string name="core_i8n_read_media_audio_permission_denied">मीडिया और ऑडियो पढ़ने की अनुमति अस्वीकार कर दी गई</string>
+
+    <string name="core_i8n_ringtone_permission">रिंगटोन</string>
+    <string name="core_i8n_ringtone_permission_prompt">संगीत को रिंगटोन के रूप में सेट करने के लिए ऐप को आपके डिवाइस सेटिंग्स तक पहुंचने की अनुमति चाहिए</string>
+
+    <string name="core_i8n_post_notifications_permission">नोटिफिकेशन भेजें</string>
+    <string name="core_i8n_post_notifications_permission_prompt">आपके डिवाइस पर नोटिफिकेशन बनाने और दिखाने के लिए ऐप को इसकी आवश्यकता है</string>
+    <string name="core_i8n_post_notifications_permission_denied">नोटिफिकेशन भेजने की अनुमति अस्वीकार कर दी गई</string>
+    <string name="core_i8n_lets_go">शुरू करें</string>
+
+    <string name="core_i8n_write_storage">स्टोरेज में लिखें</string>
+    <string name="core_i8n_write_storage_description">डिवाइस से गानों को हटाने के लिए ऐप को इसकी आवश्यकता है</string>
+    <string name="core_i8n_telegram">टेलीग्राम</string>
+
+    <string name="core_i8n_my_name">Michael Allan Odhiambo</string>
+    <string name="core_i8n_app_github_repo_url">https://github.com/Odhiambo-Michael-Allan/music-matters</string>
+    <string name="core_i8n_github_profile_url">https://github.com/Odhiambo-Michael-Allan</string>
+
+    <string name="core_i8n_discord_server_url">https://discord.gg/EfruF8CP</string>
+    <string name="core_i8n_reddit_community_url">https://www.reddit.com/r/musicmattersappusers/</string>
+    <string name="core_i8n_telegram_channel_link">https://t.me/+58NS_CnxjD44YTI0</string>
+
+    <string name="core_i8n_added_song_to_favorites">गाना पसंदीदा सूची में जोड़ा गया</string>
+    <string name="core_i8n_removed_song_from_favorites">गाना पसंदीदा सूची से हटाया गया</string>
+    <string name="core_i8n_song_added_to_queue">गाना कतार में जोड़ा गया</string>
+    <string name="core_i8n_song_removed_from_queue">गाना कतार से हटाया गया</string>
+    <string name="core_i8n_song_will_play_next">गाना इसके बाद चलेगा</string>
+
+    <string name="core_i8n_playing_notification_name">प्लेइंग नोटिफिकेशन</string>
+    <string name="core_i8n_playing_notification_description">प्लेइंग नोटिफिकेशन चलाने/रोकने (प्ले/पॉज़) जैसी क्रियाएं प्रदान करता है</string>
+    <string name="core_i8n_action_grant">अनुमति दें</string>
+
+    <string name="core_i8n_permission_bluetooth_denied">आस-पास के डिवाइस की अनुमति अस्वीकार कर दी गई।</string>
+    <string name="core_i8n_sharing_song_failed">गाना साझा करने में विफल</string>
+    <string name="core_i8n_appearance">दिखावट (अपीयरेंस)</string>
+
+    <string name="core_i8n_language">भाषा</string>
+    <string name="core_i8n_english">अंग्रेज़ी</string>
+    <string name="core_i8n_german">जर्मन</string>
+    <string name="core_i8n_french">फ़्रेंच</string>
+    <string name="core_i8n_japanese">जापानी</string>
+    <string name="core_i8n_portuguese_portugal">पुर्तगाली (पुर्तगाल)</string>
+    <string name="core_i8n_portuguese_brazil">पुर्तगाली (ब्राजील)</string>
+    <string name="core_i8n_hindi">हिन्दी</string>
+</resources>

@@ -69,6 +69,8 @@ import com.squad.musicmatters.feature.nowplaying.NowPlayingScreen
 import com.squad.musicmatters.feature.nowplaying.components.MiniPlayer
 import com.squad.musicmatters.feature.queue.navigation.navigateToQueue
 import com.squad.musicmatters.feature.queue.navigation.queueScreen
+import com.squad.musicmatters.feature.settings.navigation.navigateToSettings
+import com.squad.musicmatters.feature.settings.navigation.settingsScreen
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import com.squad.musicmatters.feature.songs.navigation.songsScreen
 import com.squad.musicmatters.navigation.LibraryDestinations
@@ -79,7 +81,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.OptIn
-import com.squad.musicMatters.core.i8n.R as i8nR
+import com.squad.musicmatters.core.i8n.R as i8nR
 
 
 @Composable
@@ -257,7 +259,13 @@ fun MusicMattersAppContent(
                         title = stringResource( id = R.string.songs ),
                         topAppBarScrollBehavior = topAppBarScrollBehavior,
                         onNavigationIconClicked = {},
-                        onSettingsClicked = {}
+                        onSettingsClicked = {
+                            navController.navigateToSettings(
+                                navOptions = navOptions {
+                                    launchSingleTop = true
+                                }
+                            )
+                        }
                     )
                 }
 
@@ -347,6 +355,9 @@ fun MusicMattersAppContent(
                                 it
                             )
                         }
+                    )
+                    settingsScreen(
+                        onNavigateBack = { navController.navigateUp()}
                     )
 //                composable(
 //                    route = Route.Artists.name,

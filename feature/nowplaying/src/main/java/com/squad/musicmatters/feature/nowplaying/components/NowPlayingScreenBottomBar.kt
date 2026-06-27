@@ -47,12 +47,8 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.ThemeMode
-import com.squad.musicmatters.core.ui.ScreenOrientation
 import com.squad.musicmatters.core.ui.dialog.ScaffoldDialog
-
-import com.squad.musicMatters.core.i8n.R as i8nR
 
 
 @OptIn( ExperimentalMaterial3Api::class )

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_i8n_give_your_playlist_a_name">Donnez un nom à votre playlist</string>
+    <string name="core_i8n_playlist_name_placeholder">Morceaux</string>
+    <string name="core_i8n_cancel">Annuler</string>
+    <string name="core_i8n_favorites">Favoris</string>
+    <string name="core_i8n_added_n_songs_to_playlist">%1$d chansons ajoutées à %2$s</string>
+    <string name="core_i8n_added_song_to_playlist">Ajouté à %s</string>
+    <string name="core_i8n_no_lyrics_found">Aucune parole trouvée</string>
+    <string name="core_i8n_error_media_not_found">Impossible de localiser le média demandé.</string>
+    <string name="core_i8n_generic_error">L\'application a rencontré une erreur inattendue.</string>
+    <string name="core_i8n_left">restant</string>
+
+    <string name="core_i8n_end_of_episode">À la fin de la chanson en cours</string>
+    <string name="core_i8n_turn_off_timer">Désactiver la minuterie</string>
+    <string name="core_i8n_sleep_timer">Minuterie de veille</string>
+    <string name="core_i8n_sleep_timer_set">Votre minuterie de veille est activée</string>
+    <string name="core_i8n_sleep_timer_off">Votre minuterie de veille est désactivée</string>
+    <string name="core_i8n_sleep_timer_duration_left">Minuterie de veille %s</string>
+
+    <string name="core_i8n_queue">File d\'attente</string>
+    <string name="core_i8n_settings">Paramètres</string>
+    <string name="core_i8n_songs">Chansons</string>
+    <string name="core_i8n_n_songs">%d chansons</string>
+
+    <string name="core_i8n_custom">Personnalisé</string>
+    <string name="core_i8n_title">Titre</string>
+    <string name="core_i8n_artist">Artiste</string>
+    <string name="core_i8n_album">Album</string>
+    <string name="core_i8n_duration">Durée</string>
+    <string name="core_i8n_date_added">Date d\'ajout</string>
+    <string name="core_i8n_composer">Compositeur</string>
+    <string name="core_i8n_year">Année</string>
+    <string name="core_i8n_file_name">Nom du fichier</string>
+    <string name="core_i8n_track_number">Numéro de piste</string>
+
+    <string name="core_i8n_damn_this_is_so_empty">Mince, c\'est tellement vide ici !!</string>
+    <string name="core_i8n_favorite">Ajouter aux favoris</string>
+    <string name="core_i8n_view_artist">Voir l\'artiste : %s</string>
+    <string name="core_i8n_view_album">Voir l\'album : %s</string>
+
+    <string name="core_i8n_share_song">Partager la chanson</string>
+    <string name="core_i8n_details">Détails</string>
+    <string name="core_i8n_delete">Supprimer</string>
+    <string name="core_i8n_play_next">Lire ensuite</string>
+    <string name="core_i8n_add_to_queue">Ajouter à la file d\'attente</string>
+    <string name="core_i8n_remove_from_queue">Retirer de la file d\'attente</string>
+    <string name="core_i8n_add_to_playlist">Ajouter à la playlist</string>
+
+    <string name="core_i8n_no_playlists_found">Aucune playlist trouvée</string>
+    <string name="core_i8n_new_playlist">Nouvelle playlist</string>
+    <string name="core_i8n_done">Terminé</string>
+    <string name="core_i8n_shuffle_play">Lecture aléatoire</string>
+
+    <string name="core_i8n_track_name">Nom de la piste</string>
+    <string name="core_i8n_genre">Genre</string>
+    <string name="core_i8n_path">Chemin d\'accès</string>
+    <string name="core_i8n_size">Taille</string>
+
+    <string name="core_i8n_bitrate">Débit binaire</string>
+    <string name="core_i8n_xKbps">%s kbps</string>
+    <string name="core_i8n_bits_per_sample">Bits par échantillon</string>
+    <string name="core_i8n_xBit">%s bits</string>
+    <string name="core_i8n_sampling_rate">Fréquence d\'échantillonnage</string>
+    <string name="core_i8n_xKHZ">%s KHZ</string>
+    <string name="core_i8n_codec">Codec</string>
+    <string name="core_i8n_delete_song">Supprimer %s</string>
+
+    <string name="core_i8n_rename_playlist">Renommer la playlist</string>
+    <string name="core_i8n_rename">Renommer</string>
+    <string name="core_i8n_equalizer">Égaliseur</string>
+    <string name="core_i8n_speed">Vitesse</string>
+    <string name="core_i8n_pitch">Hauteur</string>
+
+    <string name="core_i8n_storage_access">Accès au stockage</string>
+    <string name="core_i8n_grant_access">Autoriser l\'accès</string>
+    <string name="core_i8n_storage_access_permission_prompt">L\'application a besoin de l\'autorisation d\'accéder au stockage de votre appareil pour lire de la musique</string>
+    <string name="core_i8n_storage_access_permission_denied">Accès au stockage refusé</string>
+    <string name="core_i8n_welcome_message">Bonjour ! Bienvenue sur</string>
+    <string name="core_i8n_read_media_audio">Lire les fichiers audio</string>
+    <string name="core_i8n_read_media_audio_permission_prompt">L\'application doit lire les fichiers multimédias et audio afin de récupérer et de lire les fichiers audio stockés sur votre appareil</string>
+    <string name="core_i8n_read_media_audio_permission_denied">Autorisation de lire les fichiers multimédias et audio refusée</string>
+
+    <string name="core_i8n_ringtone_permission">Sonnerie</string>
+    <string name="core_i8n_ringtone_permission_prompt">L\'application a besoin de l\'autorisation d\'accéder aux paramètres de l\'appareil afin de définir une musique comme sonnerie</string>
+
+    <string name="core_i8n_post_notifications_permission">Afficher les notifications</string>
+    <string name="core_i8n_post_notifications_permission_prompt">L\'application en a besoin pour créer et afficher des notifications sur votre appareil</string>
+    <string name="core_i8n_post_notifications_permission_denied">Autorisation d\'afficher les notifications refusée</string>
+    <string name="core_i8n_lets_go">C\'est parti</string>
+
+    <string name="core_i8n_write_storage">Écriture sur le stockage</string>
+    <string name="core_i8n_write_storage_description">L\'application en a besoin pour supprimer des chansons de l\'appareil</string>
+    <string name="core_i8n_telegram">Telegram</string>
+
+    <string name="core_i8n_my_name">Michael Allan Odhiambo</string>
+    <string name="core_i8n_app_github_repo_url">https://github.com/Odhiambo-Michael-Allan/music-matters</string>
+    <string name="core_i8n_github_profile_url">https://github.com/Odhiambo-Michael-Allan</string>
+
+    <string name="core_i8n_discord_server_url">https://discord.gg/EfruF8CP</string>
+    <string name="core_i8n_reddit_community_url">https://www.reddit.com/r/musicmattersappusers/</string>
+    <string name="core_i8n_telegram_channel_link">https://t.me/+58NS_CnxjD44YTI0</string>
+
+    <string name="core_i8n_added_song_to_favorites">Chanson ajoutée aux favoris</string>
+    <string name="core_i8n_removed_song_from_favorites">Chanson retirée des favoris</string>
+    <string name="core_i8n_song_added_to_queue">Chanson ajoutée à la file d\'attente</string>
+    <string name="core_i8n_song_removed_from_queue">Chanson retirée de la file d\'attente</string>
+    <string name="core_i8n_song_will_play_next">La chanson sera lue ensuite</string>
+
+    <string name="core_i8n_playing_notification_name">Notification de lecture</string>
+    <string name="core_i8n_playing_notification_description">La notification de lecture fournit des actions pour lire/mettre en pause, etc.</string>
+    <string name="core_i8n_action_grant">Autoriser</string>
+
+    <string name="core_i8n_permission_bluetooth_denied">Autorisation pour les appareils à proximité refusée.</string>
+    <string name="core_i8n_sharing_song_failed">Échec du partage de la chanson</string>
+    <string name="core_i8n_appearance">Apparence</string>
+
+    <string name="core_i8n_language">Langue</string>
+    <string name="core_i8n_english">Anglais</string>
+    <string name="core_i8n_german">Allemand</string>
+    <string name="core_i8n_french">Français</string>
+    <string name="core_i8n_japanese">Japonais</string>
+    <string name="core_i8n_portuguese_portugal">Portugais (Portugal)</string>
+    <string name="core_i8n_portuguese_brazil">Portugais (Brésil)</string>
+    <string name="core_i8n_hindi">Hindi</string>
+</resources>

@@ -53,4 +53,6 @@ message UserPreferences {
   bool sort_paths_reverse = 36;
   string currently_playing_song_id = 37;
   bool use_material_you_set = 38;
+  string language = 39;
+  bool show_lyrics_on_separate_screen = 40;
 }

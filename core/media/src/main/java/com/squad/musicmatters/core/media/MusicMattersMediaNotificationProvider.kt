@@ -22,7 +22,6 @@ import com.google.common.collect.ImmutableList
 import com.squad.musicmatters.core.data.utils.VersionUtils
 import com.squad.musicmatters.core.media.media.MusicService
 
-import com.squad.musicMatters.core.i8n.R as i8nR
 
 //private const val MUSIC_MATTERS_PACKAGE_NAME = "com.squad.musicmatters"
 //private const val TARGET_ACTIVITY_NAME = "$MUSIC_MATTERS_PACKAGE_NAME.MainActivity"

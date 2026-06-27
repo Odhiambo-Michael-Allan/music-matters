@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             currentSongBeingDeleted?.let {
                 contentResolver.delete( it.mediaUri.toUri(), null, null )
+                viewModel.deleteSong( it )
                 Toast.makeText(
                     applicationContext,
                     "Song Deleted",

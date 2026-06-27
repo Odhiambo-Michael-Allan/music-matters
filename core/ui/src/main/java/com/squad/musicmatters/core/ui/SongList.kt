@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.squad.musicMatters.core.i8n.R
+import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
@@ -95,7 +95,8 @@ fun SongList(
 
                 LazyColumn(
                     state = lazyListState,
-                    modifier = Modifier.drawScrollBar( lazyListState )
+                    modifier = Modifier
+                        .drawScrollBar( lazyListState )
                 ) {
                     leadingContent?.invoke( this )
                     itemsIndexed( songs ) {  index, song ->

@@ -92,14 +92,13 @@
 
     <string name="core_i8n_write_storage">Write Storage</string>
     <string name="core_i8n_write_storage_description">The app needs this to delete songs on the device</string>
-    <string name="core_i8n_telegram">Telegram</string>
 
     <string name="core_i8n_my_name">Michael Allan Odhiambo</string>
-    <string name="core_i8n_app_github_repo">https://github.com/Odhiambo-Michael-Allan/music-matters</string>
+    <string name="core_i8n_app_github_repo_url">https://github.com/Odhiambo-Michael-Allan/music-matters</string>
     <string name="core_i8n_github_profile_url">https://github.com/Odhiambo-Michael-Allan</string>
 
     <string name="core_i8n_discord_server_url">https://discord.gg/EfruF8CP</string>
-    <string name="core_i8n_reddit_community">https://www.reddit.com/r/musicmattersappusers/</string>
+    <string name="core_i8n_reddit_community_url">https://www.reddit.com/r/musicmattersappusers/</string>
     <string name="core_i8n_telegram_channel_link">https://t.me/+58NS_CnxjD44YTI0</string>
 
     <string name="core_i8n_added_song_to_favorites">Added Song To Favorites</string>
@@ -109,9 +108,67 @@
     <string name="core_i8n_song_will_play_next">Song will play next</string>
 
     <string name="core_i8n_playing_notification_name">Playing notification</string>
-    <string name="core_i8n_playing_notification_description">The playing notification provides actions for play/pause etc</string>
+    <string name="core_i8n_playing_notification_description">The playing notification provides
+        actions for play/pause etc</string>
     <string name="core_i8n_action_grant">Grant</string>
 
     <string name="core_i8n_permission_bluetooth_denied">Nearby devices permission denied.</string>
     <string name="core_i8n_sharing_song_failed">Sharing song failed</string>
+    <string name="core_i8n_appearance">Appearance</string>
+
+    <string name="core_i8n_language">Language</string>
+    <string name="core_i8n_english">English</string>
+    <string name="core_i8n_german">German</string>
+    <string name="core_i8n_french">French</string>
+    <string name="core_i8n_japanese">Japanese</string>
+    <string name="core_i8n_portuguese_portugal">Portuguese (Portugal)</string>
+    <string name="core_i8n_portuguese_brazil">Portuguese (Brazil)</string>
+    <string name="core_i8n_hindi">Hindi</string>
+
+<!--    TODO: THESE SHOULD BE TRANSLATED-->
+    <string name="core_i8n_font" translatable="false">Font</string>
+    <string name="core_i8n_font_scale" translatable="false">Font Scale</string>
+    <string name="core_i8n_reset" translatable="false">Reset</string>
+
+<!--    THEME MODES-->
+    <string name="core_i8n_system_light_dark" translatable="false">System (Light/Dark)</string>
+    <string name="core_i8n_light" translatable="false">Light</string>
+    <string name="core_i8n_dark" translatable="false">Dark</string>
+    <string name="core_i8n_black" translatable="false">Black</string>
+    <string name="core_i8n_theme" translatable="false">Theme</string>
+
+<!--    COLOR SCHEME-->
+    <string name="core_i8n_primary_color" translatable="false">Primary Color</string>
+
+    <string name="core_i8n_invisible" translatable="false">Invisible</string>
+    <string name="core_i8n_visible_when_active" translatable="false">Visible when active</string>
+    <string name="core_i8n_always_visible" translatable="false">Always visible</string>
+    <string name="core_i8n_bottom_bar_label_visibility" translatable="false">Bottom bar label visibility</string>
+    <string name="core_i8n_require_audio_focus" translatable="false">Require audio focus</string>
+    <string name="core_i8n_fade_playback_in_out" translatable="false">Fade playback in-out</string>
+    <string name="core_i8n_xSeconds" translatable="false">%s seconds</string>
+    <string name="core_i8n_ignore_audio_focus_loss" translatable="false">Ignore audio focus loss</string>
+    <string name="core_i8n_play_on_headphones_connect" translatable="false">Play on headphones connect</string>
+    <string name="core_i8n_pause_on_headphones_disconnect" translatable="false">Pause on headphones disconnect</string>
+    <string name="core_i8n_mini_player_text_marquee" translatable="false">Mini player text marquee</string>
+    <string name="core_i8n_show_lyrics_on_separate_screen" translatable="false">Show lyrics on separate screen</string>
+    <string name="core_i8n_made_by" translatable="false">Made by Michael Allan Odhiambo</string>
+    <string name="core_i8n_use_material_you" translatable="false">Use material you</string>
+    <string name="core_i8n_system_default" translatable="false">System-Default</string>
+    <string name="core_i8n_interface" translatable="false">Interface</string>
+    <string name="core_i8n_player" translatable="false">Player</string>
+    <string name="core_i8n_mini_player" translatable="false">Mini player</string>
+    <string name="core_i8n_now_playing" translatable="false">Now playing</string>
+    <string name="core_i8n_community" translatable="false">Community</string>
+    <string name="core_i8n_about" translatable="false">About</string>
+
+
+
+
+    <string name="core_i8n_reddit" translatable="false">Reddit</string>
+    <string name="core_i8n_discord" translatable="false">Discord</string>
+    <string name="core_i8n_telegram" translatable="false">Telegram</string>
+    <string name="core_i8n_github" translatable="false">Github</string>
+
+
 </resources>

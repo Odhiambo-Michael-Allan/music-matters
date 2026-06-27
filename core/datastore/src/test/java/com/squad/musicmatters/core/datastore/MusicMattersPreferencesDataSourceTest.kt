@@ -78,11 +78,11 @@ class MusicMattersPreferencesDataSourceTest {
     }
 
     @Test
-    fun testChangeUseMaterialYou() = testScope.runTest {
+    fun testChangeSetUseMaterialYou() = testScope.runTest {
         assertTrue( subject.userData.map { it.useMaterialYou }.first() )
-        subject.useMaterialYou( true )
+        subject.setUseMaterialYou( true )
         assertTrue( subject.userData.map { it.useMaterialYou }.first() )
-        subject.useMaterialYou( false )
+        subject.setUseMaterialYou( false )
         assertFalse( subject.userData.map { it.useMaterialYou }.first() )
     }
 
@@ -176,35 +176,6 @@ class MusicMattersPreferencesDataSourceTest {
         assertFalse( subject.userData.map { it.pauseOnHeadphonesDisconnect }.first() )
     }
 
-    @Test
-    fun testSetFastRewindDuration() = runTest {
-        assertEquals(
-            DefaultPreferences.FAST_REWIND_DURATION,
-            subject.userData.map { it.fastRewindDuration }.first()
-        )
-        listOf( 15, 30 ).forEach {
-            subject.setFastRewindDuration( it )
-            assertEquals(
-                it,
-                subject.userData.map { it.fastRewindDuration }.first()
-            )
-        }
-    }
-
-    @Test
-    fun testSetFastForwardDuration() = runTest {
-        assertEquals(
-            DefaultPreferences.FAST_FORWARD_DURATION,
-            subject.userData.map { it.fastForwardDuration }.first()
-        )
-        listOf( 15, 30 ).forEach {
-            subject.setFastForwardDuration( it )
-            assertEquals(
-                it,
-                subject.userData.map { it.fastForwardDuration }.first()
-            )
-        }
-    }
 
     @Test
     fun testSetMiniPlayerTextMarquee() = runTest {
@@ -215,53 +186,6 @@ class MusicMattersPreferencesDataSourceTest {
         assertFalse( subject.userData.map { it.miniPlayerTextMarquee }.first() )
     }
 
-    @Test
-    fun testSetMiniPlayerShowSeekControls() = runTest {
-        assertFalse( subject.userData.map { it.miniPlayerShowSeekControls }.first() )
-        subject.setMiniPlayerShowSeekControls( true )
-        assertTrue( subject.userData.map { it.miniPlayerShowSeekControls }.first() )
-        subject.setMiniPlayerShowSeekControls( false )
-        assertFalse( subject.userData.map { it.miniPlayerShowSeekControls }.first() )
-    }
-
-    @Test
-    fun testSetMiniPlayerShowTrackControls() = runTest {
-        assertFalse( subject.userData.map { it.miniPlayerShowTrackControls }.first() )
-        subject.setMiniPlayerShowTrackControls( true )
-        assertTrue( subject.userData.map { it.miniPlayerShowTrackControls }.first() )
-        subject.setMiniPlayerShowTrackControls( false )
-        assertFalse( subject.userData.map { it.miniPlayerShowTrackControls }.first() )
-    }
-
-    @Test
-    fun testSetPlaybackSpeed() = runTest {
-        assertEquals(
-            DefaultPreferences.PLAYBACK_SPEED,
-            subject.userData.map { it.playbackSpeed }.first()
-        )
-        listOf( 0.5f, 1f, 1.5f, 2f ).forEach {
-            subject.setPlaybackSpeed( it )
-            assertEquals(
-                it,
-                subject.userData.map { it.playbackSpeed }.first()
-            )
-        }
-    }
-
-    @Test
-    fun testSetPlaybackPitch() = runTest {
-        assertEquals(
-            DefaultPreferences.PLAYBACK_PITCH,
-            subject.userData.map { it.playbackPitch }.first()
-        )
-        listOf( 0.5f, 1f, 1.5f, 2f ).forEach {
-            subject.setPlaybackPitch( it )
-            assertEquals(
-                it,
-                subject.userData.map { it.playbackPitch }.first()
-            )
-        }
-    }
 
     @Test
     fun testSetLoopMode() = runTest {
@@ -294,15 +218,6 @@ class MusicMattersPreferencesDataSourceTest {
         assertTrue( subject.userData.map { it.showLyrics }.first() )
         subject.setShowLyrics( false )
         assertFalse( subject.userData.map { it.showLyrics }.first() )
-    }
-
-    @Test
-    fun testSetControlsLayoutIsDefault() = runTest {
-        assertFalse( subject.userData.map { it.controlsLayoutDefault }.first() )
-        subject.setControlsLayoutIsDefault( true )
-        assertTrue( subject.userData.map { it.controlsLayoutDefault }.first() )
-        subject.setControlsLayoutIsDefault( false )
-        assertFalse( subject.userData.map { it.controlsLayoutDefault }.first() )
     }
 
     @Test

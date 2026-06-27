@@ -140,9 +140,16 @@ fun MediaSortBarPreview() {
             sortReverse = false,
             onSortReverseChange = {},
             sortType = SortSongsBy.TITLE,
-            sortTypes = SortSongsBy.entries.associateBy( { it }, { it.sortSongsByLabelResId() } ),
+            sortTypes = SortSongsBy.entries.associateBy(
+                { it }, { it.sortSongsByLabelResId() }
+            ),
             onSortTypeChange = {},
-            label = { Text( text = stringResource( id = com.squad.musicMatters.core.i8n.R.string.core_i8n_n_songs, 42 )) }
+            label = {
+                Text( text = stringResource(
+                    id = com.squad.musicmatters.core.i8n.R.string.core_i8n_n_songs,
+                    42 )
+                )
+            }
         )
     }
 }

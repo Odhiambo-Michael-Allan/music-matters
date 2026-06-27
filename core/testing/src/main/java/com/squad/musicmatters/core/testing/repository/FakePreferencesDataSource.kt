@@ -57,7 +57,7 @@ class FakePreferencesDataSource : PreferencesDataSource {
         }
     }
 
-    override suspend fun useMaterialYou( useMaterialYou: Boolean ) {
+    override suspend fun setUseMaterialYou(useMaterialYou: Boolean ) {
         currentUserData.let { current ->
             _userData.tryEmit(
                 current.copy(
@@ -147,71 +147,11 @@ class FakePreferencesDataSource : PreferencesDataSource {
         }
     }
 
-    override suspend fun setFastRewindDuration( fastRewindDuration: Int ) {
-        currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    fastRewindDuration = fastRewindDuration
-                )
-            )
-        }
-    }
-
-    override suspend fun setFastForwardDuration( fastForwardDuration: Int ) {
-        currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    fastForwardDuration = fastForwardDuration
-                )
-            )
-        }
-    }
-
     override suspend fun setMiniPlayerTextMarquee( miniPlayerTextMarquee: Boolean ) {
         currentUserData.let { current ->
             _userData.tryEmit(
                 current.copy(
                     miniPlayerTextMarquee = miniPlayerTextMarquee
-                )
-            )
-        }
-    }
-
-    override suspend fun setMiniPlayerShowSeekControls( miniPlayerShowSeekControls: Boolean ) {
-        currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    miniPlayerShowSeekControls = miniPlayerShowSeekControls
-                )
-            )
-        }
-    }
-
-    override suspend fun setMiniPlayerShowTrackControls( miniPlayerShowTrackControls: Boolean ) {
-        currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    miniPlayerShowTrackControls = miniPlayerShowTrackControls
-                )
-            )
-        }
-    }
-
-    override suspend fun setPlaybackSpeed( playbackSpeed: Float ) {
-        currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    playbackSpeed = playbackSpeed
-                )
-            )
-        }
-    }
-
-    override suspend fun setPlaybackPitch( playbackPitch: Float ) {
-        currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    playbackPitch = playbackPitch
                 )
             )
         }
@@ -247,15 +187,6 @@ class FakePreferencesDataSource : PreferencesDataSource {
         }
     }
 
-    override suspend fun setControlsLayoutIsDefault( controlsLayoutIsDefault: Boolean ) {
-        currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    controlsLayoutDefault = controlsLayoutIsDefault
-                )
-            )
-        }
-    }
 
     override suspend fun setDisabledTreePaths( disabledTreePaths: Set<String> ) {
         currentUserData.let { current ->
@@ -397,6 +328,16 @@ class FakePreferencesDataSource : PreferencesDataSource {
         }
     }
 
+    override suspend fun setShowLyricsOnSeparateScreen( showLyricsOnSeparateScreen: Boolean ) {
+        currentUserData.let { current ->
+            _userData.tryEmit(
+                current.copy(
+                    showLyricsOnSeparateScreen = showLyricsOnSeparateScreen
+                )
+            )
+        }
+    }
+
     fun sendUserData( userData: UserData ) {
         _userData.tryEmit( userData )
     }
@@ -415,17 +356,10 @@ val emptyUserData = UserData(
     ignoreAudioFocusLoss = false,
     playOnHeadphonesConnect = true,
     pauseOnHeadphonesDisconnect = false,
-    fastRewindDuration = 30,
-    fastForwardDuration = 30,
-    miniPlayerShowTrackControls = true,
-    miniPlayerShowSeekControls = false,
     miniPlayerTextMarquee = true,
-    playbackSpeed = 1f,
-    playbackPitch = 1f,
     loopMode = LoopMode.None,
     shuffle = false,
     showLyrics = false,
-    controlsLayoutDefault = true,
     currentlyDisabledTreePaths = emptySet(),
     sortSongsBy = SortSongsBy.TITLE,
     sortSongsReverse = false,
@@ -440,4 +374,5 @@ val emptyUserData = UserData(
     sortPathsBy = SortPathsBy.NAME,
     sortPathsReverse = false,
     currentlyPlayingSongId = "",
+    showLyricsOnSeparateScreen = false,
 )

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.squad.musicMatters.core.i8n"
+    namespace = "com.squad.musicmatters.core.i8n"
 
     defaultConfig {
 

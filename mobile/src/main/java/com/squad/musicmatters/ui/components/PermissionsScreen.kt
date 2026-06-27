@@ -37,12 +37,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import com.squad.musicMatters.core.i8n.R
+import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import kotlinx.coroutines.CoroutineScope
-import com.squad.musicMatters.core.i8n.R as i8nR
+import com.squad.musicmatters.core.i8n.R as i8nR
 import kotlinx.coroutines.launch
 
 

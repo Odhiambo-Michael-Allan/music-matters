@@ -5,12 +5,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
@@ -22,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,16 +42,13 @@ fun ScaffoldDialog(
     onDismissRequest: () -> Unit,
 ) {
 
-    val configuration = LocalConfiguration.current
-
     Dialog( onDismissRequest = onDismissRequest ) {
         Surface(
             color = MaterialTheme.colorScheme.background,
             shape = RoundedCornerShape( 8.dp ),
-            modifier = Modifier.run {
-                val maxHeight = ( configuration.screenHeightDp * 0.9f ).dp
-                requiredHeightIn( max = maxHeight )
-            }
+            modifier = Modifier
+//                .fillMaxWidth( 0.8f )
+//                .fillMaxHeight( 0.7f )
         ) {
             Column {
                 Row(
@@ -56,7 +57,12 @@ fun ScaffoldDialog(
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
-                            .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 12.dp)
+                            .padding(
+                                start = 20.dp,
+                                end = 20.dp,
+                                top = 12.dp,
+                                bottom = 12.dp
+                            )
                             .weight(1f)
                     ) {
                         ProvideTextStyle(
@@ -69,7 +75,10 @@ fun ScaffoldDialog(
                         }
                     }
                 }
-                Divider( thickness = 0.5.dp )
+                Divider(
+                    thickness = 0.5.dp,
+                    modifier = Modifier.padding( 24.dp, 0.dp )
+                )
                 topBar?.let { it() }
                 Box {
                     content()

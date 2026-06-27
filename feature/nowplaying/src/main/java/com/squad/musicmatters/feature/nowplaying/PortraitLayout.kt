@@ -170,8 +170,6 @@ private fun PortraitPreview() {
         PortraitLayout(
             uiState = NowPlayingScreenUiState.Success(
                 userData = emptyUserData.copy(
-                    miniPlayerShowTrackControls = false,
-                    controlsLayoutDefault = false,
                     loopMode = LoopMode.Queue,
                     shuffle = true,
                     showLyrics = true,

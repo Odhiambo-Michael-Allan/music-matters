@@ -74,7 +74,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
 
-import com.squad.musicMatters.core.i8n.R as i8nR
+import com.squad.musicmatters.core.i8n.R as i8nR
 
 @Retention( AnnotationRetention.BINARY )
 @Target( AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION )
@@ -554,8 +554,6 @@ private fun NowPlayingScreenContentPreview() {
         NowPlayingScreenContent(
             uiState = NowPlayingScreenUiState.Success(
                 userData = emptyUserData.copy(
-                    miniPlayerShowTrackControls = false,
-                    controlsLayoutDefault = false,
                     loopMode = LoopMode.Queue,
                 ),
                 currentlyPlayingSong = Song(

@@ -13,6 +13,7 @@ import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
+import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
@@ -25,7 +26,7 @@ import androidx.media3.session.SessionCommand
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
-import com.squad.musicMatters.core.i8n.R
+import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.common.Dispatcher
 import com.squad.musicmatters.core.common.MusicMattersDispatchers
 import com.squad.musicmatters.core.common.di.ApplicationScope
@@ -39,13 +40,10 @@ import com.squad.musicmatters.core.data.songs.SongsStore
 import com.squad.musicmatters.core.data.songs.impl.SongsStoreImpl
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.media.connection.DefaultSongToMediaItemConverter
-import com.squad.musicmatters.core.media.media.extensions.getMediaItems
-import com.squad.musicmatters.core.media.media.extensions.toMediaItem
 import com.squad.musicmatters.core.model.LoopMode
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -112,7 +110,7 @@ class MusicService : MediaLibraryService() {
             .build()
     }
 
-    private val musicallyAudioAttributes = AudioAttributes.Builder()
+    private val playerAudioAttributes = AudioAttributes.Builder()
         .setContentType( C.AUDIO_CONTENT_TYPE_MUSIC )
         .setUsage( C.USAGE_MEDIA )
         .build()
@@ -126,7 +124,7 @@ class MusicService : MediaLibraryService() {
     private val exoPlayer: Player by lazy {
         val player = ExoPlayer.Builder( this ).build()
             .apply {
-            setAudioAttributes( musicallyAudioAttributes, true )
+            setAudioAttributes( playerAudioAttributes, true )
             setHandleAudioBecomingNoisy( true )
             addListener( playerListener )
         }
@@ -156,7 +154,9 @@ class MusicService : MediaLibraryService() {
         return MusicServiceCallback()
     }
 
+
     private val headsetReceiver = object : BroadcastReceiver() {
+
         override fun onReceive( context: Context?, intent: Intent? ) {
             intent?.action?.let { action ->
                 if ( action == Intent.ACTION_HEADSET_PLUG ) {
@@ -228,21 +228,6 @@ class MusicService : MediaLibraryService() {
         MediaPermissionsManager.checkForPermissions( applicationContext )
         setMediaNotificationProvider( notificationProvider )
         registerHeadsetEvents()
-    }
-
-    private suspend fun initializePlayer() {
-//        replaceableForwardingPlayer.apply {
-//            val songsInQueue = queueRepository.fetchSongsInQueueSortedByPosition().first()
-//            val previouslyPlayingSong = songsInQueue
-//                .find { it.id == userPreferencesDataSource.userData.first().currentlyPlayingSongId }
-//            setMediaItems(
-//                songsInQueue.map { it.toMediaItem() }.toMutableList(),
-//                previouslyPlayingSong?.let { songsInQueue.indexOf( it ) } ?: 0,
-//                C.TIME_UNSET
-//            )
-//            prepare()
-//        }
-
     }
 
     private suspend fun observeLoopMode() {

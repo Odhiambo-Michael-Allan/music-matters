@@ -273,30 +273,7 @@ private fun MiniPlayerContent(
                                     )
                                 }
                                 Spacer( modifier = Modifier.width( 15.dp ) )
-                                AnimatedVisibility(
-                                    uiState.userData.miniPlayerShowTrackControls
-                                ) {
-                                    IconButton(
-                                        onClick = { previousSong() }
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.SkipPrevious,
-                                            contentDescription = null
-                                        )
-                                    }
-                                }
-                                AnimatedVisibility(
-                                    uiState.userData.miniPlayerShowSeekControls
-                                ) {
-                                    IconButton(
-                                        onClick = seekBack
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.FastRewind,
-                                            contentDescription = null
-                                        )
-                                    }
-                                }
+
                                 IconButton( onClick = playPause ) {
                                     AnimatedContent(
                                         targetState = uiState.playerState.isPlaying,
@@ -313,30 +290,6 @@ private fun MiniPlayerContent(
                                             } else {
                                                 Color.White
                                             },
-                                            contentDescription = null
-                                        )
-                                    }
-                                }
-                                AnimatedVisibility(
-                                    uiState.userData.miniPlayerShowSeekControls
-                                ) {
-                                    IconButton(
-                                        onClick = seekForward
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.FastForward,
-                                            contentDescription = null
-                                        )
-                                    }
-                                }
-                                AnimatedVisibility(
-                                    uiState.userData.miniPlayerShowTrackControls
-                                ) {
-                                    IconButton(
-                                        onClick = { nextSong() }
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.SkipNext,
                                             contentDescription = null
                                         )
                                     }
@@ -630,7 +583,6 @@ private fun MiniPlayerPreview() {
                 modifier = Modifier.align( Alignment.Center ),
                 uiState = NowPlayingScreenUiState.Success(
                     userData = emptyUserData.copy(
-                        miniPlayerShowTrackControls = false,
                         miniPlayerTextMarquee = true
                     ),
                     currentlyPlayingSong = Song(
@@ -688,17 +640,10 @@ val emptyUserData = UserData(
     ignoreAudioFocusLoss = false,
     playOnHeadphonesConnect = true,
     pauseOnHeadphonesDisconnect = false,
-    fastRewindDuration = 30,
-    fastForwardDuration = 30,
-    miniPlayerShowTrackControls = true,
-    miniPlayerShowSeekControls = false,
     miniPlayerTextMarquee = true,
-    playbackSpeed = 1f,
-    playbackPitch = 1f,
     loopMode = LoopMode.None,
     shuffle = false,
     showLyrics = false,
-    controlsLayoutDefault = true,
     currentlyDisabledTreePaths = emptySet(),
     sortSongsBy = SortSongsBy.TITLE,
     sortSongsReverse = false,
@@ -713,5 +658,6 @@ val emptyUserData = UserData(
     sortPathsBy = SortPathsBy.NAME,
     sortPathsReverse = false,
     currentlyPlayingSongId = "",
+    showLyricsOnSeparateScreen = true
 )
 

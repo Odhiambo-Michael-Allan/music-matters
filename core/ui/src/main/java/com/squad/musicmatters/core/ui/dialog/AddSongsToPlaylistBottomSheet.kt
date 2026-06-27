@@ -45,7 +45,7 @@ import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.R
 import com.squad.musicmatters.core.ui.SubtleCaptionText
 
-import com.squad.musicMatters.core.i8n.R as i8nR
+import com.squad.musicmatters.core.i8n.R as i8nR
 
 @Composable
 internal fun AddSongsToPlaylistBottomSheet(

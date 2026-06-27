@@ -15,14 +15,12 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Density
 import com.squad.musicmatters.core.model.ThemeMode
+import com.squad.musicmatters.core.i8n.R as i8nR
 
 const val contentScale = 1.0f
-
-
-
 enum class ColorSchemeMode {
     LIGHT,
     DARK,
@@ -67,14 +65,13 @@ fun MusicMattersTheme(
         }
     }
 
-//    val typography = MusicMattersTypography.toTypography(
-//        MusicMattersTypography.resolveFont( fontName ),
-//        TextDirection.Ltr
-//    )
+    val typography = MusicMattersTypography.toTypography(
+        MusicMattersTypography.resolveFont( fontName ),
+    )
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = MusicMattersTypography,
+        typography = typography,
         content = {
             CompositionLocalProvider(
                 LocalDensity provides Density(
@@ -90,12 +87,13 @@ fun MusicMattersTheme(
     )
 }
 
-//fun ThemeMode.resolveName( language: Language) = when ( this ) {
-//    ThemeMode.FOLLOW_SYSTEM -> language.systemLightDark
-//    ThemeMode.LIGHT -> language.light
-//    ThemeMode.DARK -> language.dark
-//    ThemeMode.BLACK -> language.black
-//}
+@Composable
+fun ThemeMode.resolveName() = when ( this ) {
+    ThemeMode.FOLLOW_SYSTEM -> stringResource( id = i8nR.string.core_i8n_system_light_dark )
+    ThemeMode.LIGHT -> stringResource( id = i8nR.string.core_i8n_light )
+    ThemeMode.DARK -> stringResource( id = i8nR.string.core_i8n_dark )
+    ThemeMode.BLACK -> stringResource( id = i8nR.string.core_i8n_black )
+}
 
 fun ThemeMode.toColorSchemeMode(isSystemInDarkTheme: Boolean ) = when ( this ) {
     ThemeMode.FOLLOW_SYSTEM -> if ( isSystemInDarkTheme ) ColorSchemeMode.DARK else ColorSchemeMode.LIGHT
