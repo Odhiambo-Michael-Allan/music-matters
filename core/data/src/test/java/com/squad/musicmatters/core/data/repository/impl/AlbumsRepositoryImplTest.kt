@@ -22,6 +22,7 @@ class AlbumsRepositoryImplTest {
 
     @Test
     fun testFetchAlbums() = runTest {
+        songsRepository.sendSongs( emptyList() )
         var albums = subject.fetchAlbums().first()
         assertTrue( albums.isEmpty() )
 
@@ -59,10 +60,10 @@ class AlbumsRepositoryImplTest {
         )
         songsRepository.sendSongs( testSongs )
         albums = subject.fetchAlbums().first()
-        assertEquals( 6, albums.size )
+        assertEquals( 3, albums.size )
 
-        val views = subject.fetchAlbumWithId( 3 ).first()
-        assertEquals( 3, views.trackCount )
+        val views = subject.fetchAlbumWithId( 1 ).first()
+        assertEquals( 4, views.trackCount )
         assertEquals( "Views", views.title )
 
         val scorpion = subject.fetchAlbumWithId( 3 ).first()

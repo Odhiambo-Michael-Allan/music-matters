@@ -189,7 +189,8 @@ private fun buildSongUsing( cursor: Cursor ): Song {
         dateModified = dateAdded ?: dateModified ?: UNKNOWN_LONG_VALUE,
         size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: UNKNOWN_LONG_VALUE,
         path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: UNKNOWN_STRING_VALUE,
-        artworkUri = cursor.getArtworkUri()?.toString()
+        artworkUri = cursor.getArtworkUri()?.toString(),
+        albumArtist = cursor.getNullableStringFrom( "album_artist" )
     )
 }
 

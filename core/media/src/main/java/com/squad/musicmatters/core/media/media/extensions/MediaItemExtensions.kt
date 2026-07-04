@@ -124,19 +124,19 @@ fun getArtworkUriWith(cursor: Cursor ): Uri? = MediaStore.Audio.Media.EXTERNAL_C
 //    artworkUri = mediaMetadata.artworkUri.toString(),
 //)
 
-fun MediaItem.toAlbum( songs: List<Song> ) = Album(
-    title = mediaMetadata.title.toString(),
-    artists = parseAlbumArtistsStringIntoIndividualArtists( artistTagSeparators ),
-    trackCount = songs.count { it.albumTitle == mediaMetadata.title.toString() },
-    artworkUri = mediaMetadata.artworkUri.toString()
-)
-
-fun MediaItem.toArtist( songs: List<Song>, albums: List<Album> ) = Artist(
-    name = mediaMetadata.title.toString(),
-    artworkUri = mediaMetadata.artworkUri?.toString(),
-    trackCount = songs.count { it.artists.contains( this.mediaMetadata.title ) },
-    albumCount = albums.count { it.artists.contains( mediaMetadata.title ) }
-)
+//fun MediaItem.toAlbum( songs: List<Song> ) = Album(
+//    title = mediaMetadata.title.toString(),
+//    artists = parseAlbumArtistsStringIntoIndividualArtists( artistTagSeparators ),
+//    trackCount = songs.count { it.albumTitle == mediaMetadata.title.toString() },
+//    artworkUri = mediaMetadata.artworkUri.toString()
+//)
+//
+//fun MediaItem.toArtist( songs: List<Song>, albums: List<Album> ) = Artist(
+//    name = mediaMetadata.title.toString(),
+//    artworkUri = mediaMetadata.artworkUri?.toString(),
+//    trackCount = songs.count { it.artists.contains( this.mediaMetadata.title ) },
+//    albumCount = albums.count { it.artists.contains( mediaMetadata.title ) }
+//)
 
 fun MediaItem.parseArtistStringIntoIndividualArtists( separators: Set<String> ): Set<String> {
     val artistsSet = mediaMetadata.extras?.getString( ARTIST_KEY )?.split( *separators.toTypedArray() )
@@ -145,10 +145,10 @@ fun MediaItem.parseArtistStringIntoIndividualArtists( separators: Set<String> ):
     return artistsSet
 }
 
-fun MediaItem.parseAlbumArtistsStringIntoIndividualArtists( separators: Set<String> ) =
-    mediaMetadata.extras?.getString( ARTIST_KEY )?.split( *separators.toTypedArray() )
-    ?.mapNotNull { x -> x.trim().takeIf { it.isNotEmpty() } }
-    ?.toSet() ?: setOf()
+//fun MediaItem.parseAlbumArtistsStringIntoIndividualArtists( separators: Set<String> ) =
+//    mediaMetadata.extras?.getString( ARTIST_KEY )?.split( *separators.toTypedArray() )
+//    ?.mapNotNull { x -> x.trim().takeIf { it.isNotEmpty() } }
+//    ?.toSet() ?: setOf()
 
 val genreTagSeparators = setOf( "/", "," )
 

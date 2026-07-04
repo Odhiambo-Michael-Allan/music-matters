@@ -16,6 +16,7 @@ data class Song(
     val albumId: Long,
     val composer: String?,
     val artworkUri: String?,
+    val albumArtist: String? = null,
 ) {
     companion object {
 
