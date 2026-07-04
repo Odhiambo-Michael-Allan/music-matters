@@ -65,9 +65,11 @@ import com.squad.musicmatters.R
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.TopAppBar
+import com.squad.musicmatters.feature.lyrics.navigation.lyricsScreen
+import com.squad.musicmatters.feature.lyrics.navigation.navigateToLyricsScreen
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreen
 import com.squad.musicmatters.feature.nowplaying.components.MiniPlayer
-import com.squad.musicmatters.feature.queue.navigation.navigateToQueue
+import com.squad.musicmatters.feature.queue.navigation.navigateToQueueScreen
 import com.squad.musicmatters.feature.queue.navigation.queueScreen
 import com.squad.musicmatters.feature.settings.navigation.navigateToSettings
 import com.squad.musicmatters.feature.settings.navigation.settingsScreen
@@ -355,6 +357,9 @@ fun MusicMattersAppContent(
                                 it
                             )
                         }
+                    )
+                    lyricsScreen(
+                        onNavigateBack = { navController.navigateUp() }
                     )
                     settingsScreen(
                         onNavigateBack = { navController.navigateUp()}
@@ -731,8 +736,15 @@ fun MusicMattersAppContent(
                                 showNowPlayingScreen = false
                             },
 
-                            onNavigateToQueue = {
-                                navController.navigateToQueue(
+                            onNavigateToQueueScreen = {
+                                navController.navigateToQueueScreen(
+                                    navOptions = navOptions {
+                                        launchSingleTop = true
+                                    }
+                                )
+                            },
+                            onNavigateToLyricsScreen = {
+                                navController.navigateToLyricsScreen(
                                     navOptions = navOptions {
                                         launchSingleTop = true
                                     }

@@ -4,9 +4,11 @@ import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
+import com.squad.musicmatters.core.media.media.PlaybackPositionUpdater
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
-import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
+import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
+import com.squad.musicmatters.core.testing.media.FakePlaybackPositionUpdater
 import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
@@ -33,9 +35,9 @@ class NowPlayingScreenViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var viewModel: NowPlayingScreenViewModel
-    private lateinit var player: TestMusicMattersPlayer
+    private lateinit var player: FakeMusicMattersPlayer
     private lateinit var playlistRepository: FakePlaylistRepository
-    private lateinit var playbackPositionUpdater: TestPlaybackPositionUpdater
+    private lateinit var playbackPositionUpdater: FakePlaybackPositionUpdater
     private lateinit var metadataRepository: FakeSongsAdditionalMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
     private lateinit var songsRepository: FakeSongsRepository
@@ -43,9 +45,9 @@ class NowPlayingScreenViewModelTest {
 
     @Before
     fun setUp() {
-        player = TestMusicMattersPlayer()
+        player = FakeMusicMattersPlayer()
         playlistRepository = FakePlaylistRepository()
-        playbackPositionUpdater = TestPlaybackPositionUpdater()
+        playbackPositionUpdater = FakePlaybackPositionUpdater()
         metadataRepository = FakeSongsAdditionalMetadataRepository()
         songsRepository = FakeSongsRepository()
         queueRepository = FakeQueueRepository()
@@ -195,23 +197,3 @@ class NowPlayingScreenViewModelTest {
 
 }
 
-private class TestPlaybackPositionUpdater : PlaybackPositionUpdater {
-    private val _playbackPosition = MutableStateFlow( PlaybackPosition.ZERO )
-    override val playbackPosition = _playbackPosition.asStateFlow()
-
-    override fun startPeriodicUpdates() {
-        TODO("Not yet implemented")
-    }
-
-    override fun stopPeriodicUpdates() {
-        TODO("Not yet implemented")
-    }
-
-    override fun cleanUp() {
-        TODO("Not yet implemented")
-    }
-
-    fun setPlaybackPosition( playbackPosition: PlaybackPosition ) {
-        _playbackPosition.tryEmit( playbackPosition )
-    }
-}

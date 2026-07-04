@@ -395,8 +395,12 @@ class MusicMattersPreferencesDataSource @Inject constructor(
         }
     }
 
-    override suspend fun setShowLyricsOnSeparateScreen(showLyricsOnSeparateScreen: Boolean) {
-        TODO("Not yet implemented")
+    override suspend fun setShowLyricsOnSeparateScreen( showLyricsOnSeparateScreen: Boolean ) {
+        userPreferencesDataStore.updateData {
+            it.copy {
+                this.showLyricsOnSeparateScreen = showLyricsOnSeparateScreen
+            }
+        }
     }
 
 }

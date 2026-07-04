@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -41,13 +42,17 @@ internal fun DialogOption(
             )
             Spacer( modifier = Modifier.width( 8.dp ) )
             Column {
-                Text( text = title )
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.ExtraBold,
+                )
                 caption?.let {
                     Spacer( modifier = Modifier.height( 2.dp ) )
                     Text(
                         caption,
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = LocalContentColor.current.copy( alpha = 0.7f )
+                            color = LocalContentColor.current.copy( alpha = 0.7f ),
+                            fontWeight = FontWeight.Bold
                         )
                     )
                 }

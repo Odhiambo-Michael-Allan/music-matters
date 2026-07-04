@@ -1,4 +1,4 @@
-package com.squad.musicmatters.feature.nowplaying
+package com.squad.musicmatters.core.media.media
 
 import android.os.Handler
 import android.os.Looper

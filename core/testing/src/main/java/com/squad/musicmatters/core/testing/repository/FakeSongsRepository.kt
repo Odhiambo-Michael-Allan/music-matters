@@ -29,9 +29,7 @@ class FakeSongsRepository : SongsRepository {
         )
     }
 
-    override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> {
-        TODO("Not yet implemented")
-    }
+    override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> = lyricsFlow
 
     /**
      * A test-only API to allow controlling the list of songs from tests.

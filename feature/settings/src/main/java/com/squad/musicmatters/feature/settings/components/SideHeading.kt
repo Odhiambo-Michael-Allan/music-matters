@@ -14,7 +14,7 @@ internal fun SettingsSideHeading( text: String ) {
     Box( modifier = Modifier.padding( 16.dp ) ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.labelMedium.copy(
+            style = MaterialTheme.typography.headlineSmall.copy(
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.ExtraBold,
             )

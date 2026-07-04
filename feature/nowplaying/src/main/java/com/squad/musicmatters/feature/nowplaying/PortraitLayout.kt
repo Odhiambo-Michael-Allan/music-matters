@@ -1,8 +1,5 @@
 package com.squad.musicmatters.feature.nowplaying
 
-import android.content.Context
-import android.content.Intent
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -70,7 +67,8 @@ internal fun PortraitLayout(
     onPausePlayButtonClick: () -> Unit,
     onPreviousButtonClick: () -> Unit,
     onPlayNext: () -> Unit,
-    onNavigateToQueue: () -> Unit,
+    onNavigateToQueueScreen: () -> Unit,
+    onNavigateToLyricsScreen: () -> Unit,
     onShowLyrics: ( Boolean ) -> Unit,
     onToggleLoopMode: ( LoopMode ) -> Unit,
     onToggleShuffleMode: ( Boolean ) -> Unit,
@@ -145,8 +143,10 @@ internal fun PortraitLayout(
             Spacer( modifier = Modifier.height( 16.dp ) )
             NowPlayingScreenBottomBar(
                 showLyrics = uiState.userData.showLyrics,
+                showLyricsOnSeparateScreen = uiState.userData.showLyricsOnSeparateScreen,
                 onShowLyrics = onShowLyrics,
-                onNavigateToQueueScreen = onNavigateToQueue,
+                onNavigateToQueueScreen = onNavigateToQueueScreen,
+                onNavigateToLyricsScreen = onNavigateToLyricsScreen,
             )
         }
     }
@@ -252,7 +252,7 @@ private fun PortraitPreview() {
             onPlayNext = {},
             onSeekEnd = {},
             onArtworkClicked = {},
-            onNavigateToQueue = {},
+            onNavigateToQueueScreen = {},
             onSeekStart = {},
             currentlyPlayingSong = Song(
                 id = "song-id-1",
@@ -284,6 +284,7 @@ private fun PortraitPreview() {
             onShowLyrics = {},
             onToggleLoopMode = {},
             onToggleShuffleMode = {},
+            onNavigateToLyricsScreen = {},
         )
     }
 }

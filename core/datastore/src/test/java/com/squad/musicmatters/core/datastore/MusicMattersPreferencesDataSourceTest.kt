@@ -39,7 +39,10 @@ class MusicMattersPreferencesDataSourceTest {
 
     @Test
     fun testChangeFontName() = testScope.runTest {
-        assertEquals( "Google Sans", subject.userData.map { it.fontName }.first() )
+        assertEquals(
+            "Product Sans",
+            subject.userData.map { it.fontName }.first()
+        )
         listOf(
             "font name 1",
             "font name 2",
@@ -396,5 +399,12 @@ class MusicMattersPreferencesDataSourceTest {
             "song-id",
             subject.userData.map { it.currentlyPlayingSongId }.first()
         )
+    }
+
+    @Test
+    fun testSetShowLyricsOnSeparateScreen() = runTest {
+        assertFalse( subject.userData.map { it.showLyricsOnSeparateScreen }.first() )
+        subject.setShowLyricsOnSeparateScreen( true )
+        assertTrue( subject.userData.map { it.showLyricsOnSeparateScreen }.first() )
     }
 }

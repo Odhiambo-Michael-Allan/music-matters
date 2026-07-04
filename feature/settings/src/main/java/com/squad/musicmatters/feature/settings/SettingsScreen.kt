@@ -79,10 +79,6 @@ internal fun SettingsScreen(
         onUseMaterialYouChange = viewModel::setUseMaterialYou,
         onPrimaryColorNameChange = viewModel::setPrimaryColorName,
         onBottomBarLabelVisibilityChange = viewModel::setBottomBarLabelVisibility,
-        onFadePlaybackChange = viewModel::setFadePlayback,
-        onFadePlaybackDurationChange = viewModel::setFadePlaybackDuration,
-        onRequireAudioFocusChange = viewModel::setRequireAudioFocus,
-        onIgnoreAudioFocusLossChange = viewModel::setIgnoreAudioFocusLoss,
         onPlayOnHeadphonesConnectChange = viewModel::setPlayOnHeadphonesConnect,
         onPauseOnHeadphonesDisconnectChange = viewModel::setPauseOnHeadphonesDisconnect,
         onMiniPlayerTextMarqueeChange = viewModel::setMiniPlayerTextMarquee,
@@ -130,10 +126,6 @@ private fun SettingsScreenContent(
     onUseMaterialYouChange: ( Boolean ) -> Unit,
     onPrimaryColorNameChange: ( String ) -> Unit,
     onBottomBarLabelVisibilityChange: ( BottomBarLabelVisibility ) -> Unit,
-    onFadePlaybackChange: ( Boolean ) -> Unit,
-    onFadePlaybackDurationChange: ( Float ) -> Unit,
-    onRequireAudioFocusChange: ( Boolean ) -> Unit,
-    onIgnoreAudioFocusLossChange: ( Boolean ) -> Unit,
     onPlayOnHeadphonesConnectChange: ( Boolean ) -> Unit,
     onPauseOnHeadphonesDisconnectChange: ( Boolean ) -> Unit,
     onMiniPlayerTextMarqueeChange: ( Boolean ) -> Unit,
@@ -199,23 +191,6 @@ private fun SettingsScreenContent(
                         )
                         SettingsSideHeading(
                             text = stringResource( id = i8nR.string.core_i8n_player )
-                        )
-                        FadePlayback(
-                            fadePlayback = uiState.userData.fadePlayback,
-                            onFadePlaybackChange = onFadePlaybackChange,
-                        )
-                        FadePlaybackDuration(
-                            value = uiState.userData.fadePlaybackDuration,
-                            enabled = uiState.userData.fadePlayback,
-                            onFadePlaybackDurationChange = onFadePlaybackDurationChange,
-                        )
-                        RequireAudioFocus(
-                            requireAudioFocus = uiState.userData.requireAudioFocus,
-                            onRequireAudioFocusChange = onRequireAudioFocusChange,
-                        )
-                        IgnoreAudioFocusLoss(
-                            ignoreAudioFocusLoss = uiState.userData.ignoreAudioFocusLoss,
-                            onIgnoreAudioFocusLossChange = onIgnoreAudioFocusLossChange,
                         )
                         PlayOnHeadphonesConnect(
                             playOnHeadphonesConnect = uiState.userData.playOnHeadphonesConnect,
@@ -330,10 +305,6 @@ private fun SettingsScreenContentPreview() {
             onUseMaterialYouChange = {},
             onPrimaryColorNameChange = {},
             onBottomBarLabelVisibilityChange = {},
-            onFadePlaybackChange = {},
-            onFadePlaybackDurationChange = {},
-            onRequireAudioFocusChange = {},
-            onIgnoreAudioFocusLossChange = {},
             onPlayOnHeadphonesConnectChange = {},
             onPauseOnHeadphonesDisconnectChange = {},
             onMiniPlayerTextMarqueeChange = {},

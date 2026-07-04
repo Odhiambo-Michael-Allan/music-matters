@@ -1,8 +1,5 @@
 package com.squad.musicmatters.feature.nowplaying
 
-import android.content.Context
-import android.content.Intent
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -61,7 +58,8 @@ internal fun ExpandedLayout(
     onPausePlayButtonClick: () -> Unit,
     onPreviousButtonClick: () -> Unit,
     onPlayNext: () -> Unit,
-    onNavigateToQueue: () -> Unit,
+    onNavigateToQueueScreen: () -> Unit,
+    onNavigateToLyricsScreen: () -> Unit,
     onShowLyrics: ( Boolean ) -> Unit,
     onToggleLoopMode: ( LoopMode ) -> Unit,
     onToggleShuffleMode: ( Boolean ) -> Unit,
@@ -126,8 +124,10 @@ internal fun ExpandedLayout(
                     )
                     NowPlayingScreenBottomBar(
                         showLyrics = uiState.userData.showLyrics,
+                        showLyricsOnSeparateScreen = uiState.userData.showLyricsOnSeparateScreen,
                         onShowLyrics = onShowLyrics,
-                        onNavigateToQueueScreen = onNavigateToQueue
+                        onNavigateToQueueScreen = onNavigateToQueueScreen,
+                        onNavigateToLyricsScreen = onNavigateToLyricsScreen,
                     )
                 }
             }
@@ -243,7 +243,7 @@ private fun ExpandedLayoutPreview() {
             onPlayNext = {},
             onSeekEnd = {},
             onArtworkClicked = {},
-            onNavigateToQueue = {},
+            onNavigateToQueueScreen = {},
             onSeekStart = {},
             currentlyPlayingSong = Song(
                 id = "song-id-1",
@@ -275,6 +275,7 @@ private fun ExpandedLayoutPreview() {
             onShowLyrics = {},
             onToggleShuffleMode = {},
             onToggleLoopMode = {},
+            onNavigateToLyricsScreen = {},
         )
     }
 }

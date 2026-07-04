@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable data object QueueRoute
 
-fun NavController.navigateToQueue( navOptions: NavOptions ) =
+fun NavController.navigateToQueueScreen( navOptions: NavOptions ) =
     navigate( route = QueueRoute, navOptions )
 
 fun NavGraphBuilder.queueScreen(

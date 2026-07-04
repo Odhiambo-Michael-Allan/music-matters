@@ -163,7 +163,7 @@ class MusicService : MediaLibraryService() {
                     when ( intent.getIntExtra( "state", -1 ) ) {
                         0 -> {
                             Timber.tag( TAG ).d( "HEADSET DISCONNECTED" )
-                            serviceScope.launch {
+                            serviceScope.launch( mainDispatcher ) {
                                 if (
                                     userPreferencesDataSource
                                         .userData
@@ -171,12 +171,14 @@ class MusicService : MediaLibraryService() {
                                         .first()
                                 ) {
                                     replaceableForwardingPlayer.pause()
+                                } else {
+                                    replaceableForwardingPlayer.play()
                                 }
                             }
                         }
                         1 -> {
                             Timber.tag( TAG ).d( "HEADSET CONNECTED" )
-                            serviceScope.launch {
+                            serviceScope.launch( mainDispatcher ) {
                                 if (
                                     userPreferencesDataSource
                                         .userData

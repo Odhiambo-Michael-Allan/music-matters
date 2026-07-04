@@ -3,7 +3,7 @@ package com.squad.musicmatters.feature.songs
 import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.datastore.DefaultPreferences
-import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
+import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakeSongsAdditionalMetadataRepository
@@ -29,7 +29,7 @@ class SongsScreenViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var preferencesDataSource: FakePreferencesDataSource
-    private lateinit var musicServiceConnection: TestMusicMattersPlayer
+    private lateinit var musicServiceConnection: FakeMusicMattersPlayer
     private lateinit var viewModel: SongsScreenViewModel
     private lateinit var playlistRepository: FakePlaylistRepository
     private lateinit var songsRepository: FakeSongsRepository
@@ -38,7 +38,7 @@ class SongsScreenViewModelTest {
     @Before
     fun setup() {
         preferencesDataSource = FakePreferencesDataSource()
-        musicServiceConnection = TestMusicMattersPlayer()
+        musicServiceConnection = FakeMusicMattersPlayer()
         songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
         songsRepository = FakeSongsRepository()
         playlistRepository = FakePlaylistRepository()

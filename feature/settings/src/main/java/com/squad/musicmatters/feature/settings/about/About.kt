@@ -34,10 +34,7 @@ fun About(
             headlineContent = {
                 Text(
                     text = stringResource( id = i8nR.string.core_i8n_made_by ),
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
-                    ),
+                    fontWeight = FontWeight.ExtraBold,
                 )
             },
             supportingContent = {

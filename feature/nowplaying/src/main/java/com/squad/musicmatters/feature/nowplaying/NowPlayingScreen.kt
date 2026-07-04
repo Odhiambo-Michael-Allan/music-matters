@@ -91,7 +91,8 @@ fun NowPlayingScreen(
     backgroundColor: Color = Color.Unspecified,
     onViewAlbum: ( String ) -> Unit,
     onViewArtist: ( String ) -> Unit,
-    onNavigateToQueue: () -> Unit,
+    onNavigateToQueueScreen: () -> Unit,
+    onNavigateToLyricsScreen: () -> Unit,
     onLaunchEqualizerActivity: () -> Unit,
     onHideBottomSheet: () -> Unit
 ) {
@@ -134,9 +135,13 @@ fun NowPlayingScreen(
                 onHideBottomSheet()
                 onViewArtist( it )
             },
-            onNavigateToQueue = {
+            onNavigateToQueueScreen = {
                 onHideBottomSheet()
-                onNavigateToQueue()
+                onNavigateToQueueScreen()
+            },
+            onNavigateToLyricsScreen = {
+                onHideBottomSheet()
+                onNavigateToLyricsScreen()
             },
             onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
             onCreatePlaylist = viewModel::createPlaylist,
@@ -183,7 +188,8 @@ private fun NowPlayingScreenContent(
     onArtworkClicked: ( Song ) -> Unit,
     onSwipeArtworkLeft: () -> Unit,
     onSwipeArtworkRight: () -> Unit,
-    onNavigateToQueue: () -> Unit,
+    onNavigateToQueueScreen: () -> Unit,
+    onNavigateToLyricsScreen: () -> Unit,
     onCreateEqualizerActivityContract: () -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
@@ -237,7 +243,8 @@ private fun NowPlayingScreenContent(
                             onPausePlayButtonClick = onPausePlayButtonClick,
                             onPreviousButtonClick = onPreviousButtonClick,
                             onPlayNext = onPlayNext,
-                            onNavigateToQueue = onNavigateToQueue,
+                            onNavigateToQueueScreen = onNavigateToQueueScreen,
+                            onNavigateToLyricsScreen = onNavigateToLyricsScreen,
                             onShowLyrics = onShowLyrics,
                             onToggleShuffleMode = onToggleShuffleMode,
                             onToggleLoopMode = onToggleLoopMode,
@@ -263,7 +270,8 @@ private fun NowPlayingScreenContent(
                             onPausePlayButtonClick = onPausePlayButtonClick,
                             onPreviousButtonClick = onPreviousButtonClick,
                             onPlayNext = onPlayNext,
-                            onNavigateToQueue = onNavigateToQueue,
+                            onNavigateToQueueScreen = onNavigateToQueueScreen,
+                            onNavigateToLyricsScreen = onNavigateToLyricsScreen,
                             onShowLyrics = onShowLyrics,
                             onToggleShuffleMode = onToggleShuffleMode,
                             onToggleLoopMode = onToggleLoopMode,
@@ -627,7 +635,7 @@ private fun NowPlayingScreenContentPreview() {
             onArtworkClicked = {},
             onSwipeArtworkLeft = {},
             onSwipeArtworkRight = {},
-            onNavigateToQueue = {},
+            onNavigateToQueueScreen = {},
             onSeekStart = {},
             onCreateEqualizerActivityContract = {
                 object : ActivityResultContract<Unit, Unit>() {
@@ -647,7 +655,8 @@ private fun NowPlayingScreenContentPreview() {
             onShowLyrics = {},
             onToggleLoopMode = {},
             onToggleShuffleMode = {},
-            onRemoveFromQueue = {}
+            onRemoveFromQueue = {},
+            onNavigateToLyricsScreen = {},
         )
     }
 }

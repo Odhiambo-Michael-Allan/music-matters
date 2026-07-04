@@ -1,7 +1,7 @@
 package com.squad.musicmatters.feature.queue
 
 import com.squad.castify.core.testing.rules.MainDispatcherRule
-import com.squad.musicmatters.core.testing.connection.TestMusicMattersPlayer
+import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
@@ -23,7 +23,7 @@ class QueueScreenViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var preferencesDataSource: FakePreferencesDataSource
-    private lateinit var player: TestMusicMattersPlayer
+    private lateinit var player: FakeMusicMattersPlayer
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var playlistRepository: FakePlaylistRepository
     private lateinit var songsAdditionalMetadataRepository: FakeSongsAdditionalMetadataRepository
@@ -32,7 +32,7 @@ class QueueScreenViewModelTest {
     @Before
     fun setup() {
         preferencesDataSource = FakePreferencesDataSource()
-        player = TestMusicMattersPlayer()
+        player = FakeMusicMattersPlayer()
         songsRepository = FakeSongsRepository()
         playlistRepository = FakePlaylistRepository()
         songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()

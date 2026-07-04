@@ -13,7 +13,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
-class TestMusicMattersPlayer : MusicMattersPlayer {
+class FakeMusicMattersPlayer : MusicMattersPlayer {
 
     private val _playerState = MutableStateFlow( PlayerState() )
     override val playerState = _playerState.asStateFlow()

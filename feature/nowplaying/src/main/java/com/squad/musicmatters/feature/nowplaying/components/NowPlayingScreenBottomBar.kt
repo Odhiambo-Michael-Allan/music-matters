@@ -56,8 +56,10 @@ import com.squad.musicmatters.core.ui.dialog.ScaffoldDialog
 internal fun NowPlayingScreenBottomBar(
     modifier: Modifier = Modifier,
     showLyrics: Boolean,
+    showLyricsOnSeparateScreen: Boolean,
     onShowLyrics: ( Boolean ) -> Unit,
     onNavigateToQueueScreen: () -> Unit,
+    onNavigateToLyricsScreen: () -> Unit,
 ) {
 
     Row(
@@ -76,7 +78,10 @@ internal fun NowPlayingScreenBottomBar(
             label = "LyricsLayoutAnimation"
         ) {
             IconButton(
-                onClick = { onShowLyrics( !showLyrics ) }
+                onClick = {
+                    if ( showLyricsOnSeparateScreen ) onNavigateToLyricsScreen()
+                    else onShowLyrics( !showLyrics )
+                }
             ) {
                 Icon(
                     painter = painterResource(
@@ -98,54 +103,6 @@ internal fun NowPlayingScreenBottomBar(
     }
 }
 
-
-
-@OptIn( ExperimentalMaterial3Api::class )
-@Composable
-private fun NowPlayingOptionDialog(
-    title: String,
-    currentValue: Float,
-    onValueChange: ( Float ) -> Unit,
-    onDismissRequest: () -> Unit
-) {
-    ScaffoldDialog(
-        title = { Text( text = title ) },
-        onDismissRequest = onDismissRequest,
-        content = {
-            Column( modifier = Modifier.padding( 0.dp, 8.dp ) ) {
-                setOf( .5f, 1f, 1.5f, 2f ).map {
-                    val onClick = {
-                        onDismissRequest()
-                        onValueChange( it )
-                    }
-                    Card (
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent
-                        ),
-                        shape = MaterialTheme.shapes.small,
-                        onClick = onClick
-                    ) {
-                        Row (
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp, 0.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(
-                                selected = currentValue == it,
-                                onClick = onClick
-                            )
-                            Spacer( modifier = Modifier.width( 8.dp ) )
-                            Text( text = "x$it" )
-                        }
-                    }
-                }
-            }
-        }
-    )
-}
-
 @DevicePreviews
 @Composable
 private fun NowPlayingScreenBottomBarPreview() {
@@ -158,8 +115,10 @@ private fun NowPlayingScreenBottomBarPreview() {
     ) {
         NowPlayingScreenBottomBar(
             showLyrics = true,
+            showLyricsOnSeparateScreen = false,
             onShowLyrics = {},
             onNavigateToQueueScreen = {},
+            onNavigateToLyricsScreen = {},
         )
     }
 }

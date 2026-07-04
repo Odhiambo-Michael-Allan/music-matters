@@ -2,7 +2,6 @@ package com.squad.musicmatters.core.ui
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -83,9 +82,9 @@ fun MinimalAppBar(
     modifier: Modifier = Modifier,
     onNavigationIconClicked: () -> Unit,
     title: String,
-    options: ( @Composable () -> Unit )? = null
+    options: ( @Composable () -> Unit )? = null,
 
-) {
+    ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

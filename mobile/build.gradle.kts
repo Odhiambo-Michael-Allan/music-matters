@@ -57,6 +57,7 @@ dependencies {
     implementation( projects.feature.songs )
     implementation( projects.feature.nowplaying )
     implementation( projects.feature.queue )
+    implementation( projects.feature.lyrics )
     implementation( projects.feature.settings )
 
     implementation( projects.core.designsystem )

@@ -60,28 +60,6 @@ internal class SettingsScreenViewModel @Inject constructor(
         }
     }
 
-    fun setFadePlayback( fadePlayback: Boolean ) {
-        viewModelScope.launch { userPreferencesDataSource.setFadePlayback( fadePlayback ) }
-    }
-
-    fun setFadePlaybackDuration( fadePlaybackDuration: Float ) {
-        viewModelScope.launch {
-            userPreferencesDataSource.setFadePlaybackDuration( fadePlaybackDuration )
-        }
-    }
-
-    fun setRequireAudioFocus( requireAudioFocus: Boolean ) {
-        viewModelScope.launch {
-            userPreferencesDataSource.setRequireAudioFocus( requireAudioFocus )
-        }
-    }
-
-    fun setIgnoreAudioFocusLoss( ignoreAudioFocusLoss: Boolean ) {
-        viewModelScope.launch {
-            userPreferencesDataSource.setIgnoreAudioFocusLoss( ignoreAudioFocusLoss )
-        }
-    }
-
     fun setPlayOnHeadphonesConnect( playOnHeadphoneConnect: Boolean ) {
         viewModelScope.launch {
             userPreferencesDataSource.setPlayOnHeadphonesConnect( playOnHeadphoneConnect )
@@ -101,6 +79,7 @@ internal class SettingsScreenViewModel @Inject constructor(
     fun setShowLyricsOnSeparateScreen( showLyricsOnSeparatePage: Boolean ) {
         viewModelScope.launch {
             userPreferencesDataSource.setShowLyricsOnSeparateScreen( showLyricsOnSeparatePage )
+            if ( showLyricsOnSeparatePage ) userPreferencesDataSource.setShowLyrics( false )
         }
     }
 
