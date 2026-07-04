@@ -1,6 +1,8 @@
 package com.squad.musicmatters.core.data.repository.impl
 
 import android.util.Log
+import com.squad.musicmatters.core.common.Dispatcher
+import com.squad.musicmatters.core.common.MusicMattersDispatchers
 import com.squad.musicmatters.core.common.di.ApplicationScope
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.songs.SongsStore
@@ -10,12 +12,16 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -27,6 +33,7 @@ import javax.inject.Inject
 class SongsRepositoryImpl @Inject constructor(
     private val songsStore: SongsStore,
     @ApplicationScope applicationScope: CoroutineScope,
+    @param:Dispatcher(MusicMattersDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : SongsRepository {
 
     /**
@@ -35,25 +42,37 @@ class SongsRepositoryImpl @Inject constructor(
      * @param sortSongsBy The criteria passed to the [SongsStore] for sorting the songs.
      */
     // Share this flow across the whole app so it only reads the disk ONCE
-    private val sharedSongsFlow = callbackFlow {
-        suspend fun queryAndEmit() {
-            val sortedSongs = songsStore.fetchSongs()
-            trySend( sortedSongs )
-        }
+    private val sharedSongsFlow = channelFlow {
+        // 1. Create a simple event flow for media store changes
+        val changeEvents = MutableSharedFlow<Unit>(
+            extraBufferCapacity = 1,
+            replay = 1,
+        )
 
         val storeListener = object : SongsStoreListener {
             override fun onMediaStoreChanged() {
-                launch(Dispatchers.IO) { queryAndEmit() }
+                changeEvents.tryEmit(Unit) // Trigger a new fetch
+            }
+        }
+        songsStore.registerListener(storeListener)
+
+        // 2. Use collectLatest inside the scope.
+        // It automatically cancels the previous disk read if a new event arrives!
+        launch( ioDispatcher ) {
+            changeEvents.collectLatest {
+                runCatching { songsStore.fetchSongs() }
+                    .onSuccess { send( it ) } // send() is used in channelFlow
             }
         }
 
-        songsStore.registerListener( storeListener )
-        queryAndEmit()
-        awaitClose { songsStore.unregisterListener( storeListener ) }
+        // Trigger initial load
+        changeEvents.tryEmit( Unit )
+
+        awaitClose { songsStore.unregisterListener(storeListener) }
     }.shareIn(
         scope = applicationScope,
-        started = SharingStarted.WhileSubscribed( 5_000 ),
-        replay = 1 // Keeps the 10,000 songs cached in memory
+        started = SharingStarted.WhileSubscribed(5_000),
+        replay = 1
     )
 
     override fun fetchSongs(
@@ -65,31 +84,37 @@ class SongsRepositoryImpl @Inject constructor(
             sortSongsBy = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
             reverse = sortSongsInReverse ?: false
         )
-    }
+    }.flowOn( Dispatchers.Default )
 
-    override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> = callbackFlow {
+    override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> = channelFlow {
         if ( song == null ) {
-            trySend( emptyList() )
+            send( emptyList() )
             close()
-            return@callbackFlow
+            return@channelFlow
         }
 
-        suspend fun load() {
-            val result = songsStore.fetchLyricsFor( song )
-            trySend( result )
-        }
+        val changeEvents = MutableSharedFlow<Unit>(
+            extraBufferCapacity = 1,
+            replay = 1
+        )
 
-        val listener = object : SongsStoreListener {
+        val storeListener = object : SongsStoreListener {
             override fun onMediaStoreChanged() {
-                // Re-read the file if the media store notifies of a change
-                launch { load() }
+                changeEvents.tryEmit( Unit ) // Trigger new fetch
             }
         }
 
-        songsStore.registerListener( listener )
-        launch { load() } // Initial load
+        songsStore.registerListener( storeListener )
 
-        awaitClose { songsStore.unregisterListener( listener ) }
+        launch( ioDispatcher ) {
+            changeEvents.collectLatest {
+                runCatching { songsStore.fetchLyricsFor( song ) }
+                    .onSuccess { send( it ) }
+            }
+        }
+        // Trigger initial load.
+        changeEvents.tryEmit( Unit )
+        awaitClose { songsStore.unregisterListener( storeListener ) }
     }
 
 }

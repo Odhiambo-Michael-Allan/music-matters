@@ -107,22 +107,22 @@ fun getArtworkUriWith(cursor: Cursor ): Uri? = MediaStore.Audio.Media.EXTERNAL_C
     }
 
 
-fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
-    id = mediaId,
-    mediaUri = mediaId,
-    title = mediaMetadata.title.toString(),
-    displayTitle = mediaMetadata.extras?.getString( DISPLAY_TITLE_KEY ) ?: UNKNOWN_STRING_VALUE,
-    trackNumber = mediaMetadata.extras?.getInt( TRACK_NUMBER_KEY ),
-    year = mediaMetadata.extras?.getInt( RELEASE_YEAR_KEY ),
-    duration = mediaMetadata.extras?.getLong( SONG_DURATION ) ?: UNKNOWN_LONG_VALUE,
-    albumTitle = mediaMetadata.extras?.getString( ALBUM_TITLE_KEY ),
-    artists = parseArtistStringIntoIndividualArtists( artistTagSeparators ),
-    composer = mediaMetadata.composer.toString(),
-    dateModified = mediaMetadata.extras?.getLong( DATE_KEY ) ?: UNKNOWN_LONG_VALUE ,
-    size = mediaMetadata.extras?.getLong( SIZE_KEY ) ?: UNKNOWN_LONG_VALUE,
-    path = mediaMetadata.extras?.getString( PATH_KEY ) ?: UNKNOWN_STRING_VALUE,
-    artworkUri = mediaMetadata.artworkUri.toString(),
-)
+//fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
+//    id = mediaId,
+//    mediaUri = mediaId,
+//    title = mediaMetadata.title.toString(),
+//    displayTitle = mediaMetadata.extras?.getString( DISPLAY_TITLE_KEY ) ?: UNKNOWN_STRING_VALUE,
+//    trackNumber = mediaMetadata.extras?.getInt( TRACK_NUMBER_KEY ),
+//    year = mediaMetadata.extras?.getInt( RELEASE_YEAR_KEY ),
+//    duration = mediaMetadata.extras?.getLong( SONG_DURATION ) ?: UNKNOWN_LONG_VALUE,
+//    albumTitle = mediaMetadata.extras?.getString( ALBUM_TITLE_KEY ),
+//    artists = parseArtistStringIntoIndividualArtists( artistTagSeparators ),
+//    composer = mediaMetadata.composer.toString(),
+//    dateModified = mediaMetadata.extras?.getLong( DATE_KEY ) ?: UNKNOWN_LONG_VALUE ,
+//    size = mediaMetadata.extras?.getLong( SIZE_KEY ) ?: UNKNOWN_LONG_VALUE,
+//    path = mediaMetadata.extras?.getString( PATH_KEY ) ?: UNKNOWN_STRING_VALUE,
+//    artworkUri = mediaMetadata.artworkUri.toString(),
+//)
 
 fun MediaItem.toAlbum( songs: List<Song> ) = Album(
     title = mediaMetadata.title.toString(),

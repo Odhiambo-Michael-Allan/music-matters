@@ -178,7 +178,7 @@ private fun PortraitPreview() {
                     id = "song-id-1",
                     mediaUri = "Uri.EMPTY",
                     title = "Started From the Bottom",
-                    displayTitle = "",
+                    albumId = 0L,
                     duration = 0L,
                     artists = setOf(
                         "Drake",
@@ -258,7 +258,7 @@ private fun PortraitPreview() {
                 id = "song-id-1",
                 mediaUri = "Uri.EMPTY",
                 title = "Started From the Bottom Now we Here",
-                displayTitle = "",
+                albumId = 0L,
                 duration = 0L,
                 artists = setOf(
                     "Drake",

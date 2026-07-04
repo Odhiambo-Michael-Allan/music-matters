@@ -589,7 +589,7 @@ private fun MiniPlayerPreview() {
                         id = "song-id-1",
                         mediaUri = "Uri.EMPTY",
                         title = "Started From the Bottom Now we Here",
-                        displayTitle = "",
+                        albumId = 0L,
                         duration = 0L,
                         artists = setOf( "Drake", "Majid Jordan" ),
                         size = 0L,

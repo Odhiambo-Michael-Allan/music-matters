@@ -80,7 +80,7 @@ class SongsStoreImpl @Inject constructor(
         sortSongsInReverse: Boolean?,
     ): List<Song> =
         withContext( ioDispatcher )  {
-            val mediaItemList = mutableListOf<MediaItem>()
+            val songList = mutableListOf<Song>()
             try {
                 Log.d( TAG, "FETCHING SONGS.." )
                 context.contentResolver.query(
@@ -92,14 +92,11 @@ class SongsStoreImpl @Inject constructor(
                 )?.use {
                     while ( it.moveToNext() ) {
                         kotlin.runCatching {
-                            MediaItem.Builder().from( it )
-                        }.getOrNull()?.also { mediaItemBuilder ->
-                            mediaItemList.add( mediaItemBuilder.build() )
-                        }
+                            buildSongUsing( it )
+                        }.getOrNull()?.also { song -> songList.add( song ) }
                     }
                 }
-                return@withContext mediaItemList
-                    .map { it.toSong() }
+                return@withContext songList
                     .sortSongs(
                         sortSongsBy = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
                         reverse = sortSongsInReverse ?: false
@@ -172,95 +169,46 @@ class SongsStoreImpl @Inject constructor(
 
 }
 
-private fun MediaItem.Builder.from( cursor: Cursor ): MediaItem.Builder {
-    val mediaUri = getMediaUriFrom( cursor )
-    setMediaId( mediaUri.toString() )
-    setUri( mediaUri )
-    setMediaMetadata(
-        MediaMetadata.Builder().from( cursor ).build()
+private fun buildSongUsing( cursor: Cursor ): Song {
+    val mediaUri = cursor.getMediaUriFrom().toString()
+    val dateAdded = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
+    val dateModified = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
+    return Song(
+        id = mediaUri,
+        mediaUri = mediaUri,
+        title = cursor.getStringFrom( AudioColumns.TITLE ),
+        trackNumber = cursor.getNullableIntFrom( AudioColumns.TRACK ) ?: UNKNOWN_INT_VALUE,
+        year = cursor.getNullableIntFrom( AudioColumns.YEAR ) ?: UNKNOWN_INT_VALUE,
+        duration = cursor.getLongFrom( AudioColumns.DURATION ),
+        albumId = cursor.getLongFrom(AudioColumns.ALBUM_ID ),
+        albumTitle = cursor.getNullableStringFrom( AudioColumns.ALBUM ) ?: UNKNOWN_STRING_VALUE,
+        artists = parseArtistStringIntoIndividualArtists(
+                cursor.getNullableStringFrom( AudioColumns.ARTIST ) ?: UNKNOWN_STRING_VALUE
+            ),
+        composer = cursor.getNullableStringFrom( AudioColumns.COMPOSER ) ?: UNKNOWN_STRING_VALUE,
+        dateModified = dateAdded ?: dateModified ?: UNKNOWN_LONG_VALUE,
+        size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: UNKNOWN_LONG_VALUE,
+        path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: UNKNOWN_STRING_VALUE,
+        artworkUri = cursor.getArtworkUri()?.toString()
     )
-    return this
 }
 
-private fun getMediaUriFrom( cursor: Cursor ): Uri = ContentUris.withAppendedId(
-    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, cursor.getLongFrom( AudioColumns._ID )
-)
 
-private fun MediaMetadata.Builder.from( cursor: Cursor ): MediaMetadata.Builder {
-
-    val id = cursor.getLongFrom( AudioColumns._ID )
-    val title = cursor.getStringFrom( AudioColumns.TITLE )
-    val trackNumber = cursor.getNullableIntFrom( AudioColumns.TRACK ) ?: UNKNOWN_INT_VALUE
-    val year = cursor.getNullableIntFrom( AudioColumns.YEAR ) ?: UNKNOWN_INT_VALUE
-    val duration = cursor.getLongFrom( AudioColumns.DURATION )
-    val albumTitle = cursor.getNullableStringFrom( AudioColumns.ALBUM ) ?: UNKNOWN_STRING_VALUE
-    val artist = cursor.getNullableStringFrom( AudioColumns.ARTIST ) ?: UNKNOWN_STRING_VALUE
-    val albumArtist = cursor.getNullableStringFrom( AudioColumns.ALBUM_ARTIST ) ?: UNKNOWN_STRING_VALUE
-    val composer = cursor.getNullableStringFrom( AudioColumns.COMPOSER ) ?: UNKNOWN_STRING_VALUE
-    val dateAdded = cursor.getLongFrom( AudioColumns.DATE_MODIFIED )
-    val dateModified = cursor.getLongFrom( AudioColumns.DATE_MODIFIED )
-    val size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: UNKNOWN_LONG_VALUE
-    val path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: UNKNOWN_STRING_VALUE
-
-    setTitle( title )
-    setDisplayTitle( title )
-    setTrackNumber( trackNumber )
-    setReleaseYear( year )
-    setAlbumTitle( albumTitle )
-    setArtist( artist )
-    setAlbumArtist( albumArtist )
-    setComposer( composer )
-    setIsPlayable( true )
-    setArtworkUri( getArtworkUriWith( cursor ) )
-    setIsBrowsable( false )
-
-    setExtras(
-        Bundle().apply {
-            putLong( SONG_DURATION, duration )
-            putLong( DATE_KEY, if ( dateAdded == UNKNOWN_LONG_VALUE ) dateModified else dateAdded )
-            putLong( SIZE_KEY, size )
-            putString( PATH_KEY, path )
-            // I don't know why these 5 values are not sent to the UI so i will just add them again
-            // here as part of the extras.
-            putString( DISPLAY_TITLE_KEY, title )
-            putInt( TRACK_NUMBER_KEY, trackNumber )
-            putInt( RELEASE_YEAR_KEY, year )
-            putString( ALBUM_TITLE_KEY, albumTitle )
-            putString( ARTIST_KEY, artist )
-            putLong( MEDIA_ITEM_ID_KEY, id )
-        }
+private fun Cursor.getMediaUriFrom(): Uri = ContentUris.withAppendedId(
+    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+    getLongFrom( AudioColumns._ID
     )
-    return this
-}
-
-private fun MediaItem.toSong() = Song(
-    id = mediaId,
-    mediaUri = mediaId,
-    title = mediaMetadata.title.toString(),
-    displayTitle = mediaMetadata.extras?.getString( DISPLAY_TITLE_KEY ) ?: UNKNOWN_STRING_VALUE,
-    trackNumber = mediaMetadata.extras?.getInt( TRACK_NUMBER_KEY ),
-    year = mediaMetadata.extras?.getInt( RELEASE_YEAR_KEY ),
-    duration = mediaMetadata.extras?.getLong( SONG_DURATION ) ?: UNKNOWN_LONG_VALUE,
-    albumTitle = mediaMetadata.extras?.getString( ALBUM_TITLE_KEY ),
-    artists = parseArtistStringIntoIndividualArtists(),
-    composer = mediaMetadata.composer.toString(),
-    dateModified = mediaMetadata.extras?.getLong( DATE_KEY ) ?: UNKNOWN_LONG_VALUE ,
-    size = mediaMetadata.extras?.getLong( SIZE_KEY ) ?: UNKNOWN_LONG_VALUE,
-    path = mediaMetadata.extras?.getString( PATH_KEY ) ?: UNKNOWN_STRING_VALUE,
-    artworkUri = mediaMetadata.artworkUri.toString(),
 )
 
-private fun getArtworkUriWith( cursor: Cursor ): Uri? = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+private fun Cursor.getArtworkUri(): Uri? = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     .buildUpon()
     .run {
-        appendPath( cursor.getLongFrom( AudioColumns._ID ).toString() )
+        appendPath( getLongFrom( AudioColumns._ID ).toString() )
         appendPath( "albumart" )
         build()
     }
 
-private fun MediaItem.parseArtistStringIntoIndividualArtists(): Set<String> {
-    // 1. Get the raw string from extras
-    val rawArtists = mediaMetadata.extras?.getString(ARTIST_KEY) ?: return emptySet()
+private fun parseArtistStringIntoIndividualArtists( artists: String ): Set<String> {
     val regex = Regex(
         // Match delimiters with optional surrounding whitespace
         """\s*(?:feat\.?|ft\.?|&|and|with|vs\.?|[,;/])\s*""",
@@ -268,7 +216,7 @@ private fun MediaItem.parseArtistStringIntoIndividualArtists(): Set<String> {
     )
 
     // 3. Split, trim, and filter in one pass
-    return rawArtists.split(regex)
+    return artists.split(regex)
         .map { it.trim() }
         .filter { it.isNotEmpty() }
         .toSet()
@@ -348,16 +296,6 @@ private class SimplePath( val parts: List<String> ) {
 const val UNKNOWN_LONG_VALUE = 0L
 const val UNKNOWN_INT_VALUE = 0
 const val UNKNOWN_STRING_VALUE = "<unknown>"
-const val SONG_DURATION = "SONG-DURATION"
-const val DATE_KEY = "DATE"
-const val SIZE_KEY = "SIZE"
-const val PATH_KEY = "PATH"
-const val DISPLAY_TITLE_KEY = "DISPLAY-TITLE"
-const val TRACK_NUMBER_KEY = "TRACK-NUMBER"
-const val RELEASE_YEAR_KEY = "RELEASE-YEAR"
-const val ALBUM_TITLE_KEY = "ALBUM-TITLE"
-const val ARTIST_KEY = "ARTIST"
-const val MEDIA_ITEM_ID_KEY = "--MEDIA-ITEM-ID-KEY--"
 
 val projection = arrayOf(
     AudioColumns._ID,

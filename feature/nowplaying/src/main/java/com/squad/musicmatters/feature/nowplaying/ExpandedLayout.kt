@@ -169,7 +169,6 @@ private fun ExpandedLayoutPreview() {
                     id = "song-id-1",
                     mediaUri = "Uri.EMPTY",
                     title = "Started From the Bottom",
-                    displayTitle = "",
                     duration = 0L,
                     artists = setOf(
                         "Drake",
@@ -180,6 +179,7 @@ private fun ExpandedLayoutPreview() {
                         "Young thug"
                     ),
                     size = 0L,
+                    albumId = 0L,
                     dateModified = 0L,
                     path = "",
                     trackNumber = null,
@@ -249,7 +249,7 @@ private fun ExpandedLayoutPreview() {
                 id = "song-id-1",
                 mediaUri = "Uri.EMPTY",
                 title = "Started From the Bottom Now we Here",
-                displayTitle = "",
+                albumId = 0L,
                 duration = 0L,
                 artists = setOf(
                     "Drake",

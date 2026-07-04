@@ -22,7 +22,7 @@ class TestMostPlayedSongsRepository : MostPlayedSongsRepository {
                 id = songId,
                 mediaUri = "Uri.EMPTY",
                 title = "",
-                displayTitle = "",
+                albumId = 0L,
                 duration = 0L,
                 artists = emptySet(),
                 size = 0L,

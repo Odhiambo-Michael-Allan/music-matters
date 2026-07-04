@@ -568,7 +568,7 @@ private fun NowPlayingScreenContentPreview() {
                     id = "song-id-1",
                     mediaUri = "Uri.EMPTY",
                     title = "Started From the Bottom",
-                    displayTitle = "",
+                    albumId = 0L,
                     duration = 0L,
                     artists = setOf( "Drake", "Disclosure", "London", "Grammar", "The Weekend", "Young thug" ),
                     size = 0L,

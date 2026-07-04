@@ -33,7 +33,8 @@ class SongsRepositoryImplTest {
         songsStore = TestSongsStore()
         subject = SongsRepositoryImpl(
             songsStore = songsStore,
-            applicationScope = TestScope()
+            applicationScope = TestScope(),
+            ioDispatcher = UnconfinedTestDispatcher()
         )
     }
 
