@@ -27,65 +27,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/modules/feature/lyrics/MusicMatters.feature.lyrics.androidTest.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/media/FakePlaybackPositionUpdater.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/LyricsLayout.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/lyrics/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/lyrics/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/lyrics/consumer-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/lyrics/proguard-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/lyrics/src/main/AndroidManifest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/lyrics/src/main/java/com/squad/musicmatters/feature/lyrics/LyricsScreen.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/lyrics/src/main/java/com/squad/musicmatters/feature/lyrics/LyricsScreenViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/lyrics/src/main/java/com/squad/musicmatters/feature/lyrics/navigation/LyricsScreenNavigation.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/lyrics/src/test/java/com/squad/musicmatters/feature/lyrics/ExampleUnitTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/lyrics/src/test/java/com/squad/musicmatters/feature/lyrics/LyricsScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0-milestone-1/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/feature/nowplaying/MusicMatters.feature.nowplaying.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/feature/settings/MusicMatters.feature.settings.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/datastore/src/main/java/com/squad/musicmatters/core/datastore/MusicMattersPreferencesDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/datastore/src/main/java/com/squad/musicmatters/core/datastore/MusicMattersPreferencesDataSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/datastore/src/test/java/com/squad/musicmatters/core/datastore/MusicMattersPreferencesDataSourceTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/datastore/src/test/java/com/squad/musicmatters/core/datastore/MusicMattersPreferencesDataSourceTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/di/Binders.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/di/Binders.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MusicService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MusicService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/connection/TestMusicMattersPlayer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/connection/FakeMusicMattersPlayer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeSongsRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeSongsRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/AppBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/AppBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/ExpandedLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/ExpandedLayout.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/PlaybackPositionUpdater.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/PlaybackPositionUpdater.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/PortraitLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/PortraitLayout.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/components/LyricsLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/components/LyricsLayout.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/components/NowPlayingScreenBottomBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/components/NowPlayingScreenBottomBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/di/NowPlayingDiModule.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/test/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/test/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/navigation/QueueScreenNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/navigation/QueueScreenNavigation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/queue/src/test/java/com/squad/musicmatters/feature/queue/QueueScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/queue/src/test/java/com/squad/musicmatters/feature/queue/QueueScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/SettingsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/SettingsScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/SettingsScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/SettingsScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/about/About.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/about/About.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/components/SettingDialogOption.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/components/SettingDialogOption.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/components/SideHeading.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/components/SideHeading.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/settings/src/test/java/com/squad/musicmatters/feature/settings/SettingsScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/test/java/com/squad/musicmatters/feature/settings/SettingsScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/songs/src/test/java/com/squad/musicmatters/feature/songs/SongsScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/src/test/java/com/squad/musicmatters/feature/songs/SongsScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/MusicMattersApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/MusicMattersApp.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +37,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/app/.android/avd/Pixel_9a.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -157,110 +99,110 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Android App.mobile.executor": "Run",
-    "Android Instrumented Tests.All Tests.executor": "Run",
-    "Android Instrumented Tests.PlayHistoryDaoTest.executor": "Run",
-    "Android Instrumented Tests.PlaylistDaoTest.executor": "Run",
-    "Android Instrumented Tests.QueueDaoTest.executor": "Run",
-    "Android Instrumented Tests.SongPlayCountEntryDaoTest.executor": "Run",
-    "Android Instrumented Tests.Tests in 'com.squad.musicmatters.core.database'.executor": "Run",
-    "Android Instrumented Tests.testAddSongIdToFavoriteSongsPlaylist().executor": "Run",
-    "ApkExportedModule": "MusicMatters.mobile",
-    "BundleExportedModule": "MusicMatters.mobile",
-    "ExportApk.ApkPathForMusicMatters.mobile": "/home/michael-allan-odhiambo/AndroidStudioProjects/music-matters/mobile",
-    "Gradle.CompositeRepositoryImplTest.executor": "Run",
-    "Gradle.LyricsScreenViewModelTest.executor": "Run",
-    "Gradle.MostPlayedSongsRepositoryImplTest.executor": "Run",
-    "Gradle.MusicMattersPlayerControllerImplTest.executor": "Run",
-    "Gradle.MusicMattersPlayerControllerImplTest.testAddToQueue.executor": "Run",
-    "Gradle.MusicMattersPlayerControllerImplTest.testClearQueue.executor": "Run",
-    "Gradle.MusicMattersPlayerControllerImplTest.testMoveSong.executor": "Run",
-    "Gradle.MusicMattersPlayerControllerImplTest.testPlayNext.executor": "Run",
-    "Gradle.MusicMattersPlayerControllerImplTest.testPlayPreviousSong.executor": "Run",
-    "Gradle.MusicMattersPlayerControllerImplTest.testSeekToNext.executor": "Run",
-    "Gradle.MusicMattersPlayerControllerImplTest.testShuffleAndPlay.executor": "Run",
-    "Gradle.MusicMattersPlayerControllerImplTest.testShuffleSongsInQueue.executor": "Run",
-    "Gradle.MusicMattersPlayerControllerImplTest.testSleepTimerIsSetCorrectly.executor": "Run",
-    "Gradle.MusicMattersPlayerControllerImplTest.testWhenNowPlayingSongIsDeleted_theNextSongInQueueIsPlayed.executor": "Run",
-    "Gradle.MusicMattersPlayerImplTest.executor": "Run",
-    "Gradle.MusicMattersPlayerImplTest.testAddToQueue.executor": "Run",
-    "Gradle.MusicMattersPlayerImplTest.testClearQueue.executor": "Run",
-    "Gradle.MusicMattersPlayerImplTest.testPlayNext.executor": "Run",
-    "Gradle.MusicMattersPlayerImplTest.testPlayPreviousSong.executor": "Run",
-    "Gradle.MusicMattersPlayerImplTest.testSeekToNext.executor": "Run",
-    "Gradle.MusicMattersPlayerImplTest.testSetPlaybackSpeed.executor": "Run",
-    "Gradle.MusicMattersPlayerImplTest.testSetRepeatMode.executor": "Run",
-    "Gradle.MusicMattersPlayerImplTest.testShuffleAndPlay.executor": "Run",
-    "Gradle.MusicMattersPlayerImplTest.testShuffleSongsInQueue.executor": "Run",
-    "Gradle.MusicMattersPlayerImplTest.testSleepTimerIsSetCorrectly.executor": "Run",
-    "Gradle.MusicMattersPreferencesDataSourceTest.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testClearQueue.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testOnMediaStoreChange.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testPlayNext.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testPlayPreviousSong.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testPlaybackParametersAreSetCorrectly.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testSetPlaybackSpeed.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testSetRepeatMode.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testShuffleSongsInQueue.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testSleepTimerIsSetCorrectly.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testWhenNowPlayingSongIsDeleted_theNextSongInQueueIsPlayed.executor": "Run",
-    "Gradle.MusicServiceConnectionImplTest.testWhenSongIsDeleted_songIsRemovedFromAllPlaylistsItIsPresent.executor": "Run",
-    "Gradle.NowPlayingScreenViewModelTest.executor": "Run",
-    "Gradle.NowPlayingViewModelTest.executor": "Run",
-    "Gradle.PlayHistoryRepositoryImplTest.executor": "Run",
-    "Gradle.PlaylistRepositoryImplTest.executor": "Run",
-    "Gradle.QueueRepositoryImplTest.executor": "Run",
-    "Gradle.QueueScreenViewModelTest.executor": "Run",
-    "Gradle.QueueScreenViewModelTest.testCurrentlyPlayingSongIdChange.executor": "Run",
-    "Gradle.QueueScreenViewModelTest.testSongsInQueueChange.executor": "Run",
-    "Gradle.QueueScreenViewModelTest.testUiStateIsInitiallyLoading.executor": "Run",
-    "Gradle.QueueScreenViewModelTest.testUiStateIsSuccessWhenAllRequiredFlowsEmit.executor": "Run",
-    "Gradle.ReplaceableForwardingPlayerTest.executor": "Run",
-    "Gradle.ReplaceableForwardingPlayerTest.testShuffleSongsInQueue.executor": "Run",
-    "Gradle.ReplaceableForwardingPlayerTest.whenShuffleModeEnabledIsFalse_playerIsInitializedWithCurrentPlayingQueue.executor": "Run",
-    "Gradle.ReplaceableForwardingPlayerTest.whenShuffleModeEnabledIsFalse_playerIsInitializedWithOriginalPlayingQueue.executor": "Run",
-    "Gradle.ReplaceableForwardingPlayerTest.whenShuffleModeEnabledIsTrue_playerIsInitializedWithCurrentPlayingQueue.executor": "Run",
-    "Gradle.SettingsScreenViewModelTest.executor": "Run",
-    "Gradle.SongsRepositoryImplTest (1).executor": "Run",
-    "Gradle.SongsRepositoryImplTest.executor": "Run",
-    "Gradle.SongsRepositoryImplTest.testFetchLyrics.executor": "Run",
-    "Gradle.SongsRepositoryImplTest.testFetchSongs.executor": "Run",
-    "Gradle.SongsScreenViewModelTest.executor": "Run",
-    "Gradle.SongsScreenViewModelTest.testFavoriteSongsAreCorrectlyUpdated.executor": "Run",
-    "Gradle.SongsScreenViewModelTest.testPlayerStateIsCorrectlyUpdated.executor": "Run",
-    "Gradle.SongsScreenViewModelTest.testSongsAreCorrectlyLoadedFromTheMusicServiceConnection.executor": "Run",
-    "Gradle.SongsScreenViewModelTest.testUiStateIsUpdatedWhenThemeModeChanges.executor": "Run",
-    "Gradle.Tests in 'com.odesa.musicMatters'.executor": "Run",
-    "Gradle.Upgrade Gradle wrapper.executor": "Run",
-    "Gradle.UserPreferencesSerializerTest.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "com.google.services.firebase.aqiPopupShown": "true",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
-    "git-widget-placeholder": "feature-settings",
-    "kotlin-language-version-configured": "true",
-    "last_directory_selection": "/Users/app/Desktop/android/projects/music-matters/core/media/src/test/java/com/squad/musicmatters/core/media/media",
-    "last_opened_file_path": "/Users/app/Desktop/android/projects/music-matters/core/media/src/main/java/com/squad/musicmatters/core/media/media",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.17",
-    "project.structure.side.proportion": "0.32862645",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Android App.mobile.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.All Tests.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.PlayHistoryDaoTest.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.PlaylistDaoTest.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.QueueDaoTest.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.SongPlayCountEntryDaoTest.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.Tests in 'com.squad.musicmatters.core.database'.executor&quot;: &quot;Run&quot;,
+    &quot;Android Instrumented Tests.testAddSongIdToFavoriteSongsPlaylist().executor&quot;: &quot;Run&quot;,
+    &quot;ApkExportedModule&quot;: &quot;MusicMatters.mobile&quot;,
+    &quot;BundleExportedModule&quot;: &quot;MusicMatters.mobile&quot;,
+    &quot;ExportApk.ApkPathForMusicMatters.mobile&quot;: &quot;/home/michael-allan-odhiambo/AndroidStudioProjects/music-matters/mobile&quot;,
+    &quot;Gradle.CompositeRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.LyricsScreenViewModelTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MostPlayedSongsRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerControllerImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerControllerImplTest.testAddToQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerControllerImplTest.testClearQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerControllerImplTest.testMoveSong.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerControllerImplTest.testPlayNext.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerControllerImplTest.testPlayPreviousSong.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerControllerImplTest.testSeekToNext.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerControllerImplTest.testShuffleAndPlay.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerControllerImplTest.testShuffleSongsInQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerControllerImplTest.testSleepTimerIsSetCorrectly.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerControllerImplTest.testWhenNowPlayingSongIsDeleted_theNextSongInQueueIsPlayed.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerImplTest.testAddToQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerImplTest.testClearQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerImplTest.testPlayNext.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerImplTest.testPlayPreviousSong.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerImplTest.testSeekToNext.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerImplTest.testSetPlaybackSpeed.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerImplTest.testSetRepeatMode.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerImplTest.testShuffleAndPlay.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerImplTest.testShuffleSongsInQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPlayerImplTest.testSleepTimerIsSetCorrectly.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicMattersPreferencesDataSourceTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testClearQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testOnMediaStoreChange.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testPlayNext.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testPlayPreviousSong.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testPlaybackParametersAreSetCorrectly.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testSetPlaybackSpeed.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testSetRepeatMode.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testShuffleSongsInQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testSleepTimerIsSetCorrectly.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testWhenNowPlayingSongIsDeleted_theNextSongInQueueIsPlayed.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MusicServiceConnectionImplTest.testWhenSongIsDeleted_songIsRemovedFromAllPlaylistsItIsPresent.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.NowPlayingScreenViewModelTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.NowPlayingViewModelTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PlayHistoryRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PlaylistRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.QueueRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.QueueScreenViewModelTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.QueueScreenViewModelTest.testCurrentlyPlayingSongIdChange.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.QueueScreenViewModelTest.testSongsInQueueChange.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.QueueScreenViewModelTest.testUiStateIsInitiallyLoading.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.QueueScreenViewModelTest.testUiStateIsSuccessWhenAllRequiredFlowsEmit.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ReplaceableForwardingPlayerTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ReplaceableForwardingPlayerTest.testShuffleSongsInQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ReplaceableForwardingPlayerTest.whenShuffleModeEnabledIsFalse_playerIsInitializedWithCurrentPlayingQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ReplaceableForwardingPlayerTest.whenShuffleModeEnabledIsFalse_playerIsInitializedWithOriginalPlayingQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ReplaceableForwardingPlayerTest.whenShuffleModeEnabledIsTrue_playerIsInitializedWithCurrentPlayingQueue.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SettingsScreenViewModelTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsRepositoryImplTest (1).executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsRepositoryImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsRepositoryImplTest.testFetchLyrics.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsRepositoryImplTest.testFetchSongs.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsScreenViewModelTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsScreenViewModelTest.testFavoriteSongsAreCorrectlyUpdated.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsScreenViewModelTest.testPlayerStateIsCorrectlyUpdated.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsScreenViewModelTest.testSongsAreCorrectlyLoadedFromTheMusicServiceConnection.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SongsScreenViewModelTest.testUiStateIsUpdatedWhenThemeModeChanges.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Tests in 'com.odesa.musicMatters'.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Upgrade Gradle wrapper.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.UserPreferencesSerializerTest.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature-settings&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;/Users/app/Desktop/android/projects/music-matters/core/media/src/test/java/com/squad/musicmatters/core/media/media&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/app/Desktop/android/projects/music-matters/core/media/src/main/java/com/squad/musicmatters/core/media/media&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.32862645&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   },
-  "keyToStringList": {
-    "ExportApk.BuildVariants": [
-      "debug"
+  &quot;keyToStringList&quot;: {
+    &quot;ExportApk.BuildVariants&quot;: [
+      &quot;debug&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media" />
