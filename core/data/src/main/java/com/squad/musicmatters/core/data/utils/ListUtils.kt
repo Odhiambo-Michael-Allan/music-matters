@@ -1,6 +1,8 @@
 package com.squad.musicmatters.core.data.utils
 
+import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.SortAlbumsBy
 import com.squad.musicmatters.core.model.SortSongsBy
 import kotlin.math.max
 import kotlin.math.min
@@ -20,17 +22,29 @@ fun <T> List<T>.randomSubList( length: Int ): List<T> {
     return out
 }
 
-fun List<Song>.sortSongs( sortSongsBy: SortSongsBy, reverse: Boolean ): List<Song> {
-    return when ( sortSongsBy ) {
-        SortSongsBy.TITLE -> if ( reverse ) sortedByDescending { it.title } else sortedBy { it.title }
-        SortSongsBy.ALBUM -> if ( reverse ) sortedByDescending { it.albumTitle } else sortedBy { it.albumTitle }
-        SortSongsBy.ARTIST -> if ( reverse ) sortedByDescending { it.artists.joinToString() } else sortedBy { it.artists.joinToString() }
-        SortSongsBy.COMPOSER -> if ( reverse ) sortedByDescending { it.composer } else sortedBy { it.composer }
-        SortSongsBy.DURATION -> if ( reverse ) sortedByDescending { it.duration } else sortedBy { it.duration }
-        SortSongsBy.YEAR -> if ( reverse ) sortedByDescending { it.year } else sortedBy { it.year }
-        SortSongsBy.DATE_ADDED -> if ( reverse ) sortedByDescending { it.dateModified } else sortedBy { it.dateModified }
-        SortSongsBy.FILENAME -> if ( reverse ) sortedByDescending { it.path } else sortedBy { it.path }
-        SortSongsBy.TRACK_NUMBER -> if ( reverse ) sortedByDescending { it.trackNumber } else sortedBy { it.trackNumber }
+fun List<Song>.sortSongs(by: SortSongsBy, reverse: Boolean ): List<Song> {
+    val sortedList = when ( by ) {
+        SortSongsBy.TITLE -> sortedBy { it.title }
+        SortSongsBy.ALBUM -> sortedBy { it.albumTitle }
+        SortSongsBy.ARTIST -> sortedBy { it.artists.joinToString() }
+        SortSongsBy.COMPOSER -> sortedBy { it.composer }
+        SortSongsBy.DURATION -> sortedBy { it.duration }
+        SortSongsBy.YEAR -> sortedBy { it.year }
+        SortSongsBy.DATE_ADDED -> sortedBy { it.dateModified }
+        SortSongsBy.FILENAME -> sortedBy { it.path }
+        SortSongsBy.TRACK_NUMBER -> sortedBy { it.trackNumber }
         SortSongsBy.CUSTOM -> shuffled()
     }
+    return if ( reverse ) sortedList.reversed() else sortedList
+}
+
+fun List<Album>.sortAlbums(by: SortAlbumsBy, reverse: Boolean ): List<Album> {
+    val sortedList = when ( by ) {
+        SortAlbumsBy.ALBUM_NAME -> sortedBy { it.title }
+        SortAlbumsBy.ARTIST_NAME -> sortedBy { it.albumArtist }
+        SortAlbumsBy.TRACK_COUNT -> sortedBy { it.trackCount }
+        SortAlbumsBy.CUSTOM -> shuffled()
+    }
+    println( sortedList )
+    return if ( reverse ) sortedList.reversed() else sortedList
 }

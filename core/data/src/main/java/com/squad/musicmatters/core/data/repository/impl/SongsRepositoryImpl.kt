@@ -1,6 +1,5 @@
 package com.squad.musicmatters.core.data.repository.impl
 
-import android.util.Log
 import com.squad.musicmatters.core.common.Dispatcher
 import com.squad.musicmatters.core.common.MusicMattersDispatchers
 import com.squad.musicmatters.core.common.di.ApplicationScope
@@ -19,15 +18,12 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
-import java.time.Instant
 import javax.inject.Inject
 
 class SongsRepositoryImpl @Inject constructor(
@@ -81,7 +77,7 @@ class SongsRepositoryImpl @Inject constructor(
     ): Flow<List<Song>> = sharedSongsFlow.map { cachedSongs ->
         // Sort the list instantly in memory using your existing sort helper extension
         cachedSongs.sortSongs(
-            sortSongsBy = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
+            by = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
             reverse = sortSongsInReverse ?: false
         )
     }.flowOn( Dispatchers.Default )

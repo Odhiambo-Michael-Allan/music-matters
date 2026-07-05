@@ -6,7 +6,6 @@ import android.content.Context
 import android.database.ContentObserver
 import android.database.Cursor
 import android.net.Uri
-import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.provider.MediaStore
@@ -16,8 +15,6 @@ import androidx.annotation.WorkerThread
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
 import com.squad.musicmatters.core.data.songs.SongsStore
 import com.squad.musicmatters.core.data.songs.SongsStoreListener
@@ -98,7 +95,7 @@ class SongsStoreImpl @Inject constructor(
                 }
                 return@withContext songList
                     .sortSongs(
-                        sortSongsBy = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
+                        by = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
                         reverse = sortSongsInReverse ?: false
                     )
             } catch ( exception: Exception ) {

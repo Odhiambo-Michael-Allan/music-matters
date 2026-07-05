@@ -1,6 +1,7 @@
 package com.squad.musicmatters.core.data.repository.impl
 
 import com.squad.musicmatters.core.data.repository.AlbumsRepository
+import com.squad.musicmatters.core.model.SortAlbumsBy
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.songs.testSong
 import kotlinx.coroutines.flow.first
@@ -59,8 +60,15 @@ class AlbumsRepositoryImplTest {
             )
         )
         songsRepository.sendSongs( testSongs )
-        albums = subject.fetchAlbums().first()
+        albums = subject.fetchAlbums(
+            sortAlbumsBy = SortAlbumsBy.ALBUM_NAME,
+        ).first()
         assertEquals( 3, albums.size )
+
+        assertEquals(
+            "More Life",
+            albums.first().title
+        )
 
         val views = subject.fetchAlbumWithId( 1 ).first()
         assertEquals( 4, views.trackCount )

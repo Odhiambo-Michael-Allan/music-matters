@@ -24,7 +24,7 @@ class FakeSongsRepository : SongsRepository {
         sortSongsInReverse: Boolean?
     ): Flow<List<Song>> = songsFlow.map { songs ->
         songs.sortSongs(
-            sortSongsBy = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
+            by = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
             reverse = sortSongsInReverse ?: false
         )
     }
