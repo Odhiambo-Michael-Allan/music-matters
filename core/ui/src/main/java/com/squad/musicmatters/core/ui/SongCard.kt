@@ -44,6 +44,7 @@ import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.GoogleRed
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
+import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -60,7 +61,7 @@ fun SongCard(
     isFavorite: Boolean,
     onSongIsPresentInQueue: ( Song ) -> Boolean,
     songAdditionalMetadata: SongAdditionalMetadata?,
-    playlists: List<Playlist>,
+    onGetPlaylists: () -> List<Playlist>,
     onClick: () -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
@@ -88,14 +89,14 @@ fun SongCard(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding( 12.dp, 4.dp, 4.dp, 4.dp )
+                .padding(12.dp, 4.dp, 4.dp, 4.dp)
         ) {
             DynamicAsyncImage(
                 imageUri = song.artworkUri?.toUri(),
                 contentDescription = song.title,
                 modifier = Modifier
-                    .size( 45.dp )
-                    .clip( RoundedCornerShape( 10.dp ) )
+                    .size(45.dp)
+                    .clip(RoundedCornerShape(10.dp))
             )
             Spacer( modifier = Modifier.width( 16.dp ) )
             Column( modifier = Modifier.weight( 1f ) ) {
@@ -158,7 +159,7 @@ fun SongCard(
                                 song = song,
                                 isFavorite = isFavorite,
                                 isCurrentlyPlaying = isCurrentlyPlaying,
-                                playlists = playlists,
+                                onGetPlaylists = onGetPlaylists,
                                 onFavorite = onFavorite,
                                 onAddToQueue = onAddToQueue,
                                 onRemoveFromQueue = onRemoveFromQueue,
@@ -212,7 +213,7 @@ fun SongOptionsBottomSheetMenu(
     song: Song,
     isFavorite: Boolean,
     isCurrentlyPlaying: Boolean,
-    playlists: List<Playlist>,
+    onGetPlaylists: () -> List<Playlist>,
     onFavorite: ( Song, Boolean ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onRemoveFromQueue: ( Song ) -> Unit,
@@ -235,7 +236,8 @@ fun SongOptionsBottomSheetMenu(
         headerTitle = song.title,
         titleIsHighlighted = isCurrentlyPlaying,
         headerDescription = song.artists.joinToString(),
-        playlists = playlists,
+        onGetPlaylists = onGetPlaylists,
+        onShowSnackBar = onShowSnackBar,
         songIsPresentInQueue = { onSongIsPresentInQueue( song ) },
         onDismissRequest = onDismissRequest,
         onPlayNext = { onPlayNext( song ) },
@@ -262,7 +264,6 @@ fun SongOptionsBottomSheetMenu(
                 onShowSnackBar( feedback )
             }
         },
-        onShowSnackBar = onShowSnackBar,
         trailingBottomSheetMenuItems = {
             song.artists.forEach {
                 BottomSheetMenuItem(
@@ -322,7 +323,7 @@ private fun SongOptionsBottomSheetContentPreview() {
             song = PreviewParameterData.songs.first(),
             isFavorite = false,
             isCurrentlyPlaying = true,
-            playlists = emptyList(),
+            onGetPlaylists = { emptyList() },
             onFavorite = { _, _ -> },
             onAddToQueue = {},
             onPlayNext = { /*TODO*/ },
@@ -345,7 +346,7 @@ private fun SongOptionsBottomSheetContentPreview() {
 @Composable
 private fun SongCardPreview() {
     MusicMattersTheme(
-//        fontName = SupportedFonts.ProductSans.name,
+        fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
         fontScale = 1.0f,
         themeMode = ThemeMode.LIGHT,
@@ -355,7 +356,7 @@ private fun SongCardPreview() {
             song = PreviewParameterData.songs.first(),
             isCurrentlyPlaying = true,
             isFavorite = true,
-            playlists = emptyList(),
+            onGetPlaylists = { emptyList() },
             songAdditionalMetadata = null,
             onClick = {},
             onFavorite = { _, _ -> },

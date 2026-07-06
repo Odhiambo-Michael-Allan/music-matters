@@ -114,7 +114,7 @@ private fun QueueScreenContent(
                     songsInQueue = uiState.songsInQueue,
                     currentlyPlayingSongId = uiState.currentlyPlayingSongId,
                     songsAdditionalMetadata = uiState.songsAdditionalMetadata,
-                    playlists = uiState.playlists,
+                    onGetPlaylists = { uiState.playlists },
                     playSong = playSong,
                     onMoveSong = onMoveSong,
                     onAddToQueue = onAddToQueue,

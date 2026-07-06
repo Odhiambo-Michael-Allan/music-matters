@@ -12,6 +12,7 @@ import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -40,7 +41,13 @@ fun IconTextBodyCompact(
         icon( Modifier.size( 48.dp ) )
         Spacer( modifier = Modifier.height( 8.dp ) )
         ProvideTextStyle(
-            value = MaterialTheme.typography.bodyMedium.copy( textAlign = TextAlign.Center )
+            value = MaterialTheme
+                .typography
+                .bodyMedium.
+                copy(
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.SemiBold
+                )
         ) {
             content()
         }

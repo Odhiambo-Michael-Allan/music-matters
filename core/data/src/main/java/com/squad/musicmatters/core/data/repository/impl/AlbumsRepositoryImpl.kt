@@ -30,7 +30,7 @@ class AlbumsRepositoryImpl @Inject constructor(
                     title = albumTitle,
                     trackCount = songsInAlbum.size,
                     artworkUri = artworkUri,
-                    albumArtist = albumArtist
+                    artist = albumArtist
                 )
             }
             albums.sortAlbums(
@@ -48,7 +48,7 @@ class AlbumsRepositoryImpl @Inject constructor(
                 title = albumTitle,
                 trackCount = songsInAlbum.size,
                 artworkUri = songsInAlbum.firstOrNull { it.artworkUri != null }?.artworkUri,
-                albumArtist = songsInAlbum.firstOrNull { it.albumArtist != null }?.albumArtist
+                artist = songsInAlbum.firstOrNull { it.albumArtist != null }?.albumArtist
             )
         }
 

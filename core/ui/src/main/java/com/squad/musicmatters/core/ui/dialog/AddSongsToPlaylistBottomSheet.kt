@@ -50,7 +50,7 @@ import com.squad.musicmatters.core.i8n.R as i8nR
 @Composable
 internal fun AddSongsToPlaylistBottomSheet(
     songsToAdd: List<Song>,
-    playlists: List<Playlist>,
+    onGetPlaylists: () -> List<Playlist>,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreateNewPlaylist: () -> Unit,
     onDismissRequest: ( String ) -> Unit,
@@ -60,12 +60,12 @@ internal fun AddSongsToPlaylistBottomSheet(
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding( 8.dp, 4.dp )
+            .padding(8.dp, 4.dp)
     ) {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding( 8.dp ),
+                .padding(8.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
@@ -78,7 +78,7 @@ internal fun AddSongsToPlaylistBottomSheet(
         HorizontalDivider( thickness = 1.dp )
         Spacer( modifier = Modifier.height( 8.dp ) )
         when {
-            playlists.isEmpty() -> SubtleCaptionText(
+            onGetPlaylists().isEmpty() -> SubtleCaptionText(
                 modifier = Modifier.weight( 1f ),
                 text = stringResource( id = i8nR.string.core_i8n_no_playlists_found )
             )
@@ -87,7 +87,7 @@ internal fun AddSongsToPlaylistBottomSheet(
                     modifier = Modifier.weight( 1f ),
                     contentPadding = PaddingValues( bottom = 4.dp )
                 ) {
-                    items( playlists ) { playlist ->
+                    items( onGetPlaylists() ) { playlist ->
                         GenericCard(
                             imageUri = playlist.artworkUri?.toUri(),
                             title = {
@@ -185,7 +185,7 @@ private fun AddToPlaylistBottomSheetPreview(
     ) {
         AddSongsToPlaylistBottomSheet(
             songsToAdd = previewData.songs,
-            playlists = previewData.playlists,
+            onGetPlaylists = { previewData.playlists },
             onCreateNewPlaylist = {},
             onDismissRequest = {},
             onAddSongsToPlaylist = { _, _ -> }

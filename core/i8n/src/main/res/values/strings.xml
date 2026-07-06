@@ -161,6 +161,13 @@
     <string name="core_i8n_now_playing" translatable="false">Now playing</string>
     <string name="core_i8n_community" translatable="false">Community</string>
     <string name="core_i8n_about" translatable="false">About</string>
+    <string name="core_i8n_albums" translatable="false">Albums</string>
+    <string name="core_i8n_n_albums" translatable="false">%d albums</string>
+
+<!--    SORT BY-->
+    <string name="core_i8n_album_name" translatable="false">Album name</string>
+    <string name="core_i8n_artist_name" translatable="false">Artist name</string>
+    <string name="core_i8n_track_count" translatable="false">Track count</string>
 
 
 

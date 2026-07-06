@@ -19,6 +19,7 @@ import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
+import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
@@ -30,7 +31,7 @@ fun SongList(
     sortReverse: Boolean,
     sortSongsBy: SortSongsBy,
     songs: List<Song>,
-    playlists: List<Playlist>,
+    onGetPlaylists: () -> List<Playlist>,
     songsAdditionalMetadata: List<SongAdditionalMetadata>,
     onShufflePlay: () -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
@@ -55,9 +56,9 @@ fun SongList(
 
     Column {
         MediaSortBar(
-            sortReverse = sortReverse,
+            sortInReverse = sortReverse,
             onSortReverseChange = onSortReverseChange,
-            sortType = sortSongsBy,
+            sortBy = sortSongsBy,
             sortTypes = SortSongsBy.entries.associateBy(
                     { it },
                     { it.sortSongsByLabelResId() }
@@ -104,7 +105,7 @@ fun SongList(
                             song = song,
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = isFavorite( songs[ index ].id ),
-                            playlists = playlists,
+                            onGetPlaylists = onGetPlaylists,
                             songAdditionalMetadata = songsAdditionalMetadata.find { metadata -> metadata.songId == song.id },
                             onClick = { playSong( song, songs ) },
                             onFavorite = onFavorite,
@@ -127,7 +128,7 @@ fun SongList(
     }
 }
 
-fun SortSongsBy.sortSongsByLabelResId() = when ( this ) {
+private fun SortSongsBy.sortSongsByLabelResId() = when ( this ) {
     SortSongsBy.CUSTOM -> R.string.core_i8n_custom
     SortSongsBy.TITLE -> R.string.core_i8n_title
     SortSongsBy.ARTIST -> R.string.core_i8n_artist
@@ -146,7 +147,7 @@ fun SortSongsBy.sortSongsByLabelResId() = when ( this ) {
 @Composable
 fun SongListPreview() {
     MusicMattersTheme(
-//        fontName = SupportedFonts.ProductSans.name,
+        fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
         fontScale = 1.25f,
         themeMode = ThemeMode.LIGHT,
@@ -156,7 +157,7 @@ fun SongListPreview() {
             sortReverse = false,
             sortSongsBy = SortSongsBy.TITLE,
             songs = PreviewParameterData.songs,
-            playlists = emptyList(),
+            onGetPlaylists = { emptyList() },
             songsAdditionalMetadata = emptyList(),
             onShufflePlay = {},
             onSortTypeChange = {},

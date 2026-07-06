@@ -8,6 +8,7 @@ import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakeAlbumsRepository
 import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -27,6 +28,7 @@ class AlbumsScreenViewModelTest {
     private lateinit var player: FakeMusicMattersPlayer
     private lateinit var preferencesDataSource: FakePreferencesDataSource
     private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var songsRepository: FakeSongsRepository
     private lateinit var subject: AlbumsScreenViewModel
 
     @Before
@@ -35,11 +37,13 @@ class AlbumsScreenViewModelTest {
         player = FakeMusicMattersPlayer()
         preferencesDataSource = FakePreferencesDataSource()
         playlistRepository = FakePlaylistRepository()
+        songsRepository = FakeSongsRepository()
         subject = AlbumsScreenViewModel(
             albumsRepository = albumsRepository,
             player = player,
             preferencesDataSource = preferencesDataSource,
             playlistRepository = playlistRepository,
+            songsRepository = songsRepository,
         )
     }
 
@@ -66,33 +70,35 @@ class AlbumsScreenViewModelTest {
                 id = 0L,
                 title = "Views",
                 trackCount = 2,
-                albumArtist = "Drake",
+                artist = "Drake",
                 artworkUri = ""
             ),
             Album(
                 id = 1L,
                 title = "Scorpion",
                 trackCount = 4,
-                albumArtist = "Drake",
+                artist = "Drake",
                 artworkUri = ""
             ),
             Album(
                 id = 2L,
                 title = "More Life",
                 trackCount = 5,
-                albumArtist = "Drake",
+                artist = "Drake",
                 artworkUri = ""
             )
         )
         albumsRepository.sendAlbums( albums )
         playlistRepository.sendPlaylists( emptyList() )
+        songsRepository.sendSongs( emptyList() )
 
         assertEquals(
             AlbumsScreenUiState.Success(
                 albums = albums.sortAlbums( by = SortAlbumsBy.TRACK_COUNT, reverse = false ),
                 sortAlbumsBy = SortAlbumsBy.TRACK_COUNT,
                 sortAlbumsInReverse = false,
-                playlists = emptyList()
+                playlists = emptyList(),
+                songs = emptyList(),
             ),
             subject.uiState.value
         )

@@ -290,7 +290,7 @@ private fun NowPlayingScreenContent(
                             headerTitle = song.title,
                             titleIsHighlighted = true,
                             headerDescription = song.artists.joinToString(),
-                            playlists = uiState.playlists,
+                            onGetPlaylists = { uiState.playlists },
                             onDismissRequest = { showOptionsMenu = false },
                             onPlayNext = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
                             onAddToQueue = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue

@@ -41,7 +41,7 @@ fun List<Song>.sortSongs(by: SortSongsBy, reverse: Boolean ): List<Song> {
 fun List<Album>.sortAlbums(by: SortAlbumsBy, reverse: Boolean ): List<Album> {
     val sortedList = when ( by ) {
         SortAlbumsBy.ALBUM_NAME -> sortedBy { it.title }
-        SortAlbumsBy.ARTIST_NAME -> sortedBy { it.albumArtist }
+        SortAlbumsBy.ARTIST_NAME -> sortedBy { it.artist }
         SortAlbumsBy.TRACK_COUNT -> sortedBy { it.trackCount }
         SortAlbumsBy.CUSTOM -> shuffled()
     }

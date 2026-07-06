@@ -88,12 +88,24 @@ abstract class BaseViewModel(
         }
     }
 
+    fun playSongsNext( songs: List<Song> ) {
+        songs.forEach { player.playSongNext( it ) }
+    }
+
     fun playSongNext( song: Song ) {
         player.playSongNext( song )
     }
 
+    fun addSongsToQueue( songs: List<Song> ) {
+        songs.forEach { player.addToQueue( it )  }
+    }
+
     fun addSongToQueue( song: Song ) {
         player.addToQueue( song )
+    }
+
+    fun removeSongsFromQueue( songs: List<Song> ) {
+        songs.forEach { player.remove( it ) }
     }
 
     fun removeSongFromQueue( song: Song ) {
@@ -101,5 +113,9 @@ abstract class BaseViewModel(
     }
 
     fun songIsPresentInQueue( song: Song ) = player.contains( song )
+
+    fun noSongInTheAlbumPresentInTheQueue( songs: List<Song> ): Boolean {
+        return songs.none { player.contains( it ) }
+    }
 
 }

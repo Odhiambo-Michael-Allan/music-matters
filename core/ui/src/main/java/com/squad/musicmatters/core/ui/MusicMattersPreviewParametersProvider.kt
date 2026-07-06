@@ -1,6 +1,7 @@
 package com.squad.musicmatters.core.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.model.Song
 import java.util.UUID
 import com.squad.musicmatters.core.model.Playlist
@@ -11,6 +12,7 @@ class MusicMattersPreviewParametersProvider : PreviewParameterProvider<PreviewDa
         get() = sequenceOf(
             PreviewData(
                 songs = PreviewParameterData.songs,
+                albums = PreviewParameterData.albums,
                 playlists = PreviewParameterData.playlists
             )
         )
@@ -19,6 +21,7 @@ class MusicMattersPreviewParametersProvider : PreviewParameterProvider<PreviewDa
 
 data class PreviewData(
     val songs: List<Song>,
+    val albums: List<Album>,
     val playlists: List<Playlist>,
 )
 
@@ -104,6 +107,44 @@ object PreviewParameterData {
             size = 5L,
             path = "/path/to/song/5"
         ),
+    )
+
+    val albums = listOf(
+        Album(
+            id = 1L,
+            title = "The Eminem Show",
+            artist = "Eminem",
+            trackCount = 20,
+            artworkUri = null,
+        ),
+        Album(
+            id = 2L,
+            title = "The Score",
+            artist = "Fugees",
+            trackCount = 17,
+            artworkUri = null,
+        ),
+        Album(
+            id = 3L,
+            title = "The Marshall Mathers LP",
+            artist = "Eminem",
+            trackCount = 18,
+            artworkUri = null,
+        ),
+        Album(
+            id = 4L,
+            title = "The Miseducation of Lauryn Hill",
+            artist = "Lauryn Hill",
+            trackCount = 16,
+            artworkUri = null,
+        ),
+        Album(
+            id = 5L,
+            title = "Please Hammer, Don't Hurt 'Em",
+            artist = "MC Hammer",
+            trackCount = 14,
+            artworkUri = null,
+        )
     )
 
     val playlists = List( 20 ) {

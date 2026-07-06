@@ -1,16 +1,21 @@
 package com.squad.musicmatters.feature.songs
 
 import android.net.Uri
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
@@ -77,7 +82,14 @@ private fun SongsScreenContent(
 ) {
 
     when ( uiState ) {
-        SongsScreenUiState.Loading -> {}
+        SongsScreenUiState.Loading -> {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                CircularProgressIndicator()
+            }
+        }
         is SongsScreenUiState.Success -> {
             SongList(
                 sortReverse = uiState.sortSongsInReverse,
@@ -85,7 +97,7 @@ private fun SongsScreenContent(
                 sortSongsBy = uiState.sortSongsBy,
                 onSortTypeChange = onSortTypeChange,
                 songs = uiState.songs,
-                playlists = uiState.playlists,
+                onGetPlaylists = { uiState.playlists },
                 onShufflePlay = { onShufflePlay( uiState.songs ) },
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
                 playSong = playSong,
@@ -109,26 +121,28 @@ private fun SongsScreenContent(
 }
 
 
-@DevicePreviews
+@PreviewScreenSizes
 @Composable
 private fun SongsScreenContentPreview() {
     MusicMattersTheme(
+        fontName = SupportedFonts.ProductSans.name,
         themeMode = DefaultPreferences.THEME_MODE,
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
         fontScale = 1.0f,
         useMaterialYou = true
     ) {
         SongsScreenContent(
-            uiState = SongsScreenUiState.Success(
-                songs = PreviewParameterData.songs,
-                themeMode = ThemeMode.LIGHT,
-                currentlyPlayingSongId = PreviewParameterData.songs.first().id,
-                favoriteSongIds = PreviewParameterData.songs.map { it.id }.toSet(),
-                sortSongsBy = SortSongsBy.TITLE,
-                sortSongsInReverse = false,
-                playlists = emptyList(),
-                songsAdditionalMetadata = emptyList()
-            ),
+            uiState = SongsScreenUiState.Loading,
+//                SongsScreenUiState.Success(
+//                songs = PreviewParameterData.songs,
+//                themeMode = ThemeMode.LIGHT,
+//                currentlyPlayingSongId = PreviewParameterData.songs.first().id,
+//                favoriteSongIds = PreviewParameterData.songs.map { it.id }.toSet(),
+//                sortSongsBy = SortSongsBy.TITLE,
+//                sortSongsInReverse = false,
+//                playlists = emptyList(),
+//                songsAdditionalMetadata = emptyList()
+//            ),
             onSortReverseChange = {},
             onSortTypeChange = {},
             onShufflePlay = {},

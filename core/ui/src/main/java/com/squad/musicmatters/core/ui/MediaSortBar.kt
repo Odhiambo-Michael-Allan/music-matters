@@ -35,11 +35,11 @@ import com.squad.musicmatters.core.model.SortSongsBy
 
 @Composable
 fun <T : Enum<T>> MediaSortBar(
-    sortReverse: Boolean,
+    sortInReverse: Boolean,
     onSortReverseChange: (Boolean ) -> Unit,
-    sortType: T,
+    sortBy: T,
     sortTypes: Map<T, Int>,
-    onSortTypeChange: (T ) -> Unit,
+    onSortTypeChange: ( T ) -> Unit,
     label: @Composable () -> Unit,
     onShufflePlay: ( () -> Unit )? = null
 ) {
@@ -53,11 +53,11 @@ fun <T : Enum<T>> MediaSortBar(
         Row {
             Spacer( modifier = Modifier.width( 8.dp ) )
             IconButton(
-                onClick = { onSortReverseChange( !sortReverse ) }
+                onClick = { onSortReverseChange( !sortInReverse ) }
             ) {
                 Icon(
                     modifier = Modifier.size( 20.dp ),
-                    imageVector = if ( sortReverse ) {
+                    imageVector = if ( sortInReverse ) {
                         MusicMattersIcons.ArrowUpward
                     } else {
                         MusicMattersIcons.ArrowDownward
@@ -73,7 +73,7 @@ fun <T : Enum<T>> MediaSortBar(
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
-                        text = stringResource( id = sortTypes[ sortType ]!! ),
+                        text = stringResource( id = sortTypes[ sortBy ]!! ),
                     )
                 }
                 DropdownMenu(
@@ -88,7 +88,7 @@ fun <T : Enum<T>> MediaSortBar(
                         DropdownMenuItem(
                             leadingIcon = {
                                 RadioButton(
-                                    selected = it.key == sortType,
+                                    selected = it.key == sortBy,
                                     onClick = onClick
                                 )
                             },
@@ -123,33 +123,5 @@ fun <T : Enum<T>> MediaSortBar(
                 }
             } ?: Spacer( modifier = Modifier.width( 20.dp ) )
         }
-    }
-}
-
-@Preview( showSystemUi = true )
-@Composable
-fun MediaSortBarPreview() {
-    MusicMattersTheme(
-        themeMode = DefaultPreferences.THEME_MODE,
-        primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
-        fontName = DefaultPreferences.FONT_NAME,
-        fontScale = DefaultPreferences.FONT_SCALE,
-        useMaterialYou = true
-    ) {
-        MediaSortBar(
-            sortReverse = false,
-            onSortReverseChange = {},
-            sortType = SortSongsBy.TITLE,
-            sortTypes = SortSongsBy.entries.associateBy(
-                { it }, { it.sortSongsByLabelResId() }
-            ),
-            onSortTypeChange = {},
-            label = {
-                Text( text = stringResource(
-                    id = com.squad.musicmatters.core.i8n.R.string.core_i8n_n_songs,
-                    42 )
-                )
-            }
-        )
     }
 }

@@ -49,7 +49,7 @@ fun MediaMetadata.Builder.from( cursor: Cursor ): MediaMetadata.Builder {
 //    Timber.tag( TAG ).d( "Artist: $artist" )
 
     val albumArtist = cursor.getNullableStringFrom( AudioColumns.ALBUM_ARTIST ) ?: UNKNOWN_STRING_VALUE
-//    Timber.tag( TAG ).d( "Album Artist: $albumArtist" )
+//    Timber.tag( TAG ).d( "Album Artist: $artist" )
 
     val composer = cursor.getNullableStringFrom( AudioColumns.COMPOSER ) ?: UNKNOWN_STRING_VALUE
 //    Timber.tag( TAG ).d( "Composer: $composer" )

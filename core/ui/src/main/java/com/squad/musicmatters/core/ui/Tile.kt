@@ -50,18 +50,18 @@ import com.squad.musicmatters.core.ui.dialog.NewPlaylistDialog
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun GenericTile(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     imageUri: Uri?,
     title: String,
     description: String? = null,
     headerDescription: String,
-    playlists: List<Playlist>,
+    onGetPlaylists: () -> List<Playlist>,
     onPlay: () -> Unit,
     onClick: () -> Unit,
     onShufflePlay: () -> Unit,
     onAddToQueue: () -> Unit,
     onRemoveFromQueue: () -> Unit,
-    showAddToQueueOption: () -> Boolean,
+    onShowAddToQueueOption: () -> Boolean,
     onPlayNext: () -> Unit,
     onGetSongs: () -> List<Song>,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
@@ -82,8 +82,8 @@ fun GenericTile(
                         headerImageUri = imageUri,
                         headerTitle = title,
                         headerDescription = headerDescription,
-                        playlists = playlists,
-                        songIsPresentInQueue = showAddToQueueOption,
+                        onGetPlaylists = onGetPlaylists,
+                        songIsPresentInQueue = onShowAddToQueueOption,
                         onDismissRequest = onDismissRequest,
                         onAddToQueue = onAddToQueue,
                         onRemoveFromQueue = onRemoveFromQueue,
@@ -136,7 +136,7 @@ fun GenericOptionsBottomSheet(
     headerTitle: String,
     titleIsHighlighted: Boolean = false,
     headerDescription: String,
-    playlists: List<Playlist>,
+    onGetPlaylists: () -> List<Playlist>,
     onDismissRequest: () -> Unit,
     onPlayNext: () -> Unit,
     onAddToQueue: () -> Unit,
@@ -212,7 +212,7 @@ fun GenericOptionsBottomSheet(
         ) {
             AddSongsToPlaylistBottomSheet(
                 songsToAdd = onGetSongs(),
-                playlists = playlists,
+                onGetPlaylists = onGetPlaylists,
                 onAddSongsToPlaylist = { playlist, songs ->
                     onAddSongsToPlaylist( playlist, songs )
                 },
