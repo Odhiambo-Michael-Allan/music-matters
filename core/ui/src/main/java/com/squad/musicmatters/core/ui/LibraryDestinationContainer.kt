@@ -11,8 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.LineHeightStyle.Alignment
-import com.squad.castify.core.designsystem.component.CastifyTopAppBar
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -20,8 +18,6 @@ fun LibraryDestinationContainer(
     @StringRes title: Int? = null,
     isLoading: Boolean,
     onNavigateBack: () -> Unit,
-    onNavigateToSettings: () -> Unit,
-    appBarStartContent: @Composable ((() -> Unit) -> Unit) = {},
     content: @Composable () -> Unit,
 ) {
 

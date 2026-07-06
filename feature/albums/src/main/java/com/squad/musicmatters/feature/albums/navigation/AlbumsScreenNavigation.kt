@@ -23,6 +23,7 @@ fun NavGraphBuilder.albumsScreen(
     onViewAlbum: ( Album ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     composable<AlbumsRoute>(
         enterTransition = { SlideTransition.slideUp.enterTransition() },
@@ -31,7 +32,8 @@ fun NavGraphBuilder.albumsScreen(
         AlbumsScreen(
             onViewAlbum = onViewAlbum,
             onViewArtist = onViewArtist,
-            onShowSnackBar = onShowSnackBar
+            onShowSnackBar = onShowSnackBar,
+            onNavigateBack = onNavigateBack,
         )
     }
 }

@@ -19,6 +19,7 @@ import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortAlbumsBy
+import com.squad.musicmatters.core.ui.LibraryDestinationContainer
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.feature.albums.components.AlbumGrid
@@ -29,27 +30,33 @@ internal fun AlbumsScreen(
     onViewAlbum: ( Album ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    AlbumsScreenContent(
-        uiState = uiState,
-        onViewAlbum = onViewAlbum,
-        onViewAlbumArtist = onViewArtist,
-        onShowSnackBar = onShowSnackBar,
-        onSortTypeChange = viewModel::onSortTypeChange,
-        onSortInReverseChange = viewModel::onSortInReverseChange,
-        onPlaySongsInAlbum = viewModel::playSongs,
-        onAddSongsInAlbumToQueue = viewModel::addSongsToQueue,
-        onPlaySongsInAlbumNext = viewModel::playSongsNext,
-        onShuffleAndPlaySongsInAlbum = viewModel::shuffleAndPlay,
-        onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
-        onCreatePlaylist = viewModel::createPlaylist,
-        onShowAddToQueueOption = viewModel::noSongInTheAlbumPresentInTheQueue,
-        onRemoveSongsInAlbumFromQueue = viewModel::removeSongsFromQueue,
+    LibraryDestinationContainer(
+        isLoading = uiState is AlbumsScreenUiState.Loading,
+        onNavigateBack = onNavigateBack,
+    ) {
+        AlbumsScreenContent(
+            uiState = uiState,
+            onViewAlbum = onViewAlbum,
+            onViewAlbumArtist = onViewArtist,
+            onShowSnackBar = onShowSnackBar,
+            onSortTypeChange = viewModel::onSortTypeChange,
+            onSortInReverseChange = viewModel::onSortInReverseChange,
+            onPlaySongsInAlbum = viewModel::playSongs,
+            onAddSongsInAlbumToQueue = viewModel::addSongsToQueue,
+            onPlaySongsInAlbumNext = viewModel::playSongsNext,
+            onShuffleAndPlaySongsInAlbum = viewModel::shuffleAndPlay,
+            onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
+            onCreatePlaylist = viewModel::createPlaylist,
+            onShowAddToQueueOption = viewModel::noSongInTheAlbumPresentInTheQueue,
+            onRemoveSongsInAlbumFromQueue = viewModel::removeSongsFromQueue,
 
-    )
+            )
+    }
 
 }
 

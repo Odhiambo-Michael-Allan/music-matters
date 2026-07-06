@@ -358,11 +358,12 @@ fun MusicMattersAppContent(
                         onNavigateBack = { navController.navigateUp() }
                     )
                     settingsScreen(
-                        onNavigateBack = { navController.navigateUp()}
+                        onNavigateBack = { navController.navigateUp() }
                     )
                     albumsScreen(
                         onViewAlbum = {},
                         onViewArtist = {},
+                        onNavigateBack = { navController.navigateUp() },
                         onShowSnackBar = {
                             snackBarHostState.showSnackBar(
                                 coroutineScope,
