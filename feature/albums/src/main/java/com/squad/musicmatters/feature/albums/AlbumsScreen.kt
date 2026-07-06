@@ -8,17 +8,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortAlbumsBy
+import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
+import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.feature.albums.components.AlbumGrid
 
 @Composable
 internal fun AlbumsScreen(
-    viewModel: AlbumsScreenViewModel = hiltViewModel()
+    viewModel: AlbumsScreenViewModel = hiltViewModel(),
+    onViewAlbum: ( Album ) -> Unit,
+    onViewArtist: ( String ) -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -115,4 +125,42 @@ private fun AlbumsScreenContent(
         }
     }
 
+}
+
+@PreviewScreenSizes
+@Composable
+private fun AlbumsScreenContentPreview(
+    @PreviewParameter( MusicMattersPreviewParametersProvider::class )
+    previewData: PreviewData
+) {
+    MusicMattersTheme(
+        fontName = SupportedFonts.ProductSans.name,
+        themeMode = DefaultPreferences.THEME_MODE,
+        primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
+        fontScale = 1.0f,
+        useMaterialYou = true
+    ) {
+        AlbumsScreenContent(
+            uiState = AlbumsScreenUiState.Success(
+                albums = previewData.albums,
+                sortAlbumsBy = SortAlbumsBy.ALBUM_NAME,
+                sortAlbumsInReverse = false,
+                songs = emptyList(),
+                playlists = emptyList(),
+            ),
+            onViewAlbum = {},
+            onShowSnackBar = {},
+            onViewAlbumArtist = {},
+            onPlaySongsInAlbum = { _, _ -> },
+            onCreatePlaylist = { _, _ -> },
+            onPlaySongsInAlbumNext = {},
+            onRemoveSongsInAlbumFromQueue = {},
+            onShowAddToQueueOption = { false },
+            onAddSongsInAlbumToQueue = {},
+            onSortInReverseChange = {},
+            onShuffleAndPlaySongsInAlbum = {},
+            onSortTypeChange = {},
+            onAddSongsToPlaylist = { _, _ -> }
+        )
+    }
 }

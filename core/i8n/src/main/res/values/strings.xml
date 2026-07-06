@@ -163,6 +163,7 @@
     <string name="core_i8n_about" translatable="false">About</string>
     <string name="core_i8n_albums" translatable="false">Albums</string>
     <string name="core_i8n_n_albums" translatable="false">%d albums</string>
+    <string name="core_i8n_library" translatable="false">Library</string>
 
 <!--    SORT BY-->
     <string name="core_i8n_album_name" translatable="false">Album name</string>

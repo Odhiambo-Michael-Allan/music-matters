@@ -59,6 +59,7 @@ dependencies {
     implementation( projects.feature.queue )
     implementation( projects.feature.lyrics )
     implementation( projects.feature.settings )
+    implementation( projects.feature.albums )
 
     implementation( projects.core.designsystem )
     implementation( projects.core.media )

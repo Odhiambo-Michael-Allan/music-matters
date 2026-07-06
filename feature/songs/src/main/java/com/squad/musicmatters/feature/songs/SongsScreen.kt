@@ -132,17 +132,16 @@ private fun SongsScreenContentPreview() {
         useMaterialYou = true
     ) {
         SongsScreenContent(
-            uiState = SongsScreenUiState.Loading,
-//                SongsScreenUiState.Success(
-//                songs = PreviewParameterData.songs,
-//                themeMode = ThemeMode.LIGHT,
-//                currentlyPlayingSongId = PreviewParameterData.songs.first().id,
-//                favoriteSongIds = PreviewParameterData.songs.map { it.id }.toSet(),
-//                sortSongsBy = SortSongsBy.TITLE,
-//                sortSongsInReverse = false,
-//                playlists = emptyList(),
-//                songsAdditionalMetadata = emptyList()
-//            ),
+                SongsScreenUiState.Success(
+                songs = PreviewParameterData.songs,
+                themeMode = ThemeMode.LIGHT,
+                currentlyPlayingSongId = PreviewParameterData.songs.first().id,
+                favoriteSongIds = PreviewParameterData.songs.map { it.id }.toSet(),
+                sortSongsBy = SortSongsBy.TITLE,
+                sortSongsInReverse = false,
+                playlists = emptyList(),
+                songsAdditionalMetadata = emptyList()
+            ),
             onSortReverseChange = {},
             onSortTypeChange = {},
             onShufflePlay = {},

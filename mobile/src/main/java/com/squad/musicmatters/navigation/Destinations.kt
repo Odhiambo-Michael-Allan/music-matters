@@ -2,16 +2,14 @@ package com.squad.musicmatters.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.squad.musicmatters.R
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
+import com.squad.musicmatters.feature.albums.navigation.AlbumsRoute
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import kotlinx.serialization.Serializable
+import com.squad.musicmatters.core.i8n.R as i8nR
 
 
 import kotlin.reflect.KClass
-
-@Serializable
-data object LibraryRoute
 
 enum class TopLevelDestination(
     val selectedIcon: ImageVector,
@@ -24,19 +22,34 @@ enum class TopLevelDestination(
         selectedIcon = MusicMattersIcons.MusicNote,
         unselectedIcon = MusicMattersIcons.MusicNoteOutlined,
         route = SongsRoute::class,
-        titleTextId = R.string.songs,
-        iconTextId = R.string.songs
+        titleTextId = i8nR.string.core_i8n_songs,
+        iconTextId = i8nR.string.core_i8n_songs,
     ),
     LIBRARY(
         selectedIcon = MusicMattersIcons.Library,
         unselectedIcon = MusicMattersIcons.LibraryUnselected,
-        iconTextId = R.string.library,
-        titleTextId = R.string.library,
+        iconTextId = i8nR.string.core_i8n_library,
+        titleTextId = i8nR.string.core_i8n_library,
         route = LibraryRoute::class
     )
 }
 
-val LibraryDestinations: Set<TopLevelDestination> = emptySet()
+@Serializable
+data object LibraryRoute
+
+
+
+enum class LibraryDestination(
+    val icon: ImageVector,
+    @StringRes val titleTextId: Int,
+    val route: KClass<*>
+) {
+    ALBUMS(
+        icon = MusicMattersIcons.Album,
+        titleTextId = i8nR.string.core_i8n_albums,
+        route = AlbumsRoute::class,
+    )
+}
 
 ///**
 // * Contract for information needed on every MusicMatters destination

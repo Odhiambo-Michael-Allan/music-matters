@@ -12,12 +12,14 @@ import androidx.activity.result.launch
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,7 +56,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -64,7 +68,10 @@ import com.squad.musicmatters.MainActivityUiState
 import com.squad.musicmatters.R
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.TopAppBar
+import com.squad.musicmatters.feature.albums.navigation.albumsScreen
+import com.squad.musicmatters.feature.albums.navigation.navigateToAlbums
 import com.squad.musicmatters.feature.lyrics.navigation.lyricsScreen
 import com.squad.musicmatters.feature.lyrics.navigation.navigateToLyricsScreen
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreen
@@ -74,8 +81,9 @@ import com.squad.musicmatters.feature.queue.navigation.queueScreen
 import com.squad.musicmatters.feature.settings.navigation.navigateToSettings
 import com.squad.musicmatters.feature.settings.navigation.settingsScreen
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
+import com.squad.musicmatters.feature.songs.navigation.navigateToSongs
 import com.squad.musicmatters.feature.songs.navigation.songsScreen
-import com.squad.musicmatters.navigation.LibraryDestinations
+import com.squad.musicmatters.navigation.LibraryDestination
 import com.squad.musicmatters.navigation.TopLevelDestination
 import com.squad.musicmatters.ui.utils.shareSong
 import com.squad.musicmatters.utils.ScreenOrientation
@@ -167,7 +175,7 @@ fun MusicMattersAppContent(
             }
         }
         currentlySelectedLibraryDestinationName = ""
-        LibraryDestinations.forEach {
+        LibraryDestination.entries.forEach {
             if ( destination.route == it.route.qualifiedName ) {
                 currentlySelectedLibraryDestinationName = it.route.qualifiedName ?: ""
             }
@@ -204,10 +212,10 @@ fun MusicMattersAppContent(
                     alwaysShowLabel = labelVisibility == BottomBarLabelVisibility.ALWAYS_VISIBLE,
                     onClick = {
                         if ( destination == TopLevelDestination.LIBRARY ) {
-//                            showMoreDestinationsBottomSheet = true
+                            showMoreDestinationsBottomSheet = true
                         }
                         else if ( isSelected.not() ) {
-                            navController.navigate( destination.route )
+                            navController.navigateToTopLevelDestination( destination )
                         }
                     },
                     icon = {
@@ -244,21 +252,9 @@ fun MusicMattersAppContent(
 
         Scaffold(
             topBar = {
-//                AnimatedVisibility(
-//                    visible = shouldShowTopAppBar,
-//                    enter = SlideTransition.slideDown.enterTransition(),
-//                    exit = SlideTransition.slideUp.exitTransition(),
-//                ) {
-//                    TopAppBar(
-//                        title = stringResource( id = R.string.songs ),
-//                        topAppBarScrollBehavior = topAppBarScrollBehavior,
-//                        onNavigationIconClicked = {},
-//                        onSettingsClicked = {}
-//                    )
-//                }
                 if ( shouldShowTopAppBar ) {
                     TopAppBar(
-                        title = stringResource( id = R.string.songs ),
+                        title = stringResource( id = i8nR.string.core_i8n_songs ),
                         topAppBarScrollBehavior = topAppBarScrollBehavior,
                         onNavigationIconClicked = {},
                         onSettingsClicked = {
@@ -364,6 +360,17 @@ fun MusicMattersAppContent(
                     settingsScreen(
                         onNavigateBack = { navController.navigateUp()}
                     )
+                    albumsScreen(
+                        onViewAlbum = {},
+                        onViewArtist = {},
+                        onShowSnackBar = {
+                            snackBarHostState.showSnackBar(
+                                coroutineScope,
+                                it
+                            )
+                        }
+                    )
+
 //                composable(
 //                    route = Route.Artists.name,
 //                    enterTransition = { SlideTransition.slideUp.enterTransition() },
@@ -413,27 +420,6 @@ fun MusicMattersAppContent(
 //                        onDeleteSong = {
 //                            mainActivity.deleteSong( it )
 //                        }
-//                    )
-//                }
-//                composable(
-//                    route = Route.Albums.name,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) {
-//                    val albumsScreenViewModel: AlbumsScreenViewModel = viewModel(
-//                        factory = AlbumsViewModelFactory(
-//                            musicServiceConnection = musicServiceConnection,
-//                            settingsRepository = settingsRepository,
-//                            playlistRepository = playlistRepository,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-//                        )
-//                    )
-//                    AlbumsScreen(
-//                        viewModel = albumsScreenViewModel,
-//                        onAlbumClick = navController::navigateToAlbumScreen,
-//                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.ALBUM.name ) },
-//                        onSettingsClicked = { navController.navigate( Route.Settings.name ) },
-//                        onViewArtist = navController::navigateToArtistScreen
 //                    )
 //                }
 //                composable(
@@ -692,28 +678,29 @@ fun MusicMattersAppContent(
                 }
 
 
-//                if ( showMoreDestinationsBottomSheet ) {
-//                    ModalBottomSheet(
-//                        sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
-//                        onDismissRequest = { showMoreDestinationsBottomSheet = false }
-//                    ) {
-//                        MORE_DESTINATIONS.forEach {
-//                            BottomSheetMenuItem(
-//                                leadingIcon = it.selectedIcon,
-//                                leadingIconContentDescription = it.iconContentDescription,
-//                                label = it.getLabel( language ),
-//                                isSelected = currentlySelectedMoreTab == it.route.name
-//                            ) {
-//                                currentlySelectedMoreTab = it.route.name
-//                                showMoreDestinationsBottomSheet = false
-//                                currentTabName = Library.route.name
-//                                navController.navigate( it.route )
-//                            }
-//                        }
-//                        Spacer( modifier = Modifier.size( 36.dp ) )
-//                    }
-//                }
-//            }
+                if ( showMoreDestinationsBottomSheet ) {
+                    ModalBottomSheet(
+                        sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
+                        onDismissRequest = { showMoreDestinationsBottomSheet = false }
+                    ) {
+                        LibraryDestination.entries.forEach {
+                            val isSelected = currentlySelectedLibraryDestinationName ==
+                                    it.route.qualifiedName
+                            BottomSheetMenuItem(
+                                leadingIcon = it.icon,
+                                leadingIconContentDescription = stringResource( it.titleTextId ),
+                                label = stringResource( it.titleTextId ),
+                                isSelected = isSelected
+                            ) {
+                                showMoreDestinationsBottomSheet = false
+                                currentTopLevelDestinationName = TopLevelDestination.LIBRARY
+                                    .route.qualifiedName
+                                navController.navigateToLibraryDestination( it )
+                            }
+                        }
+                        Spacer( modifier = Modifier.size( 36.dp ) )
+                    }
+                }
 
                 MiniPlayer (
                     onShowNowPlayingBottomSheet = { showNowPlayingScreen = true },
@@ -763,8 +750,8 @@ fun MusicMattersAppContent(
                     }
                 }
             }
-        }
 
+        }
     }
 }
 
@@ -773,6 +760,10 @@ private fun SnackbarHostState.showSnackBar(
     message: String,
     duration: SnackbarDuration = SnackbarDuration.Short,
 ) {
+    // Instantly dismiss the active snackbar if one exists
+    currentSnackbarData?.dismiss()
+
+    // Launch the new one immediately
     coroutineScope.launch {
         showSnackbar(
             message = message,
@@ -812,6 +803,32 @@ private fun TransitionScreenToPortraitMode() {
             activity.requestedOrientation = originalOrientation
         }
     }
+}
+
+fun NavHostController.navigateToTopLevelDestination( topLevelDestination: TopLevelDestination ) {
+    when ( topLevelDestination ) {
+        TopLevelDestination.SONGS -> navigateToSongs( navOptions = topLevelNavOptions() )
+        TopLevelDestination.LIBRARY -> {}
+    }
+}
+
+fun NavHostController.navigateToLibraryDestination( libraryDestination: LibraryDestination ) {
+    when ( libraryDestination ) {
+        LibraryDestination.ALBUMS ->
+            navigateToAlbums( navOptions = topLevelNavOptions() )
+    }
+}
+
+fun NavHostController.topLevelNavOptions() = navOptions {
+    // Pop up to the start destination of the graph to avoid building up a large stack
+    // of destinations on the back stack as users select items.
+    popUpTo( graph.findStartDestination().id ) {
+//        saveState = true
+    }
+    // Avoid multiple copies of the same destination when re-selecting the same item.
+    launchSingleTop = true
+    // Restore state when re-selecting a previously selected item.
+//    restoreState = true
 }
 
 private fun Context.findActivity(): Activity? = when (this) {
