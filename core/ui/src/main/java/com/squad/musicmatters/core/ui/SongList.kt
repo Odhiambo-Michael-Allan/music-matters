@@ -2,6 +2,7 @@ package com.squad.musicmatters.core.ui
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -96,6 +98,7 @@ fun SongList(
 
                 LazyColumn(
                     state = lazyListState,
+                    contentPadding = PaddingValues( bottom = 70.dp ),
                     modifier = Modifier
                         .drawScrollBar( lazyListState )
                 ) {

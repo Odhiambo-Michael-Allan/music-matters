@@ -24,6 +24,7 @@ import com.squad.musicmatters.core.i8n.R as i8nR
 
 @Composable
 internal fun MusicMattersNavHost(
+    modifier: Modifier = Modifier,
     navController: NavHostController,
     onDeleteSong: ( Song ) -> Unit,
     snackBarHostState: SnackbarHostState,
@@ -33,7 +34,7 @@ internal fun MusicMattersNavHost(
     val coroutineScope = rememberCoroutineScope()
 
     NavHost(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         navController = navController,
         startDestination = SongsRoute,
     ) {

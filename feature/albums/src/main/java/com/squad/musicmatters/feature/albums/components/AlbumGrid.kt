@@ -91,7 +91,12 @@ internal fun AlbumGrid(
             else -> {
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive( minSize = 150.dp ),
-                    contentPadding = PaddingValues( 8.dp )
+                    contentPadding = PaddingValues(
+                        start = 8.dp,
+                        end = 8.dp,
+                        top = 8.dp,
+                        bottom = 70.dp
+                    )
                 ) {
                     items(
                         albums,
