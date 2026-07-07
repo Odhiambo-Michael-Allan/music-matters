@@ -36,7 +36,7 @@
 
     <string name="core_i8n_damn_this_is_so_empty">Verdammt, hier ist es so leer!!</string>
     <string name="core_i8n_favorite">Favorit</string>
-    <string name="core_i8n_view_artist">Künstler anzeigen: %s</string>
+    <string name="core_i8n_go_to_artist">Künstler anzeigen: %s</string>
     <string name="core_i8n_view_album">Album anzeigen: %s</string>
 
     <string name="core_i8n_share_song">Song teilen</string>

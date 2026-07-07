@@ -332,7 +332,7 @@ private fun NowPlayingScreenContent(
                                     BottomSheetMenuItem(
                                         leadingIcon = Icons.Default.Person,
                                         label = stringResource(
-                                            id = i8nR.string.core_i8n_view_artist,
+                                            id = i8nR.string.core_i8n_go_to_artist,
                                             artistName
                                         )
                                     ) {

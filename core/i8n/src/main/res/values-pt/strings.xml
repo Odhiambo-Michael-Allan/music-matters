@@ -36,7 +36,7 @@
 
     <string name="core_i8n_damn_this_is_so_empty">Isto está completamente vazio!!</string>
     <string name="core_i8n_favorite">Adicionar aos favoritos</string>
-    <string name="core_i8n_view_artist">Ver Artista: %s</string>
+    <string name="core_i8n_go_to_artist">Ver Artista: %s</string>
     <string name="core_i8n_view_album">Ver Álbum: %s</string>
 
     <string name="core_i8n_share_song">Partilhar música</string>

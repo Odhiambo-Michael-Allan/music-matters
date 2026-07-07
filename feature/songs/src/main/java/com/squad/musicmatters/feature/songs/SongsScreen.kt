@@ -134,7 +134,6 @@ private fun SongsScreenContentPreview() {
         SongsScreenContent(
                 SongsScreenUiState.Success(
                 songs = PreviewParameterData.songs,
-                themeMode = ThemeMode.LIGHT,
                 currentlyPlayingSongId = PreviewParameterData.songs.first().id,
                 favoriteSongIds = PreviewParameterData.songs.map { it.id }.toSet(),
                 sortSongsBy = SortSongsBy.TITLE,

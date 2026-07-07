@@ -270,7 +270,7 @@ fun SongOptionsBottomSheetMenu(
             song.artists.forEach {
                 BottomSheetMenuItem(
                     leadingIcon = MusicMattersIcons.Artist,
-                    label = stringResource( id = R.string.core_i8n_view_artist, it )
+                    label = stringResource( id = R.string.core_i8n_go_to_artist, it )
                 ) {
                     onDismissRequest()
                     onViewArtist( it )

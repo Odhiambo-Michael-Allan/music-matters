@@ -36,7 +36,7 @@
 
     <string name="core_i8n_damn_this_is_so_empty">अरे, यहाँ तो कुछ भी नहीं है!!</string>
     <string name="core_i8n_favorite">पसंदीदा बनाएं</string>
-    <string name="core_i8n_view_artist">कलाकार देखें: %s</string>
+    <string name="core_i8n_go_to_artist">कलाकार देखें: %s</string>
     <string name="core_i8n_view_album">एल्बम देखें: %s</string>
 
     <string name="core_i8n_share_song">गाना साझा करें</string>

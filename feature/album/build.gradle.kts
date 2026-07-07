@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.squad.musicmatters.feature.albums"
+    namespace = "com.squad.musicmatters.feature.album"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -18,5 +18,6 @@ dependencies {
     implementation( libs.androidx.core.ktx )
     implementation( libs.androidx.appcompat )
     implementation( libs.material )
+
     testImplementation( libs.junit )
 }

@@ -56,15 +56,17 @@ internal fun AlbumTile(
         onShowAddToQueueOption = onShowAddToQueueOption,
         onRemoveFromQueue = onRemoveSongsInAlbumFromQueue,
         additionalBottomSheetMenuItems = { onDismissRequest ->
-            BottomSheetMenuItem(
-                leadingIcon = MusicMattersIcons.Artist,
-                label = stringResource(
-                    id = i8nR.string.core_i8n_view_artist,
-                    album.artist ?: ""
-                )
-            ) {
-                onDismissRequest()
-                album.artist.takeIf { !it.isNullOrBlank() }?.let { onViewAlbumArtist( it ) }
+            album.artist?.let { albumArtist ->
+                BottomSheetMenuItem(
+                    leadingIcon = MusicMattersIcons.Artist,
+                    label = stringResource(
+                        id = i8nR.string.core_i8n_go_to_artist,
+                        albumArtist
+                    )
+                ) {
+                    onDismissRequest()
+                    onViewAlbumArtist( albumArtist )
+                }
             }
         }
     )
