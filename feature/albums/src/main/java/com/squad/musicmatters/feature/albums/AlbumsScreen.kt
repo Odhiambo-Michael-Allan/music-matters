@@ -53,9 +53,8 @@ internal fun AlbumsScreen(
             onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
             onCreatePlaylist = viewModel::createPlaylist,
             onShowAddToQueueOption = viewModel::noSongInTheAlbumPresentInTheQueue,
-            onRemoveSongsInAlbumFromQueue = viewModel::removeSongsFromQueue,
-
-            )
+            onRemoveSongsInAlbumFromQueue = viewModel::removeSongsFromQueue
+        )
     }
 
 }
@@ -80,15 +79,7 @@ private fun AlbumsScreenContent(
 ) {
 
     when ( uiState ) {
-        AlbumsScreenUiState.Loading -> {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                CircularProgressIndicator()
-            }
-        }
-
+        AlbumsScreenUiState.Loading -> {}
         is AlbumsScreenUiState.Success -> {
             AlbumGrid(
                 albums = uiState.albums,

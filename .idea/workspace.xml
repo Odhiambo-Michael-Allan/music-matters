@@ -29,11 +29,6 @@
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/LibraryDestinationContainer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/LibraryDestinationContainer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/AlbumsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/AlbumsScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/components/AlbumGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/components/AlbumGrid.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/navigation/AlbumsScreenNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/navigation/AlbumsScreenNavigation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/MusicMattersApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/MusicMattersApp.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

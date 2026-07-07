@@ -80,15 +80,18 @@ fun TopAppBar(
 @Composable
 fun MinimalAppBar(
     modifier: Modifier = Modifier,
-    onNavigationIconClicked: () -> Unit,
     title: String,
+    scrollBehavior: TopAppBarScrollBehavior,
+    onNavigationIconClicked: () -> Unit,
     options: ( @Composable () -> Unit )? = null,
 
     ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Transparent
+        scrollBehavior = scrollBehavior,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent,
+            scrolledContainerColor = Color.Transparent,
         ),
         navigationIcon = {
             IconButton( onClick = onNavigationIconClicked ) {
@@ -150,12 +153,14 @@ fun TopAppBarMinimalTitle(
     }
 }
 
+@OptIn( ExperimentalMaterial3Api::class )
 @Preview( showBackground = true )
 @Composable
 private fun TopAppBarMinimalAppBarPreview() {
     MinimalAppBar(
+        title = "Queue",
+        scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
         onNavigationIconClicked = { /*TODO*/ },
-        title = "Queue"
     )
 }
 

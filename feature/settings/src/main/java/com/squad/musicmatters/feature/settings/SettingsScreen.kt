@@ -39,6 +39,7 @@ import com.squad.musicmatters.core.model.SortPlaylistsBy
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.model.UserData
+import com.squad.musicmatters.core.ui.LibraryDestinationContainer
 import com.squad.musicmatters.core.ui.MinimalAppBar
 import com.squad.musicmatters.feature.settings.Interface.BottomBarLabelVisibility
 import com.squad.musicmatters.feature.settings.about.About
@@ -136,20 +137,16 @@ private fun SettingsScreenContent(
     onGoToGithubProfile: () -> Unit,
     onGoToAppGithubRepository: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize()
+
+    LibraryDestinationContainer(
+        isLoading = uiState is SettingsScreenUiState.Loading,
+        title = i8nR.string.core_i8n_settings,
+        onNavigateBack = onNavigateBack,
     ) {
-        MinimalAppBar(
-            title = stringResource( id = i8nR.string.core_i8n_settings ),
-            onNavigationIconClicked = onNavigateBack,
-            modifier = Modifier.fillMaxWidth()
-        )
         when ( uiState ) {
             SettingsScreenUiState.Loading -> {}
             is SettingsScreenUiState.Success -> {
-                LazyColumn (
-                    modifier = Modifier.weight( 1f )
-                ) {
+                LazyColumn {
                     item {
                         SettingsSideHeading( text = stringResource( id = i8nR.string.core_i8n_appearance ) )
                         Language()

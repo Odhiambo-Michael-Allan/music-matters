@@ -29,15 +29,15 @@ fun LibraryDestinationContainer(
             .nestedScroll( scrollBehavior.nestedScrollConnection )
     ) {
         MinimalAppBar(
-            onNavigationIconClicked = onNavigateBack,
             title = title?.let { stringResource( id = it ) } ?: "",
+            scrollBehavior = scrollBehavior,
+            onNavigationIconClicked = onNavigateBack,
         )
         Box(
             contentAlignment = androidx.compose.ui.Alignment.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            content()
-            if ( isLoading ) CircularProgressIndicator()
+            if ( isLoading ) CircularProgressIndicator() else content()
         }
     }
     

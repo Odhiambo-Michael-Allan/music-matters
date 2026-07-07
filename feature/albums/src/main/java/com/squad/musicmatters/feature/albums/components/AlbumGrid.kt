@@ -1,12 +1,14 @@
 package com.squad.musicmatters.feature.albums.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -87,7 +89,7 @@ internal fun AlbumGrid(
             }
             else -> {
                 LazyVerticalGrid(
-                    columns = GridCells.Adaptive( 128.dp ),
+                    columns = GridCells.Adaptive( minSize = 150.dp ),
                     contentPadding = PaddingValues( 8.dp )
                 ) {
                     items(
@@ -95,6 +97,7 @@ internal fun AlbumGrid(
                         key = { it.id }
                     ) {
                         AlbumTile(
+                            modifier = Modifier.fillMaxWidth(),
                             album = it,
                             onViewAlbum = { onViewAlbum( it ) },
                             onPlaySongsInAlbum = { onPlaySongsInAlbum( it ) },

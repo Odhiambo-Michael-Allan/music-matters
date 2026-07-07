@@ -20,6 +20,7 @@ import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Lyric
+import com.squad.musicmatters.core.ui.LibraryDestinationContainer
 import com.squad.musicmatters.core.ui.LyricsLayout
 import com.squad.musicmatters.core.ui.MinimalAppBar
 import java.time.Duration
@@ -54,22 +55,12 @@ private fun LyricsScreenContent(
     modifier: Modifier = Modifier,
 ) {
 
-    Column(
-        modifier = Modifier.fillMaxSize()
+    LibraryDestinationContainer(
+        isLoading = uiState is LyricsScreenUiState.Loading,
+        onNavigateBack = onNavigateBack,
     ) {
-        MinimalAppBar(
-            title = "",
-            onNavigationIconClicked = onNavigateBack,
-        )
         when ( uiState ) {
-            LyricsScreenUiState.Loading -> {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
+            LyricsScreenUiState.Loading -> {}
             is LyricsScreenUiState.Success -> {
                 LyricsLayout(
                     lyrics = uiState.lyrics,
