@@ -42,7 +42,8 @@ class AlbumsRepositoryImpl @Inject constructor(
     override fun fetchAlbumWithId( id: Long ): Flow<Album> = songsRepository.fetchSongs()
         .map { songs ->
             val songsInAlbum = songs.filter { it.albumId == id }
-            val albumTitle = songsInAlbum.firstOrNull { !it.albumTitle.isNullOrBlank() }?.albumTitle ?: ""
+            val albumTitle = songsInAlbum
+                .firstOrNull { !it.albumTitle.isNullOrBlank() }?.albumTitle ?: ""
             Album(
                 id = id,
                 title = albumTitle,

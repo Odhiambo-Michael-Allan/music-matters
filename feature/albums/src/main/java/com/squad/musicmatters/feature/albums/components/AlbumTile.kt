@@ -3,11 +3,16 @@ package com.squad.musicmatters.feature.albums.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
+import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
+import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.GenericTile
 import com.squad.musicmatters.core.i8n.R as i8nR
@@ -35,7 +40,8 @@ internal fun AlbumTile(
         modifier = modifier,
         imageUri = album.artworkUri?.toUri(),
         title = album.title,
-        description = album.artist,
+        subTitle = album.artist.takeIf { !it.isNullOrBlank() }
+            ?: stringResource( id = i8nR.string.core_i8n_untitled ),
         headerDescription = album.artist ?: "",
         onGetPlaylists = onGetPlaylists,
         onPlay = onPlaySongsInAlbum,
@@ -63,4 +69,39 @@ internal fun AlbumTile(
         }
     )
 
+}
+
+@Preview( showBackground = true )
+@Composable
+private fun AlbumTilePreview() {
+    MusicMattersTheme(
+        fontName = SupportedFonts.ProductSans.name,
+        useMaterialYou = true,
+        fontScale = 1.0f,
+        themeMode = ThemeMode.LIGHT,
+        primaryColorName = PrimaryThemeColors.Blue.name
+    ) {
+        AlbumTile(
+            album = Album(
+                id = 5L,
+                title = "Please Hammer, Don't Hurt 'Em",
+                artist = "",
+                trackCount = 14,
+                artworkUri = null,
+            ),
+            onViewAlbum = {},
+            onViewAlbumArtist = {},
+            onPlaySongsInAlbum = {},
+            onCreatePlaylist = { _, _ -> },
+            onPlaySongsInAlbumNext = {},
+            onGetSongsInAlbum = { emptyList() },
+            onShowSnackBar = {},
+            onAddSongsInAlbumToQueue = {},
+            onRemoveSongsInAlbumFromQueue = {},
+            onShuffleAndPlaySongsInAlbum = {},
+            onAddSongsToPlaylist = { _, _ -> },
+            onShowAddToQueueOption = { false },
+            onGetPlaylists = { emptyList() }
+        )
+    }
 }

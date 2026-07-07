@@ -173,26 +173,31 @@ private fun buildSongUsing( cursor: Cursor ): Song {
     val dateModified = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
     val title = cursor.getStringFrom( AudioColumns.TITLE )
     val albumId = cursor.getLongFrom(AudioColumns.ALBUM_ID )
+    val artists = cursor.getNullableStringFrom( AudioColumns.ARTIST )?.let {
+        parseArtistStringIntoIndividualArtists( it )
+    } ?: setOf( "" )
+    val albumArtist = cursor.getNullableStringFrom( AudioColumns.ALBUM_ARTIST )
+        ?: artists.first()
+
     Timber.tag( TAG ).d( "SONG TITLE: $title" )
     Timber.tag( TAG ).d( "ALBUM ID: $albumId" )
+    Timber.tag( TAG ).d( "ALBUM ARTIST: $albumArtist" )
     return Song(
         id = mediaUri,
         mediaUri = mediaUri,
         title = title,
-        trackNumber = cursor.getNullableIntFrom( AudioColumns.TRACK ) ?: UNKNOWN_INT_VALUE,
-        year = cursor.getNullableIntFrom( AudioColumns.YEAR ) ?: UNKNOWN_INT_VALUE,
+        trackNumber = cursor.getNullableIntFrom( AudioColumns.TRACK ) ?: 0,
+        year = cursor.getNullableIntFrom( AudioColumns.YEAR ) ?: 0,
         duration = cursor.getLongFrom( AudioColumns.DURATION ),
         albumId = albumId,
-        albumTitle = cursor.getNullableStringFrom( AudioColumns.ALBUM ) ?: UNKNOWN_STRING_VALUE,
-        artists = parseArtistStringIntoIndividualArtists(
-                cursor.getNullableStringFrom( AudioColumns.ARTIST ) ?: UNKNOWN_STRING_VALUE
-            ),
-        composer = cursor.getNullableStringFrom( AudioColumns.COMPOSER ) ?: UNKNOWN_STRING_VALUE,
-        dateModified = dateAdded ?: dateModified ?: UNKNOWN_LONG_VALUE,
-        size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: UNKNOWN_LONG_VALUE,
-        path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: UNKNOWN_STRING_VALUE,
+        albumTitle = cursor.getNullableStringFrom( AudioColumns.ALBUM ) ?: "",
+        artists = artists,
+        composer = cursor.getNullableStringFrom( AudioColumns.COMPOSER ) ?: "",
+        dateModified = dateAdded ?: dateModified ?: 0L,
+        size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: 0,
+        path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: "",
         artworkUri = cursor.getArtworkUri()?.toString(),
-        albumArtist = cursor.getNullableStringFrom( "album_artist" )
+        albumArtist = albumArtist ?: artists.first(),
     )
 }
 
@@ -219,7 +224,7 @@ private fun parseArtistStringIntoIndividualArtists( artists: String ): Set<Strin
     )
 
     // 3. Split, trim, and filter in one pass
-    return artists.split(regex)
+    return artists.split( regex )
         .map { it.trim() }
         .filter { it.isNotEmpty() }
         .toSet()
@@ -295,10 +300,6 @@ private class SimplePath( val parts: List<String> ) {
         }
     }
 }
-
-const val UNKNOWN_LONG_VALUE = 0L
-const val UNKNOWN_INT_VALUE = 0
-const val UNKNOWN_STRING_VALUE = "<unknown>"
 
 val projection = arrayOf(
     AudioColumns._ID,

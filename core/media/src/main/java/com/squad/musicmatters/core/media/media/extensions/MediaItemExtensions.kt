@@ -42,16 +42,16 @@ fun MediaMetadata.Builder.from( cursor: Cursor ): MediaMetadata.Builder {
     val duration = cursor.getLongFrom( AudioColumns.DURATION )
 //    Timber.tag( TAG ).d( "Duration: $duration" )
 
-    val albumTitle = cursor.getNullableStringFrom( AudioColumns.ALBUM ) ?: UNKNOWN_STRING_VALUE
+    val albumTitle = cursor.getNullableStringFrom( AudioColumns.ALBUM ) ?: ""
 //    Timber.tag( TAG ).d( "Album: $albumTitle" )
 
-    val artist = cursor.getNullableStringFrom( AudioColumns.ARTIST ) ?: UNKNOWN_STRING_VALUE
+    val artist = cursor.getNullableStringFrom( AudioColumns.ARTIST ) ?: ""
 //    Timber.tag( TAG ).d( "Artist: $artist" )
 
-    val albumArtist = cursor.getNullableStringFrom( AudioColumns.ALBUM_ARTIST ) ?: UNKNOWN_STRING_VALUE
+    val albumArtist = cursor.getNullableStringFrom( AudioColumns.ALBUM_ARTIST ) ?: ""
 //    Timber.tag( TAG ).d( "Album Artist: $artist" )
 
-    val composer = cursor.getNullableStringFrom( AudioColumns.COMPOSER ) ?: UNKNOWN_STRING_VALUE
+    val composer = cursor.getNullableStringFrom( AudioColumns.COMPOSER ) ?: ""
 //    Timber.tag( TAG ).d( "Composer: $composer" )
 
     val dateAdded = cursor.getLongFrom( AudioColumns.DATE_MODIFIED )
@@ -62,7 +62,7 @@ fun MediaMetadata.Builder.from( cursor: Cursor ): MediaMetadata.Builder {
 
     val size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: UNKNOWN_LONG_VALUE
 //    Timber.tag( TAG ).d( "Size: $size" )
-    val path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: UNKNOWN_STRING_VALUE
+    val path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: ""
 //    Timber.tag( TAG ).d( "Path: $path" )
 
     Timber.tag( TAG ).d( "------------------------------------------------------------------" )
@@ -98,45 +98,13 @@ fun MediaMetadata.Builder.from( cursor: Cursor ): MediaMetadata.Builder {
     return this
 }
 
-fun getArtworkUriWith(cursor: Cursor ): Uri? = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+fun getArtworkUriWith( cursor: Cursor ): Uri? = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     .buildUpon()
     .run {
         appendPath( cursor.getLongFrom( AudioColumns._ID ).toString() )
         appendPath( "albumart" )
         build()
     }
-
-
-//fun MediaItem.toSong( artistTagSeparators: Set<String> ) = Song(
-//    id = mediaId,
-//    mediaUri = mediaId,
-//    title = mediaMetadata.title.toString(),
-//    displayTitle = mediaMetadata.extras?.getString( DISPLAY_TITLE_KEY ) ?: UNKNOWN_STRING_VALUE,
-//    trackNumber = mediaMetadata.extras?.getInt( TRACK_NUMBER_KEY ),
-//    year = mediaMetadata.extras?.getInt( RELEASE_YEAR_KEY ),
-//    duration = mediaMetadata.extras?.getLong( SONG_DURATION ) ?: UNKNOWN_LONG_VALUE,
-//    albumTitle = mediaMetadata.extras?.getString( ALBUM_TITLE_KEY ),
-//    artists = parseArtistStringIntoIndividualArtists( artistTagSeparators ),
-//    composer = mediaMetadata.composer.toString(),
-//    dateModified = mediaMetadata.extras?.getLong( DATE_KEY ) ?: UNKNOWN_LONG_VALUE ,
-//    size = mediaMetadata.extras?.getLong( SIZE_KEY ) ?: UNKNOWN_LONG_VALUE,
-//    path = mediaMetadata.extras?.getString( PATH_KEY ) ?: UNKNOWN_STRING_VALUE,
-//    artworkUri = mediaMetadata.artworkUri.toString(),
-//)
-
-//fun MediaItem.toAlbum( songs: List<Song> ) = Album(
-//    title = mediaMetadata.title.toString(),
-//    artists = parseAlbumArtistsStringIntoIndividualArtists( artistTagSeparators ),
-//    trackCount = songs.count { it.albumTitle == mediaMetadata.title.toString() },
-//    artworkUri = mediaMetadata.artworkUri.toString()
-//)
-//
-//fun MediaItem.toArtist( songs: List<Song>, albums: List<Album> ) = Artist(
-//    name = mediaMetadata.title.toString(),
-//    artworkUri = mediaMetadata.artworkUri?.toString(),
-//    trackCount = songs.count { it.artists.contains( this.mediaMetadata.title ) },
-//    albumCount = albums.count { it.artists.contains( mediaMetadata.title ) }
-//)
 
 fun MediaItem.parseArtistStringIntoIndividualArtists( separators: Set<String> ): Set<String> {
     val artistsSet = mediaMetadata.extras?.getString( ARTIST_KEY )?.split( *separators.toTypedArray() )
@@ -145,16 +113,10 @@ fun MediaItem.parseArtistStringIntoIndividualArtists( separators: Set<String> ):
     return artistsSet
 }
 
-//fun MediaItem.parseAlbumArtistsStringIntoIndividualArtists( separators: Set<String> ) =
-//    mediaMetadata.extras?.getString( ARTIST_KEY )?.split( *separators.toTypedArray() )
-//    ?.mapNotNull { x -> x.trim().takeIf { it.isNotEmpty() } }
-//    ?.toSet() ?: setOf()
-
 val genreTagSeparators = setOf( "/", "," )
 
 const val UNKNOWN_LONG_VALUE = 0L
 const val UNKNOWN_INT_VALUE = 0
-const val UNKNOWN_STRING_VALUE = "<unknown>"
 const val SONG_DURATION = "SONG-DURATION"
 const val DATE_KEY = "DATE"
 const val SIZE_KEY = "SIZE"

@@ -20,6 +20,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class SongsAdditionalMetadataRepositoryImpl @Inject constructor(
@@ -44,7 +45,7 @@ class SongsAdditionalMetadataRepositoryImpl @Inject constructor(
                         val codec = extractCodecUsing( metadataRetriever )
                         val samplingRate = extractSamplingRateUsing( metadataRetriever )
                         val genre = extractGenreUsing( metadataRetriever )
-                        Log.d( TAG, "SAVING METADATA FOR: ${it.title}" )
+                        Timber.tag( TAG ).d( "SAVING METADATA FOR: ${it.title}" )
                         save(
                             SongAdditionalMetadata(
                                 songId = it.id,
@@ -56,10 +57,8 @@ class SongsAdditionalMetadataRepositoryImpl @Inject constructor(
                             )
                         )
                     } catch ( e: Exception ) {
-                        Log.e(
-                            TAG,
-                            "ERROR OCCURRED WHILE FETCHING ADDITIONAL METADATA FOR: ${it.title}"
-                        )
+                        Timber.tag( TAG )
+                            .e( "ERROR OCCURRED WHILE FETCHING ADDITIONAL METADATA FOR: ${it.title}" )
                     }
                 }
                 metadataRetriever.release()
@@ -103,7 +102,7 @@ private fun extractBitsPerSampleUsing( mediaMetadataRetriever: MediaMetadataRetr
 private fun extractCodecUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
     mediaMetadataRetriever.runCatching {
         extractMetadata( MediaMetadataRetriever.METADATA_KEY_MIMETYPE )
-    }.getOrNull() ?: UNKNOWN_STRING_VALUE
+    }.getOrNull() ?: ""
 
 private fun extractSamplingRateUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
     if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {
@@ -115,7 +114,7 @@ private fun extractSamplingRateUsing( mediaMetadataRetriever: MediaMetadataRetri
 private fun extractGenreUsing( mediaMetadataRetriever: MediaMetadataRetriever ): String {
     val genre = mediaMetadataRetriever.runCatching {
         extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE)
-    }.getOrNull() ?: return UNKNOWN_STRING_VALUE
+    }.getOrNull() ?: return ""
 
     val genreSplitRegex = Regex(
         """\s*(?:,|/|;|\\|&|and|//)\s*""",
@@ -124,17 +123,16 @@ private fun extractGenreUsing( mediaMetadataRetriever: MediaMetadataRetriever ):
     val genreList = genre.split( genreSplitRegex )
 
     // Return the first non-empty trimmed genre, or the unknown value if empty
-    return genreList.firstOrNull { it.isNotBlank() }?.trim() ?: UNKNOWN_STRING_VALUE
+    return genreList.firstOrNull { it.isNotBlank() }?.trim() ?: ""
 }
 
-private const val UNKNOWN_STRING_VALUE = "<unknown>"
 private const val TAG = "ADD-METADATA-REPO"
 
 private fun SongAdditionalMetadata.asEntity() = SongAdditionalMetadataEntity(
     songId = songId,
     codec = codec,
-    bitsPerSample = bitsPerSample.toLong(),
-    bitrate = bitrate.toLong(),
+    bitsPerSample = bitsPerSample,
+    bitrate = bitrate,
     samplingRate = (samplingRate.toDouble() * 1000).toLong(),
     genre = genre,
 )

@@ -86,14 +86,14 @@ fun SongDetailsDialog(
                         value = song.artists.joinToString(),
                     )
 
-                    song.albumTitle?.let {
+                    song.albumTitle?.takeIf { it.isNotBlank() }?.let {
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_album ),
                             value = it,
                         )
                     }
 
-                    song.composer?.let {
+                    song.composer?.takeIf { it.isNotBlank() }?.let {
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_composer ),
                             value = it,
@@ -107,14 +107,14 @@ fun SongDetailsDialog(
                         )
                     }
 
-                    song.year?.let {
+                    song.year?.takeIf { it != 0 }?.let {
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_year ),
                             value = it.toString(),
                         )
                     }
 
-                    song.trackNumber?.let {
+                    song.trackNumber?.takeIf { it != 0 }?.let {
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_track_number ),
                             value = ( it % 1000 ).toString(),
@@ -141,7 +141,7 @@ fun SongDetailsDialog(
                         value = song.dateModifiedString,
                     )
 
-                    metadata?.bitrate?.let {
+                    metadata?.bitrate?.takeIf { it != 0L }?.let {
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_bitrate ),
                             value = stringResource(
@@ -151,7 +151,7 @@ fun SongDetailsDialog(
                         )
                     }
 
-                    metadata?.bitsPerSample?.let {
+                    metadata?.bitsPerSample?.takeIf { it != 0L }?.let{
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_bits_per_sample ),
                             value = stringResource(
@@ -161,7 +161,7 @@ fun SongDetailsDialog(
                         )
                     }
 
-                    metadata?.samplingRate?.let {
+                    metadata?.samplingRate?.takeIf { it != 0f }?.let {
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_sampling_rate ),
                             value = stringResource(

@@ -51,6 +51,7 @@ import com.squad.musicmatters.core.model.SongAdditionalMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.dialog.DeleteSongDialog
 import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
+import com.squad.musicmatters.core.i8n.R as i8nR
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -113,7 +114,8 @@ fun SongCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = song.artists.joinToString(),
+                    text = song.artists.joinToString().takeIf { it.isNotBlank() }
+                        ?: stringResource( id = i8nR.string.core_i8n_untitled ),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )

@@ -7,7 +7,6 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.media3.common.MediaItem
 import com.squad.musicmatters.core.media.media.extensions.UNKNOWN_LONG_VALUE
-import com.squad.musicmatters.core.media.media.extensions.UNKNOWN_STRING_VALUE
 import com.squad.musicmatters.core.media.media.extensions.from
 import com.squad.musicmatters.core.media.media.extensions.genreTagSeparators
 import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
@@ -135,7 +134,7 @@ class LocalMusicSource(
     private fun extractCodecUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
         mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_MIMETYPE )
-        }.getOrNull() ?: UNKNOWN_STRING_VALUE
+        }.getOrNull() ?: ""
 
     private fun extractSamplingRateUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
         if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {
@@ -147,7 +146,7 @@ class LocalMusicSource(
     private fun extractGenreUsing( mediaMetadataRetriever: MediaMetadataRetriever ): String {
         val genre = mediaMetadataRetriever.runCatching {
             extractMetadata( MediaMetadataRetriever.METADATA_KEY_GENRE )
-        }.getOrNull() ?: UNKNOWN_STRING_VALUE
+        }.getOrNull() ?: ""
         return genre.split( *genreTagSeparators.toTypedArray() ).first()
     }
 

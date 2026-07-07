@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -53,7 +54,7 @@ fun GenericTile(
     modifier: Modifier = Modifier,
     imageUri: Uri?,
     title: String,
-    description: String? = null,
+    subTitle: String? = null,
     headerDescription: String,
     onGetPlaylists: () -> List<Playlist>,
     onPlay: () -> Unit,
@@ -109,15 +110,18 @@ fun GenericTile(
         content = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            description?.let {
+            subTitle?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
+                    ),
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -253,7 +257,7 @@ fun Tile(
         onClick = onClick
     ) {
         Box(
-            modifier = Modifier.padding( 12.dp )
+            modifier = modifier
         ) {
             Column (
                 horizontalAlignment = Alignment.CenterHorizontally
