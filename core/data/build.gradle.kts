@@ -21,6 +21,7 @@ dependencies {
 
     implementation( libs.androidx.core.ktx )
     implementation( libs.androidx.media3.common )
+    implementation( libs.timber )
 
     testImplementation( libs.junit )
     testImplementation( libs.androidx.junit )

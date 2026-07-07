@@ -66,34 +66,6 @@ class AlbumsScreenViewModel @Inject constructor(
         viewModelScope.launch { preferencesDataSource.setSortAlbumsInReverse( reverse ) }
     }
 
-//    fun playSongsInAlbum( album: Album, songs: List<Song> ) {
-//        val songsInAlbum = songs.filter { it.albumId == album.id }
-//        playSongs(
-//            selectedSong = songsInAlbum.first(),
-//            songsInPlaylist = songsInAlbum,
-//        )
-//    }
-//
-//    fun onAddSongsInAlbumToQueue( album: Album, songs: List<Song> ) {
-//        val songsInAlbum = songs.filter { it.albumId == album.id }
-//        songsInAlbum.forEach { addSongToQueue( it ) }
-//    }
-//
-//    fun onAddSongsInAlbumNext( album: Album, songs: List<Song> ) {
-//        val songsInAlbum = songs.filter { it.albumId == album.id }
-//        songsInAlbum.forEach { playSongNext( it ) }
-//    }
-//
-//    fun onShuffleAndPlaySongsInAlbum( album: Album, songs: List<Song> ) {
-//        val songsInAlbum = songs.filter { it.albumId == album.id }
-//        shuffleAndPlay( songsInAlbum )
-//    }
-//
-//    fun onAddSongsInAlbumToPlaylist( album: Album, playlist: Playlist, songs: List<Song> ) {
-//        val songsInAlbum = songs.filter { it.albumId == album.id }
-//        addSongsToPlaylist( playlist, songsInAlbum )
-//    }
-
 }
 
 sealed interface AlbumsScreenUiState {

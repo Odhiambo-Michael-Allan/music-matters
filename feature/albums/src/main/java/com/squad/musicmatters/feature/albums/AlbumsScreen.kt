@@ -90,7 +90,7 @@ private fun AlbumsScreenContent(
                 onViewAlbum = onViewAlbum,
                 onPlaySongsInAlbum = {
                     val songsInAlbum = uiState.songs.filter { song -> song.albumId == it.id }
-                    onPlaySongsInAlbum( songsInAlbum.first(), uiState.songs )
+                    onPlaySongsInAlbum( songsInAlbum.first(), songsInAlbum )
                 },
                 onAddSongsInAlbumToQueue = {
                     onAddSongsInAlbumToQueue(

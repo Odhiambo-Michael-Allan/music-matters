@@ -28,6 +28,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 import javax.annotation.concurrent.Immutable
 import javax.inject.Inject
@@ -170,14 +171,18 @@ private fun buildSongUsing( cursor: Cursor ): Song {
     val mediaUri = cursor.getMediaUriFrom().toString()
     val dateAdded = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
     val dateModified = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
+    val title = cursor.getStringFrom( AudioColumns.TITLE )
+    val albumId = cursor.getLongFrom(AudioColumns.ALBUM_ID )
+    Timber.tag( TAG ).d( "SONG TITLE: $title" )
+    Timber.tag( TAG ).d( "ALBUM ID: $albumId" )
     return Song(
         id = mediaUri,
         mediaUri = mediaUri,
-        title = cursor.getStringFrom( AudioColumns.TITLE ),
+        title = title,
         trackNumber = cursor.getNullableIntFrom( AudioColumns.TRACK ) ?: UNKNOWN_INT_VALUE,
         year = cursor.getNullableIntFrom( AudioColumns.YEAR ) ?: UNKNOWN_INT_VALUE,
         duration = cursor.getLongFrom( AudioColumns.DURATION ),
-        albumId = cursor.getLongFrom(AudioColumns.ALBUM_ID ),
+        albumId = albumId,
         albumTitle = cursor.getNullableStringFrom( AudioColumns.ALBUM ) ?: UNKNOWN_STRING_VALUE,
         artists = parseArtistStringIntoIndividualArtists(
                 cursor.getNullableStringFrom( AudioColumns.ARTIST ) ?: UNKNOWN_STRING_VALUE
