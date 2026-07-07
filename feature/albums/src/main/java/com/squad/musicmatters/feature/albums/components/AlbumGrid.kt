@@ -97,7 +97,9 @@ internal fun AlbumGrid(
                         key = { it.id }
                     ) {
                         AlbumTile(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItem(),
                             album = it,
                             onViewAlbum = { onViewAlbum( it ) },
                             onPlaySongsInAlbum = { onPlaySongsInAlbum( it ) },

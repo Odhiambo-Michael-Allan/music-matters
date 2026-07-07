@@ -100,8 +100,12 @@ fun SongList(
                         .drawScrollBar( lazyListState )
                 ) {
                     leadingContent?.invoke( this )
-                    itemsIndexed( songs ) {  index, song ->
+                    itemsIndexed(
+                        items = songs,
+                        key = { _, song -> song.id }
+                    ) {  index, song ->
                         SongCard(
+                            modifier = Modifier.animateItem(),
                             song = song,
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = isFavorite( songs[ index ].id ),
