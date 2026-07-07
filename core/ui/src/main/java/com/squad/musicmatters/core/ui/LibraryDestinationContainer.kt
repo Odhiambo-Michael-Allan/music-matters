@@ -34,10 +34,13 @@ fun LibraryDestinationContainer(
             onNavigationIconClicked = onNavigateBack,
         )
         Box(
-            contentAlignment = androidx.compose.ui.Alignment.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            if ( isLoading ) CircularProgressIndicator() else content()
+            if ( isLoading )
+                CircularProgressIndicator(
+                    modifier = Modifier.align( androidx.compose.ui.Alignment.Center )
+                )
+            else content()
         }
     }
     

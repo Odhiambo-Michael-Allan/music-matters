@@ -60,6 +60,7 @@ dependencies {
     implementation( projects.feature.lyrics )
     implementation( projects.feature.settings )
     implementation( projects.feature.albums )
+    implementation( projects.feature.album )
 
     implementation( projects.core.designsystem )
     implementation( projects.core.media )

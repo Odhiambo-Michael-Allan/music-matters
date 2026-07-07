@@ -30,25 +30,25 @@ import com.squad.musicmatters.core.model.ThemeMode
 
 @Composable
 fun SongList(
-    sortReverse: Boolean,
+    sortSongsInReverse: Boolean,
     sortSongsBy: SortSongsBy,
     songs: List<Song>,
     onGetPlaylists: () -> List<Playlist>,
-    songsAdditionalMetadata: List<SongAdditionalMetadata>,
+    onGetSongsAdditionalMetadata: () -> List<SongAdditionalMetadata>,
     onShufflePlay: () -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
-    onSortReverseChange: ( Boolean ) -> Unit,
+    onSortSongsInReverseChange: ( Boolean ) -> Unit,
     currentlyPlayingSongId: String,
     playSong: ( Song, List<Song> ) -> Unit,
     isFavorite: ( String ) -> Boolean,
     onFavorite: ( Song, Boolean ) -> Unit,
-    onViewAlbum: ( String ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onSongIsPresentInQueue: ( Song ) -> Boolean,
-    onAddToQueue: ( Song ) -> Unit,
-    onRemoveFromQueue: ( Song ) -> Unit,
+    onAddSongToQueue: (Song ) -> Unit,
+    onRemoveSongFromQueue: (Song ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onPlayNext: ( Song ) -> Unit,
+    onPlaySongNext: (Song ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
@@ -58,8 +58,8 @@ fun SongList(
 
     Column {
         MediaSortBar(
-            sortInReverse = sortReverse,
-            onSortReverseChange = onSortReverseChange,
+            sortInReverse = sortSongsInReverse,
+            onSortReverseChange = onSortSongsInReverseChange,
             sortBy = sortSongsBy,
             sortTypes = SortSongsBy.entries.associateBy(
                     { it },
@@ -113,11 +113,14 @@ fun SongList(
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = isFavorite( songs[ index ].id ),
                             onGetPlaylists = onGetPlaylists,
-                            songAdditionalMetadata = songsAdditionalMetadata.find { metadata -> metadata.songId == song.id },
+                            onGetSongAdditionalMetadata = {
+                                onGetSongsAdditionalMetadata()
+                                    .find { metadata -> metadata.songId == song.id }
+                            },
                             onClick = { playSong( song, songs ) },
                             onFavorite = onFavorite,
-                            onPlayNext = onPlayNext,
-                            onAddToQueue = onAddToQueue,
+                            onPlayNext = onPlaySongNext,
+                            onAddToQueue = onAddSongToQueue,
                             onViewArtist = onViewArtist,
                             onViewAlbum = onViewAlbum,
                             onShareSong = onShareSong,
@@ -125,7 +128,7 @@ fun SongList(
                             onCreatePlaylist = onCreatePlaylist,
                             onDeleteSong = onDeleteSong,
                             onShowSnackBar = onShowSnackBar,
-                            onRemoveFromQueue = onRemoveFromQueue,
+                            onRemoveFromQueue = onRemoveSongFromQueue,
                             onSongIsPresentInQueue = onSongIsPresentInQueue,
                         )
                     }
@@ -161,14 +164,14 @@ fun SongListPreview() {
         primaryColorName = PrimaryThemeColors.Blue.name
     ) {
         SongList(
-            sortReverse = false,
+            sortSongsInReverse = false,
             sortSongsBy = SortSongsBy.TITLE,
             songs = PreviewParameterData.songs,
             onGetPlaylists = { emptyList() },
-            songsAdditionalMetadata = emptyList(),
+            onGetSongsAdditionalMetadata = { emptyList() },
             onShufflePlay = {},
             onSortTypeChange = {},
-            onSortReverseChange = {},
+            onSortSongsInReverseChange = {},
             isFavorite = { true },
             onFavorite = { _, _ -> },
             currentlyPlayingSongId = PreviewParameterData.songs.first().id,
@@ -176,14 +179,14 @@ fun SongListPreview() {
             onViewAlbum = {},
             onViewArtist = {},
             onShareSong = {},
-            onPlayNext = {},
-            onAddToQueue = {},
+            onPlaySongNext = {},
+            onAddSongToQueue = {},
             onAddSongsToPlaylist = { _, _ -> },
             onCreatePlaylist = { _, _ -> },
             onDeleteSong = {},
             onShowSnackBar = {},
             onSongIsPresentInQueue = { true },
-            onRemoveFromQueue = {}
+            onRemoveSongFromQueue = {}
         )
     }
 }

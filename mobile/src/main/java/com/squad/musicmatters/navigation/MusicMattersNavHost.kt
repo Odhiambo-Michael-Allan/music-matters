@@ -9,8 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navOptions
 import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.feature.album.navigation.albumScreen
+import com.squad.musicmatters.feature.album.navigation.navigateToAlbum
 import com.squad.musicmatters.feature.albums.navigation.albumsScreen
 import com.squad.musicmatters.feature.lyrics.navigation.lyricsScreen
 import com.squad.musicmatters.feature.queue.navigation.queueScreen
@@ -106,9 +109,27 @@ internal fun MusicMattersNavHost(
             onNavigateBack = { navController.navigateUp() }
         )
         albumsScreen(
+            onViewAlbum = {
+                navController.navigateToAlbum(
+                    albumId = it.id,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewArtist = {},
+            onNavigateBack = { navController.navigateUp() },
+            onShowSnackBar = {
+                snackBarHostState.showSnackBar(
+                    coroutineScope,
+                    it
+                )
+            }
+        )
+        albumScreen(
             onViewAlbum = {},
             onViewArtist = {},
             onNavigateBack = { navController.navigateUp() },
+            onDeleteSong = onDeleteSong,
+            onShareSong = {},
             onShowSnackBar = {
                 snackBarHostState.showSnackBar(
                     coroutineScope,
@@ -162,37 +183,6 @@ internal fun MusicMattersNavHost(
 //                        onViewAlbum = navController::navigateToAlbumScreen,
 //                        onViewArtist = navController::navigateToArtistScreen,
 //                        onNavigateBack = { navController.navigateUp() },
-//                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-//                        onDeleteSong = {
-//                            mainActivity.deleteSong( it )
-//                        }
-//                    )
-//                }
-//                composable(
-//                    route = Album.routeWithArgs,
-//                    arguments = Album.arguments,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) { navBackStackEntry ->
-//                    // Retrieve the passed argument
-//                    val albumName = navBackStackEntry.getRouteArgument(
-//                        RouteParameters.ALBUM_ROUTE_ALBUM_NAME ) ?: ""
-//                    val albumScreenViewModel: AlbumScreenViewModel = viewModel(
-//                        factory = AlbumScreenViewModelFactory(
-//                            albumName = albumName,
-//                            musicServiceConnection = musicServiceConnection,
-//                            settingsRepository = settingsRepository,
-//                            playlistRepository = playlistRepository,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-//                        )
-//                    )
-//
-//                    AlbumScreen(
-//                        albumName = albumName,
-//                        viewModel = albumScreenViewModel,
-//                        onNavigateBack = { navController.navigateUp() },
-//                        onViewAlbum = navController::navigateToAlbumScreen,
-//                        onViewArtist = navController::navigateToArtistScreen,
 //                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
 //                        onDeleteSong = {
 //                            mainActivity.deleteSong( it )
@@ -439,4 +429,9 @@ private fun SnackbarHostState.showSnackBar(
             duration = duration
         )
     }
+}
+
+private fun nonTopLevelDestinationNavOptions() = navOptions {
+    launchSingleTop = true
+    restoreState = true
 }

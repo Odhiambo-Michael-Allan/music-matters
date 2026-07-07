@@ -2,39 +2,27 @@ package com.squad.musicmatters.feature.queue.components
 
 import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
@@ -43,7 +31,6 @@ import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongAdditionalMetadata
-import com.squad.musicmatters.core.ui.DynamicAsyncImage
 import com.squad.musicmatters.core.ui.IconTextBody
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
@@ -63,7 +50,7 @@ internal fun QueueList(
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onViewArtist: ( String ) -> Unit,
-    onViewAlbum: ( String ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
@@ -160,7 +147,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
-    onViewAlbum: ( String ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
@@ -194,7 +181,9 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
                 isCurrentlyPlaying = isCurrentlyPlaying,
                 isFavorite = isFavorite( song ),
                 onGetPlaylists = onGetPlaylists,
-                songAdditionalMetadata = songsAdditionalMetadata.find { metadata -> metadata.songId == song.id },
+                onGetSongAdditionalMetadata = {
+                    songsAdditionalMetadata.find { metadata -> metadata.songId == song.id }
+                },
                 onClick = onClick,
                 onFavorite = onFavorite,
                 onPlayNext = onPlayNext,

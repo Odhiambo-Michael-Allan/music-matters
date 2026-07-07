@@ -2,26 +2,18 @@ package com.squad.musicmatters.core.ui.dialog
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,7 +34,7 @@ import com.squad.musicmatters.core.ui.PreviewParameterData
 @Composable
 fun SongDetailsDialog(
     song: Song,
-    metadata: SongAdditionalMetadata?,
+    onGetMetadata: () -> SongAdditionalMetadata?,
     durationFormatter: ( Long ) -> String,
     onDismissRequest: () -> Unit,
 ) {
@@ -72,8 +64,8 @@ fun SongDetailsDialog(
                 HorizontalDivider()
                 Column (
                     modifier = Modifier
-                        .verticalScroll( rememberScrollState() )
-                        .padding( 0.dp, 4.dp )
+                        .verticalScroll(rememberScrollState())
+                        .padding(0.dp, 4.dp)
                 ) {
 
                     SongDetailsItem(
@@ -100,7 +92,7 @@ fun SongDetailsDialog(
                         )
                     }
 
-                    metadata?.genre?.let {
+                    onGetMetadata()?.genre?.let {
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_genre ),
                             value = it,
@@ -141,7 +133,7 @@ fun SongDetailsDialog(
                         value = song.dateModifiedString,
                     )
 
-                    metadata?.bitrate?.takeIf { it != 0L }?.let {
+                    onGetMetadata()?.bitrate?.takeIf { it != 0L }?.let {
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_bitrate ),
                             value = stringResource(
@@ -151,7 +143,7 @@ fun SongDetailsDialog(
                         )
                     }
 
-                    metadata?.bitsPerSample?.takeIf { it != 0L }?.let{
+                    onGetMetadata()?.bitsPerSample?.takeIf { it != 0L }?.let{
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_bits_per_sample ),
                             value = stringResource(
@@ -161,7 +153,7 @@ fun SongDetailsDialog(
                         )
                     }
 
-                    metadata?.samplingRate?.takeIf { it != 0f }?.let {
+                    onGetMetadata()?.samplingRate?.takeIf { it != 0f }?.let {
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_sampling_rate ),
                             value = stringResource(
@@ -171,7 +163,7 @@ fun SongDetailsDialog(
                         )
                     }
 
-                    metadata?.codec?.let {
+                    onGetMetadata()?.codec?.let {
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_codec ),
                             value = it,
@@ -218,14 +210,16 @@ fun SongDetailsDialogPreview() {
         SongDetailsDialog(
             song = PreviewParameterData.songs.first(),
             durationFormatter = { "3:44" },
-            metadata = SongAdditionalMetadata(
-                songId = "",
-                codec = "unknown",
-                bitrate = 0,
-                samplingRate = 0f,
-                bitsPerSample = 0,
-                genre = "unknown"
-            ),
+            onGetMetadata = {
+                SongAdditionalMetadata(
+                    songId = "",
+                    codec = "unknown",
+                    bitrate = 0,
+                    samplingRate = 0f,
+                    bitsPerSample = 0,
+                    genre = "unknown"
+                )
+            },
             onDismissRequest = {}
         )
     }

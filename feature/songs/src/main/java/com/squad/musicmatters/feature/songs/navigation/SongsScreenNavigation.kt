@@ -17,7 +17,7 @@ fun NavController.navigateToSongs( navOptions: NavOptions ) =
     navigate( route = SongsRoute, navOptions )
 
 fun NavGraphBuilder.songsScreen(
-    onViewAlbum: ( String ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,

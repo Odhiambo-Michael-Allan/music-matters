@@ -61,7 +61,7 @@ fun SongCard(
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
     onSongIsPresentInQueue: ( Song ) -> Boolean,
-    songAdditionalMetadata: SongAdditionalMetadata?,
+    onGetSongAdditionalMetadata: () -> SongAdditionalMetadata?,
     onGetPlaylists: () -> List<Playlist>,
     onClick: () -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
@@ -69,7 +69,7 @@ fun SongCard(
     onAddToQueue: ( Song ) -> Unit,
     onRemoveFromQueue: ( Song ) -> Unit,
     onViewArtist: ( String ) -> Unit,
-    onViewAlbum: ( String ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
@@ -194,7 +194,7 @@ fun SongCard(
             SongDetailsDialog(
                 song = song,
                 durationFormatter = { it.formatMilliseconds() },
-                metadata = songAdditionalMetadata,
+                onGetMetadata = onGetSongAdditionalMetadata,
             ) {
                 showSongDetailsDialog = false
             }
@@ -221,7 +221,7 @@ fun SongOptionsBottomSheetMenu(
     onRemoveFromQueue: ( Song ) -> Unit,
     onSongIsPresentInQueue: ( Song ) -> Boolean,
     onViewArtist: ( String ) -> Unit,
-    onViewAlbum: ( String ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onShowSongDetails: () -> Unit,
@@ -282,7 +282,7 @@ fun SongOptionsBottomSheetMenu(
                     label = stringResource( id = R.string.core_i8n_view_album, it )
                 ) {
                     onDismissRequest()
-                    onViewAlbum( it )
+                    onViewAlbum( song.albumId )
                 }
             }
             BottomSheetMenuItem(
@@ -359,7 +359,7 @@ private fun SongCardPreview() {
             isCurrentlyPlaying = true,
             isFavorite = true,
             onGetPlaylists = { emptyList() },
-            songAdditionalMetadata = null,
+            onGetSongAdditionalMetadata = { null },
             onClick = {},
             onFavorite = { _, _ -> },
             onPlayNext = {},

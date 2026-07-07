@@ -376,7 +376,7 @@ private fun NowPlayingScreenContent(
                     SongDetailsDialog(
                         song = song,
                         durationFormatter = { it.formatMilliseconds() },
-                        metadata = uiState.songAdditionalMetadata
+                        onGetMetadata = { uiState.songAdditionalMetadata }
                     ) {
                         showSongDetailsDialog = false
                     }

@@ -17,7 +17,7 @@ fun NavController.navigateToQueueScreen( navOptions: NavOptions ) =
 
 fun NavGraphBuilder.queueScreen(
     onNavigateBack: () -> Unit,
-    onViewAlbum: ( String ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,

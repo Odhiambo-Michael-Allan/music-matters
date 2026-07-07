@@ -2,7 +2,6 @@ package com.squad.musicmatters.feature.songs
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -13,21 +12,18 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.datastore.DefaultPreferences
-import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
-import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.PreviewParameterData
 import com.squad.musicmatters.core.ui.SongList
-import com.squad.musicmatters.core.ui.TopAppBar
 
 @Composable
 internal fun SongsScreen(
     viewModel: SongsScreenViewModel = hiltViewModel(),
-    onViewAlbum: (String ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
@@ -68,7 +64,7 @@ private fun SongsScreenContent(
     onShufflePlay: ( List<Song> ) -> Unit,
     playSong: ( Song, List<Song> ) -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
-    onViewAlbum: ( String ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
@@ -92,8 +88,8 @@ private fun SongsScreenContent(
         }
         is SongsScreenUiState.Success -> {
             SongList(
-                sortReverse = uiState.sortSongsInReverse,
-                onSortReverseChange = onSortReverseChange,
+                sortSongsInReverse = uiState.sortSongsInReverse,
+                onSortSongsInReverseChange = onSortReverseChange,
                 sortSongsBy = uiState.sortSongsBy,
                 onSortTypeChange = onSortTypeChange,
                 songs = uiState.songs,
@@ -101,20 +97,20 @@ private fun SongsScreenContent(
                 onShufflePlay = { onShufflePlay( uiState.songs ) },
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
                 playSong = playSong,
-                songsAdditionalMetadata = uiState.songsAdditionalMetadata,
+                onGetSongsAdditionalMetadata = { uiState.songsAdditionalMetadata },
                 isFavorite = { uiState.favoriteSongIds.contains( it ) },
                 onFavorite = onFavorite,
                 onViewAlbum = onViewAlbum,
                 onViewArtist = onViewArtist,
                 onShareSong = onShareSong,
-                onPlayNext = onPlayNext,
-                onAddToQueue = onAddToQueue,
+                onPlaySongNext = onPlayNext,
+                onAddSongToQueue = onAddToQueue,
                 onAddSongsToPlaylist = onAddSongsToPlaylist,
                 onCreatePlaylist = onCreatePlaylist,
                 onDeleteSong = onDeleteSong,
                 onShowSnackBar = onShowSnackBar,
                 onSongIsPresentInQueue = onSongIsPresentInQueue,
-                onRemoveFromQueue = onRemoveFromQueue,
+                onRemoveSongFromQueue = onRemoveFromQueue,
             )
         }
     }
