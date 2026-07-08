@@ -24,16 +24,16 @@ internal fun AlbumTile(
     onViewAlbum: () -> Unit,
     onPlaySongsInAlbum: () -> Unit,
     onAddSongsInAlbumToQueue: () -> Unit,
+    onRemoveSongsInAlbumFromQueue: () -> Unit,
     onPlaySongsInAlbumNext: () -> Unit,
     onShuffleAndPlaySongsInAlbum: () -> Unit,
     onViewAlbumArtist: ( String ) -> Unit,
     onGetPlaylists: () -> List<Playlist>,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onGetSongsInAlbum: () -> List<Song>,
     onShowSnackBar: ( String ) -> Unit,
     onShowAddToQueueOption: () -> Boolean,
-    onRemoveSongsInAlbumFromQueue: () -> Unit,
 ) {
 
     GenericTile(

@@ -27,11 +27,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/feature/artists/src/main/java/com/squad/musicmatters/feature/artists/ArtistsScreenViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/artists/src/test/java/com/squad/musicmatters/feature/artists/ArtistsScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeArtistsRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeArtistsRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/artists/src/main/java/com/squad/musicmatters/feature/artists/ArtistsScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/i8n/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/MusicMattersPreviewParametersProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/MusicMattersPreviewParametersProvider.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/components/AlbumGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/components/AlbumGrid.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/components/AlbumTile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/components/AlbumTile.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,8 +78,8 @@
         <option value="valueResourceFile" />
         <option value="Kotlin Data Class" />
         <option value="resourceFile" />
-        <option value="Kotlin Class" />
         <option value="Kotlin JUnit4 Test Class" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -240,11 +241,11 @@
       <recent name="com.squad.musicmatters.core.ui" />
     </key>
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="com.squad.musicmatters.feature.albums.components" />
       <recent name="com.squad.musicmatters.core.common" />
       <recent name="com.squad.musicmatters.core.ui" />
       <recent name="com.squad.musicmatters.feature.nowplaying.components" />
       <recent name="com.squad.musicmatters.feature.nowplaying" />
-      <recent name="com.squad.musicmatters.ui" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.ArtistsScreenViewModelTest">

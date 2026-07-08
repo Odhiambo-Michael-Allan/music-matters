@@ -53,7 +53,7 @@ internal fun AlbumGrid(
     onRemoveSongsInAlbumFromQueue: ( Album ) -> Unit,
 ) {
 
-    MediaSortBarScaffold(
+    MediaSortBarScaffold (
         mediaSortBar = {
             MediaSortBar(
                 sortBy = sortBy,
@@ -107,10 +107,6 @@ internal fun AlbumGrid(
                         key = { it.id }
                     ) {
                         AlbumTile(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(4.dp)
-                                .animateItem(),
                             album = it,
                             onViewAlbum = { onViewAlbum( it ) },
                             onPlaySongsInAlbum = { onPlaySongsInAlbum( it ) },
@@ -124,7 +120,11 @@ internal fun AlbumGrid(
                             onGetSongsInAlbum = { onGetSongsInAlbum( it ) },
                             onShowSnackBar = onShowSnackBar,
                             onShowAddToQueueOption = { onShowAddToQueueOption( it ) },
-                            onRemoveSongsInAlbumFromQueue = { onRemoveSongsInAlbumFromQueue( it ) }
+                            onRemoveSongsInAlbumFromQueue = { onRemoveSongsInAlbumFromQueue( it ) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(4.dp)
+                                .animateItem(),
                         )
                     }
                 }

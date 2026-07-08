@@ -2,6 +2,7 @@ package com.squad.musicmatters.core.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.squad.musicmatters.core.model.Album
+import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.model.Song
 import java.util.UUID
 import com.squad.musicmatters.core.model.Playlist
@@ -13,6 +14,7 @@ class MusicMattersPreviewParametersProvider : PreviewParameterProvider<PreviewDa
             PreviewData(
                 songs = PreviewParameterData.songs,
                 albums = PreviewParameterData.albums,
+                artists = PreviewParameterData.artists,
                 playlists = PreviewParameterData.playlists
             )
         )
@@ -22,6 +24,7 @@ class MusicMattersPreviewParametersProvider : PreviewParameterProvider<PreviewDa
 data class PreviewData(
     val songs: List<Song>,
     val albums: List<Album>,
+    val artists: List<Artist>,
     val playlists: List<Playlist>,
 )
 
@@ -148,6 +151,27 @@ object PreviewParameterData {
             title = "Please Hammer, Don't Hurt 'Em",
             artist = "MC Hammer",
             trackCount = 14,
+            artworkUri = null,
+        )
+    )
+
+    val artists = listOf(
+        Artist(
+            id = 1,
+            name = "Drake",
+            trackCount = 2,
+            artworkUri = null,
+        ),
+        Artist(
+            id = 2,
+            name = "Alicia Keys",
+            trackCount = 3,
+            artworkUri = null,
+        ),
+        Artist(
+            id = 3,
+            name = "Zedd",
+            trackCount = 1,
             artworkUri = null,
         )
     )
