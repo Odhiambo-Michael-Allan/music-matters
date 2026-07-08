@@ -43,7 +43,7 @@ internal fun QueueScreen(
     onNavigateBack: () -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onViewAlbum: ( Long ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
 ) {
@@ -83,7 +83,7 @@ private fun QueueScreenContent(
     onShuffle: ( Boolean ) -> Unit,
     onClearQueue: () -> Unit,
     onViewAlbum: ( Long ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,

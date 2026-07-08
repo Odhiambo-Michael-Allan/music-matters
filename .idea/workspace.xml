@@ -27,17 +27,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/feature/artist/src/main/java/com/squad/musicmatters/feature/artist/ArtistScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/album/src/main/java/com/squad/musicmatters/feature/album/AlbumScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/album/src/main/java/com/squad/musicmatters/feature/album/AlbumScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/album/src/main/java/com/squad/musicmatters/feature/album/AlbumScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/album/src/main/java/com/squad/musicmatters/feature/album/AlbumScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/album/src/main/java/com/squad/musicmatters/feature/album/navigation/AlbumScreenNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/album/src/main/java/com/squad/musicmatters/feature/album/navigation/AlbumScreenNavigation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/album/src/test/java/com/squad/musicmatters/feature/album/AlbumScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/album/src/test/java/com/squad/musicmatters/feature/album/AlbumScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/artist/src/main/java/com/squad/musicmatters/feature/artist/navigation/ArtistScreenNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/artist/src/main/java/com/squad/musicmatters/feature/artist/navigation/ArtistScreenNavigation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/QueueScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/QueueScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/components/QueueList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/components/QueueList.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/navigation/QueueScreenNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/navigation/QueueScreenNavigation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/navigation/SongsScreenNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/navigation/SongsScreenNavigation.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -254,7 +250,7 @@
       <recent name="com.squad.musicmatters.feature.nowplaying" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.ArtistScreenViewModelTest">
+  <component name="RunManager" selected="Android App.mobile">
     <configuration name="mobile" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="MusicMatters.mobile" />
       <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />

@@ -18,7 +18,7 @@ fun NavController.navigateToSongs( navOptions: NavOptions ) =
 
 fun NavGraphBuilder.songsScreen(
     onViewAlbum: ( Long ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,

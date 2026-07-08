@@ -24,7 +24,7 @@ import com.squad.musicmatters.core.ui.SongList
 internal fun SongsScreen(
     viewModel: SongsScreenViewModel = hiltViewModel(),
     onViewAlbum: ( Long ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
@@ -65,7 +65,7 @@ private fun SongsScreenContent(
     playSong: ( Song, List<Song> ) -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
     onViewAlbum: ( Long ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
     onSongIsPresentInQueue: ( Song ) -> Boolean,
