@@ -15,7 +15,6 @@ android {
 dependencies {
 
     api( projects.core.datastore )
-
     implementation( projects.core.i8n )
     implementation( projects.core.database )
 

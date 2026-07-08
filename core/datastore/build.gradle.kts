@@ -13,12 +13,12 @@ android {
 }
 
 dependencies {
-
-    api( libs.androidx.dataStore )
-    api( projects.core.datastoreProto )
     api( projects.core.model )
     api( projects.core.common )
 
+    implementation( projects.core.datastoreProto )
+
+    implementation( libs.androidx.dataStore )
     implementation( libs.androidx.core.ktx )
 
     testImplementation( libs.kotlinx.coroutines.test )

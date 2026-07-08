@@ -15,6 +15,7 @@ android {
 
 dependencies {
 
+    implementation( projects.core.common )
     implementation( projects.core.i8n )
     implementation( projects.core.data )
 

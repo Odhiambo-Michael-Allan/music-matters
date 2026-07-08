@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,6 +58,14 @@ class ArtistsScreenViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed( 5_000 ),
             initialValue = ArtistsScreenUiState.Loading
         )
+
+    fun onSortTypeChange( by: SortArtistsBy ) {
+        viewModelScope.launch { preferencesDataSource.setSortArtistsBy( by ) }
+    }
+
+    fun onSortInReverseChange( reverse: Boolean ) {
+        viewModelScope.launch { preferencesDataSource.setSortArtistsInReverse( reverse ) }
+    }
 
 }
 

@@ -1,6 +1,8 @@
 package com.squad.musicmatters.feature.artists
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -14,6 +16,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -22,7 +25,6 @@ import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortArtistsBy
-import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.GenericTile
 import com.squad.musicmatters.core.ui.IconTextBody
 import com.squad.musicmatters.core.ui.MediaSortBar
@@ -30,6 +32,13 @@ import com.squad.musicmatters.core.ui.MediaSortBarScaffold
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.i8n.R as i8nR
+
+@Composable
+internal fun ArtistsScreen(
+    viewModel: ArtistsScreenViewModel = hiltViewModel(),
+) {
+
+}
 
 @Composable
 private fun ArtistsScreenContent(
@@ -166,7 +175,11 @@ internal fun ArtistsGrid(
                             onRemoveSongsByArtistFromQueue = {
                                 onRemoveSongsByArtistFromQueue( it )
                             },
-                            onGetSongsByArtist = { onGetSongsByArtist( it ) }
+                            onGetSongsByArtist = { onGetSongsByArtist( it ) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding( 4.dp )
+                                .animateItem()
                         )
                     }
                 }

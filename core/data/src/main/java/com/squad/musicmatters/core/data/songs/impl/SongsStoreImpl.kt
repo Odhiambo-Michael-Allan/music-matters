@@ -173,6 +173,7 @@ private fun buildSongUsing( cursor: Cursor ): Song {
     val dateModified = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
     val title = cursor.getStringFrom( AudioColumns.TITLE )
     val albumId = cursor.getLongFrom(AudioColumns.ALBUM_ID )
+    val artist = cursor.getNullableStringFrom( AudioColumns.ARTIST ) ?: ""
     return Song(
         id = mediaUri,
         mediaUri = mediaUri,
@@ -182,13 +183,15 @@ private fun buildSongUsing( cursor: Cursor ): Song {
         duration = cursor.getLongFrom( AudioColumns.DURATION ),
         albumId = albumId,
         albumTitle = cursor.getNullableStringFrom( AudioColumns.ALBUM ) ?: "",
-        artist = cursor.getNullableStringFrom( AudioColumns.ARTIST ) ?: "",
+        artist = artist,
         composer = cursor.getNullableStringFrom( AudioColumns.COMPOSER ) ?: "",
         dateModified = dateAdded ?: dateModified ?: 0L,
         size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: 0,
         path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: "",
         artworkUri = cursor.getArtworkUri()?.toString(),
-        albumArtist = cursor.getNullableStringFrom( AudioColumns.ALBUM_ARTIST ),
+        albumArtist =
+            cursor.getNullableStringFrom( AudioColumns.ALBUM_ARTIST )
+                ?: artist,
         artistId = cursor.getLongFrom( AudioColumns.ARTIST_ID )
     )
 }
