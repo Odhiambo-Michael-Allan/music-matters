@@ -3,16 +3,15 @@ package com.squad.musicmatters.core.data.repository.impl
 import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.os.Build
-import android.util.Log
 import androidx.core.net.toUri
 import com.squad.musicmatters.core.common.Dispatcher
 import com.squad.musicmatters.core.common.MusicMattersDispatchers
-import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.database.dao.SongAdditionalMetadataDao
 import com.squad.musicmatters.core.database.model.SongAdditionalMetadataEntity
 import com.squad.musicmatters.core.database.model.asExternalModel
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -23,12 +22,12 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-class SongsAdditionalMetadataRepositoryImpl @Inject constructor(
+class SongsMetadataRepositoryImpl @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val songsRepository: SongsRepository,
     private val songAdditionalMetadataDao: SongAdditionalMetadataDao,
     @Dispatcher( MusicMattersDispatchers.IO ) dispatcher: CoroutineDispatcher,
-) : SongsAdditionalMetadataRepository {
+) : SongsMetadataRepository {
 
     private val scope = CoroutineScope( dispatcher + SupervisorJob() )
 
@@ -47,7 +46,7 @@ class SongsAdditionalMetadataRepositoryImpl @Inject constructor(
                         val genre = extractGenreUsing( metadataRetriever )
                         Timber.tag( TAG ).d( "SAVING METADATA FOR: ${it.title}" )
                         save(
-                            SongAdditionalMetadata(
+                            SongMetadata(
                                 songId = it.id,
                                 bitrate = ( bitrate / 1000 ),
                                 bitsPerSample = bitsPerSample,
@@ -66,20 +65,20 @@ class SongsAdditionalMetadataRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun fetchAdditionalMetadataEntries(): Flow<List<SongAdditionalMetadata>> =
+    override fun fetchMetadata(): Flow<List<SongMetadata>> =
         songAdditionalMetadataDao.fetchEntries().map { entities -> entities.map { it.asExternalModel() } }
 
-    override suspend fun fetchAdditionalMetadataForSongWithId( songId: String ) =
+    override suspend fun fetchMetadataForSongWithId(songId: String ) =
         songAdditionalMetadataDao
             .fetchAdditionalMetadataForSongWithId( songId )
             ?.asExternalModel()
 
-    override suspend fun save( songAdditionalMetadata: SongAdditionalMetadata ) {
-        songAdditionalMetadataDao.insert( songAdditionalMetadata.asEntity() )
+    override suspend fun save(songMetadata: SongMetadata ) {
+        songAdditionalMetadataDao.insert( songMetadata.asEntity() )
     }
 
-    override suspend fun save( songAdditionalMetadata: List<SongAdditionalMetadata> ) {
-        songAdditionalMetadataDao.insertAll( songAdditionalMetadata.map { it.asEntity() } )
+    override suspend fun save(songMetadata: List<SongMetadata> ) {
+        songAdditionalMetadataDao.insertAll( songMetadata.map { it.asEntity() } )
     }
 
     override suspend fun deleteEntryWithId( id: String ) {
@@ -128,7 +127,7 @@ private fun extractGenreUsing( mediaMetadataRetriever: MediaMetadataRetriever ):
 
 private const val TAG = "ADD-METADATA-REPO"
 
-private fun SongAdditionalMetadata.asEntity() = SongAdditionalMetadataEntity(
+private fun SongMetadata.asEntity() = SongAdditionalMetadataEntity(
     songId = songId,
     codec = codec,
     bitsPerSample = bitsPerSample,

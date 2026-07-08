@@ -7,7 +7,7 @@ import com.squad.musicmatters.core.testing.repository.TestMostPlayedSongsReposit
 import com.squad.musicmatters.core.testing.repository.TestPlayHistoryRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
-import com.squad.musicmatters.core.testing.repository.FakeSongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
 import com.squad.musicmatters.core.model.Song
@@ -29,7 +29,7 @@ class MusicMattersPlayerImplTest {
     private lateinit var playerConnector: FakePlayerConnector
     private lateinit var mostPlayedSongsRepository: TestMostPlayedSongsRepository
     private lateinit var playHistoryRepository: TestPlayHistoryRepository
-    private lateinit var songsAdditionalMetadataRepository: FakeSongsAdditionalMetadataRepository
+    private lateinit var songsAdditionalMetadataRepository: FakeSongsMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
     private lateinit var preferencesDataSource: FakePreferencesDataSource
     private lateinit var subject: MusicMattersPlayer
@@ -41,7 +41,7 @@ class MusicMattersPlayerImplTest {
         playerConnector = FakePlayerConnector()
         mostPlayedSongsRepository = TestMostPlayedSongsRepository()
         playHistoryRepository = TestPlayHistoryRepository()
-        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
+        songsAdditionalMetadataRepository = FakeSongsMetadataRepository()
         queueRepository = FakeQueueRepository()
         preferencesDataSource = FakePreferencesDataSource()
         subject = MusicMattersPlayerImpl(

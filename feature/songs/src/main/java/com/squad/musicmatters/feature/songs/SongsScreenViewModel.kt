@@ -3,14 +3,13 @@ package com.squad.musicmatters.feature.songs
 import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
-import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.SortSongsBy
-import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,7 +24,7 @@ class SongsScreenViewModel @Inject constructor(
     preferencesDataSource: PreferencesDataSource,
     playlistRepository: PlaylistRepository,
     musicMattersPlayer: MusicMattersPlayer,
-    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository
+    songsMetadataRepository: SongsMetadataRepository
 ) : BaseViewModel(
     player = musicMattersPlayer,
     preferencesDataSource = preferencesDataSource,
@@ -43,7 +42,7 @@ class SongsScreenViewModel @Inject constructor(
         musicMattersPlayer.playerState,
         playlistRepository.fetchFavorites(),
         playlistRepository.fetchPlaylists(),
-        songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries()
+        songsMetadataRepository.fetchMetadata()
     ) { songs,
         userData,
         playerState,
@@ -78,7 +77,7 @@ sealed interface SongsScreenUiState {
         val currentlyPlayingSongId: String,
         val favoriteSongIds: Set<String>,
         val playlists: List<Playlist>,
-        val songsAdditionalMetadata: List<SongAdditionalMetadata>
+        val songsAdditionalMetadata: List<SongMetadata>
     ) : SongsScreenUiState
 }
 

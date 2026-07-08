@@ -25,7 +25,7 @@ import com.squad.musicmatters.core.media.connection.SleepTimer
 import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.feature.nowplaying.components.LyricsLayout
 import com.squad.musicmatters.feature.nowplaying.components.NowPlayingSongArtwork
@@ -189,7 +189,7 @@ private fun ExpandedLayoutPreview() {
                     isBuffering = false,
                 ),
                 playlists = emptyList(),
-                songAdditionalMetadata = SongAdditionalMetadata(
+                songMetadata = SongMetadata(
                     songId = "",
                     codec = "mp3",
                     bitrate = 0,

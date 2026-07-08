@@ -24,7 +24,7 @@ import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.model.ThemeMode
 
@@ -34,7 +34,7 @@ fun SongList(
     sortSongsBy: SortSongsBy,
     songs: List<Song>,
     onGetPlaylists: () -> List<Playlist>,
-    onGetSongsAdditionalMetadata: () -> List<SongAdditionalMetadata>,
+    onGetSongsAdditionalMetadata: () -> List<SongMetadata>,
     onShufflePlay: () -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
     onSortSongsInReverseChange: ( Boolean ) -> Unit,
@@ -116,7 +116,7 @@ fun SongList(
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
                             isFavorite = isFavorite( songs[ index ].id ),
                             onGetPlaylists = onGetPlaylists,
-                            onGetSongAdditionalMetadata = {
+                            onGetSongMetadata = {
                                 onGetSongsAdditionalMetadata()
                                     .find { metadata -> metadata.songId == song.id }
                             },

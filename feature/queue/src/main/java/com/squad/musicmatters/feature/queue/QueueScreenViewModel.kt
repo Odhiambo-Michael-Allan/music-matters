@@ -1,15 +1,14 @@
 package com.squad.musicmatters.feature.queue
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
-import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,7 +25,7 @@ private const val TAG = "QUEUE-SCREEN-VIEW-MODEL"
 @HiltViewModel
 internal class QueueScreenViewModel @Inject constructor(
     playlistRepository: PlaylistRepository,
-    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
+    songsMetadataRepository: SongsMetadataRepository,
     private val songsRepository: SongsRepository,
     private val player: MusicMattersPlayer,
     private val preferencesDataSource: PreferencesDataSource,
@@ -51,7 +50,7 @@ internal class QueueScreenViewModel @Inject constructor(
             preferencesDataSource.userData,
             playlistRepository.fetchFavorites(),
             playlistRepository.fetchPlaylists(),
-            songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries()
+            songsMetadataRepository.fetchMetadata()
         ) {
             songsInQueue,
             userData,
@@ -95,7 +94,7 @@ sealed interface QueueScreenUiState {
         val shuffle: Boolean,
         val favoriteSongIds: Set<String>,
         val playlists: List<Playlist>,
-        val songsAdditionalMetadata: List<SongAdditionalMetadata>,
+        val songsAdditionalMetadata: List<SongMetadata>,
     ): QueueScreenUiState
 
 }

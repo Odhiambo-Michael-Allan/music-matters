@@ -6,7 +6,7 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
-import com.squad.musicmatters.core.testing.repository.FakeSongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSongsForSorting
@@ -33,13 +33,13 @@ class SongsScreenViewModelTest {
     private lateinit var viewModel: SongsScreenViewModel
     private lateinit var playlistRepository: FakePlaylistRepository
     private lateinit var songsRepository: FakeSongsRepository
-    private lateinit var songsAdditionalMetadataRepository: FakeSongsAdditionalMetadataRepository
+    private lateinit var songsAdditionalMetadataRepository: FakeSongsMetadataRepository
 
     @Before
     fun setup() {
         preferencesDataSource = FakePreferencesDataSource()
         musicServiceConnection = FakeMusicMattersPlayer()
-        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
+        songsAdditionalMetadataRepository = FakeSongsMetadataRepository()
         songsRepository = FakeSongsRepository()
         playlistRepository = FakePlaylistRepository()
         viewModel = SongsScreenViewModel(
@@ -47,7 +47,7 @@ class SongsScreenViewModelTest {
             preferencesDataSource = preferencesDataSource,
             musicMattersPlayer = musicServiceConnection,
             playlistRepository = playlistRepository,
-            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
+            songsMetadataRepository = songsAdditionalMetadataRepository
         )
     }
 

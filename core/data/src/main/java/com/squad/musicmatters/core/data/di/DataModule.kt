@@ -7,7 +7,7 @@ import com.squad.musicmatters.core.data.repository.MostPlayedSongsRepository
 import com.squad.musicmatters.core.data.repository.PlayHistoryRepository
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
-import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.repository.impl.AlbumsRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.ArtistsRepositoryImpl
@@ -16,7 +16,7 @@ import com.squad.musicmatters.core.data.repository.impl.MostPlayedSongsRepositor
 import com.squad.musicmatters.core.data.repository.impl.PlayHistoryRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.PlaylistRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.QueueRepositoryImpl
-import com.squad.musicmatters.core.data.repository.impl.SongsAdditionalMetadataRepositoryImpl
+import com.squad.musicmatters.core.data.repository.impl.SongsMetadataRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.SongsRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -61,8 +61,8 @@ abstract class DataModule {
     @Binds
     @Singleton
     internal abstract fun bindsSongsAdditionalMetadataRepository(
-        repository: SongsAdditionalMetadataRepositoryImpl
-    ): SongsAdditionalMetadataRepository
+        repository: SongsMetadataRepositoryImpl
+    ): SongsMetadataRepository
 
     @Binds
     @Singleton

@@ -47,11 +47,10 @@ import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.dialog.DeleteSongDialog
 import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
-import com.squad.musicmatters.core.i8n.R as i8nR
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -61,7 +60,7 @@ fun SongCard(
     isCurrentlyPlaying: Boolean,
     isFavorite: Boolean,
     onSongIsPresentInQueue: ( Song ) -> Boolean,
-    onGetSongAdditionalMetadata: () -> SongAdditionalMetadata?,
+    onGetSongMetadata: () -> SongMetadata?,
     onGetPlaylists: () -> List<Playlist>,
     onClick: () -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
@@ -193,7 +192,7 @@ fun SongCard(
             SongDetailsDialog(
                 song = song,
                 durationFormatter = { it.formatMilliseconds() },
-                onGetMetadata = onGetSongAdditionalMetadata,
+                onGetMetadata = onGetSongMetadata,
             ) {
                 showSongDetailsDialog = false
             }
@@ -358,7 +357,7 @@ private fun SongCardPreview() {
             isCurrentlyPlaying = true,
             isFavorite = true,
             onGetPlaylists = { emptyList() },
-            onGetSongAdditionalMetadata = { null },
+            onGetSongMetadata = { null },
             onClick = {},
             onFavorite = { _, _ -> },
             onPlayNext = {},

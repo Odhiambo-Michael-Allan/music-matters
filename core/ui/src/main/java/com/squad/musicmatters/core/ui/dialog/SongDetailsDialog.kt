@@ -26,7 +26,7 @@ import com.squad.musicmatters.core.media.media.extensions.dateModifiedString
 import com.squad.musicmatters.core.media.media.extensions.sizeString
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.ui.PreviewParameterData
 
 
@@ -34,7 +34,7 @@ import com.squad.musicmatters.core.ui.PreviewParameterData
 @Composable
 fun SongDetailsDialog(
     song: Song,
-    onGetMetadata: () -> SongAdditionalMetadata?,
+    onGetMetadata: () -> SongMetadata?,
     durationFormatter: ( Long ) -> String,
     onDismissRequest: () -> Unit,
 ) {
@@ -211,7 +211,7 @@ fun SongDetailsDialogPreview() {
             song = PreviewParameterData.songs.first(),
             durationFormatter = { "3:44" },
             onGetMetadata = {
-                SongAdditionalMetadata(
+                SongMetadata(
                     songId = "",
                     codec = "unknown",
                     bitrate = 0,

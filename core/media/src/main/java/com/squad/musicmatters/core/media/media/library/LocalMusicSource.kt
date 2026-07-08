@@ -9,8 +9,8 @@ import androidx.media3.common.MediaItem
 import com.squad.musicmatters.core.media.media.extensions.UNKNOWN_LONG_VALUE
 import com.squad.musicmatters.core.media.media.extensions.from
 import com.squad.musicmatters.core.media.media.extensions.genreTagSeparators
-import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
+import com.squad.musicmatters.core.model.SongMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -20,7 +20,7 @@ import timber.log.Timber
  */
 class LocalMusicSource(
     private val context: Context,
-    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
+    private val songsMetadataRepository: SongsMetadataRepository,
 ) : AbstractMusicSource() {
 
     private var musicCatalog: List<MediaItem> = emptyList()
@@ -82,7 +82,7 @@ class LocalMusicSource(
     private suspend fun fetchMediaItemsAdditionalMetadata() {
         withContext( Dispatchers.IO ) {
             val mediaMetadataRetriever = MediaMetadataRetriever()
-            val additionalMetadataList = mutableListOf<SongAdditionalMetadata>()
+            val additionalMetadataList = mutableListOf<SongMetadata>()
             musicCatalog.forEach {
                 try {
                     val uri = it.localConfiguration?.uri ?: Uri.EMPTY
@@ -101,7 +101,7 @@ class LocalMusicSource(
 //                Timber.tag( TAG ).d( "Genre: $genre" )
 
                     additionalMetadataList.add(
-                        SongAdditionalMetadata(
+                        SongMetadata(
                             songId = it.mediaId,
                             bitrate = (bitrate / 1000),
                             bitsPerSample = bitsPerSample,
@@ -114,7 +114,7 @@ class LocalMusicSource(
                     Timber.tag( TAG ).d( "ERROR OCCURRED WHILE FETCHING ADDITIONAL METADATA FOR: ${it.mediaMetadata.title}" )
                 }
             }
-            songsAdditionalMetadataRepository.save( additionalMetadataList )
+            songsMetadataRepository.save( additionalMetadataList )
             mediaMetadataRetriever.release()
         }
     }

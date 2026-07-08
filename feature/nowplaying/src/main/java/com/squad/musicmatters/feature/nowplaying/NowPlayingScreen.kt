@@ -59,7 +59,7 @@ import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.GenericOptionsBottomSheet
@@ -376,7 +376,7 @@ private fun NowPlayingScreenContent(
                     SongDetailsDialog(
                         song = song,
                         durationFormatter = { it.formatMilliseconds() },
-                        onGetMetadata = { uiState.songAdditionalMetadata }
+                        onGetMetadata = { uiState.songMetadata }
                     ) {
                         showSongDetailsDialog = false
                     }
@@ -588,7 +588,7 @@ private fun NowPlayingScreenContentPreview() {
                     isBuffering = false,
                 ),
                 playlists = emptyList(),
-                songAdditionalMetadata = SongAdditionalMetadata(
+                songMetadata = SongMetadata(
                     songId = "",
                     codec = "mp3",
                     bitrate = 0,

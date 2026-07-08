@@ -4,9 +4,9 @@ import com.squad.musicmatters.core.data.repository.CompositeRepository
 import com.squad.musicmatters.core.testing.repository.TestMostPlayedSongsRepository
 import com.squad.musicmatters.core.testing.repository.TestPlayHistoryRepository
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
-import com.squad.musicmatters.core.testing.repository.FakeSongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.songs.testSong
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -17,7 +17,7 @@ class CompositeRepositoryImplTest {
 
     private lateinit var mostPlayedSongsRepository: TestMostPlayedSongsRepository
     private lateinit var playHistoryRepository: TestPlayHistoryRepository
-    private lateinit var songsAdditionalMetadataRepository: FakeSongsAdditionalMetadataRepository
+    private lateinit var songsAdditionalMetadataRepository: FakeSongsMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
     private lateinit var subject: CompositeRepository
 
@@ -25,12 +25,12 @@ class CompositeRepositoryImplTest {
     fun setUp() {
         mostPlayedSongsRepository = TestMostPlayedSongsRepository()
         playHistoryRepository = TestPlayHistoryRepository()
-        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
+        songsAdditionalMetadataRepository = FakeSongsMetadataRepository()
         queueRepository = FakeQueueRepository()
         subject = CompositeRepositoryImpl(
             mostPlayedSongsRepository = mostPlayedSongsRepository,
             playHistoryRepository = playHistoryRepository,
-            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
+            songsMetadataRepository = songsAdditionalMetadataRepository,
             queueRepository = queueRepository
         )
     }
@@ -48,7 +48,7 @@ class CompositeRepositoryImplTest {
         playHistoryRepository.sendSongs( songs )
         songsAdditionalMetadataRepository.sendMetadata(
             songs.map {
-                SongAdditionalMetadata(
+                SongMetadata(
                     songId = it.id,
                     codec = "",
                     bitrate = 0L,
@@ -72,7 +72,7 @@ class CompositeRepositoryImplTest {
         )
         assertEquals(
             4,
-            songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries().first().size
+            songsAdditionalMetadataRepository.fetchMetadata().first().size
         )
         assertEquals(
             4,

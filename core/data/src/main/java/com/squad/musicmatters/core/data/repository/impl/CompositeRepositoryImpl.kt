@@ -4,21 +4,21 @@ import com.squad.musicmatters.core.data.repository.CompositeRepository
 import com.squad.musicmatters.core.data.repository.MostPlayedSongsRepository
 import com.squad.musicmatters.core.data.repository.PlayHistoryRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
-import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import javax.inject.Inject
 
 class CompositeRepositoryImpl @Inject constructor(
     private val mostPlayedSongsRepository: MostPlayedSongsRepository,
     private val playHistoryRepository: PlayHistoryRepository,
     private val queueRepository: QueueRepository,
-    private val songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
+    private val songsMetadataRepository: SongsMetadataRepository,
 ) : CompositeRepository {
 
     override suspend fun deleteSongWithId( songId: String ) {
         mostPlayedSongsRepository.deleteSongWithId( songId )
         playHistoryRepository.deleteSongWithId( songId )
         queueRepository.removeSongWithId( songId )
-        songsAdditionalMetadataRepository.deleteEntryWithId( songId )
+        songsMetadataRepository.deleteEntryWithId( songId )
     }
 
 }

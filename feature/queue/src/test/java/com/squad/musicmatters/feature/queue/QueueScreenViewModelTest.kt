@@ -5,7 +5,7 @@ import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
-import com.squad.musicmatters.core.testing.repository.FakeSongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
 import junit.framework.TestCase.assertEquals
@@ -26,7 +26,7 @@ class QueueScreenViewModelTest {
     private lateinit var player: FakeMusicMattersPlayer
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var playlistRepository: FakePlaylistRepository
-    private lateinit var songsAdditionalMetadataRepository: FakeSongsAdditionalMetadataRepository
+    private lateinit var songsAdditionalMetadataRepository: FakeSongsMetadataRepository
     private lateinit var viewModel: QueueScreenViewModel
 
     @Before
@@ -35,11 +35,11 @@ class QueueScreenViewModelTest {
         player = FakeMusicMattersPlayer()
         songsRepository = FakeSongsRepository()
         playlistRepository = FakePlaylistRepository()
-        songsAdditionalMetadataRepository = FakeSongsAdditionalMetadataRepository()
+        songsAdditionalMetadataRepository = FakeSongsMetadataRepository()
         viewModel = QueueScreenViewModel(
             songsRepository = songsRepository,
             playlistRepository = playlistRepository,
-            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
+            songsMetadataRepository = songsAdditionalMetadataRepository,
             preferencesDataSource = preferencesDataSource,
             player = player,
         )

@@ -3,7 +3,7 @@ package com.squad.musicmatters.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 
 @Entity(
     tableName = "songs_additional_metadata",
@@ -17,8 +17,8 @@ data class SongAdditionalMetadataEntity(
     @ColumnInfo( name = "genre" ) val genre: String
 )
 
-fun SongAdditionalMetadataEntity.asExternalModel(): SongAdditionalMetadata =
-    SongAdditionalMetadata(
+fun SongAdditionalMetadataEntity.asExternalModel(): SongMetadata =
+    SongMetadata(
         songId = songId,
         codec = codec,
         bitsPerSample = bitsPerSample,

@@ -4,20 +4,17 @@ import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
-import com.squad.musicmatters.core.media.media.PlaybackPositionUpdater
 import com.squad.musicmatters.core.model.Playlist
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.media.FakePlaybackPositionUpdater
 import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
-import com.squad.musicmatters.core.testing.repository.FakeSongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -38,7 +35,7 @@ class NowPlayingScreenViewModelTest {
     private lateinit var player: FakeMusicMattersPlayer
     private lateinit var playlistRepository: FakePlaylistRepository
     private lateinit var playbackPositionUpdater: FakePlaybackPositionUpdater
-    private lateinit var metadataRepository: FakeSongsAdditionalMetadataRepository
+    private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var preferencesDataSource: FakePreferencesDataSource
@@ -48,7 +45,7 @@ class NowPlayingScreenViewModelTest {
         player = FakeMusicMattersPlayer()
         playlistRepository = FakePlaylistRepository()
         playbackPositionUpdater = FakePlaybackPositionUpdater()
-        metadataRepository = FakeSongsAdditionalMetadataRepository()
+        metadataRepository = FakeSongsMetadataRepository()
         songsRepository = FakeSongsRepository()
         queueRepository = FakeQueueRepository()
         preferencesDataSource = FakePreferencesDataSource()
@@ -57,7 +54,7 @@ class NowPlayingScreenViewModelTest {
             preferencesDataSource = preferencesDataSource,
             playlistRepository = playlistRepository,
             playbackPositionUpdater = playbackPositionUpdater,
-            songsAdditionalMetadataRepository = metadataRepository,
+            songsMetadataRepository = metadataRepository,
             queueRepository = queueRepository,
             songsRepository = songsRepository,
         )
@@ -89,7 +86,7 @@ class NowPlayingScreenViewModelTest {
                 userData = emptyUserData,
                 currentlyPlayingSongIsFavorite = false,
                 playlists = emptyList(),
-                songAdditionalMetadata = null
+                songMetadata = null
             ),
             viewModel.uiState.value
         )
@@ -111,7 +108,7 @@ class NowPlayingScreenViewModelTest {
             isBuffering = false,
         )
         val metadataList = listOf(
-            SongAdditionalMetadata(
+            SongMetadata(
                 songId = "song-id-1",
                 codec = "",
                 bitsPerSample = 0L,
@@ -140,7 +137,7 @@ class NowPlayingScreenViewModelTest {
                         songIds = setOf( "song-id-2" )
                     )
                 ),
-                songAdditionalMetadata = null
+                songMetadata = null
             ),
             viewModel.uiState.value
         )
@@ -184,7 +181,7 @@ class NowPlayingScreenViewModelTest {
                 userData = emptyUserData,
                 currentlyPlayingSongIsFavorite = false,
                 playlists = emptyList(),
-                songAdditionalMetadata = null,
+                songMetadata = null,
                 sleepTimer = null,
             ),
             viewModel.uiState.value

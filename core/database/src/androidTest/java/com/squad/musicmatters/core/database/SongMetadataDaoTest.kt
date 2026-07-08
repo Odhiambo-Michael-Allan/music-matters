@@ -14,7 +14,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class SongAdditionalMetadataDaoTest {
+class SongMetadataDaoTest {
 
     private lateinit var database : MusicMattersDatabase
     private lateinit var dao: SongAdditionalMetadataDao

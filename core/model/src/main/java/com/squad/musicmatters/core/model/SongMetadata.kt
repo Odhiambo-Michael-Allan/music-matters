@@ -2,7 +2,7 @@ package com.squad.musicmatters.core.model
 
 
 
-data class SongAdditionalMetadata(
+data class SongMetadata(
     val songId: String,
     val codec: String,
     val bitsPerSample: Long,

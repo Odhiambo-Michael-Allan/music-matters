@@ -30,7 +30,7 @@ import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.ui.IconTextBody
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
@@ -43,7 +43,7 @@ import sh.calvin.reorderable.ReorderableItem
 internal fun QueueList(
     songsInQueue: List<Song>,
     currentlyPlayingSongId: String,
-    songsAdditionalMetadata: List<SongAdditionalMetadata>,
+    songsAdditionalMetadata: List<SongMetadata>,
     onGetPlaylists: () -> List<Playlist>,
     onFavorite: ( Song, Boolean ) -> Unit,
     playSong: ( Song, List<Song> ) -> Unit,
@@ -138,7 +138,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
     modifier: Modifier = Modifier,
     song: Song,
     isCurrentlyPlaying: Boolean,
-    songsAdditionalMetadata: List<SongAdditionalMetadata>,
+    songsAdditionalMetadata: List<SongMetadata>,
     onGetPlaylists: () -> List<Playlist>,
     onClick: () -> Unit,
     onDragHandleClick: () -> Unit,
@@ -181,7 +181,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
                 isCurrentlyPlaying = isCurrentlyPlaying,
                 isFavorite = isFavorite( song ),
                 onGetPlaylists = onGetPlaylists,
-                onGetSongAdditionalMetadata = {
+                onGetSongMetadata = {
                     songsAdditionalMetadata.find { metadata -> metadata.songId == song.id }
                 },
                 onClick = onClick,

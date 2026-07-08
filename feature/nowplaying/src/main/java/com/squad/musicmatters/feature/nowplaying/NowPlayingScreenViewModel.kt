@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.data.repository.PlaylistRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
-import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
+import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.utils.combine
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
@@ -16,7 +16,7 @@ import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.UserData
 import com.squad.musicmatters.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +37,7 @@ class NowPlayingScreenViewModel @Inject constructor(
     private val playlistRepository: PlaylistRepository,
     private val playbackPositionUpdater: PlaybackPositionUpdater,
     private val queueRepository: QueueRepository,
-    songsAdditionalMetadataRepository: SongsAdditionalMetadataRepository,
+    songsMetadataRepository: SongsMetadataRepository,
     songsRepository: SongsRepository,
 ) : BaseViewModel(
     preferencesDataSource = preferencesDataSource,
@@ -56,7 +56,7 @@ class NowPlayingScreenViewModel @Inject constructor(
                 playlistRepository.isFavorite( songId ?: "" )
             },
             playlistRepository.fetchPlaylists(),
-            songsAdditionalMetadataRepository.fetchAdditionalMetadataEntries(),
+            songsMetadataRepository.fetchMetadata(),
             player.sleepTimer
         ) {
             playerState,
@@ -72,7 +72,7 @@ class NowPlayingScreenViewModel @Inject constructor(
                 userData = userData,
                 currentlyPlayingSongIsFavorite = currentlyPlayingSongIsFavorite,
                 playlists = playlists,
-                songAdditionalMetadata = metadata.find {
+                songMetadata = metadata.find {
                     it.songId == playerState.currentlyPlayingSongId
                 },
                 sleepTimer = sleepTimer
@@ -184,7 +184,7 @@ sealed interface NowPlayingScreenUiState {
         val currentlyPlayingSongIsFavorite: Boolean,
         val playerState: PlayerState,
         val playlists: List<Playlist>,
-        val songAdditionalMetadata: SongAdditionalMetadata?,
+        val songMetadata: SongMetadata?,
         val sleepTimer: SleepTimer? = null,
     ) : NowPlayingScreenUiState
 }

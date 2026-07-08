@@ -1,36 +1,36 @@
 package com.squad.musicmatters.core.testing.repository
 
-import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
-import com.squad.musicmatters.core.model.SongAdditionalMetadata
+import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
+import com.squad.musicmatters.core.model.SongMetadata
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class FakeSongsAdditionalMetadataRepository : SongsAdditionalMetadataRepository {
+class FakeSongsMetadataRepository : SongsMetadataRepository {
 
-    private val metadataFlow: MutableSharedFlow<List<SongAdditionalMetadata>> =
+    private val metadataFlow: MutableSharedFlow<List<SongMetadata>> =
         MutableSharedFlow( replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST )
 
-    override fun fetchAdditionalMetadataEntries(): Flow<List<SongAdditionalMetadata>> =
+    override fun fetchMetadata(): Flow<List<SongMetadata>> =
         metadataFlow
 
-    override suspend fun fetchAdditionalMetadataForSongWithId(
+    override suspend fun fetchMetadataForSongWithId(
         songId: String
-    ): SongAdditionalMetadata? = metadataFlow.map { metadata ->
+    ): SongMetadata? = metadataFlow.map { metadata ->
         metadata.find { it.songId == songId }
     }.first()
 
-    override suspend fun save( songAdditionalMetadata: SongAdditionalMetadata ) {
+    override suspend fun save(songMetadata: SongMetadata ) {
         val currentMetadata = metadataFlow.first().toMutableList()
-        currentMetadata.add( songAdditionalMetadata )
+        currentMetadata.add( songMetadata )
         metadataFlow.tryEmit( currentMetadata )
     }
 
-    override suspend fun save( songAdditionalMetadata: List<SongAdditionalMetadata> ) {
+    override suspend fun save(songMetadata: List<SongMetadata> ) {
         val currentMetadata = metadataFlow.first().toMutableList()
-        currentMetadata.addAll( songAdditionalMetadata )
+        currentMetadata.addAll( songMetadata )
         metadataFlow.tryEmit( currentMetadata )
     }
 
@@ -40,7 +40,7 @@ class FakeSongsAdditionalMetadataRepository : SongsAdditionalMetadataRepository 
         metadataFlow.tryEmit( currentMetadata )
     }
 
-    fun sendMetadata( metadata: List<SongAdditionalMetadata> ) {
+    fun sendMetadata( metadata: List<SongMetadata> ) {
         metadataFlow.tryEmit( metadata )
     }
 }
