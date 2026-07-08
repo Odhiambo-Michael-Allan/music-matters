@@ -67,7 +67,11 @@ internal fun AlbumGrid(
                 label = {
                     Text(
                         text = stringResource(
-                            id = i8nR.string.core_i8n_n_albums,
+                            id = if ( albums.size > 1 ) {
+                                i8nR.string.core_i8n_n_albums
+                            } else {
+                                i8nR.string.core_i8n_album
+                            },
                             albums.size
                         ),
                         fontWeight = FontWeight.SemiBold
@@ -105,7 +109,7 @@ internal fun AlbumGrid(
                         AlbumTile(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding( 4.dp )
+                                .padding(4.dp)
                                 .animateItem(),
                             album = it,
                             onViewAlbum = { onViewAlbum( it ) },

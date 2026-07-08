@@ -2,11 +2,14 @@ package com.squad.musicmatters.feature.album
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -124,6 +127,7 @@ private fun AlbumScreenContent(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
+                                Spacer( modifier = Modifier.height( 32.dp ) )
                                 ElevatedCard(
                                     elevation = CardDefaults.elevatedCardElevation(
                                         defaultElevation = 8.dp,
@@ -134,10 +138,28 @@ private fun AlbumScreenContent(
                                         imageUri = uiState.album.artworkUri?.toUri(),
                                         contentDescription = null,
                                         modifier = Modifier
-                                            .size( 200.dp )
+                                            .size( 250.dp )
                                             .clip( MaterialTheme.shapes.medium )
                                     )
                                 }
+                                Spacer( modifier = Modifier.height( 32.dp ) )
+                                Text(
+                                    text = uiState.album.title,
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                                uiState.album.artist?.takeIf { it.isNotBlank() }?.let {
+                                    Spacer( modifier = Modifier.height( 8.dp ) )
+                                    Text(
+                                        text = it,
+                                        style = MaterialTheme.typography.titleMedium.copy(
+                                            color = MaterialTheme
+                                                .colorScheme
+                                                .onSurface
+                                                .copy( alpha = 0.5f )
+                                        ),
+                                    )
+                                }
+                                Spacer( modifier = Modifier.height( 32.dp ) )
                             }
                         }
                     }

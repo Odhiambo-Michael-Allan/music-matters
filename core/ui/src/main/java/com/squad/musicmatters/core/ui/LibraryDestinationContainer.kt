@@ -18,6 +18,7 @@ fun LibraryDestinationContainer(
     @StringRes title: Int? = null,
     isLoading: Boolean,
     onNavigateBack: () -> Unit,
+    options: @Composable (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
 
@@ -32,6 +33,7 @@ fun LibraryDestinationContainer(
             title = title?.let { stringResource( id = it ) } ?: "",
             scrollBehavior = scrollBehavior,
             onNavigationIconClicked = onNavigateBack,
+            options = options,
         )
         Box(
             modifier = Modifier.fillMaxSize()

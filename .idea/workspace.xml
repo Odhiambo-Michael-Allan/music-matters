@@ -27,12 +27,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/songs/impl/SongsStoreImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/songs/impl/SongsStoreImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/Tile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/Tile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/components/AlbumTile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/albums/src/main/java/com/squad/musicmatters/feature/albums/components/AlbumTile.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,6 +116,7 @@
     &quot;ApkExportedModule&quot;: &quot;MusicMatters.mobile&quot;,
     &quot;BundleExportedModule&quot;: &quot;MusicMatters.mobile&quot;,
     &quot;ExportApk.ApkPathForMusicMatters.mobile&quot;: &quot;/home/michael-allan-odhiambo/AndroidStudioProjects/music-matters/mobile&quot;,
+    &quot;Gradle.AlbumScreenViewModelTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.AlbumsRepositoryImplTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.AlbumsScreenViewModelTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.CompositeRepositoryImplTest.executor&quot;: &quot;Run&quot;,
@@ -195,7 +195,7 @@
     &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature-albums&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature-album&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_directory_selection&quot;: &quot;/Users/app/Desktop/android/projects/music-matters/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/app/Desktop/android/projects/music-matters/core/ui/src/main/java/com/squad/musicmatters/core/ui&quot;,
@@ -226,11 +226,11 @@
       <recent name="$PROJECT_DIR$/mobile/src/main/res/font/dmsans" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.squad.musicmatters.feature.album" />
       <recent name="com.squad.musicmatters.feature.albums" />
       <recent name="com.squad.musicmatters.core.data.repository.impl" />
       <recent name="com.squad.musicmatters.feature.lyrics" />
       <recent name="com.squad.musicmatters.feature.settings" />
-      <recent name="com.squad.musicmatters.core.media.media" />
     </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
       <recent name="com.squad.musicmatters.feature.queue" />
@@ -318,6 +318,33 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="AlbumScreenViewModelTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":feature:album:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.squad.musicmatters.feature.album.AlbumScreenViewModelTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
+      <method v="2" />
+    </configuration>
     <configuration name="AlbumsRepositoryImplTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -359,33 +386,6 @@
             <option value=":feature:albums:testDebugUnitTest" />
             <option value="--tests" />
             <option value="&quot;com.squad.musicmatters.feature.albums.AlbumsScreenViewModelTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <GradleProfilingDisabled>false</GradleProfilingDisabled>
-      <GradleCoverageDisabled>false</GradleCoverageDisabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="LyricsScreenViewModelTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":feature:lyrics:testDebugUnitTest" />
-            <option value="--tests" />
-            <option value="&quot;com.squad.musicmatters.feature.lyrics.LyricsScreenViewModelTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -455,11 +455,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.AlbumScreenViewModelTest" />
         <item itemvalue="Gradle.AlbumsScreenViewModelTest" />
         <item itemvalue="Gradle.SongsRepositoryImplTest" />
         <item itemvalue="Gradle.AlbumsRepositoryImplTest" />
         <item itemvalue="Gradle.SongsRepositoryImplTest.testFetchSongs" />
-        <item itemvalue="Gradle.LyricsScreenViewModelTest" />
       </list>
     </recent_temporary>
   </component>

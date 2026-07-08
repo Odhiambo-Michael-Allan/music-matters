@@ -15,6 +15,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/model/MusicMatters.core.model.test.iml" filepath="$PROJECT_DIR$/.idea/modules/core/model/MusicMatters.core.model.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/testing/MusicMatters.core.testing.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/album/MusicMatters.feature.album.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/album/MusicMatters.feature.album.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/albums/MusicMatters.feature.albums.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/albums/MusicMatters.feature.albums.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/lyrics/MusicMatters.feature.lyrics.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/lyrics/MusicMatters.feature.lyrics.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/nowplaying/MusicMatters.feature.nowplaying.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/nowplaying/MusicMatters.feature.nowplaying.androidTest.iml" />

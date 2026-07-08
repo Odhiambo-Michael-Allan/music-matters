@@ -68,7 +68,10 @@ fun SongList(
             onSortTypeChange = onSortTypeChange,
             label = {
                 Text(
-                    text = stringResource( id = R.string.core_i8n_n_songs, songs.size ),
+                    text = stringResource(
+                        id = if ( songs.size > 1 ) R.string.core_i8n_n_songs else R.string.core_i8n_song,
+                        songs.size
+                    ),
                     fontWeight = FontWeight.SemiBold,
                 )
             },
