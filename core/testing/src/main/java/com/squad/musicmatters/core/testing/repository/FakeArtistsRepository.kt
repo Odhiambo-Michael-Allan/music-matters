@@ -30,4 +30,8 @@ class FakeArtistsRepository : ArtistsRepository {
             artists.find { it.id == id }!!
         }
 
+    fun sendArtists( artists: List<Artist> ) {
+        artistsFlow.tryEmit( artists )
+    }
+
 }
