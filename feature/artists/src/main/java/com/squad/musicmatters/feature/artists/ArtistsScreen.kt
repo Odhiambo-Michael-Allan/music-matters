@@ -47,6 +47,7 @@ internal fun ArtistsScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LibraryDestinationContainer(
+        titleResId = i8nR.string.core_i8n_artists,
         isLoading = uiState is ArtistsScreenUiState.Loading,
         onNavigateBack = onNavigateBack,
     ) {

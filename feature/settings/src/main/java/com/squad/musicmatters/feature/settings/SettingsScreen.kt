@@ -6,9 +6,6 @@ import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
@@ -40,7 +37,6 @@ import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.model.UserData
 import com.squad.musicmatters.core.ui.LibraryDestinationContainer
-import com.squad.musicmatters.core.ui.MinimalAppBar
 import com.squad.musicmatters.feature.settings.Interface.BottomBarLabelVisibility
 import com.squad.musicmatters.feature.settings.about.About
 import com.squad.musicmatters.feature.settings.appearance.Font
@@ -53,12 +49,8 @@ import com.squad.musicmatters.feature.settings.community.Community
 import com.squad.musicmatters.feature.settings.components.SettingsSideHeading
 import com.squad.musicmatters.feature.settings.miniPlayer.MiniPlayerTextMarquee
 import com.squad.musicmatters.feature.settings.nowPlaying.LyricsLayout
-import com.squad.musicmatters.feature.settings.player.FadePlayback
-import com.squad.musicmatters.feature.settings.player.FadePlaybackDuration
-import com.squad.musicmatters.feature.settings.player.IgnoreAudioFocusLoss
 import com.squad.musicmatters.feature.settings.player.PauseOnHeadphonesDisconnect
 import com.squad.musicmatters.feature.settings.player.PlayOnHeadphonesConnect
-import com.squad.musicmatters.feature.settings.player.RequireAudioFocus
 import com.squad.musicmatters.core.i8n.R as i8nR
 
 @Composable
@@ -140,7 +132,7 @@ private fun SettingsScreenContent(
 
     LibraryDestinationContainer(
         isLoading = uiState is SettingsScreenUiState.Loading,
-        title = i8nR.string.core_i8n_settings,
+        titleResId = i8nR.string.core_i8n_settings,
         onNavigateBack = onNavigateBack,
     ) {
         when ( uiState ) {

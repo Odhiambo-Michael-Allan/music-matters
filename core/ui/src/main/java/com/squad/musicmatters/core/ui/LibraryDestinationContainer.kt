@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun LibraryDestinationContainer(
-    @StringRes title: Int? = null,
+    @StringRes titleResId: Int? = null,
     isLoading: Boolean,
     onNavigateBack: () -> Unit,
     options: @Composable (() -> Unit)? = null,
@@ -30,7 +30,7 @@ fun LibraryDestinationContainer(
             .nestedScroll( scrollBehavior.nestedScrollConnection )
     ) {
         MinimalAppBar(
-            title = title?.let { stringResource( id = it ) } ?: "",
+            title = titleResId?.let { stringResource( id = it ) } ?: "",
             scrollBehavior = scrollBehavior,
             onNavigationIconClicked = onNavigateBack,
             options = options,

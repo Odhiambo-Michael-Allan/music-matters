@@ -18,6 +18,7 @@ import com.squad.musicmatters.core.ui.LibraryDestinationContainer
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.feature.albums.components.AlbumGrid
+import com.squad.musicmatters.core.i8n.R as i8nR
 
 @Composable
 internal fun AlbumsScreen(
@@ -31,6 +32,7 @@ internal fun AlbumsScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LibraryDestinationContainer(
+        titleResId = i8nR.string.core_i8n_albums,
         isLoading = uiState is AlbumsScreenUiState.Loading,
         onNavigateBack = onNavigateBack,
     ) {
