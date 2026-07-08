@@ -72,6 +72,7 @@ import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.TopAppBar
 import com.squad.musicmatters.feature.albums.navigation.albumsScreen
 import com.squad.musicmatters.feature.albums.navigation.navigateToAlbums
+import com.squad.musicmatters.feature.artists.navigation.navigateToArtists
 import com.squad.musicmatters.feature.lyrics.navigation.lyricsScreen
 import com.squad.musicmatters.feature.lyrics.navigation.navigateToLyricsScreen
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreen
@@ -413,8 +414,8 @@ fun NavHostController.navigateToTopLevelDestination( topLevelDestination: TopLev
 
 fun NavHostController.navigateToLibraryDestination( libraryDestination: LibraryDestination ) {
     when ( libraryDestination ) {
-        LibraryDestination.ALBUMS ->
-            navigateToAlbums( navOptions = topLevelNavOptions() )
+        LibraryDestination.ALBUMS -> navigateToAlbums( navOptions = topLevelNavOptions() )
+        LibraryDestination.ARTISTS -> navigateToArtists( navOptions = topLevelNavOptions() )
     }
 }
 

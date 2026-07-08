@@ -1,6 +1,7 @@
 package com.squad.musicmatters.core.data.di
 
 import com.squad.musicmatters.core.data.repository.AlbumsRepository
+import com.squad.musicmatters.core.data.repository.ArtistsRepository
 import com.squad.musicmatters.core.data.repository.CompositeRepository
 import com.squad.musicmatters.core.data.repository.MostPlayedSongsRepository
 import com.squad.musicmatters.core.data.repository.PlayHistoryRepository
@@ -9,6 +10,7 @@ import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.data.repository.SongsAdditionalMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.repository.impl.AlbumsRepositoryImpl
+import com.squad.musicmatters.core.data.repository.impl.ArtistsRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.CompositeRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.MostPlayedSongsRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.PlayHistoryRepositoryImpl
@@ -73,5 +75,11 @@ abstract class DataModule {
     internal abstract fun bindsAlbumsRepository(
         repository: AlbumsRepositoryImpl
     ): AlbumsRepository
+
+    @Binds
+    @Singleton
+    internal abstract fun bindsArtistsRepository(
+        repository: ArtistsRepositoryImpl
+    ): ArtistsRepository
 
 }

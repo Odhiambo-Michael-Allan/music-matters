@@ -167,6 +167,7 @@
     <string name="core_i8n_untitled" translatable="false">&lt;untitled&gt;</string>
     <string name="core_i8n_song" translatable="false">Song</string>
     <string name="core_i8n_n_artists" translatable="false">%d artists</string>
+    <string name="core_i8n_artists" translatable="false">Artists</string>
 
 <!--    SORT BY-->
     <string name="core_i8n_album_name" translatable="false">Album name</string>

@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.feature.albums.navigation.AlbumsRoute
+import com.squad.musicmatters.feature.artists.navigation.ArtistsRoute
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import kotlinx.serialization.Serializable
 import com.squad.musicmatters.core.i8n.R as i8nR
@@ -48,6 +49,11 @@ enum class LibraryDestination(
         icon = MusicMattersIcons.Album,
         titleTextId = i8nR.string.core_i8n_albums,
         route = AlbumsRoute::class,
+    ),
+    ARTISTS(
+        icon = MusicMattersIcons.Artist,
+        titleTextId = i8nR.string.core_i8n_artists,
+        route = ArtistsRoute::class
     )
 }
 
