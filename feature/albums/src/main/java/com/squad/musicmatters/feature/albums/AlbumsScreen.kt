@@ -1,13 +1,8 @@
 package com.squad.musicmatters.feature.albums
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,7 +47,7 @@ internal fun AlbumsScreen(
             onShuffleAndPlaySongsInAlbum = viewModel::shuffleAndPlay,
             onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
             onCreatePlaylist = viewModel::createPlaylist,
-            onShowAddToQueueOption = viewModel::noSongInTheAlbumPresentInTheQueue,
+            onShowAddToQueueOption = viewModel::noSongInTheListIsPresentInTheQueue,
             onRemoveSongsInAlbumFromQueue = viewModel::removeSongsFromQueue
         )
     }

@@ -84,7 +84,7 @@ fun GenericTile(
                         headerTitle = title,
                         headerDescription = headerDescription,
                         onGetPlaylists = onGetPlaylists,
-                        songIsPresentInQueue = onShowAddToQueueOption,
+                        onShowAddToQueueOption = onShowAddToQueueOption,
                         onDismissRequest = onDismissRequest,
                         onAddToQueue = onAddToQueue,
                         onRemoveFromQueue = onRemoveFromQueue,
@@ -148,7 +148,7 @@ fun GenericOptionsBottomSheet(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onGetSongs: () -> List<Song>,
-    songIsPresentInQueue: () -> Boolean,
+    onShowAddToQueueOption: () -> Boolean,
     onShowSnackBar: ( String ) -> Unit,
     leadingBottomSheetMenuItem: ( @Composable ( () -> Unit ) -> Unit ),
     trailingBottomSheetMenuItems: ( @Composable ( () -> Unit ) -> Unit )? = null,
@@ -157,7 +157,7 @@ fun GenericOptionsBottomSheet(
     val context = LocalContext.current
     var showAddSongToPlaylistBottomSheet by remember { mutableStateOf( false ) }
     var showCreateNewPlaylistDialog by remember { mutableStateOf( false ) }
-    val songIsPresentInQueue = songIsPresentInQueue()
+    val showAddToQueueOption = onShowAddToQueueOption()
 
     BottomSheetMenuContent(
         bottomSheetHeader = {
@@ -182,20 +182,20 @@ fun GenericOptionsBottomSheet(
         BottomSheetMenuItem(
             leadingIcon = MusicMattersIcons.PlaylistAdd,
             label = stringResource(
-                id = if ( songIsPresentInQueue ) {
-                    R.string.core_i8n_remove_from_queue
-                } else {
+                id = if ( showAddToQueueOption ) {
                     R.string.core_i8n_add_to_queue
+                } else {
+                    R.string.core_i8n_remove_from_queue
                 }
             )
         ) {
-            val feedback = if ( songIsPresentInQueue ) {
-                context.getString( R.string.core_i8n_song_removed_from_queue )
-            } else {
+            val feedback = if ( showAddToQueueOption ) {
                 context.getString( R.string.core_i8n_song_added_to_queue )
+            } else {
+                context.getString( R.string.core_i8n_song_removed_from_queue )
             }
             onDismissRequest()
-            if ( songIsPresentInQueue ) onRemoveFromQueue() else onAddToQueue()
+            if ( showAddToQueueOption ) onAddToQueue() else onRemoveFromQueue()
             onShowSnackBar( feedback )
         }
         BottomSheetMenuItem(

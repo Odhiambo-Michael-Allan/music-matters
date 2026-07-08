@@ -10,7 +10,6 @@ import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -114,7 +113,7 @@ abstract class BaseViewModel(
 
     fun songIsPresentInQueue( song: Song ) = player.contains( song )
 
-    fun noSongInTheAlbumPresentInTheQueue( songs: List<Song> ): Boolean {
+    fun noSongInTheListIsPresentInTheQueue( songs: List<Song> ): Boolean {
         return songs.none { player.contains( it ) }
     }
 

@@ -240,7 +240,7 @@ fun SongOptionsBottomSheetMenu(
         headerDescription = song.artists.joinToString(),
         onGetPlaylists = onGetPlaylists,
         onShowSnackBar = onShowSnackBar,
-        songIsPresentInQueue = { onSongIsPresentInQueue( song ) },
+        onShowAddToQueueOption = { !onSongIsPresentInQueue( song ) },
         onDismissRequest = onDismissRequest,
         onPlayNext = { onPlayNext( song ) },
         onAddToQueue = { onAddToQueue( song ) },
@@ -315,7 +315,7 @@ fun SongOptionsBottomSheetMenu(
 @Composable
 private fun SongOptionsBottomSheetContentPreview() {
     MusicMattersTheme(
-//        fontName = SupportedFonts.GoogleSans.name,
+        fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
         fontScale = 1.0f,
         themeMode = ThemeMode.LIGHT,

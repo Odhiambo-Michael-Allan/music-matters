@@ -8,13 +8,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
@@ -22,16 +30,20 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
+import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.DynamicAsyncImage
+import com.squad.musicmatters.core.ui.GenericOptionsBottomSheet
 import com.squad.musicmatters.core.ui.LibraryDestinationContainer
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.SongList
+import com.squad.musicmatters.core.i8n.R as i8nR
 
 @Composable
 internal fun AlbumScreen(
@@ -57,7 +69,7 @@ internal fun AlbumScreen(
         onShuffleAndPlay = viewModel::shuffleAndPlay,
         onSortTypeChange = viewModel::setSortSongsBy,
         onSortSongsInReverseChange = viewModel::setSortSongsInReverse,
-        playSong = viewModel::playSongs,
+        onPlaySong = viewModel::playSongs,
         onAddToFavorites = viewModel::addToFavorites,
         onSongIsPresentInQueue = viewModel::songIsPresentInQueue,
         onAddSongToQueue = viewModel::addSongToQueue,
@@ -65,9 +77,14 @@ internal fun AlbumScreen(
         onPlaySongNext = viewModel::playSongNext,
         onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
         onCreatePlaylist = viewModel::createPlaylist,
+        onPlaySongsInAlbumNext = viewModel::playSongsNext,
+        onAddSongsInAlbumToQueue = viewModel::addSongsToQueue,
+        onRemoveSongsInAlbumFromQueue = viewModel::removeSongsFromQueue,
+        onShowAddToQueueOption = viewModel::noSongInTheListIsPresentInTheQueue
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AlbumScreenContent(
     uiState: AlbumScreenUiState,
@@ -75,7 +92,7 @@ private fun AlbumScreenContent(
     onShuffleAndPlay: ( List<Song> ) -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
     onSortSongsInReverseChange: ( Boolean ) -> Unit,
-    playSong: ( Song, List<Song> ) -> Unit,
+    onPlaySong: (Song, List<Song> ) -> Unit,
     onAddToFavorites: ( Song, Boolean ) -> Unit,
     onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( String ) -> Unit,
@@ -88,11 +105,29 @@ private fun AlbumScreenContent(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
+    onShowAddToQueueOption: ( List<Song> ) -> Boolean,
+    onPlaySongsInAlbumNext: ( List<Song> ) -> Unit,
+    onAddSongsInAlbumToQueue: ( List<Song> ) -> Unit,
+    onRemoveSongsInAlbumFromQueue: ( List<Song> ) -> Unit,
 ) {
+
+    var showBottomSheetMenu by remember { mutableStateOf( false ) }
 
     LibraryDestinationContainer(
         isLoading = uiState is AlbumScreenUiState.Loading,
         onNavigateBack = onNavigateBack,
+        options = {
+            IconButton(
+                onClick = {
+                    showBottomSheetMenu = !showBottomSheetMenu
+                }
+            ) {
+                Icon(
+                    imageVector = MusicMattersIcons.MoreVertical,
+                    contentDescription = null,
+                )
+            }
+        }
     ) {
         when ( uiState ) {
             AlbumScreenUiState.Loading -> {}
@@ -107,7 +142,7 @@ private fun AlbumScreenContent(
                     onShufflePlay = { onShuffleAndPlay( uiState.songsInAlbum ) },
                     onSortTypeChange = onSortTypeChange,
                     onSortSongsInReverseChange = onSortSongsInReverseChange,
-                    playSong = playSong,
+                    playSong = onPlaySong,
                     isFavorite = { uiState.favoriteSongIds.contains( it ) },
                     onFavorite = onAddToFavorites,
                     onViewAlbum = onViewAlbum,
@@ -138,8 +173,8 @@ private fun AlbumScreenContent(
                                         imageUri = uiState.album.artworkUri?.toUri(),
                                         contentDescription = null,
                                         modifier = Modifier
-                                            .size( 250.dp )
-                                            .clip( MaterialTheme.shapes.medium )
+                                            .size(250.dp)
+                                            .clip(MaterialTheme.shapes.medium)
                                     )
                                 }
                                 Spacer( modifier = Modifier.height( 32.dp ) )
@@ -164,6 +199,41 @@ private fun AlbumScreenContent(
                         }
                     }
                 )
+
+                if ( showBottomSheetMenu ) {
+                    ModalBottomSheet(
+                        onDismissRequest = { showBottomSheetMenu = false }
+                    ) {
+                        GenericOptionsBottomSheet(
+                            headerImageUri = uiState.album.artworkUri?.toUri(),
+                            headerTitle = uiState.album.title,
+                            headerDescription = uiState.album.artist ?: "",
+                            onGetPlaylists = { uiState.playlists },
+                            onDismissRequest = { showBottomSheetMenu = false },
+                            onPlayNext = { onPlaySongsInAlbumNext( uiState.songsInAlbum ) },
+                            onAddToQueue = { onAddSongsInAlbumToQueue( uiState.songsInAlbum ) },
+                            onRemoveFromQueue = {
+                                onRemoveSongsInAlbumFromQueue( uiState.songsInAlbum )
+                            },
+                            onCreatePlaylist = onCreatePlaylist,
+                            onAddSongsToPlaylist = onAddSongsToPlaylist,
+                            onGetSongs = { uiState.songsInAlbum },
+                            onShowAddToQueueOption = {
+                                onShowAddToQueueOption( uiState.songsInAlbum )
+                            },
+                            onShowSnackBar = onShowSnackBar,
+                            leadingBottomSheetMenuItem = { onDismissRequest ->
+                                BottomSheetMenuItem(
+                                    leadingIcon = MusicMattersIcons.PlayNext,
+                                    label = stringResource( id = i8nR.string.core_i8n_shuffle_play )
+                                ) {
+                                    onDismissRequest()
+                                    onShuffleAndPlay( uiState.songsInAlbum )
+                                }
+                            }
+                        )
+                    }
+                }
             }
         }
     }
@@ -210,7 +280,11 @@ private fun AlbumScreenContentPreview(
             onAddSongToQueue = {},
             onRemoveSongFromQueue = {},
             onSortSongsInReverseChange = {},
-            playSong = { _, _ -> }
+            onPlaySong = { _, _ -> },
+            onShowAddToQueueOption = { true },
+            onPlaySongsInAlbumNext = {},
+            onAddSongsInAlbumToQueue = {},
+            onRemoveSongsInAlbumFromQueue = {},
         )
     }
 }

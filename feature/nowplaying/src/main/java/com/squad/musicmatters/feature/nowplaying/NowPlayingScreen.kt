@@ -312,7 +312,7 @@ private fun NowPlayingScreenContent(
                                 }
                             },
                             onShowSnackBar = onShowSnackBar,
-                            songIsPresentInQueue = { false },
+                            onShowAddToQueueOption = { false },
                             onRemoveFromQueue = { onRemoveFromQueue( song ) },
                             trailingBottomSheetMenuItems = { onDismissRequest ->
                                 song.albumTitle?.let { albumTitle ->
