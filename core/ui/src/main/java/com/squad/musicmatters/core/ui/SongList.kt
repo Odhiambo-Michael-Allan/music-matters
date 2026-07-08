@@ -43,7 +43,7 @@ fun SongList(
     isFavorite: ( String ) -> Boolean,
     onFavorite: ( Song, Boolean ) -> Unit,
     onViewAlbum: ( Long ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onSongIsPresentInQueue: ( Song ) -> Boolean,
     onAddSongToQueue: (Song ) -> Unit,
     onRemoveSongFromQueue: (Song ) -> Unit,

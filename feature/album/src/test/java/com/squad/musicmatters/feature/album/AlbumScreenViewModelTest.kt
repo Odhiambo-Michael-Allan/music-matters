@@ -110,7 +110,7 @@ class AlbumScreenViewModelTest {
                 currentlyPlayingSongId = "song-id-2",
                 favoriteSongIds = emptySet(),
                 playlists = emptyList(),
-                songsAdditionalMetadata = emptyList()
+                songsMetadata = emptyList()
             ),
             subject.uiState.value,
         )

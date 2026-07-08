@@ -67,7 +67,7 @@ fun SongCard(
     onPlayNext: ( Song ) -> Unit,
     onAddToQueue: ( Song ) -> Unit,
     onRemoveFromQueue: ( Song ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onViewAlbum: ( Long ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
@@ -218,7 +218,7 @@ fun SongOptionsBottomSheetMenu(
     onAddToQueue: ( Song ) -> Unit,
     onRemoveFromQueue: ( Song ) -> Unit,
     onSongIsPresentInQueue: ( Song ) -> Boolean,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onViewAlbum: ( Long ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlayNext: ( Song ) -> Unit,
@@ -265,14 +265,15 @@ fun SongOptionsBottomSheetMenu(
             }
         },
         trailingBottomSheetMenuItems = {
-            song.artist.let {
-                BottomSheetMenuItem(
-                    leadingIcon = MusicMattersIcons.Artist,
-                    label = stringResource( id = R.string.core_i8n_go_to_artist, it )
-                ) {
-                    onDismissRequest()
-                    onViewArtist( it )
-                }
+            BottomSheetMenuItem(
+                leadingIcon = MusicMattersIcons.Artist,
+                label = stringResource(
+                    id = R.string.core_i8n_go_to_artist,
+                    song.artist
+                )
+            ) {
+                onDismissRequest()
+                onViewArtist( song.artistId )
             }
             song.albumTitle?.let {
                 BottomSheetMenuItem(

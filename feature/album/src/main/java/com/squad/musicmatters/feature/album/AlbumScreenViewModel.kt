@@ -61,7 +61,7 @@ class AlbumScreenViewModel @Inject constructor(
             currentlyPlayingSongId = userData.currentlyPlayingSongId,
             favoriteSongIds = favoriteSongsPlaylist?.songIds ?: emptySet(),
             playlists = playlists,
-            songsAdditionalMetadata = metadata,
+            songsMetadata = metadata,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -81,6 +81,6 @@ sealed interface AlbumScreenUiState {
         val favoriteSongIds: Set<String>,
         val sortSongsInReverse: Boolean,
         val playlists: List<Playlist>,
-        val songsAdditionalMetadata: List<SongMetadata>,
+        val songsMetadata: List<SongMetadata>,
     ) : AlbumScreenUiState
 }

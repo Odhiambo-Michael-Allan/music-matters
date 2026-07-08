@@ -30,7 +30,7 @@ fun NavGraphBuilder.albumScreen(
     onShowSnackBar: ( String ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onViewAlbum: ( Long ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
 ) {
     composable<AlbumRoute>(

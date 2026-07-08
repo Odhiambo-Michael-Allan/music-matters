@@ -1,4 +1,4 @@
-package com.squad.musicmatters.feature.album
+package com.squad.musicmatters.feature.artist
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
@@ -35,6 +35,7 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
+import com.squad.musicmatters.core.i8n.R as i8nR
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
@@ -45,11 +46,10 @@ import com.squad.musicmatters.core.ui.LibraryDestinationContainer
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.SongList
-import com.squad.musicmatters.core.i8n.R as i8nR
 
 @Composable
-internal fun AlbumScreen(
-    viewModel: AlbumScreenViewModel = hiltViewModel(),
+internal fun ArtistScreen(
+    viewModel: ArtistScreenViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
     onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( Long ) -> Unit,
@@ -60,14 +60,14 @@ internal fun AlbumScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    AlbumScreenContent(
+    ArtistScreenContent(
         uiState = uiState,
         onNavigateBack = onNavigateBack,
-        onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
+        onViewAlbum = onViewAlbum,
         onShareSong = onShareSong,
-        onDeleteSong = onDeleteSong,
         onShowSnackBar = onShowSnackBar,
+        onDeleteSong = onDeleteSong,
         onShuffleAndPlay = viewModel::shuffleAndPlay,
         onSortTypeChange = viewModel::setSortSongsBy,
         onSortSongsInReverseChange = viewModel::setSortSongsInReverse,
@@ -79,28 +79,29 @@ internal fun AlbumScreen(
         onPlaySongNext = viewModel::playSongNext,
         onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
         onCreatePlaylist = viewModel::createPlaylist,
-        onPlaySongsInAlbumNext = viewModel::playSongsNext,
-        onAddSongsInAlbumToQueue = viewModel::addSongsToQueue,
-        onRemoveSongsInAlbumFromQueue = viewModel::removeSongsFromQueue,
-        onShowAddToQueueOption = viewModel::noSongInTheListIsPresentInTheQueue
+        onPlaySongsByArtistNext = viewModel::playSongsNext,
+        onAddSongsByArtistToQueue = viewModel::addSongsToQueue,
+        onRemoveSongsByArtistFromQueue = viewModel::removeSongsFromQueue,
+        onShowAddToQueueOption = viewModel::noSongInTheListIsPresentInTheQueue,
     )
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AlbumScreenContent(
-    uiState: AlbumScreenUiState,
+private fun ArtistScreenContent(
+    uiState: ArtistScreenUiState,
     onNavigateBack: () -> Unit,
     onShuffleAndPlay: ( List<Song> ) -> Unit,
     onSortTypeChange: ( SortSongsBy ) -> Unit,
     onSortSongsInReverseChange: ( Boolean ) -> Unit,
     onPlaySong: (Song, List<Song> ) -> Unit,
     onAddToFavorites: ( Song, Boolean ) -> Unit,
-    onViewAlbum: ( Long ) -> Unit,
-    onViewArtist: ( Long ) -> Unit,
     onSongIsPresentInQueue: ( Song ) -> Boolean,
     onAddSongToQueue: ( Song ) -> Unit,
     onRemoveSongFromQueue: ( Song ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onPlaySongNext: ( Song ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
@@ -108,15 +109,15 @@ private fun AlbumScreenContent(
     onDeleteSong: ( Song ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
     onShowAddToQueueOption: ( List<Song> ) -> Boolean,
-    onPlaySongsInAlbumNext: ( List<Song> ) -> Unit,
-    onAddSongsInAlbumToQueue: ( List<Song> ) -> Unit,
-    onRemoveSongsInAlbumFromQueue: ( List<Song> ) -> Unit,
+    onPlaySongsByArtistNext: ( List<Song> ) -> Unit,
+    onAddSongsByArtistToQueue: ( List<Song> ) -> Unit,
+    onRemoveSongsByArtistFromQueue: ( List<Song> ) -> Unit,
 ) {
 
     var showBottomSheetMenu by remember { mutableStateOf( false ) }
 
     LibraryDestinationContainer(
-        isLoading = uiState is AlbumScreenUiState.Loading,
+        isLoading = uiState is ArtistScreenUiState.Loading,
         onNavigateBack = onNavigateBack,
         options = {
             IconButton(
@@ -132,16 +133,24 @@ private fun AlbumScreenContent(
         }
     ) {
         when ( uiState ) {
-            AlbumScreenUiState.Loading -> {}
-            is AlbumScreenUiState.Success -> {
+            ArtistScreenUiState.Loading -> {}
+            is ArtistScreenUiState.Success -> {
+                val subTitle = stringResource(
+                    id = if ( uiState.artist.trackCount > 1 ) {
+                        i8nR.string.core_i8n_n_songs
+                    } else {
+                        i8nR.string.core_i8n_one_song
+                    },
+                    uiState.artist.trackCount
+                )
                 SongList(
                     sortSongsInReverse = uiState.sortSongsInReverse,
                     sortSongsBy = uiState.sortSongsBy,
-                    songs = uiState.songsInAlbum,
+                    songs = uiState.songsByArtist,
                     currentlyPlayingSongId = uiState.currentlyPlayingSongId,
                     onGetPlaylists = { uiState.playlists },
                     onGetSongsAdditionalMetadata = { uiState.songsMetadata },
-                    onShufflePlay = { onShuffleAndPlay( uiState.songsInAlbum ) },
+                    onShufflePlay = { onShuffleAndPlay( uiState.songsByArtist ) },
                     onSortTypeChange = onSortTypeChange,
                     onSortSongsInReverseChange = onSortSongsInReverseChange,
                     playSong = onPlaySong,
@@ -172,35 +181,33 @@ private fun AlbumScreenContent(
                                     shape = MaterialTheme.shapes.medium,
                                 ) {
                                     DynamicAsyncImage(
-                                        imageUri = uiState.album.artworkUri?.toUri(),
+                                        imageUri = uiState.artist.artworkUri?.toUri(),
                                         contentDescription = null,
                                         modifier = Modifier
                                             .size( 250.dp )
-                                            .clip(MaterialTheme.shapes.medium)
+                                            .clip( MaterialTheme.shapes.medium )
                                     )
                                 }
                                 Spacer( modifier = Modifier.height( 32.dp ) )
                                 Text(
-                                    text = uiState.album.title,
+                                    text = uiState.artist.name,
                                     style = MaterialTheme.typography.titleLarge,
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.padding( 8.dp, 0.dp ),
                                 )
-                                uiState.album.artist?.takeIf { it.isNotBlank() }?.let {
-                                    Spacer( modifier = Modifier.height( 8.dp ) )
-                                    Text(
-                                        text = it,
-                                        style = MaterialTheme.typography.titleMedium.copy(
-                                            color = MaterialTheme
-                                                .colorScheme
-                                                .onSurface
-                                                .copy( alpha = 0.5f )
-                                        ),
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier
-                                            .padding( 8.dp, 0.dp ),
-                                    )
-                                }
+                                Spacer( modifier = Modifier.height( 8.dp ) )
+                                Text(
+                                    text = subTitle,
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        color = MaterialTheme
+                                            .colorScheme
+                                            .onSurface
+                                            .copy( alpha = 0.5f )
+                                    ),
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .padding( 8.dp, 0.dp ),
+                                )
                                 Spacer( modifier = Modifier.height( 32.dp ) )
                             }
                         }
@@ -212,21 +219,21 @@ private fun AlbumScreenContent(
                         onDismissRequest = { showBottomSheetMenu = false }
                     ) {
                         GenericOptionsBottomSheet(
-                            headerImageUri = uiState.album.artworkUri?.toUri(),
-                            headerTitle = uiState.album.title,
-                            headerDescription = uiState.album.artist ?: "",
+                            headerImageUri = uiState.artist.artworkUri?.toUri(),
+                            headerTitle = uiState.artist.name,
+                            headerDescription = subTitle,
                             onGetPlaylists = { uiState.playlists },
                             onDismissRequest = { showBottomSheetMenu = false },
-                            onPlayNext = { onPlaySongsInAlbumNext( uiState.songsInAlbum ) },
-                            onAddToQueue = { onAddSongsInAlbumToQueue( uiState.songsInAlbum ) },
+                            onPlayNext = { onPlaySongsByArtistNext( uiState.songsByArtist ) },
+                            onAddToQueue = { onAddSongsByArtistToQueue( uiState.songsByArtist ) },
                             onRemoveFromQueue = {
-                                onRemoveSongsInAlbumFromQueue( uiState.songsInAlbum )
+                                onRemoveSongsByArtistFromQueue( uiState.songsByArtist )
                             },
                             onCreatePlaylist = onCreatePlaylist,
                             onAddSongsToPlaylist = onAddSongsToPlaylist,
-                            onGetSongs = { uiState.songsInAlbum },
+                            onGetSongs = { uiState.songsByArtist },
                             onShowAddToQueueOption = {
-                                onShowAddToQueueOption( uiState.songsInAlbum )
+                                onShowAddToQueueOption( uiState.songsByArtist )
                             },
                             onShowSnackBar = onShowSnackBar,
                             leadingBottomSheetMenuItem = { onDismissRequest ->
@@ -235,7 +242,7 @@ private fun AlbumScreenContent(
                                     label = stringResource( id = i8nR.string.core_i8n_shuffle_play )
                                 ) {
                                     onDismissRequest()
-                                    onShuffleAndPlay( uiState.songsInAlbum )
+                                    onShuffleAndPlay( uiState.songsByArtist )
                                 }
                             }
                         )
@@ -249,7 +256,7 @@ private fun AlbumScreenContent(
 
 @PreviewScreenSizes
 @Composable
-private fun AlbumScreenContentPreview(
+private fun ArtistScreenContentPreview(
     @PreviewParameter(MusicMattersPreviewParametersProvider::class )
     previewData: PreviewData
 ) {
@@ -260,10 +267,10 @@ private fun AlbumScreenContentPreview(
         fontScale = 1.0f,
         useMaterialYou = true
     ) {
-        AlbumScreenContent(
-            uiState = AlbumScreenUiState.Success(
-                album = previewData.albums.first(),
-                songsInAlbum = previewData.songs,
+        ArtistScreenContent(
+            uiState = ArtistScreenUiState.Success(
+                artist = previewData.artists.first(),
+                songsByArtist = previewData.songs,
                 sortSongsBy = DefaultPreferences.SORT_SONGS_BY,
                 sortSongsInReverse = false,
                 currentlyPlayingSongId = previewData.songs.first().id,
@@ -289,9 +296,10 @@ private fun AlbumScreenContentPreview(
             onSortSongsInReverseChange = {},
             onPlaySong = { _, _ -> },
             onShowAddToQueueOption = { true },
-            onPlaySongsInAlbumNext = {},
-            onAddSongsInAlbumToQueue = {},
-            onRemoveSongsInAlbumFromQueue = {},
+            onPlaySongsByArtistNext = {},
+            onAddSongsByArtistToQueue = {},
+            onRemoveSongsByArtistFromQueue = {},
         )
     }
+
 }
