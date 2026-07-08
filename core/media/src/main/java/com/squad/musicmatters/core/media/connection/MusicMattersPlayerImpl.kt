@@ -148,9 +148,10 @@ class MusicMattersPlayerImpl @Inject constructor(
     }
 
     override fun shuffleAndPlay( songs: List<Song> ) {
+        val shuffledSongs = songs.shuffled()
         playSong(
-            song = songs.random(),
-            songs = songs.shuffled(),
+            song = shuffledSongs.first(),
+            songs = shuffledSongs,
         )
     }
 

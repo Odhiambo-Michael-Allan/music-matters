@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -17,6 +18,7 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -27,6 +29,7 @@ import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortArtistsBy
 import com.squad.musicmatters.core.ui.GenericTile
 import com.squad.musicmatters.core.ui.IconTextBody
+import com.squad.musicmatters.core.ui.LibraryDestinationContainer
 import com.squad.musicmatters.core.ui.MediaSortBar
 import com.squad.musicmatters.core.ui.MediaSortBarScaffold
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
@@ -36,7 +39,33 @@ import com.squad.musicmatters.core.i8n.R as i8nR
 @Composable
 internal fun ArtistsScreen(
     viewModel: ArtistsScreenViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit,
+    onViewArtist: ( Long ) -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
 ) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LibraryDestinationContainer(
+        isLoading = uiState is ArtistsScreenUiState.Loading,
+        onNavigateBack = onNavigateBack,
+    ) {
+        ArtistsScreenContent(
+            uiState = uiState,
+            onViewArtist = onViewArtist,
+            onShowSnackBar = onShowSnackBar,
+            onSortTypeChange = viewModel::onSortTypeChange,
+            onSortInReverseChange = viewModel::onSortInReverseChange,
+            onCreatePlaylist = viewModel::createPlaylist,
+            onShowAddToQueueOption = viewModel::noSongInTheListIsPresentInTheQueue,
+            onPlaySongs = viewModel::playSongs,
+            onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
+            onShuffleAndPlay = viewModel::shuffleAndPlay,
+            onPlaySongsNext = viewModel::playSongsNext,
+            onAddSongsToQueue = viewModel::addSongsToQueue,
+            onRemoveSongsFromQueue = viewModel::removeSongsFromQueue,
+        )
+    }
 
 }
 
@@ -46,17 +75,15 @@ private fun ArtistsScreenContent(
     onSortTypeChange: ( SortArtistsBy ) -> Unit,
     onSortInReverseChange: ( Boolean ) -> Unit,
     onViewArtist: ( Long ) -> Unit,
-    onPlaySongsByArtist: ( Artist ) -> Unit,
-    onAddSongsByArtistToQueue: ( Artist ) -> Unit,
-    onRemoveSongsByArtistFromQueue: ( Artist ) -> Unit,
-    onPlaySongsByArtistNext: ( Artist ) -> Unit,
-    onShuffleAndPlaySongsByArtist: ( Artist ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
+    onPlaySongs: ( Song, List<Song> ) -> Unit,
+    onAddSongsToQueue: ( List<Song> ) -> Unit,
+    onRemoveSongsFromQueue: ( List<Song> ) -> Unit,
+    onPlaySongsNext: ( List<Song> ) -> Unit,
+    onShuffleAndPlay: ( List<Song> ) -> Unit,
     onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetSongsByArtist: ( Artist ) -> List<Song>,
     onShowSnackBar: ( String ) -> Unit,
-    onShowAddToQueueOption: ( Artist ) -> Boolean,
+    onShowAddToQueueOption: ( List<Song> ) -> Boolean,
 ) {
 
     when ( uiState ) {
@@ -67,19 +94,34 @@ private fun ArtistsScreenContent(
                 sortArtistsBy = uiState.sortArtistsBy,
                 sortArtistsInReverse = uiState.sortArtistsInReverse,
                 onViewArtist = onViewArtist,
-                onGetSongsByArtist = onGetSongsByArtist,
-                onPlaySongsByArtist = onPlaySongsByArtist,
-                onPlaySongsByArtistNext = onPlaySongsByArtistNext,
-                onAddSongsByArtistToQueue = onAddSongsByArtistToQueue,
-                onGetPlaylists = onGetPlaylists,
-                onCreatePlaylist = onCreatePlaylist,
-                onShuffleAndPlaySongsByArtist = onShuffleAndPlaySongsByArtist,
-                onRemoveSongsByArtistFromQueue = onRemoveSongsByArtistFromQueue,
-                onShowSnackBar = onShowSnackBar,
-                onAddSongsToPlaylist = onAddSongsToPlaylist,
-                onShowAddToQueueOption = onShowAddToQueueOption,
                 onSortTypeChange = onSortTypeChange,
                 onSortInReverseChange = onSortInReverseChange,
+                onGetSongsByArtist = { artist -> uiState.songs.filter { it.artistId == artist.id } },
+                onPlaySongsByArtist = { artist ->
+                    val songsByArtists = uiState.songs.filter { it.artistId == artist.id }
+                    onPlaySongs( songsByArtists.first(), songsByArtists )
+                },
+                onAddSongsByArtistToQueue = { artist ->
+                    onAddSongsToQueue(
+                        uiState.songs.filter { it.artistId == artist.id }
+                    )
+                },
+                onRemoveSongsByArtistFromQueue = { artist ->
+                    onRemoveSongsFromQueue( uiState.songs.filter { it.artistId == artist.id } )
+                },
+                onPlaySongsByArtistNext = { artist ->
+                    onPlaySongsNext( uiState.songs.filter { it.artistId == artist.id } )
+                },
+                onShuffleAndPlaySongsByArtist = { artist ->
+                    onShuffleAndPlay( uiState.songs.filter { it.artistId == artist.id } )
+                },
+                onGetPlaylists = { uiState.playlists },
+                onAddSongsToPlaylist = onAddSongsToPlaylist,
+                onCreatePlaylist = onCreatePlaylist,
+                onShowSnackBar = onShowSnackBar,
+                onShowAddToQueueOption = { artist ->
+                    onShowAddToQueueOption( uiState.songs.filter { it.artistId == artist.id } )
+                }
             )
         }
     }
@@ -178,7 +220,7 @@ internal fun ArtistsGrid(
                             onGetSongsByArtist = { onGetSongsByArtist( it ) },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding( 4.dp )
+                                .padding(4.dp)
                                 .animateItem()
                         )
                     }
@@ -263,19 +305,17 @@ private fun ArtistsScreenPreview(
                 songs = emptyList()
             ),
             onViewArtist = {},
-            onGetPlaylists = { emptyList() },
             onCreatePlaylist = { _, _ -> },
             onSortTypeChange = {},
-            onGetSongsByArtist = { emptyList() },
             onSortInReverseChange = {},
-            onPlaySongsByArtist = {},
             onShowSnackBar = {},
             onShowAddToQueueOption = { false },
             onAddSongsToPlaylist = { _, _ -> },
-            onPlaySongsByArtistNext = {},
-            onAddSongsByArtistToQueue = {},
-            onShuffleAndPlaySongsByArtist = {},
-            onRemoveSongsByArtistFromQueue = {},
+            onRemoveSongsFromQueue = {},
+            onAddSongsToQueue = {},
+            onPlaySongs = { _, _ -> },
+            onShuffleAndPlay = {},
+            onPlaySongsNext = {},
         )
     }
 }

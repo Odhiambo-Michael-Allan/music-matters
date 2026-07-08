@@ -52,7 +52,7 @@ abstract class BaseViewModel(
         songs: List<Song>,
     ) {
         if ( songs.isEmpty() ) return
-        viewModelScope.launch { player.shuffleAndPlay( songs ) }
+        player.shuffleAndPlay( songs )
     }
 
     fun playSong( song: Song ) {
