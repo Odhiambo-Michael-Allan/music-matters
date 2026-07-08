@@ -251,7 +251,7 @@ private fun ArtistTile(
         id = if ( artist.trackCount > 1 ) {
             i8nR.string.core_i8n_n_songs
         } else {
-            i8nR.string.core_i8n_song
+            i8nR.string.core_i8n_one_song
         },
         artist.trackCount
     )
