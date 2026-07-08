@@ -227,7 +227,7 @@ private fun AlbumScreenContent(
                             onShowSnackBar = onShowSnackBar,
                             leadingBottomSheetMenuItem = { onDismissRequest ->
                                 BottomSheetMenuItem(
-                                    leadingIcon = MusicMattersIcons.PlayNext,
+                                    leadingIcon = MusicMattersIcons.Shuffle,
                                     label = stringResource( id = i8nR.string.core_i8n_shuffle_play )
                                 ) {
                                     onDismissRequest()
