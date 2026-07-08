@@ -30,24 +30,26 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.ui.FadeTransition
 import kotlin.math.absoluteValue
 
 @OptIn( ExperimentalLayoutApi::class )
 @Composable
 internal fun ArtistsRow(
-    artists: Set<String>,
-    onArtistClicked: ( String ) -> Unit,
+    artistId: Long,
+    artistName: String,
+    onArtistClicked: ( Long ) -> Unit,
 ) {
 
     NowPlayingBottomBarContentText(
-        text = artists.joinToString( ", " ),
+        text = artistName,
         style = LocalTextStyle.current.copy(
             color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.7f ),
             fontWeight = FontWeight.SemiBold
         ),
         textMarquee = true,
-        onClick = { onArtistClicked( artists.first() ) },
+        onClick = { onArtistClicked( artistId ) },
     )
 
 }

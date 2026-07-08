@@ -114,8 +114,7 @@ fun SongCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = song.artists.joinToString().takeIf { it.isNotBlank() }
-                        ?: stringResource( id = i8nR.string.core_i8n_untitled ),
+                    text = song.artist,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
@@ -237,7 +236,7 @@ fun SongOptionsBottomSheetMenu(
         headerImageUri = song.artworkUri?.toUri(),
         headerTitle = song.title,
         titleIsHighlighted = isCurrentlyPlaying,
-        headerDescription = song.artists.joinToString(),
+        headerDescription = song.artist,
         onGetPlaylists = onGetPlaylists,
         onShowSnackBar = onShowSnackBar,
         onShowAddToQueueOption = { !onSongIsPresentInQueue( song ) },
@@ -267,7 +266,7 @@ fun SongOptionsBottomSheetMenu(
             }
         },
         trailingBottomSheetMenuItems = {
-            song.artists.forEach {
+            song.artist.let {
                 BottomSheetMenuItem(
                     leadingIcon = MusicMattersIcons.Artist,
                     label = stringResource( id = R.string.core_i8n_go_to_artist, it )

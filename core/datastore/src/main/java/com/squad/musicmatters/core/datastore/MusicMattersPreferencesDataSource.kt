@@ -70,7 +70,6 @@ class MusicMattersPreferencesDataSource @Inject constructor(
                 null, SortArtistsByProto.ARTISTS_UNSPECIFIED, SortArtistsByProto.UNRECOGNIZED -> DefaultPreferences.SORT_ARTISTS_BY
                 SortArtistsByProto.ARTISTS_CUSTOM -> SortArtistsBy.CUSTOM
                 SortArtistsByProto.ARTISTS_ARTIST_NAME -> SortArtistsBy.ARTIST_NAME
-                SortArtistsByProto.ARTISTS_ALBUM_COUNT -> SortArtistsBy.ALBUM_COUNT
                 SortArtistsByProto.ARTISTS_TRACK_COUNT -> SortArtistsBy.TRACK_COUNT
             },
             sortArtistsReverse = it.sortArtistsReverse,
@@ -292,7 +291,6 @@ class MusicMattersPreferencesDataSource @Inject constructor(
                     SortArtistsBy.CUSTOM -> SortArtistsByProto.ARTISTS_CUSTOM
                     SortArtistsBy.ARTIST_NAME -> SortArtistsByProto.ARTISTS_ARTIST_NAME
                     SortArtistsBy.TRACK_COUNT -> SortArtistsByProto.ARTISTS_TRACK_COUNT
-                    SortArtistsBy.ALBUM_COUNT -> SortArtistsByProto.ARTISTS_ALBUM_COUNT
                 }
             }
         }

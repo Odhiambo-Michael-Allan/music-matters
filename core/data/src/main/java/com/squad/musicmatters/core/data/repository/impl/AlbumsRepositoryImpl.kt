@@ -22,9 +22,13 @@ class AlbumsRepositoryImpl @Inject constructor(
         .map { songs ->
             val songsGroupedByAlbumId = songs.groupBy { it.albumId }
             val albums = songsGroupedByAlbumId.map { ( albumId, songsInAlbum ) ->
-                val albumTitle = songsInAlbum.firstOrNull { !it.albumTitle.isNullOrBlank() }?.albumTitle ?: ""
+                val albumTitle = songsInAlbum.firstOrNull {
+                    !it.albumTitle.isNullOrBlank()
+                }?.albumTitle ?: ""
                 val artworkUri = songsInAlbum.firstOrNull { it.artworkUri != null }?.artworkUri
-                val albumArtist = songsInAlbum.firstOrNull { !it.albumArtist.isNullOrBlank() }?.albumArtist
+                val albumArtist = songsInAlbum.firstOrNull {
+                    !it.albumArtist.isNullOrBlank()
+                }?.albumArtist
                 Album(
                     id = albumId,
                     title = albumTitle,
@@ -54,3 +58,4 @@ class AlbumsRepositoryImpl @Inject constructor(
         }
 
 }
+

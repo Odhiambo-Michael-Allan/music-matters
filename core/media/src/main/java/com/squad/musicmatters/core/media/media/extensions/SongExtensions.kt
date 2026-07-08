@@ -20,7 +20,7 @@ fun Song.toMediaItem(): MediaItem = MediaItem.Builder()
 fun MediaMetadata.Builder.from( song: Song ): MediaMetadata.Builder {
     setTitle( song.title )
     setDisplayTitle( song.title )
-    setArtist( song.artists.joinToString( "," ) )
+    setArtist( song.artist )
     setArtworkUri( song.artworkUri?.toUri() ?: Uri.EMPTY )
     setIsPlayable( true )
     return this

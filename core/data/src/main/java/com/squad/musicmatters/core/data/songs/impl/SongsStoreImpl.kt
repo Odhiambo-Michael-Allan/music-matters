@@ -173,15 +173,6 @@ private fun buildSongUsing( cursor: Cursor ): Song {
     val dateModified = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
     val title = cursor.getStringFrom( AudioColumns.TITLE )
     val albumId = cursor.getLongFrom(AudioColumns.ALBUM_ID )
-    val artists = cursor.getNullableStringFrom( AudioColumns.ARTIST )?.let {
-        parseArtistStringIntoIndividualArtists( it )
-    } ?: setOf( "" )
-    val albumArtist = cursor.getNullableStringFrom( AudioColumns.ALBUM_ARTIST )
-        ?: artists.first()
-
-    Timber.tag( TAG ).d( "SONG TITLE: $title" )
-    Timber.tag( TAG ).d( "ALBUM ID: $albumId" )
-    Timber.tag( TAG ).d( "ALBUM ARTIST: $albumArtist" )
     return Song(
         id = mediaUri,
         mediaUri = mediaUri,
@@ -191,13 +182,14 @@ private fun buildSongUsing( cursor: Cursor ): Song {
         duration = cursor.getLongFrom( AudioColumns.DURATION ),
         albumId = albumId,
         albumTitle = cursor.getNullableStringFrom( AudioColumns.ALBUM ) ?: "",
-        artists = artists,
+        artist = cursor.getNullableStringFrom( AudioColumns.ARTIST ) ?: "",
         composer = cursor.getNullableStringFrom( AudioColumns.COMPOSER ) ?: "",
         dateModified = dateAdded ?: dateModified ?: 0L,
         size = cursor.getNullableLongFrom( AudioColumns.SIZE ) ?: 0,
         path = cursor.getNullableStringFrom( AudioColumns.DATA ) ?: "",
         artworkUri = cursor.getArtworkUri()?.toString(),
-        albumArtist = albumArtist,
+        albumArtist = cursor.getNullableStringFrom( AudioColumns.ALBUM_ARTIST ),
+        artistId = cursor.getLongFrom( AudioColumns.ARTIST_ID )
     )
 }
 
@@ -215,20 +207,6 @@ private fun Cursor.getArtworkUri(): Uri? = MediaStore.Audio.Media.EXTERNAL_CONTE
         appendPath( "albumart" )
         build()
     }
-
-private fun parseArtistStringIntoIndividualArtists( artists: String ): Set<String> {
-    val regex = Regex(
-        // Match delimiters with optional surrounding whitespace
-        """\s*(?:feat\.?|ft\.?|&|and|with|vs\.?|[,;/])\s*""",
-        RegexOption.IGNORE_CASE
-    )
-
-    // 3. Split, trim, and filter in one pass
-    return artists.split( regex )
-        .map { it.trim() }
-        .filter { it.isNotEmpty() }
-        .toSet()
-}
 
 private fun Cursor.getLongFrom( columnName: String ): Long {
     val columnIndex = getColumnIndex( columnName )

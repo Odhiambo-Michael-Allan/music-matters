@@ -8,5 +8,4 @@ enum SortArtistsByProto {
   ARTISTS_CUSTOM = 1;
   ARTISTS_ARTIST_NAME = 2;
   ARTISTS_TRACK_COUNT = 3;
-  ARTISTS_ALBUM_COUNT = 4;
 }

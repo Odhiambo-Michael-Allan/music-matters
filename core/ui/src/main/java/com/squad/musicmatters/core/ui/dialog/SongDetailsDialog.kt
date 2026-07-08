@@ -75,7 +75,7 @@ fun SongDetailsDialog(
 
                     SongDetailsItem(
                         key = stringResource( id = R.string.core_i8n_artist ),
-                        value = song.artists.joinToString(),
+                        value = song.artist,
                     )
 
                     song.albumTitle?.takeIf { it.isNotBlank() }?.let {

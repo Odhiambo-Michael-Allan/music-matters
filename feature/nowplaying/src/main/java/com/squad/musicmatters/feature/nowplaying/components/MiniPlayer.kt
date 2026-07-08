@@ -412,7 +412,7 @@ private fun MiniPlayerContent(
                     onClick = onNowPlayingBottomBarClick,
                 )
                 NowPlayingBottomBarContentText(
-                    text = song.artists.first(),
+                    text = song.artist,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
@@ -591,7 +591,7 @@ private fun MiniPlayerPreview() {
                         title = "Started From the Bottom Now we Here",
                         albumId = 0L,
                         duration = 0L,
-                        artists = setOf( "Drake", "Majid Jordan" ),
+                        artist = "Michael Jackson",
                         size = 0L,
                         dateModified = 0L,
                         path = "",
@@ -600,6 +600,7 @@ private fun MiniPlayerPreview() {
                         albumTitle = null,
                         composer = null,
                         artworkUri = null,
+                        artistId = 0,
                     ),
                     currentlyPlayingSongIsFavorite = true,
                     playerState = PlayerState(

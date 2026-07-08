@@ -90,7 +90,7 @@ fun NowPlayingScreen(
     viewModel: NowPlayingScreenViewModel = hiltViewModel(),
     backgroundColor: Color = Color.Unspecified,
     onViewAlbum: ( String ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onNavigateToQueueScreen: () -> Unit,
     onNavigateToLyricsScreen: () -> Unit,
     onLaunchEqualizerActivity: () -> Unit,
@@ -178,7 +178,7 @@ private fun NowPlayingScreenContent(
     lyricsUiState: LyricsUiState,
     backgroundColor: Color = Color.Unspecified,
     onGetPlaybackPosition: () -> PlaybackPosition,
-    onArtistClicked: ( String ) -> Unit,
+    onArtistClicked: ( Long ) -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
     onPausePlayButtonClick: () -> Unit,
     onPreviousButtonClick: () -> Unit,
@@ -194,7 +194,7 @@ private fun NowPlayingScreenContent(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     onViewAlbum: ( String ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onHideNowPlayingBottomSheet: () -> Unit,
     onShowSnackBar: ( String ) -> Unit,
     onStartSleepTimer: ( Duration ) -> Unit,
@@ -289,7 +289,7 @@ private fun NowPlayingScreenContent(
                             headerImageUri = song.artworkUri?.toUri(),
                             headerTitle = song.title,
                             titleIsHighlighted = true,
-                            headerDescription = song.artists.joinToString(),
+                            headerDescription = song.artist,
                             onGetPlaylists = { uiState.playlists },
                             onDismissRequest = { showOptionsMenu = false },
                             onPlayNext = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
@@ -328,7 +328,7 @@ private fun NowPlayingScreenContent(
                                         onViewAlbum( albumTitle )
                                     }
                                 }
-                                song.artists.forEach { artistName ->
+                                song.artist.let { artistName ->
                                     BottomSheetMenuItem(
                                         leadingIcon = Icons.Default.Person,
                                         label = stringResource(
@@ -338,7 +338,7 @@ private fun NowPlayingScreenContent(
                                     ) {
                                         onDismissRequest()
                                         onHideNowPlayingBottomSheet()
-                                        onViewArtist( artistName )
+                                        onViewArtist( song.artistId )
                                     }
                                 }
                                 BottomSheetMenuItem(
@@ -570,7 +570,7 @@ private fun NowPlayingScreenContentPreview() {
                     title = "Started From the Bottom",
                     albumId = 0L,
                     duration = 0L,
-                    artists = setOf( "Drake", "Disclosure", "London", "Grammar", "The Weekend", "Young thug" ),
+                    artist = "Michael Jackson",
                     size = 0L,
                     dateModified = 0L,
                     path = "",
@@ -579,6 +579,7 @@ private fun NowPlayingScreenContentPreview() {
                     albumTitle = null,
                     composer = null,
                     artworkUri = null,
+                    artistId = 0,
                 ),
                 currentlyPlayingSongIsFavorite = true,
                 playerState = PlayerState(

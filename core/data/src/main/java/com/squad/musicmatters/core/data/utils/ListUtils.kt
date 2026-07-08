@@ -1,8 +1,10 @@
 package com.squad.musicmatters.core.data.utils
 
 import com.squad.musicmatters.core.model.Album
+import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortAlbumsBy
+import com.squad.musicmatters.core.model.SortArtistsBy
 import com.squad.musicmatters.core.model.SortSongsBy
 import kotlin.math.max
 import kotlin.math.min
@@ -26,7 +28,7 @@ fun List<Song>.sortSongs(by: SortSongsBy, reverse: Boolean ): List<Song> {
     val sortedList = when ( by ) {
         SortSongsBy.TITLE -> sortedBy { it.title }
         SortSongsBy.ALBUM -> sortedBy { it.albumTitle }
-        SortSongsBy.ARTIST -> sortedBy { it.artists.joinToString() }
+        SortSongsBy.ARTIST -> sortedBy { it.artist }
         SortSongsBy.COMPOSER -> sortedBy { it.composer }
         SortSongsBy.DURATION -> sortedBy { it.duration }
         SortSongsBy.YEAR -> sortedBy { it.year }
@@ -45,6 +47,14 @@ fun List<Album>.sortAlbums(by: SortAlbumsBy, reverse: Boolean ): List<Album> {
         SortAlbumsBy.TRACK_COUNT -> sortedBy { it.trackCount }
         SortAlbumsBy.CUSTOM -> shuffled()
     }
-    println( sortedList )
+    return if ( reverse ) sortedList.reversed() else sortedList
+}
+
+fun List<Artist>.sortArtists( by: SortArtistsBy, reverse: Boolean ): List<Artist> {
+    val sortedList = when ( by ) {
+        SortArtistsBy.ARTIST_NAME -> sortedBy { it.name }
+        SortArtistsBy.TRACK_COUNT -> sortedBy { it.trackCount }
+        SortArtistsBy.CUSTOM -> shuffled()
+    }
     return if ( reverse ) sortedList.reversed() else sortedList
 }

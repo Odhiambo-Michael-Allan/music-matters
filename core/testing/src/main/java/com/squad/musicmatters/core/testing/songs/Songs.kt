@@ -11,14 +11,15 @@ fun testSong(
     artworkUri: String? = null,
     albumId: Long? = null,
     albumTitle: String? = null,
-    artists: Set<String> = emptySet(),
+    artistId: Long = 0,
+    artistTitle: String = "",
 ) = Song(
     id = id,
     mediaUri = "Uri.EMPTY",
     title = "",
     albumId = albumId ?: 0L,
     duration = 0L,
-    artists = artists,
+    artist = artistTitle,
     size = 0L,
     dateModified = 0L,
     path = "",
@@ -27,6 +28,7 @@ fun testSong(
     albumTitle = albumTitle,
     composer = null,
     artworkUri = artworkUri,
+    artistId = artistId,
 )
 
 fun testLyric(
@@ -43,7 +45,7 @@ val testSongsForSorting = listOf(
         mediaUri = "Uri.EMPTY",
         title = "song-1",
         albumTitle = "D",
-        artists = setOf( "A", "Michael Jackson" ),
+        artist = "A - Michael Jackson",
         artworkUri = null,
         composer = "A,B",
         dateModified = 354L,
@@ -52,14 +54,15 @@ val testSongsForSorting = listOf(
         trackNumber = 324,
         year = 2022,
         size = 1L,
-        path = "/path/to/song/7"
+        path = "/path/to/song/7",
+        artistId = 0,
     ),
     Song(
         id = "id2",
         mediaUri = "Uri.EMPTY",
         title = "song-2",
         albumTitle = "C",
-        artists = setOf( "B", "Michael Jackson" ),
+        artist = "B - Michael Jackson",
         artworkUri = null,
         composer = "B,C",
         dateModified = 754L,
@@ -68,14 +71,15 @@ val testSongsForSorting = listOf(
         trackNumber = 235,
         year = 2002,
         size = 2L,
-        path = "/path/to/song/8"
+        path = "/path/to/song/8",
+        artistId = 0,
     ),
     Song(
         id = "id3",
         mediaUri = "Uri.EMPTY",
         title = "song-3",
         albumTitle = "B",
-        artists = setOf( "C", "Michael Jackson" ),
+        artist = "C - Michael Jackson",
         artworkUri = null,
         composer = "C,D",
         dateModified = 7976L,
@@ -84,14 +88,15 @@ val testSongsForSorting = listOf(
         trackNumber = 443,
         year = 2007,
         size = 3L,
-        path = "/path/to/song/6"
+        path = "/path/to/song/6",
+        artistId = 0,
     ),
     Song(
         id = "id4",
         mediaUri = "Uri.EMPTY",
         title = "song-4",
         albumTitle = "A",
-        artists = setOf( "D", "Michael Jackson" ),
+        artist = "D - Michael Jackson",
         artworkUri = null,
         composer = "D,E",
         dateModified = 200L,
@@ -100,14 +105,15 @@ val testSongsForSorting = listOf(
         trackNumber = 234,
         year = 2004,
         size = 4L,
-        path = "/path/to/song/1"
+        path = "/path/to/song/1",
+        artistId = 0,
     ),
     Song(
         id = "id5",
         mediaUri = "Uri.EMPTY",
         title = "song-5",
         albumTitle = "<unknown>",
-        artists = setOf( "E", "Michael Jackson" ),
+        artist = "E - Michael Jackson",
         artworkUri = null,
         composer = null,
         dateModified = 34245L,
@@ -116,7 +122,8 @@ val testSongsForSorting = listOf(
         trackNumber =134,
         year = 1990,
         size = 5L,
-        path = "/path/to/song/5"
+        path = "/path/to/song/5",
+        artistId = 0,
     ),
 )
 

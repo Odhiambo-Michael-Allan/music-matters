@@ -24,15 +24,16 @@ class TestPlayHistoryRepository : PlayHistoryRepository {
                 title = "",
                 albumId = 0L,
                 duration = 0L,
-                artists = emptySet(),
+                artist = "",
                 size = 0L,
-                dateModified = 0L,
+                dateModified = 0,
                 path = "",
                 trackNumber = null,
                 year = null,
                 albumTitle = null,
                 composer = null,
                 artworkUri = null,
+                artistId = 0,
             )
         )
         songsFlow.tryEmit( currentSongs )

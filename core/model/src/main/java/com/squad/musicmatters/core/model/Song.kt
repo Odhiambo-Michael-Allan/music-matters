@@ -6,7 +6,7 @@ data class Song(
     val mediaUri: String,
     val title: String,
     val duration: Long,
-    val artists: Set<String>,
+    val artist: String,
     val size: Long,
     val dateModified: Long,
     val path: String,
@@ -14,6 +14,7 @@ data class Song(
     val year: Int?,
     val albumTitle: String?,
     val albumId: Long,
+    val artistId: Long,
     val composer: String?,
     val artworkUri: String?,
     val albumArtist: String? = null,
@@ -33,9 +34,10 @@ data class Song(
             albumTitle = null,
             artworkUri = null,
             mediaUri = "",
-            artists = emptySet(),
+            artist = "",
             composer = "",
-            albumId = 0L
+            albumId = 0,
+            artistId = 0,
         )
     }
 }

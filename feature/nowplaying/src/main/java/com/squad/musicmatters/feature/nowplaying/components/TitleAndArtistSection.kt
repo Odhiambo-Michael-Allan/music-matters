@@ -24,7 +24,7 @@ import com.squad.musicmatters.core.ui.FadeTransition
 internal fun TitleAndArtistSection(
     currentlyPlayingSong: Song,
     currentlyPlayingSongIsFavorite: Boolean,
-    onArtistClicked: ( String ) -> Unit,
+    onArtistClicked: ( Long ) -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
     onShowOptionsMenu: () -> Unit,
 ) {
@@ -51,7 +51,8 @@ internal fun TitleAndArtistSection(
                 )
 
                 ArtistsRow(
-                    artists = target.artists,
+                    artistId = currentlyPlayingSong.artistId,
+                    artistName = target.artist,
                     onArtistClicked = onArtistClicked
                 )
             }
