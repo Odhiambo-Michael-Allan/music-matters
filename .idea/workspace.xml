@@ -29,11 +29,6 @@
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/QueueScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/QueueScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/components/QueueList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/components/QueueList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/navigation/QueueScreenNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/navigation/QueueScreenNavigation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/navigation/SongsScreenNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/navigation/SongsScreenNavigation.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
