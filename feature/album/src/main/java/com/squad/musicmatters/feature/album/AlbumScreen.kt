@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
@@ -180,7 +181,8 @@ private fun AlbumScreenContent(
                                 Spacer( modifier = Modifier.height( 32.dp ) )
                                 Text(
                                     text = uiState.album.title,
-                                    style = MaterialTheme.typography.titleLarge
+                                    style = MaterialTheme.typography.titleLarge,
+                                    textAlign = TextAlign.Center
                                 )
                                 uiState.album.artist?.takeIf { it.isNotBlank() }?.let {
                                     Spacer( modifier = Modifier.height( 8.dp ) )
@@ -192,6 +194,7 @@ private fun AlbumScreenContent(
                                                 .onSurface
                                                 .copy( alpha = 0.5f )
                                         ),
+                                        textAlign = TextAlign.Center
                                     )
                                 }
                                 Spacer( modifier = Modifier.height( 32.dp ) )
