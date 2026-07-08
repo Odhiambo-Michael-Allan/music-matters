@@ -3,7 +3,7 @@ package com.squad.musicmatters.core.database
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.squad.musicmatters.core.database.dao.SongAdditionalMetadataDao
-import com.squad.musicmatters.core.database.model.SongAdditionalMetadataEntity
+import com.squad.musicmatters.core.database.model.SongMetadataEntity
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertNull
@@ -34,7 +34,7 @@ class SongMetadataDaoTest {
     @Test
     fun testInsert() = runTest {
         val songsAdditionalMetadataList = listOf( "song-id-1", "song-id-2" ).map {
-            SongAdditionalMetadataEntity(
+            SongMetadataEntity(
                 songId = it,
                 codec = "",
                 genre = "",
@@ -49,7 +49,7 @@ class SongMetadataDaoTest {
     @Test
     fun testUpdate() = runTest {
         val songsAdditionalMetadataList = listOf( "song-id-1", "song-id-2" ).map {
-            SongAdditionalMetadataEntity(
+            SongMetadataEntity(
                 songId = it,
                 codec = "",
                 genre = "",
@@ -57,7 +57,7 @@ class SongMetadataDaoTest {
         }
         dao.insertAll( songsAdditionalMetadataList )
         dao.insert(
-            SongAdditionalMetadataEntity(
+            SongMetadataEntity(
                 songId = "song-id-1",
                 codec = "mp3",
                 bitrate = 44000L,
@@ -77,7 +77,7 @@ class SongMetadataDaoTest {
         assertTrue( dao.fetchEntries().first().isEmpty() )
         dao.insertAll(
             listOf( songId1, songId2 ).map {
-                SongAdditionalMetadataEntity(
+                SongMetadataEntity(
                     songId = it,
                     codec = "",
                     genre = "",
@@ -93,7 +93,7 @@ class SongMetadataDaoTest {
         val songId2 = "song-id-2"
         listOf( songId1, songId2 ).forEach {
             dao.insert(
-                SongAdditionalMetadataEntity(
+                SongMetadataEntity(
                     songId = it,
                     codec = "",
                     genre = ""

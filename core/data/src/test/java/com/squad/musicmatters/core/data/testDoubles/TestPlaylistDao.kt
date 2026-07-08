@@ -36,6 +36,10 @@ class TestPlaylistDao : PlaylistDao() {
     override suspend fun playlistExists( playlistId: String ): Boolean =
         entitiesStateFlow.first().find { it.id == playlistId }?.let { true } ?: false
 
+    override suspend fun upsert( entity: PlaylistEntity ) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insert( entity: PlaylistEntity ) {
         entitiesStateFlow.update {
             it + entity

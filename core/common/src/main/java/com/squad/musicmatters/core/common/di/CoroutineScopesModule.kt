@@ -17,12 +17,12 @@ import javax.inject.Singleton
 internal object CoroutineScopesModule {
     @Provides
     @Singleton
-    @ApplicationScope
+    @IoScope
     fun providesCoroutineScope(
-        @Dispatcher( MusicMattersDispatchers.Default ) dispatcher: CoroutineDispatcher
+        @Dispatcher( MusicMattersDispatchers.IO ) dispatcher: CoroutineDispatcher
     ): CoroutineScope = CoroutineScope( SupervisorJob() + dispatcher )
 }
 
 @Retention( AnnotationRetention.RUNTIME )
 @Qualifier
-annotation class ApplicationScope
+annotation class IoScope

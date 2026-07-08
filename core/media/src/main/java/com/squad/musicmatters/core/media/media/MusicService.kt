@@ -29,7 +29,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.common.Dispatcher
 import com.squad.musicmatters.core.common.MusicMattersDispatchers
-import com.squad.musicmatters.core.common.di.ApplicationScope
+import com.squad.musicmatters.core.common.di.IoScope
 import com.squad.musicmatters.core.data.repository.MostPlayedSongsRepository
 import com.squad.musicmatters.core.data.repository.PlayHistoryRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
@@ -66,7 +66,7 @@ import javax.inject.Inject
 class MusicService : MediaLibraryService() {
 
     @Inject
-    @ApplicationScope
+    @IoScope
     lateinit var serviceScope: CoroutineScope
 
     @Inject

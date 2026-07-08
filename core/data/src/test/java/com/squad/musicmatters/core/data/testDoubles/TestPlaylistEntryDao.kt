@@ -29,6 +29,10 @@ class TestPlaylistEntryDao : PlaylistEntryDao() {
         entitiesStateFlow.tryEmit( currentEntities )
     }
 
+    override suspend fun upsert( entity: PlaylistEntryEntity ) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insert( entity: PlaylistEntryEntity ) {
         entitiesStateFlow.update {
             it + entity

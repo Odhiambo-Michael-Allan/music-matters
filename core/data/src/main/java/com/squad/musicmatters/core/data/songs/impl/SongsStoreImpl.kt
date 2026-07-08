@@ -15,6 +15,7 @@ import androidx.annotation.WorkerThread
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
+import com.squad.musicmatters.core.common.di.IoScope
 import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
 import com.squad.musicmatters.core.data.songs.SongsStore
 import com.squad.musicmatters.core.data.songs.SongsStoreListener
@@ -36,7 +37,7 @@ import javax.inject.Inject
 class SongsStoreImpl @Inject constructor(
     private val context: Context,
     private val ioDispatcher: CoroutineDispatcher,
-    applicationScope: CoroutineScope,
+    @param:IoScope private val ioScope: CoroutineScope,
 ) : SongsStore {
 
     private val collectionUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -65,7 +66,7 @@ class SongsStoreImpl @Inject constructor(
         )
         mediaObserverIsRegistered = true
 
-        applicationScope.launch {
+        ioScope.launch {
             MediaPermissionsManager.hasAllRequiredPermissions.collect { granted ->
                 if ( granted ) { listeners.forEach { it.onMediaStoreChanged() } }
             }
@@ -80,7 +81,7 @@ class SongsStoreImpl @Inject constructor(
         withContext( ioDispatcher )  {
             val songList = mutableListOf<Song>()
             try {
-                Log.d( TAG, "FETCHING SONGS.." )
+                Timber.tag( TAG ).d( "FETCHING SONGS.." )
                 context.contentResolver.query(
                     collectionUri,
                     projection,
@@ -100,7 +101,7 @@ class SongsStoreImpl @Inject constructor(
                         reverse = sortSongsInReverse ?: false
                     )
             } catch ( exception: Exception ) {
-                exception.message?.let { Log.e( TAG, it ) }
+                exception.message?.let { Timber.tag( TAG ).e( it ) }
                 return@withContext emptyList()
             }
         }
@@ -111,17 +112,17 @@ class SongsStoreImpl @Inject constructor(
             val lyricFile = File( path )
 
             if ( !lyricFile.exists() ) {
-                Log.e( TAG, "Lyrics file does not exist at: $path" )
+                Timber.tag( TAG ).e( "Lyrics file does not exist at: $path" )
                 return@withContext emptyList()
             }
             val content = lyricFile.bufferedReader( Charsets.UTF_8 ).use { it.readText() }
 
             Lyrics.from( content )
         } catch ( e: Exception ) {
-            Log.e(
-                TAG,
-                "Error occurred while fetching lyrics for: ${song?.title} ${e.message}"
-            )
+            Timber.tag( TAG )
+                .e("Error occurred while fetching lyrics for: " +
+                        "${song?.title} ${e.message}"
+                )
             emptyList()
         }
     }

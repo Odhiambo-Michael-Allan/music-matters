@@ -27,8 +27,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/songs/MetadataStore.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/songs/impl/MetadataStoreImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/common/src/main/java/com/squad/musicmatters/core/common/di/CoroutineScopesModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/common/src/main/java/com/squad/musicmatters/core/common/di/CoroutineScopesModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/di/SongsStoreModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/di/SongsStoreModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsMetadataRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsMetadataRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/songs/impl/SongsStoreImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/songs/impl/SongsStoreImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImplTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/TestPlaylistDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/TestPlaylistDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/TestPlaylistEntryDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/TestPlaylistEntryDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/database/src/androidTest/java/com/squad/musicmatters/core/database/SongMetadataDaoTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/androidTest/java/com/squad/musicmatters/core/database/SongMetadataDaoTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/MusicMattersDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/MusicMattersDatabase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/BaseDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/BaseDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/SongAdditionalMetadataDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/SongAdditionalMetadataDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/model/SongAdditionalMetadataEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/model/SongMetadataEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/datastore/src/main/java/com/squad/musicmatters/core/datastore/di/DataStoreModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/datastore/src/main/java/com/squad/musicmatters/core/datastore/di/DataStoreModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MusicService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MusicService.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,11 +88,11 @@
         <option value="Kotlin Annotation" />
         <option value="Kotlin Enum" />
         <option value="Kotlin Object" />
-        <option value="Kotlin Interface" />
         <option value="valueResourceFile" />
         <option value="Kotlin Data Class" />
         <option value="resourceFile" />
         <option value="Kotlin JUnit4 Test Class" />
+        <option value="Kotlin Interface" />
         <option value="Kotlin Class" />
       </list>
     </option>

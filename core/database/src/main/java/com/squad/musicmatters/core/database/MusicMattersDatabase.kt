@@ -1,9 +1,6 @@
 package com.squad.musicmatters.core.database
 
-import android.content.Context
-import androidx.room.AutoMigration
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.squad.musicmatters.core.database.dao.PlayHistoryDao
@@ -16,7 +13,7 @@ import com.squad.musicmatters.core.database.model.PlayHistoryEntity
 import com.squad.musicmatters.core.database.model.PlaylistEntity
 import com.squad.musicmatters.core.database.model.PlaylistEntryEntity
 import com.squad.musicmatters.core.database.model.QueueEntity
-import com.squad.musicmatters.core.database.model.SongAdditionalMetadataEntity
+import com.squad.musicmatters.core.database.model.SongMetadataEntity
 import com.squad.musicmatters.core.database.model.SongPlayCountEntity
 import com.squad.musicmatters.core.database.typeconverter.InstantConverter
 
@@ -25,7 +22,7 @@ import com.squad.musicmatters.core.database.typeconverter.InstantConverter
         PlaylistEntity::class,
         PlaylistEntryEntity::class,
         SongPlayCountEntity::class,
-        SongAdditionalMetadataEntity::class,
+        SongMetadataEntity::class,
         QueueEntity::class,
         PlayHistoryEntity::class,
     ],

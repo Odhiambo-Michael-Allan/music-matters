@@ -6,7 +6,7 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.squad.musicmatters.core.common.Dispatcher
 import com.squad.musicmatters.core.common.MusicMattersDispatchers
-import com.squad.musicmatters.core.common.di.ApplicationScope
+import com.squad.musicmatters.core.common.di.IoScope
 import com.squad.musicmatters.core.datastore.MusicMattersPreferencesDataSource
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.datastore.UserPreferences
@@ -29,7 +29,7 @@ internal object DataStoreModule {
     internal fun providesUserPreferencesDataStore(
         @ApplicationContext context: Context,
         @Dispatcher( MusicMattersDispatchers.IO ) ioDispatcher: CoroutineDispatcher,
-        @ApplicationScope scope: CoroutineScope,
+        @IoScope scope: CoroutineScope,
         userPreferencesSerializer: UserPreferencesSerializer
     ): DataStore<UserPreferences> =
         DataStoreFactory.create(

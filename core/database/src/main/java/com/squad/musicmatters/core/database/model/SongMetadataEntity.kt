@@ -8,7 +8,7 @@ import com.squad.musicmatters.core.model.SongMetadata
 @Entity(
     tableName = "songs_additional_metadata",
 )
-data class SongAdditionalMetadataEntity(
+data class SongMetadataEntity(
     @PrimaryKey @ColumnInfo( name = "id" ) val songId: String,
     @ColumnInfo( name = "codec" ) val codec: String,
     @ColumnInfo( name = "bits_per_sample" ) val bitsPerSample: Long = 0L,
@@ -17,7 +17,7 @@ data class SongAdditionalMetadataEntity(
     @ColumnInfo( name = "genre" ) val genre: String
 )
 
-fun SongAdditionalMetadataEntity.asExternalModel(): SongMetadata =
+fun SongMetadataEntity.asExternalModel(): SongMetadata =
     SongMetadata(
         songId = songId,
         codec = codec,

@@ -2,7 +2,7 @@ package com.squad.musicmatters.core.data.repository.impl
 
 import com.squad.musicmatters.core.common.Dispatcher
 import com.squad.musicmatters.core.common.MusicMattersDispatchers
-import com.squad.musicmatters.core.common.di.ApplicationScope
+import com.squad.musicmatters.core.common.di.IoScope
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.songs.SongsStore
 import com.squad.musicmatters.core.data.songs.SongsStoreListener
@@ -28,8 +28,9 @@ import javax.inject.Inject
 
 class SongsRepositoryImpl @Inject constructor(
     private val songsStore: SongsStore,
-    @ApplicationScope applicationScope: CoroutineScope,
-    @param:Dispatcher(MusicMattersDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    @IoScope ioScope: CoroutineScope,
+    @param:Dispatcher( MusicMattersDispatchers.IO )
+    private val ioDispatcher: CoroutineDispatcher,
 ) : SongsRepository {
 
     /**
@@ -66,7 +67,7 @@ class SongsRepositoryImpl @Inject constructor(
 
         awaitClose { songsStore.unregisterListener(storeListener) }
     }.shareIn(
-        scope = applicationScope,
+        scope = ioScope,
         started = SharingStarted.WhileSubscribed(5_000),
         replay = 1
     )
