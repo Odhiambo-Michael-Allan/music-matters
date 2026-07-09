@@ -27,22 +27,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/feature/genre/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/genre/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/genre/consumer-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/genre/proguard-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/genre/src/main/AndroidManifest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/genre/src/main/java/com/squad/musicmatters/feature/genre/GenreScreen.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/genre/src/main/java/com/squad/musicmatters/feature/genre/GenreScreenViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/genre/src/main/java/com/squad/musicmatters/feature/genre/navigation/GenreScreenNavigation.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/genre/src/test/java/com/squad/musicmatters/feature/genre/ExampleUnitTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/genre/src/test/java/com/squad/musicmatters/feature/genre/GenreScreenViewModelTest.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/LibraryDestinationContainer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/LibraryDestinationContainer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/genre/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/genre/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/genre/src/main/java/com/squad/musicmatters/feature/genre/GenreScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/genre/src/main/java/com/squad/musicmatters/feature/genre/GenreScreenViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,8 +78,8 @@
         <option value="Kotlin Data Class" />
         <option value="resourceFile" />
         <option value="Kotlin Interface" />
-        <option value="Kotlin JUnit4 Test Class" />
         <option value="Kotlin Class" />
+        <option value="Kotlin JUnit4 Test Class" />
       </list>
     </option>
   </component>
@@ -134,6 +124,7 @@
     "Gradle.ArtistsRepositoryImplTest.executor": "Run",
     "Gradle.ArtistsScreenViewModelTest.executor": "Run",
     "Gradle.CompositeRepositoryImplTest.executor": "Run",
+    "Gradle.GenreScreenViewModelTest.executor": "Run",
     "Gradle.GenresScreenViewModelTest.executor": "Run",
     "Gradle.LyricsScreenViewModelTest.executor": "Run",
     "Gradle.MostPlayedSongsRepositoryImplTest.executor": "Run",
@@ -243,11 +234,11 @@
       <recent name="$PROJECT_DIR$/mobile/src/main/res/font/dmsans" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.squad.musicmatters.feature.genre" />
       <recent name="com.squad.musicmatters.feature.genres" />
       <recent name="com.squad.musicmatters.core.data.repository.impl" />
       <recent name="com.squad.musicmatters.feature.artist" />
       <recent name="com.squad.musicmatters.feature.artists" />
-      <recent name="com.squad.musicmatters.feature.album" />
     </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
       <recent name="com.squad.musicmatters.feature.queue" />
@@ -262,7 +253,7 @@
       <recent name="com.squad.musicmatters.feature.nowplaying" />
     </key>
   </component>
-  <component name="RunManager" selected="Android App.mobile">
+  <component name="RunManager" selected="Gradle.GenreScreenViewModelTest">
     <configuration name="mobile" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="MusicMatters.mobile" />
       <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
@@ -362,6 +353,33 @@
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
+    <configuration name="GenreScreenViewModelTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":feature:genre:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.squad.musicmatters.feature.genre.GenreScreenViewModelTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
+      <method v="2" />
+    </configuration>
     <configuration name="GenresScreenViewModelTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -443,40 +461,13 @@
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
-    <configuration name="SongsRepositoryImplTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":core:data:testDebugUnitTest" />
-            <option value="--tests" />
-            <option value="&quot;com.squad.musicmatters.core.data.repository.impl.SongsRepositoryImplTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <GradleProfilingDisabled>false</GradleProfilingDisabled>
-      <GradleCoverageDisabled>false</GradleCoverageDisabled>
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.GenreScreenViewModelTest" />
         <item itemvalue="Gradle.GenresScreenViewModelTest" />
         <item itemvalue="Gradle.SongsMetadataRepositoryImplTest" />
         <item itemvalue="Gradle.CompositeRepositoryImplTest" />
         <item itemvalue="Gradle.SongsMetadataRepositoryImplTest.testFetchMetadata" />
-        <item itemvalue="Gradle.SongsRepositoryImplTest" />
       </list>
     </recent_temporary>
   </component>

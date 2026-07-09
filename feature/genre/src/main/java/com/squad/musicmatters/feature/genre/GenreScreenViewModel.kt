@@ -68,7 +68,7 @@ class GenreScreenViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed( 5_000 ),
         initialValue = GenreScreenUiState.Loading
     )
-    
+
 }
 
 sealed interface GenreScreenUiState {
