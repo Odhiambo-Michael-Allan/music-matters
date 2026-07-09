@@ -5,7 +5,6 @@ import com.squad.musicmatters.core.database.dao.PlayHistoryDao
 import com.squad.musicmatters.core.database.dao.PlaylistDao
 import com.squad.musicmatters.core.database.dao.PlaylistEntryDao
 import com.squad.musicmatters.core.database.dao.QueueDao
-import com.squad.musicmatters.core.database.dao.SongAdditionalMetadataDao
 import com.squad.musicmatters.core.database.dao.SongPlayCountEntryDao
 import dagger.Module
 import dagger.Provides
@@ -34,11 +33,6 @@ internal object DaosModule {
     fun providesQueueDao(
         database: MusicMattersDatabase
     ): QueueDao = database.queueDao()
-
-    @Provides
-    fun providesSongAdditionalMetadataDao(
-        database: MusicMattersDatabase
-    ): SongAdditionalMetadataDao = database.songAdditionalMetadataDao()
 
     @Provides
     fun providesSongPlayCountEntryDao(

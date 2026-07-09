@@ -4,7 +4,6 @@ import com.squad.musicmatters.core.common.di.IoScope
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.songs.MetadataStore
-import com.squad.musicmatters.core.database.model.SongMetadataEntity
 import com.squad.musicmatters.core.model.SongMetadata
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -55,14 +54,7 @@ class SongsMetadataRepositoryImpl @Inject constructor(
         metadataCache.remove( id )
     }
 }
-private fun SongMetadata.asEntity() = SongMetadataEntity(
-    songId = songId,
-    codec = codec,
-    bitsPerSample = bitsPerSample,
-    bitrate = bitrate,
-    samplingRate = (samplingRate.toDouble() * 1000).toLong(),
-    genre = genre,
-)
+
 
 
 
