@@ -18,8 +18,10 @@ import com.squad.musicmatters.feature.albums.navigation.albumsScreen
 import com.squad.musicmatters.feature.artist.navigation.artistScreen
 import com.squad.musicmatters.feature.artist.navigation.navigateToArtist
 import com.squad.musicmatters.feature.artists.navigation.artistsScreen
+import com.squad.musicmatters.feature.genres.navigation.genresScreen
 import com.squad.musicmatters.feature.lyrics.navigation.lyricsScreen
 import com.squad.musicmatters.feature.queue.navigation.queueScreen
+import com.squad.musicmatters.feature.settings.navigation.navigateToSettings
 import com.squad.musicmatters.feature.settings.navigation.settingsScreen
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import com.squad.musicmatters.feature.songs.navigation.songsScreen
@@ -32,8 +34,9 @@ import com.squad.musicmatters.core.i8n.R as i8nR
 internal fun MusicMattersNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    onDeleteSong: ( Song ) -> Unit,
     snackBarHostState: SnackbarHostState,
+    onDeleteSong: ( Song ) -> Unit,
+    onNavigateToSettings: () -> Unit,
 ) {
 
     val context = LocalContext.current
@@ -44,27 +47,6 @@ internal fun MusicMattersNavHost(
         navController = navController,
         startDestination = SongsRoute,
     ) {
-//                composable(
-//                    Route.ForYou.name,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) {
-//                    val forYouScreenViewModel: ForYouScreenViewModel = viewModel(
-//                        factory = ForYouViewModelFactory(
-//                            musicServiceConnection = musicServiceConnection,
-//                            playlistRepository = playlistRepository,
-//                            settingsRepository = settingsRepository,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-//                        )
-//                    )
-//                    ForYouScreen(
-//                        viewModel = forYouScreenViewModel,
-//                        onSettingsClicked = { navController.navigate( Route.Settings.name ) },
-//                        onNavigateToSearch = { navController.navigateToSearchScreen( "--" ) },
-//                        onSuggestedAlbumClick = navController::navigateToAlbumScreen,
-//                        onViewArtist = navController::navigateToArtistScreen,
-//                    )
-//                }
 
         songsScreen(
             onShareSong = {
@@ -120,6 +102,7 @@ internal fun MusicMattersNavHost(
             },
             onViewArtist = {},
             onNavigateBack = { navController.navigateUp() },
+            onNavigateToSettings = onNavigateToSettings,
             onShowSnackBar = {
                 snackBarHostState.showSnackBar(
                     coroutineScope,
@@ -142,6 +125,7 @@ internal fun MusicMattersNavHost(
         )
         artistsScreen(
             onNavigateBack = { navController.navigateUp() },
+            onNavigateToSettings = onNavigateToSettings,
             onViewArtist = {
                 navController.navigateToArtist(
                     artistId = it,
@@ -168,280 +152,12 @@ internal fun MusicMattersNavHost(
                 )
             }
         )
+        genresScreen(
+            onViewGenre = {},
+            onNavigateBack = { navController.navigateUp() },
+            onNavigateToSettings = onNavigateToSettings,
+        )
 
-//                composable(
-//                    route = Route.Artists.name,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) {
-//                    val artistsScreenViewModel: ArtistsScreenViewModel = viewModel(
-//                        factory = ArtistsViewModelFactory(
-//                            musicServiceConnection = musicServiceConnection,
-//                            settingsRepository = settingsRepository,
-//                            playlistRepository = playlistRepository,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-//                        )
-//                    )
-//                    ArtistsScreen(
-//                        viewModel = artistsScreenViewModel,
-//                        onArtistClick = navController::navigateToArtistScreen,
-//                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.ARTIST.name ) },
-//                        onSettingsClicked = { navController.navigate( Route.Settings.name ) }
-//                    )
-//                }
-//                composable(
-//                    route = Artist.route.name,
-//                    arguments = Artist.arguments,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) { navBackStackEntry ->
-//                    // Retrieve the passed argument
-//                    val artistName = navBackStackEntry.getRouteArgument(
-//                        RouteParameters.ARTIST_ROUTE_ARTIST_NAME
-//                    ) ?: ""
-//                    val artistScreenViewModel: ArtistScreenViewModel = viewModel(
-//                        factory = ArtistScreenViewModelFactory(
-//                            artistName = artistName,
-//                            musicServiceConnection = musicServiceConnection,
-//                            settingsRepository = settingsRepository,
-//                            playlistRepository = playlistRepository,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-//                        )
-//                    )
-//                    ArtistScreen(
-//                        artistName = artistName,
-//                        viewModel = artistScreenViewModel,
-//                        onViewAlbum = navController::navigateToAlbumScreen,
-//                        onViewArtist = navController::navigateToArtistScreen,
-//                        onNavigateBack = { navController.navigateUp() },
-//                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-//                        onDeleteSong = {
-//                            mainActivity.deleteSong( it )
-//                        }
-//                    )
-//                }
-//                composable(
-//                    route = Route.Genres.name,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) {
-//                    val genresScreenViewModel: GenresScreenViewModel = viewModel(
-//                        factory = GenresScreenViewModelFactory(
-//                            musicServiceConnection = musicServiceConnection,
-//                            settingsRepository = settingsRepository,
-//                        )
-//                    )
-//                    GenresScreen(
-//                        viewModel = genresScreenViewModel,
-//                        onGenreClick = navController::navigateToGenreScreen,
-//                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.GENRE.name ) },
-//                        onSettingsClicked = { navController.navigate( Route.Settings.name ) }
-//                    )
-//                }
-//                composable(
-//                    route = Genre.routeWithArgs,
-//                    arguments = Genre.arguments,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) { navBackStackEntry ->
-//                    // Retrieve the passed argument
-//                    val genreName = navBackStackEntry.getRouteArgument(
-//                        RouteParameters.GENRE_ROUTE_GENRE_NAME ) ?: ""
-//
-//                    val genreScreenViewModel: GenreScreenViewModel = viewModel(
-//                        factory = GenreScreenViewModelFactory(
-//                            genreName = genreName,
-//                            musicServiceConnection = musicServiceConnection,
-//                            settingsRepository = settingsRepository,
-//                            playlistRepository = playlistRepository,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-//                        )
-//                    )
-//                    GenreScreen(
-//                        genreName = genreName,
-//                        viewModel = genreScreenViewModel,
-//                        onViewAlbum = navController::navigateToAlbumScreen,
-//                        onViewArtist = navController::navigateToArtistScreen,
-//                        onNavigateBack = { navController.navigateUp() },
-//                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-//                        onDeleteSong = {
-//                            mainActivity.deleteSong( it )
-//                        }
-//                    )
-//                }
-//                composable(
-//                    route = Route.Playlists.name,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) {
-//                    val playlistsViewModel: PlaylistsViewModel = viewModel(
-//                        factory = PlaylistsViewModelFactory(
-//                            musicServiceConnection = musicServiceConnection,
-//                            settingsRepository = settingsRepository,
-//                            playlistRepository = playlistRepository,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
-//                        )
-//                    )
-//                    PlaylistsScreen(
-//                        viewModel = playlistsViewModel,
-//                        onPlaylistClick = { playlistId, playlistName -> navController.navigateToPlaylistScreen( playlistId, playlistName ) },
-//                        onNavigateToSearch = { navController.navigateToSearchScreen( SearchFilter.PLAYLIST.name ) },
-//                        onSettingsClicked = { navController.navigate( Route.Settings.name ) }
-//                    )
-//                }
-//                composable(
-//                    route = Playlist.routeWithArgs,
-//                    arguments = Playlist.arguments,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) { navBackStackEntry ->
-//                    val playlistId = navBackStackEntry.getRouteArgument(
-//                        RouteParameters.PLAYLIST_ROUTE_PLAYLIST_ID
-//                    ) ?: ""
-//                    val playlistName = navBackStackEntry.getRouteArgument(
-//                        RouteParameters.PLAYLIST_ROUTE_PLAYLIST_NAME
-//                    ) ?: ""
-//                    val playlistScreenViewModel: PlaylistScreenViewModel = viewModel(
-//                        factory = PlaylistScreenViewModelFactory(
-//                            playlistId = playlistId,
-//                            musicServiceConnection = musicServiceConnection,
-//                            settingsRepository = settingsRepository,
-//                            playlistsRepository = playlistRepository,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
-//                        )
-//                    )
-//
-//                    PlaylistScreen(
-//                        playlistTitle = playlistName,
-//                        viewModel = playlistScreenViewModel,
-//                        onViewAlbum = navController::navigateToAlbumScreen,
-//                        onViewArtist = navController::navigateToArtistScreen,
-//                        onNavigateBack = { navController.navigateUp() },
-//                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-//                        onDeleteSong = {
-//                            mainActivity.deleteSong( it )
-//                        }
-//                    )
-//                }
-//                composable(
-//                    route = Route.Tree.name,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) {
-//                    val treeScreenViewModel: TreeScreenViewModel = viewModel(
-//                        factory = TreeViewModelFactory(
-//                            musicServiceConnection = musicServiceConnection,
-//                            settingsRepository = settingsRepository,
-//                            playlistRepository = playlistRepository,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository,
-//                        )
-//                    )
-//                    TreeScreen(
-//                        viewModel = treeScreenViewModel,
-//                        onViewArtist = navController::navigateToArtistScreen,
-//                        onViewAlbum = navController::navigateToAlbumScreen,
-//                        onShareSong = { uri, errorMessage -> shareSong( context, uri, errorMessage ) },
-//                        onNavigateToSearch = { navController.navigateToSearchScreen( "--" ) },
-//                        onSettingsClicked = { navController.navigate( Route.Settings.name ) },
-//                        onDeleteSong = {
-//                            mainActivity.deleteSong( it )
-//                        }
-//                    )
-//                }
-//                composable(
-//                    route = Search.routeWithArgs,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) { navBackStackEntry ->
-//                    val searchFilterName = navBackStackEntry.getRouteArgument(
-//                        RouteParameters.SEARCH_ROUTE_SEARCH_FILTER
-//                    ) ?: ""
-//
-//                    val searchScreenViewModel: SearchScreenViewModel = viewModel(
-//                        factory = SearchScreenViewModelFactory(
-//                            musicServiceConnection = musicServiceConnection,
-//                            settingsRepository = settingsRepository,
-//                            playlistRepository = playlistRepository,
-//                            searchHistoryRepository = searchHistoryRepository,
-//                            songsAdditionalMetadataRepository = songsAdditionalMetadataRepository
-//                        )
-//                    )
-//                    SearchScreen(
-//                        viewModel = searchScreenViewModel,
-//                        initialSearchFilter = getSearchFilterFrom( searchFilterName ),
-//                        onAlbumClick = { navController.navigateToAlbumScreen( it.title ) },
-//                        onArtistClick = { navController.navigateToArtistScreen( it.name ) },
-//                        onGenreClick = { navController.navigateToGenreScreen( it.name ) },
-//                        onPlaylistClick = { navController.navigateToPlaylistScreen( it.id, it.title ) }
-//                    ) {
-//                        navController.navigateUp()
-//                    }
-//                }
-//                composable(
-//                    Route.Settings.name,
-//                    enterTransition = { SlideTransition.slideUp.enterTransition() },
-//                    exitTransition = { FadeTransition.exitTransition() }
-//                ) {
-//                    val settingsViewModel: SettingsViewModel = viewModel(
-//                        factory = SettingsViewModelFactory(
-//                            settingsRepository
-//                        )
-//                    )
-//                    SettingsScreen(
-//                        viewModel = settingsViewModel,
-//                        onBackPressed = { navController.popBackStack() },
-//                        goToRedditCommunity = {
-//                            mainActivity.startActivity(
-//                                Intent( Intent.ACTION_VIEW )
-//                                    .setData(
-//                                        Uri.parse(
-//                                            mainActivity.getString( R.string.reddit_community )
-//                                        )
-//                                    )
-//                            )
-//                        },
-//                        goToDiscordServer = {
-//                            mainActivity.startActivity(
-//                                Intent( Intent.ACTION_VIEW )
-//                                    .setData(
-//                                        Uri.parse(
-//                                            mainActivity.getString( R.string.discord_server_url )
-//                                        )
-//                                    )
-//                            )
-//                        },
-//                        goToTelegramChannel = {
-//                            mainActivity.startActivity(
-//                                Intent( Intent.ACTION_VIEW )
-//                                    .setData(
-//                                        Uri.parse(
-//                                            mainActivity.getString( R.string.telegram_channel_link )
-//                                        )
-//                                    )
-//                            )
-//                        },
-//                        goToGithubProfile = {
-//                            mainActivity.startActivity(
-//                                Intent( Intent.ACTION_VIEW )
-//                                    .setData(
-//                                        Uri.parse(
-//                                            mainActivity.getString( R.string.github_profile_url )
-//                                        )
-//                                    )
-//                            )
-//                        },
-//                        goToAppGithubRepository = {
-//                            mainActivity.startActivity(
-//                                Intent( Intent.ACTION_VIEW )
-//                                    .setData(
-//                                        Uri.parse(
-//                                            mainActivity.getString( R.string.app_github_repo )
-//                                        )
-//                                    )
-//                            )
-//                        }
-//                    )
-//                }
     }
 }
 

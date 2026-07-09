@@ -136,7 +136,7 @@ internal fun AlbumGrid(
 
 private fun SortAlbumsBy.label(): Int =
     when ( this ) {
-        SortAlbumsBy.ALBUM_NAME -> i8nR.string.core_i8n_album_name
+        SortAlbumsBy.ALBUM_NAME -> i8nR.string.core_i8n_title
         SortAlbumsBy.CUSTOM -> i8nR.string.core_i8n_custom
         SortAlbumsBy.ARTIST_NAME -> i8nR.string.core_i8n_artist_name
         SortAlbumsBy.TRACK_COUNT -> i8nR.string.core_i8n_track_count

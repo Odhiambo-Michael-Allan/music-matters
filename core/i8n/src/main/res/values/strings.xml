@@ -169,10 +169,10 @@
     <string name="core_i8n_n_artists" translatable="false">%d artists</string>
     <string name="core_i8n_artists" translatable="false">Artists</string>
     <string name="core_i8n_one_song" translatable="false">%d song</string>
-
-<!--    SORT BY-->
-    <string name="core_i8n_album_name" translatable="false">Album name</string>
+    <string name="core_i8n_n_genres" translatable="false">%d genres</string>
+    <string name="core_i8n_genres" translatable="false">Genres</string>
     <string name="core_i8n_artist_name" translatable="false">Artist name</string>
+
     <string name="core_i8n_track_count" translatable="false">Track count</string>
 
 

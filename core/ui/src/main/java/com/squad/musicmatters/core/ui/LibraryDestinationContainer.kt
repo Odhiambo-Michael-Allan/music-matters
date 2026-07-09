@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
@@ -18,6 +21,7 @@ fun LibraryDestinationContainer(
     @StringRes titleResId: Int? = null,
     isLoading: Boolean,
     onNavigateBack: () -> Unit,
+    onNavigateToSettings: ( () -> Unit )? = null,
     options: @Composable (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
@@ -27,13 +31,22 @@ fun LibraryDestinationContainer(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll( scrollBehavior.nestedScrollConnection )
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         MinimalAppBar(
             title = titleResId?.let { stringResource( id = it ) } ?: "",
             scrollBehavior = scrollBehavior,
             onNavigationIconClicked = onNavigateBack,
-            options = options,
+            options = options ?: {
+                IconButton(
+                    onClick = { onNavigateToSettings?.let { it() } }
+                ) {
+                    Icon(
+                        imageVector = MusicMattersIcons.Settings,
+                        contentDescription = null,
+                    )
+                }
+            },
         )
         Box(
             modifier = Modifier.fillMaxSize()

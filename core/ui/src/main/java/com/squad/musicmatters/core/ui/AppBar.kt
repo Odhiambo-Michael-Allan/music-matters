@@ -83,9 +83,8 @@ fun MinimalAppBar(
     title: String,
     scrollBehavior: TopAppBarScrollBehavior,
     onNavigationIconClicked: () -> Unit,
-    options: ( @Composable () -> Unit )? = null,
-
-    ) {
+    options: ( @Composable () -> Unit )? = null
+) {
     CenterAlignedTopAppBar(
         modifier = modifier,
         scrollBehavior = scrollBehavior,
@@ -123,7 +122,7 @@ fun MinimalAppBar(
         },
         actions = {
             options?.let {
-                options()
+                it()
             }
         }
     )

@@ -3,6 +3,7 @@ package com.squad.musicmatters.core.ui
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.model.Artist
+import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.Song
 import java.util.UUID
 import com.squad.musicmatters.core.model.Playlist
@@ -15,6 +16,7 @@ class MusicMattersPreviewParametersProvider : PreviewParameterProvider<PreviewDa
                 songs = PreviewParameterData.songs,
                 albums = PreviewParameterData.albums,
                 artists = PreviewParameterData.artists,
+                genres = PreviewParameterData.genres,
                 playlists = PreviewParameterData.playlists
             )
         )
@@ -25,6 +27,7 @@ data class PreviewData(
     val songs: List<Song>,
     val albums: List<Album>,
     val artists: List<Artist>,
+    val genres: List<Genre>,
     val playlists: List<Playlist>,
 )
 
@@ -173,6 +176,29 @@ object PreviewParameterData {
             name = "Zedd",
             trackCount = 1,
             artworkUri = null,
+        )
+    )
+
+    val genres = listOf(
+        Genre(
+            name = "Rap/HipHop",
+            numberOfTracks = 200,
+        ),
+        Genre(
+            name = "",
+            numberOfTracks = 30,
+        ),
+        Genre(
+            name = "RnB",
+            numberOfTracks = 37,
+        ),
+        Genre(
+            name = "Pop",
+            numberOfTracks = 57,
+        ),
+        Genre(
+            name = "Alternative",
+            numberOfTracks = 5,
         )
     )
 

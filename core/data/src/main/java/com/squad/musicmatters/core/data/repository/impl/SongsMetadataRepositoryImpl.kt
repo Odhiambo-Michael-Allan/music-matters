@@ -4,8 +4,10 @@ import com.squad.musicmatters.core.common.di.IoScope
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.songs.MetadataStore
+import com.squad.musicmatters.core.data.utils.sortGenres
 import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.SongMetadata
+import com.squad.musicmatters.core.model.SortGenresBy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -49,8 +51,17 @@ class SongsMetadataRepositoryImpl @Inject constructor(
 
     override fun fetchMetadata(): Flow<List<SongMetadata>> = metadataFlow
 
-    override fun fetchGenres(): Flow<List<Genre>> {
-        TODO("Not yet implemented")
+    override fun fetchGenres(
+        sortGenresBy: SortGenresBy,
+        reverse: Boolean,
+    ): Flow<List<Genre>> = metadataFlow.map { metadata ->
+        val genres = metadata.groupBy { it.genre }.map { ( genre, metadataList ) ->
+            Genre(
+                name = genre,
+                numberOfTracks = metadataList.size
+            )
+        }
+        genres.sortGenres( by = sortGenresBy, reverse = reverse )
     }
 
     override suspend fun deleteEntryWithId( id: String ) {

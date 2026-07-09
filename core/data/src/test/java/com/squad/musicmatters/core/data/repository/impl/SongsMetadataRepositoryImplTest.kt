@@ -5,6 +5,7 @@ import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.songs.MetadataStore
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
+import com.squad.musicmatters.core.model.SortGenresBy
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.songs.testSong
 import junit.framework.TestCase.assertEquals
@@ -84,6 +85,57 @@ class SongsMetadataRepositoryImplTest {
         metadataStore.sendMetadata( metadata )
         songsRepository.sendSongs( songs )
         assertEquals( 3, subject.fetchMetadata().first().size )
+    }
+
+    @Test
+    fun testFetchGenres() = runTest( UnconfinedTestDispatcher() ) {
+        backgroundScope.launch {
+            subject.fetchMetadata().collect()
+        }
+        assertTrue( subject.fetchMetadata().first().isEmpty() )
+
+        val songs = listOf(
+            testSong( id = "song-id-1" ),
+            testSong( id = "song-id-2" ),
+            testSong( id = "song-id-3" ),
+            testSong( id = "song-id-4" ),
+            testSong( id = "song-id-5" )
+        )
+        val metadata = listOf(
+            SongMetadata(
+                songId = "song-id-1",
+                codec = "",
+                bitrate = 0,
+                bitsPerSample = 0,
+                genre = "Pop",
+                samplingRate = 0f
+            ),
+            SongMetadata(
+                songId = "song-id-2",
+                codec = "",
+                bitrate = 0,
+                bitsPerSample = 0,
+                genre = "Rap/HipHop",
+                samplingRate = 0f
+            ),
+            SongMetadata(
+                songId = "song-id-3",
+                codec = "",
+                bitrate = 0,
+                bitsPerSample = 0,
+                genre = "Rap/HipHop",
+                samplingRate = 0f
+            ),
+        )
+        metadataStore.sendMetadata( metadata )
+        songsRepository.sendSongs( songs )
+
+        val genres = subject.fetchGenres(
+            sortGenresBy = SortGenresBy.NAME,
+            reverse = false
+        ).first()
+        assertEquals( 2, genres.size )
+        assertEquals( "Pop", genres.first().name )
     }
 
 

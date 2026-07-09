@@ -58,6 +58,7 @@ private fun LyricsScreenContent(
     LibraryDestinationContainer(
         isLoading = uiState is LyricsScreenUiState.Loading,
         onNavigateBack = onNavigateBack,
+        options = {},
     ) {
         when ( uiState ) {
             LyricsScreenUiState.Loading -> {}

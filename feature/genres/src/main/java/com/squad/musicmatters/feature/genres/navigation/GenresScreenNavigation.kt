@@ -1,40 +1,35 @@
-package com.squad.musicmatters.feature.albums.navigation
+package com.squad.musicmatters.feature.genres.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.ui.FadeTransition
 import com.squad.musicmatters.core.ui.SlideTransition
-import com.squad.musicmatters.feature.albums.AlbumsScreen
+import com.squad.musicmatters.feature.genres.GenresScreen
 import kotlinx.serialization.Serializable
 
-@Serializable data object AlbumsRoute
+@Serializable data object GenresRoute
 
-fun NavController.navigateToAlbums( navOptions: NavOptions ) {
+fun NavController.navigateToGenres( navOptions: NavOptions ) {
     navigate(
-        route = AlbumsRoute,
-        navOptions = navOptions,
+        route = GenresRoute,
+        navOptions = navOptions
     )
 }
 
-fun NavGraphBuilder.albumsScreen(
-    onViewAlbum: ( Album ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
-    onShowSnackBar: ( String ) -> Unit,
+fun NavGraphBuilder.genresScreen(
     onNavigateBack: () -> Unit,
+    onViewGenre: ( String ) -> Unit,
     onNavigateToSettings: () -> Unit,
 ) {
-    composable<AlbumsRoute>(
+    composable<GenresRoute>(
         enterTransition = { SlideTransition.slideUp.enterTransition() },
         exitTransition = { FadeTransition.exitTransition() }
     ) {
-        AlbumsScreen(
-            onViewAlbum = onViewAlbum,
-            onViewArtist = onViewArtist,
-            onShowSnackBar = onShowSnackBar,
+        GenresScreen(
             onNavigateBack = onNavigateBack,
+            onViewGenre = onViewGenre,
             onNavigateToSettings = onNavigateToSettings,
         )
     }

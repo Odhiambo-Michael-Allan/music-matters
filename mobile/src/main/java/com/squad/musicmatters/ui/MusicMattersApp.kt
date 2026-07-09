@@ -73,6 +73,7 @@ import com.squad.musicmatters.core.ui.TopAppBar
 import com.squad.musicmatters.feature.albums.navigation.albumsScreen
 import com.squad.musicmatters.feature.albums.navigation.navigateToAlbums
 import com.squad.musicmatters.feature.artists.navigation.navigateToArtists
+import com.squad.musicmatters.feature.genres.navigation.navigateToGenres
 import com.squad.musicmatters.feature.lyrics.navigation.lyricsScreen
 import com.squad.musicmatters.feature.lyrics.navigation.navigateToLyricsScreen
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreen
@@ -292,6 +293,13 @@ fun MusicMattersAppContent(
                     navController = navController,
                     onDeleteSong = onDeleteSong,
                     snackBarHostState = snackBarHostState,
+                    onNavigateToSettings = {
+                        navController.navigateToSettings(
+                            navOptions = navOptions {
+                                launchSingleTop = true
+                            }
+                        )
+                    }
                 )
 
 
@@ -416,6 +424,7 @@ fun NavHostController.navigateToLibraryDestination( libraryDestination: LibraryD
     when ( libraryDestination ) {
         LibraryDestination.ALBUMS -> navigateToAlbums( navOptions = topLevelNavOptions() )
         LibraryDestination.ARTISTS -> navigateToArtists( navOptions = topLevelNavOptions() )
+        LibraryDestination.GENRES -> navigateToGenres( navOptions = topLevelNavOptions() )
     }
 }
 

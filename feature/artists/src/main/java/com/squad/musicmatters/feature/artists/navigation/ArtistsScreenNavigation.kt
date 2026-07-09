@@ -23,6 +23,7 @@ fun NavGraphBuilder.artistsScreen(
     onNavigateBack: () -> Unit,
     onViewArtist: ( Long ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
+    onNavigateToSettings: () -> Unit,
 ) {
     composable<ArtistsRoute>(
         enterTransition = { SlideTransition.slideUp.enterTransition() },
@@ -32,6 +33,7 @@ fun NavGraphBuilder.artistsScreen(
             onNavigateBack = onNavigateBack,
             onViewArtist = onViewArtist,
             onShowSnackBar = onShowSnackBar,
+            onNavigateToSettings = onNavigateToSettings,
         )
     }
 }
