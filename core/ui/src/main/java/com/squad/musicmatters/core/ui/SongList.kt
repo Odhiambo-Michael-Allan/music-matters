@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.squad.musicmatters.core.i8n.R
+import com.squad.musicmatters.core.i8n.R as i8nR
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
@@ -69,7 +69,11 @@ fun SongList(
             label = {
                 Text(
                     text = stringResource(
-                        id = if ( songs.size > 1 ) R.string.core_i8n_n_songs else R.string.core_i8n_song,
+                        id = if ( songs.size > 1 ) {
+                            i8nR.string.core_i8n_n_songs
+                        } else {
+                            i8nR.string.core_i8n_one_song
+                        },
                         songs.size
                     ),
                     fontWeight = FontWeight.SemiBold,
@@ -89,7 +93,7 @@ fun SongList(
                 },
                 content = {
                     Text(
-                        text = stringResource( id = R.string.core_i8n_damn_this_is_so_empty ),
+                        text = stringResource( id = i8nR.string.core_i8n_damn_this_is_so_empty ),
                         style = LocalTextStyle.current.copy(
                             fontWeight = FontWeight.SemiBold
                         )
@@ -142,16 +146,16 @@ fun SongList(
 }
 
 private fun SortSongsBy.sortSongsByLabelResId() = when ( this ) {
-    SortSongsBy.CUSTOM -> R.string.core_i8n_custom
-    SortSongsBy.TITLE -> R.string.core_i8n_title
-    SortSongsBy.ARTIST -> R.string.core_i8n_artist
-    SortSongsBy.ALBUM -> R.string.core_i8n_album
-    SortSongsBy.DURATION -> R.string.core_i8n_duration
-    SortSongsBy.DATE_ADDED -> R.string.core_i8n_date_added
-    SortSongsBy.COMPOSER -> R.string.core_i8n_composer
-    SortSongsBy.YEAR -> R.string.core_i8n_year
-    SortSongsBy.FILENAME -> R.string.core_i8n_file_name
-    SortSongsBy.TRACK_NUMBER -> R.string.core_i8n_track_number
+    SortSongsBy.CUSTOM -> i8nR.string.core_i8n_custom
+    SortSongsBy.TITLE -> i8nR.string.core_i8n_title
+    SortSongsBy.ARTIST -> i8nR.string.core_i8n_artist
+    SortSongsBy.ALBUM -> i8nR.string.core_i8n_album
+    SortSongsBy.DURATION -> i8nR.string.core_i8n_duration
+    SortSongsBy.DATE_ADDED -> i8nR.string.core_i8n_date_added
+    SortSongsBy.COMPOSER -> i8nR.string.core_i8n_composer
+    SortSongsBy.YEAR -> i8nR.string.core_i8n_year
+    SortSongsBy.FILENAME -> i8nR.string.core_i8n_file_name
+    SortSongsBy.TRACK_NUMBER -> i8nR.string.core_i8n_track_number
 }
 
 
