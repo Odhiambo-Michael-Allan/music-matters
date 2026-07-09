@@ -14,6 +14,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.core.net.toUri
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -29,6 +31,44 @@ import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.SongList
 
+@Composable
+internal fun GenreScreen(
+    viewModel: GenreScreenViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
+    onDeleteSong: ( Song ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
+    onShareSong: ( Uri ) -> Unit,
+) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    GenreScreenContent(
+        uiState = uiState,
+        onNavigateBack = onNavigateBack,
+        onViewArtist = onViewArtist,
+        onViewAlbum = onViewAlbum,
+        onShareSong = onShareSong,
+        onShowSnackBar = onShowSnackBar,
+        onDeleteSong = onDeleteSong,
+        onShuffleAndPlay = viewModel::shuffleAndPlay,
+        onSortTypeChange = viewModel::setSortSongsBy,
+        onSortSongsInReverseChange = viewModel::setSortSongsInReverse,
+        onPlaySong = viewModel::playSongs,
+        onAddToFavorites = viewModel::addToFavorites,
+        onSongIsPresentInQueue = viewModel::songIsPresentInQueue,
+        onAddSongToQueue = viewModel::addSongToQueue,
+        onRemoveSongFromQueue = viewModel::removeSongFromQueue,
+        onPlaySongNext = viewModel::playSongNext,
+        onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
+        onCreatePlaylist = viewModel::createPlaylist,
+        onPlaySongsInGenreNext = viewModel::playSongsNext,
+        onAddSongsInGenreToQueue = viewModel::addSongsToQueue,
+        onRemoveSongsInGenreFromQueue = viewModel::removeSongsFromQueue,
+        onShowAddToQueueOption = viewModel::noSongInTheListIsPresentInTheQueue,
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
