@@ -2,7 +2,7 @@ package com.squad.musicmatters.feature.nowplaying
 
 import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
@@ -34,14 +34,14 @@ import kotlin.time.Duration
 class NowPlayingScreenViewModel @Inject constructor(
     private val player: MusicMattersPlayer,
     private val preferencesDataSource: PreferencesDataSource,
-    private val playlistRepository: PlaylistRepository,
+    private val playlistsRepository: PlaylistsRepository,
     private val playbackPositionUpdater: PlaybackPositionUpdater,
     private val queueRepository: QueueRepository,
     songsMetadataRepository: SongsMetadataRepository,
     songsRepository: SongsRepository,
 ) : BaseViewModel(
     preferencesDataSource = preferencesDataSource,
-    playlistRepository = playlistRepository,
+    playlistsRepository = playlistsRepository,
     player = player,
 ) {
 
@@ -53,9 +53,9 @@ class NowPlayingScreenViewModel @Inject constructor(
             },
             preferencesDataSource.userData,
             player.playerState.map { it.currentlyPlayingSongId }.flatMapLatest { songId ->
-                playlistRepository.isFavorite( songId ?: "" )
+                playlistsRepository.isFavorite( songId ?: "" )
             },
-            playlistRepository.fetchPlaylists(),
+            playlistsRepository.fetchPlaylists(),
             songsMetadataRepository.fetchMetadata(),
             player.sleepTimer
         ) {

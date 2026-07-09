@@ -2,7 +2,7 @@ package com.squad.musicmatters.feature.albums
 
 import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.data.repository.AlbumsRepository
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
@@ -25,12 +25,12 @@ class AlbumsScreenViewModel @Inject constructor(
     private val preferencesDataSource: PreferencesDataSource,
     albumsRepository: AlbumsRepository,
     player: MusicMattersPlayer,
-    playlistRepository: PlaylistRepository,
+    playlistsRepository: PlaylistsRepository,
     songsRepository: SongsRepository,
 ) : BaseViewModel(
     player = player,
     preferencesDataSource = preferencesDataSource,
-    playlistRepository = playlistRepository,
+    playlistsRepository = playlistsRepository,
 ) {
 
     val uiState: StateFlow<AlbumsScreenUiState> =
@@ -42,7 +42,7 @@ class AlbumsScreenViewModel @Inject constructor(
                 )
             },
             preferencesDataSource.userData,
-            playlistRepository.fetchPlaylists(),
+            playlistsRepository.fetchPlaylists(),
             songsRepository.fetchSongs(),
         ) { albums, userData, playlists, songs ->
             AlbumsScreenUiState.Success(

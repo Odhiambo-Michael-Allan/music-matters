@@ -1,6 +1,6 @@
 package com.squad.musicmatters.core.data.repository.impl
 
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.database.dao.PlaylistDao
 import com.squad.musicmatters.core.database.dao.PlaylistEntryDao
 import com.squad.musicmatters.core.database.model.PlaylistEntity
@@ -11,16 +11,14 @@ import com.squad.musicmatters.core.model.Song
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import java.util.UUID
 import javax.inject.Inject
-import kotlin.uuid.Uuid
 
 const val FAVORITES_PLAYLIST_ID = "--MUSIC-MATTERS-FAVORITES-PLAYLIST-ID--"
 
-class PlaylistRepositoryImpl @Inject constructor(
+class PlaylistsRepositoryImpl @Inject constructor(
     private val playlistDao: PlaylistDao,
     private val playlistEntryDao: PlaylistEntryDao,
-) : PlaylistRepository {
+) : PlaylistsRepository {
 
     override fun fetchFavorites() = fetchPlaylistWithId( FAVORITES_PLAYLIST_ID )
 
@@ -114,24 +112,6 @@ class PlaylistRepositoryImpl @Inject constructor(
         )
     }
 
-    companion object {
-
-        @Volatile
-        private var INSTANCE: PlaylistRepository? = null
-
-        fun getInstance(
-            playlistDao: PlaylistDao,
-            playlistEntryDao: PlaylistEntryDao,
-        ): PlaylistRepository {
-            return INSTANCE ?: synchronized( this ) {
-                PlaylistRepositoryImpl(
-                    playlistDao = playlistDao,
-                    playlistEntryDao = playlistEntryDao,
-                ).also { INSTANCE = it }
-            }
-
-        }
-    }
 }
 
 private fun Playlist.asEntity() = PlaylistEntity(

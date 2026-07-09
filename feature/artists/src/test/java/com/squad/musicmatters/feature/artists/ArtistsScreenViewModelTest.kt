@@ -2,16 +2,14 @@ package com.squad.musicmatters.feature.artists
 
 import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.utils.sortArtists
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.model.SortArtistsBy
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakeArtistsRepository
-import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
+import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
-import com.squad.musicmatters.core.testing.songs.testSong
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -29,7 +27,7 @@ class ArtistsScreenViewModelTest {
     private lateinit var artistsRepository: FakeArtistsRepository
     private lateinit var player: FakeMusicMattersPlayer
     private lateinit var preferencesDataSource: FakePreferencesDataSource
-    private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var subject: ArtistsScreenViewModel
 
@@ -38,12 +36,12 @@ class ArtistsScreenViewModelTest {
         artistsRepository = FakeArtistsRepository()
         player = FakeMusicMattersPlayer()
         preferencesDataSource = FakePreferencesDataSource()
-        playlistRepository = FakePlaylistRepository()
+        playlistRepository = FakePlaylistsRepository()
         songsRepository = FakeSongsRepository()
         subject = ArtistsScreenViewModel(
             artistsRepository = artistsRepository,
             songsRepository = songsRepository,
-            playlistRepository = playlistRepository,
+            playlistsRepository = playlistRepository,
             preferencesDataSource = preferencesDataSource,
             player = player,
         )

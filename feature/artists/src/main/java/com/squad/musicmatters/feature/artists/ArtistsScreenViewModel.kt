@@ -2,7 +2,7 @@ package com.squad.musicmatters.feature.artists
 
 import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.data.repository.ArtistsRepository
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
@@ -14,7 +14,6 @@ import com.squad.musicmatters.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -26,12 +25,12 @@ class ArtistsScreenViewModel @Inject constructor(
     private val preferencesDataSource: PreferencesDataSource,
     artistsRepository: ArtistsRepository,
     player: MusicMattersPlayer,
-    playlistRepository: PlaylistRepository,
+    playlistsRepository: PlaylistsRepository,
     songsRepository: SongsRepository
 ) : BaseViewModel(
     player = player,
     preferencesDataSource = preferencesDataSource,
-    playlistRepository = playlistRepository
+    playlistsRepository = playlistsRepository
 ) {
 
     val uiState: StateFlow<ArtistsScreenUiState> =
@@ -43,7 +42,7 @@ class ArtistsScreenViewModel @Inject constructor(
                 )
             },
             preferencesDataSource.userData,
-            playlistRepository.fetchPlaylists(),
+            playlistsRepository.fetchPlaylists(),
             songsRepository.fetchSongs()
         ) { artists, userData, playlists, songs ->
             ArtistsScreenUiState.Success(

@@ -1,7 +1,7 @@
 package com.squad.musicmatters.feature.queue
 
 import androidx.lifecycle.viewModelScope
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
@@ -24,7 +24,7 @@ private const val TAG = "QUEUE-SCREEN-VIEW-MODEL"
 
 @HiltViewModel
 internal class QueueScreenViewModel @Inject constructor(
-    playlistRepository: PlaylistRepository,
+    playlistsRepository: PlaylistsRepository,
     songsMetadataRepository: SongsMetadataRepository,
     private val songsRepository: SongsRepository,
     private val player: MusicMattersPlayer,
@@ -32,7 +32,7 @@ internal class QueueScreenViewModel @Inject constructor(
 ) : BaseViewModel(
     player = player,
     preferencesDataSource = preferencesDataSource,
-    playlistRepository = playlistRepository,
+    playlistsRepository = playlistsRepository,
 ) {
 
     
@@ -48,8 +48,8 @@ internal class QueueScreenViewModel @Inject constructor(
                 }
             },
             preferencesDataSource.userData,
-            playlistRepository.fetchFavorites(),
-            playlistRepository.fetchPlaylists(),
+            playlistsRepository.fetchFavorites(),
+            playlistsRepository.fetchPlaylists(),
             songsMetadataRepository.fetchMetadata()
         ) {
             songsInQueue,

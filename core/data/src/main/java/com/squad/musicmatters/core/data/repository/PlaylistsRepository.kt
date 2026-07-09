@@ -4,7 +4,7 @@ import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import kotlinx.coroutines.flow.Flow
 
-interface PlaylistRepository {
+interface PlaylistsRepository {
 
     fun fetchFavorites(): Flow<Playlist?>
     fun fetchPlaylists(): Flow<List<Playlist>>

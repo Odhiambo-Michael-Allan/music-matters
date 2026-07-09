@@ -8,7 +8,7 @@ import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.media.FakePlaybackPositionUpdater
-import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
+import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
@@ -33,7 +33,7 @@ class NowPlayingScreenViewModelTest {
 
     private lateinit var viewModel: NowPlayingScreenViewModel
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var playbackPositionUpdater: FakePlaybackPositionUpdater
     private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
@@ -43,7 +43,7 @@ class NowPlayingScreenViewModelTest {
     @Before
     fun setUp() {
         player = FakeMusicMattersPlayer()
-        playlistRepository = FakePlaylistRepository()
+        playlistRepository = FakePlaylistsRepository()
         playbackPositionUpdater = FakePlaybackPositionUpdater()
         metadataRepository = FakeSongsMetadataRepository()
         songsRepository = FakeSongsRepository()
@@ -52,7 +52,7 @@ class NowPlayingScreenViewModelTest {
         viewModel = NowPlayingScreenViewModel(
             player = player,
             preferencesDataSource = preferencesDataSource,
-            playlistRepository = playlistRepository,
+            playlistsRepository = playlistRepository,
             playbackPositionUpdater = playbackPositionUpdater,
             songsMetadataRepository = metadataRepository,
             queueRepository = queueRepository,

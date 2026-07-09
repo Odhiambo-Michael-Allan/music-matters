@@ -1,6 +1,6 @@
 package com.squad.musicmatters.core.data.repository.impl
 
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.testDoubles.TestPlaylistDao
 import com.squad.musicmatters.core.data.testDoubles.TestPlaylistEntryDao
 import com.squad.musicmatters.core.model.Playlist
@@ -12,18 +12,18 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-class PlaylistRepositoryImplTest {
+class PlaylistsRepositoryImplTest {
 
     private lateinit var playlistDao: TestPlaylistDao
     private lateinit var playlistEntryDao: TestPlaylistEntryDao
-    private lateinit var subject: PlaylistRepository
+    private lateinit var subject: PlaylistsRepository
 
     @OptIn( ExperimentalCoroutinesApi::class )
     @Before
     fun setup() {
         playlistDao = TestPlaylistDao()
         playlistEntryDao = TestPlaylistEntryDao()
-        subject = PlaylistRepositoryImpl(
+        subject = PlaylistsRepositoryImpl(
             playlistDao = playlistDao,
             playlistEntryDao = playlistEntryDao,
         )

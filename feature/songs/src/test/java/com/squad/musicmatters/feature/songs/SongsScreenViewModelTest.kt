@@ -4,7 +4,7 @@ import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
-import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
+import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
@@ -31,7 +31,7 @@ class SongsScreenViewModelTest {
     private lateinit var preferencesDataSource: FakePreferencesDataSource
     private lateinit var musicServiceConnection: FakeMusicMattersPlayer
     private lateinit var viewModel: SongsScreenViewModel
-    private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var songsAdditionalMetadataRepository: FakeSongsMetadataRepository
 
@@ -41,12 +41,12 @@ class SongsScreenViewModelTest {
         musicServiceConnection = FakeMusicMattersPlayer()
         songsAdditionalMetadataRepository = FakeSongsMetadataRepository()
         songsRepository = FakeSongsRepository()
-        playlistRepository = FakePlaylistRepository()
+        playlistRepository = FakePlaylistsRepository()
         viewModel = SongsScreenViewModel(
             songsRepository = songsRepository,
             preferencesDataSource = preferencesDataSource,
             musicMattersPlayer = musicServiceConnection,
-            playlistRepository = playlistRepository,
+            playlistsRepository = playlistRepository,
             songsMetadataRepository = songsAdditionalMetadataRepository
         )
     }

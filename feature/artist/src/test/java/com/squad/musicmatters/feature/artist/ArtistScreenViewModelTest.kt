@@ -7,7 +7,7 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakeArtistsRepository
-import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
+import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
@@ -46,7 +46,7 @@ class ArtistScreenViewModelTest {
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var player: FakeMusicMattersPlayer
     private lateinit var preferencesDataSource: FakePreferencesDataSource
-    private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var subject: ArtistScreenViewModel
 
@@ -55,7 +55,7 @@ class ArtistScreenViewModelTest {
         artistsRepository = FakeArtistsRepository()
         songsRepository = FakeSongsRepository()
         preferencesDataSource = FakePreferencesDataSource()
-        playlistRepository = FakePlaylistRepository()
+        playlistRepository = FakePlaylistsRepository()
         metadataRepository = FakeSongsMetadataRepository()
         player = FakeMusicMattersPlayer()
         subject = ArtistScreenViewModel(
@@ -65,7 +65,7 @@ class ArtistScreenViewModelTest {
             artistsRepository = artistsRepository,
             songsRepository = songsRepository,
             preferencesDataSource = preferencesDataSource,
-            playlistRepository = playlistRepository,
+            playlistsRepository = playlistRepository,
             songsMetadataRepository = metadataRepository,
             player = player
         )

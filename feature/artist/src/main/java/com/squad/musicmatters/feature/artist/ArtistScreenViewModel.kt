@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.squad.musicmatters.core.data.repository.ArtistsRepository
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
@@ -30,12 +30,12 @@ class ArtistScreenViewModel @Inject constructor(
     songsRepository: SongsRepository,
     player: MusicMattersPlayer,
     preferencesDataSource: PreferencesDataSource,
-    playlistRepository: PlaylistRepository,
+    playlistsRepository: PlaylistsRepository,
     songsMetadataRepository: SongsMetadataRepository,
 ) : BaseViewModel(
     player = player,
     preferencesDataSource = preferencesDataSource,
-    playlistRepository = playlistRepository
+    playlistsRepository = playlistsRepository
 ) {
 
     val artistId = savedStateHandle.toRoute<ArtistRoute>().artistId
@@ -49,8 +49,8 @@ class ArtistScreenViewModel @Inject constructor(
             )
         },
         preferencesDataSource.userData,
-        playlistRepository.fetchFavorites(),
-        playlistRepository.fetchPlaylists(),
+        playlistsRepository.fetchFavorites(),
+        playlistsRepository.fetchPlaylists(),
         songsMetadataRepository.fetchMetadata()
     ) { artist, songs, userData, favoriteSongsPlaylist, playlists, metadata ->
         ArtistScreenUiState.Success(

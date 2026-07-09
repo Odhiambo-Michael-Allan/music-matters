@@ -3,7 +3,7 @@ package com.squad.musicmatters.feature.genre
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
@@ -29,11 +29,11 @@ class GenreScreenViewModel @Inject constructor(
     songsRepository: SongsRepository,
     player: MusicMattersPlayer,
     preferencesDataSource: PreferencesDataSource,
-    playlistRepository: PlaylistRepository,
+    playlistsRepository: PlaylistsRepository,
 ) : BaseViewModel(
     player = player,
     preferencesDataSource = preferencesDataSource,
-    playlistRepository = playlistRepository
+    playlistsRepository = playlistsRepository
 ) {
 
     val genreName = savedStateHandle.toRoute<GenreRoute>().genreName
@@ -46,8 +46,8 @@ class GenreScreenViewModel @Inject constructor(
             )
         },
         preferencesDataSource.userData,
-        playlistRepository.fetchFavorites(),
-        playlistRepository.fetchPlaylists(),
+        playlistsRepository.fetchFavorites(),
+        playlistsRepository.fetchPlaylists(),
         songsMetadataRepository.fetchMetadata()
     ) { songs, userData, favoriteSongsPlaylist, playlists, metadata ->
         GenreScreenUiState.Success(

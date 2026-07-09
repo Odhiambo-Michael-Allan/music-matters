@@ -3,7 +3,7 @@ package com.squad.musicmatters.feature.queue
 import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
-import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
+import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -25,7 +25,7 @@ class QueueScreenViewModelTest {
     private lateinit var preferencesDataSource: FakePreferencesDataSource
     private lateinit var player: FakeMusicMattersPlayer
     private lateinit var songsRepository: FakeSongsRepository
-    private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var songsAdditionalMetadataRepository: FakeSongsMetadataRepository
     private lateinit var viewModel: QueueScreenViewModel
 
@@ -34,11 +34,11 @@ class QueueScreenViewModelTest {
         preferencesDataSource = FakePreferencesDataSource()
         player = FakeMusicMattersPlayer()
         songsRepository = FakeSongsRepository()
-        playlistRepository = FakePlaylistRepository()
+        playlistRepository = FakePlaylistsRepository()
         songsAdditionalMetadataRepository = FakeSongsMetadataRepository()
         viewModel = QueueScreenViewModel(
             songsRepository = songsRepository,
-            playlistRepository = playlistRepository,
+            playlistsRepository = playlistRepository,
             songsMetadataRepository = songsAdditionalMetadataRepository,
             preferencesDataSource = preferencesDataSource,
             player = player,

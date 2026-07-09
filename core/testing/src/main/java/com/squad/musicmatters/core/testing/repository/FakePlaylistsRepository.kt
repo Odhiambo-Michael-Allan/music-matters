@@ -1,6 +1,6 @@
 package com.squad.musicmatters.core.testing.repository
 
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class FakePlaylistRepository : PlaylistRepository {
+class FakePlaylistsRepository : PlaylistsRepository {
 
     private val playlistsFlow: MutableSharedFlow<List<Playlist>> =
         MutableSharedFlow( replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST )
