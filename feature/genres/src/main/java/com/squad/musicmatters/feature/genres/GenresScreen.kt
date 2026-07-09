@@ -162,6 +162,7 @@ fun GenresGrid(
                 ) {
                     itemsIndexed( genres ) { index, genre ->
                         GenreCard(
+                            modifier = Modifier.animateItem(),
                             genre = genre,
                             position = index,
                             onClick = { onViewGenre( genre.name ) }
@@ -176,12 +177,13 @@ fun GenresGrid(
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 private fun GenreCard(
+    modifier: Modifier = Modifier,
     genre: Genre,
     position: Int,
     onClick: () -> Unit,
 ) {
     Card (
-        modifier = Modifier
+        modifier = modifier
             .padding( 2.dp ),
         colors = GenreTileColors.cardColors( index = position ),
         onClick = onClick,
