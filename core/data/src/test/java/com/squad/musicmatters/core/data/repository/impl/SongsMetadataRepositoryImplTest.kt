@@ -1,8 +1,11 @@
 package com.squad.musicmatters.core.data.repository.impl
 
 import com.squad.castify.core.testing.rules.MainDispatcherRule
+import com.squad.musicmatters.core.data.repository.GenreResult
+import com.squad.musicmatters.core.data.repository.MetadataResult
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.songs.MetadataStore
+import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.SortGenresBy
@@ -47,7 +50,10 @@ class SongsMetadataRepositoryImplTest {
         backgroundScope.launch {
             subject.fetchMetadata().collect()
         }
-        assertTrue( subject.fetchMetadata().first().isEmpty() )
+        assertEquals(
+            emptyList<SongMetadata>(),
+            subject.fetchMetadata().first()
+        )
 
         val songs = listOf(
             testSong( id = "song-id-1" ),
@@ -84,7 +90,10 @@ class SongsMetadataRepositoryImplTest {
         )
         metadataStore.sendMetadata( metadata )
         songsRepository.sendSongs( songs )
-        assertEquals( 3, subject.fetchMetadata().first().size )
+        assertEquals(
+            metadata,
+            subject.fetchMetadata().first()
+        )
     }
 
     @Test
@@ -92,7 +101,14 @@ class SongsMetadataRepositoryImplTest {
         backgroundScope.launch {
             subject.fetchMetadata().collect()
         }
-        assertTrue( subject.fetchMetadata().first().isEmpty() )
+
+        assertEquals(
+            GenreResult.Loading,
+            subject.fetchGenres(
+                sortGenresBy = SortGenresBy.NAME,
+                reverse = false
+            ).first()
+        )
 
         val songs = listOf(
             testSong( id = "song-id-1" ),
@@ -130,14 +146,25 @@ class SongsMetadataRepositoryImplTest {
         metadataStore.sendMetadata( metadata )
         songsRepository.sendSongs( songs )
 
-        val genres = subject.fetchGenres(
-            sortGenresBy = SortGenresBy.NAME,
-            reverse = false
-        ).first()
-        assertEquals( 2, genres.size )
-        assertEquals( "Pop", genres.first().name )
+        assertEquals(
+            GenreResult.Success(
+                genres = listOf(
+                    Genre(
+                        name = "Pop",
+                        numberOfTracks = 1,
+                    ),
+                    Genre(
+                        name = "Rap/HipHop",
+                        numberOfTracks = 2,
+                    )
+                )
+            ),
+            subject.fetchGenres(
+                sortGenresBy = SortGenresBy.NAME,
+                reverse = false
+            ).first()
+        )
     }
-
 
 }
 

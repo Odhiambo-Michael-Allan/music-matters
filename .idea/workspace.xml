@@ -27,9 +27,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/SongsMetadataRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/SongsMetadataRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsMetadataRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsMetadataRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/CompositeRepositoryImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/CompositeRepositoryImplTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/SongsMetadataRepositoryImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/SongsMetadataRepositoryImplTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeQueueRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeQueueRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeSongsMetadataRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeSongsMetadataRepository.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/feature/genres/src/main/java/com/squad/musicmatters/feature/genres/GenresScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/genres/src/main/java/com/squad/musicmatters/feature/genres/GenresScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/genres/src/main/java/com/squad/musicmatters/feature/genres/GenresScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/genres/src/main/java/com/squad/musicmatters/feature/genres/GenresScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/genres/src/test/java/com/squad/musicmatters/feature/genres/GenresScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/genres/src/test/java/com/squad/musicmatters/feature/genres/GenresScreenViewModelTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -249,7 +258,7 @@
       <recent name="com.squad.musicmatters.feature.nowplaying" />
     </key>
   </component>
-  <component name="RunManager" selected="Android App.mobile">
+  <component name="RunManager" selected="Gradle.GenresScreenViewModelTest">
     <configuration name="mobile" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="MusicMatters.mobile" />
       <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
@@ -322,7 +331,7 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ArtistScreenViewModelTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="CompositeRepositoryImplTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -333,9 +342,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":feature:artist:testDebugUnitTest" />
+            <option value=":core:data:testDebugUnitTest" />
             <option value="--tests" />
-            <option value="&quot;com.squad.musicmatters.feature.artist.ArtistScreenViewModelTest&quot;" />
+            <option value="&quot;com.squad.musicmatters.core.data.repository.impl.CompositeRepositoryImplTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -461,9 +470,9 @@
       <list>
         <item itemvalue="Gradle.GenresScreenViewModelTest" />
         <item itemvalue="Gradle.SongsMetadataRepositoryImplTest" />
+        <item itemvalue="Gradle.CompositeRepositoryImplTest" />
         <item itemvalue="Gradle.SongsMetadataRepositoryImplTest.testFetchMetadata" />
         <item itemvalue="Gradle.SongsRepositoryImplTest" />
-        <item itemvalue="Gradle.ArtistScreenViewModelTest" />
       </list>
     </recent_temporary>
   </component>

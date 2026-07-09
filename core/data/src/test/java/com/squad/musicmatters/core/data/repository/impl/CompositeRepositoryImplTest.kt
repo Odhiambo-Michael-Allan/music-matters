@@ -1,6 +1,7 @@
 package com.squad.musicmatters.core.data.repository.impl
 
 import com.squad.musicmatters.core.data.repository.CompositeRepository
+import com.squad.musicmatters.core.data.repository.MetadataResult
 import com.squad.musicmatters.core.testing.repository.TestMostPlayedSongsRepository
 import com.squad.musicmatters.core.testing.repository.TestPlayHistoryRepository
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
@@ -72,7 +73,7 @@ class CompositeRepositoryImplTest {
         )
         assertEquals(
             4,
-            songsAdditionalMetadataRepository.fetchMetadata().first().size
+            (songsAdditionalMetadataRepository.fetchMetadata().first() as MetadataResult.Success).metadata.size
         )
         assertEquals(
             4,

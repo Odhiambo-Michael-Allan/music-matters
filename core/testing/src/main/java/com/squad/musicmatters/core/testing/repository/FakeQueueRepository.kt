@@ -50,6 +50,15 @@ class FakeQueueRepository : QueueRepository {
     }
 
     fun sendSongs( songs: List<Song> ) {
+        queue.addAll(
+            songs.mapIndexed { index, song ->
+                QueueEntry(
+                    songId = song.id,
+                    currentPositionInQueue = index,
+                    originalPositionInQueue = index
+                )
+            }
+        )
         songsFlow.tryEmit( songs )
     }
 

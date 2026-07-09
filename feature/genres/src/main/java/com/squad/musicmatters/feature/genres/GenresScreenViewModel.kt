@@ -2,6 +2,7 @@ package com.squad.musicmatters.feature.genres
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.squad.musicmatters.core.data.repository.GenreResult
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.model.Genre
@@ -30,9 +31,9 @@ class GenresScreenViewModel @Inject constructor(
                     reverse = it.sortGenresReverse
                 )
             }
-        ) { userData, genres ->
+        ) { userData, genreResult ->
             GenresScreenUiState.Success(
-                genres = genres,
+                genreResult = genreResult,
                 sortGenresBy = userData.sortGenresBy,
                 sortGenresInReverse = userData.sortGenresReverse
             )
@@ -55,7 +56,7 @@ class GenresScreenViewModel @Inject constructor(
 sealed interface GenresScreenUiState {
     data object Loading : GenresScreenUiState
     data class Success(
-        val genres: List<Genre>,
+        val genreResult: GenreResult,
         val sortGenresBy: SortGenresBy,
         val sortGenresInReverse: Boolean,
     ): GenresScreenUiState

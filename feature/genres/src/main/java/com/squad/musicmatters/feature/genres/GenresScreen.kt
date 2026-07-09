@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.squad.musicmatters.core.data.repository.GenreResult
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -79,21 +80,28 @@ private fun GenresScreenContent(
 
     LibraryDestinationContainer(
         titleResId = i8nR.string.core_i8n_genres,
-        isLoading = uiState is GenresScreenUiState.Loading,
+        isLoading = uiState is GenresScreenUiState.Loading ||
+                ( uiState is GenresScreenUiState.Success && uiState.genreResult is GenreResult.Loading ),
         onNavigateBack = onNavigateBack,
         onNavigateToSettings = onNavigateToSettings,
     ) {
         when ( uiState ) {
             GenresScreenUiState.Loading -> {}
             is GenresScreenUiState.Success -> {
-                GenresGrid(
-                    genres = uiState.genres,
-                    sortType = uiState.sortGenresBy,
-                    sortReverse = uiState.sortGenresInReverse,
-                    onSortTypeChange = onSortGenresByChange,
-                    onSortReverseChange = onSortGenresInReverseChange,
-                    onViewGenre = onViewGenre,
-                )
+                when ( uiState.genreResult ) {
+                    GenreResult.Loading -> {}
+                    is GenreResult.Success -> {
+                        GenresGrid(
+                            genres = uiState.genreResult.genres,
+                            sortType = uiState.sortGenresBy,
+                            sortReverse = uiState.sortGenresInReverse,
+                            onSortTypeChange = onSortGenresByChange,
+                            onSortReverseChange = onSortGenresInReverseChange,
+                            onViewGenre = onViewGenre,
+                        )
+                    }
+                }
+
             }
         }
     }
@@ -234,7 +242,7 @@ private fun GenreCard(
                         id = if ( genre.numberOfTracks > 1 ) {
                             i8nR.string.core_i8n_n_songs
                         } else {
-                            i8nR.string.core_i8n_song
+                            i8nR.string.core_i8n_one_song
                         },
                         genre.numberOfTracks
                     ),
@@ -293,7 +301,7 @@ private fun ArtistsScreenPreview(
     ) {
         GenresScreenContent(
             uiState = GenresScreenUiState.Success(
-                genres = previewData.genres,
+                genreResult = GenreResult.Success( previewData.genres ),
                 sortGenresBy = SortGenresBy.NAME,
                 sortGenresInReverse = false,
             ),

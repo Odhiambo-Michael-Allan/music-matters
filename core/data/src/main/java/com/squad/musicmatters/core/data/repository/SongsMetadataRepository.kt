@@ -10,6 +10,16 @@ interface SongsMetadataRepository {
     fun fetchGenres(
         sortGenresBy: SortGenresBy,
         reverse: Boolean,
-    ): Flow<List<Genre>>
+    ): Flow<GenreResult>
     suspend fun deleteEntryWithId( id: String )
+}
+
+sealed interface MetadataResult {
+    data object Loading: MetadataResult
+    data class Success( val metadata: List<SongMetadata> ): MetadataResult
+}
+
+sealed interface GenreResult {
+    data object Loading: GenreResult
+    data class Success( val genres: List<Genre> ): GenreResult
 }

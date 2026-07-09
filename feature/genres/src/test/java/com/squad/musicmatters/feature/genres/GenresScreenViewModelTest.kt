@@ -1,6 +1,7 @@
 package com.squad.musicmatters.feature.genres
 
 import com.squad.castify.core.testing.rules.MainDispatcherRule
+import com.squad.musicmatters.core.data.repository.GenreResult
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.SongMetadata
@@ -87,14 +88,16 @@ class GenresScreenViewModelTest {
         preferencesDataSource.sendUserData( emptyUserData )
         assertEquals(
             GenresScreenUiState.Success(
-                genres = listOf(
-                    Genre(
-                        name = "Pop",
-                        numberOfTracks = 1
-                    ),
-                    Genre(
-                        name = "Rap/HipHop",
-                        numberOfTracks = 2
+                genreResult = GenreResult.Success(
+                    listOf(
+                        Genre(
+                            name = "Pop",
+                            numberOfTracks = 1
+                        ),
+                        Genre(
+                            name = "Rap/HipHop",
+                            numberOfTracks = 2
+                        )
                     )
                 ),
                 sortGenresBy = DefaultPreferences.SORT_GENRES_BY,
