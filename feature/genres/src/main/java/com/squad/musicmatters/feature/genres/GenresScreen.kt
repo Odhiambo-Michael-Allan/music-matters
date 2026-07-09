@@ -158,7 +158,12 @@ fun GenresGrid(
                     columns = StaggeredGridCells.Adaptive( 150.dp ),
                     horizontalArrangement = Arrangement.spacedBy( 4.dp ),
                     verticalItemSpacing = 4.dp,
-                    contentPadding = PaddingValues( 8.dp )
+                    contentPadding = PaddingValues(
+                        start = 8.dp,
+                        end = 8.dp,
+                        top = 8.dp,
+                        bottom = 70.dp
+                    )
                 ) {
                     itemsIndexed( genres ) { index, genre ->
                         GenreCard(
@@ -225,9 +230,18 @@ private fun GenreCard(
                         .copy( fontWeight = FontWeight.Bold )
                 )
                 Text(
-                    text = genre.numberOfTracks.toString(),
+                    text = stringResource(
+                        id = if ( genre.numberOfTracks > 1 ) {
+                            i8nR.string.core_i8n_n_songs
+                        } else {
+                            i8nR.string.core_i8n_song
+                        },
+                        genre.numberOfTracks
+                    ),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelSmall
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontWeight = FontWeight.Bold
+                    )
                 )
             }
         }
