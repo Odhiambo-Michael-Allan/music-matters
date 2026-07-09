@@ -34,10 +34,10 @@ import java.io.File
 import javax.annotation.concurrent.Immutable
 import javax.inject.Inject
 
-class SongsStoreImpl @Inject constructor(
+class SongsStoreImpl(
     private val context: Context,
     private val ioDispatcher: CoroutineDispatcher,
-    @param:IoScope private val ioScope: CoroutineScope,
+    ioScope: CoroutineScope,
 ) : SongsStore {
 
     private val collectionUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI

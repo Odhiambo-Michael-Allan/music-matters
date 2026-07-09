@@ -114,7 +114,7 @@ class LocalMusicSource(
                     Timber.tag( TAG ).d( "ERROR OCCURRED WHILE FETCHING ADDITIONAL METADATA FOR: ${it.mediaMetadata.title}" )
                 }
             }
-            songsMetadataRepository.save( additionalMetadataList )
+//            songsMetadataRepository.save( additionalMetadataList )
             mediaMetadataRetriever.release()
         }
     }

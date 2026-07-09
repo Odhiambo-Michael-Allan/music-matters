@@ -1,130 +1,60 @@
 package com.squad.musicmatters.core.data.repository.impl
 
-import android.content.Context
-import android.media.MediaMetadataRetriever
-import android.os.Build
-import androidx.core.net.toUri
 import com.squad.musicmatters.core.common.di.IoScope
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
-import com.squad.musicmatters.core.database.dao.SongAdditionalMetadataDao
+import com.squad.musicmatters.core.data.songs.MetadataStore
 import com.squad.musicmatters.core.database.model.SongMetadataEntity
-import com.squad.musicmatters.core.database.model.asExternalModel
 import com.squad.musicmatters.core.model.SongMetadata
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import kotlinx.coroutines.flow.stateIn
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
+
+
 class SongsMetadataRepositoryImpl @Inject constructor(
-    @param:ApplicationContext private val context: Context,
-    private val songsRepository: SongsRepository,
-    private val songAdditionalMetadataDao: SongAdditionalMetadataDao,
-    @IoScope coroutineScope: CoroutineScope,
+    private val metadataStore: MetadataStore,
+    @param:IoScope private val coroutineScope: CoroutineScope,
+    songsRepository: SongsRepository,
 ) : SongsMetadataRepository {
 
-    init {
-        coroutineScope.launch {
-            songsRepository.fetchSongs().collect { songs ->
-                val metadataRetriever = MediaMetadataRetriever()
-                songs.forEach {
-                    try {
-                        val uri = it.mediaUri.toUri()
-                        metadataRetriever.setDataSource( context, uri )
-                        val bitrate = extractBitrateUsing(
-                            metadataRetriever
-                        )
-                        val bitsPerSample = extractBitsPerSampleUsing(
-                            metadataRetriever
-                        )
-                        val codec = extractCodecUsing( metadataRetriever )
-                        val samplingRate = extractSamplingRateUsing(
-                            metadataRetriever
-                        )
-                        val genre = extractGenreUsing( metadataRetriever )
-                        Timber.tag( TAG ).d( "SAVING METADATA FOR: ${it.title}" )
-                        save(
-                            SongMetadata(
-                                songId = it.id,
-                                bitrate = ( bitrate / 1000 ),
-                                bitsPerSample = bitsPerSample,
-                                codec = codec,
-                                samplingRate = samplingRate.toFloat(),
-                                genre = genre
-                            )
-                        )
-                    } catch ( e: Exception ) {
-                        Timber.tag( TAG )
-                            .e(
-                                "ERROR OCCURRED WHILE FETCHING ADDITIONAL METADATA FOR:"
-                                        + " ${it.title} -> ERROR: ${e.message}"
-                            )
-                    }
+    // Thread-safe in-memory cache to store metadata once looked up
+    private val metadataCache = ConcurrentHashMap<String, SongMetadata>()
+
+    val metadataFlow: StateFlow<List<SongMetadata>> = songsRepository.fetchSongs()
+        .map { songs ->
+            // 1. Identify which songs are missing from our memory cache
+            val missingSongs = songs.filter { !metadataCache.containsKey( it.id ) }
+            println( "MISSING SONGS SIZE: ${missingSongs.size}" )
+
+            // 2. Only fetch metadata for the missing files
+            if ( missingSongs.isNotEmpty() ) {
+                val fetchedMetadata = metadataStore.fetchMetadataFor( missingSongs )
+                println( "FETCHED METADATA SIZE: ${fetchedMetadata.size}" )
+                fetchedMetadata.forEach { metadata ->
+                    metadataCache[ metadata.songId ] = metadata
                 }
-                metadataRetriever.release()
             }
-        }
-    }
 
-    override fun fetchMetadata(): Flow<List<SongMetadata>> =
-        songAdditionalMetadataDao.fetchEntries().map { entities ->
-            entities.map { it.asExternalModel() }
-        }
+            // 3. Map the original song list to the cached metadata
+            songs.mapNotNull { metadataCache[ it.id ] }
+        }.stateIn(
+            scope = coroutineScope, // Runs safely on Dispatchers.IO
+            started = SharingStarted.WhileSubscribed( 5_000 ),
+            initialValue = emptyList()
+        )
 
-    override suspend fun fetchMetadataForSongWithId(songId: String ) =
-        songAdditionalMetadataDao
-            .fetchAdditionalMetadataForSongWithId( songId )
-            ?.asExternalModel()
-
-    override suspend fun save( songMetadata: SongMetadata ) {
-        songAdditionalMetadataDao.upsert( songMetadata.asEntity() )
-    }
-
-    override suspend fun save( songMetadata: List<SongMetadata> ) {
-        songAdditionalMetadataDao.insertAll( songMetadata.map { it.asEntity() } )
-    }
+    override fun fetchMetadata(): Flow<List<SongMetadata>> = metadataFlow
 
     override suspend fun deleteEntryWithId( id: String ) {
-        songAdditionalMetadataDao.deleteEntryWithId( id )
+        metadataCache.remove( id )
     }
 }
-
-private fun extractBitrateUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
-    mediaMetadataRetriever.runCatching {
-        extractMetadata( MediaMetadataRetriever.METADATA_KEY_BITRATE )?.toLong()
-    }.getOrNull() ?: 0L
-
-private fun extractBitsPerSampleUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
-    if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {
-        mediaMetadataRetriever.runCatching {
-            extractMetadata(
-                MediaMetadataRetriever.METADATA_KEY_BITS_PER_SAMPLE
-            )?.toLong()
-        }.getOrNull() ?: 0L
-    } else 0L
-
-private fun extractCodecUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
-    mediaMetadataRetriever.runCatching {
-        extractMetadata( MediaMetadataRetriever.METADATA_KEY_MIMETYPE )
-    }.getOrNull() ?: ""
-
-private fun extractSamplingRateUsing( mediaMetadataRetriever: MediaMetadataRetriever ) =
-    if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {
-        mediaMetadataRetriever.runCatching {
-            extractMetadata( MediaMetadataRetriever.METADATA_KEY_SAMPLERATE )?.toLong()
-        }.getOrNull() ?: 0L
-    } else 0L
-
-private fun extractGenreUsing( mediaMetadataRetriever: MediaMetadataRetriever ): String =
-    mediaMetadataRetriever.runCatching {
-        extractMetadata( MediaMetadataRetriever.METADATA_KEY_GENRE )
-    }.getOrNull() ?: ""
-
-private const val TAG = "SONGS-METADATA-REPO"
-
 private fun SongMetadata.asEntity() = SongMetadataEntity(
     songId = songId,
     codec = codec,

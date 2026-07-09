@@ -5,8 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SongsMetadataRepository {
     fun fetchMetadata(): Flow<List<SongMetadata>>
-    suspend fun fetchMetadataForSongWithId( songId: String ): SongMetadata?
-    suspend fun save( songMetadata: SongMetadata )
-    suspend fun save( songMetadata: List<SongMetadata> )
     suspend fun deleteEntryWithId( id: String )
 }

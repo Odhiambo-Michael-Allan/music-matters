@@ -25,12 +25,12 @@ class SongsRepositoryImplTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private lateinit var songsStore: TestSongsStore
+    private lateinit var songsStore: FakeSongsStore
     private lateinit var subject: SongsRepository
 
     @Before
     fun setUp() {
-        songsStore = TestSongsStore()
+        songsStore = FakeSongsStore()
         subject = SongsRepositoryImpl(
             songsStore = songsStore,
             ioScope = TestScope(),
@@ -40,9 +40,6 @@ class SongsRepositoryImplTest {
 
     @Test
     fun testFetchSongs() = runTest {
-        backgroundScope.launch(UnconfinedTestDispatcher() ) {
-            subject.fetchSongs( SortSongsBy.TITLE ).collect()
-        }
 
         val testSongs = listOf(
             testSong( id = "song-id-1" ),
@@ -77,7 +74,7 @@ class SongsRepositoryImplTest {
 
 }
 
-private class TestSongsStore : SongsStore {
+private class FakeSongsStore : SongsStore {
 
     private var currentSongs = emptyList<Song>()
     private var currentLyrics = emptyList<Lyric>()

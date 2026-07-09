@@ -4,7 +4,9 @@ import android.content.Context
 import com.squad.musicmatters.core.common.Dispatcher
 import com.squad.musicmatters.core.common.MusicMattersDispatchers
 import com.squad.musicmatters.core.common.di.IoScope
+import com.squad.musicmatters.core.data.songs.MetadataStore
 import com.squad.musicmatters.core.data.songs.SongsStore
+import com.squad.musicmatters.core.data.songs.impl.MetadataStoreImpl
 import com.squad.musicmatters.core.data.songs.impl.SongsStoreImpl
 import dagger.Module
 import dagger.Provides
@@ -17,7 +19,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn( SingletonComponent::class )
-internal object SongsStoreModule {
+internal object MediaStoreModule {
 
     @Provides
     @Singleton
@@ -30,5 +32,11 @@ internal object SongsStoreModule {
         ioDispatcher = ioDispatcher,
         ioScope = ioScope,
     )
+
+    @Provides
+    @Singleton
+    internal fun providesMetadataStore(
+        @ApplicationContext context: Context
+    ) : MetadataStore = MetadataStoreImpl( context = context )
 
 }
