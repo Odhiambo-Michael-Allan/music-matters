@@ -15,7 +15,6 @@ internal fun SettingsSideHeading( text: String ) {
         Text(
             text = text,
             style = MaterialTheme.typography.headlineSmall.copy(
-                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.ExtraBold,
             )
         )

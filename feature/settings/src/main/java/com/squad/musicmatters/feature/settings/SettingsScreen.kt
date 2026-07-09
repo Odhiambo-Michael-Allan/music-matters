@@ -134,6 +134,7 @@ private fun SettingsScreenContent(
         isLoading = uiState is SettingsScreenUiState.Loading,
         titleResId = i8nR.string.core_i8n_settings,
         onNavigateBack = onNavigateBack,
+        options = {},
     ) {
         when ( uiState ) {
             SettingsScreenUiState.Loading -> {}
