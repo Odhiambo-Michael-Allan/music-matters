@@ -87,7 +87,7 @@ private fun ArtistsScreenContent(
 ) {
 
     LibraryDestinationContainer(
-        titleResId = i8nR.string.core_i8n_artists,
+        title = stringResource( id = i8nR.string.core_i8n_artists ),
         isLoading = uiState is ArtistsScreenUiState.Loading,
         onNavigateBack = onNavigateBack,
         onNavigateToSettings = onNavigateToSettings,

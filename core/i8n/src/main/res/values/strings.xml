@@ -172,7 +172,6 @@
     <string name="core_i8n_n_genres" translatable="false">%d genres</string>
     <string name="core_i8n_genres" translatable="false">Genres</string>
     <string name="core_i8n_artist_name" translatable="false">Artist name</string>
-
     <string name="core_i8n_track_count" translatable="false">Track count</string>
 
 

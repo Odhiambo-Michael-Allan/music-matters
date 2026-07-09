@@ -20,7 +20,7 @@ import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 @OptIn(  ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class )
 @Composable
 fun LibraryDestinationContainer(
-    @StringRes titleResId: Int? = null,
+    title: String? = null,
     isLoading: Boolean,
     onNavigateBack: () -> Unit,
     onNavigateToSettings: ( () -> Unit )? = null,
@@ -36,7 +36,7 @@ fun LibraryDestinationContainer(
             .nestedScroll( scrollBehavior.nestedScrollConnection )
     ) {
         MinimalAppBar(
-            title = titleResId?.let { stringResource( id = it ) } ?: "",
+            title = title ?: "",
             scrollBehavior = scrollBehavior,
             onNavigationIconClicked = onNavigateBack,
             options = options ?: {

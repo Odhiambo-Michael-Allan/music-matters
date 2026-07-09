@@ -79,7 +79,7 @@ private fun GenresScreenContent(
 ) {
 
     LibraryDestinationContainer(
-        titleResId = i8nR.string.core_i8n_genres,
+        title = stringResource( id = i8nR.string.core_i8n_genres ),
         isLoading = uiState is GenresScreenUiState.Loading ||
                 ( uiState is GenresScreenUiState.Success && uiState.genreResult is GenreResult.Loading ),
         onNavigateBack = onNavigateBack,

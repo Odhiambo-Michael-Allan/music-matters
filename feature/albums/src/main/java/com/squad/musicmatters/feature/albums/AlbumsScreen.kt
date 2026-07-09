@@ -3,6 +3,7 @@ package com.squad.musicmatters.feature.albums
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -75,7 +76,7 @@ private fun AlbumsScreenContent(
 ) {
 
     LibraryDestinationContainer(
-        titleResId = i8nR.string.core_i8n_albums,
+        title = stringResource( id = i8nR.string.core_i8n_albums ),
         isLoading = uiState is AlbumsScreenUiState.Loading,
         onNavigateBack = onNavigateBack,
         onNavigateToSettings = onNavigateToSettings,
