@@ -27,15 +27,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/feature/genres/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/genres/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/genres/consumer-rules.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/genres/proguard-rules.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/genres/src/main/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/genres/src/main/java/com/squad/musicmatters/feature/genres/GenresScreenViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/genres/src/test/java/com/squad/musicmatters/feature/genres/ExampleUnitTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/SongsMetadataRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/SongsMetadataRepository.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsMetadataRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsMetadataRepositoryImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/schemas/com.squad.musicmatters.core.database.MusicMattersDatabase/1.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/schemas/com.squad.musicmatters.core.database.MusicMattersDatabase/1.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/androidTest/java/com/squad/musicmatters/core/database/SongMetadataDaoTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/MusicMattersDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/MusicMattersDatabase.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/dao/SongAdditionalMetadataDao.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/di/DaosModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/di/DaosModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/database/src/main/java/com/squad/musicmatters/core/database/model/SongMetadataEntity.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/SongsMetadataRepositoryImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/SongsMetadataRepositoryImplTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/Genre.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/Genre.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeSongsMetadataRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeSongsMetadataRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,8 +90,8 @@
         <option value="Kotlin Data Class" />
         <option value="resourceFile" />
         <option value="Kotlin Interface" />
-        <option value="Kotlin Class" />
         <option value="Kotlin JUnit4 Test Class" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -204,7 +213,7 @@
     "com.google.services.firebase.aqiPopupShown": "true",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
-    "git-widget-placeholder": "feature-artist",
+    "git-widget-placeholder": "feature-genre",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "/Users/app/Desktop/android/projects/music-matters/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl",
     "last_opened_file_path": "/Users/app/Desktop/android/projects/music-matters/core/ui/src/main/java/com/squad/musicmatters/core/ui",
@@ -254,7 +263,7 @@
       <recent name="com.squad.musicmatters.feature.nowplaying" />
     </key>
   </component>
-  <component name="RunManager" selected="Android App.mobile">
+  <component name="RunManager" selected="Gradle.SongsMetadataRepositoryImplTest.testFetchMetadata">
     <configuration name="mobile" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="MusicMatters.mobile" />
       <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />

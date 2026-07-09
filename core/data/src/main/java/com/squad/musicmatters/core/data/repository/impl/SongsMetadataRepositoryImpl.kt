@@ -4,6 +4,7 @@ import com.squad.musicmatters.core.common.di.IoScope
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.songs.MetadataStore
+import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.SongMetadata
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -25,16 +26,14 @@ class SongsMetadataRepositoryImpl @Inject constructor(
     // Thread-safe in-memory cache to store metadata once looked up
     private val metadataCache = ConcurrentHashMap<String, SongMetadata>()
 
-    val metadataFlow: StateFlow<List<SongMetadata>> = songsRepository.fetchSongs()
+    private val metadataFlow: StateFlow<List<SongMetadata>> = songsRepository.fetchSongs()
         .map { songs ->
             // 1. Identify which songs are missing from our memory cache
             val missingSongs = songs.filter { !metadataCache.containsKey( it.id ) }
-            println( "MISSING SONGS SIZE: ${missingSongs.size}" )
 
             // 2. Only fetch metadata for the missing files
             if ( missingSongs.isNotEmpty() ) {
                 val fetchedMetadata = metadataStore.fetchMetadataFor( missingSongs )
-                println( "FETCHED METADATA SIZE: ${fetchedMetadata.size}" )
                 fetchedMetadata.forEach { metadata ->
                     metadataCache[ metadata.songId ] = metadata
                 }
@@ -49,6 +48,10 @@ class SongsMetadataRepositoryImpl @Inject constructor(
         )
 
     override fun fetchMetadata(): Flow<List<SongMetadata>> = metadataFlow
+
+    override fun fetchGenres(): Flow<List<Genre>> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun deleteEntryWithId( id: String ) {
         metadataCache.remove( id )

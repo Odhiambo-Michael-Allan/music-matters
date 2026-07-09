@@ -1,6 +1,7 @@
 package com.squad.musicmatters.core.testing.repository
 
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
+import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.SongMetadata
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,10 @@ class FakeSongsMetadataRepository : SongsMetadataRepository {
 
     override fun fetchMetadata(): Flow<List<SongMetadata>> =
         metadataFlow
+
+    override fun fetchGenres(): Flow<List<Genre>> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun deleteEntryWithId( id: String ) {
         val currentMetadata = metadataFlow.first().toMutableList()

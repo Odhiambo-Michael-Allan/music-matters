@@ -8,6 +8,7 @@ import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.songs.testSong
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -27,21 +28,26 @@ class SongsMetadataRepositoryImplTest {
 
     private lateinit var metadataStore: FakeMetadataStore
     private lateinit var songsRepository: FakeSongsRepository
-    private lateinit var subject: SongsMetadataRepository
+    private lateinit var subject: SongsMetadataRepositoryImpl
 
     @Before
     fun setUp() {
         metadataStore = FakeMetadataStore()
         songsRepository = FakeSongsRepository()
-    }
-
-    @Test
-    fun testFetchMetadata() = testScope.runTest {
         subject = SongsMetadataRepositoryImpl(
             metadataStore = metadataStore,
             songsRepository = songsRepository,
-            coroutineScope = backgroundScope
+            coroutineScope = testScope
         )
+    }
+
+    @Test
+    fun testFetchMetadata() = runTest( UnconfinedTestDispatcher() ) {
+        backgroundScope.launch {
+            subject.fetchMetadata().collect()
+        }
+        assertTrue( subject.fetchMetadata().first().isEmpty() )
+
         val songs = listOf(
             testSong( id = "song-id-1" ),
             testSong( id = "song-id-2" ),
