@@ -41,6 +41,7 @@
             <option value="$PROJECT_DIR$/feature/albums" />
             <option value="$PROJECT_DIR$/feature/artist" />
             <option value="$PROJECT_DIR$/feature/artists" />
+            <option value="$PROJECT_DIR$/feature/genre" />
             <option value="$PROJECT_DIR$/feature/genres" />
             <option value="$PROJECT_DIR$/feature/lyrics" />
             <option value="$PROJECT_DIR$/feature/nowplaying" />

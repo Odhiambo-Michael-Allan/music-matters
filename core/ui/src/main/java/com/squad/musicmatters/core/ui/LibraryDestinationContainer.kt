@@ -24,7 +24,7 @@ fun LibraryDestinationContainer(
     isLoading: Boolean,
     onNavigateBack: () -> Unit,
     onNavigateToSettings: ( () -> Unit )? = null,
-    options: @Composable (() -> Unit)? = null,
+    options: @Composable ( () -> Unit )? = null,
     content: @Composable () -> Unit,
 ) {
 
@@ -33,7 +33,7 @@ fun LibraryDestinationContainer(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .nestedScroll( scrollBehavior.nestedScrollConnection )
     ) {
         MinimalAppBar(
             title = titleResId?.let { stringResource( id = it ) } ?: "",
