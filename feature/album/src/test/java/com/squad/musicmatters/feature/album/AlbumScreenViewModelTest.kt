@@ -8,7 +8,7 @@ import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakeAlbumsRepository
 import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
-import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -44,7 +44,7 @@ class AlbumScreenViewModelTest {
     private lateinit var albumsRepository: FakeAlbumsRepository
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var preferencesDataSource: FakePreferencesDataSource
+    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
     private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var subject: AlbumScreenViewModel
@@ -55,7 +55,7 @@ class AlbumScreenViewModelTest {
         songsRepository = FakeSongsRepository()
         player = FakeMusicMattersPlayer()
         playlistRepository = FakePlaylistsRepository()
-        preferencesDataSource = FakePreferencesDataSource()
+        preferencesDataSource = FakeUserPreferencesRepository()
         metadataRepository = FakeSongsMetadataRepository()
         subject = AlbumScreenViewModel(
             savedStateHandle = SavedStateHandle(
@@ -65,7 +65,7 @@ class AlbumScreenViewModelTest {
             songsRepository = songsRepository,
             player = player,
             playlistsRepository = playlistRepository,
-            preferencesDataSource = preferencesDataSource,
+            userPreferencesRepository = preferencesDataSource,
             songsMetadataRepository = metadataRepository
         )
     }

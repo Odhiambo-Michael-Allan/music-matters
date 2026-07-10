@@ -5,7 +5,7 @@ import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.datastore.UserPreferencesRepository
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
@@ -21,24 +21,24 @@ import javax.inject.Inject
 @HiltViewModel
 class SongsScreenViewModel @Inject constructor(
     songsRepository: SongsRepository,
-    preferencesDataSource: PreferencesDataSource,
+    userPreferencesRepository: UserPreferencesRepository,
     playlistsRepository: PlaylistsRepository,
     musicMattersPlayer: MusicMattersPlayer,
     songsMetadataRepository: SongsMetadataRepository
 ) : BaseViewModel(
     player = musicMattersPlayer,
-    preferencesDataSource = preferencesDataSource,
+    userPreferencesRepository = userPreferencesRepository,
     playlistsRepository = playlistsRepository,
 ) {
 
     val uiState: StateFlow<SongsScreenUiState> = com.squad.musicmatters.core.data.utils.combine(
-        preferencesDataSource.userData.flatMapLatest {
+        userPreferencesRepository.userData.flatMapLatest {
             songsRepository.fetchSongs(
                 sortSongsBy = it.sortSongsBy,
                 sortSongsInReverse = it.sortSongsReverse
             )
         },
-        preferencesDataSource.userData,
+        userPreferencesRepository.userData,
         musicMattersPlayer.playerState,
         playlistsRepository.fetchFavorites(),
         playlistsRepository.fetchPlaylists(),

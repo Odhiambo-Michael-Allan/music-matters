@@ -7,7 +7,7 @@ import com.squad.musicmatters.core.model.SortArtistsBy
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakeArtistsRepository
 import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
-import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import kotlinx.coroutines.flow.collect
@@ -26,7 +26,7 @@ class ArtistsScreenViewModelTest {
 
     private lateinit var artistsRepository: FakeArtistsRepository
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var preferencesDataSource: FakePreferencesDataSource
+    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
     private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var subject: ArtistsScreenViewModel
@@ -35,14 +35,14 @@ class ArtistsScreenViewModelTest {
     fun setUp() {
         artistsRepository = FakeArtistsRepository()
         player = FakeMusicMattersPlayer()
-        preferencesDataSource = FakePreferencesDataSource()
+        preferencesDataSource = FakeUserPreferencesRepository()
         playlistRepository = FakePlaylistsRepository()
         songsRepository = FakeSongsRepository()
         subject = ArtistsScreenViewModel(
             artistsRepository = artistsRepository,
             songsRepository = songsRepository,
             playlistsRepository = playlistRepository,
-            preferencesDataSource = preferencesDataSource,
+            userPreferencesRepository = preferencesDataSource,
             player = player,
         )
     }

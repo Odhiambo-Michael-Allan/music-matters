@@ -3,10 +3,12 @@ package com.squad.musicmatters.core.data.utils
 import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.model.Genre
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortAlbumsBy
 import com.squad.musicmatters.core.model.SortArtistsBy
 import com.squad.musicmatters.core.model.SortGenresBy
+import com.squad.musicmatters.core.model.SortPlaylistsBy
 import com.squad.musicmatters.core.model.SortSongsBy
 import kotlin.math.max
 import kotlin.math.min
@@ -66,6 +68,15 @@ fun List<Genre>.sortGenres( by: SortGenresBy, reverse: Boolean ): List<Genre> {
         SortGenresBy.NAME -> sortedBy { it.name }
         SortGenresBy.TRACK_COUNT -> sortedBy { it.numberOfTracks }
         SortGenresBy.CUSTOM -> shuffled()
+    }
+    return if ( reverse ) sortedList.reversed() else sortedList
+}
+
+fun List<Playlist>.sortPlaylists( by: SortPlaylistsBy, reverse: Boolean ): List<Playlist> {
+    val sortedList = when ( by ) {
+        SortPlaylistsBy.TITLE -> sortedBy { it.title }
+        SortPlaylistsBy.TRACK_COUNT -> sortedBy { it.songIds.size }
+        SortPlaylistsBy.CUSTOM -> shuffled()
     }
     return if ( reverse ) sortedList.reversed() else sortedList
 }

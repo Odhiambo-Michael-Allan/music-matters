@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.datastore.UserPreferencesRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.media.PlaybackPositionUpdater
@@ -22,12 +22,12 @@ import javax.inject.Inject
 class LyricsScreenViewModel @Inject constructor(
     songsRepository: SongsRepository,
     queueRepository: QueueRepository,
-    preferencesDataSource: PreferencesDataSource,
+    userPreferencesRepository: UserPreferencesRepository,
     playbackPositionUpdater: PlaybackPositionUpdater,
     private val player: MusicMattersPlayer,
 ) : ViewModel() {
 
-    val uiState: StateFlow<LyricsScreenUiState> = preferencesDataSource.userData
+    val uiState: StateFlow<LyricsScreenUiState> = userPreferencesRepository.userData
         .map { it.currentlyPlayingSongId }
         .distinctUntilChanged()
         .flatMapLatest { songId ->

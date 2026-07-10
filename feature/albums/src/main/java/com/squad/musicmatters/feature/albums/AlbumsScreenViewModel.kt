@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.data.repository.AlbumsRepository
 import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.datastore.UserPreferencesRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.model.Playlist
@@ -22,26 +22,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumsScreenViewModel @Inject constructor(
-    private val preferencesDataSource: PreferencesDataSource,
+    private val userPreferencesRepository: UserPreferencesRepository,
     albumsRepository: AlbumsRepository,
     player: MusicMattersPlayer,
     playlistsRepository: PlaylistsRepository,
     songsRepository: SongsRepository,
 ) : BaseViewModel(
     player = player,
-    preferencesDataSource = preferencesDataSource,
+    userPreferencesRepository = userPreferencesRepository,
     playlistsRepository = playlistsRepository,
 ) {
 
     val uiState: StateFlow<AlbumsScreenUiState> =
         combine(
-            preferencesDataSource.userData.flatMapLatest {
+            userPreferencesRepository.userData.flatMapLatest {
                 albumsRepository.fetchAlbums(
                     sortAlbumsBy = it.sortAlbumsBy,
                     sortAlbumsInReverse = it.sortAlbumsReverse
                 )
             },
-            preferencesDataSource.userData,
+            userPreferencesRepository.userData,
             playlistsRepository.fetchPlaylists(),
             songsRepository.fetchSongs(),
         ) { albums, userData, playlists, songs ->
@@ -59,11 +59,11 @@ class AlbumsScreenViewModel @Inject constructor(
         )
 
     fun onSortTypeChange( by: SortAlbumsBy ) {
-        viewModelScope.launch { preferencesDataSource.setSortAlbumsBy( by ) }
+        viewModelScope.launch { userPreferencesRepository.setSortAlbumsBy( by ) }
     }
 
     fun onSortInReverseChange( reverse: Boolean ) {
-        viewModelScope.launch { preferencesDataSource.setSortAlbumsInReverse( reverse ) }
+        viewModelScope.launch { userPreferencesRepository.setSortAlbumsInReverse( reverse ) }
     }
 
 }

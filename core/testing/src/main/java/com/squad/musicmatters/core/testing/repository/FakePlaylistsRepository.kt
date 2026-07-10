@@ -4,6 +4,7 @@ import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.SortPlaylistsBy
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,7 +21,10 @@ class FakePlaylistsRepository : PlaylistsRepository {
             playlists.find { it.id == FAVORITES_PLAYLIST_ID }
         }
 
-    override fun fetchPlaylists(): Flow<List<Playlist>> = playlistsFlow
+    override fun fetchPlaylists(
+        sortPlaylistsBy: SortPlaylistsBy,
+        sortInReverse: Boolean
+    ): Flow<List<Playlist>> = playlistsFlow
 
     override fun fetchPlaylistWithId( id: String ): Flow<Playlist?> =
         playlistsFlow.map { playlists ->

@@ -1,6 +1,7 @@
 package com.squad.musicmatters.core.data.repository.impl
 
 import com.squad.musicmatters.core.data.repository.PlaylistsRepository
+import com.squad.musicmatters.core.data.utils.sortPlaylists
 import com.squad.musicmatters.core.database.dao.PlaylistDao
 import com.squad.musicmatters.core.database.dao.PlaylistEntryDao
 import com.squad.musicmatters.core.database.model.PlaylistEntity
@@ -8,6 +9,7 @@ import com.squad.musicmatters.core.database.model.PlaylistEntryEntity
 import com.squad.musicmatters.core.database.model.PopulatedPlaylistEntity
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.SortPlaylistsBy
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -29,9 +31,16 @@ class PlaylistsRepositoryImpl @Inject constructor(
                 it?.asPlaylistInfo()
             }
 
-    override fun fetchPlaylists(): Flow<List<Playlist>> = playlistDao
+    override fun fetchPlaylists(
+        sortPlaylistsBy: SortPlaylistsBy,
+        sortInReverse: Boolean,
+    ): Flow<List<Playlist>> = playlistDao
         .fetchPlaylists()
-        .map { playlists -> playlists.map { it.asPlaylistInfo() } }
+        .map { playlists ->
+            playlists
+                .map { it.asPlaylistInfo() }
+                .sortPlaylists( sortPlaylistsBy, sortInReverse )
+        }
 
     override fun isFavorite( songId: String ) =
         playlistDao.fetchPlaylistWithId(

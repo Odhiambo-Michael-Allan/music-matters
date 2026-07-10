@@ -5,7 +5,7 @@ import com.squad.musicmatters.core.media.media.extensions.getMediaItems
 import com.squad.musicmatters.core.testing.connection.FakePlayerConnector
 import com.squad.musicmatters.core.testing.repository.TestMostPlayedSongsRepository
 import com.squad.musicmatters.core.testing.repository.TestPlayHistoryRepository
-import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -31,7 +31,7 @@ class MusicMattersPlayerImplTest {
     private lateinit var playHistoryRepository: TestPlayHistoryRepository
     private lateinit var songsAdditionalMetadataRepository: FakeSongsMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
-    private lateinit var preferencesDataSource: FakePreferencesDataSource
+    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
     private lateinit var subject: MusicMattersPlayer
 
 
@@ -43,7 +43,7 @@ class MusicMattersPlayerImplTest {
         playHistoryRepository = TestPlayHistoryRepository()
         songsAdditionalMetadataRepository = FakeSongsMetadataRepository()
         queueRepository = FakeQueueRepository()
-        preferencesDataSource = FakePreferencesDataSource()
+        preferencesDataSource = FakeUserPreferencesRepository()
         subject = MusicMattersPlayerImpl(
             playerConnector = playerConnector,
             songToMediaItemConverter = TestSongToMediaItemConverter(),
