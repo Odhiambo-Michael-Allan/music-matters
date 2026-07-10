@@ -78,6 +78,7 @@ import com.squad.musicmatters.feature.lyrics.navigation.lyricsScreen
 import com.squad.musicmatters.feature.lyrics.navigation.navigateToLyricsScreen
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreen
 import com.squad.musicmatters.feature.nowplaying.components.MiniPlayer
+import com.squad.musicmatters.feature.playlists.navigation.navigateToPlaylists
 import com.squad.musicmatters.feature.queue.navigation.navigateToQueueScreen
 import com.squad.musicmatters.feature.queue.navigation.queueScreen
 import com.squad.musicmatters.feature.settings.navigation.navigateToSettings
@@ -425,6 +426,7 @@ fun NavHostController.navigateToLibraryDestination( libraryDestination: LibraryD
         LibraryDestination.ALBUMS -> navigateToAlbums( navOptions = topLevelNavOptions() )
         LibraryDestination.ARTISTS -> navigateToArtists( navOptions = topLevelNavOptions() )
         LibraryDestination.GENRES -> navigateToGenres( navOptions = topLevelNavOptions() )
+        LibraryDestination.PLAYLIST -> navigateToPlaylists( navOptions = topLevelNavOptions() )
     }
 }
 

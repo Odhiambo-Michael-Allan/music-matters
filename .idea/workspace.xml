@@ -27,8 +27,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/feature/playlists/src/main/java/com/squad/musicmatters/feature/playlists/PlaylistsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/playlists/src/main/java/com/squad/musicmatters/feature/playlists/PlaylistsScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/playlists/src/main/java/com/squad/musicmatters/feature/playlists/PlaylistsScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/playlists/src/main/java/com/squad/musicmatters/feature/playlists/PlaylistsScreenViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/playlists/src/main/java/com/squad/musicmatters/feature/playlists/navigation/PlaylistsScreenNavigation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/MusicMattersIcons.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/MusicMattersIcons.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/navigation/Destinations.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/navigation/Destinations.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/navigation/MusicMattersNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/navigation/MusicMattersNavHost.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -6,6 +6,7 @@ import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.feature.albums.navigation.AlbumsRoute
 import com.squad.musicmatters.feature.artists.navigation.ArtistsRoute
 import com.squad.musicmatters.feature.genres.navigation.GenresRoute
+import com.squad.musicmatters.feature.playlists.navigation.PlaylistsRoute
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import kotlinx.serialization.Serializable
 import com.squad.musicmatters.core.i8n.R as i8nR
@@ -61,6 +62,11 @@ enum class LibraryDestination(
         titleTextId = i8nR.string.core_i8n_genres,
         route = GenresRoute::class
     ),
+    PLAYLIST(
+        icon = MusicMattersIcons.Playlist,
+        titleTextId = i8nR.string.core_i8n_playlists,
+        route = PlaylistsRoute::class
+    )
 }
 
 ///**
