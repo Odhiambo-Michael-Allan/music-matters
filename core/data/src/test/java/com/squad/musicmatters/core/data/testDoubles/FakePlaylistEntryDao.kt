@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
-class TestPlaylistEntryDao : PlaylistEntryDao() {
+class FakePlaylistEntryDao : PlaylistEntryDao() {
 
     private val entitiesStateFlow = MutableStateFlow( emptyList<PlaylistEntryEntity>() )
 

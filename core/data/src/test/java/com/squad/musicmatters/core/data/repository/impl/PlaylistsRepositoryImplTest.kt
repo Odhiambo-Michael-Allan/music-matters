@@ -1,8 +1,8 @@
 package com.squad.musicmatters.core.data.repository.impl
 
 import com.squad.musicmatters.core.data.repository.PlaylistsRepository
-import com.squad.musicmatters.core.data.testDoubles.TestPlaylistDao
-import com.squad.musicmatters.core.data.testDoubles.TestPlaylistEntryDao
+import com.squad.musicmatters.core.data.testDoubles.FakePlaylistDao
+import com.squad.musicmatters.core.data.testDoubles.FakePlaylistEntryDao
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.testing.songs.testSong
 import junit.framework.TestCase
@@ -14,15 +14,15 @@ import org.junit.Test
 
 class PlaylistsRepositoryImplTest {
 
-    private lateinit var playlistDao: TestPlaylistDao
-    private lateinit var playlistEntryDao: TestPlaylistEntryDao
+    private lateinit var playlistDao: FakePlaylistDao
+    private lateinit var playlistEntryDao: FakePlaylistEntryDao
     private lateinit var subject: PlaylistsRepository
 
     @OptIn( ExperimentalCoroutinesApi::class )
     @Before
     fun setup() {
-        playlistDao = TestPlaylistDao()
-        playlistEntryDao = TestPlaylistEntryDao()
+        playlistDao = FakePlaylistDao()
+        playlistEntryDao = FakePlaylistEntryDao()
         subject = PlaylistsRepositoryImpl(
             playlistDao = playlistDao,
             playlistEntryDao = playlistEntryDao,

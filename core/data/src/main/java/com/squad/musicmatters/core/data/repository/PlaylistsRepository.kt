@@ -19,7 +19,7 @@ interface PlaylistsRepository {
     suspend fun removeFromFavorites( songId: String )
 
     suspend fun savePlaylist( id: String, playlistName: String, songsInPlaylist: List<Song> )
-    suspend fun deletePlaylist(playlist: Playlist )
+    suspend fun deletePlaylist( playlist: Playlist )
     suspend fun addSongToPlaylist( song: Song, playlistId: String )
 
     suspend fun removeSongIdFromPlaylist( songId: String, playlistId: String )

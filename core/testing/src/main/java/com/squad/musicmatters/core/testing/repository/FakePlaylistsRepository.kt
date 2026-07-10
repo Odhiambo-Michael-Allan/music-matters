@@ -26,9 +26,9 @@ class FakePlaylistsRepository : PlaylistsRepository {
         sortInReverse: Boolean
     ): Flow<List<Playlist>> = playlistsFlow
 
-    override fun fetchPlaylistWithId( id: String ): Flow<Playlist?> =
+    override fun fetchPlaylistWithId( id: String ): Flow<Playlist> =
         playlistsFlow.map { playlists ->
-            playlists.find { it.id == id }
+            playlists.find { it.id == id }!!
         }
 
     override fun isFavorite( songId: String ): Flow<Boolean> =

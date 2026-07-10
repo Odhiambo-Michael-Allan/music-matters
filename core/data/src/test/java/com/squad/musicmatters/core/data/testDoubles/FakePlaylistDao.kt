@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
-class TestPlaylistDao : PlaylistDao() {
+class FakePlaylistDao : PlaylistDao() {
 
     private val entitiesStateFlow = MutableStateFlow( emptyList<PlaylistEntity>() )
 

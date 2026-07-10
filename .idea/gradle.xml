@@ -45,6 +45,7 @@
             <option value="$PROJECT_DIR$/feature/genres" />
             <option value="$PROJECT_DIR$/feature/lyrics" />
             <option value="$PROJECT_DIR$/feature/nowplaying" />
+            <option value="$PROJECT_DIR$/feature/playlist" />
             <option value="$PROJECT_DIR$/feature/playlists" />
             <option value="$PROJECT_DIR$/feature/queue" />
             <option value="$PROJECT_DIR$/feature/settings" />
