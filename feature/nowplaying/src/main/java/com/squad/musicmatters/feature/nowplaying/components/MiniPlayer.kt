@@ -115,8 +115,6 @@ fun MiniPlayer(
         onNowPlayingBottomBarClick = onShowNowPlayingBottomSheet,
         nextSong = viewModel::playNextSong,
         previousSong = viewModel::playPreviousSong,
-        seekBack = viewModel::fastRewind,
-        seekForward = viewModel::fastForward,
         playPause = viewModel::playPause,
         modifier = modifier,
     )
@@ -132,8 +130,6 @@ private fun MiniPlayerContent(
     onNowPlayingBottomBarClick: () -> Unit,
     nextSong: () -> Boolean,
     previousSong: () -> Boolean,
-    seekBack: () -> Unit,
-    seekForward: () -> Unit,
     playPause: () -> Unit,
 ) {
 
@@ -616,8 +612,6 @@ private fun MiniPlayerPreview() {
                 onNowPlayingBottomBarClick = {},
                 nextSong = { true },
                 previousSong = { true },
-                seekBack = {},
-                seekForward = {},
                 playPause = {},
             )
         }

@@ -4,6 +4,8 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -56,6 +58,7 @@ internal fun SongsScreen(
     )
 }
 
+@OptIn( ExperimentalMaterial3ExpressiveApi::class )
 @Composable
 private fun SongsScreenContent(
     uiState: SongsScreenUiState,
@@ -83,7 +86,7 @@ private fun SongsScreenContent(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                CircularProgressIndicator()
+                LoadingIndicator()
             }
         }
         is SongsScreenUiState.Success -> {

@@ -75,7 +75,7 @@ fun <T : Enum<T>> MediaSortBar(
                 ) {
                     Text(
                         style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Bold
                         ),
                         text = stringResource( id = sortTypes[ sortBy ]!! ),
                     )
@@ -111,7 +111,11 @@ fun <T : Enum<T>> MediaSortBar(
         Row (
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ProvideTextStyle( value = MaterialTheme.typography.bodySmall ) {
+            ProvideTextStyle(
+                value = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.SemiBold
+                )
+            ) {
                 label()
             }
             onShufflePlay?.let {

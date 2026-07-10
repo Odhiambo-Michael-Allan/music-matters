@@ -201,6 +201,8 @@ private fun GenreCard(
         colors = GenreTileColors.cardColors( index = position ),
         onClick = onClick,
     ) {
+        val genreName = genre.name.takeIf { it.isNotBlank() }
+            ?: stringResource( id = i8nR.string.core_i8n_untitled )
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -216,8 +218,7 @@ private fun GenreCard(
                     .absoluteOffset( 8.dp, 12.dp )
             ) {
                 Text(
-                    text = genre.name.takeIf { !it.isBlank() }
-                        ?: stringResource( id = i8nR.string.core_i8n_untitled ),
+                    text = genreName,
                     textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.displaySmall
                         .copy( fontWeight = FontWeight.Bold ),
@@ -232,7 +233,7 @@ private fun GenreCard(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = genre.name,
+                    text = genreName,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyLarge
                         .copy( fontWeight = FontWeight.Bold )

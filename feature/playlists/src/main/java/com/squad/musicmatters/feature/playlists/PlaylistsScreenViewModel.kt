@@ -46,7 +46,7 @@ class PlaylistsScreenViewModel @Inject constructor(
                     it.copy(
                         artworkUri = songs
                             .filter { song -> song.id in it.songIds }
-                            .firstOrNull { song -> song.artworkUri != null }
+                            .firstOrNull { song -> !song.artworkUri.isNullOrBlank() }
                             ?.artworkUri
                     )
                 },

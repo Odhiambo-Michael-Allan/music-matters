@@ -82,6 +82,9 @@ fun DynamicAsyncImage(
             onSuccess = {
                 onImageLoaded?.invoke( it.result.image.toBitmap().asImageBitmap() )
             },
+            onError = {
+                onImageLoaded?.invoke( null )
+            },
             modifier = Modifier.fillMaxSize()
         )
     }

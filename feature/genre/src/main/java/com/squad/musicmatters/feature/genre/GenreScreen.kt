@@ -98,9 +98,12 @@ private fun GenreScreenContent(
 ) {
 
     var showBottomSheetMenu by remember { mutableStateOf( false ) }
+    val genreName = ( uiState as? GenreScreenUiState.Success )
+        ?.genreName.takeIf { !it.isNullOrBlank() }
+        ?: stringResource( id = i8nR.string.core_i8n_untitled )
 
     LibraryDestinationContainer(
-        title = ( uiState as? GenreScreenUiState.Success )?.genreName,
+        title = genreName,
         isLoading = uiState is GenreScreenUiState.Loading,
         onNavigateBack = onNavigateBack,
         options = {
