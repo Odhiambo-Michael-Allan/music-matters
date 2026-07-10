@@ -239,7 +239,7 @@ private fun PlaylistsGrid(
                             onDeletePlaylist = { onDeletePlaylist( it ) },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding( 4.dp )
+                                .padding(4.dp)
                                 .animateItem()
                         )
                     }
@@ -279,7 +279,11 @@ private fun PlaylistTile(
     GenericTile(
         modifier = modifier,
         imageUri = playlist.artworkUri?.toUri(),
-        title = playlist.title,
+        title = if ( playlist.id == FAVORITES_PLAYLIST_ID ) {
+            stringResource(id = i8nR.string.core_i8n_favorites)
+        } else {
+            playlist.title
+        },
         subTitle = subTitle,
         headerDescription = subTitle,
         onGetPlaylists = onGetPlaylists,
