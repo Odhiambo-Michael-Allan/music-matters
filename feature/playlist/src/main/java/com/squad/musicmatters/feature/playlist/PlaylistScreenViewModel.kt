@@ -51,7 +51,7 @@ class PlaylistScreenViewModel @Inject constructor(
         songsMetadataRepository.fetchMetadata()
     ) { playlist, songs, userData, favoriteSongsPlaylist, playlists, metadata ->
         PlaylistScreenUiState.Success(
-            playlist = playlist,
+            playlist = playlist!!,
             songsInPlaylist = songs.filter { it.id in playlist.songIds },
             sortSongsBy = userData.sortSongsBy,
             sortSongsInReverse = userData.sortSongsReverse,

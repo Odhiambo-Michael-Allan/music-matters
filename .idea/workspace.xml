@@ -27,25 +27,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/feature/playlist/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/playlist/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/playlist/consumer-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/playlist/proguard-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/playlist/src/main/AndroidManifest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/PlaylistScreenViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/navigation/PlaylistScreenNavigation.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/playlist/src/test/java/com/squad/musicmatters/feature/playlist/ExampleUnitTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/playlist/src/test/java/com/squad/musicmatters/feature/playlist/PlaylistScreenViewModelTest.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/PlaylistsRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/PlaylistsRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/PlaylistsRepositoryImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/PlaylistsRepositoryImplTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/TestPlaylistDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/FakePlaylistDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/TestPlaylistEntryDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/testDoubles/FakePlaylistEntryDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakePlaylistsRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakePlaylistsRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/playlist/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/playlist/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/PlaylistScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/PlaylistScreenViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,8 +78,8 @@
         <option value="Kotlin Data Class" />
         <option value="resourceFile" />
         <option value="Kotlin Interface" />
-        <option value="Kotlin JUnit4 Test Class" />
         <option value="Kotlin Class" />
+        <option value="Kotlin JUnit4 Test Class" />
       </list>
     </option>
   </component>
@@ -180,6 +167,7 @@
     "Gradle.NowPlayingViewModelTest.executor": "Run",
     "Gradle.PlayHistoryRepositoryImplTest.executor": "Run",
     "Gradle.PlaylistRepositoryImplTest.executor": "Run",
+    "Gradle.PlaylistScreenViewModelTest.executor": "Run",
     "Gradle.PlaylistsRepositoryImplTest.executor": "Run",
     "Gradle.QueueRepositoryImplTest.executor": "Run",
     "Gradle.QueueScreenViewModelTest.executor": "Run",
@@ -248,11 +236,11 @@
       <recent name="$PROJECT_DIR$/mobile/src/main/res/font/dmsans" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.squad.musicmatters.feature.playlist" />
       <recent name="com.squad.musicmatters.feature.genre" />
       <recent name="com.squad.musicmatters.feature.genres" />
       <recent name="com.squad.musicmatters.core.data.repository.impl" />
       <recent name="com.squad.musicmatters.feature.artist" />
-      <recent name="com.squad.musicmatters.feature.artists" />
     </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
       <recent name="com.squad.musicmatters.feature.queue" />
@@ -267,7 +255,7 @@
       <recent name="com.squad.musicmatters.feature.nowplaying" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.PlaylistsRepositoryImplTest">
+  <component name="RunManager" selected="Gradle.PlaylistScreenViewModelTest">
     <configuration name="mobile" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="MusicMatters.mobile" />
       <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
@@ -453,6 +441,33 @@
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
+    <configuration name="PlaylistScreenViewModelTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":feature:playlist:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.squad.musicmatters.feature.playlist.PlaylistScreenViewModelTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
+      <method v="2" />
+    </configuration>
     <configuration name="PlaylistsRepositoryImplTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -480,40 +495,13 @@
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
-    <configuration name="SongsMetadataRepositoryImplTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":core:data:testDebugUnitTest" />
-            <option value="--tests" />
-            <option value="&quot;com.squad.musicmatters.core.data.repository.impl.SongsMetadataRepositoryImplTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <GradleProfilingDisabled>false</GradleProfilingDisabled>
-      <GradleCoverageDisabled>false</GradleCoverageDisabled>
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.PlaylistScreenViewModelTest" />
         <item itemvalue="Gradle.PlaylistsRepositoryImplTest" />
         <item itemvalue="Android Instrumented Tests.PlaylistDaoTest" />
         <item itemvalue="Gradle.GenreScreenViewModelTest" />
         <item itemvalue="Gradle.GenresScreenViewModelTest" />
-        <item itemvalue="Gradle.SongsMetadataRepositoryImplTest" />
       </list>
     </recent_temporary>
   </component>

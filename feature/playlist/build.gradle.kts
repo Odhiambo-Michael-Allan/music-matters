@@ -19,4 +19,5 @@ dependencies {
     implementation( libs.material )
 
     testImplementation( libs.junit )
+    testImplementation( libs.robolectric )
 }
