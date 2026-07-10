@@ -9,12 +9,15 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
@@ -32,6 +35,38 @@ import com.squad.musicmatters.core.ui.MediaSortBarScaffold
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.i8n.R as i8nR
+
+@Composable
+internal fun PlaylistsScreen(
+    viewModel: PlaylistsScreenViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit,
+    onViewPlaylist: ( Playlist ) -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
+    onNavigateToSettings: () -> Unit,
+) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    PlaylistsScreenContent(
+        uiState = uiState,
+        onViewPlaylist = onViewPlaylist,
+        onNavigateBack = onNavigateBack,
+        onNavigateToSettings = onNavigateToSettings,
+        onShowSnackBar = onShowSnackBar,
+        onCreatePlaylist = viewModel::createPlaylist,
+        onDeletePlaylist = viewModel::deletePlaylist,
+        onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
+        onPlaySongs = viewModel::playSongs,
+        onPlaySongsNext = viewModel::playSongsNext,
+        onAddSongsToQueue = viewModel::addSongsToQueue,
+        onSortTypeChange = viewModel::onSortTypeChange,
+        onSortInReverseChange = viewModel::onSortInReverseChange,
+        onShuffleAndPlaySongs = viewModel::shuffleAndPlay,
+        onRemoveSongsFromQueue = viewModel::removeSongsFromQueue,
+        onShowAddToQueueOption = viewModel::noSongInTheListIsPresentInTheQueue,
+    )
+
+}
 
 @Composable
 private fun PlaylistsScreenContent(

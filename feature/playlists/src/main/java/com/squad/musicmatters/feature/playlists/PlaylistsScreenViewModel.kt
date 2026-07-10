@@ -21,8 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PlaylistsScreenViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
+    private val playlistsRepository: PlaylistsRepository,
     songsRepository: SongsRepository,
-    playlistsRepository: PlaylistsRepository,
     player: MusicMattersPlayer,
 ) : BaseViewModel(
     player = player,
@@ -66,6 +66,10 @@ class PlaylistsScreenViewModel @Inject constructor(
 
     fun onSortInReverseChange( reverse: Boolean ) {
         viewModelScope.launch { userPreferencesRepository.setSortPlaylistsInReverse( reverse ) }
+    }
+
+    fun deletePlaylist( playlist: Playlist ) {
+        viewModelScope.launch { playlistsRepository.deletePlaylist( playlist ) }
     }
 
 }
