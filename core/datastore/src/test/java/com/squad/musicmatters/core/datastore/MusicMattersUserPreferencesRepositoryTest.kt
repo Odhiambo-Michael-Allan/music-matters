@@ -20,17 +20,17 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
-class MusicMattersPreferencesDataSourceTest {
+class MusicMattersUserPreferencesRepositoryTest {
 
     private val testScope = TestScope( UnconfinedTestDispatcher() )
-    private lateinit var subject: MusicMattersPreferencesDataSource
+    private lateinit var subject: MusicMattersUserPreferencesRepository
 
     @get:Rule
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
 
     @Before
     fun setUp() {
-        subject = MusicMattersPreferencesDataSource(
+        subject = MusicMattersUserPreferencesRepository(
             userPreferencesDataStore = tmpFolder.testUserPreferencesDataStore(
                 coroutineScope = testScope.backgroundScope
             )

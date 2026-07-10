@@ -12,7 +12,7 @@ import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.model.UserData
 import kotlinx.coroutines.flow.Flow
 
-interface PreferencesDataSource {
+interface UserPreferencesRepository {
     val userData: Flow<UserData>
     suspend fun setFontName( fontName: String )
     suspend fun setFontScale( fontScale: Float )

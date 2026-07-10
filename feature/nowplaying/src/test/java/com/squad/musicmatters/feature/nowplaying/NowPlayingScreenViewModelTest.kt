@@ -8,8 +8,8 @@ import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.media.FakePlaybackPositionUpdater
-import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
-import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
+import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
@@ -33,26 +33,26 @@ class NowPlayingScreenViewModelTest {
 
     private lateinit var viewModel: NowPlayingScreenViewModel
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var playbackPositionUpdater: FakePlaybackPositionUpdater
     private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
     private lateinit var songsRepository: FakeSongsRepository
-    private lateinit var preferencesDataSource: FakePreferencesDataSource
+    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
 
     @Before
     fun setUp() {
         player = FakeMusicMattersPlayer()
-        playlistRepository = FakePlaylistRepository()
+        playlistRepository = FakePlaylistsRepository()
         playbackPositionUpdater = FakePlaybackPositionUpdater()
         metadataRepository = FakeSongsMetadataRepository()
         songsRepository = FakeSongsRepository()
         queueRepository = FakeQueueRepository()
-        preferencesDataSource = FakePreferencesDataSource()
+        preferencesDataSource = FakeUserPreferencesRepository()
         viewModel = NowPlayingScreenViewModel(
             player = player,
-            preferencesDataSource = preferencesDataSource,
-            playlistRepository = playlistRepository,
+            userPreferencesRepository = preferencesDataSource,
+            playlistsRepository = playlistRepository,
             playbackPositionUpdater = playbackPositionUpdater,
             songsMetadataRepository = metadataRepository,
             queueRepository = queueRepository,

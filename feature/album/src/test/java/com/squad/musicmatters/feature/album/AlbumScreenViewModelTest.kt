@@ -7,8 +7,8 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakeAlbumsRepository
-import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
-import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
+import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -44,8 +44,8 @@ class AlbumScreenViewModelTest {
     private lateinit var albumsRepository: FakeAlbumsRepository
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var preferencesDataSource: FakePreferencesDataSource
-    private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
+    private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var subject: AlbumScreenViewModel
 
@@ -54,8 +54,8 @@ class AlbumScreenViewModelTest {
         albumsRepository = FakeAlbumsRepository()
         songsRepository = FakeSongsRepository()
         player = FakeMusicMattersPlayer()
-        playlistRepository = FakePlaylistRepository()
-        preferencesDataSource = FakePreferencesDataSource()
+        playlistRepository = FakePlaylistsRepository()
+        preferencesDataSource = FakeUserPreferencesRepository()
         metadataRepository = FakeSongsMetadataRepository()
         subject = AlbumScreenViewModel(
             savedStateHandle = SavedStateHandle(
@@ -64,8 +64,8 @@ class AlbumScreenViewModelTest {
             albumsRepository = albumsRepository,
             songsRepository = songsRepository,
             player = player,
-            playlistRepository = playlistRepository,
-            preferencesDataSource = preferencesDataSource,
+            playlistsRepository = playlistRepository,
+            userPreferencesRepository = preferencesDataSource,
             songsMetadataRepository = metadataRepository
         )
     }

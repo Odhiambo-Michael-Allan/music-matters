@@ -7,8 +7,8 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakeArtistsRepository
-import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
-import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
+import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -45,8 +45,8 @@ class ArtistScreenViewModelTest {
     private lateinit var artistsRepository: FakeArtistsRepository
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var preferencesDataSource: FakePreferencesDataSource
-    private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
+    private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var subject: ArtistScreenViewModel
 
@@ -54,8 +54,8 @@ class ArtistScreenViewModelTest {
     fun setUp() {
         artistsRepository = FakeArtistsRepository()
         songsRepository = FakeSongsRepository()
-        preferencesDataSource = FakePreferencesDataSource()
-        playlistRepository = FakePlaylistRepository()
+        preferencesDataSource = FakeUserPreferencesRepository()
+        playlistRepository = FakePlaylistsRepository()
         metadataRepository = FakeSongsMetadataRepository()
         player = FakeMusicMattersPlayer()
         subject = ArtistScreenViewModel(
@@ -64,8 +64,8 @@ class ArtistScreenViewModelTest {
             ),
             artistsRepository = artistsRepository,
             songsRepository = songsRepository,
-            preferencesDataSource = preferencesDataSource,
-            playlistRepository = playlistRepository,
+            userPreferencesRepository = preferencesDataSource,
+            playlistsRepository = playlistRepository,
             songsMetadataRepository = metadataRepository,
             player = player
         )

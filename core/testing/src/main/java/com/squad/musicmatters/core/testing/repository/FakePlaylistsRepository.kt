@@ -1,16 +1,17 @@
 package com.squad.musicmatters.core.testing.repository
 
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.SortPlaylistsBy
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class FakePlaylistRepository : PlaylistRepository {
+class FakePlaylistsRepository : PlaylistsRepository {
 
     private val playlistsFlow: MutableSharedFlow<List<Playlist>> =
         MutableSharedFlow( replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST )
@@ -20,7 +21,10 @@ class FakePlaylistRepository : PlaylistRepository {
             playlists.find { it.id == FAVORITES_PLAYLIST_ID }
         }
 
-    override fun fetchPlaylists(): Flow<List<Playlist>> = playlistsFlow
+    override fun fetchPlaylists(
+        sortPlaylistsBy: SortPlaylistsBy,
+        sortInReverse: Boolean
+    ): Flow<List<Playlist>> = playlistsFlow
 
     override fun fetchPlaylistWithId( id: String ): Flow<Playlist?> =
         playlistsFlow.map { playlists ->

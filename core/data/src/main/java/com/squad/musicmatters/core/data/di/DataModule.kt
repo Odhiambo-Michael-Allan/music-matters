@@ -5,7 +5,7 @@ import com.squad.musicmatters.core.data.repository.ArtistsRepository
 import com.squad.musicmatters.core.data.repository.CompositeRepository
 import com.squad.musicmatters.core.data.repository.MostPlayedSongsRepository
 import com.squad.musicmatters.core.data.repository.PlayHistoryRepository
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
@@ -14,7 +14,7 @@ import com.squad.musicmatters.core.data.repository.impl.ArtistsRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.CompositeRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.MostPlayedSongsRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.PlayHistoryRepositoryImpl
-import com.squad.musicmatters.core.data.repository.impl.PlaylistRepositoryImpl
+import com.squad.musicmatters.core.data.repository.impl.PlaylistsRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.QueueRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.SongsMetadataRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.SongsRepositoryImpl
@@ -49,8 +49,8 @@ abstract class DataModule {
     @Binds
     @Singleton
     internal abstract fun bindsPlaylistRepository(
-        repository: PlaylistRepositoryImpl
-    ): PlaylistRepository
+        repository: PlaylistsRepositoryImpl
+    ): PlaylistsRepository
 
     @Binds
     @Singleton

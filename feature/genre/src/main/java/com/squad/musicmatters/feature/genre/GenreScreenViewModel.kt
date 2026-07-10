@@ -3,10 +3,10 @@ package com.squad.musicmatters.feature.genre
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.datastore.UserPreferencesRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
@@ -28,26 +28,26 @@ class GenreScreenViewModel @Inject constructor(
     songsMetadataRepository: SongsMetadataRepository,
     songsRepository: SongsRepository,
     player: MusicMattersPlayer,
-    preferencesDataSource: PreferencesDataSource,
-    playlistRepository: PlaylistRepository,
+    userPreferencesRepository: UserPreferencesRepository,
+    playlistsRepository: PlaylistsRepository,
 ) : BaseViewModel(
     player = player,
-    preferencesDataSource = preferencesDataSource,
-    playlistRepository = playlistRepository
+    userPreferencesRepository = userPreferencesRepository,
+    playlistsRepository = playlistsRepository
 ) {
 
     val genreName = savedStateHandle.toRoute<GenreRoute>().genreName
 
     val uiState: StateFlow<GenreScreenUiState> = combine(
-        preferencesDataSource.userData.flatMapLatest {
+        userPreferencesRepository.userData.flatMapLatest {
             songsRepository.fetchSongs(
                 sortSongsBy = it.sortSongsBy,
                 sortSongsInReverse = it.sortSongsReverse
             )
         },
-        preferencesDataSource.userData,
-        playlistRepository.fetchFavorites(),
-        playlistRepository.fetchPlaylists(),
+        userPreferencesRepository.userData,
+        playlistsRepository.fetchFavorites(),
+        playlistsRepository.fetchPlaylists(),
         songsMetadataRepository.fetchMetadata()
     ) { songs, userData, favoriteSongsPlaylist, playlists, metadata ->
         GenreScreenUiState.Success(

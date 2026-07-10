@@ -21,20 +21,16 @@ import androidx.media3.common.TrackSelectionParameters
 import androidx.media3.common.Tracks
 import androidx.media3.common.VideoSize
 import androidx.media3.common.text.CueGroup
-import androidx.media3.common.util.Log
 import androidx.media3.common.util.Size
 import androidx.media3.common.util.UnstableApi
 import com.squad.musicmatters.core.data.repository.QueueRepository
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.datastore.UserPreferencesRepository
 import com.squad.musicmatters.core.media.connection.SongToMediaItemConverter
 import com.squad.musicmatters.core.media.media.extensions.getMediaItems
 import com.squad.musicmatters.core.media.media.extensions.move
-import com.squad.musicmatters.core.media.media.extensions.toMediaItem
 import com.squad.musicmatters.core.model.QueueEntry
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -46,7 +42,7 @@ class ReplaceableForwardingPlayer(
     private var player: Player,
     private val coroutineScope: CoroutineScope,
     private val queueRepository: QueueRepository,
-    private val userPreferences: PreferencesDataSource,
+    private val userPreferences: UserPreferencesRepository,
     private val songToMediaItemConverter: SongToMediaItemConverter,
 ) : Player {
 

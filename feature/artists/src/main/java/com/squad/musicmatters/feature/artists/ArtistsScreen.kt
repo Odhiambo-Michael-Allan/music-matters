@@ -227,7 +227,7 @@ internal fun ArtistsGrid(
                             onGetSongsByArtist = { onGetSongsByArtist( it ) },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(4.dp)
+                                .padding( 4.dp )
                                 .animateItem()
                         )
                     }

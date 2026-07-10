@@ -1,6 +1,6 @@
 package com.squad.musicmatters.core.testing.repository
 
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.datastore.UserPreferencesRepository
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.SortAlbumsBy
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 
-class FakePreferencesDataSource : PreferencesDataSource {
+class FakeUserPreferencesRepository : UserPreferencesRepository {
 
     private val _userData = MutableSharedFlow<UserData>(
         replay = 1,

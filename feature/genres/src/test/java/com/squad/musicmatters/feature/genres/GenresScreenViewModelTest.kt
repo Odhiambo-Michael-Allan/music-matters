@@ -5,7 +5,7 @@ import com.squad.musicmatters.core.data.repository.GenreResult
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.SongMetadata
-import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
@@ -24,16 +24,16 @@ class GenresScreenViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var songsMetadataRepository: FakeSongsMetadataRepository
-    private lateinit var preferencesDataSource: FakePreferencesDataSource
+    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
     private lateinit var subject: GenresScreenViewModel
 
     @Before
     fun setUp() {
         songsMetadataRepository = FakeSongsMetadataRepository()
-        preferencesDataSource = FakePreferencesDataSource()
+        preferencesDataSource = FakeUserPreferencesRepository()
         subject = GenresScreenViewModel(
             songsMetadataRepository = songsMetadataRepository,
-            preferencesDataSource = preferencesDataSource
+            userPreferencesRepository = preferencesDataSource
         )
     }
 

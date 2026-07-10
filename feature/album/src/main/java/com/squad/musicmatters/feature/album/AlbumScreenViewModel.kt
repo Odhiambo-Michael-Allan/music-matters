@@ -4,10 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.squad.musicmatters.core.data.repository.AlbumsRepository
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.datastore.UserPreferencesRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.model.Playlist
@@ -29,28 +29,28 @@ class AlbumScreenViewModel @Inject constructor(
     albumsRepository: AlbumsRepository,
     songsRepository: SongsRepository,
     player: MusicMattersPlayer,
-    preferencesDataSource: PreferencesDataSource,
-    playlistRepository: PlaylistRepository,
+    userPreferencesRepository: UserPreferencesRepository,
+    playlistsRepository: PlaylistsRepository,
     songsMetadataRepository: SongsMetadataRepository,
 ) : BaseViewModel(
     player = player,
-    preferencesDataSource = preferencesDataSource,
-    playlistRepository = playlistRepository,
+    userPreferencesRepository = userPreferencesRepository,
+    playlistsRepository = playlistsRepository,
 ) {
 
     val albumId = savedStateHandle.toRoute<AlbumRoute>().albumId
 
     val uiState: StateFlow<AlbumScreenUiState> = com.squad.musicmatters.core.data.utils.combine(
          albumsRepository.fetchAlbumWithId( albumId ),
-        preferencesDataSource.userData.flatMapLatest {
+        userPreferencesRepository.userData.flatMapLatest {
                 songsRepository.fetchSongs(
                 sortSongsBy = it.sortSongsBy,
                 sortSongsInReverse = it.sortSongsReverse
             )
         },
-        preferencesDataSource.userData,
-        playlistRepository.fetchFavorites(),
-        playlistRepository.fetchPlaylists(),
+        userPreferencesRepository.userData,
+        playlistsRepository.fetchFavorites(),
+        playlistsRepository.fetchPlaylists(),
         songsMetadataRepository.fetchMetadata()
     ) { album, songs, userData, favoriteSongsPlaylist, playlists, metadata ->
         AlbumScreenUiState.Success(

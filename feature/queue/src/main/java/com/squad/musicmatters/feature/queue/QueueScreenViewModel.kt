@@ -1,11 +1,11 @@
 package com.squad.musicmatters.feature.queue
 
 import androidx.lifecycle.viewModelScope
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.datastore.UserPreferencesRepository
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
@@ -24,15 +24,15 @@ private const val TAG = "QUEUE-SCREEN-VIEW-MODEL"
 
 @HiltViewModel
 internal class QueueScreenViewModel @Inject constructor(
-    playlistRepository: PlaylistRepository,
+    playlistsRepository: PlaylistsRepository,
     songsMetadataRepository: SongsMetadataRepository,
     private val songsRepository: SongsRepository,
     private val player: MusicMattersPlayer,
-    private val preferencesDataSource: PreferencesDataSource,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : BaseViewModel(
     player = player,
-    preferencesDataSource = preferencesDataSource,
-    playlistRepository = playlistRepository,
+    userPreferencesRepository = userPreferencesRepository,
+    playlistsRepository = playlistsRepository,
 ) {
 
     
@@ -47,9 +47,9 @@ internal class QueueScreenViewModel @Inject constructor(
                     songsInQueue
                 }
             },
-            preferencesDataSource.userData,
-            playlistRepository.fetchFavorites(),
-            playlistRepository.fetchPlaylists(),
+            userPreferencesRepository.userData,
+            playlistsRepository.fetchFavorites(),
+            playlistsRepository.fetchPlaylists(),
             songsMetadataRepository.fetchMetadata()
         ) {
             songsInQueue,
@@ -78,7 +78,7 @@ internal class QueueScreenViewModel @Inject constructor(
     fun onToggleShuffleMode( shuffle: Boolean ) {
         viewModelScope.launch {
             player.shuffleSongsInQueue( shuffle )
-            preferencesDataSource.setShuffle( shuffle )
+            userPreferencesRepository.setShuffle( shuffle )
         }
     }
 

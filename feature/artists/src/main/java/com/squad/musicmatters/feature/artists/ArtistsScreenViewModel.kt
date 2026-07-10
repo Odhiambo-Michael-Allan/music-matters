@@ -2,9 +2,9 @@ package com.squad.musicmatters.feature.artists
 
 import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.data.repository.ArtistsRepository
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.datastore.UserPreferencesRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.model.Playlist
@@ -14,7 +14,6 @@ import com.squad.musicmatters.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -23,27 +22,27 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ArtistsScreenViewModel @Inject constructor(
-    private val preferencesDataSource: PreferencesDataSource,
+    private val userPreferencesRepository: UserPreferencesRepository,
     artistsRepository: ArtistsRepository,
     player: MusicMattersPlayer,
-    playlistRepository: PlaylistRepository,
+    playlistsRepository: PlaylistsRepository,
     songsRepository: SongsRepository
 ) : BaseViewModel(
     player = player,
-    preferencesDataSource = preferencesDataSource,
-    playlistRepository = playlistRepository
+    userPreferencesRepository = userPreferencesRepository,
+    playlistsRepository = playlistsRepository
 ) {
 
     val uiState: StateFlow<ArtistsScreenUiState> =
         combine(
-            preferencesDataSource.userData.flatMapLatest {
+            userPreferencesRepository.userData.flatMapLatest {
                 artistsRepository.fetchArtists(
                     sortArtistsBy = it.sortArtistsBy,
                     sortArtistsInReverse = it.sortArtistsReverse
                 )
             },
-            preferencesDataSource.userData,
-            playlistRepository.fetchPlaylists(),
+            userPreferencesRepository.userData,
+            playlistsRepository.fetchPlaylists(),
             songsRepository.fetchSongs()
         ) { artists, userData, playlists, songs ->
             ArtistsScreenUiState.Success(
@@ -60,11 +59,11 @@ class ArtistsScreenViewModel @Inject constructor(
         )
 
     fun onSortTypeChange( by: SortArtistsBy ) {
-        viewModelScope.launch { preferencesDataSource.setSortArtistsBy( by ) }
+        viewModelScope.launch { userPreferencesRepository.setSortArtistsBy( by ) }
     }
 
     fun onSortInReverseChange( reverse: Boolean ) {
-        viewModelScope.launch { preferencesDataSource.setSortArtistsInReverse( reverse ) }
+        viewModelScope.launch { userPreferencesRepository.setSortArtistsInReverse( reverse ) }
     }
 
 }

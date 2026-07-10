@@ -4,11 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.testing.invoke
 import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.datastore.DefaultPreferences
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
-import com.squad.musicmatters.core.testing.repository.FakePlaylistRepository
-import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
+import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -44,8 +43,8 @@ class GenreScreenViewModelTest {
     private val genreName = "Rap/HipHop"
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var preferencesDataSource: FakePreferencesDataSource
-    private lateinit var playlistRepository: FakePlaylistRepository
+    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
+    private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var subject: GenreScreenViewModel
 
@@ -53,18 +52,18 @@ class GenreScreenViewModelTest {
     fun setUp() {
         songsRepository = FakeSongsRepository()
         player = FakeMusicMattersPlayer()
-        preferencesDataSource = FakePreferencesDataSource()
-        playlistRepository = FakePlaylistRepository()
+        preferencesDataSource = FakeUserPreferencesRepository()
+        playlistRepository = FakePlaylistsRepository()
         metadataRepository = FakeSongsMetadataRepository()
         subject = GenreScreenViewModel(
             savedStateHandle = SavedStateHandle(
                 route = GenreRoute( genreName = genreName )
             ),
             songsRepository = songsRepository,
-            playlistRepository = playlistRepository,
+            playlistsRepository = playlistRepository,
             songsMetadataRepository = metadataRepository,
             player = player,
-            preferencesDataSource = preferencesDataSource
+            userPreferencesRepository = preferencesDataSource
         )
     }
 

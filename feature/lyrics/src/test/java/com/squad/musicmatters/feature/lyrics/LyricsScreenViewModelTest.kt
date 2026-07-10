@@ -4,7 +4,7 @@ import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.media.FakePlaybackPositionUpdater
-import com.squad.musicmatters.core.testing.repository.FakePreferencesDataSource
+import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -17,7 +17,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlin.time.Duration
 
 class LyricsScreenViewModelTest {
 
@@ -26,7 +25,7 @@ class LyricsScreenViewModelTest {
 
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var queueRepository: FakeQueueRepository
-    private lateinit var preferencesDataSource: FakePreferencesDataSource
+    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
     private lateinit var playbackPositionUpdater: FakePlaybackPositionUpdater
     private lateinit var player: FakeMusicMattersPlayer
     private lateinit var subject: LyricsScreenViewModel
@@ -35,14 +34,14 @@ class LyricsScreenViewModelTest {
     fun setUp() {
         songsRepository = FakeSongsRepository()
         queueRepository = FakeQueueRepository()
-        preferencesDataSource = FakePreferencesDataSource()
+        preferencesDataSource = FakeUserPreferencesRepository()
         playbackPositionUpdater = FakePlaybackPositionUpdater()
         player = FakeMusicMattersPlayer()
         subject = LyricsScreenViewModel(
             player = player,
             songsRepository = songsRepository,
             queueRepository = queueRepository,
-            preferencesDataSource = preferencesDataSource,
+            userPreferencesRepository = preferencesDataSource,
             playbackPositionUpdater = FakePlaybackPositionUpdater()
         )
     }

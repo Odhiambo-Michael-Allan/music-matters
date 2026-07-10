@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.util.UnstableApi
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
-import com.squad.musicmatters.core.data.repository.PlaylistRepository
-import com.squad.musicmatters.core.datastore.PreferencesDataSource
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
+import com.squad.musicmatters.core.datastore.UserPreferencesRepository
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
@@ -15,14 +15,14 @@ import java.util.UUID
 
 abstract class BaseViewModel(
     private val player: MusicMattersPlayer,
-    private val preferencesDataSource: PreferencesDataSource,
-    private val playlistRepository: PlaylistRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val playlistsRepository: PlaylistsRepository,
 ) : ViewModel() {
 
     fun addToFavorites( song: Song, isFavorite: Boolean ) {
         viewModelScope.launch {
-            if ( isFavorite ) playlistRepository.addToFavorites( song )
-            else playlistRepository.removeFromFavorites( song.id )
+            if ( isFavorite ) playlistsRepository.addToFavorites( song )
+            else playlistsRepository.removeFromFavorites( song.id )
         }
     }
 
@@ -32,7 +32,7 @@ abstract class BaseViewModel(
     ) {
         viewModelScope.launch {
             songs.forEach {
-                playlistRepository.addSongToPlaylist( it, playlist.id )
+                playlistsRepository.addSongToPlaylist( it, playlist.id )
             }
         }
     }
@@ -67,7 +67,7 @@ abstract class BaseViewModel(
         songsToAddToPlaylist: List<Song>
     ) {
         viewModelScope.launch {
-            playlistRepository.savePlaylist(
+            playlistsRepository.savePlaylist(
                 id = UUID.randomUUID().toString(),
                 playlistName = playlistTitle,
                 songsInPlaylist = songsToAddToPlaylist,
@@ -77,13 +77,13 @@ abstract class BaseViewModel(
 
     fun setSortSongsBy( by: SortSongsBy ) {
         viewModelScope.launch {
-            preferencesDataSource.setSortSongsBy( by )
+            userPreferencesRepository.setSortSongsBy( by )
         }
     }
 
     fun setSortSongsInReverse( sortSongsInReverse: Boolean ) {
         viewModelScope.launch {
-            preferencesDataSource.setSortSongsInReverse( sortSongsInReverse )
+            userPreferencesRepository.setSortSongsInReverse( sortSongsInReverse )
         }
     }
 

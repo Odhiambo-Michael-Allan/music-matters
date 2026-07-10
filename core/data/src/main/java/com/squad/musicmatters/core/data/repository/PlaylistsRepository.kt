@@ -2,12 +2,16 @@ package com.squad.musicmatters.core.data.repository
 
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.SortPlaylistsBy
 import kotlinx.coroutines.flow.Flow
 
-interface PlaylistRepository {
+interface PlaylistsRepository {
 
     fun fetchFavorites(): Flow<Playlist?>
-    fun fetchPlaylists(): Flow<List<Playlist>>
+    fun fetchPlaylists(
+        sortPlaylistsBy: SortPlaylistsBy = SortPlaylistsBy.TITLE,
+        sortInReverse: Boolean = false
+    ): Flow<List<Playlist>>
     fun fetchPlaylistWithId( id: String ): Flow<Playlist?>
 
     fun isFavorite( songId: String ): Flow<Boolean>

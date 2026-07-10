@@ -23,6 +23,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/genres/MusicMatters.feature.genres.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/genres/MusicMatters.feature.genres.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/lyrics/MusicMatters.feature.lyrics.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/lyrics/MusicMatters.feature.lyrics.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/nowplaying/MusicMatters.feature.nowplaying.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/nowplaying/MusicMatters.feature.nowplaying.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/playlists/MusicMatters.feature.playlists.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/playlists/MusicMatters.feature.playlists.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/queue/MusicMatters.feature.queue.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/queue/MusicMatters.feature.queue.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/songs/MusicMatters.feature.songs.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/songs/MusicMatters.feature.songs.androidTest.iml" />
     </modules>
