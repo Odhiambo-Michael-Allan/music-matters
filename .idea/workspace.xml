@@ -27,12 +27,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/feature/playlist/src/test/java/com/squad/musicmatters/feature/playlist/PlaylistScreenViewModelTest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/PlaylistScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/playlist/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/playlist/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/PlaylistScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/PlaylistScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongsList.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/album/src/main/java/com/squad/musicmatters/feature/album/AlbumScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/album/src/main/java/com/squad/musicmatters/feature/album/AlbumScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/artist/src/main/java/com/squad/musicmatters/feature/artist/ArtistScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/artist/src/main/java/com/squad/musicmatters/feature/artist/ArtistScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/genre/src/main/java/com/squad/musicmatters/feature/genre/GenreScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/genre/src/main/java/com/squad/musicmatters/feature/genre/GenreScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/navigation/PlaylistScreenNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/navigation/PlaylistScreenNavigation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/build.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,8 +83,8 @@
         <option value="Kotlin Data Class" />
         <option value="resourceFile" />
         <option value="Kotlin Interface" />
-        <option value="Kotlin Class" />
         <option value="Kotlin JUnit4 Test Class" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>

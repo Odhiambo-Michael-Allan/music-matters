@@ -45,7 +45,7 @@ import com.squad.musicmatters.core.ui.GenericOptionsBottomSheet
 import com.squad.musicmatters.core.ui.LibraryDestinationContainer
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
-import com.squad.musicmatters.core.ui.SongList
+import com.squad.musicmatters.core.ui.SongsList
 
 @Composable
 internal fun ArtistScreen(
@@ -143,7 +143,7 @@ private fun ArtistScreenContent(
                     },
                     uiState.artist.trackCount
                 )
-                SongList(
+                SongsList(
                     sortSongsInReverse = uiState.sortSongsInReverse,
                     sortSongsBy = uiState.sortSongsBy,
                     songs = uiState.songsByArtist,
@@ -153,7 +153,7 @@ private fun ArtistScreenContent(
                     onShufflePlay = { onShuffleAndPlay( uiState.songsByArtist ) },
                     onSortTypeChange = onSortTypeChange,
                     onSortSongsInReverseChange = onSortSongsInReverseChange,
-                    playSong = onPlaySong,
+                    onPlaySong = onPlaySong,
                     isFavorite = { uiState.favoriteSongIds.contains( it ) },
                     onFavorite = onAddToFavorites,
                     onViewAlbum = onViewAlbum,

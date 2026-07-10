@@ -66,6 +66,7 @@ dependencies {
     implementation( projects.feature.genres )
     implementation( projects.feature.genre )
     implementation( projects.feature.playlists )
+    implementation( projects.feature.playlist )
 
     implementation( projects.core.designsystem )
     implementation( projects.core.media )

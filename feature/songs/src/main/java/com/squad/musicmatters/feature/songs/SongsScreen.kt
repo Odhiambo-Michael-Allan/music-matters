@@ -3,7 +3,6 @@ package com.squad.musicmatters.feature.songs
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.runtime.Composable
@@ -20,7 +19,7 @@ import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.ui.PreviewParameterData
-import com.squad.musicmatters.core.ui.SongList
+import com.squad.musicmatters.core.ui.SongsList
 
 @Composable
 internal fun SongsScreen(
@@ -90,7 +89,7 @@ private fun SongsScreenContent(
             }
         }
         is SongsScreenUiState.Success -> {
-            SongList(
+            SongsList(
                 sortSongsInReverse = uiState.sortSongsInReverse,
                 onSortSongsInReverseChange = onSortReverseChange,
                 sortSongsBy = uiState.sortSongsBy,
@@ -99,7 +98,7 @@ private fun SongsScreenContent(
                 onGetPlaylists = { uiState.playlists },
                 onShufflePlay = { onShufflePlay( uiState.songs ) },
                 currentlyPlayingSongId = uiState.currentlyPlayingSongId,
-                playSong = playSong,
+                onPlaySong = playSong,
                 onGetSongsAdditionalMetadata = { uiState.songsAdditionalMetadata },
                 isFavorite = { uiState.favoriteSongIds.contains( it ) },
                 onFavorite = onFavorite,

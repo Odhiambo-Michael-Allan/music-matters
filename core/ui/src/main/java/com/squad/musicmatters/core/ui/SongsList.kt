@@ -29,7 +29,7 @@ import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.model.ThemeMode
 
 @Composable
-fun SongList(
+fun SongsList(
     sortSongsInReverse: Boolean,
     sortSongsBy: SortSongsBy,
     songs: List<Song>,
@@ -39,7 +39,7 @@ fun SongList(
     onSortTypeChange: ( SortSongsBy ) -> Unit,
     onSortSongsInReverseChange: ( Boolean ) -> Unit,
     currentlyPlayingSongId: String,
-    playSong: ( Song, List<Song> ) -> Unit,
+    onPlaySong: (Song, List<Song> ) -> Unit,
     isFavorite: ( String ) -> Boolean,
     onFavorite: ( Song, Boolean ) -> Unit,
     onViewAlbum: ( Long ) -> Unit,
@@ -124,7 +124,7 @@ fun SongList(
                                 onGetSongsAdditionalMetadata()
                                     .find { metadata -> metadata.songId == song.id }
                             },
-                            onClick = { playSong( song, songs ) },
+                            onClick = { onPlaySong( song, songs ) },
                             onFavorite = onFavorite,
                             onPlayNext = onPlaySongNext,
                             onAddToQueue = onAddSongToQueue,
@@ -162,7 +162,7 @@ private fun SortSongsBy.sortSongsByLabelResId() = when ( this ) {
 
 @DevicePreviews
 @Composable
-fun SongListPreview() {
+fun SongsListPreview() {
     MusicMattersTheme(
         fontName = SupportedFonts.ProductSans.name,
         useMaterialYou = true,
@@ -170,7 +170,7 @@ fun SongListPreview() {
         themeMode = ThemeMode.LIGHT,
         primaryColorName = PrimaryThemeColors.Blue.name
     ) {
-        SongList(
+        SongsList(
             sortSongsInReverse = false,
             sortSongsBy = SortSongsBy.TITLE,
             songs = PreviewParameterData.songs,
@@ -182,7 +182,7 @@ fun SongListPreview() {
             isFavorite = { true },
             onFavorite = { _, _ -> },
             currentlyPlayingSongId = PreviewParameterData.songs.first().id,
-            playSong = { _, _ -> },
+            onPlaySong = { _, _ -> },
             onViewAlbum = {},
             onViewArtist = {},
             onShareSong = {},

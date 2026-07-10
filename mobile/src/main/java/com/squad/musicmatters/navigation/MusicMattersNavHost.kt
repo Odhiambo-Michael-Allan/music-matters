@@ -22,6 +22,8 @@ import com.squad.musicmatters.feature.genre.navigation.genreScreen
 import com.squad.musicmatters.feature.genre.navigation.navigateToGenre
 import com.squad.musicmatters.feature.genres.navigation.genresScreen
 import com.squad.musicmatters.feature.lyrics.navigation.lyricsScreen
+import com.squad.musicmatters.feature.playlist.navigation.navigateToPlaylist
+import com.squad.musicmatters.feature.playlist.navigation.playlistScreen
 import com.squad.musicmatters.feature.playlists.navigation.playlistsScreen
 import com.squad.musicmatters.feature.queue.navigation.queueScreen
 import com.squad.musicmatters.feature.settings.navigation.navigateToSettings
@@ -179,9 +181,27 @@ internal fun MusicMattersNavHost(
             }
         )
         playlistsScreen(
-            onViewPlaylist = {},
+            onViewPlaylist = {
+                navController.navigateToPlaylist(
+                    playlistId = it.id,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
             onNavigateToSettings = onNavigateToSettings,
             onNavigateBack = { navController.navigateUp() },
+            onShowSnackBar = {
+                snackBarHostState.showSnackBar(
+                    coroutineScope,
+                    it
+                )
+            }
+        )
+        playlistScreen(
+            onViewAlbum = {},
+            onViewArtist = {},
+            onNavigateBack = { navController.navigateUp() },
+            onDeleteSong = onDeleteSong,
+            onShareSong = {},
             onShowSnackBar = {
                 snackBarHostState.showSnackBar(
                     coroutineScope,
