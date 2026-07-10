@@ -27,17 +27,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/PlaylistScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongsList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/album/src/main/java/com/squad/musicmatters/feature/album/AlbumScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/album/src/main/java/com/squad/musicmatters/feature/album/AlbumScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/artist/src/main/java/com/squad/musicmatters/feature/artist/ArtistScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/artist/src/main/java/com/squad/musicmatters/feature/artist/ArtistScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/genre/src/main/java/com/squad/musicmatters/feature/genre/GenreScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/genre/src/main/java/com/squad/musicmatters/feature/genre/GenreScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/navigation/PlaylistScreenNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/playlist/src/main/java/com/squad/musicmatters/feature/playlist/navigation/PlaylistScreenNavigation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/src/main/java/com/squad/musicmatters/feature/songs/SongsScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/build.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +39,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/app/.android/avd/Automotive_Ultrawide.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/app/.android/avd/Pixel_9_Pro_Fold.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -260,7 +252,7 @@
       <recent name="com.squad.musicmatters.feature.nowplaying" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.PlaylistScreenViewModelTest">
+  <component name="RunManager" selected="Android App.mobile">
     <configuration name="mobile" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="MusicMatters.mobile" />
       <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
