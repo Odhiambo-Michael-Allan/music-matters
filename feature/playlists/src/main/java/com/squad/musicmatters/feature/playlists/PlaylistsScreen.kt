@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
@@ -27,6 +28,7 @@ import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortPlaylistsBy
 import com.squad.musicmatters.core.ui.BottomSheetMenuItem
+import com.squad.musicmatters.core.ui.GenericGrid
 import com.squad.musicmatters.core.ui.GenericTile
 import com.squad.musicmatters.core.ui.IconTextBody
 import com.squad.musicmatters.core.ui.LibraryDestinationContainer
@@ -87,6 +89,9 @@ private fun PlaylistsScreenContent(
     onNavigateBack: () -> Unit,
     onDeletePlaylist: ( Playlist ) -> Unit,
 ) {
+
+    val context = LocalContext.current
+
     LibraryDestinationContainer(
         title = stringResource( id = i8nR.string.core_i8n_playlists ),
         isLoading = uiState is PlaylistsScreenUiState.Loading,
@@ -96,36 +101,57 @@ private fun PlaylistsScreenContent(
         when ( uiState ) {
             PlaylistsScreenUiState.Loading -> {}
             is PlaylistsScreenUiState.Success -> {
-                PlaylistsGrid(
-                    playlists = uiState.playlists,
+                val onGetSubTitle: ( Playlist ) -> String = {
+                    context.getString(
+                        if ( it.songIds.size > 1 ) {
+                            i8nR.string.core_i8n_n_songs
+                        } else {
+                            i8nR.string.core_i8n_one_song
+                        },
+                        it.songIds.size
+                    )
+                }
+                GenericGrid(
+                    items = uiState.playlists,
+                    multipleItemsSortBarLabel = i8nR.string.core_i8n_n_playlists,
+                    singleItemSortBarLabel = i8nR.string.core_i8n_one_playlist,
+                    icon = MusicMattersIcons.Playlist,
                     sortBy = uiState.sortPlaylistsBy,
+                    sortTypes = SortPlaylistsBy.entries.associateBy(
+                        { it },
+                        { it.label() }
+                    ),
                     sortInReverse = uiState.sortPlaylistsInReverse,
-                    onViewPlaylist = onViewPlaylist,
                     onSortTypeChange = onSortTypeChange,
                     onSortInReverseChange = onSortInReverseChange,
-                    onGetSongsInPlaylist = {
-                        uiState.songs.filter { song -> song.id in it.songIds  }
+                    onGetItemKeyFor = { it.id },
+                    onGetArtworkUriFor = { it.artworkUri?.toUri() },
+                    onGetTitleFor = { it.title },
+                    onGetSubTitleFor = onGetSubTitle,
+                    onGetHeaderDescriptionFor = onGetSubTitle,
+                    onGetSongsForItem = {
+                        uiState.songs.filter { song -> song.id in it.songIds }
                     },
-                    onPlaySongsInPlaylist = {
+                    onPlaySongsForItem = {
                         val songsInPlaylist = uiState.songs.filter { song -> song.id in it.songIds }
                         onPlaySongs( songsInPlaylist.first(), songsInPlaylist )
                     },
-                    onAddSongsInPlaylistToQueue = { playlist ->
+                    onAddSongsForItemToQueue = { playlist ->
                         onAddSongsToQueue(
                             uiState.songs.filter { it.id in playlist.songIds }
                         )
                     },
-                    onRemoveSongsInPlaylistFromQueue = { playlist ->
+                    onRemoveSongsForItemFromQueue = { playlist ->
                         onRemoveSongsFromQueue(
                             uiState.songs.filter { it.id in playlist.songIds }
                         )
                     },
-                    onPlaySongsInPlaylistNext = { playlist ->
+                    onPlaySongsForItemNext = { playlist ->
                         onPlaySongsNext(
                             uiState.songs.filter { it.id in playlist.songIds }
                         )
                     },
-                    onShuffleAndPlaySongsInPlaylist = { playlist ->
+                    onShuffleAndPlaySongsForItem = { playlist ->
                         onShuffleAndPlaySongs(
                             uiState.songs.filter { it.id in playlist.songIds }
                         )
@@ -134,183 +160,27 @@ private fun PlaylistsScreenContent(
                     onAddSongsToPlaylist = onAddSongsToPlaylist,
                     onCreatePlaylist = onCreatePlaylist,
                     onShowSnackBar = onShowSnackBar,
-                    onShowAddToQueueOption = { playlist ->
+                    onShowAddToQueueOptionFor = { playlist ->
                         onShowAddToQueueOption( uiState.songs.filter { it.id in playlist.songIds } )
                     },
-                    onDeletePlaylist = onDeletePlaylist,
+                    onViewItem = onViewPlaylist,
+                    additionalBottomSheetMenuItems = { playlist, onDismissRequest ->
+                        if ( playlist.id != FAVORITES_PLAYLIST_ID ) {
+                            BottomSheetMenuItem(
+                                leadingIcon = MusicMattersIcons.Delete,
+                                label = stringResource( id = i8nR.string.core_i8n_delete )
+                            ) {
+                                onDismissRequest()
+                                onDeletePlaylist( playlist )
+                            }
+                        }
+                    }
                 )
             }
         }
     }
 }
 
-@Composable
-private fun PlaylistsGrid(
-    playlists: List<Playlist>,
-    sortBy: SortPlaylistsBy,
-    sortInReverse: Boolean,
-    onSortTypeChange: ( SortPlaylistsBy ) -> Unit,
-    onSortInReverseChange: ( Boolean ) -> Unit,
-    onViewPlaylist: ( Playlist ) -> Unit,
-    onPlaySongsInPlaylist: ( Playlist ) -> Unit,
-    onAddSongsInPlaylistToQueue: ( Playlist ) -> Unit,
-    onPlaySongsInPlaylistNext: ( Playlist ) -> Unit,
-    onShuffleAndPlaySongsInPlaylist: ( Playlist ) -> Unit,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
-    onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onShowSnackBar: ( String ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onGetSongsInPlaylist: ( Playlist ) -> List<Song>,
-    onShowAddToQueueOption: ( Playlist ) -> Boolean,
-    onRemoveSongsInPlaylistFromQueue: ( Playlist ) -> Unit,
-    onDeletePlaylist: ( Playlist ) -> Unit,
-) {
-
-    MediaSortBarScaffold(
-        mediaSortBar = {
-            MediaSortBar(
-                sortBy = sortBy,
-                sortTypes = SortPlaylistsBy.entries.associateBy(
-                    { it },
-                    { it.label() }
-                ),
-                sortInReverse = sortInReverse,
-                onSortTypeChange = onSortTypeChange,
-                onSortInReverseChange = onSortInReverseChange,
-                label = {
-                    Text(
-                        text = stringResource(
-                            id = if ( playlists.size > 1 ) {
-                                i8nR.string.core_i8n_n_playlists
-                            } else {
-                                i8nR.string.core_i8n_one_playlist
-                            },
-                            playlists.size
-                        )
-                    )
-                }
-            )
-        }
-    ) {
-        when {
-            playlists.isEmpty() -> IconTextBody(
-                icon = { modifier ->
-                    Icon(
-                        modifier = modifier,
-                        imageVector = MusicMattersIcons.Album,
-                        contentDescription = null,
-                    )
-                }
-            ) {
-                Text( text = stringResource( id = i8nR.string.core_i8n_damn_this_is_so_empty ) )
-            }
-            else -> {
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive( minSize = 150.dp ),
-                    contentPadding = PaddingValues(
-                        start = 8.dp,
-                        end = 8.dp,
-                        top = 8.dp,
-                        bottom = 70.dp
-                    )
-                ) {
-                    items(
-                        playlists,
-                        key = { it.id }
-                    ) {
-                        PlaylistTile(
-                            playlist = it,
-                            onViewPlaylist= { onViewPlaylist( it ) },
-                            onPlaySongsInPlaylist = { onPlaySongsInPlaylist( it ) },
-                            onAddSongsInPlaylistToQueue = { onAddSongsInPlaylistToQueue( it ) },
-                            onPlaySongsInPlaylistNext = { onPlaySongsInPlaylistNext( it ) },
-                            onShuffleAndPlaySongsInPlaylist = {
-                                onShuffleAndPlaySongsInPlaylist( it )
-                            },
-                            onGetPlaylists = onGetPlaylists,
-                            onAddSongsToPlaylist = onAddSongsToPlaylist,
-                            onShowSnackBar = onShowSnackBar,
-                            onCreatePlaylist = onCreatePlaylist,
-                            onShowAddToQueueOption = { onShowAddToQueueOption( it ) },
-                            onRemoveSongsInPlaylistFromQueue = {
-                                onRemoveSongsInPlaylistFromQueue( it )
-                            },
-                            onGetSongsInPlaylist = { onGetSongsInPlaylist( it ) },
-                            onDeletePlaylist = { onDeletePlaylist( it ) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(4.dp)
-                                .animateItem()
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-}
-
-@Composable
-private fun PlaylistTile(
-    modifier: Modifier = Modifier,
-    playlist: Playlist,
-    onViewPlaylist: () -> Unit,
-    onPlaySongsInPlaylist: () -> Unit,
-    onAddSongsInPlaylistToQueue: () -> Unit,
-    onRemoveSongsInPlaylistFromQueue: () -> Unit,
-    onPlaySongsInPlaylistNext: () -> Unit,
-    onShuffleAndPlaySongsInPlaylist: () -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
-    onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetSongsInPlaylist: () -> List<Song>,
-    onShowSnackBar: ( String ) -> Unit,
-    onShowAddToQueueOption: () -> Boolean,
-    onDeletePlaylist: () -> Unit,
-) {
-    val subTitle = stringResource(
-        id = if ( playlist.songIds.size > 1 ) {
-            i8nR.string.core_i8n_n_songs
-        } else {
-            i8nR.string.core_i8n_one_song
-        },
-        playlist.songIds.size
-    )
-    GenericTile(
-        modifier = modifier,
-        imageUri = playlist.artworkUri?.toUri(),
-        title = if ( playlist.id == FAVORITES_PLAYLIST_ID ) {
-            stringResource(id = i8nR.string.core_i8n_favorites)
-        } else {
-            playlist.title
-        },
-        subTitle = subTitle,
-        headerDescription = subTitle,
-        onGetPlaylists = onGetPlaylists,
-        onPlay = onPlaySongsInPlaylist,
-        onClick = onViewPlaylist,
-        onShufflePlay = onShuffleAndPlaySongsInPlaylist,
-        onAddToQueue = onAddSongsInPlaylistToQueue,
-        onPlayNext = onPlaySongsInPlaylistNext,
-        onGetSongs = onGetSongsInPlaylist,
-        onCreatePlaylist = onCreatePlaylist,
-        onAddSongsToPlaylist = onAddSongsToPlaylist,
-        onShowSnackBar = onShowSnackBar,
-        onShowAddToQueueOption = onShowAddToQueueOption,
-        onRemoveFromQueue = onRemoveSongsInPlaylistFromQueue,
-        additionalBottomSheetMenuItems = { onDismissRequest ->
-            if ( playlist.id != FAVORITES_PLAYLIST_ID ) {
-                BottomSheetMenuItem(
-                    leadingIcon = MusicMattersIcons.Delete,
-                    label = stringResource( id = i8nR.string.core_i8n_delete )
-                ) {
-                    onDismissRequest()
-                    onDeletePlaylist()
-                }
-            }
-        }
-    )
-}
 
 private fun SortPlaylistsBy.label() =
     when ( this ) {

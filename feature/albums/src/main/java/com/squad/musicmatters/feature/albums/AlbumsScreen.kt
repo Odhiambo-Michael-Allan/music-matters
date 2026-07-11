@@ -3,7 +3,6 @@ package com.squad.musicmatters.feature.albums
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.toString
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
@@ -107,7 +106,7 @@ private fun AlbumsScreenContent(
                         album.artist.takeIf { !it.isNullOrBlank() }
                     },
                     onGetItemKeyFor = { it.id.toString() },
-                    onGetImageUriFor = { it.artworkUri?.toUri() },
+                    onGetArtworkUriFor = { it.artworkUri?.toUri() },
                     onGetHeaderDescriptionFor = { it.artist ?: "" },
                     onPlaySongsForItem = {
                         val songsInAlbum = uiState.songs.filter { song -> song.albumId == it.id }

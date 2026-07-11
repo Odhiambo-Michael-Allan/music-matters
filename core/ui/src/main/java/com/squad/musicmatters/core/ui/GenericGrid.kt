@@ -32,7 +32,7 @@ fun <T, E: Enum<E>> GenericGrid(
     onSortTypeChange: ( E ) -> Unit,
     onSortInReverseChange: ( Boolean ) -> Unit,
     onGetItemKeyFor: ( T ) -> String,
-    onGetImageUriFor: ( T ) -> Uri?,
+    onGetArtworkUriFor: (T ) -> Uri?,
     onGetTitleFor: ( T ) -> String,
     onGetSubTitleFor: ( T ) -> String?,
     onGetHeaderDescriptionFor: ( T ) -> String,
@@ -105,7 +105,7 @@ fun <T, E: Enum<E>> GenericGrid(
                         key = { onGetItemKeyFor( it ) }
                     ) { item ->
                         GenericTile(
-                            imageUri = onGetImageUriFor( item ),
+                            imageUri = onGetArtworkUriFor( item ),
                             title = onGetTitleFor( item ),
                             subTitle = onGetSubTitleFor( item )
                                 ?: stringResource( id = i8nR.string.core_i8n_untitled ),
