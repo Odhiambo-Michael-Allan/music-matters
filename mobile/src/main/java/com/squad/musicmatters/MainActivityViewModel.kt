@@ -2,7 +2,7 @@ package com.squad.musicmatters
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.UserData
@@ -15,11 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    userPreferencesRepository: UserPreferencesRepository,
+    userDataRepository: UserDataRepository,
     private val player: MusicMattersPlayer,
 ) : ViewModel() {
 
-    val uiState: StateFlow<MainActivityUiState> = userPreferencesRepository.userData.map {
+    val uiState: StateFlow<MainActivityUiState> = userDataRepository.userData.map {
         MainActivityUiState.Success(
             userData = it
         )

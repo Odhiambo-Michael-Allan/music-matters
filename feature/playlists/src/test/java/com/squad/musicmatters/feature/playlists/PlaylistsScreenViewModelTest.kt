@@ -5,7 +5,7 @@ import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SortPlaylistsBy
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
-import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
+import com.squad.musicmatters.core.testing.repository.FakeUserDataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import junit.framework.TestCase.assertEquals
@@ -24,7 +24,7 @@ class PlaylistsScreenViewModelTest {
 
     private lateinit var playlistsRepository: FakePlaylistsRepository
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var userPreferencesRepository: FakeUserPreferencesRepository
+    private lateinit var userPreferencesRepository: FakeUserDataRepository
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var subject: PlaylistsScreenViewModel
 
@@ -32,13 +32,13 @@ class PlaylistsScreenViewModelTest {
     fun setUp() {
         playlistsRepository = FakePlaylistsRepository()
         player = FakeMusicMattersPlayer()
-        userPreferencesRepository = FakeUserPreferencesRepository()
+        userPreferencesRepository = FakeUserDataRepository()
         songsRepository = FakeSongsRepository()
         subject = PlaylistsScreenViewModel(
             player = player,
             playlistsRepository = playlistsRepository,
             songsRepository = songsRepository,
-            userPreferencesRepository = userPreferencesRepository
+            userDataRepository = userPreferencesRepository
         )
     }
 

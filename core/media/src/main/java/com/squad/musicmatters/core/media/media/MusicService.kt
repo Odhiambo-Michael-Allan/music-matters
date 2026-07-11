@@ -37,7 +37,7 @@ import com.squad.musicmatters.core.media.media.library.MUSIC_MATTERS_BROWSABLE_R
 import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
 import com.squad.musicmatters.core.data.songs.SongsStore
 import com.squad.musicmatters.core.data.songs.impl.SongsStoreImpl
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.media.connection.DefaultSongToMediaItemConverter
 import com.squad.musicmatters.core.model.LoopMode
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,7 +77,7 @@ class MusicService : MediaLibraryService() {
     lateinit var ioDispatcher: CoroutineDispatcher
 
     @Inject
-    lateinit var userUserPreferencesRepository: UserPreferencesRepository
+    lateinit var userUserDataRepository: UserDataRepository
 
     @Inject
     lateinit var songsStore: SongsStore
@@ -136,7 +136,7 @@ class MusicService : MediaLibraryService() {
             player = exoPlayer,
             coroutineScope = serviceScope,
             queueRepository = queueRepository,
-            userPreferences = userUserPreferencesRepository,
+            userPreferences = userUserDataRepository,
             songToMediaItemConverter = DefaultSongToMediaItemConverter()
         )
     }
@@ -164,7 +164,7 @@ class MusicService : MediaLibraryService() {
                             Timber.tag( TAG ).d( "HEADSET DISCONNECTED" )
                             serviceScope.launch( mainDispatcher ) {
                                 if (
-                                    userUserPreferencesRepository
+                                    userUserDataRepository
                                         .userData
                                         .map { it.pauseOnHeadphonesDisconnect }
                                         .first()
@@ -179,7 +179,7 @@ class MusicService : MediaLibraryService() {
                             Timber.tag( TAG ).d( "HEADSET CONNECTED" )
                             serviceScope.launch( mainDispatcher ) {
                                 if (
-                                    userUserPreferencesRepository
+                                    userUserDataRepository
                                         .userData
                                         .map { it.playOnHeadphonesConnect }
                                         .first()
@@ -232,7 +232,7 @@ class MusicService : MediaLibraryService() {
     }
 
     private suspend fun observeLoopMode() {
-        userUserPreferencesRepository.userData.map { it.loopMode }.collect {
+        userUserDataRepository.userData.map { it.loopMode }.collect {
             replaceableForwardingPlayer.setRepeatMode( it )
         }
     }
@@ -331,7 +331,7 @@ class MusicService : MediaLibraryService() {
             Timber.tag( TAG ).d( "MEDIA ITEM TRANSITION. ID: ${mediaItem?.mediaId}" )
             mediaItem?.let {
                 serviceScope.launch {
-                    userUserPreferencesRepository.setCurrentlyPlayingSongId( it.mediaId )
+                    userUserDataRepository.setCurrentlyPlayingSongId( it.mediaId )
                     mostPlayedSongsRepository.addSongId( it.mediaId )
                     playHistoryRepository.upsertSongWithId(
                         it.mediaId,

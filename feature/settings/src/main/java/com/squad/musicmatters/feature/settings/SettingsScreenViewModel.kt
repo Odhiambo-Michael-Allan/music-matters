@@ -2,7 +2,7 @@ package com.squad.musicmatters.feature.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersFont
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.ThemeMode
@@ -18,11 +18,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class SettingsScreenViewModel @Inject constructor(
-    private val userUserPreferencesRepository: UserPreferencesRepository
+    private val userUserDataRepository: UserDataRepository
 ) : ViewModel() {
 
     val uiState: StateFlow<SettingsScreenUiState> =
-        userUserPreferencesRepository.userData.map {
+        userUserDataRepository.userData.map {
             SettingsScreenUiState.Success( userData = it )
         }.stateIn(
             scope = viewModelScope,
@@ -31,55 +31,55 @@ internal class SettingsScreenViewModel @Inject constructor(
         )
 
     fun setFont( font: MusicMattersFont ) {
-        viewModelScope.launch { userUserPreferencesRepository.setFontName( font.name ) }
+        viewModelScope.launch { userUserDataRepository.setFontName( font.name ) }
     }
 
     fun setFontScale( fontScale: String ) {
         fontScale.toFloatOrNull()?.let {
             if ( FONT_SCALE_VALUES.contains( it ) ) {
-                viewModelScope.launch { userUserPreferencesRepository.setFontScale( it ) }
+                viewModelScope.launch { userUserDataRepository.setFontScale( it ) }
             }
         }
     }
 
     fun setThemeMode( themeMode: ThemeMode ) {
-        viewModelScope.launch { userUserPreferencesRepository.setThemeMode( themeMode ) }
+        viewModelScope.launch { userUserDataRepository.setThemeMode( themeMode ) }
     }
 
     fun setUseMaterialYou( use: Boolean ) {
-        viewModelScope.launch { userUserPreferencesRepository.setUseMaterialYou( use ) }
+        viewModelScope.launch { userUserDataRepository.setUseMaterialYou( use ) }
     }
 
     fun setPrimaryColorName( primaryColorName: String ) {
-        viewModelScope.launch { userUserPreferencesRepository.setPrimaryColorName( primaryColorName ) }
+        viewModelScope.launch { userUserDataRepository.setPrimaryColorName( primaryColorName ) }
     }
 
     fun setBottomBarLabelVisibility( bottomBarLabelVisibility: BottomBarLabelVisibility ) {
         viewModelScope.launch {
-            userUserPreferencesRepository.setBottomBarLabelVisibility( bottomBarLabelVisibility )
+            userUserDataRepository.setBottomBarLabelVisibility( bottomBarLabelVisibility )
         }
     }
 
     fun setPlayOnHeadphonesConnect( playOnHeadphoneConnect: Boolean ) {
         viewModelScope.launch {
-            userUserPreferencesRepository.setPlayOnHeadphonesConnect( playOnHeadphoneConnect )
+            userUserDataRepository.setPlayOnHeadphonesConnect( playOnHeadphoneConnect )
         }
     }
 
     fun setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect: Boolean ) {
         viewModelScope.launch {
-            userUserPreferencesRepository.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
+            userUserDataRepository.setPauseOnHeadphonesDisconnect( pauseOnHeadphonesDisconnect )
         }
     }
 
     fun setMiniPlayerTextMarquee( marquee: Boolean ) {
-        viewModelScope.launch { userUserPreferencesRepository.setMiniPlayerTextMarquee( marquee ) }
+        viewModelScope.launch { userUserDataRepository.setMiniPlayerTextMarquee( marquee ) }
     }
 
     fun setShowLyricsOnSeparateScreen( showLyricsOnSeparatePage: Boolean ) {
         viewModelScope.launch {
-            userUserPreferencesRepository.setShowLyricsOnSeparateScreen( showLyricsOnSeparatePage )
-            if ( showLyricsOnSeparatePage ) userUserPreferencesRepository.setShowLyrics( false )
+            userUserDataRepository.setShowLyricsOnSeparateScreen( showLyricsOnSeparatePage )
+            if ( showLyricsOnSeparatePage ) userUserDataRepository.setShowLyrics( false )
         }
     }
 

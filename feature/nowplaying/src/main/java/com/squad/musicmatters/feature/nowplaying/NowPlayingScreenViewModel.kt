@@ -7,7 +7,7 @@ import com.squad.musicmatters.core.data.repository.QueueRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.utils.combine
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.media.connection.SleepTimer
@@ -33,14 +33,14 @@ import kotlin.time.Duration
 @HiltViewModel
 class NowPlayingScreenViewModel @Inject constructor(
     private val player: MusicMattersPlayer,
-    private val userPreferencesRepository: UserPreferencesRepository,
+    private val userDataRepository: UserDataRepository,
     private val playlistsRepository: PlaylistsRepository,
     private val playbackPositionUpdater: PlaybackPositionUpdater,
     private val queueRepository: QueueRepository,
     songsMetadataRepository: SongsMetadataRepository,
     songsRepository: SongsRepository,
 ) : BaseViewModel(
-    userPreferencesRepository = userPreferencesRepository,
+    userDataRepository = userDataRepository,
     playlistsRepository = playlistsRepository,
     player = player,
 ) {
@@ -51,7 +51,7 @@ class NowPlayingScreenViewModel @Inject constructor(
             player.playerState.map { it.currentlyPlayingSongId }.flatMapLatest { songId ->
                 songsRepository.fetchSongs().map { songs -> songs.firstOrNull { it.id == songId } }
             },
-            userPreferencesRepository.userData,
+            userDataRepository.userData,
             player.playerState.map { it.currentlyPlayingSongId }.flatMapLatest { songId ->
                 playlistsRepository.isFavorite( songId ?: "" )
             },
@@ -142,7 +142,7 @@ class NowPlayingScreenViewModel @Inject constructor(
 
     fun onShowLyrics( show: Boolean ) {
         viewModelScope.launch {
-            userPreferencesRepository.setShowLyrics( show )
+            userDataRepository.setShowLyrics( show )
         }
     }
 
@@ -163,14 +163,14 @@ class NowPlayingScreenViewModel @Inject constructor(
         val currentLoopModePosition = LoopMode.entries.indexOf( currentLoopMode )
         val nextLoopModePosition = ( currentLoopModePosition + 1 ) % LoopMode.entries.size
         viewModelScope.launch {
-            userPreferencesRepository.setLoopMode( LoopMode.entries[ nextLoopModePosition ] )
+            userDataRepository.setLoopMode( LoopMode.entries[ nextLoopModePosition ] )
         }
     }
 
     fun onToggleShuffleMode( shuffle: Boolean ) {
         viewModelScope.launch {
             player.shuffleSongsInQueue( shuffle )
-            userPreferencesRepository.setShuffle( shuffle )
+            userDataRepository.setShuffle( shuffle )
         }
     }
 

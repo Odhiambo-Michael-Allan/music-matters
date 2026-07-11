@@ -7,7 +7,7 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
-import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
+import com.squad.musicmatters.core.testing.repository.FakeUserDataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -43,7 +43,7 @@ class GenreScreenViewModelTest {
     private val genreName = "Rap/HipHop"
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
+    private lateinit var preferencesDataSource: FakeUserDataRepository
     private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var subject: GenreScreenViewModel
@@ -52,7 +52,7 @@ class GenreScreenViewModelTest {
     fun setUp() {
         songsRepository = FakeSongsRepository()
         player = FakeMusicMattersPlayer()
-        preferencesDataSource = FakeUserPreferencesRepository()
+        preferencesDataSource = FakeUserDataRepository()
         playlistRepository = FakePlaylistsRepository()
         metadataRepository = FakeSongsMetadataRepository()
         subject = GenreScreenViewModel(
@@ -63,7 +63,7 @@ class GenreScreenViewModelTest {
             playlistsRepository = playlistRepository,
             songsMetadataRepository = metadataRepository,
             player = player,
-            userPreferencesRepository = preferencesDataSource
+            userDataRepository = preferencesDataSource
         )
     }
 

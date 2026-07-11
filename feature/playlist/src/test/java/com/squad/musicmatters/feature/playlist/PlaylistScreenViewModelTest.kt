@@ -9,7 +9,7 @@ import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
-import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
+import com.squad.musicmatters.core.testing.repository.FakeUserDataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
 import com.squad.musicmatters.feature.playlist.navigation.PlaylistRoute
@@ -43,7 +43,7 @@ class PlaylistScreenViewModelTest {
     private lateinit var playlistsRepository: FakePlaylistsRepository
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var userPreferencesRepository: FakeUserPreferencesRepository
+    private lateinit var userPreferencesRepository: FakeUserDataRepository
     private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var subject: PlaylistScreenViewModel
 
@@ -52,7 +52,7 @@ class PlaylistScreenViewModelTest {
         playlistsRepository = FakePlaylistsRepository()
         songsRepository = FakeSongsRepository()
         player = FakeMusicMattersPlayer()
-        userPreferencesRepository = FakeUserPreferencesRepository()
+        userPreferencesRepository = FakeUserDataRepository()
         metadataRepository = FakeSongsMetadataRepository()
         subject = PlaylistScreenViewModel(
             savedStateHandle = SavedStateHandle(
@@ -63,7 +63,7 @@ class PlaylistScreenViewModelTest {
             playlistsRepository = playlistsRepository,
             songsRepository = songsRepository,
             player = player,
-            userPreferencesRepository = userPreferencesRepository,
+            userDataRepository = userPreferencesRepository,
             songsMetadataRepository = metadataRepository
         )
     }

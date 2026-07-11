@@ -8,7 +8,7 @@ import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakeArtistsRepository
 import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
-import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
+import com.squad.musicmatters.core.testing.repository.FakeUserDataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -45,7 +45,7 @@ class ArtistScreenViewModelTest {
     private lateinit var artistsRepository: FakeArtistsRepository
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
+    private lateinit var preferencesDataSource: FakeUserDataRepository
     private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var subject: ArtistScreenViewModel
@@ -54,7 +54,7 @@ class ArtistScreenViewModelTest {
     fun setUp() {
         artistsRepository = FakeArtistsRepository()
         songsRepository = FakeSongsRepository()
-        preferencesDataSource = FakeUserPreferencesRepository()
+        preferencesDataSource = FakeUserDataRepository()
         playlistRepository = FakePlaylistsRepository()
         metadataRepository = FakeSongsMetadataRepository()
         player = FakeMusicMattersPlayer()
@@ -64,7 +64,7 @@ class ArtistScreenViewModelTest {
             ),
             artistsRepository = artistsRepository,
             songsRepository = songsRepository,
-            userPreferencesRepository = preferencesDataSource,
+            userDataRepository = preferencesDataSource,
             playlistsRepository = playlistRepository,
             songsMetadataRepository = metadataRepository,
             player = player

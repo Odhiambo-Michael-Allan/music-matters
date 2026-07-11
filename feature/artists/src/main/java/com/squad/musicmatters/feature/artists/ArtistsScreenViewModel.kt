@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.data.repository.ArtistsRepository
 import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.model.Playlist
@@ -22,26 +22,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ArtistsScreenViewModel @Inject constructor(
-    private val userPreferencesRepository: UserPreferencesRepository,
+    private val userDataRepository: UserDataRepository,
     artistsRepository: ArtistsRepository,
     player: MusicMattersPlayer,
     playlistsRepository: PlaylistsRepository,
     songsRepository: SongsRepository
 ) : BaseViewModel(
     player = player,
-    userPreferencesRepository = userPreferencesRepository,
+    userDataRepository = userDataRepository,
     playlistsRepository = playlistsRepository
 ) {
 
     val uiState: StateFlow<ArtistsScreenUiState> =
         combine(
-            userPreferencesRepository.userData.flatMapLatest {
+            userDataRepository.userData.flatMapLatest {
                 artistsRepository.fetchArtists(
                     sortArtistsBy = it.sortArtistsBy,
                     sortArtistsInReverse = it.sortArtistsReverse
                 )
             },
-            userPreferencesRepository.userData,
+            userDataRepository.userData,
             playlistsRepository.fetchPlaylists(),
             songsRepository.fetchSongs()
         ) { artists, userData, playlists, songs ->
@@ -59,11 +59,11 @@ class ArtistsScreenViewModel @Inject constructor(
         )
 
     fun onSortTypeChange( by: SortArtistsBy ) {
-        viewModelScope.launch { userPreferencesRepository.setSortArtistsBy( by ) }
+        viewModelScope.launch { userDataRepository.setSortArtistsBy( by ) }
     }
 
     fun onSortInReverseChange( reverse: Boolean ) {
-        viewModelScope.launch { userPreferencesRepository.setSortArtistsInReverse( reverse ) }
+        viewModelScope.launch { userDataRepository.setSortArtistsInReverse( reverse ) }
     }
 
 }

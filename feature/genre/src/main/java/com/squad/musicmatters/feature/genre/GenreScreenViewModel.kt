@@ -6,7 +6,7 @@ import androidx.navigation.toRoute
 import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
@@ -28,24 +28,24 @@ class GenreScreenViewModel @Inject constructor(
     songsMetadataRepository: SongsMetadataRepository,
     songsRepository: SongsRepository,
     player: MusicMattersPlayer,
-    userPreferencesRepository: UserPreferencesRepository,
+    userDataRepository: UserDataRepository,
     playlistsRepository: PlaylistsRepository,
 ) : BaseViewModel(
     player = player,
-    userPreferencesRepository = userPreferencesRepository,
+    userDataRepository = userDataRepository,
     playlistsRepository = playlistsRepository
 ) {
 
     val genreName = savedStateHandle.toRoute<GenreRoute>().genreName
 
     val uiState: StateFlow<GenreScreenUiState> = combine(
-        userPreferencesRepository.userData.flatMapLatest {
+        userDataRepository.userData.flatMapLatest {
             songsRepository.fetchSongs(
                 sortSongsBy = it.sortSongsBy,
                 sortSongsInReverse = it.sortSongsReverse
             )
         },
-        userPreferencesRepository.userData,
+        userDataRepository.userData,
         playlistsRepository.fetchFavorites(),
         playlistsRepository.fetchPlaylists(),
         songsMetadataRepository.fetchMetadata()

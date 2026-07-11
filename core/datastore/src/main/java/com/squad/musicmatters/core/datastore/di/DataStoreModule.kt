@@ -7,8 +7,8 @@ import androidx.datastore.dataStoreFile
 import com.squad.musicmatters.core.common.Dispatcher
 import com.squad.musicmatters.core.common.MusicMattersDispatchers
 import com.squad.musicmatters.core.common.di.IoScope
-import com.squad.musicmatters.core.datastore.MusicMattersUserPreferencesRepository
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.MusicMattersUserDataRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.datastore.UserPreferences
 import com.squad.musicmatters.core.datastore.UserPreferencesSerializer
 import dagger.Module
@@ -43,6 +43,6 @@ internal object DataStoreModule {
     @Singleton
     internal fun providesPreferencesDataSource(
         dataStore: DataStore<UserPreferences>
-    ): UserPreferencesRepository =
-        MusicMattersUserPreferencesRepository( userPreferencesDataStore = dataStore )
+    ): UserDataRepository =
+        MusicMattersUserDataRepository( userPreferencesDataStore = dataStore )
 }

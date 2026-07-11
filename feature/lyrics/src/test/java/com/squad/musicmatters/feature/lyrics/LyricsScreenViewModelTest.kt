@@ -4,7 +4,7 @@ import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.media.FakePlaybackPositionUpdater
-import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
+import com.squad.musicmatters.core.testing.repository.FakeUserDataRepository
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
@@ -25,7 +25,7 @@ class LyricsScreenViewModelTest {
 
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var queueRepository: FakeQueueRepository
-    private lateinit var preferencesDataSource: FakeUserPreferencesRepository
+    private lateinit var preferencesDataSource: FakeUserDataRepository
     private lateinit var playbackPositionUpdater: FakePlaybackPositionUpdater
     private lateinit var player: FakeMusicMattersPlayer
     private lateinit var subject: LyricsScreenViewModel
@@ -34,14 +34,14 @@ class LyricsScreenViewModelTest {
     fun setUp() {
         songsRepository = FakeSongsRepository()
         queueRepository = FakeQueueRepository()
-        preferencesDataSource = FakeUserPreferencesRepository()
+        preferencesDataSource = FakeUserDataRepository()
         playbackPositionUpdater = FakePlaybackPositionUpdater()
         player = FakeMusicMattersPlayer()
         subject = LyricsScreenViewModel(
             player = player,
             songsRepository = songsRepository,
             queueRepository = queueRepository,
-            userPreferencesRepository = preferencesDataSource,
+            userDataRepository = preferencesDataSource,
             playbackPositionUpdater = FakePlaybackPositionUpdater()
         )
     }

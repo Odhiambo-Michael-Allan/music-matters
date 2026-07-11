@@ -5,7 +5,7 @@ import com.squad.musicmatters.core.designsystem.theme.MusicMattersTypography
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.ThemeMode
-import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
+import com.squad.musicmatters.core.testing.repository.FakeUserDataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -21,12 +21,12 @@ class SettingsScreenViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private lateinit var userPreferencesDataSource: FakeUserPreferencesRepository
+    private lateinit var userPreferencesDataSource: FakeUserDataRepository
     private lateinit var subject: SettingsScreenViewModel
 
     @Before
     fun setup() {
-        userPreferencesDataSource = FakeUserPreferencesRepository()
+        userPreferencesDataSource = FakeUserDataRepository()
         subject = SettingsScreenViewModel( userPreferencesDataSource )
     }
 

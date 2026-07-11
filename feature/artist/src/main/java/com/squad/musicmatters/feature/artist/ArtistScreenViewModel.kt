@@ -7,7 +7,7 @@ import com.squad.musicmatters.core.data.repository.ArtistsRepository
 import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.model.Playlist
@@ -29,12 +29,12 @@ class ArtistScreenViewModel @Inject constructor(
     artistsRepository: ArtistsRepository,
     songsRepository: SongsRepository,
     player: MusicMattersPlayer,
-    userPreferencesRepository: UserPreferencesRepository,
+    userDataRepository: UserDataRepository,
     playlistsRepository: PlaylistsRepository,
     songsMetadataRepository: SongsMetadataRepository,
 ) : BaseViewModel(
     player = player,
-    userPreferencesRepository = userPreferencesRepository,
+    userDataRepository = userDataRepository,
     playlistsRepository = playlistsRepository
 ) {
 
@@ -42,13 +42,13 @@ class ArtistScreenViewModel @Inject constructor(
 
     val uiState: StateFlow<ArtistScreenUiState> = com.squad.musicmatters.core.data.utils.combine(
         artistsRepository.fetchArtistWithId( artistId ),
-        userPreferencesRepository.userData.flatMapLatest {
+        userDataRepository.userData.flatMapLatest {
             songsRepository.fetchSongs(
                 sortSongsBy = it.sortSongsBy,
                 sortSongsInReverse = it.sortSongsReverse
             )
         },
-        userPreferencesRepository.userData,
+        userDataRepository.userData,
         playlistsRepository.fetchFavorites(),
         playlistsRepository.fetchPlaylists(),
         songsMetadataRepository.fetchMetadata()

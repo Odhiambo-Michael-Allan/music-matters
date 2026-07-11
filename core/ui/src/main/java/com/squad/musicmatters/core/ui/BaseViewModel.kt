@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.util.UnstableApi
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.data.repository.PlaylistsRepository
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
@@ -15,7 +15,7 @@ import java.util.UUID
 
 abstract class BaseViewModel(
     private val player: MusicMattersPlayer,
-    private val userPreferencesRepository: UserPreferencesRepository,
+    private val userDataRepository: UserDataRepository,
     private val playlistsRepository: PlaylistsRepository,
 ) : ViewModel() {
 
@@ -77,13 +77,13 @@ abstract class BaseViewModel(
 
     fun setSortSongsBy( by: SortSongsBy ) {
         viewModelScope.launch {
-            userPreferencesRepository.setSortSongsBy( by )
+            userDataRepository.setSortSongsBy( by )
         }
     }
 
     fun setSortSongsInReverse( sortSongsInReverse: Boolean ) {
         viewModelScope.launch {
-            userPreferencesRepository.setSortSongsInReverse( sortSongsInReverse )
+            userDataRepository.setSortSongsInReverse( sortSongsInReverse )
         }
     }
 

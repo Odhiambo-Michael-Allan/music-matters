@@ -5,7 +5,7 @@ import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
@@ -28,10 +28,10 @@ internal class QueueScreenViewModel @Inject constructor(
     songsMetadataRepository: SongsMetadataRepository,
     private val songsRepository: SongsRepository,
     private val player: MusicMattersPlayer,
-    private val userPreferencesRepository: UserPreferencesRepository,
+    private val userDataRepository: UserDataRepository,
 ) : BaseViewModel(
     player = player,
-    userPreferencesRepository = userPreferencesRepository,
+    userDataRepository = userDataRepository,
     playlistsRepository = playlistsRepository,
 ) {
 
@@ -47,7 +47,7 @@ internal class QueueScreenViewModel @Inject constructor(
                     songsInQueue
                 }
             },
-            userPreferencesRepository.userData,
+            userDataRepository.userData,
             playlistsRepository.fetchFavorites(),
             playlistsRepository.fetchPlaylists(),
             songsMetadataRepository.fetchMetadata()
@@ -78,14 +78,14 @@ internal class QueueScreenViewModel @Inject constructor(
     fun onToggleShuffleMode( shuffle: Boolean ) {
         viewModelScope.launch {
             player.shuffleSongsInQueue( shuffle )
-            userPreferencesRepository.setShuffle( shuffle )
+            userDataRepository.setShuffle( shuffle )
         }
     }
 
     fun clearQueue() {
         player.clearQueue()
         viewModelScope.launch {
-            userPreferencesRepository.setCurrentlyPlayingSongId( "" )
+            userDataRepository.setCurrentlyPlayingSongId( "" )
         }
     }
 

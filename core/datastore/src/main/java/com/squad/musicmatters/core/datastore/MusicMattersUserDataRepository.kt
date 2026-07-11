@@ -14,9 +14,9 @@ import com.squad.musicmatters.core.model.UserData
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class MusicMattersUserPreferencesRepository @Inject constructor(
+class MusicMattersUserDataRepository @Inject constructor(
     private val userPreferencesDataStore: DataStore<UserPreferences>
-) : UserPreferencesRepository {
+) : UserDataRepository {
 
     override val userData = userPreferencesDataStore.data.map {
         UserData(

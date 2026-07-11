@@ -13,6 +13,7 @@ fun testSong(
     albumTitle: String? = null,
     artistId: Long = 0,
     artistTitle: String = "",
+    path: String = "",
 ) = Song(
     id = id,
     mediaUri = "Uri.EMPTY",
@@ -22,7 +23,7 @@ fun testSong(
     artist = artistTitle,
     size = 0L,
     dateModified = 0L,
-    path = "",
+    path = path,
     trackNumber = null,
     year = null,
     albumTitle = albumTitle,

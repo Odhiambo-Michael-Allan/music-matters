@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.data.repository.GenreResult
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.model.SortGenresBy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,13 +18,13 @@ import javax.inject.Inject
 @HiltViewModel
 class GenresScreenViewModel @Inject constructor(
     private val songsMetadataRepository: SongsMetadataRepository,
-    private val userPreferencesRepository: UserPreferencesRepository,
+    private val userDataRepository: UserDataRepository,
 ) : ViewModel() {
 
     val uiState: StateFlow<GenresScreenUiState> =
         combine(
-            userPreferencesRepository.userData,
-            userPreferencesRepository.userData.flatMapLatest {
+            userDataRepository.userData,
+            userDataRepository.userData.flatMapLatest {
                 songsMetadataRepository.fetchGenres(
                     sortGenresBy = it.sortGenresBy,
                     reverse = it.sortGenresReverse
@@ -43,11 +43,11 @@ class GenresScreenViewModel @Inject constructor(
         )
 
     fun onSortTypeChange( by: SortGenresBy ) {
-        viewModelScope.launch { userPreferencesRepository.setSortGenresBy( by ) }
+        viewModelScope.launch { userDataRepository.setSortGenresBy( by ) }
     }
 
     fun onSortInReverseChange( reverse: Boolean ) {
-        viewModelScope.launch { userPreferencesRepository.setSortGenresInReverse( reverse ) }
+        viewModelScope.launch { userDataRepository.setSortGenresInReverse( reverse ) }
     }
 
 }

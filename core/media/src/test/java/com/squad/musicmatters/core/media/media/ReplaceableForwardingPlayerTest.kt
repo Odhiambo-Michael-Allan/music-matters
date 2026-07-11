@@ -8,7 +8,7 @@ import com.squad.musicmatters.core.model.QueueEntry
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.testing.media.FakePlayer
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
-import com.squad.musicmatters.core.testing.repository.FakeUserPreferencesRepository
+import com.squad.musicmatters.core.testing.repository.FakeUserDataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import junit.framework.TestCase
 import junit.framework.TestCase.assertEquals
@@ -21,14 +21,14 @@ class ReplaceableForwardingPlayerTest {
 
     private lateinit var player: FakePlayer
     private lateinit var queueRepository: FakeQueueRepository
-    private lateinit var userPreferencesDataSource: FakeUserPreferencesRepository
+    private lateinit var userPreferencesDataSource: FakeUserDataRepository
     private lateinit var subject: ReplaceableForwardingPlayer
 
     @Before
     fun setUp() {
         player = FakePlayer()
         queueRepository = FakeQueueRepository()
-        userPreferencesDataSource = FakeUserPreferencesRepository()
+        userPreferencesDataSource = FakeUserDataRepository()
         subject = ReplaceableForwardingPlayer(
             player = player,
             queueRepository = queueRepository,

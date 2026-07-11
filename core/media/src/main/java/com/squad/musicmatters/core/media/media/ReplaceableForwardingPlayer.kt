@@ -24,7 +24,7 @@ import androidx.media3.common.text.CueGroup
 import androidx.media3.common.util.Size
 import androidx.media3.common.util.UnstableApi
 import com.squad.musicmatters.core.data.repository.QueueRepository
-import com.squad.musicmatters.core.datastore.UserPreferencesRepository
+import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.media.connection.SongToMediaItemConverter
 import com.squad.musicmatters.core.media.media.extensions.getMediaItems
 import com.squad.musicmatters.core.media.media.extensions.move
@@ -42,7 +42,7 @@ class ReplaceableForwardingPlayer(
     private var player: Player,
     private val coroutineScope: CoroutineScope,
     private val queueRepository: QueueRepository,
-    private val userPreferences: UserPreferencesRepository,
+    private val userPreferences: UserDataRepository,
     private val songToMediaItemConverter: SongToMediaItemConverter,
 ) : Player {
 
