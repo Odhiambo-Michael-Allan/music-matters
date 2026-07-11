@@ -177,7 +177,7 @@
     <string name="core_i8n_one_playlist" translatable="false">%d playlist</string>
     <string name="core_i8n_playlists" translatable="false">Playlists</string>
     <string name="core_i8n_remove_from_playlist" translatable="false">Remove from playlist</string>
-
+    <string name="core_i8n_one_artist" translatable="false">%d artist</string>
 
 
     <string name="core_i8n_reddit" translatable="false">Reddit</string>

@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -27,6 +28,7 @@ import com.squad.musicmatters.core.model.Artist
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortArtistsBy
+import com.squad.musicmatters.core.ui.GenericGrid
 import com.squad.musicmatters.core.ui.GenericTile
 import com.squad.musicmatters.core.ui.IconTextBody
 import com.squad.musicmatters.core.ui.LibraryDestinationContainer
@@ -86,6 +88,8 @@ private fun ArtistsScreenContent(
     onNavigateToSettings: () -> Unit,
 ) {
 
+    val context = LocalContext.current
+
     LibraryDestinationContainer(
         title = stringResource( id = i8nR.string.core_i8n_artists ),
         isLoading = uiState is ArtistsScreenUiState.Loading,
@@ -95,193 +99,69 @@ private fun ArtistsScreenContent(
         when ( uiState ) {
             ArtistsScreenUiState.Loading -> {}
             is ArtistsScreenUiState.Success -> {
-                ArtistsGrid(
-                    artists = uiState.artists,
-                    sortArtistsBy = uiState.sortArtistsBy,
-                    sortArtistsInReverse = uiState.sortArtistsInReverse,
-                    onViewArtist = onViewArtist,
+                val onGetSubTitle: ( Artist ) -> String = {
+                    context.getString(
+                        if ( it.trackCount > 1 ) {
+                            i8nR.string.core_i8n_n_songs
+                        } else {
+                            i8nR.string.core_i8n_one_song
+                        },
+                        it.trackCount
+                    )
+                }
+                GenericGrid(
+                    items = uiState.artists,
+                    multipleItemsSortBarLabel = i8nR.string.core_i8n_n_artists,
+                    singleItemSortBarLabel = i8nR.string.core_i8n_one_artist,
+                    icon = MusicMattersIcons.Artist,
+                    sortBy = uiState.sortArtistsBy,
+                    sortInReverse = uiState.sortArtistsInReverse,
+                    sortTypes = SortArtistsBy.entries.associateBy(
+                        { it },
+                        { it.label() }
+                    ),
                     onSortTypeChange = onSortTypeChange,
                     onSortInReverseChange = onSortInReverseChange,
-                    onGetSongsByArtist = { artist -> uiState.songs.filter { it.artistId == artist.id } },
-                    onPlaySongsByArtist = { artist ->
+                    onGetItemKeyFor = { it.id.toString() },
+                    onGetTitleFor = { it.name },
+                    onGetSubTitleFor = onGetSubTitle,
+                    onGetArtworkUriFor = { it.artworkUri?.toUri() },
+                    onGetHeaderDescriptionFor = onGetSubTitle,
+                    onViewItem = { onViewArtist( it.id ) },
+                    onPlaySongsForItem = { artist ->
                         val songsByArtists = uiState.songs.filter { it.artistId == artist.id }
                         onPlaySongs( songsByArtists.first(), songsByArtists )
                     },
-                    onAddSongsByArtistToQueue = { artist ->
+                    onAddSongsForItemToQueue = { artist ->
                         onAddSongsToQueue(
                             uiState.songs.filter { it.artistId == artist.id }
                         )
                     },
-                    onRemoveSongsByArtistFromQueue = { artist ->
+                    onRemoveSongsForItemFromQueue = { artist ->
                         onRemoveSongsFromQueue( uiState.songs.filter { it.artistId == artist.id } )
                     },
-                    onPlaySongsByArtistNext = { artist ->
+                    onPlaySongsForItemNext = { artist ->
                         onPlaySongsNext( uiState.songs.filter { it.artistId == artist.id } )
                     },
-                    onShuffleAndPlaySongsByArtist = { artist ->
+                    onShuffleAndPlaySongsForItem = { artist ->
                         onShuffleAndPlay( uiState.songs.filter { it.artistId == artist.id } )
                     },
                     onGetPlaylists = { uiState.playlists },
                     onAddSongsToPlaylist = onAddSongsToPlaylist,
                     onCreatePlaylist = onCreatePlaylist,
                     onShowSnackBar = onShowSnackBar,
-                    onShowAddToQueueOption = { artist ->
+                    onShowAddToQueueOptionFor = { artist ->
                         onShowAddToQueueOption( uiState.songs.filter { it.artistId == artist.id } )
-                    }
+                    },
+                    onGetSongsForItem = { artist ->
+                        uiState.songs.filter { it.artistId == artist.id }
+                    },
                 )
             }
         }
     }
-
 }
 
-
-@Composable
-internal fun ArtistsGrid(
-    artists: List<Artist>,
-    sortArtistsBy: SortArtistsBy,
-    sortArtistsInReverse: Boolean,
-    onSortTypeChange: ( SortArtistsBy ) -> Unit,
-    onSortInReverseChange: ( Boolean ) -> Unit,
-    onViewArtist: ( Long ) -> Unit,
-    onPlaySongsByArtist: ( Artist ) -> Unit,
-    onAddSongsByArtistToQueue: ( Artist ) -> Unit,
-    onRemoveSongsByArtistFromQueue: ( Artist ) -> Unit,
-    onPlaySongsByArtistNext: ( Artist ) -> Unit,
-    onShuffleAndPlaySongsByArtist: ( Artist ) -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
-    onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetSongsByArtist: ( Artist ) -> List<Song>,
-    onShowSnackBar: ( String ) -> Unit,
-    onShowAddToQueueOption: ( Artist ) -> Boolean,
-) {
-    MediaSortBarScaffold (
-        mediaSortBar = {
-            MediaSortBar(
-                sortBy = sortArtistsBy,
-                sortInReverse = sortArtistsInReverse,
-                sortTypes = SortArtistsBy.entries.associateBy(
-                    { it },
-                    { it.label() }
-                ),
-                onSortTypeChange = onSortTypeChange,
-                onSortInReverseChange = onSortInReverseChange,
-                label = {
-                    Text(
-                        text = stringResource(
-                            id = if ( artists.size > 1 ) {
-                                i8nR.string.core_i8n_n_artists
-                            } else {
-                                i8nR.string.core_i8n_artist
-                            },
-                            artists.size
-                        ),
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-            )
-        }
-    ) {
-        when {
-            artists.isEmpty() -> IconTextBody(
-                icon = { modifier ->
-                    Icon(
-                        modifier = modifier,
-                        imageVector = MusicMattersIcons.Artist,
-                        contentDescription = null,
-                    )
-                }
-            ) {
-                Text( text = stringResource( id = i8nR.string.core_i8n_damn_this_is_so_empty ) )
-            }
-            else -> {
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive( minSize = 150.dp ),
-                    contentPadding = PaddingValues(
-                        start = 8.dp,
-                        end = 8.dp,
-                        top = 8.dp,
-                        bottom = 70.dp
-                    )
-                ) {
-                    items(
-                        artists,
-                        key = { it.id }
-                    ) {
-                        ArtistTile(
-                            artist = it,
-                            onViewArtist = onViewArtist,
-                            onPlaySongsByArtist = { onPlaySongsByArtist( it ) },
-                            onAddSongsByArtistToQueue = { onAddSongsByArtistToQueue( it ) },
-                            onPlaySongsByArtistNext = { onPlaySongsByArtistNext( it ) },
-                            onShuffleAndPlaySongsByArtist = { onShuffleAndPlaySongsByArtist( it ) },
-                            onGetPlaylists = onGetPlaylists,
-                            onAddSongsToPlaylist = onAddSongsToPlaylist,
-                            onShowSnackBar = onShowSnackBar,
-                            onCreatePlaylist = onCreatePlaylist,
-                            onShowAddToQueueOption = { onShowAddToQueueOption( it ) },
-                            onRemoveSongsByArtistFromQueue = {
-                                onRemoveSongsByArtistFromQueue( it )
-                            },
-                            onGetSongsByArtist = { onGetSongsByArtist( it ) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding( 4.dp )
-                                .animateItem()
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ArtistTile(
-    modifier: Modifier = Modifier,
-    artist: Artist,
-    onViewArtist: ( Long ) -> Unit,
-    onPlaySongsByArtist: () -> Unit,
-    onAddSongsByArtistToQueue: () -> Unit,
-    onRemoveSongsByArtistFromQueue: () -> Unit,
-    onPlaySongsByArtistNext: () -> Unit,
-    onShuffleAndPlaySongsByArtist: () -> Unit,
-    onGetPlaylists: () -> List<Playlist>,
-    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
-    onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onGetSongsByArtist: () -> List<Song>,
-    onShowSnackBar: ( String ) -> Unit,
-    onShowAddToQueueOption: () -> Boolean,
-) {
-    val subTitle = stringResource(
-        id = if ( artist.trackCount > 1 ) {
-            i8nR.string.core_i8n_n_songs
-        } else {
-            i8nR.string.core_i8n_one_song
-        },
-        artist.trackCount
-    )
-    GenericTile(
-        modifier = modifier,
-        imageUri = artist.artworkUri?.toUri(),
-        title = artist.name,
-        subTitle = subTitle,
-        headerDescription = subTitle,
-        onGetPlaylists = onGetPlaylists,
-        onPlay = onPlaySongsByArtist,
-        onClick = { onViewArtist( artist.id ) },
-        onShufflePlay = onShuffleAndPlaySongsByArtist,
-        onAddToQueue = onAddSongsByArtistToQueue,
-        onPlayNext = onPlaySongsByArtistNext,
-        onGetSongs = onGetSongsByArtist,
-        onCreatePlaylist = onCreatePlaylist,
-        onAddSongsToPlaylist = onAddSongsToPlaylist,
-        onShowSnackBar = onShowSnackBar,
-        onShowAddToQueueOption = onShowAddToQueueOption,
-        onRemoveFromQueue = onRemoveSongsByArtistFromQueue,
-    )
-}
 
 private fun SortArtistsBy.label(): Int =
     when ( this ) {
