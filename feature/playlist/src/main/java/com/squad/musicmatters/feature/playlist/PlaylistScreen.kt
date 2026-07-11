@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -82,7 +83,8 @@ internal fun PlaylistScreen(
         onPlaySongsInPlaylistNext = viewModel::playSongsNext,
         onAddSongsInPlaylistToQueue = viewModel::addSongsToQueue,
         onRemoveSongsInPlaylistFromQueue = viewModel::removeSongsFromQueue,
-        onShowAddToQueueOption = viewModel::noSongInTheListIsPresentInTheQueue
+        onShowAddToQueueOption = viewModel::noSongInTheListIsPresentInTheQueue,
+        onRemoveSongFromPlaylist = viewModel::removeSongFromPlaylist,
     )
 
 }
@@ -112,6 +114,7 @@ private fun PlaylistScreenContent(
     onPlaySongsInPlaylistNext: ( List<Song> ) -> Unit,
     onAddSongsInPlaylistToQueue: ( List<Song> ) -> Unit,
     onRemoveSongsInPlaylistFromQueue: ( List<Song> ) -> Unit,
+    onRemoveSongFromPlaylist: ( Song, Playlist ) -> Unit,
 ) {
 
     var showBottomSheetMenu by remember { mutableStateOf( false ) }
@@ -170,6 +173,14 @@ private fun PlaylistScreenContent(
                     onCreatePlaylist = onCreatePlaylist,
                     onDeleteSong = onDeleteSong,
                     onShowSnackBar = onShowSnackBar,
+                    additionalBottomSheetMenuItems = {
+                        BottomSheetMenuItem(
+                            leadingIcon = MusicMattersIcons.Remove,
+                            label = stringResource( id = i8nR.string.core_i8n_remove_from_playlist )
+                        ) {
+                            onRemoveSongFromPlaylist( it, uiState.playlist )
+                        }
+                    },
                     leadingContent = {
                         item {
                             Column(
@@ -193,7 +204,11 @@ private fun PlaylistScreenContent(
                                 }
                                 Spacer( modifier = Modifier.height( 32.dp ) )
                                 Text(
-                                    text = uiState.playlist.title,
+                                    text = if ( uiState.playlist.id == FAVORITES_PLAYLIST_ID ) {
+                                        stringResource(id = i8nR.string.core_i8n_favorites)
+                                    } else {
+                                        uiState.playlist.title
+                                    },
                                     style = MaterialTheme.typography.titleLarge,
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.padding( 8.dp, 0.dp )
@@ -304,6 +319,7 @@ private fun PlaylistScreenContentPreview(
             onPlaySongsInPlaylistNext = {},
             onAddSongsInPlaylistToQueue = {},
             onRemoveSongsInPlaylistFromQueue = {},
+            onRemoveSongFromPlaylist = { _, _ -> }
         )
     }
 }

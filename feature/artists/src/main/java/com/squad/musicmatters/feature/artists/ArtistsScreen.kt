@@ -166,7 +166,7 @@ internal fun ArtistsGrid(
                     { it.label() }
                 ),
                 onSortTypeChange = onSortTypeChange,
-                onSortReverseChange = onSortInReverseChange,
+                onSortInReverseChange = onSortInReverseChange,
                 label = {
                     Text(
                         text = stringResource(

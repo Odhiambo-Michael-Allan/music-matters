@@ -16,6 +16,7 @@ import androidx.compose.material.icons.rounded.Album
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.ClearAll
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.DragHandle
 import androidx.compose.material.icons.rounded.FastForward
@@ -86,4 +87,5 @@ object MusicMattersIcons {
     val CastConnected = Icons.Default.CastConnected
     val Info = Icons.Default.Info
     val Playlist = Icons.AutoMirrored.Rounded.PlaylistPlay
+    val Remove = Icons.Rounded.Close
 }

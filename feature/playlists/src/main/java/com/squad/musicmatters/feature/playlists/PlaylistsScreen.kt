@@ -176,7 +176,7 @@ private fun PlaylistsGrid(
                 ),
                 sortInReverse = sortInReverse,
                 onSortTypeChange = onSortTypeChange,
-                onSortReverseChange = onSortInReverseChange,
+                onSortInReverseChange = onSortInReverseChange,
                 label = {
                     Text(
                         text = stringResource(

@@ -74,6 +74,7 @@ fun SongCard(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
+    additionalBottomSheetMenuItems: ( @Composable ( Song ) -> Unit )? = null,
 ) {
 
     var showSongOptionsBottomSheet by remember { mutableStateOf( false ) }
@@ -182,6 +183,7 @@ fun SongCard(
                                     showSongOptionsBottomSheet = false
                                 },
                                 onShowSnackBar = onShowSnackBar,
+                                additionalBottomSheetMenuItems = additionalBottomSheetMenuItems,
                             )
                         }
                     }
@@ -228,6 +230,7 @@ fun SongOptionsBottomSheetMenu(
     onDelete: ( Song ) -> Unit,
     onDismissRequest: () -> Unit,
     onShowSnackBar: ( String ) -> Unit,
+    additionalBottomSheetMenuItems: ( @Composable ( Song ) -> Unit )? = null
 ) {
     val context = LocalContext.current
 
@@ -306,6 +309,7 @@ fun SongOptionsBottomSheetMenu(
                 onDismissRequest()
                 onDelete( song )
             }
+            additionalBottomSheetMenuItems?.let { it( song ) }
         }
     )
 }

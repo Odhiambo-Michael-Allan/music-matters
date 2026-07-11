@@ -82,7 +82,12 @@ internal class QueueScreenViewModel @Inject constructor(
         }
     }
 
-    fun clearQueue() { player.clearQueue() }
+    fun clearQueue() {
+        player.clearQueue()
+        viewModelScope.launch {
+            userPreferencesRepository.setCurrentlyPlayingSongId( "" )
+        }
+    }
 
 }
 

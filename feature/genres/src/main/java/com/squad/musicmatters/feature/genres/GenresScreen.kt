@@ -124,7 +124,7 @@ fun GenresGrid(
             ) {
                 MediaSortBar(
                     sortInReverse = sortReverse,
-                    onSortReverseChange = onSortReverseChange,
+                    onSortInReverseChange = onSortReverseChange,
                     sortBy = sortType,
                     sortTypes = SortGenresBy.entries.associateBy(
                         { it },

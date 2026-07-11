@@ -45,7 +45,7 @@ internal fun AlbumGrid(
     onShuffleAndPlaySongsInAlbum: ( Album ) -> Unit,
     onViewAlbumArtist: ( String ) -> Unit,
     onGetPlaylists: () -> List<Playlist>,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onGetSongsInAlbum: ( Album ) -> List<Song>,
     onShowSnackBar: ( String ) -> Unit,
@@ -63,7 +63,7 @@ internal fun AlbumGrid(
                 ),
                 onSortTypeChange = onSortTypeChange,
                 sortInReverse = sortInReverse,
-                onSortReverseChange = onSortInReverseChange,
+                onSortInReverseChange = onSortInReverseChange,
                 label = {
                     Text(
                         text = stringResource(

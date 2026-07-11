@@ -12,7 +12,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.RadioButton
@@ -28,19 +27,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.squad.musicMatters.core.designsystem.R
-import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
-import com.squad.musicmatters.core.designsystem.component.ShuffleButton
-import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
-import com.squad.musicmatters.core.model.SortSongsBy
 
 @Composable
 fun <T : Enum<T>> MediaSortBar(
     sortInReverse: Boolean,
-    onSortReverseChange: (Boolean ) -> Unit,
+    onSortInReverseChange: (Boolean ) -> Unit,
     sortBy: T,
     sortTypes: Map<T, Int>,
     onSortTypeChange: ( T ) -> Unit,
@@ -57,7 +51,7 @@ fun <T : Enum<T>> MediaSortBar(
         Row {
             Spacer( modifier = Modifier.width( 8.dp ) )
             IconButton(
-                onClick = { onSortReverseChange( !sortInReverse ) }
+                onClick = { onSortInReverseChange( !sortInReverse ) }
             ) {
                 Icon(
                     modifier = Modifier.size( 20.dp ),

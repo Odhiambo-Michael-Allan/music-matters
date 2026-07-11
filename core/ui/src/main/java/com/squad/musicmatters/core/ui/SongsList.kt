@@ -53,13 +53,14 @@ fun SongsList(
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
-    leadingContent: ( LazyListScope.() -> Unit )? = null
+    leadingContent: ( LazyListScope.() -> Unit )? = null,
+    additionalBottomSheetMenuItems: ( @Composable ( Song ) -> Unit )? = null
 ) {
 
     Column {
         MediaSortBar(
             sortInReverse = sortSongsInReverse,
-            onSortReverseChange = onSortSongsInReverseChange,
+            onSortInReverseChange = onSortSongsInReverseChange,
             sortBy = sortSongsBy,
             sortTypes = SortSongsBy.entries.associateBy(
                     { it },
@@ -137,6 +138,7 @@ fun SongsList(
                             onShowSnackBar = onShowSnackBar,
                             onRemoveFromQueue = onRemoveSongFromQueue,
                             onSongIsPresentInQueue = onSongIsPresentInQueue,
+                            additionalBottomSheetMenuItems = additionalBottomSheetMenuItems,
                         )
                     }
                 }

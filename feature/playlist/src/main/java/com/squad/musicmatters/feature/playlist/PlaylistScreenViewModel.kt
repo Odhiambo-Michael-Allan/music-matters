@@ -19,16 +19,17 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PlaylistScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    playlistsRepository: PlaylistsRepository,
     songsRepository: SongsRepository,
     userPreferencesRepository: UserPreferencesRepository,
     songsMetadataRepository: SongsMetadataRepository,
     player: MusicMattersPlayer,
+    private val playlistsRepository: PlaylistsRepository,
 ) : BaseViewModel(
     player = player,
     userPreferencesRepository = userPreferencesRepository,
@@ -65,6 +66,15 @@ class PlaylistScreenViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed( 5_000 ),
         initialValue = PlaylistScreenUiState.Loading,
     )
+
+    fun removeSongFromPlaylist( song: Song, playlist: Playlist ) {
+        viewModelScope.launch {
+            playlistsRepository.removeSongIdFromPlaylist(
+                song.id,
+                playlist.id
+            )
+        }
+    }
 
 }
 
