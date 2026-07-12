@@ -1,5 +1,9 @@
 package com.squad.musicmatters.navigation
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -29,11 +33,9 @@ import com.squad.musicmatters.feature.playlist.navigation.navigateToPlaylist
 import com.squad.musicmatters.feature.playlist.navigation.playlistScreen
 import com.squad.musicmatters.feature.playlists.navigation.playlistsScreen
 import com.squad.musicmatters.feature.queue.navigation.queueScreen
-import com.squad.musicmatters.feature.settings.navigation.navigateToSettings
 import com.squad.musicmatters.feature.settings.navigation.settingsScreen
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import com.squad.musicmatters.feature.songs.navigation.songsScreen
-import com.squad.musicmatters.ui.utils.shareSong
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import com.squad.musicmatters.core.i8n.R as i8nR
@@ -255,6 +257,30 @@ private fun SnackbarHostState.showSnackBar(
         )
     }
 }
+
+private fun shareSong( context: Context, uri: Uri, localizedErrorMessage: String ) {
+    try {
+        val intent = createShareSongIntent( context, uri )
+        context.startActivity( intent )
+    } catch ( exception: Exception ) {
+        displayToastWithMessage(
+            context,
+            localizedErrorMessage
+        )
+    }
+}
+
+internal fun createShareSongIntent(context: Context, uri: Uri) = Intent( Intent.ACTION_SEND ).apply {
+    addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION )
+    putExtra( Intent.EXTRA_STREAM, uri )
+    type = context.contentResolver.getType( uri )
+}
+
+internal fun displayToastWithMessage(context: Context, message: String ) = Toast.makeText(
+    context,
+    message,
+    Toast.LENGTH_SHORT
+).show()
 
 private fun nonTopLevelDestinationNavOptions() = navOptions {
     launchSingleTop = true

@@ -1,4 +1,7 @@
 package com.squad.musicmatters.ui.search
+
+import com.squad.musicmatters.core.model.SearchFilter
+
 //
 //import androidx.core.net.toUri
 //import androidx.lifecycle.ViewModel
@@ -351,3 +354,13 @@ package com.squad.musicmatters.ui.search
 //    matchingGenres = emptyList(),
 //    matchingPlaylistInfos = emptyList()
 //)
+
+internal fun getSearchFilterFrom( name: String ) =
+    when ( name ) {
+        SearchFilter.SONG.name -> SearchFilter.SONG
+        SearchFilter.ALBUM.name -> SearchFilter.ALBUM
+        SearchFilter.ARTIST.name -> SearchFilter.ARTIST
+        SearchFilter.GENRE.name -> SearchFilter.GENRE
+        SearchFilter.PLAYLIST.name -> SearchFilter.PLAYLIST
+        else -> null
+    }
