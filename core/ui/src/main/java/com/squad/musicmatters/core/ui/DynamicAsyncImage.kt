@@ -35,6 +35,7 @@ import com.squad.musicmatters.core.designsystem.theme.LocalTintTheme
 @Composable
 fun DynamicAsyncImage(
     imageUri: Uri?,
+    contentScale: ContentScale = ContentScale.Fit,
     contentDescription: String?,
     modifier: Modifier = Modifier,
     onImageLoaded: ( ( ImageBitmap? ) -> Unit )? = null,
@@ -74,7 +75,7 @@ fun DynamicAsyncImage(
 
         AsyncImage(
             model = imageRequest,
-            contentScale = ContentScale.Fit,
+            contentScale = contentScale,
             contentDescription = contentDescription,
             colorFilter = if ( iconTint != Color.Unspecified ) {
                 ColorFilter.tint( iconTint )

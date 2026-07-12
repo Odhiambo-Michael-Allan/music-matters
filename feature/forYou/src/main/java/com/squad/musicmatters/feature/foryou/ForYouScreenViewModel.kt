@@ -37,6 +37,7 @@ class ForYouScreenViewModel @Inject constructor(
     artistsRepository: ArtistsRepository,
     playHistoryRepository: PlayHistoryRepository,
     mostPlayedSongsRepository: MostPlayedSongsRepository,
+    private val player: MusicMattersPlayer,
 ) : ViewModel() {
 
     val uiState: StateFlow<ForYouScreenUiState> = combine(
@@ -79,6 +80,16 @@ class ForYouScreenViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed( 5_000 ),
         initialValue = ForYouScreenUiState.Loading,
     )
+
+    fun playSongs(
+        selectedSong: Song,
+        songsInPlaylist: List<Song>
+    ) {
+        player.playSong(
+            song = selectedSong,
+            songs = songsInPlaylist,
+        )
+    }
 
 }
 

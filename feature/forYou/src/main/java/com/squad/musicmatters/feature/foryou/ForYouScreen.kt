@@ -1,11 +1,13 @@
 package com.squad.musicmatters.feature.foryou
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -28,10 +31,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,24 +46,47 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.DynamicAsyncImage
-import com.squad.musicmatters.core.ui.GenericTile
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.Tile
 import com.squad.musicmatters.core.i8n.R as i8nR
+
+@Composable
+internal fun ForYouScreen(
+    viewModel: ForYouScreenViewModel = hiltViewModel(),
+    onViewAlbum: ( Long ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
+) {
+    
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    ForYouScreenContent(
+        uiState = uiState,
+        onViewAlbum = onViewAlbum,
+        onViewArtist = onViewArtist,
+        onPlaySong = viewModel::playSongs
+    )
+    
+}
 
 @OptIn( ExperimentalMaterial3ExpressiveApi::class )
 @Composable
 private fun ForYouScreenContent(
     uiState: ForYouScreenUiState,
     onPlaySong: ( Song, List<Song> ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
 ) {
+
+    val context = LocalContext.current
 
     when ( uiState ) {
         ForYouScreenUiState.Loading -> {
@@ -69,57 +98,81 @@ private fun ForYouScreenContent(
             }
         }
         is ForYouScreenUiState.Success -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues( bottom = 100.dp ),
             ) {
-                ForYouSongRow(
-                    heading = stringResource( id = i8nR.string.core_i8n_recently_added_songs ),
-                    songs = uiState.recentlyAddedSongs,
-                    onPlaySong = onPlaySong,
-                )
-                SideHeading {
-                    Text(
-                        text = stringResource( id = i8nR.string.core_i8n_suggested_albums )
+                item {
+                    Spacer( Modifier.height( 8.dp ) )
+                    ForYouSongRow(
+                        heading = stringResource( id = i8nR.string.core_i8n_recently_added_songs ),
+                        songs = uiState.recentlyAddedSongs,
+                        onPlaySong = onPlaySong,
                     )
-                }
-                LazyRow (
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues( 8.dp, 0.dp )
-                ) {
-                    items(
-                        uiState.suggestedAlbums,
-                        key = { it.id }
-                    ) {
-                        Tile(
-                            modifier = Modifier.width( 200.dp ),
-                            imageUri = it.artworkUri?.toUri(),
-                            onPlay = {},
-                            onClick = {},
-                            content = {
-                                Text(
-                                    text = it.title,
-                                    fontWeight = FontWeight.SemiBold,
-                                    textAlign = TextAlign.Center,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                                Text(
-                                    text = it.artist
-                                        ?: stringResource( id = i8nR.string.core_i8n_untitled ),
-                                    style = MaterialTheme.typography.bodySmall.copy(
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = MaterialTheme.colorScheme.onSurface
-                                            .copy( alpha = 0.5f )
-                                    ),
-                                    textAlign = TextAlign.Center,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
+                    Spacer( Modifier.height( 8.dp ) )
+                    SideHeading {
+                        Text(
+                            text = stringResource( id = i8nR.string.core_i8n_suggested_albums )
                         )
                     }
+                    Spacer( Modifier.height( 8.dp ) )
+                    ForYouTileRow(
+                        items = uiState.suggestedAlbums,
+                        onGetItemKey = { it.id.toString() },
+                        onGetTitle = { it.title },
+                        onGetDescription = {
+                            it.artist ?: context.getString( i8nR.string.core_i8n_untitled )
+                        },
+                        onGetArtworkUri = { it.artworkUri?.toUri() },
+                        onViewItem = { onViewAlbum( it.id ) },
+                        onPlay = {
+                            val songsInAlbum = uiState.recentlyAddedSongs.filter { song ->
+                                song.albumId == it.id
+                            }
+                            onPlaySong( songsInAlbum.first(), songsInAlbum )
+                        },
+                    )
+                    Spacer( Modifier.height( 8.dp ) )
+                    ForYouSongRow(
+                        heading = stringResource( id = i8nR.string.core_i8n_most_played_songs ),
+                        songs = uiState.mostPlayedSongs,
+                        onPlaySong = onPlaySong,
+                    )
+                    Spacer( Modifier.height( 8.dp ) )
+                    SideHeading {
+                        Text(
+                            text = stringResource( id = i8nR.string.core_i8n_suggested_artists )
+                        )
+                    }
+                    Spacer( Modifier.height( 8.dp ) )
+                    ForYouTileRow(
+                        items = uiState.suggestedArtists,
+                        onGetItemKey = { it.id.toString() },
+                        onGetTitle = { it.name },
+                        onGetDescription = {
+                            context.getString(
+                                if ( it.trackCount > 1 ) {
+                                    i8nR.string.core_i8n_n_songs
+                                } else {
+                                    i8nR.string.core_i8n_one_song
+                                },
+                                it.trackCount
+                            )
+                        },
+                        onGetArtworkUri = { it.artworkUri?.toUri() },
+                        onViewItem = { onViewArtist( it.id ) },
+                        onPlay = {
+                            val songsByArtist = uiState.recentlyAddedSongs.filter { song ->
+                                song.artistId == it.id
+                            }
+                            onPlaySong( songsByArtist.first(), songsByArtist )
+                        },
+                    )
+                    ForYouSongRow(
+                        heading = stringResource( id = i8nR.string.core_i8n_recently_played_songs ),
+                        songs = uiState.recentlyPlayedSongs,
+                        onPlaySong = onPlaySong,
+                    )
                 }
             }
         }
@@ -140,8 +193,11 @@ fun ForYouSongRow(
         SideHeading {
             Text( text = heading )
         }
+        Spacer( Modifier.height( 16.dp ) )
         LazyRow(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues( 12.dp, 0.dp ),
+            horizontalArrangement = Arrangement.spacedBy( 8.dp )
         ) {
             items(
                 songs,
@@ -149,8 +205,8 @@ fun ForYouSongRow(
             ) {
                 ForYouSongCard(
                     modifier = Modifier
-                        .width(300.dp)
-                        .height(96.dp),
+                        .width( 300.dp )
+                        .height( 96.dp ),
                     song = it,
                     onClick = { onPlaySong( it, songs ) }
                 )
@@ -160,8 +216,60 @@ fun ForYouSongRow(
 }
 
 @Composable
+private fun <T> ForYouTileRow(
+    modifier: Modifier = Modifier,
+    items: List<T>,
+    onGetArtworkUri: ( T ) -> Uri?,
+    onGetTitle: ( T ) -> String,
+    onGetDescription: ( T ) -> String,
+    onViewItem: ( T ) -> Unit,
+    onGetItemKey: ( T ) -> String,
+    onPlay: ( T ) -> Unit,
+) {
+    LazyRow (
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues( 12.dp, 0.dp ),
+        horizontalArrangement = Arrangement.spacedBy( 8.dp )
+    ) {
+        items(
+            items = items,
+            key = onGetItemKey
+        ) {
+            Tile(
+                modifier = Modifier.width( 150.dp ),
+                imageUri = onGetArtworkUri( it ),
+                onPlay = { onPlay( it ) },
+                onClick = { onViewItem( it ) },
+                content = {
+                    Text(
+                        text = onGetTitle( it ),
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = onGetDescription( it ),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface
+                                .copy( alpha = 0.5f )
+                        ),
+                        textAlign = TextAlign.Center,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
 private fun SideHeading( text: @Composable () -> Unit ) {
-    Box {
+    Box (
+        modifier = Modifier.padding( 8.dp, 0.dp )
+    ) {
         ProvideTextStyle(
             value = MaterialTheme.typography.headlineSmall.copy(
                 fontWeight = FontWeight.Bold
@@ -187,8 +295,9 @@ fun ForYouSongCard(
     ) {
         Box {
             DynamicAsyncImage(
-                modifier = Modifier.matchParentSize(),
+                modifier = Modifier.fillMaxSize(),
                 imageUri = song.artworkUri?.toUri(),
+                contentScale = ContentScale.FillWidth,
                 contentDescription = null,
             )
             Box(
@@ -281,7 +390,9 @@ private fun ForYouScreenContentPreview(
                 suggestedArtists = previewData.artists,
                 recentlyPlayedSongs = previewData.songs
             ),
-            onPlaySong = { _, _ -> }
+            onPlaySong = { _, _ -> },
+            onViewAlbum = {},
+            onViewArtist = {},
         )
     }
 }

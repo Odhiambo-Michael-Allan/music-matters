@@ -37,7 +37,6 @@ abstract class BaseViewModel(
         }
     }
 
-    @OptIn(UnstableApi::class)
     fun playSongs(
         selectedSong: Song,
         songsInPlaylist: List<Song>

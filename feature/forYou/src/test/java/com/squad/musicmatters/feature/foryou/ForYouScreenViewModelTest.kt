@@ -33,6 +33,7 @@ class ForYouScreenViewModelTest {
     private lateinit var userDataRepository: FakeUserDataRepository
     private lateinit var playHistoryRepository: FakePlayHistoryRepository
     private lateinit var mostPlayedSongsRepository: FakeMostPlayedSongsRepository
+    private lateinit var player: FakeMusicMattersPlayer
     private lateinit var subject: ForYouScreenViewModel
 
     @Before
@@ -42,13 +43,15 @@ class ForYouScreenViewModelTest {
         artistsRepository = FakeArtistsRepository()
         userDataRepository = FakeUserDataRepository()
         playHistoryRepository = FakePlayHistoryRepository()
+        player = FakeMusicMattersPlayer()
         mostPlayedSongsRepository = FakeMostPlayedSongsRepository()
         subject = ForYouScreenViewModel(
             songsRepository = songsRepository,
             albumsRepository = albumsRepository,
             artistsRepository = artistsRepository,
             playHistoryRepository = playHistoryRepository,
-            mostPlayedSongsRepository = mostPlayedSongsRepository
+            mostPlayedSongsRepository = mostPlayedSongsRepository,
+            player = player,
         )
     }
 

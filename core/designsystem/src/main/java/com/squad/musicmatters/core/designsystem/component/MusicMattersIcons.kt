@@ -6,8 +6,10 @@ import androidx.compose.material.icons.automirrored.rounded.PlaylistAdd
 import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material.icons.filled.CastConnected
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ThumbUpOffAlt
+import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Timer
@@ -19,6 +21,7 @@ import androidx.compose.material.icons.rounded.ClearAll
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.DragHandle
+import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.FastForward
 import androidx.compose.material.icons.rounded.FastRewind
 import androidx.compose.material.icons.rounded.Folder
@@ -47,6 +50,8 @@ import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material.icons.rounded.VideoLibrary
 
 object MusicMattersIcons {
+    val ForYouSelected = Icons.Filled.Face
+    val ForYou = Icons.Outlined.Face
     val Search = Icons.Rounded.Search
     val Settings = Icons.Outlined.Settings
     val Favorite = Icons.Rounded.ThumbUpAlt

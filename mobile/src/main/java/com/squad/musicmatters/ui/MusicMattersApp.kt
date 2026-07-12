@@ -69,6 +69,8 @@ import com.squad.musicmatters.core.ui.TopAppBar
 import com.squad.musicmatters.feature.albums.navigation.navigateToAlbums
 import com.squad.musicmatters.feature.artists.navigation.navigateToArtists
 import com.squad.musicmatters.feature.folders.navigation.navigateToFolders
+import com.squad.musicmatters.feature.foryou.navigation.ForYouRoute
+import com.squad.musicmatters.feature.foryou.navigation.navigateToForYouScreen
 import com.squad.musicmatters.feature.genres.navigation.navigateToGenres
 import com.squad.musicmatters.feature.lyrics.navigation.navigateToLyricsScreen
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreen
@@ -242,8 +244,16 @@ fun MusicMattersAppContent(
         Scaffold(
             topBar = {
                 if ( shouldShowTopAppBar ) {
+                    val currentDest = navController.currentDestination?.route
                     TopAppBar(
-                        title = stringResource( id = i8nR.string.core_i8n_songs ),
+                        title = stringResource(
+                            id = if ( navController.currentDestination?.route ==
+                                ForYouRoute::class.qualifiedName ) {
+                                i8nR.string.core_i8n_for_you
+                            } else {
+                                i8nR.string.core_i8n_songs
+                            }
+                        ),
                         topAppBarScrollBehavior = topAppBarScrollBehavior,
                         onNavigationIconClicked = {},
                         onSettingsClicked = {
@@ -404,6 +414,7 @@ private fun TransitionScreenToPortraitMode() {
 
 fun NavHostController.navigateToTopLevelDestination( topLevelDestination: TopLevelDestination ) {
     when ( topLevelDestination ) {
+        TopLevelDestination.FOR_YOU -> navigateToForYouScreen( navOptions = topLevelNavOptions() )
         TopLevelDestination.SONGS -> navigateToSongs( navOptions = topLevelNavOptions() )
         TopLevelDestination.LIBRARY -> {}
     }

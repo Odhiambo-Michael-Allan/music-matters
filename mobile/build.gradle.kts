@@ -53,7 +53,7 @@ android {
 }
 
 dependencies {
-
+    implementation( projects.feature.forYou )
     implementation( projects.feature.songs )
     implementation( projects.feature.nowplaying )
     implementation( projects.feature.queue )

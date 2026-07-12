@@ -6,6 +6,7 @@ import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.feature.albums.navigation.AlbumsRoute
 import com.squad.musicmatters.feature.artists.navigation.ArtistsRoute
 import com.squad.musicmatters.feature.folders.navigation.FoldersRoute
+import com.squad.musicmatters.feature.foryou.navigation.ForYouRoute
 import com.squad.musicmatters.feature.genres.navigation.GenresRoute
 import com.squad.musicmatters.feature.playlists.navigation.PlaylistsRoute
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
@@ -22,6 +23,13 @@ enum class TopLevelDestination(
     @param:StringRes val titleTextId: Int,
     val route: KClass<*>
 ) {
+    FOR_YOU(
+        selectedIcon = MusicMattersIcons.ForYouSelected,
+        unselectedIcon = MusicMattersIcons.ForYou,
+        route = ForYouRoute::class,
+        titleTextId = i8nR.string.core_i8n_for_you,
+        iconTextId = i8nR.string.core_i8n_for_you,
+    ),
     SONGS(
         selectedIcon = MusicMattersIcons.MusicNote,
         unselectedIcon = MusicMattersIcons.MusicNoteOutlined,

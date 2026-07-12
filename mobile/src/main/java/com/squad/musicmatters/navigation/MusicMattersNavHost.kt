@@ -25,6 +25,8 @@ import com.squad.musicmatters.feature.artists.navigation.artistsScreen
 import com.squad.musicmatters.feature.folder.navigation.folderScreen
 import com.squad.musicmatters.feature.folder.navigation.navigateToFolder
 import com.squad.musicmatters.feature.folders.navigation.foldersScreen
+import com.squad.musicmatters.feature.foryou.navigation.ForYouRoute
+import com.squad.musicmatters.feature.foryou.navigation.forYouScreen
 import com.squad.musicmatters.feature.genre.navigation.genreScreen
 import com.squad.musicmatters.feature.genre.navigation.navigateToGenre
 import com.squad.musicmatters.feature.genres.navigation.genresScreen
@@ -55,9 +57,12 @@ internal fun MusicMattersNavHost(
     NavHost(
         modifier = modifier.fillMaxSize(),
         navController = navController,
-        startDestination = SongsRoute,
+        startDestination = ForYouRoute,
     ) {
-
+        forYouScreen(
+            onViewAlbum = {},
+            onViewArtist = {},
+        )
         songsScreen(
             onShareSong = {
                 shareSong(
