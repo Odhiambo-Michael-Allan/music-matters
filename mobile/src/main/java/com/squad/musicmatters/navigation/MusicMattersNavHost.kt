@@ -18,6 +18,7 @@ import com.squad.musicmatters.feature.albums.navigation.albumsScreen
 import com.squad.musicmatters.feature.artist.navigation.artistScreen
 import com.squad.musicmatters.feature.artist.navigation.navigateToArtist
 import com.squad.musicmatters.feature.artists.navigation.artistsScreen
+import com.squad.musicmatters.feature.folders.navigation.foldersScreen
 import com.squad.musicmatters.feature.genre.navigation.genreScreen
 import com.squad.musicmatters.feature.genre.navigation.navigateToGenre
 import com.squad.musicmatters.feature.genres.navigation.genresScreen
@@ -208,6 +209,11 @@ internal fun MusicMattersNavHost(
                     it
                 )
             }
+        )
+        foldersScreen(
+            onViewFolder = {},
+            onNavigateBack = { navController.navigateUp() },
+            onNavigateToSettings = onNavigateToSettings,
         )
 
     }

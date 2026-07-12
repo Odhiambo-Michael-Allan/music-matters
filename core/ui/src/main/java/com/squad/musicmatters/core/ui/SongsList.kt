@@ -77,7 +77,7 @@ fun SongsList(
                         },
                         songs.size
                     ),
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Bold,
                 )
             },
             onShufflePlay = onShufflePlay
@@ -95,20 +95,13 @@ fun SongsList(
                 content = {
                     Text(
                         text = stringResource( id = i8nR.string.core_i8n_damn_this_is_so_empty ),
-                        style = LocalTextStyle.current.copy(
-                            fontWeight = FontWeight.SemiBold
-                        )
+                        fontWeight = FontWeight.Bold
                     )
                 }
             )
             else -> {
-                val lazyListState = rememberLazyListState()
-
                 LazyColumn(
-                    state = lazyListState,
                     contentPadding = PaddingValues( bottom = 70.dp ),
-                    modifier = Modifier
-                        .drawScrollBar( lazyListState )
                 ) {
                     leadingContent?.invoke( this )
                     itemsIndexed(

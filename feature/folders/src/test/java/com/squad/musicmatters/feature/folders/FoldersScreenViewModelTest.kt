@@ -63,21 +63,25 @@ class FoldersScreenViewModelTest {
             FoldersScreenUiState.Success(
                 folders = listOf(
                     Folder(
+                        name = "song-1",
                         path = "path/to/song-1",
                         artworkUri = null,
                         trackCount = 1
                     ),
                     Folder(
+                        name = "song-2",
                         path = "path/to/song-2",
                         artworkUri = null,
                         trackCount = 1
                     ),
                     Folder(
+                        name = "song-3",
                         path = "path/to/song-3",
                         artworkUri = null,
                         trackCount = 1
                     ),
                     Folder(
+                        name = "song-5",
                         path = "path/to/song-5",
                         artworkUri = null,
                         trackCount = 2

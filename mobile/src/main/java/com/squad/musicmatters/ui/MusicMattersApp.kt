@@ -26,7 +26,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -42,7 +41,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -60,39 +58,29 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.window.core.layout.WindowSizeClass
 import com.squad.musicmatters.MainActivityUiState
-import com.squad.musicmatters.R
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.TopAppBar
-import com.squad.musicmatters.feature.albums.navigation.albumsScreen
 import com.squad.musicmatters.feature.albums.navigation.navigateToAlbums
 import com.squad.musicmatters.feature.artists.navigation.navigateToArtists
+import com.squad.musicmatters.feature.folders.navigation.navigateToFolders
 import com.squad.musicmatters.feature.genres.navigation.navigateToGenres
-import com.squad.musicmatters.feature.lyrics.navigation.lyricsScreen
 import com.squad.musicmatters.feature.lyrics.navigation.navigateToLyricsScreen
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreen
 import com.squad.musicmatters.feature.nowplaying.components.MiniPlayer
 import com.squad.musicmatters.feature.playlists.navigation.navigateToPlaylists
 import com.squad.musicmatters.feature.queue.navigation.navigateToQueueScreen
-import com.squad.musicmatters.feature.queue.navigation.queueScreen
 import com.squad.musicmatters.feature.settings.navigation.navigateToSettings
-import com.squad.musicmatters.feature.settings.navigation.settingsScreen
-import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import com.squad.musicmatters.feature.songs.navigation.navigateToSongs
-import com.squad.musicmatters.feature.songs.navigation.songsScreen
 import com.squad.musicmatters.navigation.LibraryDestination
 import com.squad.musicmatters.navigation.MusicMattersNavHost
 import com.squad.musicmatters.navigation.TopLevelDestination
-import com.squad.musicmatters.ui.utils.shareSong
 import com.squad.musicmatters.utils.ScreenOrientation
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.OptIn
 import com.squad.musicmatters.core.i8n.R as i8nR
@@ -404,7 +392,7 @@ private fun TransitionScreenToPortraitMode() {
         val originalOrientation = activity.requestedOrientation
 
         // Lock normal phones to portrait, but leave tablets/foldables alone
-        if (isNormalPhone) {
+        if ( isNormalPhone ) {
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
@@ -426,7 +414,8 @@ fun NavHostController.navigateToLibraryDestination( libraryDestination: LibraryD
         LibraryDestination.ALBUMS -> navigateToAlbums( navOptions = topLevelNavOptions() )
         LibraryDestination.ARTISTS -> navigateToArtists( navOptions = topLevelNavOptions() )
         LibraryDestination.GENRES -> navigateToGenres( navOptions = topLevelNavOptions() )
-        LibraryDestination.PLAYLIST -> navigateToPlaylists( navOptions = topLevelNavOptions() )
+        LibraryDestination.PLAYLISTS -> navigateToPlaylists( navOptions = topLevelNavOptions() )
+        LibraryDestination.FOLDERS -> navigateToFolders( navOptions = topLevelNavOptions() )
     }
 }
 

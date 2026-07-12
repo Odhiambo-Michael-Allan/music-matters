@@ -12,15 +12,17 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.nio.file.Path
 import javax.inject.Inject
 import kotlin.io.path.Path
+import kotlin.io.path.name
 import kotlin.io.path.pathString
 
 @HiltViewModel
 class FoldersScreenViewModel @Inject constructor(
     songsRepository: SongsRepository,
-    userDataRepository: UserDataRepository,
+    private val userDataRepository: UserDataRepository,
 ) : ViewModel() {
 
     val uiState: StateFlow<FoldersScreenUiState> = combine(
@@ -40,6 +42,14 @@ class FoldersScreenViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed( 5_000 ),
         initialValue = FoldersScreenUiState.Loading
     )
+
+    fun setSortPaths( by: SortPathsBy ) {
+        viewModelScope.launch {  userDataRepository.setSortPathsBy( by ) }
+    }
+
+    fun setSortPathsIn( reverse: Boolean ) {
+        viewModelScope.launch { userDataRepository.setSortPathsInReverse( reverse ) }
+    }
 
 }
 
@@ -66,6 +76,7 @@ private fun List<Song>.fetchSortedFolders(
     }
     return tree.map { ( path, songs ) ->
         Folder(
+            name = Path( path ).name,
             path = path,
             artworkUri = songs.firstOrNull { !it.artworkUri.isNullOrBlank() }?.artworkUri,
             trackCount = songs.size
@@ -76,9 +87,9 @@ private fun List<Song>.fetchSortedFolders(
     )
 }
 
-private fun List<Folder>.sortFolders(sortBy: SortPathsBy, reverse: Boolean ): List<Folder> {
+private fun List<Folder>.sortFolders( sortBy: SortPathsBy, reverse: Boolean ): List<Folder> {
     val sortedList = when ( sortBy ) {
-        SortPathsBy.NAME -> sortedBy { it.path }
+        SortPathsBy.NAME -> sortedBy { it.name }
         SortPathsBy.TRACK_COUNT -> sortedBy { it.trackCount }
         SortPathsBy.CUSTOM -> shuffled()
     }

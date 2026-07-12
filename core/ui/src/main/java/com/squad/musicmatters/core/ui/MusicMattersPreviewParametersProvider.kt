@@ -1,8 +1,10 @@
 package com.squad.musicmatters.core.ui
 
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.squad.musicmatters.core.model.Album
 import com.squad.musicmatters.core.model.Artist
+import com.squad.musicmatters.core.model.Folder
 import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.Song
 import java.util.UUID
@@ -17,7 +19,8 @@ class MusicMattersPreviewParametersProvider : PreviewParameterProvider<PreviewDa
                 albums = PreviewParameterData.albums,
                 artists = PreviewParameterData.artists,
                 genres = PreviewParameterData.genres,
-                playlists = PreviewParameterData.playlists
+                playlists = PreviewParameterData.playlists,
+                folders = PreviewParameterData.folders,
             )
         )
 
@@ -29,6 +32,7 @@ data class PreviewData(
     val artists: List<Artist>,
     val genres: List<Genre>,
     val playlists: List<Playlist>,
+    val folders: List<Folder>,
 )
 
 object PreviewParameterData {
@@ -210,5 +214,33 @@ object PreviewParameterData {
             artworkUri = "",
         )
     }.toMutableList()
+
+    val folders = listOf(
+        Folder(
+            name = "song-1",
+            path = "path/to/song-1",
+            trackCount = 2
+        ),
+        Folder(
+            name = "song-2",
+            path = "path/to/song-2",
+            trackCount = 4
+        ),
+        Folder(
+            name = "song-3",
+            path = "path/to/song-3",
+            trackCount = 2
+        ),
+        Folder(
+            name = "song-4",
+            path = "path/to/song-4",
+            trackCount = 18
+        ),
+        Folder(
+            name = "song-7",
+            path = "path/to/song-7",
+            trackCount = 67
+        ),
+    )
 }
 

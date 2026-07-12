@@ -178,6 +178,9 @@
     <string name="core_i8n_playlists" translatable="false">Playlists</string>
     <string name="core_i8n_remove_from_playlist" translatable="false">Remove from playlist</string>
     <string name="core_i8n_one_artist" translatable="false">%d artist</string>
+    <string name="core_i8n_folders" translatable="false">Folders</string>
+    <string name="core_i8n_one_folder" translatable="false">%d folder</string>
+    <string name="core_i8n_n_folders" translatable="false">%d folders</string>
 
 
     <string name="core_i8n_reddit" translatable="false">Reddit</string>
