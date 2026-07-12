@@ -7,6 +7,7 @@ import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.model.Folder
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortPathsBy
+import com.squad.musicmatters.core.model.directoryName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -96,10 +97,7 @@ private fun List<Folder>.sortFolders( sortBy: SortPathsBy, reverse: Boolean ): L
     return if ( reverse ) sortedList.reversed() else sortedList
 }
 
-private fun Path.directoryName(): String {
-    val indexOfSeparator = pathString.lastIndexOf( "/" )
-    return pathString.substring( 0, indexOfSeparator )
-}
+
 
 
 

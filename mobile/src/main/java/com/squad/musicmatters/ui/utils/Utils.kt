@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import com.squad.musicmatters.core.model.SearchFilter
+import java.nio.file.Path
+import kotlin.io.path.pathString
 
 internal fun displayToastWithMessage(context: Context, message: String ) = Toast.makeText(
     context,
@@ -23,6 +25,8 @@ internal fun shareSong( context: Context, uri: Uri, localizedErrorMessage: Strin
         )
     }
 }
+
+
 
 internal fun createShareSongIntent(context: Context, uri: Uri) = Intent( Intent.ACTION_SEND ).apply {
     addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION )

@@ -19,6 +19,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/albums/MusicMatters.feature.albums.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/albums/MusicMatters.feature.albums.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/artist/MusicMatters.feature.artist.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/artist/MusicMatters.feature.artist.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/artists/MusicMatters.feature.artists.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/artists/MusicMatters.feature.artists.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/folder/MusicMatters.feature.folder.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/folder/MusicMatters.feature.folder.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/folders/MusicMatters.feature.folders.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/folders/MusicMatters.feature.folders.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/genre/MusicMatters.feature.genre.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/genre/MusicMatters.feature.genre.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/feature/genres/MusicMatters.feature.genres.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/feature/genres/MusicMatters.feature.genres.androidTest.iml" />

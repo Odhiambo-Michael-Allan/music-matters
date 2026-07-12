@@ -45,8 +45,8 @@ class ArtistScreenViewModelTest {
     private lateinit var artistsRepository: FakeArtistsRepository
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var player: FakeMusicMattersPlayer
-    private lateinit var preferencesDataSource: FakeUserDataRepository
-    private lateinit var playlistRepository: FakePlaylistsRepository
+    private lateinit var userDataRepository: FakeUserDataRepository
+    private lateinit var playlistsRepository: FakePlaylistsRepository
     private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var subject: ArtistScreenViewModel
 
@@ -54,8 +54,8 @@ class ArtistScreenViewModelTest {
     fun setUp() {
         artistsRepository = FakeArtistsRepository()
         songsRepository = FakeSongsRepository()
-        preferencesDataSource = FakeUserDataRepository()
-        playlistRepository = FakePlaylistsRepository()
+        userDataRepository = FakeUserDataRepository()
+        playlistsRepository = FakePlaylistsRepository()
         metadataRepository = FakeSongsMetadataRepository()
         player = FakeMusicMattersPlayer()
         subject = ArtistScreenViewModel(
@@ -64,8 +64,8 @@ class ArtistScreenViewModelTest {
             ),
             artistsRepository = artistsRepository,
             songsRepository = songsRepository,
-            userDataRepository = preferencesDataSource,
-            playlistsRepository = playlistRepository,
+            userDataRepository = userDataRepository,
+            playlistsRepository = playlistsRepository,
             songsMetadataRepository = metadataRepository,
             player = player
         )
@@ -94,11 +94,11 @@ class ArtistScreenViewModelTest {
         )
         artistsRepository.sendArtists( artists )
         songsRepository.sendSongs( songs )
-        preferencesDataSource.sendUserData(
+        userDataRepository.sendUserData(
             emptyUserData.copy( currentlyPlayingSongId = "song-id-2" )
         )
         metadataRepository.sendMetadata( emptyList() )
-        playlistRepository.sendPlaylists( emptyList() )
+        playlistsRepository.sendPlaylists( emptyList() )
 
         assertEquals(
             ArtistScreenUiState.Success(
