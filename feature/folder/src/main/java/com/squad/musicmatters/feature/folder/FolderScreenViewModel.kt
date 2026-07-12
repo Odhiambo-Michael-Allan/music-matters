@@ -16,6 +16,7 @@ import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.model.directoryName
 import com.squad.musicmatters.core.ui.BaseViewModel
 import com.squad.musicmatters.feature.folder.navigation.FolderRoute
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -25,6 +26,7 @@ import javax.inject.Inject
 import kotlin.io.path.Path
 import kotlin.io.path.name
 
+@HiltViewModel
 class FolderScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     songsRepository: SongsRepository,

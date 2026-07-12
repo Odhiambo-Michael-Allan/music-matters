@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.SlideTransition
+import com.squad.musicmatters.feature.folder.FolderScreen
 import kotlinx.serialization.Serializable
 
 @Serializable data class FolderRoute(
@@ -36,13 +37,13 @@ fun NavGraphBuilder.folderScreen(
         enterTransition = { SlideTransition.slideUp.enterTransition() },
         exitTransition = { SlideTransition.slideDown.exitTransition() }
     ) {
-//        FolderScreen(
-//            onNavigateBack = onNavigateBack,
-//            onShowSnackBar = onShowSnackBar,
-//            onDeleteSong = onDeleteSong,
-//            onViewAlbum = onViewAlbum,
-//            onViewArtist = onViewArtist,
-//            onShareSong = onShareSong,
-//        )
+        FolderScreen(
+            onNavigateBack = onNavigateBack,
+            onShowSnackBar = onShowSnackBar,
+            onDeleteSong = onDeleteSong,
+            onViewAlbum = onViewAlbum,
+            onViewArtist = onViewArtist,
+            onShareSong = onShareSong,
+        )
     }
 }
