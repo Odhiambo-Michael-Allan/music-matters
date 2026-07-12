@@ -3,11 +3,14 @@ package com.squad.musicmatters.feature.folder
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.testing.invoke
 import com.squad.castify.core.testing.rules.MainDispatcherRule
+import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.FakeUserDataRepository
+import com.squad.musicmatters.core.testing.repository.emptyUserData
+import com.squad.musicmatters.core.testing.songs.testSong
 import com.squad.musicmatters.feature.folder.navigation.FolderRoute
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -69,7 +72,47 @@ class FolderScreenViewModelTest {
 
         assertEquals(
             FolderScreenUiState.Loading,
-            subject.uiState.value 
+            subject.uiState.value
+        )
+    }
+
+    @Test
+    fun testUiStateIsSuccessWhenAllRequiredFlowsEmit() = runTest {
+        backgroundScope.launch( UnconfinedTestDispatcher() ) { subject.uiState.collect() }
+
+        val songs = listOf(
+            testSong( id = "9", path = paths.last() + "/9" ),
+            testSong( id = "Weston Road Flows", path = paths.last() + "/Weston Road Flows" ),
+            testSong( id = "Grammys", path = paths.last() + "/Grammys" ),
+            testSong( id = "Sicko Mode", path = paths[1] + "/Sicko Mode" ),
+            testSong( id = "Often", path = paths[2] + "/Often" )
+        )
+
+        songsRepository.sendSongs( songs )
+        userDataRepository.sendUserData(
+            emptyUserData.copy(
+                currentlyPlayingSongId = "Grammys"
+            )
+        )
+        metadataRepository.sendMetadata( emptyList() )
+        playlistsRepository.sendPlaylists( emptyList() )
+
+        assertEquals(
+            FolderScreenUiState.Success(
+                name = "Views",
+                songsInFolder = listOf(
+                    testSong( id = "9", path = paths.last() + "/9" ),
+                    testSong( id = "Weston Road Flows", path = paths.last() + "/Weston Road Flows" ),
+                    testSong( id = "Grammys", path = paths.last() + "/Grammys" ),
+                ),
+                sortSongsBy = SortSongsBy.TITLE,
+                sortSongsInReverse = false,
+                favoriteSongIds = emptySet(),
+                playlists = emptyList(),
+                currentlyPlayingSongId = "Grammys",
+                songsMetadata = emptyList()
+            ),
+            subject.uiState.value,
         )
     }
 

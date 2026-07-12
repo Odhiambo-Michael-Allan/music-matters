@@ -27,25 +27,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/feature/folder/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/folder/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/folder/consumer-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/folder/proguard-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/folder/src/main/AndroidManifest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/folder/src/main/java/com/squad/musicmatters/feature/folder/FolderScreenViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/folder/src/main/java/com/squad/musicmatters/feature/folder/navigation/FolderScreenNavigation.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/folder/src/test/java/com/squad/musicmatters/feature/folder/ExampleUnitTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/feature/folder/src/test/java/com/squad/musicmatters/feature/folder/FolderScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/Folder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/Folder.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/artist/src/test/java/com/squad/musicmatters/feature/artist/ArtistScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/artist/src/test/java/com/squad/musicmatters/feature/artist/ArtistScreenViewModelTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/folders/src/main/java/com/squad/musicmatters/feature/folders/FoldersScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/folders/src/main/java/com/squad/musicmatters/feature/folders/FoldersScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/utils/Utils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/utils/Utils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/folder/src/test/java/com/squad/musicmatters/feature/folder/FolderScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/folder/src/test/java/com/squad/musicmatters/feature/folder/FolderScreenViewModelTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,6 +119,7 @@
     "Gradle.ArtistsRepositoryImplTest.executor": "Run",
     "Gradle.ArtistsScreenViewModelTest.executor": "Run",
     "Gradle.CompositeRepositoryImplTest.executor": "Run",
+    "Gradle.FolderScreenViewModelTest.executor": "Run",
     "Gradle.FoldersScreenViewModelTest.executor": "Run",
     "Gradle.GenreScreenViewModelTest.executor": "Run",
     "Gradle.GenresScreenViewModelTest.executor": "Run",
