@@ -3,8 +3,8 @@ package com.squad.musicmatters.core.media.connection
 import androidx.media3.common.MediaItem
 import com.squad.musicmatters.core.media.media.extensions.getMediaItems
 import com.squad.musicmatters.core.testing.connection.FakePlayerConnector
-import com.squad.musicmatters.core.testing.repository.TestMostPlayedSongsRepository
-import com.squad.musicmatters.core.testing.repository.TestPlayHistoryRepository
+import com.squad.musicmatters.core.testing.repository.FakeMostPlayedSongsRepository
+import com.squad.musicmatters.core.testing.repository.FakePlayHistoryRepository
 import com.squad.musicmatters.core.testing.repository.FakeUserDataRepository
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
@@ -27,8 +27,8 @@ import kotlin.time.toDuration
 class MusicMattersPlayerImplTest {
 
     private lateinit var playerConnector: FakePlayerConnector
-    private lateinit var mostPlayedSongsRepository: TestMostPlayedSongsRepository
-    private lateinit var playHistoryRepository: TestPlayHistoryRepository
+    private lateinit var mostPlayedSongsRepository: FakeMostPlayedSongsRepository
+    private lateinit var playHistoryRepository: FakePlayHistoryRepository
     private lateinit var songsAdditionalMetadataRepository: FakeSongsMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
     private lateinit var preferencesDataSource: FakeUserDataRepository
@@ -39,8 +39,8 @@ class MusicMattersPlayerImplTest {
     @Before
     fun setup() {
         playerConnector = FakePlayerConnector()
-        mostPlayedSongsRepository = TestMostPlayedSongsRepository()
-        playHistoryRepository = TestPlayHistoryRepository()
+        mostPlayedSongsRepository = FakeMostPlayedSongsRepository()
+        playHistoryRepository = FakePlayHistoryRepository()
         songsAdditionalMetadataRepository = FakeSongsMetadataRepository()
         queueRepository = FakeQueueRepository()
         preferencesDataSource = FakeUserDataRepository()

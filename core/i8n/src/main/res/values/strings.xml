@@ -181,7 +181,8 @@
     <string name="core_i8n_folders" translatable="false">Folders</string>
     <string name="core_i8n_one_folder" translatable="false">%d folder</string>
     <string name="core_i8n_n_folders" translatable="false">%d folders</string>
-
+    <string name="core_i8n_recently_added_songs" translatable="false">Recently added songs</string>
+    <string name="core_i8n_suggested_albums" translatable="false">Suggested albums</string>
 
     <string name="core_i8n_reddit" translatable="false">Reddit</string>
     <string name="core_i8n_discord" translatable="false">Discord</string>

@@ -1,5 +1,6 @@
 package com.squad.musicmatters.feature.foryou
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.data.repository.AlbumsRepository
 import com.squad.musicmatters.core.data.repository.ArtistsRepository
@@ -31,21 +32,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ForYouScreenViewModel @Inject constructor(
-    player: MusicMattersPlayer,
     songsRepository: SongsRepository,
     albumsRepository: AlbumsRepository,
     artistsRepository: ArtistsRepository,
-    userDataRepository: UserDataRepository,
-    playlistsRepository: PlaylistsRepository,
     playHistoryRepository: PlayHistoryRepository,
     mostPlayedSongsRepository: MostPlayedSongsRepository,
-) : BaseViewModel(
-    player = player,
-    userDataRepository = userDataRepository,
-    playlistsRepository = playlistsRepository,
-) {
+) : ViewModel() {
 
-    val uiState: StateFlow<ForYouScreenUiState> = com.squad.musicmatters.core.data.utils.combine(
+    val uiState: StateFlow<ForYouScreenUiState> = combine(
         songsRepository.fetchSongs(),
         mostPlayedSongsRepository
             .fetchSongsSortedByPlayCount()
@@ -69,8 +63,7 @@ class ForYouScreenViewModel @Inject constructor(
                 }
             },
         playHistoryRepository.fetchSongsSortedByTimePlayed(),
-        playlistsRepository.fetchPlaylists()
-    ) { songs, suggestedAlbums, mostPlayedSongs, suggestedArtists, playHistory, playlists ->
+    ) { songs, suggestedAlbums, mostPlayedSongs, suggestedArtists, playHistory ->
         ForYouScreenUiState.Success(
             recentlyAddedSongs = songs.sortSongs(
                 by = SortSongsBy.TITLE,
@@ -80,7 +73,6 @@ class ForYouScreenViewModel @Inject constructor(
             mostPlayedSongs = mostPlayedSongs,
             suggestedArtists = suggestedArtists.subListNonStrict( 10 ),
             recentlyPlayedSongs = playHistory,
-            playlists = playlists
         )
     }.stateIn(
         scope = viewModelScope,
@@ -98,6 +90,5 @@ sealed interface ForYouScreenUiState {
         val mostPlayedSongs: List<Song>,
         val suggestedArtists: List<Artist>,
         val recentlyPlayedSongs: List<Song>,
-        val playlists: List<Playlist>
     ): ForYouScreenUiState
 }

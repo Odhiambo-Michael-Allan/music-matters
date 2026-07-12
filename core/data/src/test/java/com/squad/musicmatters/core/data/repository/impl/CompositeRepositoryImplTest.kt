@@ -2,8 +2,8 @@ package com.squad.musicmatters.core.data.repository.impl
 
 import com.squad.musicmatters.core.data.repository.CompositeRepository
 import com.squad.musicmatters.core.data.repository.MetadataResult
-import com.squad.musicmatters.core.testing.repository.TestMostPlayedSongsRepository
-import com.squad.musicmatters.core.testing.repository.TestPlayHistoryRepository
+import com.squad.musicmatters.core.testing.repository.FakeMostPlayedSongsRepository
+import com.squad.musicmatters.core.testing.repository.FakePlayHistoryRepository
 import com.squad.musicmatters.core.testing.repository.FakeQueueRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.songs.testSong
@@ -16,16 +16,16 @@ import org.junit.Test
 
 class CompositeRepositoryImplTest {
 
-    private lateinit var mostPlayedSongsRepository: TestMostPlayedSongsRepository
-    private lateinit var playHistoryRepository: TestPlayHistoryRepository
+    private lateinit var mostPlayedSongsRepository: FakeMostPlayedSongsRepository
+    private lateinit var playHistoryRepository: FakePlayHistoryRepository
     private lateinit var songsAdditionalMetadataRepository: FakeSongsMetadataRepository
     private lateinit var queueRepository: FakeQueueRepository
     private lateinit var subject: CompositeRepository
 
     @Before
     fun setUp() {
-        mostPlayedSongsRepository = TestMostPlayedSongsRepository()
-        playHistoryRepository = TestPlayHistoryRepository()
+        mostPlayedSongsRepository = FakeMostPlayedSongsRepository()
+        playHistoryRepository = FakePlayHistoryRepository()
         songsAdditionalMetadataRepository = FakeSongsMetadataRepository()
         queueRepository = FakeQueueRepository()
         subject = CompositeRepositoryImpl(

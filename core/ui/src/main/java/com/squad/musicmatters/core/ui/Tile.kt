@@ -244,7 +244,7 @@ fun GenericOptionsBottomSheet(
 fun Tile(
     modifier: Modifier,
     imageUri: Uri?,
-    options: @Composable ( Boolean, () -> Unit ) -> Unit,
+    options: ( @Composable ( Boolean, () -> Unit ) -> Unit )? = null,
     content: @Composable ColumnScope.() -> Unit,
     onPlay: () -> Unit,
     onClick: () -> Unit
@@ -271,22 +271,24 @@ fun Tile(
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(10.dp))
                     )
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(top = 4.dp)
-                    ) {
-                        var showOptionsMenu by remember { mutableStateOf( false ) }
-
-                        IconButton(
-                            onClick = { showOptionsMenu = !showOptionsMenu }
+                    options?.let {
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(top = 4.dp)
                         ) {
-                            Icon(
-                                imageVector = Icons.Rounded.MoreVert,
-                                contentDescription = null
-                            )
-                            options( showOptionsMenu ) {
-                                showOptionsMenu = false
+                            var showOptionsMenu by remember { mutableStateOf( false ) }
+
+                            IconButton(
+                                onClick = { showOptionsMenu = !showOptionsMenu }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.MoreVert,
+                                    contentDescription = null
+                                )
+                                options( showOptionsMenu ) {
+                                    showOptionsMenu = false
+                                }
                             }
                         }
                     }

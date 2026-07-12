@@ -1,21 +1,21 @@
 package com.squad.musicmatters.core.testing.repository
 
-import com.squad.musicmatters.core.data.repository.PlayHistoryRepository
+import com.squad.musicmatters.core.data.repository.MostPlayedSongsRepository
 import com.squad.musicmatters.core.model.Song
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
-import java.time.Instant
 
-class TestPlayHistoryRepository : PlayHistoryRepository {
+class FakeMostPlayedSongsRepository : MostPlayedSongsRepository {
 
     private val songsFlow: MutableSharedFlow<List<Song>> =
         MutableSharedFlow( replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST )
 
-    override fun fetchSongsSortedByTimePlayed(): Flow<List<Song>> = songsFlow
+    override fun fetchSongsSortedByPlayCount(): Flow<List<Song>> = songsFlow
 
-    override suspend fun upsertSongWithId( songId: String, timePlayed: Instant ) {
+    override suspend fun addSongId( songId: String ) {
+        println( "ADDING SONG WITH ID: $songId" )
         val currentSongs = songsFlow.first().toMutableList()
         currentSongs.add(
             Song(
@@ -36,6 +36,7 @@ class TestPlayHistoryRepository : PlayHistoryRepository {
                 artistId = 0,
             )
         )
+        println( "EMITTING SONGS: $currentSongs" )
         songsFlow.tryEmit( currentSongs )
     }
 
@@ -48,5 +49,4 @@ class TestPlayHistoryRepository : PlayHistoryRepository {
     fun sendSongs( songs: List<Song> ) {
         songsFlow.tryEmit( songs )
     }
-
 }
