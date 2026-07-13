@@ -51,6 +51,7 @@
             <option value="$PROJECT_DIR$/feature/playlist" />
             <option value="$PROJECT_DIR$/feature/playlists" />
             <option value="$PROJECT_DIR$/feature/queue" />
+            <option value="$PROJECT_DIR$/feature/search" />
             <option value="$PROJECT_DIR$/feature/settings" />
             <option value="$PROJECT_DIR$/feature/songs" />
             <option value="$PROJECT_DIR$/mobile" />

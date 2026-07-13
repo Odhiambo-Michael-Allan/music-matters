@@ -6,10 +6,13 @@ import android.content.Context
 import android.database.ContentObserver
 import android.database.Cursor
 import android.net.Uri
+import android.os.Environment
+import android.os.Environment.getExternalStoragePublicDirectory
 import android.os.Handler
 import android.os.HandlerThread
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
+import android.provider.MediaStore.Audio.AudioColumns.IS_MUSIC
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.core.database.getIntOrNull
@@ -32,7 +35,6 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import javax.annotation.concurrent.Immutable
-import javax.inject.Inject
 
 class SongsStoreImpl(
     private val context: Context,
@@ -77,36 +79,62 @@ class SongsStoreImpl(
     override suspend fun fetchSongs(
         sortSongsBy: SortSongsBy?,
         sortSongsInReverse: Boolean?,
-    ): List<Song> =
-        withContext( ioDispatcher )  {
-            val songList = mutableListOf<Song>()
-            try {
-                Timber.tag( TAG ).d( "FETCHING SONGS.." )
-                context.contentResolver.query(
-                    collectionUri,
-                    projection,
-                    MediaStore.Audio.Media.IS_MUSIC + " = 1",
-                    null,
-                    null,
-                )?.use {
-                    while ( it.moveToNext() ) {
-                        kotlin.runCatching {
-                            buildSongUsing( it )
-                        }.getOrNull()?.also { song -> songList.add( song ) }
-                    }
-                }
-                return@withContext songList
-                    .sortSongs(
-                        by = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
-                        reverse = sortSongsInReverse ?: false
-                    )
-            } catch ( exception: Exception ) {
-                exception.message?.let { Timber.tag( TAG ).e( it ) }
-                return@withContext emptyList()
-            }
-        }
+    ): List<Song> = fetchSongs(
+        sortSongsBy = sortSongsBy,
+        sortSongsInReverse = sortSongsInReverse,
+        selection = "$IS_MUSIC = 1"
+    )
 
-    override suspend fun fetchLyricsFor(song: Song?): List<Lyric> = withContext(ioDispatcher) {
+    override suspend fun searchSongsMatching(
+        query: String,
+        sortSongsBy: SortSongsBy?,
+        sortSongsInReverse: Boolean?
+    ): List<Song> = fetchSongs(
+        sortSongsBy = sortSongsBy,
+        sortSongsInReverse = sortSongsInReverse,
+        selection = "$IS_MUSIC = 1 AND ${AudioColumns.TITLE} LIKE ?",
+        selectionArgs = arrayOf( "%${query.trim()}%" )
+    )
+
+    private suspend fun fetchSongs(
+        sortSongsBy: SortSongsBy? = null,
+        sortSongsInReverse: Boolean? = null,
+        selection: String,
+        selectionArgs: Array<String>? = null,
+        sortOrder: String? = null,
+    ) = withContext( ioDispatcher )  {
+        val songList = mutableListOf<Song>()
+        try {
+            Timber.tag( TAG ).d( "FETCHING SONGS.." )
+            context.contentResolver.query(
+                collectionUri,
+                projection,
+                selection,
+                selectionArgs,
+                sortOrder,
+            )?.use {
+                while ( it.moveToNext() ) {
+                    kotlin.runCatching {
+                        buildSongUsing( it )
+                    }.getOrNull()?.also { song -> songList.add( song ) }
+                }
+            }
+            val sortedList = songList
+                .sortSongs(
+                    by = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
+                    reverse = sortSongsInReverse ?: false
+                )
+            return@withContext sortedList
+        } catch ( exception: Exception ) {
+            exception.message?.let {
+                Timber.tag( TAG )
+                    .e( "ERROR WHILE FETCHING SONGS. ERROR -> $it" )
+            }
+            return@withContext emptyList()
+        }
+    }
+
+    override suspend fun fetchLyricsFor(song: Song?): List<Lyric> = withContext( ioDispatcher ) {
         try {
             val path = song?.lyricPath() ?: return@withContext emptyList()
             val lyricFile = File( path )

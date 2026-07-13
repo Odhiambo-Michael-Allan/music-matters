@@ -10,5 +10,5 @@ enum class SortSongsBy {
     COMPOSER,
     YEAR,
     FILENAME,
-    TRACK_NUMBER,
+    TRACK_NUMBER;
 }

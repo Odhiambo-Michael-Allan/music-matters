@@ -86,6 +86,13 @@ private class FakeSongsStore : SongsStore {
     ): List<Song> = currentSongs
 
     override suspend fun fetchLyricsFor( song: Song? ) = currentLyrics
+    override suspend fun searchSongsMatching(
+        query: String,
+        sortSongsBy: SortSongsBy?,
+        sortSongsInReverse: Boolean?
+    ): List<Song> {
+        TODO("Not yet implemented")
+    }
 
     override fun registerListener( listener: SongsStoreListener ) {
         listeners.add( listener )

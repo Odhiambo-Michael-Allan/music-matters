@@ -11,5 +11,11 @@ interface SongsRepository {
         sortSongsInReverse: Boolean? = false
     ): Flow<List<Song>>
 
+    fun searchSongs(
+        query: String,
+        sortSongsBy: SortSongsBy? = null,
+        sortSongsInReverse: Boolean? = null,
+    ): Flow<List<Song>>
+
     fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>>
 }

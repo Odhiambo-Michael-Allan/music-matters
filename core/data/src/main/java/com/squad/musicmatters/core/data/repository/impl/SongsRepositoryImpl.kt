@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
@@ -82,6 +84,18 @@ class SongsRepositoryImpl @Inject constructor(
             reverse = sortSongsInReverse ?: false
         )
     }.flowOn( Dispatchers.Default )
+
+    override fun searchSongs(
+        query: String,
+        sortSongsBy: SortSongsBy?,
+        sortSongsInReverse: Boolean?
+    ): Flow<List<Song>> = flow<List<Song>> {
+        songsStore.searchSongsMatching(
+            query = query,
+            sortSongsBy = sortSongsBy,
+            sortSongsInReverse = sortSongsInReverse,
+        )
+    }.flowOn( ioDispatcher )
 
     override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> = channelFlow {
         if ( song == null ) {

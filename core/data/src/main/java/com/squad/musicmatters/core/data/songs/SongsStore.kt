@@ -16,6 +16,12 @@ interface SongsStore {
 
     suspend fun fetchLyricsFor( song: Song? ): List<Lyric>
 
+    suspend fun searchSongsMatching(
+        query: String,
+        sortSongsBy: SortSongsBy?,
+        sortSongsInReverse: Boolean?
+    ): List<Song>
+
     fun registerListener( listener: SongsStoreListener )
     fun unregisterListener( listener: SongsStoreListener )
 }
