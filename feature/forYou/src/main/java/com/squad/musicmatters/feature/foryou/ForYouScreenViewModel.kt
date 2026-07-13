@@ -35,20 +35,25 @@ class ForYouScreenViewModel @Inject constructor(
     songsRepository: SongsRepository,
     albumsRepository: AlbumsRepository,
     artistsRepository: ArtistsRepository,
+    userDataRepository: UserDataRepository,
     playHistoryRepository: PlayHistoryRepository,
     mostPlayedSongsRepository: MostPlayedSongsRepository,
     private val player: MusicMattersPlayer,
 ) : ViewModel() {
 
-    val uiState: StateFlow<ForYouScreenUiState> = combine(
+    val uiState: StateFlow<ForYouScreenUiState> = com.squad.musicmatters.core.data.utils.combine(
         songsRepository.fetchSongs(),
         mostPlayedSongsRepository
             .fetchSongsSortedByPlayCount()
             .flatMapLatest { songs ->
                 val mostPlayedAlbumIds = songs.map { it.albumId }.toSet()
                 albumsRepository.fetchAlbums().map { albumsList ->
-                    albumsList.filter { album ->
-                        album.id in mostPlayedAlbumIds
+                    if ( mostPlayedAlbumIds.isEmpty() ) {
+                        albumsList.subListNonStrict( 10 )
+                    } else {
+                        albumsList.filter { album ->
+                            album.id in mostPlayedAlbumIds
+                        }
                     }
                 }
             },
@@ -58,22 +63,33 @@ class ForYouScreenViewModel @Inject constructor(
             .flatMapLatest { songs ->
                 val mostPlayedArtistsIds = songs.map { it.artistId }.toSet()
                 artistsRepository.fetchArtists().map { artistsList ->
-                    artistsList.filter { artist ->
-                        artist.id in mostPlayedArtistsIds
+                    if ( mostPlayedArtistsIds.isEmpty() ) {
+                        artistsList.subListNonStrict( 10 )
+                    } else {
+                        artistsList.filter { artist ->
+                            artist.id in mostPlayedArtistsIds
+                        }
                     }
                 }
             },
         playHistoryRepository.fetchSongsSortedByTimePlayed(),
-    ) { songs, suggestedAlbums, mostPlayedSongs, suggestedArtists, playHistory ->
+        userDataRepository.userData.map { it.currentlyPlayingSongId }
+    ) { songs,
+        suggestedAlbums,
+        mostPlayedSongs,
+        suggestedArtists,
+        playHistory,
+        currentlyPlayingSongId ->
         ForYouScreenUiState.Success(
             recentlyAddedSongs = songs.sortSongs(
-                by = SortSongsBy.TITLE,
-                reverse = false
-            ).subListNonStrict( 10 ),
+                by = SortSongsBy.DATE_ADDED,
+                reverse = true
+            ),
             suggestedAlbums = suggestedAlbums.subListNonStrict( 10 ),
-            mostPlayedSongs = mostPlayedSongs,
+            mostPlayedSongs = mostPlayedSongs.subListNonStrict( 10 ),
             suggestedArtists = suggestedArtists.subListNonStrict( 10 ),
             recentlyPlayedSongs = playHistory,
+            currentlyPlayingSongId = currentlyPlayingSongId
         )
     }.stateIn(
         scope = viewModelScope,
@@ -91,6 +107,13 @@ class ForYouScreenViewModel @Inject constructor(
         )
     }
 
+    fun shuffleAndPlay(
+        songs: List<Song>,
+    ) {
+        if ( songs.isEmpty() ) return
+        player.shuffleAndPlay( songs )
+    }
+
 }
 
 sealed interface ForYouScreenUiState {
@@ -101,5 +124,6 @@ sealed interface ForYouScreenUiState {
         val mostPlayedSongs: List<Song>,
         val suggestedArtists: List<Artist>,
         val recentlyPlayedSongs: List<Song>,
+        val currentlyPlayingSongId: String,
     ): ForYouScreenUiState
 }

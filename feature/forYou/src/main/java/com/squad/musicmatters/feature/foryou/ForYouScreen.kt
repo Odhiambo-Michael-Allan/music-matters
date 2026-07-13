@@ -1,6 +1,7 @@
 package com.squad.musicmatters.feature.foryou
 
 import android.net.Uri
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,13 +20,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
@@ -38,6 +38,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +49,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.squad.musicMatters.core.designsystem.R
+import com.squad.musicmatters.core.data.utils.subListNonStrict
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -72,7 +75,8 @@ internal fun ForYouScreen(
         uiState = uiState,
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
-        onPlaySong = viewModel::playSongs
+        onPlaySong = viewModel::playSongs,
+        onShuffleAndPlay = viewModel::shuffleAndPlay,
     )
     
 }
@@ -82,6 +86,7 @@ internal fun ForYouScreen(
 private fun ForYouScreenContent(
     uiState: ForYouScreenUiState,
     onPlaySong: ( Song, List<Song> ) -> Unit,
+    onShuffleAndPlay: ( List<Song> ) -> Unit,
     onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( Long ) -> Unit,
 ) {
@@ -98,81 +103,121 @@ private fun ForYouScreenContent(
             }
         }
         is ForYouScreenUiState.Success -> {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues( bottom = 100.dp ),
+            Box(
+                modifier = Modifier.fillMaxSize()
             ) {
-                item {
-                    Spacer( Modifier.height( 8.dp ) )
-                    ForYouSongRow(
-                        heading = stringResource( id = i8nR.string.core_i8n_recently_added_songs ),
-                        songs = uiState.recentlyAddedSongs,
-                        onPlaySong = onPlaySong,
-                    )
-                    Spacer( Modifier.height( 8.dp ) )
-                    SideHeading {
-                        Text(
-                            text = stringResource( id = i8nR.string.core_i8n_suggested_albums )
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues( bottom = 100.dp ),
+                ) {
+                    item {
+                        Spacer( Modifier.height( 8.dp ) )
+                        ForYouSongRow(
+                            heading = stringResource( id = i8nR.string.core_i8n_recently_added_songs ),
+                            songs = uiState.recentlyAddedSongs.subListNonStrict( 10 ),
+                            onPlaySong = onPlaySong,
                         )
-                    }
-                    Spacer( Modifier.height( 8.dp ) )
-                    ForYouTileRow(
-                        items = uiState.suggestedAlbums,
-                        onGetItemKey = { it.id.toString() },
-                        onGetTitle = { it.title },
-                        onGetDescription = {
-                            it.artist ?: context.getString( i8nR.string.core_i8n_untitled )
-                        },
-                        onGetArtworkUri = { it.artworkUri?.toUri() },
-                        onViewItem = { onViewAlbum( it.id ) },
-                        onPlay = {
-                            val songsInAlbum = uiState.recentlyAddedSongs.filter { song ->
-                                song.albumId == it.id
+                        if ( uiState.suggestedAlbums.isNotEmpty() ) {
+                            Spacer( Modifier.height( 8.dp ) )
+                            SideHeading {
+                                Text(
+                                    text = stringResource( id = i8nR.string.core_i8n_suggested_albums )
+                                )
                             }
-                            onPlaySong( songsInAlbum.first(), songsInAlbum )
-                        },
-                    )
-                    Spacer( Modifier.height( 8.dp ) )
-                    ForYouSongRow(
-                        heading = stringResource( id = i8nR.string.core_i8n_most_played_songs ),
-                        songs = uiState.mostPlayedSongs,
-                        onPlaySong = onPlaySong,
-                    )
-                    Spacer( Modifier.height( 8.dp ) )
-                    SideHeading {
-                        Text(
-                            text = stringResource( id = i8nR.string.core_i8n_suggested_artists )
-                        )
-                    }
-                    Spacer( Modifier.height( 8.dp ) )
-                    ForYouTileRow(
-                        items = uiState.suggestedArtists,
-                        onGetItemKey = { it.id.toString() },
-                        onGetTitle = { it.name },
-                        onGetDescription = {
-                            context.getString(
-                                if ( it.trackCount > 1 ) {
-                                    i8nR.string.core_i8n_n_songs
-                                } else {
-                                    i8nR.string.core_i8n_one_song
+                            Spacer( Modifier.height( 8.dp ) )
+                            ForYouTileRow(
+                                items = uiState.suggestedAlbums,
+                                onGetItemKey = { it.id.toString() },
+                                onGetTitle = { it.title },
+                                onGetDescription = {
+                                    it.artist ?: context.getString( i8nR.string.core_i8n_untitled )
                                 },
-                                it.trackCount
+                                onGetArtworkUri = { it.artworkUri?.toUri() },
+                                onViewItem = { onViewAlbum( it.id ) },
+                                onPlay = {
+                                    val songsInAlbum = uiState.recentlyAddedSongs.filter { song ->
+                                        song.albumId == it.id
+                                    }
+                                    onPlaySong( songsInAlbum.first(), songsInAlbum )
+                                },
                             )
-                        },
-                        onGetArtworkUri = { it.artworkUri?.toUri() },
-                        onViewItem = { onViewArtist( it.id ) },
-                        onPlay = {
-                            val songsByArtist = uiState.recentlyAddedSongs.filter { song ->
-                                song.artistId == it.id
+                        }
+                        if ( uiState.mostPlayedSongs.isNotEmpty() ) {
+                            Spacer( Modifier.height( 8.dp ) )
+                            ForYouSongRow(
+                                heading = stringResource( id = i8nR.string.core_i8n_most_played_songs ),
+                                songs = uiState.mostPlayedSongs,
+                                onPlaySong = onPlaySong,
+                            )
+                        }
+                        if ( uiState.suggestedArtists.isNotEmpty() ) {
+                            Spacer( Modifier.height( 8.dp ) )
+                            SideHeading {
+                                Text(
+                                    text = stringResource( id = i8nR.string.core_i8n_suggested_artists )
+                                )
                             }
-                            onPlaySong( songsByArtist.first(), songsByArtist )
-                        },
-                    )
-                    ForYouSongRow(
-                        heading = stringResource( id = i8nR.string.core_i8n_recently_played_songs ),
-                        songs = uiState.recentlyPlayedSongs,
-                        onPlaySong = onPlaySong,
-                    )
+                            Spacer( Modifier.height( 8.dp ) )
+                            ForYouTileRow(
+                                items = uiState.suggestedArtists,
+                                onGetItemKey = { it.id.toString() },
+                                onGetTitle = { it.name },
+                                onGetDescription = {
+                                    context.getString(
+                                        if ( it.trackCount > 1 ) {
+                                            i8nR.string.core_i8n_n_songs
+                                        } else {
+                                            i8nR.string.core_i8n_one_song
+                                        },
+                                        it.trackCount
+                                    )
+                                },
+                                onGetArtworkUri = { it.artworkUri?.toUri() },
+                                onViewItem = { onViewArtist( it.id ) },
+                                onPlay = {
+                                    val songsByArtist = uiState.recentlyAddedSongs.filter { song ->
+                                        song.artistId == it.id
+                                    }
+                                    onPlaySong( songsByArtist.first(), songsByArtist )
+                                },
+                            )
+                        }
+                        if ( uiState.recentlyPlayedSongs.isNotEmpty() ) {
+                            ForYouSongRow(
+                                heading = stringResource( id = i8nR.string.core_i8n_recently_played_songs ),
+                                songs = uiState.recentlyPlayedSongs,
+                                onPlaySong = onPlaySong,
+                            )
+                        }
+                    }
+                }
+                val animatedBottomPadding by animateDpAsState(
+                    targetValue = if ( uiState.currentlyPlayingSongId.isNotBlank() ) {
+                        60.dp
+                    } else {
+                        0.dp
+                    },
+                    label = "BottomPaddingAnimation"
+                )
+                Box(
+                    Modifier
+                        .align( Alignment.BottomEnd )
+                        .padding( bottom = animatedBottomPadding )
+                ) {
+                    LargeFloatingActionButton(
+                        modifier = Modifier.padding( 16.dp ),
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        onClick = { onShuffleAndPlay( uiState.recentlyAddedSongs ) }
+                    ) {
+                        Icon(
+                            painter = painterResource( id = R.drawable.ic_shuffle ),
+                            contentDescription = null,
+                            modifier = Modifier.size(
+                                MusicMattersIcons.Shuffle.defaultHeight.minus( 5.dp )
+                            )
+                        )
+                    }
+
                 }
             }
         }
@@ -197,7 +242,7 @@ fun ForYouSongRow(
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues( 12.dp, 0.dp ),
-            horizontalArrangement = Arrangement.spacedBy( 8.dp )
+            horizontalArrangement = Arrangement.spacedBy( 12.dp )
         ) {
             items(
                 songs,
@@ -205,8 +250,9 @@ fun ForYouSongRow(
             ) {
                 ForYouSongCard(
                     modifier = Modifier
-                        .width( 300.dp )
-                        .height( 96.dp ),
+                        .width(300.dp)
+                        .height(96.dp)
+                        .animateItem(),
                     song = it,
                     onClick = { onPlaySong( it, songs ) }
                 )
@@ -229,14 +275,16 @@ private fun <T> ForYouTileRow(
     LazyRow (
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues( 12.dp, 0.dp ),
-        horizontalArrangement = Arrangement.spacedBy( 8.dp )
+        horizontalArrangement = Arrangement.spacedBy( 12.dp )
     ) {
         items(
             items = items,
             key = onGetItemKey
         ) {
             Tile(
-                modifier = Modifier.width( 150.dp ),
+                modifier = Modifier
+                    .width(150.dp)
+                    .animateItem(),
                 imageUri = onGetArtworkUri( it ),
                 onPlay = { onPlay( it ) },
                 onClick = { onViewItem( it ) },
@@ -268,7 +316,7 @@ private fun <T> ForYouTileRow(
 @Composable
 private fun SideHeading( text: @Composable () -> Unit ) {
     Box (
-        modifier = Modifier.padding( 8.dp, 0.dp )
+        modifier = Modifier.padding( 12.dp, 0.dp )
     ) {
         ProvideTextStyle(
             value = MaterialTheme.typography.headlineSmall.copy(
@@ -321,7 +369,7 @@ fun ForYouSongCard(
                         modifier = Modifier
                             .aspectRatio(1f)
                             .fillMaxHeight()
-                            .clip(RoundedCornerShape(4.dp)),
+                            .clip(RoundedCornerShape(8.dp)),
                         imageUri = song.artworkUri?.toUri(),
                         contentDescription = null,
                     )
@@ -388,9 +436,11 @@ private fun ForYouScreenContentPreview(
                 suggestedAlbums = previewData.albums,
                 mostPlayedSongs = previewData.songs,
                 suggestedArtists = previewData.artists,
-                recentlyPlayedSongs = previewData.songs
+                recentlyPlayedSongs = previewData.songs,
+                currentlyPlayingSongId = "",
             ),
             onPlaySong = { _, _ -> },
+            onShuffleAndPlay = {},
             onViewAlbum = {},
             onViewArtist = {},
         )

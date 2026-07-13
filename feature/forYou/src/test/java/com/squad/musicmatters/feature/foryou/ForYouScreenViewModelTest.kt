@@ -49,6 +49,7 @@ class ForYouScreenViewModelTest {
             songsRepository = songsRepository,
             albumsRepository = albumsRepository,
             artistsRepository = artistsRepository,
+            userDataRepository = userDataRepository,
             playHistoryRepository = playHistoryRepository,
             mostPlayedSongsRepository = mostPlayedSongsRepository,
             player = player,
@@ -98,16 +99,18 @@ class ForYouScreenViewModelTest {
         songsRepository.sendSongs( songs )
         albumsRepository.sendAlbums( albums )
         artistsRepository.sendArtists( artists )
+        userDataRepository.sendUserData( emptyUserData )
         playHistoryRepository.sendSongs( songs )
         mostPlayedSongsRepository.sendSongs( songs )
 
         assertEquals(
             ForYouScreenUiState.Success(
-                recentlyAddedSongs = songs,
+                recentlyAddedSongs = songs.sortedByDescending { it.dateModified },
                 suggestedAlbums = albums,
                 mostPlayedSongs = songs,
                 suggestedArtists = artists,
                 recentlyPlayedSongs = songs,
+                currentlyPlayingSongId = "",
             ),
             subject.uiState.value,
         )
