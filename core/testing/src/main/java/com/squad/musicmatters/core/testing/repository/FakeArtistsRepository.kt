@@ -34,9 +34,7 @@ class FakeArtistsRepository : ArtistsRepository {
         query: String,
         sortArtistsBy: SortArtistsBy?,
         sortArtistsInReverse: Boolean
-    ): Flow<List<Artist>> {
-        TODO("Not yet implemented")
-    }
+    ): Flow<List<Artist>> = artistsFlow
 
     fun sendArtists( artists: List<Artist> ) {
         artistsFlow.tryEmit( artists )

@@ -14,6 +14,7 @@ import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -29,6 +30,10 @@ class SearchRepositoryImplTest {
     private lateinit var playlistsRepository: FakePlaylistsRepository
     private lateinit var subject: SearchRepository
 
+    private val dispatcher = UnconfinedTestDispatcher()
+
+    private val testScope = TestScope( dispatcher )
+
     @Before
     fun setUp() {
         songsRepository = FakeSongsRepository()
@@ -42,12 +47,12 @@ class SearchRepositoryImplTest {
             artistsRepository = artistsRepository,
             genresRepository = genresRepository,
             playlistsRepository = playlistsRepository,
-            ioDispatcher = UnconfinedTestDispatcher()
+            ioDispatcher = dispatcher
         )
     }
 
     @Test
-    fun testSearchQueryIsEmptyOrBlank_noResultsAreReturned() = runTest {
+    fun testSearchQueryIsEmptyOrBlank_noResultsAreReturned() = testScope.runTest {
         songsRepository.sendSongs( songs )
         albumsRepository.sendAlbums( albums )
         artistsRepository.sendArtists( artists )
@@ -69,6 +74,108 @@ class SearchRepositoryImplTest {
         ).first()
 
         assertTrue( results.isEmpty() )
+    }
+
+    @Test
+    fun testWhenSearchFilterIsSongs_onlySongsAreReturned() = testScope.runTest {
+        songsRepository.sendSongs( songs )
+        albumsRepository.sendAlbums( albums )
+        artistsRepository.sendArtists( artists )
+        genresRepository.sendGenres( genres )
+        playlistsRepository.sendPlaylists( playlists )
+
+        val results = subject.search(
+            query = "song",
+            selectedSearchFilter = SearchFilter.SONGS,
+            userData = emptyUserData
+        ).first()
+
+        assertEquals(  4, results[SearchFilter.SONGS]!!.size )
+        assertNull( results[ SearchFilter.ALBUMS ] )
+        assertNull( results[ SearchFilter.ARTISTS ] )
+        assertNull( results[ SearchFilter.GENRES ] )
+        assertNull( results[ SearchFilter.PLAYLISTS ] )
+    }
+
+    @Test
+    fun testWhenSearchFilterIsAlbums_onlyAlbumsAreReturned() = testScope.runTest {
+        songsRepository.sendSongs( songs )
+        albumsRepository.sendAlbums( albums )
+        artistsRepository.sendArtists( artists )
+        genresRepository.sendGenres( genres )
+        playlistsRepository.sendPlaylists( playlists )
+
+        val results = subject.search(
+            query = "album",
+            selectedSearchFilter = SearchFilter.ALBUMS,
+            userData = emptyUserData
+        ).first()
+
+        assertEquals( 4, results[SearchFilter.ALBUMS]!!.size )
+        assertNull( results[ SearchFilter.SONGS ] )
+        assertNull( results[ SearchFilter.ARTISTS ] )
+        assertNull( results[ SearchFilter.GENRES ] )
+        assertNull( results[ SearchFilter.PLAYLISTS ] )
+    }
+
+    @Test
+    fun testWhenSearchFilterIsArtists_onlyArtistsAreReturned() = testScope.runTest {
+        songsRepository.sendSongs( songs )
+        albumsRepository.sendAlbums( albums )
+        artistsRepository.sendArtists( artists )
+        genresRepository.sendGenres( genres )
+        playlistsRepository.sendPlaylists( playlists )
+
+        val results = subject.search(
+            query = "artist",
+            selectedSearchFilter = SearchFilter.ARTISTS,
+            userData = emptyUserData
+        ).first()
+        assertEquals( 4, results[ SearchFilter.ARTISTS ]!!.size )
+        assertNull( results[ SearchFilter.SONGS ] )
+        assertNull( results[ SearchFilter.ALBUMS ] )
+        assertNull( results[ SearchFilter.GENRES ] )
+        assertNull( results[ SearchFilter.PLAYLISTS ] )
+    }
+
+    @Test
+    fun testWhenSearchFilterIsGenres_onlyGenresAreReturned() = testScope.runTest {
+        songsRepository.sendSongs( songs )
+        albumsRepository.sendAlbums( albums )
+        artistsRepository.sendArtists( artists )
+        genresRepository.sendGenres( genres )
+        playlistsRepository.sendPlaylists( playlists )
+
+        val results = subject.search(
+            query = "artist",
+            selectedSearchFilter = SearchFilter.GENRES,
+            userData = emptyUserData
+        ).first()
+        assertEquals( 4, results[ SearchFilter.GENRES ]!!.size )
+        assertNull( results[ SearchFilter.SONGS ] )
+        assertNull( results[ SearchFilter.ALBUMS ] )
+        assertNull( results[ SearchFilter.ARTISTS ] )
+        assertNull( results[ SearchFilter.PLAYLISTS ] )
+    }
+
+    @Test
+    fun testWhenSearchFilterIsPlaylists_onlyPlaylistsAreReturned() = testScope.runTest {
+        songsRepository.sendSongs( songs )
+        albumsRepository.sendAlbums( albums )
+        artistsRepository.sendArtists( artists )
+        genresRepository.sendGenres( genres )
+        playlistsRepository.sendPlaylists( playlists )
+
+        val results = subject.search(
+            query = "artist",
+            selectedSearchFilter = SearchFilter.PLAYLISTS,
+            userData = emptyUserData
+        ).first()
+        assertEquals( 4, results[ SearchFilter.PLAYLISTS ]!!.size )
+        assertNull( results[ SearchFilter.SONGS ] )
+        assertNull( results[ SearchFilter.ALBUMS ] )
+        assertNull( results[ SearchFilter.ARTISTS ] )
+        assertNull( results[ SearchFilter.GENRES ] )
     }
 
 }
