@@ -2,9 +2,9 @@ package com.squad.musicmatters.feature.genres
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.squad.musicmatters.core.data.repository.GenreResult
-import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
+import com.squad.musicmatters.core.data.repository.GenresRepository
 import com.squad.musicmatters.core.datastore.UserDataRepository
+import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.SortGenresBy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GenresScreenViewModel @Inject constructor(
-    private val songsMetadataRepository: SongsMetadataRepository,
+    private val genresRepository: GenresRepository,
     private val userDataRepository: UserDataRepository,
 ) : ViewModel() {
 
@@ -25,14 +25,14 @@ class GenresScreenViewModel @Inject constructor(
         combine(
             userDataRepository.userData,
             userDataRepository.userData.flatMapLatest {
-                songsMetadataRepository.fetchGenres(
+                genresRepository.fetchGenres(
                     sortGenresBy = it.sortGenresBy,
                     reverse = it.sortGenresReverse
                 )
             }
-        ) { userData, genreResult ->
+        ) { userData, genres ->
             GenresScreenUiState.Success(
-                genreResult = genreResult,
+                genres = genres,
                 sortGenresBy = userData.sortGenresBy,
                 sortGenresInReverse = userData.sortGenresReverse
             )
@@ -55,7 +55,7 @@ class GenresScreenViewModel @Inject constructor(
 sealed interface GenresScreenUiState {
     data object Loading : GenresScreenUiState
     data class Success(
-        val genreResult: GenreResult,
+        val genres: List<Genre>,
         val sortGenresBy: SortGenresBy,
         val sortGenresInReverse: Boolean,
     ): GenresScreenUiState

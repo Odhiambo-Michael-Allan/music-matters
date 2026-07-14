@@ -32,11 +32,13 @@ import com.squad.musicmatters.core.common.di.IoScope
 import com.squad.musicmatters.core.data.repository.MostPlayedSongsRepository
 import com.squad.musicmatters.core.data.repository.PlayHistoryRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
+import com.squad.musicmatters.core.data.store.GenresStore
 import com.squad.musicmatters.core.media.media.library.MEDIA_SEARCH_SUPPORTED
 import com.squad.musicmatters.core.media.media.library.MUSIC_MATTERS_BROWSABLE_ROOT
-import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
-import com.squad.musicmatters.core.data.songs.SongsStore
-import com.squad.musicmatters.core.data.songs.impl.SongsStoreImpl
+import com.squad.musicmatters.core.data.store.MediaPermissionsManager
+import com.squad.musicmatters.core.data.store.SongsStore
+import com.squad.musicmatters.core.data.store.impl.GenresStoreImpl
+import com.squad.musicmatters.core.data.store.impl.SongsStoreImpl
 import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.media.connection.DefaultSongToMediaItemConverter
 import com.squad.musicmatters.core.model.LoopMode
@@ -81,6 +83,8 @@ class MusicService : MediaLibraryService() {
 
     @Inject
     lateinit var songsStore: SongsStore
+    @Inject
+    lateinit var genresStore: GenresStore
 
     @Inject
     lateinit var mostPlayedSongsRepository: MostPlayedSongsRepository
@@ -257,6 +261,7 @@ class MusicService : MediaLibraryService() {
         releaseMediaSession()
         unregisterReceiver( headsetReceiver )
         ( songsStore as? SongsStoreImpl )?.release()
+        ( genresStore as? GenresStoreImpl )?.release()
         serviceScope.cancel()
     }
 

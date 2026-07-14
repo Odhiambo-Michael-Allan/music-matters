@@ -8,14 +8,22 @@ import kotlinx.coroutines.flow.Flow
 interface SongsRepository {
     fun fetchSongs(
         sortSongsBy: SortSongsBy? = null,
-        sortSongsInReverse: Boolean? = false
+        sortSongsInReverse: Boolean = false
     ): Flow<List<Song>>
 
     fun searchSongs(
         query: String,
-        sortSongsBy: SortSongsBy? = null,
-        sortSongsInReverse: Boolean? = null,
+        sortSongsBy: SortSongsBy,
+        sortSongsInReverse: Boolean = false,
     ): Flow<List<Song>>
 
     fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>>
+
+    fun searchSongsInAlbumMatching(
+        query: String
+    ): Flow<List<Song>>
+
+    fun searchSongsByArtistMatching(
+        query: String
+    ): Flow<List<Song>>
 }

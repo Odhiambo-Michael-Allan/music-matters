@@ -20,6 +20,11 @@ abstract class  PlaylistDao : BaseDao<PlaylistEntity> {
     @Query( "SELECT EXISTS( SELECT 1 FROM playlists WHERE id = :playlistId )" )
     abstract suspend fun playlistExists( playlistId: String ): Boolean
 
+    @Transaction
+    @Query( "SELECT * FROM playlists WHERE title LIKE '%' || :searchQuery || '%'" )
+    abstract fun searchPlaylistsMatchingQuery( searchQuery: String ):
+            Flow<List<PopulatedPlaylistEntity>>
+
 }
 
 

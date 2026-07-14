@@ -1,36 +1,28 @@
-package com.squad.musicmatters.core.data.songs.impl
+package com.squad.musicmatters.core.data.store.impl
 
-import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
-import android.database.ContentObserver
 import android.database.Cursor
 import android.net.Uri
-import android.os.Environment
-import android.os.Environment.getExternalStoragePublicDirectory
-import android.os.Handler
-import android.os.HandlerThread
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
 import android.provider.MediaStore.Audio.AudioColumns.IS_MUSIC
-import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
-import com.squad.musicmatters.core.common.di.IoScope
-import com.squad.musicmatters.core.data.songs.MediaPermissionsManager
-import com.squad.musicmatters.core.data.songs.SongsStore
-import com.squad.musicmatters.core.data.songs.SongsStoreListener
-import com.squad.musicmatters.core.data.utils.sortSongs
-import com.squad.musicmatters.core.datastore.DefaultPreferences
+import com.squad.musicmatters.core.data.store.SongsStore
+import com.squad.musicmatters.core.data.store.MusicMattersMediaStore
+import com.squad.musicmatters.core.data.store.getLongFrom
+import com.squad.musicmatters.core.data.store.getNullableStringFrom
+import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Lyrics
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.SortGenresBy
 import com.squad.musicmatters.core.model.SortSongsBy
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
@@ -40,47 +32,16 @@ class SongsStoreImpl(
     private val context: Context,
     private val ioDispatcher: CoroutineDispatcher,
     ioScope: CoroutineScope,
-) : SongsStore {
+) : MusicMattersMediaStore(
+    context = context,
+    ioScope = ioScope
+), SongsStore {
 
-    private val collectionUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-    private val listeners = mutableSetOf<SongsStoreListener>()
-    private val contentResolver: ContentResolver = context.contentResolver
-
-    // Components to manage the ContentObserver lifecycle
-    private val mediaStoreObserverHandlerThread: HandlerThread = HandlerThread(
-        "MediaStoreObserverHandlerThread"
-    )
-    private val mediaStoreObserver: MediaStoreObserver
-
-    // A flag to check if the store has been initialized/released
-    private var mediaObserverIsRegistered = false
-
-    init {
-        // Start the thread and initialize the observer on a background looper
-        mediaStoreObserverHandlerThread.start()
-        mediaStoreObserver = MediaStoreObserver(
-            Handler( mediaStoreObserverHandlerThread.looper )
-        )
-        contentResolver.registerContentObserver(
-            collectionUri,
-            true,
-            mediaStoreObserver
-        )
-        mediaObserverIsRegistered = true
-
-        ioScope.launch {
-            MediaPermissionsManager.hasAllRequiredPermissions.collect { granted ->
-                if ( granted ) { listeners.forEach { it.onMediaStoreChanged() } }
-            }
-        }
-    }
-
-    @WorkerThread
     override suspend fun fetchSongs(
         sortSongsBy: SortSongsBy?,
-        sortSongsInReverse: Boolean?,
+        sortSongsInReverse: Boolean,
     ): List<Song> = fetchSongs(
-        sortSongsBy = sortSongsBy,
+        sortOrder = sortSongsBy?.toMediaStoreSortFormat(),
         sortSongsInReverse = sortSongsInReverse,
         selection = "$IS_MUSIC = 1"
     )
@@ -88,17 +49,30 @@ class SongsStoreImpl(
     override suspend fun searchSongsMatching(
         query: String,
         sortSongsBy: SortSongsBy?,
-        sortSongsInReverse: Boolean?
+        sortSongsInReverse: Boolean
     ): List<Song> = fetchSongs(
-        sortSongsBy = sortSongsBy,
-        sortSongsInReverse = sortSongsInReverse,
+        sortOrder = sortSongsBy?.toMediaStoreSortFormat()
+            ?: SortSongsBy.TITLE.toMediaStoreSortFormat(),
         selection = "$IS_MUSIC = 1 AND ${AudioColumns.TITLE} LIKE ?",
         selectionArgs = arrayOf( "%${query.trim()}%" )
     )
 
+    override suspend fun searchSongsInAlbumMatching(
+        query: String,
+    ): List<Song> = fetchSongs(
+        selection = AudioColumns.ALBUM + " LIKE ?",
+        selectionArgs = arrayOf( "%$query%" ),
+    )
+
+    override suspend fun searchSongsByArtistMatching(
+        query: String,
+    ): List<Song> = fetchSongs(
+        selection = AudioColumns.ARTIST + " LIKE ?",
+        selectionArgs = arrayOf( "%$query%" )
+    )
+
     private suspend fun fetchSongs(
-        sortSongsBy: SortSongsBy? = null,
-        sortSongsInReverse: Boolean? = null,
+        sortSongsInReverse: Boolean = false,
         selection: String,
         selectionArgs: Array<String>? = null,
         sortOrder: String? = null,
@@ -114,16 +88,12 @@ class SongsStoreImpl(
                 sortOrder,
             )?.use {
                 while ( it.moveToNext() ) {
-                    kotlin.runCatching {
+                    runCatching {
                         buildSongUsing( it )
                     }.getOrNull()?.also { song -> songList.add( song ) }
                 }
             }
-            val sortedList = songList
-                .sortSongs(
-                    by = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
-                    reverse = sortSongsInReverse ?: false
-                )
+            val sortedList = if ( sortSongsInReverse ) songList.reversed() else songList
             return@withContext sortedList
         } catch ( exception: Exception ) {
             exception.message?.let {
@@ -153,45 +123,6 @@ class SongsStoreImpl(
                 )
             emptyList()
         }
-    }
-
-    override fun registerListener( listener: SongsStoreListener ) {
-        listeners.add( listener )
-    }
-
-    override fun unregisterListener( listener: SongsStoreListener ) {
-        listeners.remove( listener )
-    }
-
-    /**
-     * Public method to clean up the ContentObserver and its HandlerThread.
-     * This MUST be called by the hosting service (MediaLibraryService)
-     * onDestroy()
-     */
-    fun release() {
-        if ( mediaObserverIsRegistered ) {
-            contentResolver.unregisterContentObserver( mediaStoreObserver )
-            mediaStoreObserverHandlerThread.quitSafely()
-            listeners.clear()
-            mediaObserverIsRegistered = false
-        }
-    }
-
-    // The custom ContentObserver
-    private inner class MediaStoreObserver(
-        private val handler: Handler
-    ) : ContentObserver( handler ), Runnable {
-
-        override fun onChange( selfChange: Boolean ) {
-            // Debouncing logic: remove previously scheduled callback, then post new delayed callback.
-            handler.removeCallbacks( this )
-            handler.postDelayed( this, 500 )
-        }
-
-        override fun run() {
-            listeners.forEach { it.onMediaStoreChanged() }
-        }
-
     }
 
 }
@@ -240,11 +171,6 @@ private fun Cursor.getArtworkUri(): Uri? = MediaStore.Audio.Media.EXTERNAL_CONTE
         build()
     }
 
-private fun Cursor.getLongFrom( columnName: String ): Long {
-    val columnIndex = getColumnIndex( columnName )
-    return getLong( columnIndex )
-}
-
 private fun Cursor.getNullableLongFrom( columnName: String ): Long? {
     val columnIndex = getColumnIndex( columnName )
     return getLongOrNull( columnIndex )
@@ -253,11 +179,6 @@ private fun Cursor.getNullableLongFrom( columnName: String ): Long? {
 private fun Cursor.getNullableIntFrom( columnName: String ): Int? {
     val columnIndex = getColumnIndex( columnName )
     return getIntOrNull( columnIndex )
-}
-
-private fun Cursor.getNullableStringFrom( columnName: String ): String? {
-    val columnIndex = getColumnIndex( columnName )
-    return getStringOrNull( columnIndex )
 }
 
 private fun Cursor.getStringFrom( columnName: String ): String {
@@ -329,6 +250,17 @@ val projection = arrayOf(
     AudioColumns.ALBUM_ID,
 )
 
-private val artistTagSeparators = setOf( "Feat", "feat.", "Ft", "ft", ",", "&" )
+private fun SortSongsBy.toMediaStoreSortFormat() = when ( this ) {
+    SortSongsBy.TITLE -> MediaStore.Audio.Media.TITLE
+    SortSongsBy.ARTIST -> MediaStore.Audio.Artists.DEFAULT_SORT_ORDER
+    SortSongsBy.ALBUM -> MediaStore.Audio.Albums.DEFAULT_SORT_ORDER
+    SortSongsBy.YEAR -> MediaStore.Audio.Media.YEAR
+    SortSongsBy.DURATION -> MediaStore.Audio.Media.DURATION
+    SortSongsBy.DATE_ADDED -> MediaStore.Audio.Media.DATE_ADDED
+    SortSongsBy.COMPOSER -> MediaStore.Audio.Media.COMPOSER
+    SortSongsBy.CUSTOM -> MediaStore.Audio.Media.DEFAULT_SORT_ORDER
+}
+
+
 
 private const val TAG = "SONGS-STORE"

@@ -7,6 +7,7 @@ import com.squad.musicmatters.core.database.dao.PlaylistEntryDao
 import com.squad.musicmatters.core.database.model.PlaylistEntity
 import com.squad.musicmatters.core.database.model.PlaylistEntryEntity
 import com.squad.musicmatters.core.database.model.PopulatedPlaylistEntity
+import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortPlaylistsBy
@@ -76,7 +77,11 @@ class PlaylistsRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun savePlaylist( id: String, playlistName: String, songsInPlaylist: List<Song> ) {
+    override suspend fun savePlaylist(
+        id: String,
+        playlistName: String,
+        songsInPlaylist: List<Song>
+    ) {
         val playlist = Playlist(
             id = id,
             title = playlistName,
@@ -120,6 +125,17 @@ class PlaylistsRepositoryImpl @Inject constructor(
             )
         )
     }
+
+    override suspend fun searchPlaylistsMatchingQuery(
+        searchQuery: String,
+        sortPlaylistsBy: SortPlaylistsBy,
+        sortPlaylistsInReverse: Boolean,
+    ): Flow<List<Playlist>> = playlistDao.searchPlaylistsMatchingQuery( searchQuery )
+        .map { playlists ->
+            playlists
+                .map { it.asPlaylistInfo() }
+                .sortPlaylists( sortPlaylistsBy, sortPlaylistsInReverse )
+        }
 
 }
 

@@ -17,7 +17,7 @@ class FakeAlbumsRepository : AlbumsRepository {
 
     override fun fetchAlbums(
         sortAlbumsBy: SortAlbumsBy?,
-        sortAlbumsInReverse: Boolean?
+        sortAlbumsInReverse: Boolean
     ): Flow<List<Album>> = albumsFlow.map { albums ->
         albums.sortAlbums(
             by = sortAlbumsBy ?: DefaultPreferences.SORT_ALBUMS_BY,
@@ -29,6 +29,14 @@ class FakeAlbumsRepository : AlbumsRepository {
         albumsFlow.map { albums ->
             albums.find { it.id == id }!!
         }
+
+    override fun searchAlbumsMatching(
+        query: String,
+        sortAlbumsBy: SortAlbumsBy,
+        sortAlbumsInReverse: Boolean
+    ): Flow<List<Album>> {
+        TODO("Not yet implemented")
+    }
 
     fun sendAlbums( albums: List<Album> ) {
         albumsFlow.tryEmit( albums )

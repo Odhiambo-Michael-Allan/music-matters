@@ -1,6 +1,6 @@
-package com.squad.musicmatters.core.data.songs
+package com.squad.musicmatters.core.data.store
 
-interface SongsStoreListener {
+interface MediaStoreListener {
     /**
      * Called by the [SongsStore] whenever the [android.provider.MediaStore] content changes.
      */

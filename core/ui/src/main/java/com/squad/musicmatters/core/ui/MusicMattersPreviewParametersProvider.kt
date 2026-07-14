@@ -185,22 +185,27 @@ object PreviewParameterData {
 
     val genres = listOf(
         Genre(
+            id = 1,
             name = "Rap/HipHop",
             numberOfTracks = 200,
         ),
         Genre(
+            id = 2,
             name = "",
             numberOfTracks = 30,
         ),
         Genre(
+            id = 3,
             name = "RnB",
             numberOfTracks = 37,
         ),
         Genre(
+            id = 4,
             name = "Pop",
             numberOfTracks = 57,
         ),
         Genre(
+            id = 5,
             name = "Alternative",
             numberOfTracks = 5,
         )

@@ -1,18 +1,12 @@
 package com.squad.musicmatters.core.data.repository.impl
 
 import com.squad.castify.core.testing.rules.MainDispatcherRule
-import com.squad.musicmatters.core.data.repository.GenreResult
-import com.squad.musicmatters.core.data.repository.MetadataResult
-import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
-import com.squad.musicmatters.core.data.songs.MetadataStore
-import com.squad.musicmatters.core.model.Genre
+import com.squad.musicmatters.core.data.store.MetadataStore
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
-import com.squad.musicmatters.core.model.SortGenresBy
 import com.squad.musicmatters.core.testing.repository.FakeSongsRepository
 import com.squad.musicmatters.core.testing.songs.testSong
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -41,7 +35,7 @@ class SongsMetadataRepositoryImplTest {
         subject = SongsMetadataRepositoryImpl(
             metadataStore = metadataStore,
             songsRepository = songsRepository,
-            coroutineScope = testScope
+            coroutineScope = testScope,
         )
     }
 
@@ -93,76 +87,6 @@ class SongsMetadataRepositoryImplTest {
         assertEquals(
             metadata,
             subject.fetchMetadata().first()
-        )
-    }
-
-    @Test
-    fun testFetchGenres() = runTest( UnconfinedTestDispatcher() ) {
-        backgroundScope.launch {
-            subject.fetchMetadata().collect()
-        }
-
-        assertEquals(
-            GenreResult.Loading,
-            subject.fetchGenres(
-                sortGenresBy = SortGenresBy.NAME,
-                reverse = false
-            ).first()
-        )
-
-        val songs = listOf(
-            testSong( id = "song-id-1" ),
-            testSong( id = "song-id-2" ),
-            testSong( id = "song-id-3" ),
-            testSong( id = "song-id-4" ),
-            testSong( id = "song-id-5" )
-        )
-        val metadata = listOf(
-            SongMetadata(
-                songId = "song-id-1",
-                codec = "",
-                bitrate = 0,
-                bitsPerSample = 0,
-                genre = "Pop",
-                samplingRate = 0f
-            ),
-            SongMetadata(
-                songId = "song-id-2",
-                codec = "",
-                bitrate = 0,
-                bitsPerSample = 0,
-                genre = "Rap/HipHop",
-                samplingRate = 0f
-            ),
-            SongMetadata(
-                songId = "song-id-3",
-                codec = "",
-                bitrate = 0,
-                bitsPerSample = 0,
-                genre = "Rap/HipHop",
-                samplingRate = 0f
-            ),
-        )
-        metadataStore.sendMetadata( metadata )
-        songsRepository.sendSongs( songs )
-
-        assertEquals(
-            GenreResult.Success(
-                genres = listOf(
-                    Genre(
-                        name = "Pop",
-                        numberOfTracks = 1,
-                    ),
-                    Genre(
-                        name = "Rap/HipHop",
-                        numberOfTracks = 2,
-                    )
-                )
-            ),
-            subject.fetchGenres(
-                sortGenresBy = SortGenresBy.NAME,
-                reverse = false
-            ).first()
         )
     }
 

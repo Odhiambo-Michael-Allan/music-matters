@@ -37,8 +37,6 @@ fun List<Song>.sortSongs(by: SortSongsBy, reverse: Boolean ): List<Song> {
         SortSongsBy.DURATION -> sortedBy { it.duration }
         SortSongsBy.YEAR -> sortedBy { it.year }
         SortSongsBy.DATE_ADDED -> sortedBy { it.dateModified }
-        SortSongsBy.FILENAME -> sortedBy { it.path }
-        SortSongsBy.TRACK_NUMBER -> sortedBy { it.trackNumber }
         SortSongsBy.CUSTOM -> shuffled()
     }
     return if ( reverse ) sortedList.reversed() else sortedList

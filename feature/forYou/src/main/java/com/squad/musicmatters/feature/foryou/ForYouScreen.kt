@@ -1,6 +1,7 @@
 package com.squad.musicmatters.feature.foryou
 
 import android.net.Uri
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -142,7 +143,9 @@ private fun ForYouScreenContent(
                                 },
                             )
                         }
-                        if ( uiState.mostPlayedSongs.isNotEmpty() ) {
+                        AnimatedVisibility(
+                            visible = uiState.mostPlayedSongs.isNotEmpty()
+                        ) {
                             Spacer( Modifier.height( 8.dp ) )
                             ForYouSongRow(
                                 heading = stringResource( id = i8nR.string.core_i8n_most_played_songs ),
@@ -150,6 +153,7 @@ private fun ForYouScreenContent(
                                 onPlaySong = onPlaySong,
                             )
                         }
+
                         if ( uiState.suggestedArtists.isNotEmpty() ) {
                             Spacer( Modifier.height( 8.dp ) )
                             SideHeading {
@@ -182,7 +186,9 @@ private fun ForYouScreenContent(
                                 },
                             )
                         }
-                        if ( uiState.recentlyPlayedSongs.isNotEmpty() ) {
+                        AnimatedVisibility(
+                            visible = uiState.recentlyPlayedSongs.isNotEmpty()
+                        ) {
                             ForYouSongRow(
                                 heading = stringResource( id = i8nR.string.core_i8n_recently_played_songs ),
                                 songs = uiState.recentlyPlayedSongs,

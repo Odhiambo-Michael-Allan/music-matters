@@ -9,6 +9,4 @@ enum class SortSongsBy {
     DATE_ADDED,
     COMPOSER,
     YEAR,
-    FILENAME,
-    TRACK_NUMBER;
 }

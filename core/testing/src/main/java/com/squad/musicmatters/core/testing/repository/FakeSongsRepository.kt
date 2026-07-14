@@ -21,15 +21,30 @@ class FakeSongsRepository : SongsRepository {
 
     override fun fetchSongs(
         sortSongsBy: SortSongsBy?,
-        sortSongsInReverse: Boolean?
+        sortSongsInReverse: Boolean
     ): Flow<List<Song>> = songsFlow.map { songs ->
         songs.sortSongs(
             by = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
-            reverse = sortSongsInReverse ?: false
+            reverse = sortSongsInReverse
+        )
+    }
+
+    override fun searchSongs(
+        query: String,
+        sortSongsBy: SortSongsBy,
+        sortSongsInReverse: Boolean
+    ): Flow<List<Song>> = songsFlow.map { songs ->
+        songs.sortSongs(
+            by = sortSongsBy,
+            reverse = sortSongsInReverse
         )
     }
 
     override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> = lyricsFlow
+
+    override fun searchSongsInAlbumMatching( query: String ): Flow<List<Song>> = songsFlow
+
+    override fun searchSongsByArtistMatching( query: String ): Flow<List<Song>> = songsFlow
 
     /**
      * A test-only API to allow controlling the list of songs from tests.

@@ -143,6 +143,12 @@ class FakePlaylistsRepository : PlaylistsRepository {
         }
     }
 
+    override suspend fun searchPlaylistsMatchingQuery(
+        searchQuery: String,
+        sortPlaylistsBy: SortPlaylistsBy,
+        sortPlaylistsInReverse: Boolean
+    ): Flow<List<Playlist>> = playlistsFlow
+
     fun sendPlaylists( playlists: List<Playlist> ) {
         playlistsFlow.tryEmit( playlists )
     }

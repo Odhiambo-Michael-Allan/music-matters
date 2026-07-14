@@ -13,6 +13,4 @@ enum SortSongsByProto {
   SONGS_DATE_ADDED = 6;
   SONGS_COMPOSER = 7;
   SONGS_YEAR = 8;
-  SONGS_FILENAME = 9;
-  SONGS_TRACK_NUMBER = 10;
 }

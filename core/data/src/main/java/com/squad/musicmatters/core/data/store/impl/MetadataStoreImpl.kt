@@ -1,12 +1,13 @@
-package com.squad.musicmatters.core.data.songs.impl
+package com.squad.musicmatters.core.data.store.impl
 
 import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.os.Build
 import androidx.core.net.toUri
-import com.squad.musicmatters.core.data.songs.MetadataStore
+import com.squad.musicmatters.core.data.store.MetadataStore
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
+import kotlinx.coroutines.CoroutineDispatcher
 import timber.log.Timber
 
 private const val TAG = "METADATA-STORE"

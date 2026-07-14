@@ -36,6 +36,16 @@ class FakePlaylistDao : PlaylistDao() {
     override suspend fun playlistExists( playlistId: String ): Boolean =
         entitiesStateFlow.first().find { it.id == playlistId }?.let { true } ?: false
 
+    override fun searchPlaylistsMatchingQuery( searchQuery: String ):
+            Flow<List<PopulatedPlaylistEntity>> = entitiesStateFlow.map { entities ->
+        entities.map {
+            PopulatedPlaylistEntity(
+                playlistEntity = it,
+                entries = emptyList()
+            )
+        }
+    }
+
     override suspend fun upsert( entity: PlaylistEntity ) {
         TODO("Not yet implemented")
     }

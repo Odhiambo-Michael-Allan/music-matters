@@ -2,17 +2,14 @@ package com.squad.musicmatters.core.data.repository.impl
 
 import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.SongsRepository
-import com.squad.musicmatters.core.data.songs.SongsStore
-import com.squad.musicmatters.core.data.songs.SongsStoreListener
+import com.squad.musicmatters.core.data.store.SongsStore
+import com.squad.musicmatters.core.data.store.MediaStoreListener
 import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.testing.songs.testSong
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.testing.songs.testLyric
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -33,7 +30,6 @@ class SongsRepositoryImplTest {
         songsStore = FakeSongsStore()
         subject = SongsRepositoryImpl(
             songsStore = songsStore,
-            ioScope = TestScope(),
             ioDispatcher = UnconfinedTestDispatcher()
         )
     }
@@ -78,33 +74,39 @@ private class FakeSongsStore : SongsStore {
 
     private var currentSongs = emptyList<Song>()
     private var currentLyrics = emptyList<Lyric>()
-    private val listeners = mutableListOf<SongsStoreListener>()
+    private val listeners = mutableListOf<MediaStoreListener>()
 
     override suspend fun fetchSongs(
         sortSongsBy: SortSongsBy?,
-        sortSongsInReverse: Boolean?
+        sortSongsInReverse: Boolean
     ): List<Song> = currentSongs
 
     override suspend fun fetchLyricsFor( song: Song? ) = currentLyrics
+
     override suspend fun searchSongsMatching(
         query: String,
         sortSongsBy: SortSongsBy?,
-        sortSongsInReverse: Boolean?
-    ): List<Song> {
-        TODO("Not yet implemented")
-    }
+        sortSongsInReverse: Boolean
+    ): List<Song> = currentSongs
 
-    override fun registerListener( listener: SongsStoreListener ) {
+    override suspend fun searchSongsInAlbumMatching(
+        query: String
+    ): List<Song> = currentSongs
+
+    override suspend fun searchSongsByArtistMatching(
+        query: String
+    ): List<Song> = currentSongs
+
+    override fun registerListener( listener: MediaStoreListener ) {
         listeners.add( listener )
     }
 
-    override fun unregisterListener( listener: SongsStoreListener ) {
+    override fun unregisterListener( listener: MediaStoreListener ) {
         listeners.remove( listener )
     }
 
     fun sendSongs( newSongs: List<Song> ) {
         currentSongs = newSongs
-        println( "NEW SONGS SIZE: ${currentSongs.size}" )
         listeners.forEach {
             it.onMediaStoreChanged()
         }

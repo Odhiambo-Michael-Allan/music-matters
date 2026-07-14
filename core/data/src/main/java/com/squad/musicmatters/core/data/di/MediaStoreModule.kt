@@ -4,10 +4,12 @@ import android.content.Context
 import com.squad.musicmatters.core.common.Dispatcher
 import com.squad.musicmatters.core.common.MusicMattersDispatchers
 import com.squad.musicmatters.core.common.di.IoScope
-import com.squad.musicmatters.core.data.songs.MetadataStore
-import com.squad.musicmatters.core.data.songs.SongsStore
-import com.squad.musicmatters.core.data.songs.impl.MetadataStoreImpl
-import com.squad.musicmatters.core.data.songs.impl.SongsStoreImpl
+import com.squad.musicmatters.core.data.store.GenresStore
+import com.squad.musicmatters.core.data.store.MetadataStore
+import com.squad.musicmatters.core.data.store.SongsStore
+import com.squad.musicmatters.core.data.store.impl.GenresStoreImpl
+import com.squad.musicmatters.core.data.store.impl.MetadataStoreImpl
+import com.squad.musicmatters.core.data.store.impl.SongsStoreImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +30,18 @@ internal object MediaStoreModule {
         @Dispatcher(MusicMattersDispatchers.IO ) ioDispatcher: CoroutineDispatcher,
         @IoScope ioScope: CoroutineScope
     ): SongsStore = SongsStoreImpl(
+        context = context,
+        ioDispatcher = ioDispatcher,
+        ioScope = ioScope,
+    )
+
+    @Provides
+    @Singleton
+    internal fun providesGenresStore(
+        @ApplicationContext context: Context,
+        @Dispatcher(MusicMattersDispatchers.IO ) ioDispatcher: CoroutineDispatcher,
+        @IoScope ioScope: CoroutineScope
+    ): GenresStore = GenresStoreImpl(
         context = context,
         ioDispatcher = ioDispatcher,
         ioScope = ioScope,

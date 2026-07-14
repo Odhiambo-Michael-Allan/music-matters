@@ -1,4 +1,4 @@
-package com.squad.musicmatters.core.data.songs
+package com.squad.musicmatters.core.data.store
 
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata

@@ -149,8 +149,6 @@ private fun SortSongsBy.sortSongsByLabelResId() = when ( this ) {
     SortSongsBy.DATE_ADDED -> i8nR.string.core_i8n_date_added
     SortSongsBy.COMPOSER -> i8nR.string.core_i8n_composer
     SortSongsBy.YEAR -> i8nR.string.core_i8n_year
-    SortSongsBy.FILENAME -> i8nR.string.core_i8n_file_name
-    SortSongsBy.TRACK_NUMBER -> i8nR.string.core_i8n_track_number
 }
 
 

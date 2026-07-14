@@ -1,4 +1,4 @@
-package com.squad.musicmatters.core.data.songs
+package com.squad.musicmatters.core.data.store
 
 import android.Manifest
 import android.content.Context

@@ -60,9 +60,7 @@ class MusicMattersUserDataRepository @Inject constructor(
                 SortSongsByProto.SONGS_DURATION -> SortSongsBy.DURATION
                 SortSongsByProto.SONGS_DATE_ADDED -> SortSongsBy.DATE_ADDED
                 SortSongsByProto.SONGS_ALBUM -> SortSongsBy.ALBUM
-                SortSongsByProto.SONGS_FILENAME -> SortSongsBy.FILENAME
                 SortSongsByProto.SONGS_TITLE -> SortSongsBy.TITLE
-                SortSongsByProto.SONGS_TRACK_NUMBER -> SortSongsBy.TRACK_NUMBER
                 SortSongsByProto.SONGS_YEAR -> SortSongsBy.YEAR
             },
             sortSongsReverse = it.sortSongsReverse,
@@ -263,11 +261,9 @@ class MusicMattersUserDataRepository @Inject constructor(
                 this.sortSongsBy = when ( by ) {
                     SortSongsBy.YEAR -> SortSongsByProto.SONGS_YEAR
                     SortSongsBy.CUSTOM -> SortSongsByProto.SONGS_CUSTOM
-                    SortSongsBy.FILENAME -> SortSongsByProto.SONGS_FILENAME
                     SortSongsBy.DURATION -> SortSongsByProto.SONGS_DURATION
                     SortSongsBy.COMPOSER -> SortSongsByProto.SONGS_COMPOSER
                     SortSongsBy.TITLE -> SortSongsByProto.SONGS_TITLE
-                    SortSongsBy.TRACK_NUMBER -> SortSongsByProto.SONGS_TRACK_NUMBER
                     SortSongsBy.DATE_ADDED -> SortSongsByProto.SONGS_DATE_ADDED
                     SortSongsBy.ALBUM -> SortSongsByProto.SONGS_ALBUM
                     SortSongsBy.ARTIST -> SortSongsByProto.SONGS_ARTIST

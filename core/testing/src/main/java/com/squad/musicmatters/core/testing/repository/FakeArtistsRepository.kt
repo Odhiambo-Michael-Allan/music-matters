@@ -17,7 +17,7 @@ class FakeArtistsRepository : ArtistsRepository {
 
     override fun fetchArtists(
         sortArtistsBy: SortArtistsBy?,
-        sortArtistsInReverse: Boolean?
+        sortArtistsInReverse: Boolean
     ): Flow<List<Artist>> = artistsFlow.map { artists ->
         artists.sortArtists(
             by = sortArtistsBy ?: DefaultPreferences.SORT_ARTISTS_BY,
@@ -29,6 +29,14 @@ class FakeArtistsRepository : ArtistsRepository {
         artistsFlow.map { artists ->
             artists.find { it.id == id }!!
         }
+
+    override fun searchArtistsMatching(
+        query: String,
+        sortArtistsBy: SortArtistsBy?,
+        sortArtistsInReverse: Boolean
+    ): Flow<List<Artist>> {
+        TODO("Not yet implemented")
+    }
 
     fun sendArtists( artists: List<Artist> ) {
         artistsFlow.tryEmit( artists )

@@ -7,7 +7,6 @@ import com.squad.musicmatters.core.database.dao.PlaylistEntryDao
 import com.squad.musicmatters.core.database.model.PlaylistEntity
 import com.squad.musicmatters.core.database.model.PlaylistEntryEntity
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -109,5 +108,30 @@ class PlaylistDaoTest {
                 populatedPlaylists.last().entries.size
             )
         )
+    }
+
+    @Test
+    fun testSearchPlaylists() = runTest {
+        val id1 = "playlist-id-1"
+        val id2 = "playlist-id-2"
+
+        val playlist1 = PlaylistEntity(
+            id = id1,
+            title = "Playlist 1"
+        )
+        val playlist2 = PlaylistEntity(
+            id = id2,
+            title = "Playlist 2"
+        )
+        playlistDao.insertAll( playlist1, playlist2 )
+        ( 1..9 ).map {
+            if ( it % 2 == 0 ) PlaylistEntryEntity( playlistId = id2, songId = it.toString() )
+            else PlaylistEntryEntity( playlistId = id1, songId = it.toString() )
+        }.forEach {
+            playlistEntryDao.insert( it )
+        }
+
+        val entities = playlistDao.searchPlaylistsMatchingQuery( "Playlist" ).first()
+        assertEquals( 2, entities.size )
     }
 }

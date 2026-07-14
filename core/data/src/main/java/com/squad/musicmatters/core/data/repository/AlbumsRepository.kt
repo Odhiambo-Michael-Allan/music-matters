@@ -8,7 +8,12 @@ import javax.inject.Inject
 interface AlbumsRepository {
     fun fetchAlbums(
         sortAlbumsBy: SortAlbumsBy? = null,
-        sortAlbumsInReverse: Boolean? = null,
+        sortAlbumsInReverse: Boolean = false,
     ): Flow<List<Album>>
     fun fetchAlbumWithId( id: Long ): Flow<Album>
+    fun searchAlbumsMatching(
+        query: String,
+        sortAlbumsBy: SortAlbumsBy,
+        sortAlbumsInReverse: Boolean
+    ): Flow<List<Album>>
 }
