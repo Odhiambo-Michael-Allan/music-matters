@@ -1,5 +1,6 @@
 package com.squad.musicmatters.core.data.di
 
+import com.squad.musicmatters.core.data.SearchRepository
 import com.squad.musicmatters.core.data.repository.AlbumsRepository
 import com.squad.musicmatters.core.data.repository.ArtistsRepository
 import com.squad.musicmatters.core.data.repository.CompositeRepository
@@ -18,6 +19,7 @@ import com.squad.musicmatters.core.data.repository.impl.MostPlayedSongsRepositor
 import com.squad.musicmatters.core.data.repository.impl.PlayHistoryRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.PlaylistsRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.QueueRepositoryImpl
+import com.squad.musicmatters.core.data.repository.impl.SearchRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.SongsMetadataRepositoryImpl
 import com.squad.musicmatters.core.data.repository.impl.SongsRepositoryImpl
 import dagger.Binds
@@ -89,5 +91,10 @@ abstract class DataModule {
     internal abstract fun bindsGenresRepository(
         repository: GenresRepositoryImpl
     ): GenresRepository
+
+    @Binds
+    internal abstract fun bindsSearchRepository(
+        repository: SearchRepositoryImpl
+    ): SearchRepository
 
 }
