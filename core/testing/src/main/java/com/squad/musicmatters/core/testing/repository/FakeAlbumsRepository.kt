@@ -21,7 +21,7 @@ class FakeAlbumsRepository : AlbumsRepository {
     ): Flow<List<Album>> = albumsFlow.map { albums ->
         albums.sortAlbums(
             by = sortAlbumsBy ?: DefaultPreferences.SORT_ALBUMS_BY,
-            reverse = sortAlbumsInReverse ?: false
+            reverse = sortAlbumsInReverse
         )
     }
 

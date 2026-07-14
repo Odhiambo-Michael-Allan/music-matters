@@ -1,6 +1,7 @@
 package com.squad.musicmatters.feature.search
 
 import androidx.lifecycle.viewModelScope
+import com.squad.musicmatters.core.data.SearchRepository
 import com.squad.musicmatters.core.data.repository.AlbumsRepository
 import com.squad.musicmatters.core.data.repository.ArtistsRepository
 import com.squad.musicmatters.core.data.repository.GenresRepository
@@ -23,18 +24,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchScreenViewModel @Inject constructor(
-    private val player: MusicMattersPlayer,
-    private val songsRepository: SongsRepository,
-    private val albumsRepository: AlbumsRepository,
-    private val artistsRepository: ArtistsRepository,
-    private val genresRepository: GenresRepository,
-    private val playlistsRepository: PlaylistsRepository,
-    private val userDataRepository: UserDataRepository,
+    private val searchRepository: SearchRepository,
+    playlistsRepository: PlaylistsRepository,
+    userDataRepository: UserDataRepository,
+    player: MusicMattersPlayer
 ) : BaseViewModel(
     player = player,
     userDataRepository = userDataRepository,
@@ -44,89 +43,29 @@ class SearchScreenViewModel @Inject constructor(
     private val _currentSearchQuery = MutableStateFlow( "" )
     val currentSearchQuery = _currentSearchQuery.asStateFlow()
 
-    private val _currentSearchFilters = MutableStateFlow<List<SearchFilter>>( emptyList() )
-    val currentSearchFilters = _currentSearchFilters.asStateFlow()
+    private val _currentSearchFilter = MutableStateFlow(SearchFilter.ALL )
+    val currentSearchFilter = _currentSearchFilter.asStateFlow()
 
+    @Suppress( "UNCHECKED_CAST" )
     val uiState: StateFlow<SearchScreenUiState> = combine(
         _currentSearchQuery,
-        _currentSearchFilters,
+        _currentSearchFilter,
         userDataRepository.userData
-    ) { query, filters, userData ->
-        Triple( query, filters, userData )
-    }.flatMapLatest { ( query, filters, userData ) ->
-        if ( query.isBlank() ) {
-            return@flatMapLatest flowOf(
-                SearchScreenUiState.Success(
-                    songs = emptyList(),
-                    albums = emptyList(),
-                    artists = emptyList(),
-                    genres = emptyList(),
-                    playlists = emptyList()
-                )
-            )
-        }
-
-        val songsFlow = if ( filters.isEmpty() || filters.contains( SearchFilter.SONGS ) ) {
-            songsRepository.searchSongsMatching(
-                query = query,
-                sortSongsBy = userData.sortSongsBy,
-                sortSongsInReverse = userData.sortSongsReverse,
-            )
-        } else {
-            flowOf( emptyList() )
-        }
-        val albumsFlow = if ( filters.isEmpty() || filters.contains( SearchFilter.ALBUMS ) ) {
-            albumsRepository.searchAlbumsMatching(
-                query = query,
-                sortAlbumsBy = userData.sortAlbumsBy,
-                sortAlbumsInReverse = userData.sortAlbumsReverse,
-            )
-        } else {
-            flowOf( emptyList() )
-        }
-        val artistsFlow = if ( filters.isEmpty() || filters.contains( SearchFilter.ARTISTS ) ) {
-            artistsRepository.searchArtistsMatching(
-                query = query,
-                sortArtistsBy = userData.sortArtistsBy,
-                sortArtistsInReverse = userData.sortArtistsReverse,
-            )
-        } else {
-            flowOf( emptyList() )
-        }
-
-        val genresFlow = if ( filters.isEmpty() || filters.contains( SearchFilter.GENRES ) ) {
-            genresRepository.searchGenresMatching(
-                query = query,
-                sortGenresBy = userData.sortGenresBy,
-                reverse = userData.sortGenresReverse,
-            )
-        } else {
-            flowOf( emptyList() )
-        }
-
-        val playlistsFlow = if ( filters.isEmpty() || filters.contains( SearchFilter.PLAYLISTS ) ) {
-            playlistsRepository.searchPlaylistsMatchingQuery(
-                query = query,
-                sortPlaylistsBy = userData.sortPlaylistsBy,
-                sortPlaylistsInReverse = userData.sortPlaylistsReverse
-            )
-        } else {
-            flowOf( emptyList() )
-        }
-
-        combine(
-            songsFlow,
-            albumsFlow,
-            artistsFlow,
-            genresFlow,
-            playlistsFlow
-        ) { songs, albums, artists, genres, playlists ->
+    ) { query, filter, userData ->
+        Triple( query, filter, userData )
+    }.flatMapLatest { ( query, filter, userData ) ->
+        searchRepository.search(
+            query = query,
+            selectedSearchFilter = filter,
+            userData = userData
+        ).map { resultsMap ->
             SearchScreenUiState.Success(
-                songs = songs,
-                albums = albums,
-                artists = artists,
-                genres = genres,
-                playlists = playlists,
+                songs = ( resultsMap[ SearchFilter.SONGS ] as? List<Song> ) ?: emptyList(),
+                albums = ( resultsMap[ SearchFilter.ALBUMS ] as? List<Album> ) ?: emptyList(),
+                artists = ( resultsMap[ SearchFilter.ARTISTS ] as? List<Artist> ) ?: emptyList(),
+                genres = ( resultsMap[ SearchFilter.GENRES ] as? List<Genre> ) ?: emptyList(),
+                playlists = ( resultsMap[ SearchFilter.PLAYLISTS ] as? List<Playlist> )
+                    ?: emptyList()
             )
         }
     }.stateIn(
@@ -134,6 +73,14 @@ class SearchScreenViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed( 5_000 ),
         initialValue = SearchScreenUiState.Loading,
     )
+
+    fun onSearch( query: String ) {
+        _currentSearchQuery.value = query
+    }
+
+    fun onSearchFilterSelected( searchFilter: SearchFilter ) {
+        _currentSearchFilter.value = searchFilter
+    }
 
 }
 
