@@ -37,7 +37,8 @@ class SearchRepositoryImpl @Inject constructor(
             return flowOf( emptyMap() )
         }
 
-        val songsFlow = if ( selectedSearchFilter == SearchFilter.SONGS ) {
+        val songsFlow = if ( selectedSearchFilter == SearchFilter.SONGS
+            || selectedSearchFilter == SearchFilter.ALL ) {
             songsRepository.searchSongsMatching(
                 query = query,
                 sortSongsBy = userData.sortSongsBy,
@@ -45,7 +46,8 @@ class SearchRepositoryImpl @Inject constructor(
             )
         } else flowOf( emptyList() )
 
-        val albumsFlow = if ( selectedSearchFilter == SearchFilter.ALBUMS ) {
+        val albumsFlow = if ( selectedSearchFilter == SearchFilter.ALBUMS
+            || selectedSearchFilter == SearchFilter.ALL ) {
             albumsRepository.searchAlbumsMatching(
                 query = query,
                 sortAlbumsBy = userData.sortAlbumsBy,
@@ -53,7 +55,8 @@ class SearchRepositoryImpl @Inject constructor(
             )
         } else flowOf( emptyList() )
 
-        val artistsFlow = if ( selectedSearchFilter == SearchFilter.ARTISTS ) {
+        val artistsFlow = if ( selectedSearchFilter == SearchFilter.ARTISTS
+            || selectedSearchFilter == SearchFilter.ALL ) {
             artistsRepository.searchArtistsMatching(
                 query = query,
                 sortArtistsBy = userData.sortArtistsBy,
@@ -61,7 +64,8 @@ class SearchRepositoryImpl @Inject constructor(
             )
         } else flowOf( emptyList() )
 
-        val genresFlow = if ( selectedSearchFilter == SearchFilter.GENRES ) {
+        val genresFlow = if ( selectedSearchFilter == SearchFilter.GENRES
+            || selectedSearchFilter == SearchFilter.ALL ) {
             genresRepository.searchGenresMatching(
                 query = query,
                 sortGenresBy = userData.sortGenresBy,
@@ -69,7 +73,8 @@ class SearchRepositoryImpl @Inject constructor(
             )
         } else flowOf( emptyList() )
 
-        val playlistsFlow = if ( selectedSearchFilter == SearchFilter.PLAYLISTS ) {
+        val playlistsFlow = if ( selectedSearchFilter == SearchFilter.PLAYLISTS
+            || selectedSearchFilter == SearchFilter.ALL ) {
             playlistsRepository.searchPlaylistsMatchingQuery(
                 query = query,
                 sortPlaylistsBy = userData.sortPlaylistsBy,

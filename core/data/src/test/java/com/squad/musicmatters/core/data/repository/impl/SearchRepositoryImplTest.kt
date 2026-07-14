@@ -178,6 +178,26 @@ class SearchRepositoryImplTest {
         assertNull( results[ SearchFilter.GENRES ] )
     }
 
+    @Test
+    fun testWhenSearchFilterIsAll_allResultsAreReturned() = testScope.runTest {
+        songsRepository.sendSongs( songs )
+        albumsRepository.sendAlbums( albums )
+        artistsRepository.sendArtists( artists )
+        genresRepository.sendGenres( genres )
+        playlistsRepository.sendPlaylists( playlists )
+
+        val results = subject.search(
+            query = "artist",
+            selectedSearchFilter = SearchFilter.ALL,
+            userData = emptyUserData
+        ).first()
+        assertEquals( 4, results[ SearchFilter.PLAYLISTS ]!!.size )
+        assertEquals( 4, results[ SearchFilter.SONGS ]!!.size )
+        assertEquals( 4, results[ SearchFilter.ALBUMS ]!!.size )
+        assertEquals( 4, results[ SearchFilter.ARTISTS ]!!.size )
+        assertEquals( 4, results[ SearchFilter.GENRES ]!!.size )
+    }
+
 }
 
 private val songs = listOf(
