@@ -8,6 +8,7 @@ import java.util.UUID
 
 fun testSong(
     id: String,
+    title: String = "",
     artworkUri: String? = null,
     albumId: Long? = null,
     albumTitle: String? = null,
@@ -18,7 +19,7 @@ fun testSong(
 ) = Song(
     id = id,
     mediaUri = "Uri.EMPTY",
-    title = "",
+    title = title,
     albumId = albumId ?: 0L,
     duration = 0L,
     artist = artistTitle,

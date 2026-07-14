@@ -7,17 +7,18 @@ data class SearchHistoryItem(
 )
 
 private fun getSearchFilterFrom( name: String ) = when ( name ) {
-    SearchFilter.SONG.name -> SearchFilter.SONG
-    SearchFilter.ALBUM.name -> SearchFilter.ALBUM
-    SearchFilter.ARTIST.name -> SearchFilter.ARTIST
-    SearchFilter.GENRE.name -> SearchFilter.GENRE
-    else -> SearchFilter.PLAYLIST
+    SearchFilter.SONGS.name -> SearchFilter.SONGS
+    SearchFilter.ALBUMS.name -> SearchFilter.ALBUMS
+    SearchFilter.ARTISTS.name -> SearchFilter.ARTISTS
+    SearchFilter.GENRES.name -> SearchFilter.GENRES
+    else -> SearchFilter.PLAYLISTS
 }
 
 enum class SearchFilter {
-    SONG,
-    ALBUM,
-    ARTIST,
-    GENRE,
-    PLAYLIST,
+    ALL,
+    SONGS,
+    ALBUMS,
+    ARTISTS,
+    GENRES,
+    PLAYLISTS,
 }

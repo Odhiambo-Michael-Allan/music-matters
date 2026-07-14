@@ -29,7 +29,7 @@ class FakeSongsRepository : SongsRepository {
         )
     }
 
-    override fun searchSongs(
+    override fun searchSongsMatching(
         query: String,
         sortSongsBy: SortSongsBy,
         sortSongsInReverse: Boolean

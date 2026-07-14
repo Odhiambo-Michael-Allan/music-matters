@@ -1,6 +1,5 @@
 package com.squad.musicmatters.core.data.repository
 
-import com.squad.musicmatters.core.database.model.PopulatedPlaylistEntity
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
@@ -27,11 +26,10 @@ interface PlaylistsRepository {
     suspend fun removeSongIdFromPlaylist( songId: String, playlistId: String )
     suspend fun renamePlaylist( playlist: Playlist, newTitle: String )
 
-    suspend fun searchPlaylistsMatchingQuery(
-        searchQuery: String,
+    fun searchPlaylistsMatchingQuery(
+        query: String,
         sortPlaylistsBy: SortPlaylistsBy = DefaultPreferences.SORT_PLAYLISTS_BY,
         sortPlaylistsInReverse: Boolean = false
-    ):
-            Flow<List<Playlist>>
+    ): Flow<List<Playlist>>
 
 }

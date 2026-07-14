@@ -143,8 +143,8 @@ class FakePlaylistsRepository : PlaylistsRepository {
         }
     }
 
-    override suspend fun searchPlaylistsMatchingQuery(
-        searchQuery: String,
+    override fun searchPlaylistsMatchingQuery(
+        query: String,
         sortPlaylistsBy: SortPlaylistsBy,
         sortPlaylistsInReverse: Boolean
     ): Flow<List<Playlist>> = playlistsFlow

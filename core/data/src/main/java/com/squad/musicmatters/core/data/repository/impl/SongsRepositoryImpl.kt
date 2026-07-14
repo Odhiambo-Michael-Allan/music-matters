@@ -56,7 +56,7 @@ class SongsRepositoryImpl @Inject constructor(
         }
     }.flowOn( ioDispatcher )
 
-    override fun searchSongs(
+    override fun searchSongsMatching(
         query: String,
         sortSongsBy: SortSongsBy,
         sortSongsInReverse: Boolean
