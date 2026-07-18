@@ -77,6 +77,7 @@ import com.squad.musicmatters.feature.nowplaying.NowPlayingScreen
 import com.squad.musicmatters.feature.nowplaying.components.MiniPlayer
 import com.squad.musicmatters.feature.playlists.navigation.navigateToPlaylists
 import com.squad.musicmatters.feature.queue.navigation.navigateToQueueScreen
+import com.squad.musicmatters.feature.search.navigation.navigateToSearchScreen
 import com.squad.musicmatters.feature.settings.navigation.navigateToSettings
 import com.squad.musicmatters.feature.songs.navigation.navigateToSongs
 import com.squad.musicmatters.navigation.LibraryDestination
@@ -244,7 +245,6 @@ fun MusicMattersAppContent(
         Scaffold(
             topBar = {
                 if ( shouldShowTopAppBar ) {
-                    val currentDest = navController.currentDestination?.route
                     TopAppBar(
                         title = stringResource(
                             id = if ( navController.currentDestination?.route ==
@@ -255,7 +255,13 @@ fun MusicMattersAppContent(
                             }
                         ),
                         topAppBarScrollBehavior = topAppBarScrollBehavior,
-                        onNavigationIconClicked = {},
+                        onNavigationIconClicked = {
+                            navController.navigateToSearchScreen(
+                                navOptions = navOptions {
+                                    launchSingleTop = true
+                                }
+                            )
+                        },
                         onSettingsClicked = {
                             navController.navigateToSettings(
                                 navOptions = navOptions {

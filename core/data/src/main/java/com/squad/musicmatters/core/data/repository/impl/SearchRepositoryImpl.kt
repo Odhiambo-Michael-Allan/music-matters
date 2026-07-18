@@ -14,9 +14,13 @@ import com.squad.musicmatters.core.model.UserData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
+import timber.log.Timber
 import javax.inject.Inject
+
+private const val TAG = "SEARCH-REPOSITORY"
 
 class SearchRepositoryImpl @Inject constructor(
     private val songsRepository: SongsRepository,
@@ -33,6 +37,7 @@ class SearchRepositoryImpl @Inject constructor(
         selectedSearchFilter: SearchFilter,
         userData: UserData
     ): Flow<Map<SearchFilter, List<Any>>> {
+        Timber.tag( TAG ).d( "QUERY: $query" )
         if ( query.isBlank() ) {
             return flowOf( emptyMap() )
         }
@@ -45,6 +50,8 @@ class SearchRepositoryImpl @Inject constructor(
                 sortSongsInReverse = userData.sortSongsReverse,
             )
         } else flowOf( emptyList() )
+
+        Timber.tag( TAG ).d( "SONGS FLOW: $songsFlow" )
 
         val albumsFlow = if ( selectedSearchFilter == SearchFilter.ALBUMS
             || selectedSearchFilter == SearchFilter.ALL ) {
@@ -89,6 +96,7 @@ class SearchRepositoryImpl @Inject constructor(
             genresFlow,
             playlistsFlow,
         ) { songs, albums, artists, genres, playlists ->
+            Timber.tag( TAG ).d( "SONGS FOUND: $songs")
             buildMap {
                 if ( songs.isNotEmpty() ) put( SearchFilter.SONGS, songs )
                 if ( albums.isNotEmpty() ) put( SearchFilter.ALBUMS, albums )

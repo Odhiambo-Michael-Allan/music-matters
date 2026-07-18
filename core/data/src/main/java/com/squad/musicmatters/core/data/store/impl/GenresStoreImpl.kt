@@ -97,7 +97,7 @@ class GenresStoreImpl(
             contentResolver.query(
                 MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI,
                 projection,
-                MediaStore.Audio.Genres.NAME + " = ?",
+                MediaStore.Audio.Genres.NAME + " LIKE ?",
                 arrayOf( query ),
                 null,
             )

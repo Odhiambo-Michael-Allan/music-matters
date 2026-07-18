@@ -1,5 +1,6 @@
 package com.squad.musicmatters.feature.search
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.squad.musicmatters.core.data.SearchRepository
 import com.squad.musicmatters.core.data.repository.AlbumsRepository
@@ -52,6 +53,7 @@ class SearchScreenViewModel @Inject constructor(
         _currentSearchFilter,
         userDataRepository.userData
     ) { query, filter, userData ->
+        Log.d( "SEARCH SCREEN VIEW MODEL", "SEARCH QUERY: $query, SEARCH FILTER: $filter" )
         Triple( query, filter, userData )
     }.flatMapLatest { ( query, filter, userData ) ->
         searchRepository.search(
@@ -59,13 +61,15 @@ class SearchScreenViewModel @Inject constructor(
             selectedSearchFilter = filter,
             userData = userData
         ).map { resultsMap ->
+            Log.d( "SEARCH SCREEN VIEW MODEL", "RESULTS $resultsMap" )
             SearchScreenUiState.Success(
                 songs = ( resultsMap[ SearchFilter.SONGS ] as? List<Song> ) ?: emptyList(),
                 albums = ( resultsMap[ SearchFilter.ALBUMS ] as? List<Album> ) ?: emptyList(),
                 artists = ( resultsMap[ SearchFilter.ARTISTS ] as? List<Artist> ) ?: emptyList(),
                 genres = ( resultsMap[ SearchFilter.GENRES ] as? List<Genre> ) ?: emptyList(),
                 playlists = ( resultsMap[ SearchFilter.PLAYLISTS ] as? List<Playlist> )
-                    ?: emptyList()
+                    ?: emptyList(),
+                currentlyPlayingSongId = userData.currentlyPlayingSongId,
             )
         }
     }.stateIn(
@@ -82,6 +86,10 @@ class SearchScreenViewModel @Inject constructor(
         _currentSearchFilter.value = searchFilter
     }
 
+    fun onClearSearch() {
+        _currentSearchQuery.value = ""
+    }
+
 }
 
 sealed interface SearchScreenUiState {
@@ -92,6 +100,7 @@ sealed interface SearchScreenUiState {
         val artists: List<Artist>,
         val genres: List<Genre>,
         val playlists: List<Playlist>,
+        val currentlyPlayingSongId: String,
     ) : SearchScreenUiState
 }
 

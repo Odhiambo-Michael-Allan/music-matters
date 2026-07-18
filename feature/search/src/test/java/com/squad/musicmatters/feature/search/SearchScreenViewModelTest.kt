@@ -77,6 +77,7 @@ class SearchScreenViewModelTest {
                 artists = artists,
                 genres = genres,
                 playlists = playlists,
+                currentlyPlayingSongId = ""
             ),
             subject.uiState.value,
         )

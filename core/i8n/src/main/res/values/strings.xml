@@ -187,6 +187,9 @@
     <string name="core_i8n_suggested_artists" translatable="false">Suggested artists</string>
     <string name="core_i8n_recently_played_songs" translatable="false">Recently played songs</string>
     <string name="core_i8n_for_you" translatable="false">For you</string>
+    <string name="core_i8n_search" translatable="false">Search</string>
+    <string name="core_i8n_all" translatable="false">All</string>
+    <string name="core_i8n_no_results" translatable="false">No results</string>
 
     <string name="core_i8n_reddit" translatable="false">Reddit</string>
     <string name="core_i8n_discord" translatable="false">Discord</string>

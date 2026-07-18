@@ -20,7 +20,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
+
+private const val TAG = "SONGS-REPOSITORY"
 
 class SongsRepositoryImpl @Inject constructor(
     private val songsStore: SongsStore,
@@ -60,12 +63,14 @@ class SongsRepositoryImpl @Inject constructor(
         query: String,
         sortSongsBy: SortSongsBy,
         sortSongsInReverse: Boolean
-    ): Flow<List<Song>> = flow<List<Song>> {
-        songsStore.searchSongsMatching(
+    ): Flow<List<Song>> = flow {
+        val searchResults = songsStore.searchSongsMatching(
             query = query,
             sortSongsBy = sortSongsBy,
             sortSongsInReverse = sortSongsInReverse,
         )
+        Timber.tag( TAG ).d( "SEARCH RESULTS: $searchResults" )
+        emit( searchResults )
     }.flowOn( ioDispatcher )
 
     override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> = channelFlow {
@@ -100,13 +105,13 @@ class SongsRepositoryImpl @Inject constructor(
     }
 
     override fun searchSongsInAlbumMatching( query: String ): Flow<List<Song>> =
-        flow<List<Song>> {
-            songsStore.searchSongsInAlbumMatching( query )
+        flow {
+            emit( songsStore.searchSongsInAlbumMatching( query ) )
         }.flowOn( ioDispatcher )
 
     override fun searchSongsByArtistMatching( query: String ): Flow<List<Song>> =
-        flow<List<Song>> {
-            songsStore.searchSongsByArtistMatching( query )
+        flow {
+            emit( songsStore.searchSongsByArtistMatching( query ) )
         }.flowOn( ioDispatcher )
 
 }

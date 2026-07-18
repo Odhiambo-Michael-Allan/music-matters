@@ -35,6 +35,7 @@ import com.squad.musicmatters.feature.playlist.navigation.navigateToPlaylist
 import com.squad.musicmatters.feature.playlist.navigation.playlistScreen
 import com.squad.musicmatters.feature.playlists.navigation.playlistsScreen
 import com.squad.musicmatters.feature.queue.navigation.queueScreen
+import com.squad.musicmatters.feature.search.navigation.searchScreen
 import com.squad.musicmatters.feature.settings.navigation.settingsScreen
 import com.squad.musicmatters.feature.songs.navigation.SongsRoute
 import com.squad.musicmatters.feature.songs.navigation.songsScreen
@@ -239,6 +240,21 @@ internal fun MusicMattersNavHost(
                 snackBarHostState.showSnackBar(
                     coroutineScope,
                     it
+                )
+            }
+        )
+        searchScreen(
+            onNavigateBack = { navController.navigateUp() },
+            onViewAlbum = {},
+            onViewArtist = {},
+            onShareSong = {},
+            onViewGenre = {},
+            onViewPlaylist = {},
+            onDeleteSong = onDeleteSong,
+            onShowSnackBar = {
+                snackBarHostState.showSnackBar(
+                    coroutineScope,
+                    it,
                 )
             }
         )

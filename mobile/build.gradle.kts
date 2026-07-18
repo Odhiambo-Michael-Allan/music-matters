@@ -69,6 +69,7 @@ dependencies {
     implementation( projects.feature.playlist )
     implementation( projects.feature.folders )
     implementation( projects.feature.folder )
+    implementation( projects.feature.search )
 
     implementation( projects.core.designsystem )
     implementation( projects.core.media )
