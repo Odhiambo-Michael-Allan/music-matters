@@ -179,7 +179,7 @@ private fun ReorderableCollectionItemScope.QueueSongCard(
             SongCard(
                 song = song,
                 isCurrentlyPlaying = isCurrentlyPlaying,
-                isFavorite = isFavorite( song ),
+                isFavorite = { isFavorite( song ) },
                 onGetPlaylists = onGetPlaylists,
                 onGetSongMetadata = {
                     songsAdditionalMetadata.find { metadata -> metadata.songId == song.id }

@@ -58,7 +58,7 @@ fun SongCard(
     modifier: Modifier = Modifier,
     song: Song,
     isCurrentlyPlaying: Boolean,
-    isFavorite: Boolean,
+    isFavorite: () -> Boolean,
     onSongIsPresentInQueue: ( Song ) -> Boolean,
     onGetSongMetadata: () -> SongMetadata?,
     onGetPlaylists: () -> List<Playlist>,
@@ -125,7 +125,7 @@ fun SongCard(
             }
             Spacer( modifier = Modifier.width( 15.dp ) )
             Row {
-                if ( isFavorite ) {
+                if ( isFavorite() ) {
                     IconButton(
                         onClick = {
                             onFavorite( song, false )
@@ -213,7 +213,7 @@ fun SongCard(
 @Composable
 fun SongOptionsBottomSheetMenu(
     song: Song,
-    isFavorite: Boolean,
+    isFavorite: () -> Boolean,
     isCurrentlyPlaying: Boolean,
     onGetPlaylists: () -> List<Playlist>,
     onFavorite: ( Song, Boolean ) -> Unit,
@@ -251,7 +251,7 @@ fun SongOptionsBottomSheetMenu(
         onGetSongs = { listOf( song ) },
         leadingBottomSheetMenuItem = {
             BottomSheetMenuItem(
-                leadingIcon = if ( isFavorite ) {
+                leadingIcon = if ( isFavorite() ) {
                     MusicMattersIcons.Favorite
                 } else {
                     MusicMattersIcons.FavoriteBorder
@@ -259,10 +259,10 @@ fun SongOptionsBottomSheetMenu(
                 label = stringResource( id = R.string.core_i8n_favorite )
             ) {
                 val feedback = context.getString(
-                    if ( isFavorite ) R.string.core_i8n_removed_song_from_favorites
+                    if ( isFavorite() ) R.string.core_i8n_removed_song_from_favorites
                     else R.string.core_i8n_added_song_to_favorites
                 )
-                onFavorite( song, !isFavorite )
+                onFavorite( song, !isFavorite() )
                 onDismissRequest()
                 onShowSnackBar( feedback )
             }
@@ -326,7 +326,7 @@ private fun SongOptionsBottomSheetContentPreview() {
     ) {
         SongOptionsBottomSheetMenu(
             song = PreviewParameterData.songs.first(),
-            isFavorite = false,
+            isFavorite = { false },
             isCurrentlyPlaying = true,
             onGetPlaylists = { emptyList() },
             onFavorite = { _, _ -> },
@@ -360,7 +360,7 @@ private fun SongCardPreview() {
         SongCard(
             song = PreviewParameterData.songs.first(),
             isCurrentlyPlaying = true,
-            isFavorite = true,
+            isFavorite = { true },
             onGetPlaylists = { emptyList() },
             onGetSongMetadata = { null },
             onClick = {},

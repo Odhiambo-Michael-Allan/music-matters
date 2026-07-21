@@ -14,7 +14,9 @@ import com.squad.musicmatters.core.model.UserData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
@@ -36,10 +38,11 @@ class SearchRepositoryImpl @Inject constructor(
         query: String,
         selectedSearchFilter: SearchFilter,
         userData: UserData
-    ): Flow<Map<SearchFilter, List<Any>>> {
+    ): Flow<Map<SearchFilter, List<Any>>> = flow {
         Timber.tag( TAG ).d( "QUERY: $query" )
         if ( query.isBlank() ) {
-            return flowOf( emptyMap() )
+            emit( emptyMap() )
+            return@flow
         }
 
         val songsFlow = if ( selectedSearchFilter == SearchFilter.SONGS
@@ -89,7 +92,7 @@ class SearchRepositoryImpl @Inject constructor(
             )
         } else flowOf( emptyList() )
 
-        return combine(
+        val combinedFlows = combine(
             songsFlow,
             albumsFlow,
             artistsFlow,
@@ -104,7 +107,8 @@ class SearchRepositoryImpl @Inject constructor(
                 if ( genres.isNotEmpty() ) put( SearchFilter.GENRES, genres )
                 if ( playlists.isNotEmpty() ) put(SearchFilter.PLAYLISTS, playlists )
             }
-        }.flowOn( ioDispatcher )
-    }
+        }
+        emitAll( combinedFlows )
+    }.flowOn( ioDispatcher )
 
 }

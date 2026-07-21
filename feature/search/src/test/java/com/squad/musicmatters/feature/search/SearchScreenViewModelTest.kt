@@ -9,6 +9,7 @@ import com.squad.musicmatters.core.model.SearchFilter
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
 import com.squad.musicmatters.core.testing.repository.FakeSearchRepository
+import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
 import com.squad.musicmatters.core.testing.repository.FakeUserDataRepository
 import com.squad.musicmatters.core.testing.repository.emptyUserData
 import com.squad.musicmatters.core.testing.songs.testSong
@@ -30,6 +31,7 @@ class SearchScreenViewModelTest {
     private lateinit var searchRepository: FakeSearchRepository
     private lateinit var userDataRepository: FakeUserDataRepository
     private lateinit var playlistsRepository: FakePlaylistsRepository
+    private lateinit var metadataRepository: FakeSongsMetadataRepository
     private lateinit var subject: SearchScreenViewModel
 
     @Before
@@ -38,11 +40,13 @@ class SearchScreenViewModelTest {
         searchRepository = FakeSearchRepository()
         userDataRepository = FakeUserDataRepository()
         playlistsRepository = FakePlaylistsRepository()
+        metadataRepository = FakeSongsMetadataRepository()
         subject = SearchScreenViewModel(
             searchRepository = searchRepository,
             userDataRepository = userDataRepository,
             playlistsRepository = playlistsRepository,
             player = player,
+            metadataRepository = metadataRepository,
         )
     }
 
@@ -68,6 +72,8 @@ class SearchScreenViewModelTest {
             put( SearchFilter.PLAYLISTS, playlists )
         }
         userDataRepository.sendUserData( emptyUserData )
+        metadataRepository.sendMetadata( emptyList() )
+        playlistsRepository.sendPlaylists( playlists )
         searchRepository.sendResults( results )
 
         assertEquals(
@@ -77,6 +83,9 @@ class SearchScreenViewModelTest {
                 artists = artists,
                 genres = genres,
                 playlists = playlists,
+                favoriteSongIds = emptySet(),
+                savedPlaylists = playlists,
+                metadata = emptyList(),
                 currentlyPlayingSongId = ""
             ),
             subject.uiState.value,

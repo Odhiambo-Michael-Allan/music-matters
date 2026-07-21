@@ -112,7 +112,7 @@ fun SongsList(
                             modifier = Modifier.animateItem(),
                             song = song,
                             isCurrentlyPlaying = currentlyPlayingSongId == song.id,
-                            isFavorite = isFavorite( songs[ index ].id ),
+                            isFavorite = { isFavorite( songs[ index ].id ) },
                             onGetPlaylists = onGetPlaylists,
                             onGetSongMetadata = {
                                 onGetSongsAdditionalMetadata()

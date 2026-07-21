@@ -66,6 +66,7 @@ playServicesCastFramework = "22.3.1"
 nanohttpd = "2.3.1"
 mediaRouter = "1.8.1"
 androidxBrowser = "1.8.0"
+glance = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -145,6 +146,11 @@ google-cast-framework = { module = "com.google.android.gms:play-services-cast-fr
 androidx-mediarouter = { module = "androidx.mediarouter:mediarouter", version.ref = "mediaRouter" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
 nanohttpd = { group = "org.nanohttpd", name = "nanohttpd", version.ref = "nanohttpd" }
+
+# Glance
+androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
+androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
+androidx-glance-material = { group = "androidx.glance", name = "glance-material", version.ref = "glance" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
