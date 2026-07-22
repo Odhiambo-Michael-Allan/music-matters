@@ -124,21 +124,24 @@ private val albums = listOf(
         title = "Views",
         trackCount = 2,
         artist = "Drake",
-        artworkUri = ""
+        artworkUri = "",
+        artistId = 0L,
     ),
     Album(
         id = 1L,
         title = "Scorpion",
         trackCount = 4,
         artist = "Drake",
-        artworkUri = ""
+        artworkUri = "",
+        artistId = 0L,
     ),
     Album(
         id = 2L,
         title = "More Life",
         trackCount = 5,
         artist = "Drake",
-        artworkUri = ""
+        artworkUri = "",
+        artistId = 0L,
     )
 )
 

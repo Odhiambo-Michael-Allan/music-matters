@@ -35,7 +35,6 @@ class GenreScreenViewModel @Inject constructor(
     userDataRepository = userDataRepository,
     playlistsRepository = playlistsRepository
 ) {
-
     val genreName = savedStateHandle.toRoute<GenreRoute>().genreName
 
     val uiState: StateFlow<GenreScreenUiState> = combine(
@@ -52,8 +51,8 @@ class GenreScreenViewModel @Inject constructor(
     ) { songs, userData, favoriteSongsPlaylist, playlists, metadata ->
         GenreScreenUiState.Success(
             genreName = genreName,
-            songsInGenre = songs.filter {
-                it.id in ( metadata.filter { it.genre == genreName }
+            songsInGenre = songs.filter { song ->
+                song.id in ( metadata.filter { it.genreName == genreName }
                     .map(SongMetadata::songId ) )
             },
             sortSongsBy = userData.sortSongsBy,

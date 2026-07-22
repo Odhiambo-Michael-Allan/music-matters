@@ -21,7 +21,7 @@ fun NavController.navigateToAlbums( navOptions: NavOptions ) {
 
 fun NavGraphBuilder.albumsScreen(
     onViewAlbum: ( Album ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,

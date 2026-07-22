@@ -54,7 +54,7 @@ class CompositeRepositoryImplTest {
                     bitrate = 0L,
                     bitsPerSample = 0L,
                     samplingRate = 0f,
-                    genre = ""
+                    genreName = ""
                 )
             }
         )

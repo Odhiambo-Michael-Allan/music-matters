@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.squad.musicmatters.core.model.Album
+import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.FadeTransition
 import com.squad.musicmatters.core.ui.SlideTransition
@@ -27,7 +28,7 @@ fun NavGraphBuilder.searchScreen(
     onViewArtist: ( Long ) -> Unit,
     onViewPlaylist: ( String ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
-    onViewGenre: ( Long ) -> Unit,
+    onViewGenre: ( Genre) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
 ) {

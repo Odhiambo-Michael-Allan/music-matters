@@ -98,7 +98,7 @@ class LocalMusicSource(
                     val samplingRate = extractSamplingRateUsing( mediaMetadataRetriever )
 //                Timber.tag( TAG ).d( "Sampling Rate: $samplingRate" )
                     val genre = extractGenreUsing( mediaMetadataRetriever )
-//                Timber.tag( TAG ).d( "Genre: $genre" )
+//                Timber.tag( TAG ).d( "Genre: $genreName" )
 
                     additionalMetadataList.add(
                         SongMetadata(
@@ -107,7 +107,7 @@ class LocalMusicSource(
                             bitsPerSample = bitsPerSample,
                             codec = codec,
                             samplingRate = samplingRate.toFloat(),
-                            genre = genre
+                            genreName = genre
                         )
                     )
                 } catch ( e: Exception ) {

@@ -129,6 +129,7 @@ private fun testAlbum(
     artist = artist,
     artworkUri = artworkUri,
     trackCount = trackCount,
+    artistId = 0L,
 )
 
 private fun testArtist(

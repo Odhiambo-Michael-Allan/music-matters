@@ -61,8 +61,18 @@ internal fun MusicMattersNavHost(
         startDestination = ForYouRoute,
     ) {
         forYouScreen(
-            onViewAlbum = {},
-            onViewArtist = {},
+            onViewAlbum = {
+                navController.navigateToAlbum(
+                    albumId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewArtist = {
+                navController.navigateToArtist(
+                    artistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
         )
         songsScreen(
             onShareSong = {
@@ -74,8 +84,18 @@ internal fun MusicMattersNavHost(
                 )
             },
             onDeleteSong = onDeleteSong,
-            onViewArtist = {},
-            onViewAlbum = {},
+            onViewArtist = {
+                navController.navigateToArtist(
+                    artistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewAlbum = {
+                navController.navigateToAlbum(
+                    albumId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
             onShowSnackBar = {
                 snackBarHostState.showSnackBar(
                     coroutineScope,
@@ -94,8 +114,18 @@ internal fun MusicMattersNavHost(
                 )
             },
             onDeleteSong = onDeleteSong,
-            onViewArtist = {},
-            onViewAlbum = {},
+            onViewArtist = {
+                navController.navigateToArtist(
+                    artistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewAlbum = {
+                navController.navigateToAlbum(
+                    albumId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
             onShowSnackBar = {
                 snackBarHostState.showSnackBar(
                     coroutineScope,
@@ -116,7 +146,12 @@ internal fun MusicMattersNavHost(
                     navOptions = nonTopLevelDestinationNavOptions()
                 )
             },
-            onViewArtist = {},
+            onViewArtist = {
+                navController.navigateToArtist(
+                    artistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
             onNavigateBack = { navController.navigateUp() },
             onNavigateToSettings = onNavigateToSettings,
             onShowSnackBar = {
@@ -127,11 +162,28 @@ internal fun MusicMattersNavHost(
             }
         )
         albumScreen(
-            onViewAlbum = {},
-            onViewArtist = {},
+            onViewAlbum = {
+                navController.navigateToAlbum(
+                    albumId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewArtist = {
+                navController.navigateToArtist(
+                    artistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
             onNavigateBack = { navController.navigateUp() },
             onDeleteSong = onDeleteSong,
-            onShareSong = {},
+            onShareSong = {
+                shareSong(
+                    context = context,
+                    uri = it,
+                    localizedErrorMessage = context
+                        .getString( i8nR.string.core_i8n_sharing_song_failed )
+                )
+            },
             onShowSnackBar = {
                 snackBarHostState.showSnackBar(
                     coroutineScope,
@@ -156,11 +208,28 @@ internal fun MusicMattersNavHost(
             }
         )
         artistScreen(
-            onViewAlbum = {},
-            onViewArtist = {},
+            onViewAlbum = {
+                navController.navigateToAlbum(
+                    albumId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewArtist = {
+                navController.navigateToArtist(
+                    artistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
             onNavigateBack = { navController.navigateUp() },
             onDeleteSong = onDeleteSong,
-            onShareSong = {},
+            onShareSong = {
+                shareSong(
+                    context = context,
+                    uri = it,
+                    localizedErrorMessage = context
+                        .getString( i8nR.string.core_i8n_sharing_song_failed )
+                )
+            },
             onShowSnackBar = {
                 snackBarHostState.showSnackBar(
                     coroutineScope,
@@ -171,7 +240,7 @@ internal fun MusicMattersNavHost(
         genresScreen(
             onViewGenre = {
                 navController.navigateToGenre(
-                    genreName = it,
+                    genre = it,
                     navOptions = nonTopLevelDestinationNavOptions()
                 )
             },
@@ -179,11 +248,28 @@ internal fun MusicMattersNavHost(
             onNavigateToSettings = onNavigateToSettings,
         )
         genreScreen(
-            onViewAlbum = {},
-            onViewArtist = {},
+            onViewAlbum = {
+                navController.navigateToAlbum(
+                    albumId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewArtist = {
+                navController.navigateToArtist(
+                    artistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
             onNavigateBack = { navController.navigateUp() },
             onDeleteSong = onDeleteSong,
-            onShareSong = {},
+            onShareSong = {
+                shareSong(
+                    context = context,
+                    uri = it,
+                    localizedErrorMessage = context
+                        .getString( i8nR.string.core_i8n_sharing_song_failed )
+                )
+            },
             onShowSnackBar = {
                 snackBarHostState.showSnackBar(
                     coroutineScope,
@@ -208,11 +294,28 @@ internal fun MusicMattersNavHost(
             }
         )
         playlistScreen(
-            onViewAlbum = {},
-            onViewArtist = {},
+            onViewAlbum = {
+                navController.navigateToAlbum(
+                    albumId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewArtist = {
+                navController.navigateToArtist(
+                    artistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
             onNavigateBack = { navController.navigateUp() },
             onDeleteSong = onDeleteSong,
-            onShareSong = {},
+            onShareSong = {
+                shareSong(
+                    context = context,
+                    uri = it,
+                    localizedErrorMessage = context
+                        .getString( i8nR.string.core_i8n_sharing_song_failed )
+                )
+            },
             onShowSnackBar = {
                 snackBarHostState.showSnackBar(
                     coroutineScope,
@@ -231,11 +334,28 @@ internal fun MusicMattersNavHost(
             onNavigateToSettings = onNavigateToSettings,
         )
         folderScreen(
-            onViewAlbum = {},
-            onViewArtist = {},
+            onViewAlbum = {
+                navController.navigateToAlbum(
+                    albumId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewArtist = {
+                navController.navigateToArtist(
+                    artistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
             onNavigateBack = { navController.navigateUp() },
             onDeleteSong = onDeleteSong,
-            onShareSong = {},
+            onShareSong = {
+                shareSong(
+                    context = context,
+                    uri = it,
+                    localizedErrorMessage = context
+                        .getString( i8nR.string.core_i8n_sharing_song_failed )
+                )
+            },
             onShowSnackBar = {
                 snackBarHostState.showSnackBar(
                     coroutineScope,
@@ -245,11 +365,38 @@ internal fun MusicMattersNavHost(
         )
         searchScreen(
             onNavigateBack = { navController.navigateUp() },
-            onViewAlbum = {},
-            onViewArtist = {},
-            onShareSong = {},
-            onViewGenre = {},
-            onViewPlaylist = {},
+            onViewAlbum = {
+                navController.navigateToAlbum(
+                    albumId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewArtist = {
+                navController.navigateToArtist(
+                    artistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onShareSong = {
+                shareSong(
+                    context = context,
+                    uri = it,
+                    localizedErrorMessage = context
+                        .getString( i8nR.string.core_i8n_sharing_song_failed )
+                )
+            },
+            onViewGenre = {
+                navController.navigateToGenre(
+                    genre = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewPlaylist = {
+                navController.navigateToPlaylist(
+                    playlistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
             onDeleteSong = onDeleteSong,
             onShowSnackBar = {
                 snackBarHostState.showSnackBar(

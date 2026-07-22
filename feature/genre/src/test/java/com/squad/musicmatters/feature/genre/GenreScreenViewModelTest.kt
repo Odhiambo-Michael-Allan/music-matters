@@ -40,6 +40,7 @@ class GenreScreenViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
+    private val genreId = 1L
     private val genreName = "Rap/HipHop"
     private lateinit var songsRepository: FakeSongsRepository
     private lateinit var player: FakeMusicMattersPlayer
@@ -57,7 +58,10 @@ class GenreScreenViewModelTest {
         metadataRepository = FakeSongsMetadataRepository()
         subject = GenreScreenViewModel(
             savedStateHandle = SavedStateHandle(
-                route = GenreRoute( genreName = genreName )
+                route = GenreRoute(
+                    genreId = genreId,
+                    genreName = genreName
+                )
             ),
             songsRepository = songsRepository,
             playlistsRepository = playlistRepository,
@@ -89,11 +93,11 @@ class GenreScreenViewModelTest {
             testSong( id = "song-id-5" ),
         )
         val metadata = listOf(
-            testSongMetadata( songId = "song-id-1", genre = genreName ),
-            testSongMetadata( songId = "song-id-2", genre = genreName ),
-            testSongMetadata( songId = "song-id-3", genre = "" ),
-            testSongMetadata( songId = "song-id-4", genre = genreName ),
-            testSongMetadata( songId = "song-id-5", genre = genreName ),
+            testSongMetadata( songId = "song-id-1", genreName = genreName ),
+            testSongMetadata( songId = "song-id-2", genreName = genreName ),
+            testSongMetadata( songId = "song-id-3", genreName = "" ),
+            testSongMetadata( songId = "song-id-4", genreName = genreName ),
+            testSongMetadata( songId = "song-id-5", genreName = genreName ),
         )
         songsRepository.sendSongs( songs )
         metadataRepository.sendMetadata( metadata )
@@ -125,12 +129,12 @@ private fun testSongMetadata(
     bitsPerSample: Long = 0,
     bitrate: Long = 0,
     samplingRate: Float = 0f,
-    genre: String = ""
+    genreName: String = ""
 ) = SongMetadata(
     songId = songId,
     codec = codec,
     bitsPerSample = bitsPerSample,
     bitrate = bitrate,
     samplingRate = samplingRate,
-    genre = genre,
+    genreName = genreName,
 )

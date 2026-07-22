@@ -62,7 +62,7 @@ class SongsMetadataRepositoryImplTest {
                 codec = "",
                 bitrate = 0,
                 bitsPerSample = 0,
-                genre = "",
+                genreName = "",
                 samplingRate = 0f
             ),
             SongMetadata(
@@ -70,7 +70,7 @@ class SongsMetadataRepositoryImplTest {
                 codec = "",
                 bitrate = 0,
                 bitsPerSample = 0,
-                genre = "",
+                genreName = "",
                 samplingRate = 0f
             ),
             SongMetadata(
@@ -78,7 +78,7 @@ class SongsMetadataRepositoryImplTest {
                 codec = "",
                 bitrate = 0,
                 bitsPerSample = 0,
-                genre = "",
+                genreName = "",
                 samplingRate = 0f
             ),
         )

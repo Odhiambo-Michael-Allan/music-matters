@@ -5,22 +5,26 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.SlideTransition
 import com.squad.musicmatters.feature.genre.GenreScreen
 import kotlinx.serialization.Serializable
 
 @Serializable data class GenreRoute(
-    // The name of the genre to be displayed at this destination
+    val genreId: Long,
     val genreName: String,
 )
 
 fun NavController.navigateToGenre(
-    genreName: String,
+    genre: Genre,
     navOptions: NavOptions
 ) {
     navigate(
-        route = GenreRoute( genreName = genreName ),
+        route = GenreRoute(
+            genreId = genre.id,
+            genreName = genre.name,
+        ),
         navOptions = navOptions,
     )
 }

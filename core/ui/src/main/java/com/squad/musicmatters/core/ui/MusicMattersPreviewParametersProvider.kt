@@ -131,6 +131,7 @@ object PreviewParameterData {
             artist = "Eminem",
             trackCount = 20,
             artworkUri = null,
+            artistId = 0L,
         ),
         Album(
             id = 2L,
@@ -138,6 +139,7 @@ object PreviewParameterData {
             artist = "Fugees",
             trackCount = 17,
             artworkUri = null,
+            artistId = 0L,
         ),
         Album(
             id = 3L,
@@ -145,6 +147,7 @@ object PreviewParameterData {
             artist = "Eminem",
             trackCount = 18,
             artworkUri = null,
+            artistId = 0L,
         ),
         Album(
             id = 4L,
@@ -152,6 +155,7 @@ object PreviewParameterData {
             artist = "Lauryn Hill",
             trackCount = 16,
             artworkUri = null,
+            artistId = 0L,
         ),
         Album(
             id = 5L,
@@ -159,6 +163,7 @@ object PreviewParameterData {
             artist = "MC Hammer",
             trackCount = 14,
             artworkUri = null,
+            artistId = 0L,
         )
     )
 

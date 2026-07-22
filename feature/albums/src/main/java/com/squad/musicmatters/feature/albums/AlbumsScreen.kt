@@ -28,7 +28,7 @@ import com.squad.musicmatters.core.i8n.R as i8nR
 internal fun AlbumsScreen(
     viewModel: AlbumsScreenViewModel = hiltViewModel(),
     onViewAlbum: ( Album ) -> Unit,
-    onViewArtist: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
@@ -68,8 +68,8 @@ private fun AlbumsScreenContent(
     onAddSongsInAlbumToQueue: ( List<Song> ) -> Unit,
     onPlaySongsInAlbumNext: ( List<Song> ) -> Unit,
     onShuffleAndPlaySongsInAlbum: ( List<Song> ) -> Unit,
-    onViewAlbumArtist: ( String ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onViewAlbumArtist: ( Long ) -> Unit,
+    onAddSongsToPlaylist: ( Playlist, List<Song> ) -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
     onShowAddToQueueOption: ( List<Song> ) -> Boolean,
@@ -148,7 +148,7 @@ private fun AlbumsScreenContent(
                                 )
                             ) {
                                 onDismissRequest()
-                                onViewAlbumArtist( albumArtist )
+                                onViewAlbumArtist( album.artistId )
                             }
                         }
                     }

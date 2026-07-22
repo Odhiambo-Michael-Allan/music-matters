@@ -594,7 +594,7 @@ private fun NowPlayingScreenContentPreview() {
                     bitrate = 0,
                     samplingRate = 0f,
                     bitsPerSample = 0,
-                    genre = "Hip-Hop"
+                    genreName = "Hip-Hop"
                 ),
                 sleepTimer = SleepTimer(
                     duration = 300000L.toDuration( DurationUnit.MILLISECONDS ),

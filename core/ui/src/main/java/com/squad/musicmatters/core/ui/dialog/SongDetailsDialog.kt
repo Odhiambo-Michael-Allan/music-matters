@@ -92,7 +92,7 @@ fun SongDetailsDialog(
                         )
                     }
 
-                    onGetMetadata()?.genre?.let {
+                    onGetMetadata()?.genreName?.let {
                         SongDetailsItem(
                             key = stringResource( id = R.string.core_i8n_genre ),
                             value = it,
@@ -217,7 +217,7 @@ fun SongDetailsDialogPreview() {
                     bitrate = 0,
                     samplingRate = 0f,
                     bitsPerSample = 0,
-                    genre = "unknown"
+                    genreName = "unknown"
                 )
             },
             onDismissRequest = {}

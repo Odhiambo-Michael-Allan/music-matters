@@ -50,7 +50,7 @@ import com.squad.musicmatters.core.i8n.R as i8nR
 @Composable
 internal fun GenresScreen(
     viewModel: GenresScreenViewModel = hiltViewModel(),
-    onViewGenre: ( String ) -> Unit,
+    onViewGenre: ( Genre ) -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
 ) {
@@ -72,7 +72,7 @@ private fun GenresScreenContent(
     uiState: GenresScreenUiState,
     onSortGenresByChange: ( SortGenresBy ) -> Unit,
     onSortGenresInReverseChange: ( Boolean ) -> Unit,
-    onViewGenre: ( String ) -> Unit,
+    onViewGenre: ( Genre ) -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
 ) {
@@ -107,7 +107,7 @@ fun GenresGrid(
     sortReverse: Boolean,
     onSortReverseChange: ( Boolean ) -> Unit,
     onSortTypeChange: ( SortGenresBy ) -> Unit,
-    onViewGenre: ( String ) -> Unit,
+    onViewGenre: ( Genre ) -> Unit,
 ) {
     MediaSortBarScaffold(
         mediaSortBar = {
@@ -170,7 +170,7 @@ fun GenresGrid(
                             modifier = Modifier.animateItem(),
                             genre = genre,
                             position = index,
-                            onClick = { onViewGenre( genre.name ) }
+                            onClick = { onViewGenre( genre ) }
                         )
                     }
                 }

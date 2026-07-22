@@ -7,7 +7,6 @@ import androidx.core.net.toUri
 import com.squad.musicmatters.core.data.store.MetadataStore
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
-import kotlinx.coroutines.CoroutineDispatcher
 import timber.log.Timber
 
 private const val TAG = "METADATA-STORE"
@@ -39,7 +38,7 @@ class MetadataStoreImpl(
                 bitsPerSample = retriever.fetchBitsPerSample(),
                 codec = retriever.fetchCodec(),
                 samplingRate = retriever.fetchSamplingRate(),
-                genre = retriever.fetchGenre()
+                genreName = retriever.fetchGenre()
             )
         } catch ( e: Exception ) {
             Timber.tag( TAG ).d(

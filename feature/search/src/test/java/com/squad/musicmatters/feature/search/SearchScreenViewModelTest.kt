@@ -107,24 +107,28 @@ private val albums = listOf(
         title = "album 1",
         trackCount = 0,
         artworkUri = null,
+        artistId = 0L,
     ),
     Album(
         id = 2,
         title = "album 2",
         trackCount = 0,
         artworkUri = null,
+        artistId = 0L,
     ),
     Album(
         id = 3,
         title = "album 3",
         trackCount = 0,
         artworkUri = null,
+        artistId = 0L,
     ),
     Album(
         id = 4,
         title = "--4",
         trackCount = 0,
         artworkUri = null,
+        artistId = 0L,
     )
 )
 private val artists = listOf(

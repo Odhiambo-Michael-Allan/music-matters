@@ -49,6 +49,7 @@ import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.designsystem.theme.PrimaryThemeColors
 import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
+import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.SearchFilter
 import com.squad.musicmatters.core.model.Song
@@ -65,7 +66,7 @@ internal fun SearchScreen(
     onNavigateBack: () -> Unit,
     onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( Long ) -> Unit,
-    onViewGenre: ( Long ) -> Unit,
+    onViewGenre: ( Genre ) -> Unit,
     onViewPlaylist: ( String ) -> Unit,
     onShareSong: ( Uri ) -> Unit,
     onDeleteSong: ( Song ) -> Unit,
@@ -112,7 +113,7 @@ private fun SearchScreenContent(
     onFavorite: ( Song, Boolean ) -> Unit,
     onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( Long ) -> Unit,
-    onViewGenre: ( Long ) -> Unit,
+    onViewGenre: ( Genre ) -> Unit,
     onViewPlaylist: ( String ) -> Unit,
     onSongIsPresentInQueue: ( Song ) -> Boolean,
     onAddSongToQueue: (Song ) -> Unit,
@@ -301,7 +302,7 @@ private fun SearchScreenContent(
                                             textAlign = TextAlign.Center,
                                         )
                                     },
-                                    onClick = { onViewGenre( genre.id ) }
+                                    onClick = { onViewGenre( genre ) }
                                 )
                             }
                         }

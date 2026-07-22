@@ -114,7 +114,7 @@ class NowPlayingScreenViewModelTest {
                 bitsPerSample = 0L,
                 bitrate = 0L,
                 samplingRate = 0f,
-                genre = ""
+                genreName = ""
             )
         )
         player.sendPlayerState( playerState )

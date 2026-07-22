@@ -40,7 +40,8 @@ class AlbumsRepositoryImpl @Inject constructor(
                 title = albumTitle,
                 trackCount = songsInAlbum.size,
                 artworkUri = songsInAlbum.firstOrNull { it.artworkUri != null }?.artworkUri,
-                artist = songsInAlbum.firstOrNull { it.albumArtist != null }?.albumArtist
+                artist = songsInAlbum.firstOrNull { it.albumArtist != null }?.albumArtist,
+                artistId = songsInAlbum.first().artistId
             )
         }
 
@@ -75,12 +76,14 @@ class AlbumsRepositoryImpl @Inject constructor(
             val albumArtist = songsInAlbum.firstOrNull {
                 !it.albumArtist.isNullOrBlank()
             }?.albumArtist
+            val artistId = songsInAlbum.first().artistId
             Album(
                 id = albumId,
                 title = albumTitle,
                 trackCount = songsInAlbum.size,
                 artworkUri = artworkUri,
-                artist = albumArtist
+                artist = albumArtist,
+                artistId = artistId
             )
         }
         return albums.sortAlbums(
