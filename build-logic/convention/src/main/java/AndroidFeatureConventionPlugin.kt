@@ -25,6 +25,8 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add( "implementation", project( ":core:designsystem" ) )
                 add( "implementation", project( ":core:media" ) )
                 add( "implementation", project( ":core:i8n" ) )
+                add( "implementation", project( ":core:data" ) )
+                add( "implementation", project( ":core:model" ) )
 
                 add( "implementation", libs.findLibrary( "androidx.hilt.navigation.compose" ).get() )
                 add( "implementation", libs.findLibrary( "androidx.lifecycle.runtime.compose" ).get() )
@@ -33,7 +35,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 
                 add( "testImplementation", libs.findLibrary( "androidx.navigation.testing" ).get() )
                 add( "testImplementation", project( ":core:testing" ) )
-//                add( "androidTestImplementation", libs.findLibrary( "androidx.lifecycle.runtimeTesting" ).get() )
             }
         }
     }

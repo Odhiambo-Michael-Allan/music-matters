@@ -71,6 +71,8 @@ dependencies {
     implementation( projects.feature.folder )
     implementation( projects.feature.search )
 
+    implementation( projects.glance )
+
     implementation( projects.core.designsystem )
     implementation( projects.core.media )
     implementation( projects.core.data )

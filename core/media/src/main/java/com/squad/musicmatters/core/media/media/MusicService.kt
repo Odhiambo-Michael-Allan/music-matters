@@ -275,6 +275,13 @@ class MusicService : MediaLibraryService() {
         }
     }
 
+    private fun notifyWidgetToUpdate() {
+        val intent = Intent( UPDATE_WIDGET_INTENT ).apply {
+            setPackage( packageName )
+        }
+        sendBroadcast( intent )
+    }
+
     @UnstableApi
     open inner class MusicServiceCallback : MediaLibrarySession.Callback {
 
@@ -344,6 +351,7 @@ class MusicService : MediaLibraryService() {
                     )
                 }
             }
+            notifyWidgetToUpdate()
         }
 
         override fun onPlayerError( error: PlaybackException ) {
@@ -378,6 +386,7 @@ private const val CONTENT_STYLE_PLAYABLE_HINT = "android.media.browse.CONTENT_ST
 private const val CONTENT_STYLE_SUPPORTED = "android.media.browse.CONTENT_STYLE_SUPPORTED"
 private const val CONTENT_STYLE_LIST = 1
 private const val CONTENT_STYLE_GRID = 2
+private const val UPDATE_WIDGET_INTENT = "com.squad.musicmatters.ACTION_UPDATE_WIDGET"
 
 const val CUSTOM_COMMAND_DELETE_SONG = "com.odesa.musicmatters.delete_song"
 private const val TAG = "MUSIC-SERVICE-TAG"

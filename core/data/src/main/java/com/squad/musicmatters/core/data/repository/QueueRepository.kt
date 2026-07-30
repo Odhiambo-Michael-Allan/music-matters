@@ -9,7 +9,7 @@ interface QueueRepository {
     fun fetchSongsSortedByCurrentPosition(): Flow<List<Song>>
     fun fetchSongsSortedByOriginalPosition(): Flow<List<Song>>
     suspend fun saveQueue( queue: List<QueueEntry> )
-    suspend fun removeSongWithId(id: String )
+    suspend fun removeSongWithId( id: String )
     suspend fun clearQueue()
 
 }
