@@ -25,6 +25,11 @@
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/xml/glance_default_loading_layout.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
@@ -32,54 +37,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/MusicMattersAppWidget.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/di/GlanceModule.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/ui/ZeroState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_widget_preview.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/ic_launcher_monochrome.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/round_play_arrow_24.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/round_repeat_24.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/glance/src/main/res/xml/glance_musicmatters_widget_info.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/music_matters_minimal_widget_preview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/xml/glance_default_loading_layout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0.0/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/convention/src/main/java/AndroidFeatureConventionPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/convention/src/main/java/AndroidFeatureConventionPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/QueueRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/QueueRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MusicService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MusicService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/album/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/album/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/albums/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/albums/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/artist/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/artist/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/artists/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/artists/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/folder/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/folder/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/folders/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/folders/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/forYou/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/forYou/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/genre/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/genre/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/genres/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/genres/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/lyrics/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/lyrics/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/nowplaying/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/playlist/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/playlist/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/playlists/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/playlists/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/queue/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/queue/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/search/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/search/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/settings/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/songs/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/feature/songs/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glancewidget/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/glance/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glancewidget/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/glance/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glancewidget/consumer-rules.pro" beforeDir="false" afterPath="$PROJECT_DIR$/glance/consumer-rules.pro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glancewidget/proguard-rules.pro" beforeDir="false" afterPath="$PROJECT_DIR$/glance/proguard-rules.pro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glancewidget/src/androidTest/java/com/squad/musicmatters/glancewidget/ExampleInstrumentedTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/androidTest/java/com/squad/musicmatters/glance/ExampleInstrumentedTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glancewidget/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glancewidget/src/main/java/com/squad/musicmatters/glancewidget/MusicMattersWidgetReceiver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/MusicMattersWidgetReceiver.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glancewidget/src/test/java/com/squad/musicmatters/glancewidget/ExampleUnitTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/test/java/com/squad/musicmatters/glance/ExampleUnitTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/convention/src/main/java/AndroidLibraryConventionPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/convention/src/main/java/AndroidLibraryConventionPlugin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/convention/src/main/java/com/squad/musicmatters/convention/AndroidCompose.kt" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/convention/src/main/java/com/squad/musicmatters/convention/AndroidCompose.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/MusicMattersAppWidget.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/MusicMattersAppWidget.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/xml/glance_musicmatters_widget_info.xml" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/res/xml/glance_musicmatters_widget_info.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,8 +100,8 @@
         <option value="Kotlin Data Class" />
         <option value="Kotlin Interface" />
         <option value="Kotlin JUnit4 Test Class" />
-        <option value="resourceFile" />
         <option value="Kotlin Class" />
+        <option value="resourceFile" />
       </list>
     </option>
   </component>
@@ -259,6 +234,7 @@
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
     &quot;git-widget-placeholder&quot;: &quot;glance&quot;,
+    &quot;gradle.sync.parallel.migration.suppressed&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_directory_selection&quot;: &quot;/Users/app/Desktop/android/projects/music-matters/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/app/Desktop/android/projects/music-matters/glance/src/main/res/drawable&quot;,
@@ -330,8 +306,6 @@
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
-      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
-      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
       <option name="DEBUGGER_TYPE" value="Auto" />
       <Auto>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -340,7 +314,6 @@
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
         <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Auto>
       <Hybrid>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -349,11 +322,9 @@
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
         <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Hybrid>
       <Java>
         <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Java>
       <Native>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -362,7 +333,6 @@
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
         <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Native>
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
@@ -394,8 +364,6 @@
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
-      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
-      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
       <option name="DEBUGGER_TYPE" value="Auto" />
       <Auto>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -404,7 +372,6 @@
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
         <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Auto>
       <Hybrid>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -413,11 +380,9 @@
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
         <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Hybrid>
       <Java>
         <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Java>
       <Native>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -426,7 +391,6 @@
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
         <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Native>
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
@@ -640,7 +604,7 @@
         </entry>
         <entry key="com.squad.musicmatters.glance.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1785159235389" />
+            <CheckInfo lastCheckTimestamp="1785599869200" />
           </value>
         </entry>
         <entry key="com.squad.musicmatters.glancewidget.test">

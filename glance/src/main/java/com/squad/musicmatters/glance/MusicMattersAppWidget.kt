@@ -10,9 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.createBitmap
 import androidx.core.net.toUri
 import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
@@ -21,9 +20,11 @@ import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.LocalSize
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.components.Scaffold
@@ -40,7 +41,6 @@ import com.squad.musicmatters.glance.di.GlanceModuleEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import androidx.glance.appwidget.updateAll
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Spacer
@@ -58,7 +58,6 @@ import androidx.glance.appwidget.components.CircleIconButton
 import androidx.glance.appwidget.components.SquareIconButton
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
-import androidx.glance.unit.ColorProvider
 
 class MusicMattersAppWidget : GlanceAppWidget() {
 
@@ -83,8 +82,9 @@ class MusicMattersAppWidget : GlanceAppWidget() {
 
         // 2. Go directly to provideContent!
         provideContent {
-            val currentlyPlayingSong by currentlyPlayingSongFlow.collectAsState(initial = null)
+            val currentlyPlayingSong by currentlyPlayingSongFlow.collectAsState( initial = null )
             val context = LocalContext.current
+            val size = LocalSize.current
 
             // Load bitmap asynchronously inside the composition scope when song changes
             var artworkBitmap by remember( currentlyPlayingSong?.artworkUri ) {
@@ -99,19 +99,44 @@ class MusicMattersAppWidget : GlanceAppWidget() {
             }
 
             GlanceTheme {
-                Content(
-                    currentlyPlayingSong = currentlyPlayingSong,
-                    currentlyPlayingSongBitmap = artworkBitmap
-                )
+                when ( size ) {
+                    mediumMode -> {
+                        WidgetMediumLarge(
+                            currentlyPlayingSong = currentlyPlayingSong,
+                            currentlyPlayingSongBitmap = artworkBitmap,
+                        )
+                    }
+                    largeMode -> {
+                        WidgetMediumLarge(
+                            currentlyPlayingSong = currentlyPlayingSong,
+                            currentlyPlayingSongBitmap = artworkBitmap,
+                            layoutIsLarge = true,
+                        )
+                    }
+                }
             }
         }
     }
+
+    companion object {
+        private val mediumMode = DpSize(180.dp, 48.dp)
+        private val largeMode = DpSize(300.dp, 48.dp)
+    }
+
+    /**
+     * Define the supported sizes for this widget. The system will decide which one fits better
+     * based on the available space.
+     */
+    override val sizeMode: SizeMode = SizeMode.Responsive(
+        setOf( mediumMode, largeMode )
+    )
 }
 
 @Composable
-private fun Content(
+private fun WidgetMediumLarge(
     currentlyPlayingSong: Song?,
     currentlyPlayingSongBitmap: Bitmap?,
+    layoutIsLarge: Boolean = false,
 ) {
     Scaffold(
         modifier = GlanceModifier.fillMaxSize(),
@@ -121,7 +146,8 @@ private fun Content(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .padding( 8.dp ),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             currentlyPlayingSongBitmap?.let {
                 Image(
@@ -142,37 +168,37 @@ private fun Content(
             Spacer( modifier = GlanceModifier.width( 8.dp ) )
 
             Column(
-                modifier = GlanceModifier.defaultWeight()
+                modifier = GlanceModifier.fillMaxWidth()
             ) {
                 Text(
                     text = currentlyPlayingSong?.title ?: "No queued tracks",
                     style = TextStyle(
-                        color = GlanceTheme.colors.onSurface,
                         fontWeight = FontWeight.Bold,
+                        color = GlanceTheme.colors.secondary
                     ),
                     maxLines = 1,
                 )
                 Text(
                     text = currentlyPlayingSong?.artist ?: "",
                     style = TextStyle(
-                        color = GlanceTheme.colors.onSurface,
                         fontWeight = FontWeight.Normal,
+                        color = GlanceTheme.colors.secondary
                     ),
                     maxLines = 1,
                 )
                 Row(
-                    modifier = GlanceModifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Image(
-                        provider = ImageProvider( R.drawable.round_repeat_24 ),
-                        contentDescription = "repeat-mode",
-                        colorFilter = ColorFilter.tint( GlanceTheme.colors.onSurface ),
-                        modifier = GlanceModifier
-                            .size( 20.dp )
-                            .clickable( actionRunCallback<TogglePlayPauseAction>() )
-                    )
+                    if ( layoutIsLarge ) {
+                        Image(
+                            provider = ImageProvider( R.drawable.round_repeat_24 ),
+                            contentDescription = "repeat-mode",
+                            colorFilter = ColorFilter.tint( GlanceTheme.colors.onSurface ),
+                            modifier = GlanceModifier
+                                .size( 25.dp )
+                                .clickable( actionRunCallback<TogglePlayPauseAction>() )
+                        )
+                    }
                     Image(
                         provider = ImageProvider( R.drawable.round_skip_previous_24 ),
                         contentDescription = "skip-to-previous",
@@ -197,15 +223,53 @@ private fun Content(
                             .size( 40.dp )
                             .clickable( actionRunCallback<TogglePlayPauseAction>() )
                     )
-                    Image(
-                        provider = ImageProvider( R.drawable.round_shuffle_24 ),
-                        contentDescription = "shuffle",
-                        colorFilter = ColorFilter.tint( GlanceTheme.colors.onSurface ),
-                        modifier = GlanceModifier
-                            .size( 20.dp )
-                            .clickable( actionRunCallback<TogglePlayPauseAction>() )
-                    )
+                    if ( layoutIsLarge ) {
+                        Image(
+                            provider = ImageProvider( R.drawable.round_shuffle_24 ),
+                            contentDescription = "shuffle",
+                            colorFilter = ColorFilter.tint( GlanceTheme.colors.onSurface ),
+                            modifier = GlanceModifier
+                                .size( 25.dp )
+                                .clickable( actionRunCallback<TogglePlayPauseAction>() )
+                        )
+                    }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun WidgetSmall(
+    currentlyPlayingSongBitmap: Bitmap?,
+) {
+    Scaffold(
+        modifier = GlanceModifier.fillMaxSize(),
+        backgroundColor = GlanceTheme.colors.widgetBackground,
+    ) {
+        Box(
+            contentAlignment = Alignment.BottomStart,
+            modifier = GlanceModifier
+                .size( 120.dp )
+                .padding( 8.dp )
+        ) {
+            CircleIconButton(
+                imageProvider = currentlyPlayingSongBitmap?.let { ImageProvider( it ) }
+                    ?: ImageProvider( R.drawable.round_music_note_24 ),
+                backgroundColor = GlanceTheme.colors.primaryContainer,
+                contentDescription = "song-artwork",
+                modifier = GlanceModifier.fillMaxSize(),
+                onClick = {}
+            )
+            Row(
+                modifier = GlanceModifier.fillMaxWidth()
+            ) {
+                SquareIconButton(
+                    imageProvider = ImageProvider( R.drawable.round_play_arrow_24 ),
+                    contentDescription = "",
+                    modifier = GlanceModifier.size( 42.dp ),
+                    onClick = {}
+                )
             }
         }
     }
@@ -234,14 +298,15 @@ class TogglePlayPauseAction : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {}
-    
+
 }
 
 @OptIn( ExperimentalGlancePreviewApi::class )
 @Preview
 @Composable
 private fun ContentPreview() {
-    Content(
+    WidgetMediumLarge(
+        layoutIsLarge = true,
         currentlyPlayingSong = Song(
             id = "id4",
             mediaUri = "Uri.EMPTY",
@@ -259,7 +324,17 @@ private fun ContentPreview() {
             path = "/path/to/song/1",
             artistId = 0,
         ),
-        currentlyPlayingSongBitmap = createBitmap( 100, 100 )
-            .apply { eraseColor( android.graphics.Color.RED ) },
+        currentlyPlayingSongBitmap = null,
+//            createBitmap( 100, 100 )
+//            .apply { eraseColor( android.graphics.Color.RED ) },
+    )
+}
+
+@OptIn( ExperimentalGlancePreviewApi::class )
+@Preview
+@Composable
+private fun WidgetSmallPreview() {
+    WidgetSmall(
+        currentlyPlayingSongBitmap = null,
     )
 }

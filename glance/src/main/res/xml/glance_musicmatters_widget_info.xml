@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="3600000"
-    android:minHeight="128dp"
-    android:minWidth="128dp"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:previewImage="@drawable/music_matters_minimal_widget_preview"
+    android:resizeMode="horizontal"
 
-    android:minResizeHeight="128dp"
-    android:minResizeWidth="128dp"
-    android:widgetFeatures="configuration_optional|reconfigurable"
-    android:previewImage="@drawable/glance_widget_preview"
-    android:maxResizeHeight="128dp"
-    android:maxResizeWidth="128dp"
-    android:targetCellWidth="2"
+    android:minWidth="180dp"
+    android:minHeight="48dp"
+    android:minResizeWidth="180dp"
+    android:minResizeHeight="48dp"
+    android:maxResizeWidth="524dp"
+    android:maxResizeHeight="48dp"
+
+    android:targetCellWidth="4"
     android:targetCellHeight="2"
-    android:initialLayout="@layout/glance_default_loading_layout">
-
-</appwidget-provider>
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen" />
