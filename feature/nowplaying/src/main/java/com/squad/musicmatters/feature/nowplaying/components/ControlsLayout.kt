@@ -26,7 +26,7 @@ import com.squad.musicmatters.core.designsystem.component.LoopModeButton
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.component.ShuffleButton
 import com.squad.musicmatters.core.model.LoopMode
-import com.squad.musicMatters.core.designsystem.R as designSystemR
+import com.squad.musicmatters.core.designsystem.R as designSystemR
 
 @Composable
 internal fun NowPlayingPlayerControls(

@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.squad.musicMatters.core.designsystem.R
+import com.squad.musicmatters.core.designsystem.R
 import com.squad.musicmatters.core.data.utils.subListNonStrict
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons

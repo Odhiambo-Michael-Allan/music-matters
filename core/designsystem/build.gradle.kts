@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.squad.musicMatters.core.designsystem"
+    namespace = "com.squad.musicmatters.core.designsystem"
 
     defaultConfig {
 

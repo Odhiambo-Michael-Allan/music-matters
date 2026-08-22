@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/glance_default_loading_layout"
-    android:previewImage="@drawable/music_matters_minimal_widget_preview"
+    android:previewImage="@drawable/glance_medium_widget_preview"
     android:resizeMode="horizontal"
 
-    android:minWidth="180dp"
-    android:minHeight="48dp"
-    android:minResizeWidth="180dp"
-    android:minResizeHeight="48dp"
-    android:maxResizeWidth="524dp"
     android:maxResizeHeight="48dp"
+    android:maxResizeWidth="624dp"
+    android:minWidth="256dp"
+    android:minHeight="48dp"
+    android:minResizeWidth="240dp"
+    android:minResizeHeight="48dp"
+
 
     android:targetCellWidth="4"
     android:targetCellHeight="2"
     android:updatePeriodMillis="1800000"
-    android:widgetCategory="home_screen" />
+    android:widgetCategory="home_screen|keyguard" />

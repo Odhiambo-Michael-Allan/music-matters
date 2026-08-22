@@ -15,7 +15,17 @@
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/core/designsystem/src/main/res/drawable/ic_repeat.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/core/designsystem/src/main/res/drawable/ic_shuffle.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/glance_music_note.xml">
         <config>
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
@@ -25,7 +35,37 @@
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/ic_repeat.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/ic_shuffle.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/round_repeat_24.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/round_skip_previous_24.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/sample_mic_icon.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/glance/src/main/res/xml/glance_default_loading_layout.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/xml/glance_small_widget_info.xml">
         <config>
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
@@ -37,24 +77,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/music_matters_minimal_widget_preview.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/glance/src/main/res/xml/glance_default_loading_layout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/Utils.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/layout/Buttons.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/layout/PlayerControlsToolBarLayout.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/small/SmallWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/small/SmallWidgetReceiver.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_ic_repeat.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_ic_shuffle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_medium_widget_preview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_small_widget_preview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_thumbs_up.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/rounded_shuffle_on_24.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/sample_mic_icon.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/xml/glance_small_widget_info.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/convention/src/main/java/AndroidLibraryConventionPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/convention/src/main/java/AndroidLibraryConventionPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/convention/src/main/java/com/squad/musicmatters/convention/AndroidCompose.kt" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/convention/src/main/java/com/squad/musicmatters/convention/AndroidCompose.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/MusicMattersAppWidget.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/MusicMattersAppWidget.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glance/src/main/res/xml/glance_musicmatters_widget_info.xml" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/res/xml/glance_musicmatters_widget_info.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/designsystem/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/LoopModeButton.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/LoopModeButton.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/ShuffleButton.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/ShuffleButton.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/theme/Type.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/theme/Type.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/i8n/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/MediaSortBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/MediaSortBar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/forYou/src/main/java/com/squad/musicmatters/feature/foryou/ForYouScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/forYou/src/main/java/com/squad/musicmatters/feature/foryou/ForYouScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/components/ControlsLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/components/ControlsLayout.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/components/NowPlayingScreenBottomBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/components/NowPlayingScreenBottomBar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/nowPlaying/LyricsLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/settings/src/main/java/com/squad/musicmatters/feature/settings/nowPlaying/LyricsLayout.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/MusicMattersAppWidget.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/medium/MediumWidget.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/MusicMattersWidgetReceiver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/medium/MediumWidgetReceiver.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/ui/ZeroState.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/drawable/music_matters_minimal_widget_preview.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/drawable/round_music_note_24.xml" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_music_note.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/xml/glance_musicmatters_widget_info.xml" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/res/xml/glance_medium_widget_info.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +121,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/app/.android/avd/Pixel_9a.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/app/.android/avd/Pixel_9_Pro_Fold.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -100,8 +157,8 @@
         <option value="Kotlin Data Class" />
         <option value="Kotlin Interface" />
         <option value="Kotlin JUnit4 Test Class" />
-        <option value="Kotlin Class" />
         <option value="resourceFile" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -116,7 +173,7 @@
   </component>
   <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="$USER_HOME$/.gradle/wrapper/dists/gradle-9.0-milestone-1-bin/3vdepk4s12bybhohyuvjcm1bd/gradle-9.0-milestone-1" javaHome="$APPLICATION_HOME_DIR$/jbr/Contents/Home" gradleVersion="9.0-milestone-1" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="_Designer_Tab" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -277,11 +334,11 @@
       <recent name="com.squad.musicmatters.core.ui" />
     </key>
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="com.squad.musicmatters.glance.medium" />
+      <recent name="com.squad.musicmatters.glance.small" />
       <recent name="com.squad.musicmatters.core.data.store" />
       <recent name="com.squad.musicmatters.feature.albums.components" />
       <recent name="com.squad.musicmatters.core.common" />
-      <recent name="com.squad.musicmatters.core.ui" />
-      <recent name="com.squad.musicmatters.feature.nowplaying.components" />
     </key>
   </component>
   <component name="RunManager" selected="Android App.mobile">
@@ -572,9 +629,14 @@
             <CheckInfo lastCheckTimestamp="1767516192165" />
           </value>
         </entry>
+        <entry key="com.squad.musicmatters.core.designsystem.test">
+          <value>
+            <CheckInfo lastCheckTimestamp="1785660193901" />
+          </value>
+        </entry>
         <entry key="com.squad.musicmatters.core.i8n.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1784105552272" />
+            <CheckInfo lastCheckTimestamp="1785677126628" />
           </value>
         </entry>
         <entry key="com.squad.musicmatters.core.media.test">
@@ -604,7 +666,7 @@
         </entry>
         <entry key="com.squad.musicmatters.glance.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1785599869200" />
+            <CheckInfo lastCheckTimestamp="1787393646497" />
           </value>
         </entry>
         <entry key="com.squad.musicmatters.glancewidget.test">

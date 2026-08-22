@@ -3,10 +3,11 @@
 
     <application>
 
+<!--        Medium Widget-->
         <receiver
-            android:name=".MusicMattersWidgetReceiver"
+            android:name=".medium.MediumWidgetReceiver"
             android:exported="true"
-            android:label="Player">
+            android:label="@string/core_i8n_now_playing">
 
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -15,7 +16,25 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/glance_musicmatters_widget_info" />
+                android:resource="@xml/glance_medium_widget_info" />
+
+        </receiver>
+
+<!--        Small widget-->
+        <receiver
+            android:name=".small.SmallWidgetReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/core_i8n_turntable">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.squad.musicmatters.ACTION_UPDATE_WIDGET" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/glance_small_widget_info" />
 
         </receiver>
 

@@ -28,7 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.squad.musicMatters.core.designsystem.R
+import com.squad.musicmatters.core.designsystem.R
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 
 @Composable

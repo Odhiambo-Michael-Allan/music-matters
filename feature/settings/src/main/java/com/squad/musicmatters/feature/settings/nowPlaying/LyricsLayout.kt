@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.squad.musicMatters.core.designsystem.R
+import com.squad.musicmatters.core.designsystem.R
 import com.squad.musicmatters.feature.settings.components.SettingsOptionTile
 import com.squad.musicmatters.feature.settings.components.SettingsSwitchTile
 import com.squad.musicmatters.core.i8n.R as i8nR
