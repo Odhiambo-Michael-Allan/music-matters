@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
@@ -64,6 +65,7 @@ import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
 import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Box
+import androidx.glance.layout.height
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import androidx.glance.semantics.contentDescription
@@ -136,12 +138,11 @@ private fun MediumWidget(
 ) {
     Scaffold(
         modifier = GlanceModifier.fillMaxSize(),
-        backgroundColor = GlanceTheme.colors.widgetBackground,
     ) {
         Row(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .padding( 8.dp ),
+                .padding( 0.dp, 8.dp ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -149,13 +150,15 @@ private fun MediumWidget(
                 Image(
                     provider = ImageProvider( currentlyPlayingSongBitmap ),
                     contentDescription = "song-artwork",
-                    modifier = GlanceModifier.size( 72.dp ),
+                    modifier = GlanceModifier.size( 78.dp, 80.dp ),
                 )
             } ?: run {
                 SquareIconButton(
                     imageProvider = ImageProvider( R.drawable.glance_music_note ),
                     contentDescription = "song-artwork",
-                    modifier = GlanceModifier.size( 72.dp ),
+                    backgroundColor = GlanceTheme.colors.secondaryContainer,
+                    contentColor = GlanceTheme.colors.onSecondaryContainer,
+                    modifier = GlanceModifier.size( 78.dp, 80.dp ),
                     onClick = {}
                 )
             }
@@ -164,21 +167,22 @@ private fun MediumWidget(
             Spacer( modifier = GlanceModifier.width( 12.dp ) )
 
             Column(
-                modifier = GlanceModifier.fillMaxWidth()
+                modifier = GlanceModifier.fillMaxWidth().height( 80.dp ),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = currentlyPlayingSong?.title ?: "No queued tracks",
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
-                        color = GlanceTheme.colors.secondary
+                        color = GlanceTheme.colors.onPrimaryContainer
                     ),
                     maxLines = 1,
                 )
                 Text(
                     text = currentlyPlayingSong?.artist ?: "",
                     style = TextStyle(
-                        fontWeight = FontWeight.Normal,
-                        color = GlanceTheme.colors.secondary
+                        fontSize = 12.sp,
+                        color = GlanceTheme.colors.onPrimaryContainer
                     ),
                     maxLines = 1,
                 )
@@ -193,7 +197,7 @@ private fun MediumWidget(
 @Preview( widthDp = 330, heightDp = 128 )
 @Preview( widthDp = 256, heightDp = 128 )
 @Composable
-private fun ContentPreview() {
+private fun MediumWidgetCPreview() {
     MediumWidget(
         currentlyPlayingSong = Song(
             id = "id4",

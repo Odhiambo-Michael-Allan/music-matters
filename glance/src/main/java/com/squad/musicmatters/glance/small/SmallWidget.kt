@@ -3,6 +3,7 @@ package com.squad.musicmatters.glance.small
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -10,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -24,6 +26,7 @@ import androidx.glance.LocalSize
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.SizeMode
+import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.components.CircleIconButton
 import androidx.glance.appwidget.components.Scaffold
@@ -42,6 +45,8 @@ import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import com.squad.musicmatters.glance.R
 import com.squad.musicmatters.glance.di.GlanceModuleEntryPoint
+import com.squad.musicmatters.glance.layout.NoOpAction
+import com.squad.musicmatters.glance.layout.RectangularIconButton
 import com.squad.musicmatters.glance.loadBitmapFromUri
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.flatMapLatest
@@ -117,42 +122,58 @@ private fun SmallWidget(
     Box(
         contentAlignment = Alignment.BottomStart,
         modifier = backgroundModifier
+            .padding( 8.dp )
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = GlanceModifier
                 .fillMaxSize()
                 .cornerRadius( 300.dp )
-                .background( GlanceTheme.colors.primaryContainer )
                 .clickable {}
         ) {
-            Image(
-                provider = currentlyPlayingSongBitmap?.let { ImageProvider( it ) }
-                    ?: run { ImageProvider( R.drawable.glance_music_note ) },
-                contentDescription = null,
-                modifier = currentlyPlayingSongBitmap?.let { GlanceModifier.fillMaxSize() }
-                    ?: run { GlanceModifier.size( 62.dp ) }
-            )
+            currentlyPlayingSongBitmap?.let {
+                Image(
+                    provider = ImageProvider( it ),
+                    contentDescription = null,
+                    modifier = GlanceModifier.fillMaxSize()
+                )
+            } ?: run {
+                RectangularIconButton(
+                    iconImageProvider = ImageProvider( R.drawable.round_play_circle_outline_24 ),
+                    contentDescription = "",
+                    iconSize = iconSize.coerceAtLeast( 48.dp ),
+                    roundedCornerShape = com.squad.musicmatters.glance.layout.RoundedCornerShape.MEDIUM,
+                    backgroundColor = GlanceTheme.colors.widgetBackground,
+                    contentColor = GlanceTheme.colors.onSecondaryContainer,
+                    onClick = actionRunCallback<NoOpAction>(),
+                    modifier = GlanceModifier.fillMaxSize()
+                )
+            }
         }
-        Row(
-            modifier = GlanceModifier.fillMaxWidth()
+        Box(
+            modifier = GlanceModifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomStart
         ) {
             SquareIconButton(
                 imageProvider = ImageProvider( R.drawable.round_play_arrow_24 ),
                 contentDescription = "",
-                modifier = GlanceModifier.size( iconSize.coerceAtLeast( 62.dp ) ),
-                onClick = {}
+                backgroundColor = GlanceTheme.colors.secondaryContainer,
+                contentColor = GlanceTheme.colors.onSecondaryContainer,
+                onClick = {},
+                modifier = GlanceModifier.size( iconSize.coerceAtLeast( 55.dp ) )
             )
         }
         Box(
-            modifier = GlanceModifier.fillMaxSize(),
+            modifier = GlanceModifier
+                .fillMaxSize(),
             contentAlignment = Alignment.TopEnd
         ) {
             CircleIconButton(
                 imageProvider = ImageProvider( R.drawable.glance_thumbs_up ),
                 backgroundColor = GlanceTheme.colors.tertiaryContainer,
+                contentColor = GlanceTheme.colors.onTertiaryContainer,
                 contentDescription = "",
-                modifier = GlanceModifier.size( iconSize.coerceAtLeast( 55.dp ) ),
+                modifier = GlanceModifier.size( iconSize.coerceAtLeast( 48.dp ) ),
                 onClick = {}
             )
         }
@@ -160,10 +181,12 @@ private fun SmallWidget(
 }
 
 @OptIn( ExperimentalGlancePreviewApi::class )
-@Preview
+@Preview( 200, 200 )
 @Composable
 private fun WidgetSmallPreview() {
-    SmallWidget(
-        currentlyPlayingSongBitmap = null,
-    )
+    GlanceTheme {
+        SmallWidget(
+            currentlyPlayingSongBitmap = null,
+        )
+    }
 }

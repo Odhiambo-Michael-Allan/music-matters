@@ -23,9 +23,7 @@ import androidx.glance.layout.padding
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import com.squad.musicmatters.glance.R
-import com.squad.musicmatters.glance.layout.PlayerControlsToolBarLayoutDimens.iconSize
 import com.squad.musicmatters.glance.layout.PlayerControlsToolBarLayoutDimens.itemsSpacing
-import com.squad.musicmatters.glance.layout.PlayerControlsToolBarLayoutDimens.widgetPadding
 
 @Composable
 internal fun PlayerControlsToolBarLayout() {
@@ -52,13 +50,15 @@ internal fun PlayerControlsToolBarLayout() {
         listOf(
             PlayerControlButton(
                 iconRes = R.drawable.round_repeat_24,
+                iconSize = 24.dp,
                 contentDescription = "skip to previous button",
-                onClick = actionRunCallback<NoOpAction>()
+                onClick = actionRunCallback<NoOpAction>(),
             )
         ) + minimalControlsButtons +
                 listOf(
                     PlayerControlButton(
                         iconRes = R.drawable.round_shuffle_24,
+                        iconSize = 24.dp,
                         contentDescription = "skip to previous button",
                         onClick = actionRunCallback<NoOpAction>()
                     )
@@ -71,7 +71,6 @@ internal fun PlayerControlsToolBarLayout() {
                 spacing = itemsSpacing,
                 modifier = GlanceModifier
                     .fillMaxSize()
-                    .padding( widgetPadding, 0.dp )
             )
         }
         PlayerControlsToolBarLayoutSize.MinimalControlsRow -> {
@@ -80,7 +79,6 @@ internal fun PlayerControlsToolBarLayout() {
                 spacing = itemsSpacing,
                 modifier = GlanceModifier
                     .fillMaxSize()
-                    .padding( widgetPadding, 0.dp )
             )
         }
     }
@@ -94,12 +92,12 @@ private fun FluidContentIconButton(
     RectangularIconButton(
         iconImageProvider = ImageProvider(button.iconRes),
         contentDescription = button.contentDescription,
-        iconSize = iconSize,
+        iconSize = button.iconSize,
         roundedCornerShape = RoundedCornerShape.MEDIUM,
-        backgroundColor = if (filled) {
+        backgroundColor = if ( filled ) {
             GlanceTheme.colors.secondaryContainer
         } else {
-            ColorProvider(Color.Transparent, Color.Transparent)
+            ColorProvider( Color.Transparent, Color.Transparent )
         },
         contentColor = GlanceTheme.colors.onSecondaryContainer,
         onClick = button.onClick,
@@ -115,22 +113,22 @@ fun SpacedRow(
 ) {
     val padding = spacing / 2 // split spacing between siblings
 
-    Column(modifier = modifier) {
+    Column( modifier = modifier ) {
         Row(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .defaultWeight()
         ) {
             items.forEachIndexed { index, item ->
-                val paddingModifier = when (index) {
+                val paddingModifier = when ( index ) {
                     // Right padding only
-                    0 -> GlanceModifier.padding(end = padding)
+                    0 -> GlanceModifier.padding( end = padding )
 
                     // Left padding only
-                    items.lastIndex -> GlanceModifier.padding(start = padding)
+                    items.lastIndex -> GlanceModifier.padding( start = padding )
 
                     // Both left and right padding
-                    else -> GlanceModifier.padding(start = padding, end = padding)
+                    else -> GlanceModifier.padding( start = padding, end = padding )
                 }
 
                 Box(
@@ -149,6 +147,7 @@ data class PlayerControlButton(
     @param:DrawableRes val iconRes: Int,
     val contentDescription: String,
     val onClick: Action,
+    val iconSize: Dp = 32.dp,
 )
 
 private enum class PlayerControlsToolBarLayoutSize {
@@ -163,30 +162,11 @@ private enum class PlayerControlsToolBarLayoutSize {
             val size = LocalSize.current
             val width = size.width
 
-            return if ( width > 256.dp ) {
+            return if ( width > 300.dp ) {
                 ExpandedControlsRow
             } else {
                 MinimalControlsRow
             }
-        }
-
-        /**
-         * Returns how many items to show that would potentially fit in the horizontal orientation if
-         * we were filling the entire space.
-         */
-        @Composable
-        fun numberOfItemsThatFit(
-            minItemSize: Dp,
-            spacing: Dp,
-        ) : Int {
-            val size = LocalSize.current.width
-
-            // n buttons have n-1 content spacers, so, we add one to the total width to make the width
-            // division simpler.
-            val normalizedWidth: Dp = size + spacing
-            val normalizedButtonWidth: Dp = minItemSize + spacing
-            // Number of equally wide buttons that fit in a row
-            return ( ( normalizedWidth / normalizedButtonWidth ) ).toInt()
         }
     }
 
@@ -201,16 +181,13 @@ private object PlayerControlsToolBarLayoutDimens {
 
     /** Spacing between buttons in all layouts. */
     val itemsSpacing = 8.dp
-
-    /** Size of icons in all buttons. */
-    val iconSize = 24.dp
 }
 
 /**
  * Previews for various breakpoints for this layout.
  */
 @OptIn( ExperimentalGlancePreviewApi::class )
-@Preview( widthDp = 296, heightDp = 72 )
+@Preview( widthDp = 301, heightDp = 72 )
 @Preview( widthDp = 256, heightDp = 72 )
 @Composable
 private fun PlayerControlsToolBarLayoutPreview() {
