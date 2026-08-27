@@ -104,126 +104,142 @@ private fun ForYouScreenContent(
             }
         }
         is ForYouScreenUiState.Success -> {
+            val showEmptyLayout = uiState.recentlyAddedSongs.isEmpty() &&
+                    uiState.suggestedAlbums.isEmpty() &&
+                    uiState.mostPlayedSongs.isEmpty() &&
+                    uiState.suggestedArtists.isEmpty() &&
+                    uiState.recentlyPlayedSongs.isEmpty()
+
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues( bottom = 100.dp ),
-                ) {
-                    item {
-                        Spacer( Modifier.height( 8.dp ) )
-                        ForYouSongRow(
-                            heading = stringResource( id = i8nR.string.core_i8n_recently_added_songs ),
-                            songs = uiState.recentlyAddedSongs.subListNonStrict( 10 ),
-                            onPlaySong = onPlaySong,
-                        )
-                        if ( uiState.suggestedAlbums.isNotEmpty() ) {
-                            Spacer( Modifier.height( 8.dp ) )
-                            SideHeading {
-                                Text(
-                                    text = stringResource( id = i8nR.string.core_i8n_suggested_albums )
-                                )
-                            }
-                            Spacer( Modifier.height( 8.dp ) )
-                            ForYouTileRow(
-                                items = uiState.suggestedAlbums,
-                                onGetItemKey = { it.id.toString() },
-                                onGetTitle = { it.title },
-                                onGetDescription = {
-                                    it.artist ?: context.getString( i8nR.string.core_i8n_untitled )
-                                },
-                                onGetArtworkUri = { it.artworkUri?.toUri() },
-                                onViewItem = { onViewAlbum( it.id ) },
-                                onPlay = {
-                                    val songsInAlbum = uiState.recentlyAddedSongs.filter { song ->
-                                        song.albumId == it.id
-                                    }
-                                    onPlaySong( songsInAlbum.first(), songsInAlbum )
-                                },
-                            )
-                        }
-                        AnimatedVisibility(
-                            visible = uiState.mostPlayedSongs.isNotEmpty()
-                        ) {
-                            Spacer( Modifier.height( 8.dp ) )
-                            ForYouSongRow(
-                                heading = stringResource( id = i8nR.string.core_i8n_most_played_songs ),
-                                songs = uiState.mostPlayedSongs,
-                                onPlaySong = onPlaySong,
-                            )
-                        }
-
-                        if ( uiState.suggestedArtists.isNotEmpty() ) {
-                            Spacer( Modifier.height( 8.dp ) )
-                            SideHeading {
-                                Text(
-                                    text = stringResource( id = i8nR.string.core_i8n_suggested_artists )
-                                )
-                            }
-                            Spacer( Modifier.height( 8.dp ) )
-                            ForYouTileRow(
-                                items = uiState.suggestedArtists,
-                                onGetItemKey = { it.id.toString() },
-                                onGetTitle = { it.name },
-                                onGetDescription = {
-                                    context.getString(
-                                        if ( it.trackCount > 1 ) {
-                                            i8nR.string.core_i8n_n_songs
-                                        } else {
-                                            i8nR.string.core_i8n_one_song
-                                        },
-                                        it.trackCount
-                                    )
-                                },
-                                onGetArtworkUri = { it.artworkUri?.toUri() },
-                                onViewItem = { onViewArtist( it.id ) },
-                                onPlay = {
-                                    val songsByArtist = uiState.recentlyAddedSongs.filter { song ->
-                                        song.artistId == it.id
-                                    }
-                                    onPlaySong( songsByArtist.first(), songsByArtist )
-                                },
-                            )
-                        }
-                        AnimatedVisibility(
-                            visible = uiState.recentlyPlayedSongs.isNotEmpty()
-                        ) {
-                            ForYouSongRow(
-                                heading = stringResource( id = i8nR.string.core_i8n_recently_played_songs ),
-                                songs = uiState.recentlyPlayedSongs,
-                                onPlaySong = onPlaySong,
-                            )
-                        }
-                    }
-                }
-                val animatedBottomPadding by animateDpAsState(
-                    targetValue = if ( uiState.currentlyPlayingSongId.isNotBlank() ) {
-                        60.dp
-                    } else {
-                        0.dp
-                    },
-                    label = "BottomPaddingAnimation"
-                )
-                Box(
-                    Modifier
-                        .align( Alignment.BottomEnd )
-                        .padding( bottom = animatedBottomPadding )
-                ) {
-                    LargeFloatingActionButton(
-                        modifier = Modifier.padding( 16.dp ),
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        onClick = { onShuffleAndPlay( uiState.recentlyAddedSongs ) }
+                if ( showEmptyLayout ) {
+                    Text(
+                        text = stringResource( id = i8nR.string.core_i8n_damn_this_is_so_empty ),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align( Alignment.Center )
+                    )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues( bottom = 100.dp ),
                     ) {
-                        Icon(
-                            painter = painterResource( id = R.drawable.ic_shuffle ),
-                            contentDescription = null,
-                            modifier = Modifier.size(
-                                MusicMattersIcons.Shuffle.defaultHeight.minus( 5.dp )
-                            )
-                        )
-                    }
+                        item {
+                            Spacer( Modifier.height( 8.dp ) )
+                            if ( uiState.recentlyAddedSongs.isNotEmpty() ) {
+                                ForYouSongRow(
+                                    heading = stringResource( id = i8nR.string.core_i8n_recently_added_songs ),
+                                    songs = uiState.recentlyAddedSongs.subListNonStrict( 10 ),
+                                    onPlaySong = onPlaySong,
+                                )
+                            }
+                            if ( uiState.suggestedAlbums.isNotEmpty() ) {
+                                Spacer( Modifier.height( 8.dp ) )
+                                SideHeading {
+                                    Text(
+                                        text = stringResource( id = i8nR.string.core_i8n_suggested_albums )
+                                    )
+                                }
+                                Spacer( Modifier.height( 8.dp ) )
+                                ForYouTileRow(
+                                    items = uiState.suggestedAlbums,
+                                    onGetItemKey = { it.id.toString() },
+                                    onGetTitle = { it.title },
+                                    onGetDescription = {
+                                        it.artist ?: context.getString( i8nR.string.core_i8n_untitled )
+                                    },
+                                    onGetArtworkUri = { it.artworkUri?.toUri() },
+                                    onViewItem = { onViewAlbum( it.id ) },
+                                    onPlay = {
+                                        val songsInAlbum = uiState.recentlyAddedSongs.filter { song ->
+                                            song.albumId == it.id
+                                        }
+                                        onPlaySong( songsInAlbum.first(), songsInAlbum )
+                                    },
+                                )
+                            }
+                            AnimatedVisibility(
+                                visible = uiState.mostPlayedSongs.isNotEmpty()
+                            ) {
+                                Spacer( Modifier.height( 8.dp ) )
+                                ForYouSongRow(
+                                    heading = stringResource( id = i8nR.string.core_i8n_most_played_songs ),
+                                    songs = uiState.mostPlayedSongs,
+                                    onPlaySong = onPlaySong,
+                                )
+                            }
 
+                            if ( uiState.suggestedArtists.isNotEmpty() ) {
+                                Spacer( Modifier.height( 8.dp ) )
+                                SideHeading {
+                                    Text(
+                                        text = stringResource( id = i8nR.string.core_i8n_suggested_artists )
+                                    )
+                                }
+                                Spacer( Modifier.height( 8.dp ) )
+                                ForYouTileRow(
+                                    items = uiState.suggestedArtists,
+                                    onGetItemKey = { it.id.toString() },
+                                    onGetTitle = { it.name },
+                                    onGetDescription = {
+                                        context.getString(
+                                            if ( it.trackCount > 1 ) {
+                                                i8nR.string.core_i8n_n_songs
+                                            } else {
+                                                i8nR.string.core_i8n_one_song
+                                            },
+                                            it.trackCount
+                                        )
+                                    },
+                                    onGetArtworkUri = { it.artworkUri?.toUri() },
+                                    onViewItem = { onViewArtist( it.id ) },
+                                    onPlay = {
+                                        val songsByArtist = uiState.recentlyAddedSongs.filter { song ->
+                                            song.artistId == it.id
+                                        }
+                                        onPlaySong( songsByArtist.first(), songsByArtist )
+                                    },
+                                )
+                            }
+                            AnimatedVisibility(
+                                visible = uiState.recentlyPlayedSongs.isNotEmpty()
+                            ) {
+                                ForYouSongRow(
+                                    heading = stringResource( id = i8nR.string.core_i8n_recently_played_songs ),
+                                    songs = uiState.recentlyPlayedSongs,
+                                    onPlaySong = onPlaySong,
+                                )
+                            }
+                        }
+                    }
+                    val animatedBottomPadding by animateDpAsState(
+                        targetValue = if ( uiState.currentlyPlayingSongId.isNotBlank() ) {
+                            60.dp
+                        } else {
+                            0.dp
+                        },
+                        label = "BottomPaddingAnimation"
+                    )
+                    Box(
+                        Modifier
+                            .align( Alignment.BottomEnd )
+                            .padding( bottom = animatedBottomPadding )
+                    ) {
+                        LargeFloatingActionButton(
+                            modifier = Modifier.padding( 16.dp ),
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            onClick = { onShuffleAndPlay( uiState.recentlyAddedSongs ) }
+                        ) {
+                            Icon(
+                                painter = painterResource( id = R.drawable.ic_shuffle ),
+                                contentDescription = null,
+                                modifier = Modifier.size(
+                                    MusicMattersIcons.Shuffle.defaultHeight.minus( 5.dp )
+                                )
+                            )
+                        }
+
+                    }
                 }
             }
         }
@@ -438,11 +454,16 @@ private fun ForYouScreenContentPreview(
     ) {
         ForYouScreenContent(
             uiState = ForYouScreenUiState.Success(
-                recentlyAddedSongs = previewData.songs,
-                suggestedAlbums = previewData.albums,
-                mostPlayedSongs = previewData.songs,
-                suggestedArtists = previewData.artists,
-                recentlyPlayedSongs = previewData.songs,
+                recentlyAddedSongs = emptyList(),
+//                    previewData.songs,
+                suggestedAlbums = emptyList(),
+//                    previewData.albums,
+                mostPlayedSongs = emptyList(),
+//                    previewData.songs,
+                suggestedArtists = emptyList(),
+//                    previewData.artists,
+                recentlyPlayedSongs = emptyList(),
+//                    previewData.songs,
                 currentlyPlayingSongId = "",
             ),
             onPlaySong = { _, _ -> },

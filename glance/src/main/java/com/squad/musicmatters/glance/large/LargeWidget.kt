@@ -124,7 +124,9 @@ private fun LargeWidget(
         modifier = GlanceModifier.fillMaxSize(),
     ) {
         Column (
-            modifier = GlanceModifier.padding( 0.dp, 8.dp )
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .padding( 0.dp, 8.dp )
         ) {
             MediumWidgetLayout(
                 currentlyPlayingSongArtworkBitmap = currentlyPlayingSongArtworkBitmap,
@@ -137,6 +139,7 @@ private fun LargeWidget(
             LazyColumn(
                 modifier = GlanceModifier
                     .fillMaxWidth()
+                    .defaultWeight()
                     .background( GlanceTheme.colors.secondaryContainer )
                     .cornerRadius( 12.dp )
             ) {

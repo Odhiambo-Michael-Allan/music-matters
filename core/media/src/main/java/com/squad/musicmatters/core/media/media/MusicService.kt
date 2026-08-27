@@ -53,6 +53,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.Instant
 import javax.inject.Inject
@@ -293,17 +294,26 @@ class MusicService : MediaLibraryService() {
     }
 
     private fun handlePlay( intent: Intent? ) {
-        intent?.let {
-            val songId = intent.extras?.getString( SONG_ID_INTENT_KEY )
-            if ( songId != null ) {
-                serviceScope.launch( mainDispatcher ) {
-                    val songs = songsRepository.fetchSongs( sortSongsInReverse = true ).first()
-                    songs.find { it.id == songId }?.let { selectedSong ->
+        if ( intent == null ) return
+
+        serviceScope.launch( ioDispatcher ) { // Run data fetching on IO dispatcher
+            val songs = songsRepository.fetchSongs( sortSongsInReverse = true ).first()
+            val songId = intent.getStringExtra( SONG_ID_INTENT_KEY )
+
+            // Switch back to Main for player interaction if required by your player instance
+            withContext( mainDispatcher ) {
+                if ( songId != null ) {
+                    songs.find { song -> song.id == songId }?.let { selectedSong ->
                         player.playSong( selectedSong, songs )
                     }
+                } else if ( replaceableForwardingPlayer.mediaItemCount <= 0 ) {
+                    val firstSong = songs.firstOrNull()
+                    if ( firstSong != null ) {
+                        player.playSong( firstSong, songs )
+                    }
+                } else {
+                    player.playPause()
                 }
-            } else {
-                player.playPause()
             }
         }
     }
