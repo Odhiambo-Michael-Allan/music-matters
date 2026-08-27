@@ -9,6 +9,7 @@ import com.squad.musicmatters.core.testing.songs.testSong
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.testing.songs.testLyric
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -75,6 +76,12 @@ private class FakeSongsStore : SongsStore {
     private var currentSongs = emptyList<Song>()
     private var currentLyrics = emptyList<Lyric>()
     private val listeners = mutableListOf<MediaStoreListener>()
+    override fun fetchSongsFlow(
+        sortSongsBy: SortSongsBy?,
+        sortSongsInReverse: Boolean
+    ): Flow<List<Song>> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun fetchSongs(
         sortSongsBy: SortSongsBy?,

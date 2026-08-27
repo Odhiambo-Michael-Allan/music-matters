@@ -3,6 +3,7 @@ package com.squad.musicmatters.core.model
 
 data class Song(
     val id: String,
+    val mediaStoreId: Long,
     val mediaUri: String,
     val title: String,
     val duration: Long,
@@ -24,6 +25,7 @@ data class Song(
         @JvmStatic
         val EMPTY = Song(
             id = "-1",
+            mediaStoreId = -1,
             title = "",
             duration = -1,
             dateModified = -1,

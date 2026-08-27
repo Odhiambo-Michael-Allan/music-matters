@@ -64,6 +64,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFirstOrNull
 import androidx.core.net.toUri
@@ -91,6 +92,8 @@ import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.model.UserData
 import com.squad.musicmatters.core.ui.DynamicAsyncImage
 import com.squad.musicmatters.core.ui.FadeTransition
+import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
+import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.TransitionDurations
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenViewModel
@@ -560,7 +563,10 @@ fun Color.clampBrightness(
 
 @Preview( showSystemUi = true )
 @Composable
-private fun MiniPlayerPreview() {
+private fun MiniPlayerPreview(
+    @PreviewParameter( MusicMattersPreviewParametersProvider::class )
+    previewData: PreviewData
+) {
     MusicMattersTheme(
         themeMode = ThemeMode.LIGHT,
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
@@ -577,23 +583,7 @@ private fun MiniPlayerPreview() {
                     userData = emptyUserData.copy(
                         miniPlayerTextMarquee = true
                     ),
-                    currentlyPlayingSong = Song(
-                        id = "song-id-1",
-                        mediaUri = "Uri.EMPTY",
-                        title = "Started From the Bottom Now we Here",
-                        albumId = 0L,
-                        duration = 0L,
-                        artist = "Michael Jackson",
-                        size = 0L,
-                        dateModified = 0L,
-                        path = "",
-                        trackNumber = null,
-                        year = null,
-                        albumTitle = null,
-                        composer = null,
-                        artworkUri = null,
-                        artistId = 0,
-                    ),
+                    currentlyPlayingSong = previewData.songs.first(),
                     currentlyPlayingSongIsFavorite = true,
                     playerState = PlayerState(
                         currentlyPlayingSongId = "song-id-1",

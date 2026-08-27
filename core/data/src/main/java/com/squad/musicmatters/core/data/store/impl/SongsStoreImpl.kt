@@ -11,10 +11,13 @@ import androidx.annotation.WorkerThread
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
+import com.squad.musicmatters.core.data.store.MediaStoreListener
 import com.squad.musicmatters.core.data.store.SongsStore
 import com.squad.musicmatters.core.data.store.MusicMattersMediaStore
 import com.squad.musicmatters.core.data.store.getLongFrom
 import com.squad.musicmatters.core.data.store.getNullableStringFrom
+import com.squad.musicmatters.core.data.utils.sortSongs
+import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Lyrics
@@ -23,6 +26,12 @@ import com.squad.musicmatters.core.model.SortGenresBy
 import com.squad.musicmatters.core.model.SortSongsBy
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
@@ -36,6 +45,32 @@ class SongsStoreImpl(
     context = context,
     ioScope = ioScope
 ), SongsStore {
+
+    private var _cachedSongs = MutableSharedFlow<List<Song>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    init {
+        ioScope.launch { _cachedSongs.tryEmit( fetchSongs() ) }
+        registerListener(
+            object : MediaStoreListener {
+                override fun onMediaStoreChanged() {
+                    ioScope.launch { _cachedSongs.tryEmit( fetchSongs() ) }
+                }
+            }
+        )
+    }
+
+    override fun fetchSongsFlow(
+        sortSongsBy: SortSongsBy?,
+        sortSongsInReverse: Boolean,
+    ): Flow<List<Song>> = _cachedSongs.map {
+        it.sortSongs(
+            by = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
+            reverse = sortSongsInReverse
+        )
+    }.flowOn( ioDispatcher )
 
     override suspend fun fetchSongs(
         sortSongsBy: SortSongsBy?,
@@ -129,6 +164,7 @@ class SongsStoreImpl(
 
 private fun buildSongUsing( cursor: Cursor ): Song {
     val mediaUri = cursor.getMediaUriFrom().toString()
+    val mediaStoreId = cursor.getLongFrom( AudioColumns._ID )
     val dateAdded = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
     val dateModified = cursor.getNullableLongFrom( AudioColumns.DATE_MODIFIED )
     val title = cursor.getStringFrom( AudioColumns.TITLE )
@@ -136,6 +172,7 @@ private fun buildSongUsing( cursor: Cursor ): Song {
     val artist = cursor.getNullableStringFrom( AudioColumns.ARTIST ) ?: ""
     return Song(
         id = mediaUri,
+        mediaStoreId = mediaStoreId,
         mediaUri = mediaUri,
         title = title,
         trackNumber = cursor.getNullableIntFrom( AudioColumns.TRACK ) ?: 0,

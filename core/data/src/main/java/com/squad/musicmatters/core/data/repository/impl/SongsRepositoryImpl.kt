@@ -34,30 +34,34 @@ class SongsRepositoryImpl @Inject constructor(
     override fun fetchSongs(
         sortSongsBy: SortSongsBy?,
         sortSongsInReverse: Boolean
-    ): Flow<List<Song>> = callbackFlow {
-
-        // Helper function to fetch, sort, and emit the latest songs safely
-        fun fetchAndEmit() {
-            launch( ioDispatcher ) {
-                runCatching { songsStore.fetchSongs( sortSongsBy, sortSongsInReverse ) }
-                    .onSuccess { songs -> send( songs ) }
-            }
-        }
-
-        val storeListener = object : MediaStoreListener {
-            override fun onMediaStoreChanged() {
-                fetchAndEmit()
-            }
-        }
-        songsStore.registerListener( storeListener )
-
-        fetchAndEmit()
-
-        // 3. Keep the flow active until the collector cancels it, then clean up
-        awaitClose {
-            songsStore.unregisterListener( storeListener )
-        }
-    }.flowOn( ioDispatcher )
+    ): Flow<List<Song>> = songsStore.fetchSongsFlow(
+        sortSongsBy = sortSongsBy,
+        sortSongsInReverse = sortSongsInReverse,
+    )
+//        callbackFlow {
+//
+//        // Helper function to fetch, sort, and emit the latest songs safely
+//        fun fetchAndEmit() {
+//            launch( ioDispatcher ) {
+//                runCatching { songsStore.fetchSongs( sortSongsBy, sortSongsInReverse ) }
+//                    .onSuccess { songs -> send( songs ) }
+//            }
+//        }
+//
+//        val storeListener = object : MediaStoreListener {
+//            override fun onMediaStoreChanged() {
+//                fetchAndEmit()
+//            }
+//        }
+//        songsStore.registerListener( storeListener )
+//
+//        fetchAndEmit()
+//
+//        // 3. Keep the flow active until the collector cancels it, then clean up
+//        awaitClose {
+//            songsStore.unregisterListener( storeListener )
+//        }
+//    }.flowOn( ioDispatcher )
 
     override fun searchSongsMatching(
         query: String,

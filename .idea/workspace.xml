@@ -20,12 +20,22 @@
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/core/designsystem/src/main/res/drawable/ic_repeat_copy.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/core/designsystem/src/main/res/drawable/ic_shuffle.xml">
         <config>
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/glance_music_note.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/glance_thumbs_up.xml">
         <config>
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
@@ -45,6 +55,16 @@
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/noun_shuffle_446775.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/outline_play_circle_24.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/round_play_arrow_24.xml">
         <config>
           <theme>@android:style/Theme.Material.Light</theme>
@@ -55,12 +75,32 @@
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/round_play_circle_outline_24.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/round_repeat_24.xml">
         <config>
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/round_repeat_one_24.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/round_shuffle_24.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/round_skip_previous_24.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/drawable/rounded_shuffle_on_24.xml">
         <config>
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
@@ -71,6 +111,11 @@
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/glance/src/main/res/xml/glance_default_loading_layout.xml">
+        <config>
+          <theme>@android:style/Theme.Material.Light</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/glance/src/main/res/xml/glance_large_widget_info.xml">
         <config>
           <theme>@android:style/Theme.Material.Light</theme>
         </config>
@@ -87,17 +132,70 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/outline_play_circle_24.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/round_play_arrow_32.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/round_play_circle_outline_24.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/PlayerSettingOnIndicator.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/data/GlanceRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/data/GlanceSong.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/data/GlanceUiModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/large/LargeWidget.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/large/LargeWidgetReceiver.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/layout/MediumWidgetLayout.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_large_widget_preview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/noun_shuffle_446775.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/round_repeat_one_24.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/main/res/xml/glance_large_widget_info.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glance/src/test/java/com/squad/musicmatters/glance/GlanceRepositoryTest.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0.0/checksums/checksums.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0.0/executionHistory/executionHistory.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0.0/fileChanges/last-build.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0.0/fileHashes/fileHashes.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0.0/fileHashes/fileHashes.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0.0/gc.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/SongsStore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/SongsStore.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/impl/SongsStoreImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/impl/SongsStoreImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/utils/ListUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/utils/ListUtils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImplTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/LoopModeButton.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/LoopModeButton.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/ShuffleButton.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/ShuffleButton.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/media/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MusicService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MusicService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/Song.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/src/main/java/com/squad/musicmatters/core/model/Song.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeMostPlayedSongsRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeMostPlayedSongsRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakePlayHistoryRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakePlayHistoryRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/songs/Songs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/songs/Songs.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/MusicMattersPreviewParametersProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/MusicMattersPreviewParametersProvider.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/ExpandedLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/ExpandedLayout.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/NowPlayingScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/PortraitLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/PortraitLayout.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/components/MiniPlayer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/nowplaying/src/main/java/com/squad/musicmatters/feature/nowplaying/components/MiniPlayer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/glance/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/Utils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/Utils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/di/GlanceModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/di/GlanceModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/layout/Buttons.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/layout/Buttons.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/layout/PlayerControlsToolBarLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/layout/PlayerControlsToolBarLayout.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/medium/MediumWidget.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/medium/MediumWidget.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/medium/MediumWidgetReceiver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/medium/MediumWidgetReceiver.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/small/SmallWidget.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/small/SmallWidget.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/small/SmallWidgetReceiver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/small/SmallWidgetReceiver.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_ic_repeat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_ic_shuffle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_medium_widget_preview.png" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_medium_widget_preview.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_small_widget_preview.png" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_small_widget_preview.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/drawable/glance_widget_preview.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/drawable/ic_launcher_monochrome.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/drawable/outline_play_circle_24.xml" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/outline_thumb_up_24.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/drawable/round_play_arrow_32.xml" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/res/drawable/round_pause_24.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glance/src/main/res/drawable/sample_mic_icon.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/AndroidManifest.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +205,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/app/.android/avd/Pixel_9_Pro_Fold.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/app/.android/avd/Pixel_9a.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -140,11 +238,11 @@
         <option value="Kotlin Enum" />
         <option value="Kotlin Object" />
         <option value="valueResourceFile" />
-        <option value="Kotlin Data Class" />
         <option value="Kotlin Interface" />
-        <option value="Kotlin JUnit4 Test Class" />
         <option value="resourceFile" />
         <option value="Kotlin Class" />
+        <option value="Kotlin JUnit4 Test Class" />
+        <option value="Kotlin Data Class" />
       </list>
     </option>
   </component>
@@ -159,7 +257,7 @@
   </component>
   <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="$USER_HOME$/.gradle/wrapper/dists/gradle-9.0-milestone-1-bin/3vdepk4s12bybhohyuvjcm1bd/gradle-9.0-milestone-1" javaHome="$APPLICATION_HOME_DIR$/jbr/Contents/Home" gradleVersion="9.0-milestone-1" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="_Designer_Tab" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -195,6 +293,7 @@
     &quot;Gradle.GenreScreenViewModelTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.GenresRepositoryImplTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.GenresScreenViewModelTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.GlanceRepositoryTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.LyricsScreenViewModelTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.MostPlayedSongsRepositoryImplTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.MusicMattersPlayerControllerImplTest.executor&quot;: &quot;Run&quot;,
@@ -276,15 +375,17 @@
     &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;glance&quot;,
     &quot;gradle.sync.parallel.migration.suppressed&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_directory_selection&quot;: &quot;/Users/app/Desktop/android/projects/music-matters/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl&quot;,
+    &quot;last_directory_selection&quot;: &quot;/Users/app/Desktop/android/projects/music-matters/glance/src/androidTest/java/com/squad/musicmatters/glance&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/app/Desktop/android/projects/music-matters/glance/src/main/res/drawable&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.32862645&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;device.screenshot&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   },
   &quot;keyToStringList&quot;: {
     &quot;ExportApk.BuildVariants&quot;: [
@@ -295,10 +396,10 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/glance/src/main/res/drawable" />
+      <recent name="$PROJECT_DIR$/core/designsystem/src/main/res/drawable" />
       <recent name="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui" />
       <recent name="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media" />
       <recent name="$PROJECT_DIR$/feature/settings/src/main/res/drawable" />
-      <recent name="$PROJECT_DIR$/core/designsystem/src/main/res/font" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -308,11 +409,11 @@
       <recent name="$PROJECT_DIR$/mobile/src/main/res/font/dmsans" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.squad.musicmatters.glance.data" />
       <recent name="com.squad.musicmatters.feature.search" />
       <recent name="com.squad.musicmatters.core.data.repository.impl" />
       <recent name="com.squad.musicmatters.feature.foryou" />
       <recent name="com.squad.musicmatters.feature.folder" />
-      <recent name="com.squad.musicmatters.feature.folders" />
     </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
       <recent name="com.squad.musicmatters.feature.queue" />
@@ -320,14 +421,146 @@
       <recent name="com.squad.musicmatters.core.ui" />
     </key>
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="com.squad.musicmatters.glance" />
       <recent name="com.squad.musicmatters.glance.medium" />
       <recent name="com.squad.musicmatters.glance.small" />
       <recent name="com.squad.musicmatters.core.data.store" />
       <recent name="com.squad.musicmatters.feature.albums.components" />
-      <recent name="com.squad.musicmatters.core.common" />
     </key>
   </component>
   <component name="RunManager" selected="Android App.mobile">
+    <configuration name="androidTest" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="MusicMatters.mobile.androidTest" />
+      <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="ALLOW_ASSUME_VERIFIED" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="RESTORE_ENABLED" value="false" />
+      <option name="RESTORE_FILE" value="" />
+      <option name="RESTORE_FRESH_INSTALL_ONLY" value="false" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+      </Hybrid>
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+      </Java>
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Trace" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="main" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="MusicMatters.mobile.main" />
+      <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="ALLOW_ASSUME_VERIFIED" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="RESTORE_ENABLED" value="false" />
+      <option name="RESTORE_FILE" value="" />
+      <option name="RESTORE_FRESH_INSTALL_ONLY" value="false" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+      </Hybrid>
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+      </Java>
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Trace" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="mobile" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="MusicMatters.mobile" />
       <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
@@ -394,16 +627,24 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PlaylistDaoTest" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests" temporary="true" nameIsGenerated="true">
-      <module name="MusicMatters.core.database" />
-      <option name="ANDROID_TEST_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
-      <option name="TESTING_TYPE" value="2" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="com.squad.musicmatters.core.database.PlaylistDaoTest" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_NAME_REGEX" value="" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="EXTRA_OPTIONS" value="" />
+    <configuration name="unitTest" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="MusicMatters.mobile.unitTest" />
+      <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="ALLOW_ASSUME_VERIFIED" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="RESTORE_ENABLED" value="false" />
+      <option name="RESTORE_FILE" value="" />
+      <option name="RESTORE_FRESH_INSTALL_ONLY" value="false" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
@@ -439,10 +680,15 @@
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Trace" />
         <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
         <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
       </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
@@ -488,6 +734,33 @@
             <option value=":feature:genre:testDebugUnitTest" />
             <option value="--tests" />
             <option value="&quot;com.squad.musicmatters.feature.genre.GenreScreenViewModelTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="GlanceRepositoryTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":glance:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.squad.musicmatters.glance.GlanceRepositoryTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -557,11 +830,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.GlanceRepositoryTest" />
         <item itemvalue="Gradle.GenreScreenViewModelTest" />
         <item itemvalue="Gradle.AlbumsScreenViewModelTest" />
         <item itemvalue="Gradle.SearchScreenViewModelTest" />
         <item itemvalue="Gradle.SearchRepositoryImplTest" />
-        <item itemvalue="Android Instrumented Tests.PlaylistDaoTest" />
       </list>
     </recent_temporary>
   </component>
@@ -592,12 +865,12 @@
       <map>
         <entry key="com.odesa.musicMatters">
           <value>
-            <CheckInfo lastCheckTimestamp="1784727836230" />
+            <CheckInfo lastCheckTimestamp="1787663323626" />
           </value>
         </entry>
         <entry key="com.odesa.musicMatters.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1784727836234" />
+            <CheckInfo lastCheckTimestamp="1787663323755" />
           </value>
         </entry>
         <entry key="com.squad.musicMatters.core.designsystem.test">
@@ -617,7 +890,7 @@
         </entry>
         <entry key="com.squad.musicmatters.core.designsystem.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1785660193901" />
+            <CheckInfo lastCheckTimestamp="1787593915415" />
           </value>
         </entry>
         <entry key="com.squad.musicmatters.core.i8n.test">
@@ -627,7 +900,7 @@
         </entry>
         <entry key="com.squad.musicmatters.core.media.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1767515823752" />
+            <CheckInfo lastCheckTimestamp="1787663286036" />
           </value>
         </entry>
         <entry key="com.squad.musicmatters.core.ui.test">
@@ -652,7 +925,7 @@
         </entry>
         <entry key="com.squad.musicmatters.glance.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1787393646497" />
+            <CheckInfo lastCheckTimestamp="1787676676755" />
           </value>
         </entry>
         <entry key="com.squad.musicmatters.glancewidget.test">

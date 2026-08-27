@@ -49,22 +49,9 @@ fun ShuffleButton(
                 )
 
                 if ( isShuffleEnabled ) {
-                    OnIndicator()
+                    PlayerSettingOnIndicator()
                 }
             }
         }
     }
-}
-
-@Composable
-internal fun OnIndicator() {
-    Spacer( modifier = Modifier.height( 1.dp ) )
-    Box(
-        modifier = Modifier
-            .size( 4.dp ) // Exact size of the dot
-            .background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = CircleShape
-            )
-    )
 }

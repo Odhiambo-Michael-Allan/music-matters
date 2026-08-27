@@ -28,7 +28,7 @@ fun <T> List<T>.randomSubList( length: Int ): List<T> {
     return out
 }
 
-fun List<Song>.sortSongs(by: SortSongsBy, reverse: Boolean ): List<Song> {
+fun List<Song>.sortSongs( by: SortSongsBy, reverse: Boolean ): List<Song> {
     val sortedList = when ( by ) {
         SortSongsBy.TITLE -> sortedBy { it.title }
         SortSongsBy.ALBUM -> sortedBy { it.albumTitle }

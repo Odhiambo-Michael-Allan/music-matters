@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
@@ -71,7 +72,11 @@ import androidx.glance.preview.Preview
 import androidx.glance.semantics.contentDescription
 import androidx.glance.semantics.semantics
 import androidx.glance.unit.ColorProvider
+import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.glance.R
+import com.squad.musicmatters.glance.data.GlanceSong
+import com.squad.musicmatters.glance.data.GlanceUiModel
+import com.squad.musicmatters.glance.layout.MediumWidgetLayout
 import com.squad.musicmatters.glance.layout.PlayerControlsToolBarLayout
 import com.squad.musicmatters.glance.loadBitmapFromUri
 
@@ -91,39 +96,34 @@ class MediumWidget : GlanceAppWidget() {
             GlanceModuleEntryPoint::class.java
         )
 
-        val songsRepository = entryPoint.songsRepository()
-        val userDataRepository = entryPoint.userDataRepository()
+        val modelFlow = entryPoint.glanceRepository().getGlanceUiModel()
 
-
-        // 1. Build the cold flow
-        val currentlyPlayingSongFlow = userDataRepository.userData
-            .map { it.currentlyPlayingSongId }
-            .flatMapLatest { id ->
-                songsRepository.fetchSongs().map { songs -> songs.find { it.id == id } }
-            }
-
-        // 2. Go directly to provideContent!
         provideContent {
-            val currentlyPlayingSong by currentlyPlayingSongFlow.collectAsState( initial = null )
+            val glanceUiModel = modelFlow.collectAsState(
+                initial = GlanceUiModel(
+                    isPlaying = false,
+                    shuffle = false,
+                    currentlyPlayingSong = null,
+                    loopMode = LoopMode.None,
+                    songs = emptyList(),
+                    currentlyPlayingSongIsFavorite = false,
+                )
+            )
+            val currentlyPlayingSong = glanceUiModel.value.currentlyPlayingSong
             val context = LocalContext.current
-            val size = LocalSize.current
 
-            // Load bitmap asynchronously inside the composition scope when song changes
-            var artworkBitmap by remember( currentlyPlayingSong?.artworkUri ) {
-                mutableStateOf<Bitmap?>( null )
-            }
-
-            LaunchedEffect( currentlyPlayingSong?.artworkUri ) {
+            val artworkBitmap by produceState<Bitmap?>(
+                initialValue = null,
+                key1 = currentlyPlayingSong?.artworkUri
+            ) {
                 val uri = currentlyPlayingSong?.artworkUri?.toUri()
-                artworkBitmap = if ( uri != null ) {
-                    context.loadBitmapFromUri( uri )
-                } else null
+                value = uri?.let { context.loadBitmapFromUri( it ) }
             }
 
             GlanceTheme {
                 MediumWidget(
-                    currentlyPlayingSong = currentlyPlayingSong,
-                    currentlyPlayingSongBitmap = artworkBitmap,
+                    currentlyPlayingSongArtworkBitmap = artworkBitmap,
+                    glanceUiModel = glanceUiModel.value,
                 )
             }
         }
@@ -133,91 +133,142 @@ class MediumWidget : GlanceAppWidget() {
 
 @Composable
 private fun MediumWidget(
-    currentlyPlayingSong: Song?,
-    currentlyPlayingSongBitmap: Bitmap?,
+    currentlyPlayingSongArtworkBitmap: Bitmap?,
+    glanceUiModel: GlanceUiModel
 ) {
     Scaffold(
         modifier = GlanceModifier.fillMaxSize(),
     ) {
-        Row(
-            modifier = GlanceModifier
-                .fillMaxSize()
-                .padding( 0.dp, 8.dp ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            currentlyPlayingSongBitmap?.let {
-                Image(
-                    provider = ImageProvider( currentlyPlayingSongBitmap ),
-                    contentDescription = "song-artwork",
-                    modifier = GlanceModifier.size( 78.dp, 80.dp ),
-                )
-            } ?: run {
-                SquareIconButton(
-                    imageProvider = ImageProvider( R.drawable.glance_music_note ),
-                    contentDescription = "song-artwork",
-                    backgroundColor = GlanceTheme.colors.secondaryContainer,
-                    contentColor = GlanceTheme.colors.onSecondaryContainer,
-                    modifier = GlanceModifier.size( 78.dp, 80.dp ),
-                    onClick = {}
-                )
-            }
-            
-
-            Spacer( modifier = GlanceModifier.width( 12.dp ) )
-
-            Column(
-                modifier = GlanceModifier.fillMaxWidth().height( 80.dp ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = currentlyPlayingSong?.title ?: "No queued tracks",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        color = GlanceTheme.colors.onPrimaryContainer
-                    ),
-                    maxLines = 1,
-                )
-                Text(
-                    text = currentlyPlayingSong?.artist ?: "",
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        color = GlanceTheme.colors.onPrimaryContainer
-                    ),
-                    maxLines = 1,
-                )
-                PlayerControlsToolBarLayout()
-            }
-        }
+        MediumWidgetLayout(
+            modifier = GlanceModifier.fillMaxSize(),
+            currentlyPlayingSongArtworkBitmap = currentlyPlayingSongArtworkBitmap,
+            currentlyPlayingSong = glanceUiModel.currentlyPlayingSong,
+            isPlaying = glanceUiModel.isPlaying,
+            loopMode = glanceUiModel.loopMode,
+            shuffle = glanceUiModel.shuffle,
+        )
     }
 }
-
 
 @OptIn( ExperimentalGlancePreviewApi::class )
 @Preview( widthDp = 330, heightDp = 128 )
 @Preview( widthDp = 256, heightDp = 128 )
 @Composable
-private fun MediumWidgetCPreview() {
+private fun MediumWidgetPreview() {
     MediumWidget(
-        currentlyPlayingSong = Song(
-            id = "id4",
-            mediaUri = "Uri.EMPTY",
-            title = "Dear Boy",
-            albumTitle = "A",
-            artist = "D - Michael Jackson",
-            artworkUri = null,
-            composer = "D,E",
-            dateModified = 200L,
-            albumId = 0L,
-            duration = 4L,
-            trackNumber = 234,
-            year = 2004,
-            size = 4L,
-            path = "/path/to/song/1",
-            artistId = 0,
-        ),
-        currentlyPlayingSongBitmap = null,
-//            createBitmap( 100, 100 )
-//            .apply { eraseColor( android.graphics.Color.RED ) },
+        currentlyPlayingSongArtworkBitmap = null,
+        glanceUiModel = GlanceUiModel(
+            isPlaying = true,
+            loopMode = LoopMode.Song,
+            shuffle = true,
+            currentlyPlayingSong = GlanceSong(
+                id = "id1",
+                mediaStoreId = 0,
+                title = "You're On ( feat. Kyan )",
+                artist = "Michael Jackson",
+            ),
+            currentlyPlayingSongIsFavorite = false,
+            songs = listOf(
+                Song(
+                    id = "id1",
+                    mediaStoreId = 0,
+                    mediaUri = "Uri.EMPTY",
+                    title = "You're On ( feat. Kyan )",
+                    albumId = 0L,
+                    albumTitle = "D",
+                    artist = "A - Michael Jackson",
+                    artworkUri = "",
+                    composer = "A,B",
+                    dateModified = 354L,
+                    duration = 60L,
+                    trackNumber = 324,
+                    year = 2022,
+                    size = 1L,
+                    path = "/path/to/song/7",
+                    artistId = 0,
+                ),
+                Song(
+                    id = "id2",
+                    mediaStoreId = 0,
+                    mediaUri = "Uri.EMPTY",
+                    title = "Silk Music Showcase 07 ( Mixed by Jacob Henry & Tom Fall )",
+                    albumTitle = "C",
+                    artist = "B - Michael Jackson",
+                    artworkUri = null,
+                    composer = "B,C",
+                    dateModified = 754L,
+                    albumId = 0L,
+                    duration = 4L,
+                    trackNumber = 235,
+                    year = 2002,
+                    size = 2L,
+                    path = "/path/to/song/8",
+                    artistId = 0,
+                ),
+                Song(
+                    id = "id3",
+                    mediaStoreId = 0,
+                    mediaUri = "Uri.EMPTY",
+                    title = "Ric Flair Drip ( with Metro Boomin )",
+                    albumTitle = "B",
+                    artist = "C - Michael Jackson",
+                    artworkUri = null,
+                    composer = "C,D",
+                    dateModified = 7976L,
+                    albumId = 0L,
+                    duration = 7L,
+                    trackNumber = 443,
+                    year = 2007,
+                    size = 3L,
+                    path = "/path/to/song/6",
+                    artistId = 0,
+                ),
+                Song(
+                    id = "id4",
+                    mediaStoreId = 0,
+                    mediaUri = "Uri.EMPTY",
+                    title = "Dear Boy",
+                    albumTitle = "A",
+                    artist = "D - Michael Jackson",
+                    artworkUri = null,
+                    composer = "D,E",
+                    dateModified = 200L,
+                    albumId = 0L,
+                    duration = 4L,
+                    trackNumber = 234,
+                    year = 2004,
+                    size = 4L,
+                    path = "/path/to/song/1",
+                    artistId = 0,
+                ),
+                Song(
+                    id = "id5",
+                    mediaStoreId = 0,
+                    mediaUri = "Uri.EMPTY",
+                    title = "The Days",
+                    albumTitle = "<unknown>",
+                    artist = "E - Michael Jackson",
+                    artworkUri = null,
+                    composer = null,
+                    dateModified = 34245L,
+                    albumId = 0L,
+                    duration = 89L,
+                    trackNumber =134,
+                    year = 1990,
+                    size = 5L,
+                    path = "/path/to/song/5",
+                    artistId = 0,
+                ),
+            ).map {
+                GlanceSong(
+                    id = it.id,
+                    mediaStoreId = it.mediaStoreId,
+                    title = it.title,
+                    artist = "A - Michael Jackson",
+                )
+            }
+        )
     )
 }
+
+

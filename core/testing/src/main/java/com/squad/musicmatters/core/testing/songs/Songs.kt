@@ -18,6 +18,7 @@ fun testSong(
     dateModified: Long = 0L,
 ) = Song(
     id = id,
+    mediaStoreId = 0,
     mediaUri = "Uri.EMPTY",
     title = title,
     albumId = albumId ?: 0L,
@@ -45,6 +46,7 @@ fun testLyric(
 val testSongsForSorting = listOf(
     Song(
         id = "id1",
+        mediaStoreId = 0,
         mediaUri = "Uri.EMPTY",
         title = "song-1",
         albumTitle = "D",
@@ -62,6 +64,7 @@ val testSongsForSorting = listOf(
     ),
     Song(
         id = "id2",
+        mediaStoreId = 0,
         mediaUri = "Uri.EMPTY",
         title = "song-2",
         albumTitle = "C",
@@ -79,6 +82,7 @@ val testSongsForSorting = listOf(
     ),
     Song(
         id = "id3",
+        mediaStoreId = 0,
         mediaUri = "Uri.EMPTY",
         title = "song-3",
         albumTitle = "B",
@@ -96,6 +100,7 @@ val testSongsForSorting = listOf(
     ),
     Song(
         id = "id4",
+        mediaStoreId = 0,
         mediaUri = "Uri.EMPTY",
         title = "song-4",
         albumTitle = "A",
@@ -113,6 +118,7 @@ val testSongsForSorting = listOf(
     ),
     Song(
         id = "id5",
+        mediaStoreId = 0,
         mediaUri = "Uri.EMPTY",
         title = "song-5",
         albumTitle = "<unknown>",

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:previewImage="@drawable/glance_large_widget_preview"
+    android:resizeMode="horizontal|vertical"
+
+    android:maxResizeHeight="624dp"
+    android:maxResizeWidth="624dp"
+    android:minWidth="256dp"
+    android:minHeight="158dp"
+    android:minResizeWidth="240dp"
+    android:minResizeHeight="158dp"
+
+
+    android:targetCellWidth="4"
+    android:targetCellHeight="2"
+    android:widgetCategory="home_screen|keyguard" />

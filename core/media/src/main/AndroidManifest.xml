@@ -12,6 +12,25 @@
 
     <application>
 
+        <service
+            android:name=".media.MusicService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="mediaPlayback">
+
+            <intent-filter>
+                <action android:name="androidx.media3.session.MediaLibraryService"/>
+                <action android:name="android.media.browse.MediaBrowserService"/>
+                <action android:name="com.squad.musicmatters.widget.ACTION_PLAY"/>
+                <action android:name="com.squad.musicmatters.widget.ACTION_PAUSE"/>
+                <action android:name="com.squad.musicmatters.widget.ACTION_SKIP_TO_PREVIOUS"/>
+                <action android:name="com.squad.musicmatters.widget.ACTION_SKIP_TO_NEXT"/>
+                <action android:name="com.squad.musicmatters.widget.ACTION_SHUFFLE"/>
+                <action android:name="com.squad.musicmatters.widget.ACTION_LOOP_MODE" />
+                <action android:name="com.squad.musicmatters.widget.ACTION_ADD_TO_FAVORITES" />
+            </intent-filter>
+        </service>
+
         <!--
              MediaSession, prior to API 21, uses a broadcast receiver to communicate with a
              media session. It does not have to be this broadcast receiver, but it must

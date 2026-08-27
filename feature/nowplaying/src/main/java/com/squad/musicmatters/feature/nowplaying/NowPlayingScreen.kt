@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -63,6 +64,8 @@ import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.GenericOptionsBottomSheet
+import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
+import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
 import com.squad.musicmatters.feature.nowplaying.components.emptyUserData
 import kotlinx.coroutines.launch
@@ -551,7 +554,10 @@ private val SLEEP_TIMER_VALUES = setOf(
 
 @PreviewScreenSizesPortrait
 @Composable
-private fun NowPlayingScreenContentPreview() {
+private fun NowPlayingScreenContentPreview(
+    @PreviewParameter(MusicMattersPreviewParametersProvider::class )
+    previewData: PreviewData
+) {
     MusicMattersTheme(
         themeMode = ThemeMode.LIGHT,
         primaryColorName = "Blue",
@@ -564,23 +570,7 @@ private fun NowPlayingScreenContentPreview() {
                 userData = emptyUserData.copy(
                     loopMode = LoopMode.Queue,
                 ),
-                currentlyPlayingSong = Song(
-                    id = "song-id-1",
-                    mediaUri = "Uri.EMPTY",
-                    title = "Started From the Bottom",
-                    albumId = 0L,
-                    duration = 0L,
-                    artist = "Michael Jackson",
-                    size = 0L,
-                    dateModified = 0L,
-                    path = "",
-                    trackNumber = null,
-                    year = null,
-                    albumTitle = null,
-                    composer = null,
-                    artworkUri = null,
-                    artistId = 0,
-                ),
+                currentlyPlayingSong = previewData.songs.first(),
                 currentlyPlayingSongIsFavorite = true,
                 playerState = PlayerState(
                     currentlyPlayingSongId = "song-id-1",

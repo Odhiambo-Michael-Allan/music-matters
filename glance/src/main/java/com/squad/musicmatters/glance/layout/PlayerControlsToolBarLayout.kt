@@ -1,66 +1,123 @@
 package com.squad.musicmatters.glance.layout
 
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.action.Action
 import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.action.actionStartService
 import androidx.glance.appwidget.components.Scaffold
+import androidx.glance.appwidget.cornerRadius
+import androidx.glance.background
 import androidx.glance.color.ColorProvider
+import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
+import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.height
 import androidx.glance.layout.padding
+import androidx.glance.layout.size
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
+import androidx.media3.common.util.UnstableApi
+import com.squad.musicmatters.core.media.media.MusicService
+import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.glance.R
 import com.squad.musicmatters.glance.layout.PlayerControlsToolBarLayoutDimens.itemsSpacing
 
+@androidx.annotation.OptIn( UnstableApi::class )
 @Composable
-internal fun PlayerControlsToolBarLayout() {
+internal fun PlayerControlsToolBarLayout(
+    isPlaying: Boolean,
+    shuffle: Boolean,
+    loopMode: LoopMode,
+) {
+
+    val context = LocalContext.current
 
     val minimalControlsButtons = listOf(
         PlayerControlButton(
             iconRes = R.drawable.round_skip_previous_24,
             contentDescription = "skip to previous button",
-            onClick = actionRunCallback<NoOpAction>()
+            onClick = context.startMusicService( MusicService.ACTION_SKIP_TO_PREVIOUS )
         ),
         PlayerControlButton(
-            iconRes = R.drawable.round_play_arrow_24,
+            iconRes = if ( isPlaying ) {
+                R.drawable.round_pause_24
+            } else {
+                R.drawable.round_play_arrow_24
+            },
             contentDescription = "skip to previous button",
-            onClick = actionRunCallback<NoOpAction>()
+            onClick = context.startMusicService(
+                intentAction = if ( isPlaying ) {
+                    MusicService.ACTION_PAUSE
+                } else {
+                    MusicService.ACTION_PLAY
+                }
+            )
         ),
         PlayerControlButton(
             iconRes = R.drawable.round_skip_next_24,
             contentDescription = "skip to previous button",
-            onClick = actionRunCallback<NoOpAction>()
+            onClick = context.startMusicService( MusicService.ACTION_SKIP_TO_NEXT )
         )
     )
 
     val expandedControlsButtons =
         listOf(
             PlayerControlButton(
-                iconRes = R.drawable.round_repeat_24,
+                iconRes = if ( loopMode == LoopMode.Song ) {
+                    R.drawable.round_repeat_one_24
+                } else {
+                    R.drawable.round_repeat_24
+                },
                 iconSize = 24.dp,
+                isActive = loopMode != LoopMode.None,
                 contentDescription = "skip to previous button",
-                onClick = actionRunCallback<NoOpAction>(),
+                onClick = context.startMusicService(
+                    intentAction = MusicService.ACTION_LOOP_MODE,
+                    intentExtras = Pair( MusicService.LOOP_MODE_KEY, loopMode.name )
+                ),
             )
         ) + minimalControlsButtons +
                 listOf(
                     PlayerControlButton(
                         iconRes = R.drawable.round_shuffle_24,
                         iconSize = 24.dp,
+                        isActive = shuffle,
                         contentDescription = "skip to previous button",
-                        onClick = actionRunCallback<NoOpAction>()
+                        onClick = actionStartService(
+                            Intent(
+                                context,
+                                MusicService::class.java
+                            ).apply {
+                                action = MusicService.ACTION_SHUFFLE
+                                putExtra(
+                                    MusicService.SHUFFLE_MODE_KEY,
+                                    shuffle.not()
+                                )
+                            }
+                        )
                     )
                 )
 
@@ -87,22 +144,28 @@ internal fun PlayerControlsToolBarLayout() {
 @Composable
 private fun FluidContentIconButton(
     button: PlayerControlButton,
-    filled: Boolean = false
+    filled: Boolean = false,
 ) {
-    RectangularIconButton(
-        iconImageProvider = ImageProvider(button.iconRes),
-        contentDescription = button.contentDescription,
-        iconSize = button.iconSize,
-        roundedCornerShape = RoundedCornerShape.MEDIUM,
-        backgroundColor = if ( filled ) {
-            GlanceTheme.colors.secondaryContainer
-        } else {
-            ColorProvider( Color.Transparent, Color.Transparent )
-        },
-        contentColor = GlanceTheme.colors.onSecondaryContainer,
-        onClick = button.onClick,
-        modifier = GlanceModifier.fillMaxSize()
-    )
+    Column (
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        RectangularIconButton(
+            iconImageProvider = ImageProvider( button.iconRes ),
+            contentDescription = button.contentDescription,
+            iconSize = button.iconSize,
+            roundedCornerShape = RoundedCornerShape.MEDIUM,
+            backgroundColor = if ( filled ) {
+                GlanceTheme.colors.secondaryContainer
+            } else {
+                ColorProvider( Color.Transparent, Color.Transparent )
+            },
+            contentColor = GlanceTheme.colors.onSecondaryContainer,
+            onClick = button.onClick,
+            isActive = button.isActive,
+            modifier = GlanceModifier.fillMaxSize(),
+        )
+    }
 }
 
 @Composable
@@ -148,6 +211,7 @@ data class PlayerControlButton(
     val contentDescription: String,
     val onClick: Action,
     val iconSize: Dp = 32.dp,
+    val isActive: Boolean = false,
 )
 
 private enum class PlayerControlsToolBarLayoutSize {
@@ -183,13 +247,34 @@ private object PlayerControlsToolBarLayoutDimens {
     val itemsSpacing = 8.dp
 }
 
+
+@androidx.annotation.OptIn( UnstableApi::class )
+internal fun Context.startMusicService(
+    intentAction: String,
+    intentExtras: Pair<String, String>? = null,
+) = actionStartService(
+    Intent(
+        this,
+        MusicService::class.java
+    ).apply {
+        action = intentAction
+        intentExtras?.let {
+            putExtra( it.first, it.second )
+        }
+    }
+)
+
 /**
  * Previews for various breakpoints for this layout.
  */
 @OptIn( ExperimentalGlancePreviewApi::class )
-@Preview( widthDp = 301, heightDp = 72 )
-@Preview( widthDp = 256, heightDp = 72 )
+@Preview( widthDp = 301, heightDp = 172 )
+@Preview( widthDp = 256, heightDp = 172 )
 @Composable
 private fun PlayerControlsToolBarLayoutPreview() {
-    PlayerControlsToolBarLayout()
+    PlayerControlsToolBarLayout(
+        isPlaying = true,
+        loopMode = LoopMode.Song,
+        shuffle = false
+    )
 }

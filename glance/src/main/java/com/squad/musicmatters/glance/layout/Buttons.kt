@@ -21,6 +21,7 @@ import androidx.glance.background
 import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
+import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.height
@@ -43,6 +44,7 @@ internal fun RectangularIconButton(
     contentDescription: String,
     iconSize: Dp,
     modifier: GlanceModifier,
+    isActive: Boolean = false,
     backgroundColor: ColorProvider = GlanceTheme.colors.primary,
     contentColor: ColorProvider = GlanceTheme.colors.onPrimary,
 ) {
@@ -54,12 +56,28 @@ internal fun RectangularIconButton(
             .semantics { this.contentDescription = contentDescription }
             .clickable( onClick )
     ) {
-        Image(
-            provider = iconImageProvider,
-            contentDescription = null,
-            colorFilter = ColorFilter.tint( contentColor ),
-            modifier = GlanceModifier.size( iconSize )
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                provider = iconImageProvider,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(
+                    if ( isActive ) GlanceTheme.colors.primary
+                    else contentColor
+                ),
+                modifier = GlanceModifier.size( iconSize )
+            )
+            if ( isActive ) {
+                Spacer( modifier = GlanceModifier.height( 1.dp ) )
+                Box(
+                    modifier = GlanceModifier
+                        .size( 4.dp )
+                        .background( GlanceTheme.colors.primary )
+                        .cornerRadius( 50.dp )
+                ) {}
+            }
+        }
     }
 }
 
@@ -126,7 +144,7 @@ private fun ButtonsPreview() {
         )
         Spacer( modifier = GlanceModifier.width( 8.dp ) )
         RectangularIconButton(
-            iconImageProvider = ImageProvider( resId = R.drawable.sample_mic_icon ),
+            iconImageProvider = ImageProvider( resId = R.drawable.round_play_arrow_24 ),
             contentDescription = "",
             iconSize = 24.dp,
             roundedCornerShape = RoundedCornerShape.MEDIUM,

@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices.FOLDABLE
 import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
@@ -27,6 +28,8 @@ import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.ThemeMode
+import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
+import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.feature.nowplaying.components.LyricsLayout
 import com.squad.musicmatters.feature.nowplaying.components.NowPlayingSongArtwork
 import com.squad.musicmatters.feature.nowplaying.components.NowPlayingScreenBottomBar
@@ -150,7 +153,10 @@ internal fun ExpandedLayout(
 @Preview( name = "Tablet - Landscape", device = TABLET, showSystemUi = true )
 //@Preview( name = "Desktop", device = "spec:width=1920dp,height=1080dp,dpi=160", showSystemUi = true )
 @Composable
-private fun ExpandedLayoutPreview() {
+private fun ExpandedLayoutPreview(
+    @PreviewParameter(MusicMattersPreviewParametersProvider::class )
+    previewData: PreviewData
+) {
     MusicMattersTheme(
         themeMode = ThemeMode.LIGHT,
         primaryColorName = "Blue",
@@ -165,23 +171,7 @@ private fun ExpandedLayoutPreview() {
                     shuffle = true,
                     showLyrics = true,
                 ),
-                currentlyPlayingSong = Song(
-                    id = "song-id-1",
-                    mediaUri = "Uri.EMPTY",
-                    title = "Started From the Bottom",
-                    duration = 0L,
-                    artist = "Michael Jackson",
-                    size = 0L,
-                    albumId = 0L,
-                    dateModified = 0L,
-                    path = "",
-                    trackNumber = null,
-                    year = null,
-                    albumTitle = null,
-                    composer = null,
-                    artworkUri = null,
-                    artistId = 0,
-                ),
+                currentlyPlayingSong = previewData.songs.first(),
                 currentlyPlayingSongIsFavorite = true,
                 playerState = PlayerState(
                     currentlyPlayingSongId = "song-id-1",
@@ -239,23 +229,7 @@ private fun ExpandedLayoutPreview() {
             onArtworkClicked = {},
             onNavigateToQueueScreen = {},
             onSeekStart = {},
-            currentlyPlayingSong = Song(
-                id = "song-id-1",
-                mediaUri = "Uri.EMPTY",
-                title = "Started From the Bottom Now we Here",
-                albumId = 0L,
-                duration = 0L,
-                artist = "Michael Jackson",
-                size = 0L,
-                dateModified = 0L,
-                path = "",
-                trackNumber = null,
-                year = null,
-                albumTitle = null,
-                composer = null,
-                artworkUri = null,
-                artistId = 0,
-            ),
+            currentlyPlayingSong = previewData.songs.first(),
             onArtworkSwipedLeft = { TODO() },
             onArtworkSwipedRight = { TODO() },
             onArtworkSwipedDown = { TODO() },

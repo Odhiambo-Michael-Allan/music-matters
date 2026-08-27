@@ -39,6 +39,7 @@ object PreviewParameterData {
     val songs = listOf(
         Song(
             id = "id1",
+            mediaStoreId = 0,
             mediaUri = "Uri.EMPTY",
             title = "You're On ( feat. Kyan )",
             albumId = 0L,
@@ -56,6 +57,7 @@ object PreviewParameterData {
         ),
         Song(
             id = "id2",
+            mediaStoreId = 0,
             mediaUri = "Uri.EMPTY",
             title = "Silk Music Showcase 07 ( Mixed by Jacob Henry & Tom Fall )",
             albumTitle = "C",
@@ -73,6 +75,7 @@ object PreviewParameterData {
         ),
         Song(
             id = "id3",
+            mediaStoreId = 0,
             mediaUri = "Uri.EMPTY",
             title = "Ric Flair Drip ( with Metro Boomin )",
             albumTitle = "B",
@@ -90,6 +93,7 @@ object PreviewParameterData {
         ),
         Song(
             id = "id4",
+            mediaStoreId = 0,
             mediaUri = "Uri.EMPTY",
             title = "Dear Boy",
             albumTitle = "A",
@@ -107,6 +111,7 @@ object PreviewParameterData {
         ),
         Song(
             id = "id5",
+            mediaStoreId = 0,
             mediaUri = "Uri.EMPTY",
             title = "The Days",
             albumTitle = "<unknown>",

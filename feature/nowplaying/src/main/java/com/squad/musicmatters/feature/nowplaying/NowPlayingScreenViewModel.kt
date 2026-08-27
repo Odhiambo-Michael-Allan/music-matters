@@ -123,14 +123,6 @@ class NowPlayingScreenViewModel @Inject constructor(
         return player.playNextSong()
     }
 
-    fun fastRewind() {
-        player.seekBack()
-    }
-
-    fun fastForward() {
-        player.seekForward()
-    }
-
     fun onSeekStarted() {
         playbackPositionUpdater.stopPeriodicUpdates()
     }

@@ -20,6 +20,7 @@ class FakeMostPlayedSongsRepository : MostPlayedSongsRepository {
         currentSongs.add(
             Song(
                 id = songId,
+                mediaStoreId = 0,
                 mediaUri = "Uri.EMPTY",
                 title = "",
                 albumId = 0L,

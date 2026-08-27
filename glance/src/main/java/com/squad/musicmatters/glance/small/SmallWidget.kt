@@ -1,6 +1,7 @@
 package com.squad.musicmatters.glance.small
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedButton
@@ -27,6 +28,7 @@ import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.action.actionStartService
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.components.CircleIconButton
 import androidx.glance.appwidget.components.Scaffold
@@ -43,10 +45,15 @@ import androidx.glance.layout.padding
 import androidx.glance.layout.size
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
+import androidx.media3.common.util.UnstableApi
+import com.squad.musicmatters.core.media.media.MusicService
+import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.glance.R
+import com.squad.musicmatters.glance.data.GlanceUiModel
 import com.squad.musicmatters.glance.di.GlanceModuleEntryPoint
 import com.squad.musicmatters.glance.layout.NoOpAction
 import com.squad.musicmatters.glance.layout.RectangularIconButton
+import com.squad.musicmatters.glance.layout.startMusicService
 import com.squad.musicmatters.glance.loadBitmapFromUri
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.flatMapLatest
@@ -69,17 +76,19 @@ class SmallWidget : GlanceAppWidget() {
             GlanceModuleEntryPoint::class.java
         )
 
-        val songsRepository = entryPoint.songsRepository()
-        val userDataRepository = entryPoint.userDataRepository()
-
-        val currentlyPlayingSongFlow = userDataRepository.userData
-            .map { it.currentlyPlayingSongId }
-            .flatMapLatest { id ->
-                songsRepository.fetchSongs().map { songs -> songs.find { it.id == id } }
-            }
+        val modelFlow = entryPoint.glanceRepository().getGlanceUiModel()
 
         provideContent {
-            val currentlyPlayingSong by currentlyPlayingSongFlow.collectAsState( initial = null )
+            val model = modelFlow.collectAsState(
+                initial = GlanceUiModel(
+                    isPlaying = false,
+                    shuffle = false,
+                    currentlyPlayingSong = null,
+                    loopMode = LoopMode.None,
+                    currentlyPlayingSongIsFavorite = false,
+                )
+            )
+            val currentlyPlayingSong = model.value.currentlyPlayingSong
             val context = LocalContext.current
 
             // Load bitmap asynchronously inside the composition scope when song changes
@@ -95,18 +104,26 @@ class SmallWidget : GlanceAppWidget() {
             }
 
             GlanceTheme {
-                SmallWidget( currentlyPlayingSongBitmap = artworkBitmap )
+                SmallWidget(
+                    currentlyPlayingSongBitmap = artworkBitmap,
+                    isPlaying = model.value.isPlaying,
+                    currentlyPlayingSongIsFavorite = model.value.currentlyPlayingSongIsFavorite
+                )
             }
         }
     }
 
 }
 
+@androidx.annotation.OptIn( UnstableApi::class )
 @Composable
 private fun SmallWidget(
     currentlyPlayingSongBitmap: Bitmap?,
+    isPlaying: Boolean,
+    currentlyPlayingSongIsFavorite: Boolean,
 ) {
 
+    val context = LocalContext.current
     val widgetSize = LocalSize.current
     // Since we use a non-rectangular background, we aren't able to fill the entire widget space,
     // however, we try to at least fill the space either horizontally or vertically.
@@ -139,7 +156,7 @@ private fun SmallWidget(
                 )
             } ?: run {
                 RectangularIconButton(
-                    iconImageProvider = ImageProvider( R.drawable.round_play_circle_outline_24 ),
+                    iconImageProvider = ImageProvider(R.drawable.round_play_circle_outline_24 ),
                     contentDescription = "",
                     iconSize = iconSize.coerceAtLeast( 48.dp ),
                     roundedCornerShape = com.squad.musicmatters.glance.layout.RoundedCornerShape.MEDIUM,
@@ -154,27 +171,62 @@ private fun SmallWidget(
             modifier = GlanceModifier.fillMaxSize(),
             contentAlignment = Alignment.BottomStart
         ) {
-            SquareIconButton(
-                imageProvider = ImageProvider( R.drawable.round_play_arrow_24 ),
+            RectangularIconButton(
+                iconImageProvider = ImageProvider(
+                    if ( isPlaying ) {
+                        R.drawable.round_pause_24
+                    } else {
+                        R.drawable.round_play_arrow_24
+                    }
+                ),
                 contentDescription = "",
+                iconSize = iconSize.div( 2 ).coerceAtLeast( 24.dp ),
+                roundedCornerShape = com.squad.musicmatters.glance.layout.RoundedCornerShape.MEDIUM,
                 backgroundColor = GlanceTheme.colors.secondaryContainer,
                 contentColor = GlanceTheme.colors.onSecondaryContainer,
-                onClick = {},
+                onClick = context.startMusicService(
+                    intentAction = if ( isPlaying ) {
+                        MusicService.ACTION_PAUSE
+                    } else {
+                        MusicService.ACTION_PLAY
+                    }
+                ),
                 modifier = GlanceModifier.size( iconSize.coerceAtLeast( 55.dp ) )
             )
         }
         Box(
             modifier = GlanceModifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding( 6.dp ),
             contentAlignment = Alignment.TopEnd
         ) {
-            CircleIconButton(
-                imageProvider = ImageProvider( R.drawable.glance_thumbs_up ),
+            RectangularIconButton(
+                iconImageProvider = ImageProvider(
+                    if ( currentlyPlayingSongIsFavorite ) {
+                        R.drawable.glance_thumbs_up
+                    } else {
+                        R.drawable.outline_thumb_up_24
+                    }
+                ),
                 backgroundColor = GlanceTheme.colors.tertiaryContainer,
                 contentColor = GlanceTheme.colors.onTertiaryContainer,
                 contentDescription = "",
-                modifier = GlanceModifier.size( iconSize.coerceAtLeast( 48.dp ) ),
-                onClick = {}
+                roundedCornerShape = com.squad.musicmatters.glance.layout.RoundedCornerShape.FULL,
+                iconSize = iconSize.div( 3 ).coerceAtLeast( 16.dp ),
+                modifier = GlanceModifier
+                    .size( iconSize.minus( 10.dp ).coerceAtLeast( 48.dp ) ),
+                onClick = actionStartService(
+                    Intent(
+                        context,
+                        MusicService::class.java
+                    ).apply {
+                        action = MusicService.ACTION_ADD_TO_FAVORITES
+                        putExtra(
+                            MusicService.ADD_TO_FAVORITES_INTENT_KEY,
+                            !currentlyPlayingSongIsFavorite
+                        )
+                    }
+                )
             )
         }
     }
@@ -187,6 +239,8 @@ private fun WidgetSmallPreview() {
     GlanceTheme {
         SmallWidget(
             currentlyPlayingSongBitmap = null,
+            isPlaying = true,
+            currentlyPlayingSongIsFavorite = false,
         )
     }
 }

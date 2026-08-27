@@ -46,7 +46,7 @@ fun LoopModeButton(
                     modifier = modifier
                 )
                 if ( it != LoopMode.None ) {
-                    OnIndicator()
+                    PlayerSettingOnIndicator()
                 }
             }
         }

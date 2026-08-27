@@ -3,8 +3,14 @@ package com.squad.musicmatters.core.data.store
 import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
+import kotlinx.coroutines.flow.Flow
 
 interface SongsStore {
+
+    fun fetchSongsFlow(
+        sortSongsBy: SortSongsBy? = null,
+        sortSongsInReverse: Boolean = false,
+    ): Flow<List<Song>>
 
     suspend fun fetchSongs(
         sortSongsBy: SortSongsBy? = null,

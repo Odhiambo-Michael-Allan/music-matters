@@ -14,6 +14,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.Player.EVENT_IS_PLAYING_CHANGED
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.util.EventLogger
@@ -31,7 +32,9 @@ import com.squad.musicmatters.core.common.MusicMattersDispatchers
 import com.squad.musicmatters.core.common.di.IoScope
 import com.squad.musicmatters.core.data.repository.MostPlayedSongsRepository
 import com.squad.musicmatters.core.data.repository.PlayHistoryRepository
+import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.QueueRepository
+import com.squad.musicmatters.core.data.repository.SongsRepository
 import com.squad.musicmatters.core.data.store.GenresStore
 import com.squad.musicmatters.core.media.media.library.MEDIA_SEARCH_SUPPORTED
 import com.squad.musicmatters.core.media.media.library.MUSIC_MATTERS_BROWSABLE_ROOT
@@ -41,6 +44,7 @@ import com.squad.musicmatters.core.data.store.impl.GenresStoreImpl
 import com.squad.musicmatters.core.data.store.impl.SongsStoreImpl
 import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.media.connection.DefaultSongToMediaItemConverter
+import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.model.LoopMode
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
@@ -79,7 +83,13 @@ class MusicService : MediaLibraryService() {
     lateinit var ioDispatcher: CoroutineDispatcher
 
     @Inject
-    lateinit var userUserDataRepository: UserDataRepository
+    lateinit var userDataRepository: UserDataRepository
+
+    @Inject
+    lateinit var playlistsRepository: PlaylistsRepository
+
+    @Inject
+    lateinit var player: MusicMattersPlayer
 
     @Inject
     lateinit var songsStore: SongsStore
@@ -94,6 +104,9 @@ class MusicService : MediaLibraryService() {
 
     @Inject
     lateinit var queueRepository: QueueRepository
+
+    @Inject
+    lateinit var songsRepository: SongsRepository
 
 
     /**
@@ -140,7 +153,7 @@ class MusicService : MediaLibraryService() {
             player = exoPlayer,
             coroutineScope = serviceScope,
             queueRepository = queueRepository,
-            userPreferences = userUserDataRepository,
+            userPreferences = userDataRepository,
             songToMediaItemConverter = DefaultSongToMediaItemConverter()
         )
     }
@@ -168,7 +181,7 @@ class MusicService : MediaLibraryService() {
                             Timber.tag( TAG ).d( "HEADSET DISCONNECTED" )
                             serviceScope.launch( mainDispatcher ) {
                                 if (
-                                    userUserDataRepository
+                                    userDataRepository
                                         .userData
                                         .map { it.pauseOnHeadphonesDisconnect }
                                         .first()
@@ -183,7 +196,7 @@ class MusicService : MediaLibraryService() {
                             Timber.tag( TAG ).d( "HEADSET CONNECTED" )
                             serviceScope.launch( mainDispatcher ) {
                                 if (
-                                    userUserDataRepository
+                                    userDataRepository
                                         .userData
                                         .map { it.playOnHeadphonesConnect }
                                         .first()
@@ -233,16 +246,25 @@ class MusicService : MediaLibraryService() {
         MediaPermissionsManager.checkForPermissions( applicationContext )
         setMediaNotificationProvider( notificationProvider )
         registerHeadsetEvents()
+        registerWidgetListeners()
     }
 
     private suspend fun observeLoopMode() {
-        userUserDataRepository.userData.map { it.loopMode }.collect {
+        userDataRepository.userData.map { it.loopMode }.collect {
             replaceableForwardingPlayer.setRepeatMode( it )
         }
     }
 
     private fun registerHeadsetEvents() {
         registerReceiver( headsetReceiver, headsetReceiverIntentFilter )
+    }
+
+    private fun registerWidgetListeners() {
+        serviceScope.launch {
+            userDataRepository.userData.map { it.shuffle }.collect { notifyWidgetsToUpdate() }
+            userDataRepository.userData.map { it.loopMode }.collect { notifyWidgetsToUpdate() }
+            playlistsRepository.fetchPlaylists().collect { notifyWidgetsToUpdate() }
+        }
     }
 
     override fun onGetSession( controllerInfo: MediaSession.ControllerInfo ): MediaLibrarySession? {
@@ -254,6 +276,73 @@ class MusicService : MediaLibraryService() {
      */
     override fun onTaskRemoved( rootIntent: Intent? ) {
         super.onTaskRemoved( rootIntent )
+    }
+
+    override fun onStartCommand( intent: Intent?, flags: Int, startId: Int ): Int {
+        super.onStartCommand( intent, flags, startId )
+        when ( intent?.action ) {
+            ACTION_PLAY -> handlePlay( intent )
+            ACTION_PAUSE -> player.playPause()
+            ACTION_SKIP_TO_PREVIOUS -> player.playPreviousSong()
+            ACTION_SKIP_TO_NEXT -> player.playNextSong()
+            ACTION_SHUFFLE -> handleShuffle( intent )
+            ACTION_LOOP_MODE -> handleLoopMode( intent )
+            ACTION_ADD_TO_FAVORITES -> handleAddCurrentlyPlayingSongToFavorites( intent )
+        }
+        return START_STICKY
+    }
+
+    private fun handlePlay( intent: Intent? ) {
+        intent?.let {
+            val songId = intent.extras?.getString( SONG_ID_INTENT_KEY )
+            if ( songId != null ) {
+                serviceScope.launch( mainDispatcher ) {
+                    val songs = songsRepository.fetchSongs( sortSongsInReverse = true ).first()
+                    songs.find { it.id == songId }?.let { selectedSong ->
+                        player.playSong( selectedSong, songs )
+                    }
+                }
+            } else {
+                player.playPause()
+            }
+        }
+    }
+
+    private fun handleShuffle( intent: Intent? ) {
+        intent?.extras?.getBoolean( SHUFFLE_MODE_KEY )?.let { shuffle ->
+            serviceScope.launch( mainDispatcher ) { player.shuffleSongsInQueue( shuffle ) }
+            serviceScope.launch( ioDispatcher ) { userDataRepository.setShuffle( shuffle ) }
+        }
+    }
+
+    private fun handleLoopMode( intent: Intent? ) {
+        intent?.extras?.getString( LOOP_MODE_KEY )?.let { loopModeName ->
+            LoopMode.entries.find { it.name == loopModeName }?.let { currentLoopMode ->
+                val currentLoopModePosition = LoopMode.entries.indexOf( currentLoopMode )
+                val nextLoopModePosition = ( currentLoopModePosition + 1 ) % LoopMode.entries.size
+                serviceScope.launch {
+                    userDataRepository.setLoopMode( LoopMode.entries[ nextLoopModePosition ] )
+                }
+            }
+        }
+
+    }
+
+    private fun handleAddCurrentlyPlayingSongToFavorites( intent: Intent? ) {
+        intent?.extras?.getBoolean( ADD_TO_FAVORITES_INTENT_KEY )?.let { add ->
+            player.playerState.value.currentlyPlayingSongId?.let { songId ->
+                serviceScope.launch( ioDispatcher ) {
+                    songsRepository.fetchSongs().first().find { it.id == songId }?.let { song ->
+                        if ( add ) {
+                            playlistsRepository.addToFavorites(song)
+                        }
+                        else {
+                            playlistsRepository.removeFromFavorites( song.id )
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -275,7 +364,7 @@ class MusicService : MediaLibraryService() {
         }
     }
 
-    private fun notifyWidgetToUpdate() {
+    private fun notifyWidgetsToUpdate() {
         val intent = Intent( UPDATE_WIDGET_INTENT ).apply {
             setPackage( packageName )
         }
@@ -338,12 +427,19 @@ class MusicService : MediaLibraryService() {
     /** Listen for events from ExoPlayer */
     private inner class PlayerEventListener : Player.Listener {
 
+        override fun onEvents( player: Player, events: Player.Events ) {
+            super.onEvents( player, events )
+            if ( events.contains( EVENT_IS_PLAYING_CHANGED ) ) {
+                notifyWidgetsToUpdate()
+            }
+        }
+
         override fun onMediaItemTransition( mediaItem: MediaItem?, reason: Int ) {
             super.onMediaItemTransition( mediaItem, reason )
             Timber.tag( TAG ).d( "MEDIA ITEM TRANSITION. ID: ${mediaItem?.mediaId}" )
             mediaItem?.let {
                 serviceScope.launch {
-                    userUserDataRepository.setCurrentlyPlayingSongId( it.mediaId )
+                    userDataRepository.setCurrentlyPlayingSongId( it.mediaId )
                     mostPlayedSongsRepository.addSongId( it.mediaId )
                     playHistoryRepository.upsertSongWithId(
                         it.mediaId,
@@ -351,7 +447,7 @@ class MusicService : MediaLibraryService() {
                     )
                 }
             }
-            notifyWidgetToUpdate()
+            notifyWidgetsToUpdate()
         }
 
         override fun onPlayerError( error: PlaybackException ) {
@@ -368,6 +464,20 @@ class MusicService : MediaLibraryService() {
                 Toast.LENGTH_LONG
             ).show()
         }
+    }
+
+    companion object {
+        const val ACTION_PLAY = "com.squad.musicmatters.widget.ACTION_PLAY"
+        const val ACTION_PAUSE = "com.squad.musicmatters.widget.ACTION_PAUSE"
+        const val ACTION_SKIP_TO_PREVIOUS = "com.squad.musicmatters.widget.ACTION_SKIP_TO_PREVIOUS"
+        const val ACTION_SKIP_TO_NEXT = "com.squad.musicmatters.widget.ACTION_SKIP_TO_NEXT"
+        const val ACTION_SHUFFLE = "com.squad.musicmatters.widget.ACTION_SHUFFLE"
+        const val ACTION_LOOP_MODE = "com.squad.musicmatters.widget.LOOP_MODE"
+        const val ACTION_ADD_TO_FAVORITES = "com.squad.musicmatters.widget.ACTION_ADD_TO_FAVORITES"
+        const val SONG_ID_INTENT_KEY = "com.squad.musicmatters.widget.SONG_ID_KEY"
+        const val SHUFFLE_MODE_KEY = "com.squad.musicmatters.widget.SHUFFLE_MODE_KEY"
+        const val LOOP_MODE_KEY = "com.squad.musicmatters.widget.LOOP_MODE_KEY"
+        const val ADD_TO_FAVORITES_INTENT_KEY = "com.squad.musicmatters.widget.ADD_TO_FAVORITES_INTENT_KEY"
     }
 
 }
