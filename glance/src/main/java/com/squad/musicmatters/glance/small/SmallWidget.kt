@@ -3,6 +3,7 @@ package com.squad.musicmatters.glance.small
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
@@ -10,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
@@ -24,10 +26,12 @@ import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
 import androidx.glance.LocalSize
+import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.action.actionStartService
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.components.CircleIconButton
@@ -91,16 +95,12 @@ class SmallWidget : GlanceAppWidget() {
             val currentlyPlayingSong = model.value.currentlyPlayingSong
             val context = LocalContext.current
 
-            // Load bitmap asynchronously inside the composition scope when song changes
-            var artworkBitmap by remember( currentlyPlayingSong?.artworkUri ) {
-                mutableStateOf<Bitmap?>( null )
-            }
-
-            LaunchedEffect( currentlyPlayingSong?.artworkUri ) {
+            val artworkBitmap by produceState<Bitmap?>(
+                initialValue = null,
+                key1 = currentlyPlayingSong?.artworkUri
+            ) {
                 val uri = currentlyPlayingSong?.artworkUri?.toUri()
-                artworkBitmap = if ( uri != null ) {
-                    context.loadBitmapFromUri( uri )
-                } else null
+                value = uri?.let { context.loadBitmapFromUri( it ) }
             }
 
             GlanceTheme {
@@ -135,6 +135,9 @@ private fun SmallWidget(
         widgetSize.div( 4 ).width,
         widgetSize.div( 4 ).height
     )
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse( "musicmatters://foryou" )
+    }
 
     Box(
         contentAlignment = Alignment.BottomStart,
@@ -152,7 +155,9 @@ private fun SmallWidget(
                 Image(
                     provider = ImageProvider( it ),
                     contentDescription = null,
-                    modifier = GlanceModifier.fillMaxSize()
+                    modifier = GlanceModifier
+                        .fillMaxSize()
+                        .clickable( actionStartActivity( intent ) )
                 )
             } ?: run {
                 RectangularIconButton(

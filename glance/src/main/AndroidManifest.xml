@@ -3,23 +3,6 @@
 
     <application>
 
-        <!-- Large Widget -->
-        <receiver
-            android:name=".large.LargeWidgetReceiver"
-            android:exported="true"
-            android:label="@string/core_i8n_mini_player">
-
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="com.squad.musicmatters.ACTION_UPDATE_WIDGET" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/glance_large_widget_info" />
-
-        </receiver>
-
         <!--Medium Widget-->
         <receiver
             android:name=".medium.MediumWidgetReceiver"
@@ -28,7 +11,7 @@
 
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="com.squad.musicmatters.ACTION_UPDATE_WIDGET" />
+                <action android:name="com.squad.musicmatters.ACTION_UPDATE_MEDIUM_WIDGET" />
             </intent-filter>
 
             <meta-data
@@ -47,7 +30,7 @@
 
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.squad.musicmatters.ACTION_UPDATE_WIDGET" />
+                <action android:name="com.squad.musicmatters.ACTION_UPDATE_SMALL_WIDGET" />
             </intent-filter>
 
             <meta-data

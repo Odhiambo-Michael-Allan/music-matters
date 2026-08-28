@@ -7,7 +7,6 @@ data class GlanceUiModel(
     val isPlaying: Boolean,
     val shuffle: Boolean,
     val loopMode: LoopMode,
-    val currentlyPlayingSong: GlanceSong?,
+    val currentlyPlayingSong: Song?,
     val currentlyPlayingSongIsFavorite: Boolean,
-    val songs: List<GlanceSong> = emptyList(),
 )

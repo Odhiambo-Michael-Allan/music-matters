@@ -27,5 +27,3 @@ suspend fun Context.loadBitmapFromUri(
     val result = applicationContext.imageLoader.execute( request )
     ( result as? SuccessResult )?.image?.toBitmap()
 }
-
-internal const val UPDATE_WIDGET_INTENT = "com.squad.musicmatters.ACTION_UPDATE_WIDGET"

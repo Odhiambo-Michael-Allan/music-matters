@@ -2,26 +2,17 @@ package com.squad.musicmatters.glance.layout
 
 import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
-import androidx.glance.LocalContext
 import androidx.glance.appwidget.components.SquareIconButton
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
-import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
@@ -30,24 +21,18 @@ import androidx.glance.layout.size
 import androidx.glance.layout.width
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
-import androidx.glance.text.FontFamily
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
-import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.glance.R
-import com.squad.musicmatters.glance.data.GlanceSong
-import com.squad.musicmatters.glance.loadBitmapFromUri
-import com.squad.musicmatters.glance.medium.MediumWidget
 
 @Composable
 internal fun MediumWidgetLayout(
     modifier: GlanceModifier = GlanceModifier,
     currentlyPlayingSongArtworkBitmap: Bitmap?,
-    currentlyPlayingSong: GlanceSong?,
+    currentlyPlayingSong: Song?,
     isPlaying: Boolean,
     shuffle: Boolean,
     loopMode: LoopMode,
@@ -116,11 +101,23 @@ internal fun MediumWidgetLayout(
 private fun MediumWidgetLayoutPreview() {
     MediumWidgetLayout(
         modifier = GlanceModifier.fillMaxSize(),
-        currentlyPlayingSong = GlanceSong(
+        currentlyPlayingSong = Song(
             id = "id4",
             mediaStoreId = 0,
             title = "Dear Boy",
             artist = "Michael Jackson",
+            duration = 0L,
+            size = 0L,
+            dateModified = 0,
+            path = "path",
+            trackNumber = null,
+            year = null,
+            albumTitle = "albumTitle",
+            composer = null,
+            artworkUri = "artworkUri",
+            artistId = 0,
+            albumId = 0,
+            mediaUri = "",
         ),
         shuffle = false,
         loopMode = LoopMode.Song,

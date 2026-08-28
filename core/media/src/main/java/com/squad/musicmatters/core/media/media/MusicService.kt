@@ -50,8 +50,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -261,11 +264,16 @@ class MusicService : MediaLibraryService() {
     }
 
     private fun registerWidgetListeners() {
-        serviceScope.launch {
-            userDataRepository.userData.map { it.shuffle }.collect { notifyWidgetsToUpdate() }
-            userDataRepository.userData.map { it.loopMode }.collect { notifyWidgetsToUpdate() }
-            playlistsRepository.fetchPlaylists().collect { notifyWidgetsToUpdate() }
-        }
+        userDataRepository.userData
+            .map { Pair( it.shuffle, it.loopMode ) }
+            .distinctUntilChanged()
+            .onEach { notifyWidgetsToUpdate( UPDATE_MEDIUM_WIDGET_INTENT ) }
+            .launchIn( serviceScope )
+
+        playlistsRepository.fetchFavorites()
+            .distinctUntilChanged()
+            .onEach { notifyWidgetsToUpdate( UPDATE_SMALL_WIDGET_INTENT ) }
+            .launchIn( serviceScope )
     }
 
     override fun onGetSession( controllerInfo: MediaSession.ControllerInfo ): MediaLibrarySession? {
@@ -344,11 +352,12 @@ class MusicService : MediaLibraryService() {
                 serviceScope.launch( ioDispatcher ) {
                     songsRepository.fetchSongs().first().find { it.id == songId }?.let { song ->
                         if ( add ) {
-                            playlistsRepository.addToFavorites(song)
+                            playlistsRepository.addToFavorites( song )
                         }
                         else {
                             playlistsRepository.removeFromFavorites( song.id )
                         }
+                        notifyWidgetsToUpdate( UPDATE_SMALL_WIDGET_INTENT )
                     }
                 }
             }
@@ -375,7 +384,12 @@ class MusicService : MediaLibraryService() {
     }
 
     private fun notifyWidgetsToUpdate() {
-        val intent = Intent( UPDATE_WIDGET_INTENT ).apply {
+        notifyWidgetsToUpdate( UPDATE_SMALL_WIDGET_INTENT )
+        notifyWidgetsToUpdate( UPDATE_MEDIUM_WIDGET_INTENT )
+    }
+
+    private fun notifyWidgetsToUpdate( intent: String ) {
+        val intent = Intent( intent ).apply {
             setPackage( packageName )
         }
         sendBroadcast( intent )
@@ -506,10 +520,8 @@ private const val CONTENT_STYLE_PLAYABLE_HINT = "android.media.browse.CONTENT_ST
 private const val CONTENT_STYLE_SUPPORTED = "android.media.browse.CONTENT_STYLE_SUPPORTED"
 private const val CONTENT_STYLE_LIST = 1
 private const val CONTENT_STYLE_GRID = 2
-private const val UPDATE_WIDGET_INTENT = "com.squad.musicmatters.ACTION_UPDATE_WIDGET"
+const val UPDATE_SMALL_WIDGET_INTENT = "com.squad.musicmatters.ACTION_UPDATE_SMALL_WIDGET"
+const val UPDATE_MEDIUM_WIDGET_INTENT = "com.squad.musicmatters.ACTION_UPDATE_MEDIUM_WIDGET"
 
 const val CUSTOM_COMMAND_DELETE_SONG = "com.odesa.musicmatters.delete_song"
 private const val TAG = "MUSIC-SERVICE-TAG"
-
-const val MEDIA_STORE_REFRESH_ENDED_INTENT = "MEDIA_STORE_REFRESH_ENDED_INTENT"
-const val MEDIA_STORE_REFRESH_STARTED_INTENT = "MEDIA_STORE_REFRESH_STARTED_INTENT"

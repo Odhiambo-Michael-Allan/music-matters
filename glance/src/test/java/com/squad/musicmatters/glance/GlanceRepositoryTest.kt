@@ -77,7 +77,6 @@ class GlanceRepositoryTest {
             GlanceUiModel(
                 isPlaying = true,
                 currentlyPlayingSong = testSong( id = "2" ),
-                songs = songs.reversed(),
                 loopMode = LoopMode.Queue,
                 shuffle = false,
                 currentlyPlayingSongIsFavorite = true,

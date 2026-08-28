@@ -36,24 +36,7 @@ class GlanceRepository @Inject constructor(
             isPlaying = playerState.isPlaying,
             shuffle = shuffle,
             loopMode = loopMode,
-            songs = songs.map {
-                GlanceSong(
-                    id = it.id,
-                    mediaStoreId = it.mediaStoreId,
-                    title = it.title,
-                    artist = it.artist,
-                    artworkUri = it.artworkUri,
-                )
-            },
-            currentlyPlayingSong = currentlyPlayingSong?.let {
-                GlanceSong(
-                    id = it.id,
-                    mediaStoreId = it.mediaStoreId,
-                    title = it.title,
-                    artist = it.artist,
-                    artworkUri = it.artworkUri,
-                )
-            },
+            currentlyPlayingSong = currentlyPlayingSong,
             currentlyPlayingSongIsFavorite = currentlyPlayingSong?.let {
                 favorites?.songIds?.contains( it.id )
             } ?: false

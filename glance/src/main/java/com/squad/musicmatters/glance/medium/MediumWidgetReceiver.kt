@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.updateAll
-import com.squad.musicmatters.glance.UPDATE_WIDGET_INTENT
+import com.squad.musicmatters.core.media.media.UPDATE_MEDIUM_WIDGET_INTENT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,12 @@ class MediumWidgetReceiver : GlanceAppWidgetReceiver() {
 
     override fun onReceive( context: Context, intent: Intent ) {
         super.onReceive( context, intent )
-        if ( intent.action == UPDATE_WIDGET_INTENT ) {
+        if ( intent.action == UPDATE_MEDIUM_WIDGET_INTENT ) {
+            Toast.makeText(
+                context,
+                "Medium Widget Received update intent",
+                Toast.LENGTH_SHORT
+            ).show()
             CoroutineScope( Dispatchers.IO ).launch {
                 MediumWidget().updateAll( context )
             }

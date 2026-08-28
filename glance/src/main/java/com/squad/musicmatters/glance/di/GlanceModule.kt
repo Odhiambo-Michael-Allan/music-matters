@@ -15,4 +15,5 @@ import javax.inject.Singleton
 @InstallIn( SingletonComponent::class )
 interface GlanceModuleEntryPoint {
     fun glanceRepository(): GlanceRepository
+    fun songsRepository(): SongsRepository
 }

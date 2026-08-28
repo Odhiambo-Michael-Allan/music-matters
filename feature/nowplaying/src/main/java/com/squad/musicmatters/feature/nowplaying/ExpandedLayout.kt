@@ -76,7 +76,7 @@ internal fun ExpandedLayout(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxSize()
-                .padding( start = 48.dp, 0.dp )
+//                .padding( 48.dp, 0.dp )
         ) {
             Column (
                 verticalArrangement = Arrangement.SpaceEvenly,
@@ -169,7 +169,7 @@ private fun ExpandedLayoutPreview(
                 userData = emptyUserData.copy(
                     loopMode = LoopMode.Queue,
                     shuffle = true,
-                    showLyrics = true,
+                    showLyrics = false,
                 ),
                 currentlyPlayingSong = previewData.songs.first(),
                 currentlyPlayingSongIsFavorite = true,

@@ -10,7 +10,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,10 +56,8 @@ fun DynamicAsyncImage(
             .build()
     }
 
-    val painter = rememberAsyncImagePainter( model = imageRequest )
-    val state by painter.state.collectAsState()
-    val isLoading = state is AsyncImagePainter.State.Loading
-    val isError = state is AsyncImagePainter.State.Error
+    var isLoading by remember { mutableStateOf( true ) }
+    var isError by remember { mutableStateOf( false ) }
 
     Box(
         contentAlignment = Alignment.Center,
@@ -81,10 +81,16 @@ fun DynamicAsyncImage(
                 ColorFilter.tint( iconTint )
             } else null,
             onSuccess = {
+                isLoading = false
+                isError = false
                 onImageLoaded?.invoke( it.result.image.toBitmap().asImageBitmap() )
             },
             onError = {
+                isError = true
                 onImageLoaded?.invoke( null )
+            },
+            onLoading = {
+
             },
             modifier = Modifier.fillMaxSize()
         )

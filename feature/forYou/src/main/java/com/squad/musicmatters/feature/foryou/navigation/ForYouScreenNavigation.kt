@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import com.squad.musicmatters.core.ui.FadeTransition
 import com.squad.musicmatters.core.ui.SlideTransition
 import com.squad.musicmatters.feature.foryou.ForYouScreen
@@ -19,6 +20,11 @@ fun NavGraphBuilder.forYouScreen(
     onViewArtist: ( Long ) -> Unit,
 ) {
     composable<ForYouRoute>(
+        deepLinks = listOf(
+            navDeepLink {
+                uriPattern = "musicmatters://foryou"
+            }
+        ),
         enterTransition = { SlideTransition.slideUp.enterTransition() },
         exitTransition = { FadeTransition.exitTransition() }
     ) {
