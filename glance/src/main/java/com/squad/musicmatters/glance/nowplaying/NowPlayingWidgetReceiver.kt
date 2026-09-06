@@ -1,4 +1,4 @@
-package com.squad.musicmatters.glance.medium
+package com.squad.musicmatters.glance.nowplaying
 
 import android.content.Context
 import android.content.Intent
@@ -13,9 +13,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MediumWidgetReceiver : GlanceAppWidgetReceiver() {
+class NowPlayingWidgetReceiver : GlanceAppWidgetReceiver() {
 
-    override val glanceAppWidget: GlanceAppWidget = MediumWidget()
+    override val glanceAppWidget: GlanceAppWidget = NowPlayingWidget()
 
     override fun onReceive( context: Context, intent: Intent ) {
         super.onReceive( context, intent )
@@ -26,7 +26,7 @@ class MediumWidgetReceiver : GlanceAppWidgetReceiver() {
                 Toast.LENGTH_SHORT
             ).show()
             CoroutineScope( Dispatchers.IO ).launch {
-                MediumWidget().updateAll( context )
+                NowPlayingWidget().updateAll( context )
             }
         }
     }

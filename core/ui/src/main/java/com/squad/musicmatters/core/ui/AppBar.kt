@@ -57,11 +57,7 @@ fun TopAppBar(
                 )
             }
         },
-        title = {
-            TopAppBarMinimalTitle {
-                Text( text = title )
-            }
-        },
+        title = { TopAppBarMinimalTitle { Text( text = title ) } },
         actions = {
             IconButton(
                 onClick = onSettingsClicked

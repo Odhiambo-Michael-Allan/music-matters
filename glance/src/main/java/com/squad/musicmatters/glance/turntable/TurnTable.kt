@@ -1,24 +1,15 @@
-package com.squad.musicmatters.glance.small
+package com.squad.musicmatters.glance.turntable
 
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
@@ -26,25 +17,17 @@ import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
 import androidx.glance.LocalSize
-import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.SizeMode
-import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.action.actionStartService
 import androidx.glance.appwidget.appWidgetBackground
-import androidx.glance.appwidget.components.CircleIconButton
-import androidx.glance.appwidget.components.Scaffold
-import androidx.glance.appwidget.components.SquareIconButton
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
-import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
-import androidx.glance.layout.Row
 import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
 import androidx.glance.preview.ExperimentalGlancePreviewApi
@@ -55,16 +38,13 @@ import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.glance.R
 import com.squad.musicmatters.glance.data.GlanceUiModel
 import com.squad.musicmatters.glance.di.GlanceModuleEntryPoint
-import com.squad.musicmatters.glance.layout.NoOpAction
 import com.squad.musicmatters.glance.layout.RectangularIconButton
 import com.squad.musicmatters.glance.layout.startMusicService
 import com.squad.musicmatters.glance.loadBitmapFromUri
 import dagger.hilt.android.EntryPointAccessors
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlin.ranges.coerceAtMost
 
-class SmallWidget : GlanceAppWidget() {
+class TurnTableWidget : GlanceAppWidget() {
 
     // Unlike the "Single" size mode, using "Exact" allows us to have better control over rendering
     // in different sizes. And, unlike the "Responsive" mode, it doesn't cause several views for
@@ -104,7 +84,7 @@ class SmallWidget : GlanceAppWidget() {
             }
 
             GlanceTheme {
-                SmallWidget(
+                TurnTableWidget(
                     currentlyPlayingSongBitmap = artworkBitmap,
                     isPlaying = model.value.isPlaying,
                     currentlyPlayingSongIsFavorite = model.value.currentlyPlayingSongIsFavorite
@@ -117,7 +97,7 @@ class SmallWidget : GlanceAppWidget() {
 
 @androidx.annotation.OptIn( UnstableApi::class )
 @Composable
-private fun SmallWidget(
+private fun TurnTableWidget(
     currentlyPlayingSongBitmap: Bitmap?,
     isPlaying: Boolean,
     currentlyPlayingSongIsFavorite: Boolean,
@@ -135,8 +115,8 @@ private fun SmallWidget(
         widgetSize.div( 4 ).width,
         widgetSize.div( 4 ).height
     )
-    val intent = Intent(Intent.ACTION_VIEW).apply {
-        data = Uri.parse( "musicmatters://foryou" )
+    val launchMainActivityIntent = Intent(Intent.ACTION_VIEW).apply {
+        data = "musicmatters://foryou".toUri()
     }
 
     Box(
@@ -157,7 +137,7 @@ private fun SmallWidget(
                     contentDescription = null,
                     modifier = GlanceModifier
                         .fillMaxSize()
-                        .clickable( actionStartActivity( intent ) )
+                        .clickable( actionStartActivity( launchMainActivityIntent ) )
                 )
             } ?: run {
                 RectangularIconButton(
@@ -167,7 +147,7 @@ private fun SmallWidget(
                     roundedCornerShape = com.squad.musicmatters.glance.layout.RoundedCornerShape.MEDIUM,
                     backgroundColor = GlanceTheme.colors.widgetBackground,
                     contentColor = GlanceTheme.colors.onSecondaryContainer,
-                    onClick = actionRunCallback<NoOpAction>(),
+                    onClick = actionStartActivity( launchMainActivityIntent ),
                     modifier = GlanceModifier.fillMaxSize()
                 )
             }
@@ -190,11 +170,7 @@ private fun SmallWidget(
                 backgroundColor = GlanceTheme.colors.secondaryContainer,
                 contentColor = GlanceTheme.colors.onSecondaryContainer,
                 onClick = context.startMusicService(
-                    intentAction = if ( isPlaying ) {
-                        MusicService.ACTION_PAUSE
-                    } else {
-                        MusicService.ACTION_PLAY
-                    }
+                    intentAction = MusicService.ACTION_PLAY_PAUSE
                 ),
                 modifier = GlanceModifier.size( iconSize.coerceAtLeast( 55.dp ) )
             )
@@ -240,9 +216,9 @@ private fun SmallWidget(
 @OptIn( ExperimentalGlancePreviewApi::class )
 @Preview( 200, 200 )
 @Composable
-private fun WidgetSmallPreview() {
+private fun TurnTableWidgetPreview() {
     GlanceTheme {
-        SmallWidget(
+        TurnTableWidget(
             currentlyPlayingSongBitmap = null,
             isPlaying = true,
             currentlyPlayingSongIsFavorite = false,

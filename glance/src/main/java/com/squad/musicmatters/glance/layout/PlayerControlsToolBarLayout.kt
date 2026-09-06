@@ -68,13 +68,7 @@ internal fun PlayerControlsToolBarLayout(
                 R.drawable.round_play_arrow_24
             },
             contentDescription = "skip to previous button",
-            onClick = context.startMusicService(
-                intentAction = if ( isPlaying ) {
-                    MusicService.ACTION_PAUSE
-                } else {
-                    MusicService.ACTION_PLAY
-                }
-            )
+            onClick = context.startMusicService( intentAction = MusicService.ACTION_PLAY_PAUSE )
         ),
         PlayerControlButton(
             iconRes = R.drawable.round_skip_next_24,

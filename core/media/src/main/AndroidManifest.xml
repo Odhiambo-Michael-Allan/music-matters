@@ -21,8 +21,7 @@
             <intent-filter>
                 <action android:name="androidx.media3.session.MediaLibraryService"/>
                 <action android:name="android.media.browse.MediaBrowserService"/>
-                <action android:name="com.squad.musicmatters.widget.ACTION_PLAY"/>
-                <action android:name="com.squad.musicmatters.widget.ACTION_PAUSE"/>
+                <action android:name="com.squad.musicmatters.widget.ACTION_PLAY_PAUSE"/>
                 <action android:name="com.squad.musicmatters.widget.ACTION_SKIP_TO_PREVIOUS"/>
                 <action android:name="com.squad.musicmatters.widget.ACTION_SKIP_TO_NEXT"/>
                 <action android:name="com.squad.musicmatters.widget.ACTION_SHUFFLE"/>

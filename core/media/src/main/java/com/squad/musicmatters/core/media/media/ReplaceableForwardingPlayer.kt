@@ -5,6 +5,7 @@ import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.TextureView
+import androidx.annotation.MainThread
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.DeviceInfo
@@ -54,6 +55,7 @@ class ReplaceableForwardingPlayer(
 
     init { player.addListener( playerListener ) }
 
+    @MainThread
     suspend fun initialize() {
         val songsSortedByOriginalPosition = queueRepository
             .fetchSongsSortedByOriginalPosition()

@@ -1,4 +1,4 @@
-package com.squad.musicmatters.glance.medium
+package com.squad.musicmatters.glance.nowplaying
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -23,10 +23,10 @@ import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.glance.data.GlanceUiModel
-import com.squad.musicmatters.glance.layout.MediumWidgetLayout
+import com.squad.musicmatters.glance.layout.NowPlayingWidgetLayout
 import com.squad.musicmatters.glance.loadBitmapFromUri
 
-class MediumWidget : GlanceAppWidget() {
+class NowPlayingWidget : GlanceAppWidget() {
 
     // Unlike the "Single" size mode, using "Exact" allows us to have better control over rendering in
     // different sizes. And, unlike the "Responsive" mode, it doesn't cause several views for each
@@ -66,7 +66,7 @@ class MediumWidget : GlanceAppWidget() {
             }
 
             GlanceTheme {
-                MediumWidget(
+                NowPlayingWidgetContent(
                     currentlyPlayingSongArtworkBitmap = artworkBitmap,
                     glanceUiModel = glanceUiModel.value,
                 )
@@ -77,14 +77,14 @@ class MediumWidget : GlanceAppWidget() {
 }
 
 @Composable
-private fun MediumWidget(
+private fun NowPlayingWidgetContent(
     currentlyPlayingSongArtworkBitmap: Bitmap?,
     glanceUiModel: GlanceUiModel
 ) {
     Scaffold(
         modifier = GlanceModifier.fillMaxSize(),
     ) {
-        MediumWidgetLayout(
+        NowPlayingWidgetLayout(
             modifier = GlanceModifier.fillMaxSize(),
             currentlyPlayingSongArtworkBitmap = currentlyPlayingSongArtworkBitmap,
             currentlyPlayingSong = glanceUiModel.currentlyPlayingSong,
@@ -99,8 +99,8 @@ private fun MediumWidget(
 @Preview( widthDp = 330, heightDp = 128 )
 @Preview( widthDp = 256, heightDp = 128 )
 @Composable
-private fun MediumWidgetPreview() {
-    MediumWidget(
+private fun NowPlayingWidgetPreview() {
+    NowPlayingWidgetContent(
         currentlyPlayingSongArtworkBitmap = null,
         glanceUiModel = GlanceUiModel(
             isPlaying = true,

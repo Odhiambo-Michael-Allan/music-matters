@@ -46,6 +46,7 @@ import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.media.connection.DefaultSongToMediaItemConverter
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
 import com.squad.musicmatters.core.model.LoopMode
+import com.squad.musicmatters.core.model.Song
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -289,41 +290,24 @@ class MusicService : MediaLibraryService() {
 
     override fun onStartCommand( intent: Intent?, flags: Int, startId: Int ): Int {
         super.onStartCommand( intent, flags, startId )
-        when ( intent?.action ) {
-            ACTION_PLAY -> handlePlay( intent )
-            ACTION_PAUSE -> player.playPause()
-            ACTION_SKIP_TO_PREVIOUS -> player.playPreviousSong()
-            ACTION_SKIP_TO_NEXT -> player.playNextSong()
-            ACTION_SHUFFLE -> handleShuffle( intent )
-            ACTION_LOOP_MODE -> handleLoopMode( intent )
-            ACTION_ADD_TO_FAVORITES -> handleAddCurrentlyPlayingSongToFavorites( intent )
-        }
-        return START_STICKY
-    }
-
-    private fun handlePlay( intent: Intent? ) {
-        if ( intent == null ) return
-
-        serviceScope.launch( ioDispatcher ) { // Run data fetching on IO dispatcher
-            val songs = songsRepository.fetchSongs( sortSongsInReverse = true ).first()
-            val songId = intent.getStringExtra( SONG_ID_INTENT_KEY )
-
-            // Switch back to Main for player interaction if required by your player instance
+        // Initialize the player if necessary..
+        serviceScope.launch( ioDispatcher ) {
+            val songs = songsRepository.fetchSongs().first()
             withContext( mainDispatcher ) {
-                if ( songId != null ) {
-                    songs.find { song -> song.id == songId }?.let { selectedSong ->
-                        player.playSong( selectedSong, songs )
-                    }
-                } else if ( replaceableForwardingPlayer.mediaItemCount <= 0 ) {
-                    val firstSong = songs.firstOrNull()
-                    if ( firstSong != null ) {
-                        player.playSong( firstSong, songs )
-                    }
-                } else {
-                    player.playPause()
+                if ( replaceableForwardingPlayer.mediaItemCount <= 0 && songs.isNotEmpty() ) {
+                    replaceableForwardingPlayer.initialize()
+                }
+                when ( intent?.action ) {
+                    ACTION_PLAY_PAUSE -> player.playPause()
+                    ACTION_SKIP_TO_PREVIOUS -> player.playPreviousSong()
+                    ACTION_SKIP_TO_NEXT -> player.playNextSong()
+                    ACTION_SHUFFLE -> handleShuffle( intent )
+                    ACTION_LOOP_MODE -> handleLoopMode( intent )
+                    ACTION_ADD_TO_FAVORITES -> handleAddCurrentlyPlayingSongToFavorites( intent, songs )
                 }
             }
         }
+        return START_NOT_STICKY
     }
 
     private fun handleShuffle( intent: Intent? ) {
@@ -346,11 +330,11 @@ class MusicService : MediaLibraryService() {
 
     }
 
-    private fun handleAddCurrentlyPlayingSongToFavorites( intent: Intent? ) {
+    private fun handleAddCurrentlyPlayingSongToFavorites( intent: Intent?, songs: List<Song> ) {
         intent?.extras?.getBoolean( ADD_TO_FAVORITES_INTENT_KEY )?.let { add ->
             player.playerState.value.currentlyPlayingSongId?.let { songId ->
                 serviceScope.launch( ioDispatcher ) {
-                    songsRepository.fetchSongs().first().find { it.id == songId }?.let { song ->
+                    songs.find { it.id == songId }?.let { song ->
                         if ( add ) {
                             playlistsRepository.addToFavorites( song )
                         }
@@ -491,8 +475,7 @@ class MusicService : MediaLibraryService() {
     }
 
     companion object {
-        const val ACTION_PLAY = "com.squad.musicmatters.widget.ACTION_PLAY"
-        const val ACTION_PAUSE = "com.squad.musicmatters.widget.ACTION_PAUSE"
+        const val ACTION_PLAY_PAUSE = "com.squad.musicmatters.widget.ACTION_PLAY_PAUSE"
         const val ACTION_SKIP_TO_PREVIOUS = "com.squad.musicmatters.widget.ACTION_SKIP_TO_PREVIOUS"
         const val ACTION_SKIP_TO_NEXT = "com.squad.musicmatters.widget.ACTION_SKIP_TO_NEXT"
         const val ACTION_SHUFFLE = "com.squad.musicmatters.widget.ACTION_SHUFFLE"

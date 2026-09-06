@@ -134,7 +134,9 @@ fun MusicMattersAppContent(
     onDeleteSong: ( Song ) -> Unit,
 ) {
 
-    var currentTopLevelDestinationName by rememberSaveable { mutableStateOf( TopLevelDestination.SONGS.route.qualifiedName ) }
+    var currentTopLevelDestinationName by rememberSaveable {
+        mutableStateOf( TopLevelDestination.FOR_YOU.route.qualifiedName )
+    }
     var currentlySelectedLibraryDestinationName by rememberSaveable { mutableStateOf( "" ) }
 
     var showNowPlayingScreen by rememberSaveable { mutableStateOf( false ) }
@@ -187,8 +189,6 @@ fun MusicMattersAppContent(
 
     val snackBarHostState = remember { SnackbarHostState() }
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
-
 
     NavigationSuiteScaffold(
         navigationSuiteColors = NavigationSuiteDefaults.colors(
@@ -247,7 +247,7 @@ fun MusicMattersAppContent(
                 if ( shouldShowTopAppBar ) {
                     TopAppBar(
                         title = stringResource(
-                            id = if ( navController.currentDestination?.route ==
+                            id = if ( currentTopLevelDestinationName ==
                                 ForYouRoute::class.qualifiedName ) {
                                 i8nR.string.core_i8n_for_you
                             } else {

@@ -76,7 +76,6 @@ internal fun ExpandedLayout(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxSize()
-//                .padding( 48.dp, 0.dp )
         ) {
             Column (
                 verticalArrangement = Arrangement.SpaceEvenly,

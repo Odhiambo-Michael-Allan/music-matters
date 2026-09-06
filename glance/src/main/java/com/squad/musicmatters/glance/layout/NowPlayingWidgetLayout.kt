@@ -1,13 +1,17 @@
 package com.squad.musicmatters.glance.layout
 
+import android.content.Intent
 import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.action.clickable
+import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.components.SquareIconButton
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
@@ -29,7 +33,7 @@ import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.glance.R
 
 @Composable
-internal fun MediumWidgetLayout(
+internal fun NowPlayingWidgetLayout(
     modifier: GlanceModifier = GlanceModifier,
     currentlyPlayingSongArtworkBitmap: Bitmap?,
     currentlyPlayingSong: Song?,
@@ -37,6 +41,10 @@ internal fun MediumWidgetLayout(
     shuffle: Boolean,
     loopMode: LoopMode,
 ) {
+
+    val launchMainActivityIntent = Intent( Intent.ACTION_VIEW ).apply {
+        data = "musicmatters://foryou".toUri()
+    }
 
     Row(
         modifier = modifier
@@ -48,7 +56,9 @@ internal fun MediumWidgetLayout(
             Image(
                 provider = ImageProvider( it ),
                 contentDescription = "song-artwork",
-                modifier = GlanceModifier.size( 78.dp, 80.dp ),
+                modifier = GlanceModifier
+                    .size( 78.dp, 80.dp )
+                    .clickable( actionStartActivity( launchMainActivityIntent ) ),
             )
         } ?: run {
             SquareIconButton(
@@ -57,7 +67,7 @@ internal fun MediumWidgetLayout(
                 backgroundColor = GlanceTheme.colors.secondaryContainer,
                 contentColor = GlanceTheme.colors.onSecondaryContainer,
                 modifier = GlanceModifier.size( 78.dp, 80.dp ),
-                onClick = {}
+                onClick = { actionStartActivity( launchMainActivityIntent ) }
             )
         }
 
@@ -99,7 +109,7 @@ internal fun MediumWidgetLayout(
 @Preview( widthDp = 256, heightDp = 128 )
 @Composable
 private fun MediumWidgetLayoutPreview() {
-    MediumWidgetLayout(
+    NowPlayingWidgetLayout(
         modifier = GlanceModifier.fillMaxSize(),
         currentlyPlayingSong = Song(
             id = "id4",

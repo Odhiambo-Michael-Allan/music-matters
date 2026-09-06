@@ -1,4 +1,4 @@
-package com.squad.musicmatters.glance.small
+package com.squad.musicmatters.glance.turntable
 
 import android.content.Context
 import android.content.Intent
@@ -11,9 +11,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SmallWidgetReceiver : GlanceAppWidgetReceiver() {
+class TurnTableWidgetReceiver : GlanceAppWidgetReceiver() {
 
-    override val glanceAppWidget: GlanceAppWidget = SmallWidget()
+    override val glanceAppWidget: GlanceAppWidget = TurnTableWidget()
 
     override fun onReceive( context: Context, intent: Intent ) {
         super.onReceive( context, intent )
@@ -24,7 +24,7 @@ class SmallWidgetReceiver : GlanceAppWidgetReceiver() {
                 Toast.LENGTH_SHORT
             ).show()
             CoroutineScope( Dispatchers.IO ).launch {
-                SmallWidget().updateAll( context )
+                TurnTableWidget().updateAll( context )
             }
         }
     }

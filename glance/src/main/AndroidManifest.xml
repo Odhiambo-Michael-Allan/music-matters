@@ -5,7 +5,7 @@
 
         <!--Medium Widget-->
         <receiver
-            android:name=".medium.MediumWidgetReceiver"
+            android:name=".nowplaying.NowPlayingWidgetReceiver"
             android:exported="true"
             android:label="@string/core_i8n_now_playing">
 
@@ -23,7 +23,7 @@
 
         <!--Small widget-->
         <receiver
-            android:name=".small.SmallWidgetReceiver"
+            android:name=".turntable.TurnTableWidgetReceiver"
             android:enabled="true"
             android:exported="true"
             android:label="@string/core_i8n_turntable">
