@@ -1,18 +1,28 @@
 package com.squad.musicmatters.core.ui
 
 import android.net.Uri
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MusicNote
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +37,7 @@ import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.model.ThemeMode
+import kotlinx.coroutines.launch
 
 @Composable
 fun SongsList(
@@ -57,6 +68,17 @@ fun SongsList(
     additionalBottomSheetMenuItems: ( @Composable ( Song ) -> Unit )? = null
 ) {
 
+    val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+
+    // Show the scroll to top button if the first visible item is past the 10th item. We use
+    // a remembered derived state to minimize unnecessary compositions
+    val showScrollToTopButton by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 10
+        }
+    }
+    
     Column {
         MediaSortBar(
             sortInReverse = sortSongsInReverse,
@@ -100,39 +122,73 @@ fun SongsList(
                 }
             )
             else -> {
-                LazyColumn(
-                    contentPadding = PaddingValues( bottom = 70.dp ),
-                ) {
-                    leadingContent?.invoke( this )
-                    itemsIndexed(
-                        items = songs,
-                        key = { _, song -> song.id }
-                    ) {  index, song ->
-                        SongCard(
-                            modifier = Modifier.animateItem(),
-                            song = song,
-                            isCurrentlyPlaying = currentlyPlayingSongId == song.id,
-                            isFavorite = { isFavorite( songs[ index ].id ) },
-                            onGetPlaylists = onGetPlaylists,
-                            onGetSongMetadata = {
-                                onGetSongsAdditionalMetadata()
-                                    .find { metadata -> metadata.songId == song.id }
-                            },
-                            onClick = { onPlaySong( song, songs ) },
-                            onFavorite = onFavorite,
-                            onPlayNext = onPlaySongNext,
-                            onAddToQueue = onAddSongToQueue,
-                            onViewArtist = onViewArtist,
-                            onViewAlbum = onViewAlbum,
-                            onShareSong = onShareSong,
-                            onAddSongsToPlaylist = onAddSongsToPlaylist,
-                            onCreatePlaylist = onCreatePlaylist,
-                            onDeleteSong = onDeleteSong,
-                            onShowSnackBar = onShowSnackBar,
-                            onRemoveFromQueue = onRemoveSongFromQueue,
-                            onSongIsPresentInQueue = onSongIsPresentInQueue,
-                            additionalBottomSheetMenuItems = additionalBottomSheetMenuItems,
-                        )
+                Box {
+                    LazyColumn(
+                        state = listState,
+                        contentPadding = PaddingValues( bottom = 70.dp ),
+                    ) {
+                        leadingContent?.invoke( this )
+                        itemsIndexed(
+                            items = songs,
+                            key = { _, song -> song.id }
+                        ) {  index, song ->
+                            SongCard(
+                                modifier = Modifier.animateItem(),
+                                song = song,
+                                isCurrentlyPlaying = currentlyPlayingSongId == song.id,
+                                isFavorite = { isFavorite( songs[ index ].id ) },
+                                onGetPlaylists = onGetPlaylists,
+                                onGetSongMetadata = {
+                                    onGetSongsAdditionalMetadata()
+                                        .find { metadata -> metadata.songId == song.id }
+                                },
+                                onClick = { onPlaySong( song, songs ) },
+                                onFavorite = onFavorite,
+                                onPlayNext = onPlaySongNext,
+                                onAddToQueue = onAddSongToQueue,
+                                onViewArtist = onViewArtist,
+                                onViewAlbum = onViewAlbum,
+                                onShareSong = onShareSong,
+                                onAddSongsToPlaylist = onAddSongsToPlaylist,
+                                onCreatePlaylist = onCreatePlaylist,
+                                onDeleteSong = onDeleteSong,
+                                onShowSnackBar = onShowSnackBar,
+                                onRemoveFromQueue = onRemoveSongFromQueue,
+                                onSongIsPresentInQueue = onSongIsPresentInQueue,
+                                additionalBottomSheetMenuItems = additionalBottomSheetMenuItems,
+                            )
+                        }
+                    }
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align( Alignment.BottomCenter )
+                            .padding(
+                                bottom = if ( currentlyPlayingSongId.isNotBlank() ) {
+                                    70.dp
+                                } else {
+                                    8.dp
+                                }
+                            )
+                    ) {
+                        AnimatedVisibility(
+                            visible = showScrollToTopButton
+                        ) {
+                            Button(
+                                onClick = {
+                                    coroutineScope.launch {
+                                        // Animate scroll to the first item
+                                        listState.scrollToItem( index = 0 )
+                                    }
+                                }
+                            ) {
+                                Text(
+                                    text = stringResource( id = i8nR.string.core_i8n_scroll_to_top ),
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
                     }
                 }
             }

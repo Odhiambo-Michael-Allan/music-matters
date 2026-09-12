@@ -130,7 +130,9 @@ private fun ForYouScreenContent(
                                 ForYouSongRow(
                                     heading = stringResource( id = i8nR.string.core_i8n_recently_added_songs ),
                                     songs = uiState.recentlyAddedSongs.subListNonStrict( 10 ),
-                                    onPlaySong = onPlaySong,
+                                    onPlaySong = { song, _ ->
+                                        onPlaySong( song, uiState.recentlyAddedSongs )
+                                    }
                                 )
                             }
                             if ( uiState.suggestedAlbums.isNotEmpty() ) {
@@ -222,8 +224,8 @@ private fun ForYouScreenContent(
                     )
                     Box(
                         Modifier
-                            .align( Alignment.BottomEnd )
-                            .padding( bottom = animatedBottomPadding )
+                            .align(Alignment.BottomEnd)
+                            .padding(bottom = animatedBottomPadding)
                     ) {
                         LargeFloatingActionButton(
                             modifier = Modifier.padding( 16.dp ),

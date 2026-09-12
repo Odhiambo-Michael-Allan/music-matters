@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,10 +16,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import androidx.compose.ui.window.Dialog
 import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
@@ -38,11 +41,17 @@ fun SongDetailsDialog(
     durationFormatter: ( Long ) -> String,
     onDismissRequest: () -> Unit,
 ) {
+
+    val windowWidth = LocalWindowInfo.current.containerSize.width
+    val windowHeight = LocalWindowInfo.current.containerSize.height
+    val dialogHeight = ( windowHeight.times( 0.6 ) ).dp
+
     Dialog(
         onDismissRequest = onDismissRequest
     ) {
         Card (
-            shape = RoundedCornerShape( 16.dp )
+            shape = RoundedCornerShape( 16.dp ),
+            modifier = Modifier.height( dialogHeight )
         ) {
             Column (
                 modifier = Modifier
@@ -51,7 +60,7 @@ fun SongDetailsDialog(
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding( 8.dp ),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(

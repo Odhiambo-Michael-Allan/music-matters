@@ -39,7 +39,8 @@ fun LibraryDestinationContainer(
             title = title ?: "",
             scrollBehavior = scrollBehavior,
             onNavigationIconClicked = onNavigateBack,
-            options = options ?: {
+            options = {
+                options?.invoke()
                 IconButton(
                     onClick = { onNavigateToSettings?.let { it() } }
                 ) {

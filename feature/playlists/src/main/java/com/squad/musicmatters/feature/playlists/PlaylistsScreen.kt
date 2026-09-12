@@ -1,21 +1,16 @@
 package com.squad.musicmatters.feature.playlists
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,13 +24,10 @@ import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortPlaylistsBy
 import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.GenericGrid
-import com.squad.musicmatters.core.ui.GenericTile
-import com.squad.musicmatters.core.ui.IconTextBody
 import com.squad.musicmatters.core.ui.LibraryDestinationContainer
-import com.squad.musicmatters.core.ui.MediaSortBar
-import com.squad.musicmatters.core.ui.MediaSortBarScaffold
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
+import com.squad.musicmatters.core.ui.dialog.NewPlaylistDialog
 import com.squad.musicmatters.core.i8n.R as i8nR
 
 @Composable
@@ -91,12 +83,25 @@ private fun PlaylistsScreenContent(
 ) {
 
     val context = LocalContext.current
+    var showCreateNewPlaylistDialog by remember { mutableStateOf( false ) }
 
     LibraryDestinationContainer(
         title = stringResource( id = i8nR.string.core_i8n_playlists ),
         isLoading = uiState is PlaylistsScreenUiState.Loading,
         onNavigateBack = onNavigateBack,
-        onNavigateToSettings = onNavigateToSettings
+        onNavigateToSettings = onNavigateToSettings,
+        options = {
+            IconButton(
+                onClick = {
+                    showCreateNewPlaylistDialog = true
+                }
+            ) {
+                Icon(
+                    imageVector = MusicMattersIcons.Add,
+                    contentDescription = null,
+                )
+            }
+        }
     ) {
         when ( uiState ) {
             PlaylistsScreenUiState.Loading -> {}
@@ -126,7 +131,14 @@ private fun PlaylistsScreenContent(
                     onSortInReverseChange = onSortInReverseChange,
                     onGetItemKeyFor = { it.id },
                     onGetArtworkUriFor = { it.artworkUri?.toUri() },
-                    onGetTitleFor = { it.title },
+                    onGetTitleFor = {
+                        if ( it.id == FAVORITES_PLAYLIST_ID ) {
+                            context.getString(i8nR.string.core_i8n_favorites)
+                        }
+                        else {
+                            it.title
+                        }
+                    },
                     onGetSubTitleFor = onGetSubTitle,
                     onGetHeaderDescriptionFor = onGetSubTitle,
                     onGetSongsForItem = {
@@ -176,9 +188,21 @@ private fun PlaylistsScreenContent(
                         }
                     }
                 )
+
+                if ( showCreateNewPlaylistDialog ) {
+                    NewPlaylistDialog(
+                        songsToAdd = emptyList(),
+                        onConfirmation = { playlistName, selectedSongs ->
+                            showCreateNewPlaylistDialog = false
+                            onCreatePlaylist( playlistName, selectedSongs )
+                        },
+                        onDismissRequest = { showCreateNewPlaylistDialog = false }
+                    )
+                }
             }
         }
     }
+
 }
 
 

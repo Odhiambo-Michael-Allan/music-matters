@@ -192,6 +192,8 @@
     <string name="core_i8n_no_results" translatable="false">No results</string>
     <string name="core_i8n_turntable" translatable="false">Turntable</string>
     <string name="core_i8n_expanded_view" translatable="false">Expanded View</string>
+    <string name="core_i8n_scroll_to_top" translatable="false">Scroll to top</string>
+
 
     <string name="core_i8n_reddit" translatable="false">Reddit</string>
     <string name="core_i8n_discord" translatable="false">Discord</string>

@@ -3,6 +3,7 @@ package com.squad.musicmatters.glance.layout
 import android.content.Intent
 import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -61,13 +62,16 @@ internal fun NowPlayingWidgetLayout(
                     .clickable( actionStartActivity( launchMainActivityIntent ) ),
             )
         } ?: run {
-            SquareIconButton(
-                imageProvider = ImageProvider( R.drawable.glance_music_note ),
+            RectangularIconButton(
+                iconImageProvider = ImageProvider( R.drawable.glance_music_note ),
                 contentDescription = "song-artwork",
+                iconSize = 24.dp,
+                roundedCornerShape = RoundedCornerShape.MEDIUM,
                 backgroundColor = GlanceTheme.colors.secondaryContainer,
                 contentColor = GlanceTheme.colors.onSecondaryContainer,
-                modifier = GlanceModifier.size( 78.dp, 80.dp ),
-                onClick = { actionStartActivity( launchMainActivityIntent ) }
+                onClick = actionStartActivity( launchMainActivityIntent ),
+                modifier = GlanceModifier
+                    .size( 78.dp, 80.dp )
             )
         }
 

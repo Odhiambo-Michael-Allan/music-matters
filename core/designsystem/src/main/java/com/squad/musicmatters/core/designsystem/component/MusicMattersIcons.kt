@@ -14,6 +14,7 @@ import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.VideoLibrary
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Album
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
@@ -89,8 +90,7 @@ object MusicMattersIcons {
     val MusicNoteOutlined = Icons.Outlined.MusicNote
     val Library = Icons.Rounded.VideoLibrary
     val LibraryUnselected = Icons.Outlined.VideoLibrary
-    val Cast = Icons.Default.Cast
-    val CastConnected = Icons.Default.CastConnected
+    val Add = Icons.Rounded.Add
     val Info = Icons.Default.Info
     val Playlist = Icons.AutoMirrored.Rounded.PlaylistPlay
     val Remove = Icons.Rounded.Close

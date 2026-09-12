@@ -1,7 +1,11 @@
 package com.squad.musicmatters.feature.queue.components
 
 import android.net.Uri
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,23 +15,29 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MusicNote
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.squad.musicmatters.core.i8n.R
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.DevicePreviews
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import com.squad.musicmatters.core.i8n.R as i8nR
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
@@ -35,6 +45,7 @@ import com.squad.musicmatters.core.ui.IconTextBody
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.SongCard
+import kotlinx.coroutines.launch
 import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
 
@@ -62,14 +73,22 @@ internal fun QueueList(
     onRemoveFromQueue: ( Song ) -> Unit,
 ) {
 
-    val lazyListState = rememberLazyListState(
+    val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState(
         initialFirstVisibleItemIndex = songsInQueue.indexOfFirst {
             it.id == currentlyPlayingSongId
         }
     )
+    // Show the scroll to top button if the first visible item is past the 10th item. We use
+    // a remembered derived state to minimize unnecessary compositions
+    val showScrollToTopButton by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 10
+        }
+    }
 
     val ( displayItems, reorderableState ) = rememberReorderableLazyListDataSource(
-        listState = lazyListState,
+        listState = listState,
         items = songsInQueue,
         itemKey = Song::id,
         onCommit = { from, to ->
@@ -88,44 +107,78 @@ internal fun QueueList(
             },
             content = {
                 Text(
-                    text = stringResource( id = R.string.core_i8n_damn_this_is_so_empty )
+                    text = stringResource( id = i8nR.string.core_i8n_damn_this_is_so_empty )
                 )
             }
         )
         else -> {
-            LazyColumn(
-                state = lazyListState,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(
-                    displayItems,
-                    { it.id }
-                ) { song ->
-                    ReorderableItem(
-                        state = reorderableState,
-                        key = song.id
-                    ) {
-                        QueueSongCard(
-                            song = song,
-                            isCurrentlyPlaying = currentlyPlayingSongId == song.id,
-                            songsAdditionalMetadata = songsAdditionalMetadata,
-                            onGetPlaylists = onGetPlaylists,
-                            onClick = { playSong( song, songsInQueue ) },
-                            onDragHandleClick = {},
-                            onFavorite = onFavorite,
-                            onPlayNext = onPlayNext,
-                            onAddToQueue = onAddToQueue,
-                            onAddSongsToPlaylist = onAddSongsToPlaylist,
-                            onViewAlbum = onViewAlbum,
-                            onViewArtist = onViewArtist,
-                            onShareSong = onShareSong,
-                            onCreatePlaylist = onCreatePlaylist,
-                            onShowSnackBar = onShowSnackBar,
-                            onDeleteSong = onDeleteSong,
-                            isFavorite = isFavorite,
-                            onSongIsPresentInQueue = onSongIsPresentInQueue,
-                            onRemoveFromQueue = onRemoveFromQueue,
+            Box {
+                LazyColumn(
+                    state = listState,
+                    contentPadding = PaddingValues( bottom = 70.dp ),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(
+                        displayItems,
+                        { it.id }
+                    ) { song ->
+                        ReorderableItem(
+                            state = reorderableState,
+                            key = song.id
+                        ) {
+                            QueueSongCard(
+                                song = song,
+                                isCurrentlyPlaying = currentlyPlayingSongId == song.id,
+                                songsAdditionalMetadata = songsAdditionalMetadata,
+                                onGetPlaylists = onGetPlaylists,
+                                onClick = { playSong( song, songsInQueue ) },
+                                onDragHandleClick = {},
+                                onFavorite = onFavorite,
+                                onPlayNext = onPlayNext,
+                                onAddToQueue = onAddToQueue,
+                                onAddSongsToPlaylist = onAddSongsToPlaylist,
+                                onViewAlbum = onViewAlbum,
+                                onViewArtist = onViewArtist,
+                                onShareSong = onShareSong,
+                                onCreatePlaylist = onCreatePlaylist,
+                                onShowSnackBar = onShowSnackBar,
+                                onDeleteSong = onDeleteSong,
+                                isFavorite = isFavorite,
+                                onSongIsPresentInQueue = onSongIsPresentInQueue,
+                                onRemoveFromQueue = onRemoveFromQueue,
+                            )
+                        }
+                    }
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align( Alignment.BottomCenter )
+                        .padding(
+                            bottom = if ( currentlyPlayingSongId.isNotBlank() ) {
+                                70.dp
+                            } else {
+                                8.dp
+                            }
                         )
+                ) {
+                    AnimatedVisibility(
+                        visible = showScrollToTopButton
+                    ) {
+                        Button(
+                            onClick = {
+                                coroutineScope.launch {
+                                    // Animate scroll to the first item
+                                    listState.scrollToItem( index = 0 )
+                                }
+                            }
+                        ) {
+                            Text(
+                                text = stringResource( id = i8nR.string.core_i8n_scroll_to_top ),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }
