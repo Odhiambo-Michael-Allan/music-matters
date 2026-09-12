@@ -39,17 +39,7 @@ fun LibraryDestinationContainer(
             title = title ?: "",
             scrollBehavior = scrollBehavior,
             onNavigationIconClicked = onNavigateBack,
-            options = {
-                options?.invoke()
-                IconButton(
-                    onClick = { onNavigateToSettings?.let { it() } }
-                ) {
-                    Icon(
-                        imageVector = MusicMattersIcons.Settings,
-                        contentDescription = null,
-                    )
-                }
-            },
+            options = options
         )
         Box(
             modifier = Modifier.fillMaxSize()

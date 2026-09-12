@@ -1,12 +1,23 @@
 package com.squad.musicmatters.core.data.store
 
 import com.squad.musicmatters.core.model.Genre
+import com.squad.musicmatters.core.model.SortGenresBy
+import kotlinx.coroutines.flow.Flow
 
 interface GenresStore {
 
-    suspend fun fetchGenres(): List<Genre>
+    fun fetchGenresFlow(
+        sortGenresBy: SortGenresBy? = null,
+        sortGenresInReverse: Boolean = false,
+    ): Flow<List<Genre>>
     suspend fun fetchGenreWith( id: Long ): Genre?
-    suspend fun searchGenresMatching( query: String ): List<Genre>
-    fun registerListener( listener: MediaStoreListener )
+    suspend fun searchGenresMatching(
+        query: String,
+        sortGenresBy: SortGenresBy? = null,
+        sortGenresInReverse: Boolean = false,
+    ): List<Genre>
+
+    suspend fun fetchSongIdsInGenre( genreId: Long ): Set<Long>
+
     fun unregisterListener( listener: MediaStoreListener )
 }

@@ -13,6 +13,8 @@ interface GenresRepository {
 
     fun fetchGenreWithId( id: Long ): Flow<Genre?>
 
+    fun fetchSongIdsInGenre( genreId: Long ): Flow<Set<Long>>
+
     fun searchGenresMatching(
         query: String,
         sortGenresBy: SortGenresBy,

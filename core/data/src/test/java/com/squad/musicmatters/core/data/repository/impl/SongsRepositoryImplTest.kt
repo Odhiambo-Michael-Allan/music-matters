@@ -9,8 +9,11 @@ import com.squad.musicmatters.core.testing.songs.testSong
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SortSongsBy
 import com.squad.musicmatters.core.testing.songs.testLyric
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -73,20 +76,19 @@ class SongsRepositoryImplTest {
 
 private class FakeSongsStore : SongsStore {
 
-    private var currentSongs = emptyList<Song>()
+    private var currentSongs = MutableSharedFlow<List<Song>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
     private var currentLyrics = emptyList<Lyric>()
     private val listeners = mutableListOf<MediaStoreListener>()
-    override fun fetchSongsFlow(
-        sortSongsBy: SortSongsBy?,
-        sortSongsInReverse: Boolean
-    ): Flow<List<Song>> {
-        TODO("Not yet implemented")
-    }
 
-    override suspend fun fetchSongs(
+
+    override fun fetchSongsFlow(
+        filterSongIds: Set<String>,
         sortSongsBy: SortSongsBy?,
         sortSongsInReverse: Boolean
-    ): List<Song> = currentSongs
+    ): Flow<List<Song>> = currentSongs
 
     override suspend fun fetchLyricsFor( song: Song? ) = currentLyrics
 
@@ -94,26 +96,26 @@ private class FakeSongsStore : SongsStore {
         query: String,
         sortSongsBy: SortSongsBy?,
         sortSongsInReverse: Boolean
-    ): List<Song> = currentSongs
+    ): List<Song> = currentSongs.first()
 
     override suspend fun searchSongsInAlbumMatching(
         query: String
-    ): List<Song> = currentSongs
+    ): List<Song> = currentSongs.map { songs ->
+        songs.filter { it.title.contains( query ) }
+    }.first()
 
     override suspend fun searchSongsByArtistMatching(
         query: String
-    ): List<Song> = currentSongs
-
-    override fun registerListener( listener: MediaStoreListener ) {
-        listeners.add( listener )
-    }
+    ): List<Song> = currentSongs.map { songs ->
+        songs.filter { it.title.contains( query ) }
+    }.first()
 
     override fun unregisterListener( listener: MediaStoreListener ) {
         listeners.remove( listener )
     }
 
     fun sendSongs( newSongs: List<Song> ) {
-        currentSongs = newSongs
+        currentSongs.tryEmit( newSongs )
         listeners.forEach {
             it.onMediaStoreChanged()
         }

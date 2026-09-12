@@ -11,6 +11,7 @@ import com.squad.musicmatters.core.model.SortGenresBy
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -26,53 +27,26 @@ class GenresRepositoryImpl @Inject constructor(
     override fun fetchGenres(
         sortGenresBy: SortGenresBy,
         reverse: Boolean
-    ): Flow<List<Genre>> = callbackFlow {
-
-        fun fetchAndEmit() {
-            launch( ioDispatcher ) {
-                runCatching { genresStore.fetchGenres() }
-                    .onSuccess { send( it.sortGenres( sortGenresBy, reverse ) ) }
-            }
-        }
-
-        val mediaStoreListener = object : MediaStoreListener {
-            override fun onMediaStoreChanged() {
-                fetchAndEmit()
-            }
-        }
-        genresStore.registerListener( mediaStoreListener )
-        fetchAndEmit()
-        awaitClose {
-            genresStore.unregisterListener( mediaStoreListener )
-        }
-    }.flowOn( ioDispatcher )
+    ): Flow<List<Genre>> = genresStore.fetchGenresFlow(
+        sortGenresBy = sortGenresBy,
+        sortGenresInReverse = reverse,
+    )
 
     override fun fetchGenreWithId( id: Long ): Flow<Genre?> =
-        flow<Genre?> { genresStore.fetchGenreWith( id ) }.flowOn( ioDispatcher )
+        flow {
+            emit( genresStore.fetchGenreWith( id ) )
+        }.flowOn( ioDispatcher )
+
+    override fun fetchSongIdsInGenre( genreId: Long ): Flow<Set<Long>> = flow<Set<Long>> {
+        emit( genresStore.fetchSongIdsInGenre( genreId ) )
+    }.flowOn( ioDispatcher )
 
     override fun searchGenresMatching(
         query: String,
         sortGenresBy: SortGenresBy,
         reverse: Boolean
-    ): Flow<List<Genre>> = callbackFlow {
-
-        fun fetchAndEmit() {
-            launch( ioDispatcher ) {
-                runCatching { genresStore.searchGenresMatching( query ) }
-                    .onSuccess { send( it.sortGenres( sortGenresBy, reverse ) ) }
-            }
-        }
-
-        val mediaStoreListener = object : MediaStoreListener {
-            override fun onMediaStoreChanged() {
-                fetchAndEmit()
-            }
-        }
-        genresStore.registerListener( mediaStoreListener )
-        fetchAndEmit()
-        awaitClose {
-            genresStore.unregisterListener( mediaStoreListener )
-        }
+    ): Flow<List<Genre>> = flow<List<Genre>> {
+        emit( genresStore.searchGenresMatching( query ) )
     }.flowOn( ioDispatcher )
 
 }

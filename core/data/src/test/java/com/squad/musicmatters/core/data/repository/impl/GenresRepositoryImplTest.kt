@@ -4,10 +4,16 @@ import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.data.repository.GenresRepository
 import com.squad.musicmatters.core.data.store.GenresStore
 import com.squad.musicmatters.core.data.store.MediaStoreListener
+import com.squad.musicmatters.core.data.utils.sortGenres
+import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.SortGenresBy
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -78,19 +84,36 @@ class GenresRepositoryImplTest {
 
 private class FakeGenresStore : GenresStore {
 
-    private var genres = emptyList<Genre>()
+    private var genres = MutableSharedFlow<List<Genre>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
     private val listeners = mutableListOf<MediaStoreListener>()
 
-    override suspend fun fetchGenres(): List<Genre> = genres
+    override fun fetchGenresFlow(
+        sortGenresBy: SortGenresBy?,
+        sortGenresInReverse: Boolean
+    ): Flow<List<Genre>> = genres.map {
+        it.sortGenres(
+            by = sortGenresBy ?: DefaultPreferences.SORT_GENRES_BY,
+            reverse = sortGenresInReverse
+        )
+    }
+
 
     override suspend fun fetchGenreWith( id: Long ): Genre? =
-        genres.find { it.id == id }
+        genres.map { genres -> genres.find { it.id == id } }.first()
 
-    override suspend fun searchGenresMatching( query: String ): List<Genre> =
+    override suspend fun searchGenresMatching(
+        query: String,
+        sortGenresBy: SortGenresBy?,
+        sortGenresInReverse: Boolean
+    ): List<Genre> = genres.map { genres ->
         genres.filter { it.name.contains( query ) }
+    }.first()
 
-    override fun registerListener( listener: MediaStoreListener ) {
-        listeners.add( listener )
+    override suspend fun fetchSongIdsInGenre( genreId: Long ): Set<Long> {
+        TODO("Not yet implemented")
     }
 
     override fun unregisterListener( listener: MediaStoreListener ) {
@@ -98,7 +121,7 @@ private class FakeGenresStore : GenresStore {
     }
 
     fun sendGenres( genres: List<Genre> ) {
-        this.genres = genres
+        this.genres.tryEmit( genres )
         listeners.forEach {
             it.onMediaStoreChanged()
         }

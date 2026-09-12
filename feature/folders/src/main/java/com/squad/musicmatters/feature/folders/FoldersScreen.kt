@@ -1,5 +1,7 @@
 package com.squad.musicmatters.feature.folders
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -45,9 +47,18 @@ import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.i8n.R as i8nR
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Button
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun FoldersScreen(
@@ -111,6 +122,18 @@ private fun FoldersList(
     onSortInReverseChange: ( Boolean ) -> Unit,
     onViewFolder: ( String ) -> Unit,
 ) {
+
+    val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+
+    // Show the scroll to top button if the first visible item is past the 10th item. We use
+    // a remembered derived state to minimize unnecessary compositions
+    val showScrollToTopButton by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 10
+        }
+    }
+
     Column {
         MediaSortBar(
             sortBy = sortBy,
@@ -154,25 +177,50 @@ private fun FoldersList(
                 }
             }
             else -> {
-                LazyColumn(
-                    contentPadding = PaddingValues( bottom = 70.dp ),
-                    modifier = modifier,
-                ) {
-                    items(
-                        items = folders,
-                        key = { it.path },
-                    ) { folder ->
-                        FolderCard(
-                            modifier = Modifier.animateItem(),
-                            folder = folder,
-                            onViewFolder = onViewFolder,
-                        )
+                Box {
+                    LazyColumn(
+                        state = listState,
+                        contentPadding = PaddingValues( bottom = 70.dp ),
+                        modifier = modifier,
+                    ) {
+                        items(
+                            items = folders,
+                            key = { it.path },
+                        ) { folder ->
+                            FolderCard(
+                                folder = folder,
+                                onViewFolder = onViewFolder,
+                            )
+                        }
+                    }
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align( Alignment.BottomCenter )
+                            .padding( bottom = 70.dp)
+                    ) {
+                        AnimatedVisibility(
+                            visible = showScrollToTopButton
+                        ) {
+                            Button(
+                                onClick = {
+                                    coroutineScope.launch {
+                                        // Animate scroll to the first item
+                                        listState.scrollToItem( index = 0 )
+                                    }
+                                }
+                            ) {
+                                Text(
+                                    text = stringResource( id = i8nR.string.core_i8n_scroll_to_top ),
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
-
-
     }
 }
 
@@ -230,60 +278,91 @@ private fun FolderCard(
 fun MiddleEllipsisText(
     text: String,
     modifier: Modifier = Modifier,
-    style: TextStyle = TextStyle.Default
+    style: TextStyle = LocalTextStyle.current
 ) {
     val textMeasurer = rememberTextMeasurer()
+    val density = LocalDensity.current
 
-    BoxWithConstraints( modifier = modifier ) {
-        val density = LocalDensity.current
-        // Convert the maximum available layout width from Dp to pixels
-        val maxWidthPx = with( density ) { maxWidth.toPx() }
+    BoxWithConstraints(modifier = modifier) {
+        val maxWidthPx = with(density) {
+            maxWidth.toPx().toInt()
+        }
 
-        // Measure the full text width in pixels
-        val fullTextWidth = textMeasurer.measure( text = text, style = style ).size.width
-
-        // If it fits or is too short to split, keep it as is
-        val finalizedText = if ( fullTextWidth <= maxWidthPx || text.length <= 4 ) {
-            text
-        } else {
-            var result = text
-            val ellipsis = "..."
-
-            var startLen = text.length / 2
-            var endLen = text.length - startLen
-
-            // Trim from the middle outward until the string fits the layout constraints
-            while ( startLen > 0 && endLen > 0 ) {
-                val proposedText = text.take( startLen ) + ellipsis +
-                        text.takeLast( endLen )
-                val proposedWidth = textMeasurer.measure(
-                    text = proposedText,
-                    style = style
-                ).size.width
-
-                if ( proposedWidth <= maxWidthPx ) {
-                    result = proposedText
-                    break
-                }
-
-                // Alternate shrinking the start and end pieces
-                if ( startLen >= endLen ) {
-                    startLen--
-                } else {
-                    endLen--
-                }
-            }
-            result
+        val finalizedText = remember(
+            text,
+            style,
+            maxWidthPx
+        ) {
+            middleEllipsis(
+                text = text,
+                maxWidthPx = maxWidthPx,
+                textMeasurer = textMeasurer,
+                style = style
+            )
         }
 
         Text(
             text = finalizedText,
             style = style,
             maxLines = 1,
-            // Prevent the system from adding another ellipsis at the end
             overflow = TextOverflow.Clip
         )
     }
+}
+
+private fun middleEllipsis(
+    text: String,
+    maxWidthPx: Int,
+    textMeasurer: TextMeasurer,
+    style: TextStyle
+): String {
+    if (text.isEmpty()) return text
+
+    val fullWidth = textMeasurer
+        .measure(text = text, style = style)
+        .size.width
+
+    if (fullWidth <= maxWidthPx || text.length <= 4) {
+        return text
+    }
+
+    val ellipsis = "..."
+
+    // Number of characters we're allowed to keep
+    val maxCharacters = text.length - ellipsis.length
+
+    var low = 0
+    var high = maxCharacters
+    var best = ellipsis
+
+    while (low <= high) {
+        val totalCharacters = (low + high) / 2
+
+        // Keep approximately half from each side
+        val startLength = (totalCharacters + 1) / 2
+        val endLength = totalCharacters / 2
+
+        val candidate =
+            text.take(startLength) +
+                    ellipsis +
+                    text.takeLast(endLength)
+
+        val width = textMeasurer
+            .measure(
+                text = candidate,
+                style = style
+            )
+            .size.width
+
+        if (width <= maxWidthPx) {
+            best = candidate
+            low = totalCharacters + 1
+        } else {
+            high = totalCharacters - 1
+        }
+    }
+
+    return best
 }
 
 private fun SortPathsBy.label() = when ( this ) {

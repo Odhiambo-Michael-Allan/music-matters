@@ -8,14 +8,10 @@ import kotlinx.coroutines.flow.Flow
 interface SongsStore {
 
     fun fetchSongsFlow(
+        filterSongIds: Set<String> = emptySet(),
         sortSongsBy: SortSongsBy? = null,
         sortSongsInReverse: Boolean = false,
     ): Flow<List<Song>>
-
-    suspend fun fetchSongs(
-        sortSongsBy: SortSongsBy? = null,
-        sortSongsInReverse: Boolean = false,
-    ): List<Song>
 
     suspend fun fetchLyricsFor( song: Song? ): List<Lyric>
 
@@ -33,6 +29,5 @@ interface SongsStore {
         query: String
     ): List<Song>
 
-    fun registerListener( listener: MediaStoreListener )
     fun unregisterListener( listener: MediaStoreListener )
 }

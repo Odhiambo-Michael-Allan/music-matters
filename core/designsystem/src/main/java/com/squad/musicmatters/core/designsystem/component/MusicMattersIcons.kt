@@ -95,4 +95,5 @@ object MusicMattersIcons {
     val Playlist = Icons.AutoMirrored.Rounded.PlaylistPlay
     val Remove = Icons.Rounded.Close
     val Folder = Icons.Rounded.Folder
+
 }

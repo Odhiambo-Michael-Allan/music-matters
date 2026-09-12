@@ -3,11 +3,14 @@ package com.squad.musicmatters.feature.genre
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.squad.musicmatters.core.data.repository.GenresRepository
 import com.squad.musicmatters.core.data.repository.PlaylistsRepository
 import com.squad.musicmatters.core.data.repository.SongsMetadataRepository
 import com.squad.musicmatters.core.data.repository.SongsRepository
+import com.squad.musicmatters.core.data.utils.combine
 import com.squad.musicmatters.core.datastore.UserDataRepository
 import com.squad.musicmatters.core.media.connection.MusicMattersPlayer
+import com.squad.musicmatters.core.model.Genre
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
@@ -25,8 +28,9 @@ import javax.inject.Inject
 @HiltViewModel
 class GenreScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    songsMetadataRepository: SongsMetadataRepository,
+    genresRepository: GenresRepository,
     songsRepository: SongsRepository,
+    songsMetadataRepository: SongsMetadataRepository,
     player: MusicMattersPlayer,
     userDataRepository: UserDataRepository,
     playlistsRepository: PlaylistsRepository,
@@ -35,6 +39,7 @@ class GenreScreenViewModel @Inject constructor(
     userDataRepository = userDataRepository,
     playlistsRepository = playlistsRepository
 ) {
+    val genreId = savedStateHandle.toRoute<GenreRoute>().genreId
     val genreName = savedStateHandle.toRoute<GenreRoute>().genreName
 
     val uiState: StateFlow<GenreScreenUiState> = combine(
@@ -44,16 +49,16 @@ class GenreScreenViewModel @Inject constructor(
                 sortSongsInReverse = it.sortSongsReverse
             )
         },
+        genresRepository.fetchSongIdsInGenre( genreId ),
         userDataRepository.userData,
         playlistsRepository.fetchFavorites(),
         playlistsRepository.fetchPlaylists(),
-        songsMetadataRepository.fetchMetadata()
-    ) { songs, userData, favoriteSongsPlaylist, playlists, metadata ->
+        songsMetadataRepository.fetchMetadata(),
+    ) { songs, idsOfSongsInGenre, userData, favoriteSongsPlaylist, playlists, metadata ->
         GenreScreenUiState.Success(
             genreName = genreName,
             songsInGenre = songs.filter { song ->
-                song.id in ( metadata.filter { it.genreName == genreName }
-                    .map(SongMetadata::songId ) )
+                song.mediaStoreId in idsOfSongsInGenre
             },
             sortSongsBy = userData.sortSongsBy,
             sortSongsInReverse = userData.sortSongsReverse,

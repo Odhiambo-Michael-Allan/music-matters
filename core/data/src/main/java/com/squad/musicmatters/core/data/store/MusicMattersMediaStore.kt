@@ -46,7 +46,7 @@ open class MusicMattersMediaStore(
         }
     }
 
-    fun registerListener( listener: MediaStoreListener ) {
+    protected fun registerListener( listener: MediaStoreListener ) {
         Timber.tag( TAG ).d( "REGISTERING LISTENER" )
         listeners.add( listener )
     }

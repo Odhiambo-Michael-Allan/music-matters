@@ -62,24 +62,27 @@ class SongsStoreImpl(
         )
     }
 
+    private suspend fun fetchSongs(): List<Song> = fetchSongs(
+        sortOrder = DefaultPreferences.SORT_SONGS_BY.toMediaStoreSortFormat(),
+        sortSongsInReverse = false,
+        selection = "$IS_MUSIC = 1"
+    )
+
     override fun fetchSongsFlow(
+        filterSongIds: Set<String>,
         sortSongsBy: SortSongsBy?,
         sortSongsInReverse: Boolean,
     ): Flow<List<Song>> = _cachedSongs.map {
-        it.sortSongs(
+        val result = if ( filterSongIds.isNotEmpty() ) {
+            it.filter { song -> song.id in filterSongIds }
+        } else {
+            it
+        }
+        result.sortSongs(
             by = sortSongsBy ?: DefaultPreferences.SORT_SONGS_BY,
             reverse = sortSongsInReverse
         )
     }.flowOn( ioDispatcher )
-
-    override suspend fun fetchSongs(
-        sortSongsBy: SortSongsBy?,
-        sortSongsInReverse: Boolean,
-    ): List<Song> = fetchSongs(
-        sortOrder = sortSongsBy?.toMediaStoreSortFormat(),
-        sortSongsInReverse = sortSongsInReverse,
-        selection = "$IS_MUSIC = 1"
-    )
 
     override suspend fun searchSongsMatching(
         query: String,
@@ -196,8 +199,7 @@ private fun buildSongUsing( cursor: Cursor ): Song {
 
 private fun Cursor.getMediaUriFrom(): Uri = ContentUris.withAppendedId(
     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-    getLongFrom( AudioColumns._ID
-    )
+    getLongFrom( AudioColumns._ID )
 )
 
 private fun Cursor.getArtworkUri(): Uri? = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI

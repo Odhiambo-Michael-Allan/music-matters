@@ -290,7 +290,7 @@ class MusicService : MediaLibraryService() {
 
     override fun onStartCommand( intent: Intent?, flags: Int, startId: Int ): Int {
         super.onStartCommand( intent, flags, startId )
-        // Initialize the player if necessary..
+        // Initialize the player if necessary
         serviceScope.launch( ioDispatcher ) {
             val songs = songsRepository.fetchSongs().first()
             withContext( mainDispatcher ) {

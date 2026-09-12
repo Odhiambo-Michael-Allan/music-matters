@@ -14,6 +14,9 @@ class FakeGenresRepository : GenresRepository {
     private val genresFlow: MutableSharedFlow<List<Genre>> =
         MutableSharedFlow( replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST )
 
+    private val songIdsFlow: MutableSharedFlow<Set<Long>> =
+        MutableSharedFlow( replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST )
+
     override fun fetchGenres(
         sortGenresBy: SortGenresBy,
         reverse: Boolean
@@ -28,6 +31,8 @@ class FakeGenresRepository : GenresRepository {
         genres.find { it.id == id }
     }
 
+    override fun fetchSongIdsInGenre( genreId: Long ): Flow<Set<Long>> = songIdsFlow
+
     override fun searchGenresMatching(
         query: String,
         sortGenresBy: SortGenresBy,
@@ -41,6 +46,10 @@ class FakeGenresRepository : GenresRepository {
 
     fun sendGenres( genres: List<Genre> ) {
         genresFlow.tryEmit( genres )
+    }
+
+    fun sendSongIds( ids: Set<Long> ) {
+        songIdsFlow.tryEmit( ids )
     }
 
 }

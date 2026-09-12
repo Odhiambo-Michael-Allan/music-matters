@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,30 +39,6 @@ class SongsRepositoryImpl @Inject constructor(
         sortSongsBy = sortSongsBy,
         sortSongsInReverse = sortSongsInReverse,
     )
-//        callbackFlow {
-//
-//        // Helper function to fetch, sort, and emit the latest songs safely
-//        fun fetchAndEmit() {
-//            launch( ioDispatcher ) {
-//                runCatching { songsStore.fetchSongs( sortSongsBy, sortSongsInReverse ) }
-//                    .onSuccess { songs -> send( songs ) }
-//            }
-//        }
-//
-//        val storeListener = object : MediaStoreListener {
-//            override fun onMediaStoreChanged() {
-//                fetchAndEmit()
-//            }
-//        }
-//        songsStore.registerListener( storeListener )
-//
-//        fetchAndEmit()
-//
-//        // 3. Keep the flow active until the collector cancels it, then clean up
-//        awaitClose {
-//            songsStore.unregisterListener( storeListener )
-//        }
-//    }.flowOn( ioDispatcher )
 
     override fun searchSongsMatching(
         query: String,
@@ -77,36 +54,8 @@ class SongsRepositoryImpl @Inject constructor(
         emit( searchResults )
     }.flowOn( ioDispatcher )
 
-    override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> = channelFlow {
-        if ( song == null ) {
-            send( emptyList() )
-            close()
-            return@channelFlow
-        }
-
-        val changeEvents = MutableSharedFlow<Unit>(
-            extraBufferCapacity = 1,
-            replay = 1
-        )
-
-        val storeListener = object : MediaStoreListener {
-            override fun onMediaStoreChanged() {
-                changeEvents.tryEmit( Unit ) // Trigger new fetch
-            }
-        }
-
-        songsStore.registerListener( storeListener )
-
-        launch( ioDispatcher ) {
-            changeEvents.collectLatest {
-                runCatching { songsStore.fetchLyricsFor( song ) }
-                    .onSuccess { send( it ) }
-            }
-        }
-        // Trigger initial load.
-        changeEvents.tryEmit( Unit )
-        awaitClose { songsStore.unregisterListener( storeListener ) }
-    }
+    override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> =
+        flow<List<Lyric>> { songsStore.fetchLyricsFor( song ) }.flowOn( ioDispatcher )
 
     override fun searchSongsInAlbumMatching( query: String ): Flow<List<Song>> =
         flow {

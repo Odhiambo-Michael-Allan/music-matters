@@ -135,17 +135,26 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/GenresRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/GenresRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/GenresRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/GenresRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/GenresStore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/GenresStore.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/MusicMattersMediaStore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/MusicMattersMediaStore.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/SongsStore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/SongsStore.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/impl/GenresStoreImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/impl/GenresStoreImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/impl/SongsStoreImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/main/java/com/squad/musicmatters/core/data/store/impl/SongsStoreImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/GenresRepositoryImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/GenresRepositoryImplTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImplTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/data/src/test/java/com/squad/musicmatters/core/data/repository/impl/SongsRepositoryImplTest.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/MusicMattersIcons.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/MusicMattersIcons.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/i8n/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core/i8n/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MusicService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/media/src/main/java/com/squad/musicmatters/core/media/media/MusicService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeGenresRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/repository/FakeGenresRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/songs/Songs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/testing/src/main/java/com/squad/musicmatters/core/testing/songs/Songs.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/GenericGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/GenericGrid.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/LibraryDestinationContainer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/LibraryDestinationContainer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongsList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/SongsList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/SongDetailsDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/ui/src/main/java/com/squad/musicmatters/core/ui/dialog/SongDetailsDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/forYou/src/main/java/com/squad/musicmatters/feature/foryou/ForYouScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/forYou/src/main/java/com/squad/musicmatters/feature/foryou/ForYouScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/playlists/src/main/java/com/squad/musicmatters/feature/playlists/PlaylistsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/playlists/src/main/java/com/squad/musicmatters/feature/playlists/PlaylistsScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/components/QueueList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/queue/src/main/java/com/squad/musicmatters/feature/queue/components/QueueList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/layout/NowPlayingWidgetLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/layout/NowPlayingWidgetLayout.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/turntable/TurnTable.kt" beforeDir="false" afterPath="$PROJECT_DIR$/glance/src/main/java/com/squad/musicmatters/glance/turntable/TurnTableWidget.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/folders/src/main/java/com/squad/musicmatters/feature/folders/FoldersScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/folders/src/main/java/com/squad/musicmatters/feature/folders/FoldersScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/genre/src/main/java/com/squad/musicmatters/feature/genre/GenreScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/genre/src/main/java/com/squad/musicmatters/feature/genre/GenreScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/genre/src/test/java/com/squad/musicmatters/feature/genre/GenreScreenViewModelTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/genre/src/test/java/com/squad/musicmatters/feature/genre/GenreScreenViewModelTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/search/src/main/java/com/squad/musicmatters/feature/search/SearchScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/search/src/main/java/com/squad/musicmatters/feature/search/SearchScreen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -697,6 +706,33 @@
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
+    <configuration name="GenresRepositoryImplTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":core:data:testDebugUnitTest" />
+            <option value="--tests" />
+            <option value="&quot;com.squad.musicmatters.core.data.repository.impl.GenresRepositoryImplTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
+      <method v="2" />
+    </configuration>
     <configuration name="GlanceRepositoryTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -724,7 +760,7 @@
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
-    <configuration name="SearchRepositoryImplTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="SongsRepositoryImplTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -737,34 +773,7 @@
           <list>
             <option value=":core:data:testDebugUnitTest" />
             <option value="--tests" />
-            <option value="&quot;com.squad.musicmatters.core.data.repository.impl.SearchRepositoryImplTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <GradleProfilingDisabled>false</GradleProfilingDisabled>
-      <GradleCoverageDisabled>false</GradleCoverageDisabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="SearchScreenViewModelTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":feature:search:testDebugUnitTest" />
-            <option value="--tests" />
-            <option value="&quot;com.squad.musicmatters.feature.search.SearchScreenViewModelTest&quot;" />
+            <option value="&quot;com.squad.musicmatters.core.data.repository.impl.SongsRepositoryImplTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -780,11 +789,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.GlanceRepositoryTest" />
         <item itemvalue="Gradle.GenreScreenViewModelTest" />
+        <item itemvalue="Gradle.GenresRepositoryImplTest" />
+        <item itemvalue="Gradle.SongsRepositoryImplTest" />
+        <item itemvalue="Gradle.GlanceRepositoryTest" />
         <item itemvalue="Gradle.AlbumsScreenViewModelTest" />
-        <item itemvalue="Gradle.SearchScreenViewModelTest" />
-        <item itemvalue="Gradle.SearchRepositoryImplTest" />
       </list>
     </recent_temporary>
   </component>

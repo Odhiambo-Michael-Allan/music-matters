@@ -6,6 +6,7 @@ import com.squad.castify.core.testing.rules.MainDispatcherRule
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
+import com.squad.musicmatters.core.testing.repository.FakeGenresRepository
 import com.squad.musicmatters.core.testing.repository.FakePlaylistsRepository
 import com.squad.musicmatters.core.testing.repository.FakeUserDataRepository
 import com.squad.musicmatters.core.testing.repository.FakeSongsMetadataRepository
@@ -47,6 +48,7 @@ class GenreScreenViewModelTest {
     private lateinit var preferencesDataSource: FakeUserDataRepository
     private lateinit var playlistRepository: FakePlaylistsRepository
     private lateinit var metadataRepository: FakeSongsMetadataRepository
+    private lateinit var genresRepository: FakeGenresRepository
     private lateinit var subject: GenreScreenViewModel
 
     @Before
@@ -56,6 +58,7 @@ class GenreScreenViewModelTest {
         preferencesDataSource = FakeUserDataRepository()
         playlistRepository = FakePlaylistsRepository()
         metadataRepository = FakeSongsMetadataRepository()
+        genresRepository = FakeGenresRepository()
         subject = GenreScreenViewModel(
             savedStateHandle = SavedStateHandle(
                 route = GenreRoute(
@@ -67,7 +70,8 @@ class GenreScreenViewModelTest {
             playlistsRepository = playlistRepository,
             songsMetadataRepository = metadataRepository,
             player = player,
-            userDataRepository = preferencesDataSource
+            userDataRepository = preferencesDataSource,
+            genresRepository = genresRepository,
         )
     }
 
@@ -86,11 +90,11 @@ class GenreScreenViewModelTest {
         backgroundScope.launch( UnconfinedTestDispatcher() ) { subject.uiState.collect() }
 
         val songs = listOf(
-            testSong( id = "song-id-1" ),
-            testSong( id = "song-id-2" ),
-            testSong( id = "song-id-3" ),
-            testSong( id = "song-id-4" ),
-            testSong( id = "song-id-5" ),
+            testSong( id = "song-id-1", mediaStoreId = 1 ),
+            testSong( id = "song-id-2", mediaStoreId = 2 ),
+            testSong( id = "song-id-3", mediaStoreId = 3 ),
+            testSong( id = "song-id-4", mediaStoreId = 4 ),
+            testSong( id = "song-id-5", mediaStoreId = 5 ),
         )
         val metadata = listOf(
             testSongMetadata( songId = "song-id-1", genreName = genreName ),
@@ -99,7 +103,9 @@ class GenreScreenViewModelTest {
             testSongMetadata( songId = "song-id-4", genreName = genreName ),
             testSongMetadata( songId = "song-id-5", genreName = genreName ),
         )
+        val songIds: Set<Long> = setOf( 1, 3, 4 )
         songsRepository.sendSongs( songs )
+        genresRepository.sendSongIds( songIds )
         metadataRepository.sendMetadata( metadata )
         preferencesDataSource.sendUserData(
             emptyUserData.copy( currentlyPlayingSongId = "song-id-4" )
@@ -109,7 +115,7 @@ class GenreScreenViewModelTest {
         assertEquals(
             GenreScreenUiState.Success(
                 genreName = genreName,
-                songsInGenre = songs.filter { it.id != "song-id-3" },
+                songsInGenre = songs.filter { it.mediaStoreId in songIds },
                 sortSongsBy = DefaultPreferences.SORT_SONGS_BY,
                 sortSongsInReverse = false,
                 currentlyPlayingSongId = "song-id-4",

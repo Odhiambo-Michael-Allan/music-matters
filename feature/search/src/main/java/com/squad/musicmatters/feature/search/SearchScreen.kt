@@ -22,6 +22,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -385,6 +386,9 @@ private fun SearchBar(
                 unfocusedContainerColor = Color.Transparent
             ),
             singleLine = true,
+            textStyle = LocalTextStyle.current.copy(
+                fontWeight = FontWeight.Bold
+            ),
             value = searchQuery,
             onValueChange = {
                 searchQuery = it
