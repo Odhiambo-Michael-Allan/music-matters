@@ -40,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
@@ -161,7 +162,9 @@ private fun SearchScreenContent(
                     }
                 } else {
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding( bottom = 70.dp )
                     ) {
                         // --- SONGS SECTION ---
                         if ( uiState.songs.isNotEmpty() ) {
@@ -212,7 +215,9 @@ private fun SearchScreenContent(
                                     title = {
                                         Text(
                                             text = album.title,
-                                            fontWeight = FontWeight.Bold
+                                            fontWeight = FontWeight.Bold,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     },
                                     subtitle = {
@@ -223,6 +228,8 @@ private fun SearchScreenContent(
                                                     .onSurface.copy( alpha = 0.5f )
                                             ),
                                             textAlign = TextAlign.Center,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     },
                                     onClick = { onViewAlbum( album.id ) }
@@ -244,7 +251,9 @@ private fun SearchScreenContent(
                                     title = {
                                         Text(
                                             text = artist.name,
-                                            fontWeight = FontWeight.Bold
+                                            fontWeight = FontWeight.Bold,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     },
                                     subtitle = {
@@ -262,6 +271,8 @@ private fun SearchScreenContent(
                                                     .onSurface.copy( alpha = 0.5f )
                                             ),
                                             textAlign = TextAlign.Center,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     },
                                     onClick = { onViewArtist( artist.id ) }
@@ -283,7 +294,9 @@ private fun SearchScreenContent(
                                     title = {
                                         Text(
                                             text = genre.name,
-                                            fontWeight = FontWeight.Bold
+                                            fontWeight = FontWeight.Bold,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     },
                                     subtitle = {
@@ -301,6 +314,8 @@ private fun SearchScreenContent(
                                                     .onSurface.copy( alpha = 0.5f )
                                             ),
                                             textAlign = TextAlign.Center,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     },
                                     onClick = { onViewGenre( genre ) }
@@ -322,7 +337,9 @@ private fun SearchScreenContent(
                                     title = {
                                         Text(
                                             text = playlist.title,
-                                            fontWeight = FontWeight.Bold
+                                            fontWeight = FontWeight.Bold,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     },
                                     subtitle = {
@@ -340,6 +357,8 @@ private fun SearchScreenContent(
                                                     .onSurface.copy( alpha = 0.5f )
                                             ),
                                             textAlign = TextAlign.Center,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     },
                                     onClick = { onViewPlaylist( playlist.id ) }

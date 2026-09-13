@@ -259,110 +259,18 @@ private fun FolderCard(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                MiddleEllipsisText(
+                Text(
                     text = folder.path,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
-                    )
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.MiddleEllipsis
                 )
             }
         }
     }
-}
-
-
-
-
-@Composable
-fun MiddleEllipsisText(
-    text: String,
-    modifier: Modifier = Modifier,
-    style: TextStyle = LocalTextStyle.current
-) {
-    val textMeasurer = rememberTextMeasurer()
-    val density = LocalDensity.current
-
-    BoxWithConstraints(modifier = modifier) {
-        val maxWidthPx = with(density) {
-            maxWidth.toPx().toInt()
-        }
-
-        val finalizedText = remember(
-            text,
-            style,
-            maxWidthPx
-        ) {
-            middleEllipsis(
-                text = text,
-                maxWidthPx = maxWidthPx,
-                textMeasurer = textMeasurer,
-                style = style
-            )
-        }
-
-        Text(
-            text = finalizedText,
-            style = style,
-            maxLines = 1,
-            overflow = TextOverflow.Clip
-        )
-    }
-}
-
-private fun middleEllipsis(
-    text: String,
-    maxWidthPx: Int,
-    textMeasurer: TextMeasurer,
-    style: TextStyle
-): String {
-    if (text.isEmpty()) return text
-
-    val fullWidth = textMeasurer
-        .measure(text = text, style = style)
-        .size.width
-
-    if (fullWidth <= maxWidthPx || text.length <= 4) {
-        return text
-    }
-
-    val ellipsis = "..."
-
-    // Number of characters we're allowed to keep
-    val maxCharacters = text.length - ellipsis.length
-
-    var low = 0
-    var high = maxCharacters
-    var best = ellipsis
-
-    while (low <= high) {
-        val totalCharacters = (low + high) / 2
-
-        // Keep approximately half from each side
-        val startLength = (totalCharacters + 1) / 2
-        val endLength = totalCharacters / 2
-
-        val candidate =
-            text.take(startLength) +
-                    ellipsis +
-                    text.takeLast(endLength)
-
-        val width = textMeasurer
-            .measure(
-                text = candidate,
-                style = style
-            )
-            .size.width
-
-        if (width <= maxWidthPx) {
-            best = candidate
-            low = totalCharacters + 1
-        } else {
-            high = totalCharacters - 1
-        }
-    }
-
-    return best
 }
 
 private fun SortPathsBy.label() = when ( this ) {

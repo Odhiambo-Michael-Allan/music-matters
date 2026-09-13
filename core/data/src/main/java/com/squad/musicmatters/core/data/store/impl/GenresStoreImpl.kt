@@ -68,22 +68,19 @@ class GenresStoreImpl(
     override suspend fun fetchGenreWith( id: Long ): Genre? =
         withContext( ioDispatcher ) {
             createGenreCursor()?.let { cursor ->
-                cursor.use { fetchGenreFromCursor( it ) }
+                cursor.use {
+                    if ( it.moveToFirst() ) {
+                        fetchGenreFromCursor( it )
+                    } else {
+                        null
+                    }
+                }
             }
         }
 
     override suspend fun searchGenresMatching(
         query: String,
-        sortGenresBy: SortGenresBy?,
-        sortGenresInReverse: Boolean,
-    ): List<Genre> =
-        fetchGenresFromCursor(
-            createGenreCursor(
-                query = query,
-//                sortOrder = sortGenresBy?.toMediaStoreSortFormat()
-//                    ?: SortGenresBy.NAME.toMediaStoreSortFormat(),
-            )
-        )
+    ): List<Genre> = fetchGenresFromCursor( createGenreCursor( query = query ) )
 
     override suspend fun fetchSongIdsInGenre( genreId: Long ): Set<Long> =
         withContext( ioDispatcher ) {
@@ -175,7 +172,6 @@ class GenresStoreImpl(
 
     private fun createGenreCursor(
         query: String,
-//        sortOrder: String,
     ): Cursor? {
         val projection = arrayOf( MediaStore.Audio.Genres._ID, MediaStore.Audio.Genres.NAME )
         return try {

@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -109,6 +111,9 @@ fun GenresGrid(
     onSortTypeChange: ( SortGenresBy ) -> Unit,
     onViewGenre: ( Genre ) -> Unit,
 ) {
+
+    val listState = rememberLazyStaggeredGridState()
+
     MediaSortBarScaffold(
         mediaSortBar = {
             Box(
@@ -155,6 +160,7 @@ fun GenresGrid(
             )
             else -> {
                 LazyVerticalStaggeredGrid(
+                    state = listState,
                     columns = StaggeredGridCells.Adaptive( 150.dp ),
                     horizontalArrangement = Arrangement.spacedBy( 4.dp ),
                     verticalItemSpacing = 4.dp,
@@ -165,7 +171,10 @@ fun GenresGrid(
                         bottom = 70.dp
                     )
                 ) {
-                    itemsIndexed( genres ) { index, genre ->
+                    itemsIndexed(
+                        items = genres,
+                        key = { _, genre -> genre.id }
+                    ) { index, genre ->
                         GenreCard(
                             modifier = Modifier.animateItem(),
                             genre = genre,

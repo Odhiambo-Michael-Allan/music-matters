@@ -37,7 +37,7 @@ class GenresRepositoryImpl @Inject constructor(
             emit( genresStore.fetchGenreWith( id ) )
         }.flowOn( ioDispatcher )
 
-    override fun fetchSongIdsInGenre( genreId: Long ): Flow<Set<Long>> = flow<Set<Long>> {
+    override fun fetchSongIdsInGenre( genreId: Long ): Flow<Set<Long>> = flow {
         emit( genresStore.fetchSongIdsInGenre( genreId ) )
     }.flowOn( ioDispatcher )
 
@@ -45,8 +45,15 @@ class GenresRepositoryImpl @Inject constructor(
         query: String,
         sortGenresBy: SortGenresBy,
         reverse: Boolean
-    ): Flow<List<Genre>> = flow<List<Genre>> {
-        emit( genresStore.searchGenresMatching( query ) )
+    ): Flow<List<Genre>> = flow {
+        emit(
+            genresStore
+                .searchGenresMatching( query )
+                .sortGenres(
+                    by = sortGenresBy,
+                    reverse = reverse,
+                )
+        )
     }.flowOn( ioDispatcher )
 
 }

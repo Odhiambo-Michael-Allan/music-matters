@@ -55,7 +55,9 @@ class SongsRepositoryImpl @Inject constructor(
     }.flowOn( ioDispatcher )
 
     override fun fetchLyricsForSong( song: Song? ): Flow<List<Lyric>> =
-        flow<List<Lyric>> { songsStore.fetchLyricsFor( song ) }.flowOn( ioDispatcher )
+        flow {
+            emit( songsStore.fetchLyricsFor( song ) )
+        }.flowOn( ioDispatcher )
 
     override fun searchSongsInAlbumMatching( query: String ): Flow<List<Song>> =
         flow {

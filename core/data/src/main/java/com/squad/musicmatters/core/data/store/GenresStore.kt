@@ -11,11 +11,7 @@ interface GenresStore {
         sortGenresInReverse: Boolean = false,
     ): Flow<List<Genre>>
     suspend fun fetchGenreWith( id: Long ): Genre?
-    suspend fun searchGenresMatching(
-        query: String,
-        sortGenresBy: SortGenresBy? = null,
-        sortGenresInReverse: Boolean = false,
-    ): List<Genre>
+    suspend fun searchGenresMatching( query: String ): List<Genre>
 
     suspend fun fetchSongIdsInGenre( genreId: Long ): Set<Long>
 

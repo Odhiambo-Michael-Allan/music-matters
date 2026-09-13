@@ -121,6 +121,8 @@ fun BottomSheetMenuItem(
             Text(
                 text = label,
                 fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

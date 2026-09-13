@@ -18,6 +18,9 @@ import androidx.media3.common.Player.EVENT_IS_PLAYING_CHANGED
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.util.EventLogger
+import androidx.media3.session.CommandButton
+import androidx.media3.session.CommandButton.ICON_SKIP_FORWARD_10
+import androidx.media3.session.CommandButton.ICON_SKIP_FORWARD_30
 import androidx.media3.session.DefaultMediaNotificationProvider
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
@@ -245,11 +248,7 @@ class MusicService : MediaLibraryService() {
             }
             build()
         }
-        val notificationProvider = DefaultMediaNotificationProvider
-            .Builder( applicationContext )
-            .build()
         MediaPermissionsManager.checkForPermissions( applicationContext )
-        setMediaNotificationProvider( notificationProvider )
         registerHeadsetEvents()
         registerWidgetListeners()
     }
@@ -307,7 +306,7 @@ class MusicService : MediaLibraryService() {
                 }
             }
         }
-        return START_NOT_STICKY
+        return START_STICKY
     }
 
     private fun handleShuffle( intent: Intent? ) {
