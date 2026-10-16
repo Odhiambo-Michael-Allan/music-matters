@@ -104,13 +104,17 @@ private class FakeGenresStore : GenresStore {
     override suspend fun fetchGenreWith( id: Long ): Genre? =
         genres.map { genres -> genres.find { it.id == id } }.first()
 
-    override suspend fun searchGenresMatching(
-        query: String,
-        sortGenresBy: SortGenresBy?,
-        sortGenresInReverse: Boolean
-    ): List<Genre> = genres.map { genres ->
-        genres.filter { it.name.contains( query ) }
-    }.first()
+    override suspend fun searchGenresMatching(query: String): List<Genre> {
+        TODO("Not yet implemented")
+    }
+
+//    override suspend fun searchGenresMatching(
+//        query: String,
+//        sortGenresBy: SortGenresBy?,
+//        sortGenresInReverse: Boolean
+//    ): List<Genre> = genres.map { genres ->
+//        genres.filter { it.name.contains( query ) }
+//    }.first()
 
     override suspend fun fetchSongIdsInGenre( genreId: Long ): Set<Long> {
         TODO("Not yet implemented")

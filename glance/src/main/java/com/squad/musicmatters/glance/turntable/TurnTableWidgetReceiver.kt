@@ -18,11 +18,6 @@ class TurnTableWidgetReceiver : GlanceAppWidgetReceiver() {
     override fun onReceive( context: Context, intent: Intent ) {
         super.onReceive( context, intent )
         if ( intent.action == UPDATE_SMALL_WIDGET_INTENT ) {
-            Toast.makeText(
-                context,
-                "Small Widget Received update intent",
-                Toast.LENGTH_SHORT
-            ).show()
             CoroutineScope( Dispatchers.IO ).launch {
                 TurnTableWidget().updateAll( context )
             }

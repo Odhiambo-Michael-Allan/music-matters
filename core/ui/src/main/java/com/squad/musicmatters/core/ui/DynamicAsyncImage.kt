@@ -37,9 +37,9 @@ import com.squad.musicmatters.core.designsystem.theme.LocalTintTheme
 @Composable
 fun DynamicAsyncImage(
     imageUri: Uri?,
+    modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
     contentDescription: String?,
-    modifier: Modifier = Modifier,
     onImageLoaded: ( ( ImageBitmap? ) -> Unit )? = null,
 ) {
     val iconTint = LocalTintTheme.current.iconTint

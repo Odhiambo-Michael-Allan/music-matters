@@ -17,6 +17,7 @@ object MusicMattersTypography {
         SupportedFonts.DMSans.name to SupportedFonts.DMSans,
         SupportedFonts.Roboto.name to SupportedFonts.Roboto,
         SupportedFonts.ProductSans.name to SupportedFonts.ProductSans,
+        SupportedFonts.GoogleSans.name to SupportedFonts.GoogleSans,
         SupportedFonts.SystemDefault.name to SupportedFonts.SystemDefault
     )
 
@@ -195,6 +196,13 @@ object SupportedFonts {
         fontName = "Product Sans",
         fontFamily = FontFamily(
             Font( R.font.product_sans_regular, FontWeight.Normal ),
+        )
+    )
+
+    val GoogleSans = MusicMattersFont.fromValue(
+        fontName = "Google Sans",
+        fontFamily = FontFamily(
+            Font( R.font.google_sans_regular, FontWeight.Normal ),
         )
     )
 

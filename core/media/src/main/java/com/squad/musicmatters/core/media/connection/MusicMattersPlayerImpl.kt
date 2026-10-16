@@ -244,6 +244,9 @@ class MusicMattersPlayerImpl @Inject constructor(
     private inner class PlayerListener : Player.Listener {
 
         override fun onEvents( player: Player, events: Player.Events ) {
+            ( 0 until events.size() ).forEach {
+                Timber.tag( TAG ).i( "PLAYER EVENT: ${events.get( it )}" )
+            }
             _idsOfSongsInQueue.value = player.getMediaItems().map { it.mediaId }
             if ( events.contains( Player.EVENT_PLAY_WHEN_READY_CHANGED )
                 || events.contains( Player.EVENT_PLAYBACK_STATE_CHANGED )

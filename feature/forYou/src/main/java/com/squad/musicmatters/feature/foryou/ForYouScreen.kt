@@ -425,13 +425,17 @@ fun ForYouSongCard(
                 ) {
                     Text(
                         text = song.title,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = song.artist,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -456,16 +460,11 @@ private fun ForYouScreenContentPreview(
     ) {
         ForYouScreenContent(
             uiState = ForYouScreenUiState.Success(
-                recentlyAddedSongs = emptyList(),
-//                    previewData.songs,
-                suggestedAlbums = emptyList(),
-//                    previewData.albums,
-                mostPlayedSongs = emptyList(),
-//                    previewData.songs,
-                suggestedArtists = emptyList(),
-//                    previewData.artists,
-                recentlyPlayedSongs = emptyList(),
-//                    previewData.songs,
+                recentlyAddedSongs = previewData.songs,
+                suggestedAlbums = previewData.albums,
+                mostPlayedSongs = previewData.songs,
+                suggestedArtists = previewData.artists,
+                recentlyPlayedSongs = previewData.songs,
                 currentlyPlayingSongId = "",
             ),
             onPlaySong = { _, _ -> },

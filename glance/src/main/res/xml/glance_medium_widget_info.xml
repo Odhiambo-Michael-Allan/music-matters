@@ -5,7 +5,6 @@
     android:resizeMode="horizontal"
 
     android:maxResizeHeight="48dp"
-    android:maxResizeWidth="624dp"
     android:minWidth="256dp"
     android:minHeight="48dp"
     android:minResizeWidth="240dp"
@@ -14,5 +13,6 @@
 
     android:targetCellWidth="4"
     android:targetCellHeight="2"
-    android:updatePeriodMillis="1800000"
-    android:widgetCategory="home_screen|keyguard" />
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen|keyguard"
+    android:widgetFeatures="reconfigurable|configuration_optional" />

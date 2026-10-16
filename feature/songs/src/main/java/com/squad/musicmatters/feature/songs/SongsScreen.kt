@@ -123,7 +123,7 @@ private fun SongsScreenContent(
 @Composable
 private fun SongsScreenContentPreview() {
     MusicMattersTheme(
-        fontName = SupportedFonts.ProductSans.name,
+        fontName = SupportedFonts.GoogleSans.name,
         themeMode = DefaultPreferences.THEME_MODE,
         primaryColorName = DefaultPreferences.PRIMARY_COLOR_NAME,
         fontScale = 1.0f,
