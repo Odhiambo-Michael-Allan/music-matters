@@ -20,15 +20,12 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -60,7 +57,6 @@ import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
 import com.squad.musicmatters.feature.nowplaying.components.emptyUserData
-import kotlinx.coroutines.launch
 import java.util.Locale
 import java.util.Timer
 import kotlin.time.Clock
@@ -80,79 +76,69 @@ import com.squad.musicmatters.core.i8n.R as i8nR
 annotation class PreviewScreenSizesPortrait
 
 // Stateful
-@Composable
-fun NowPlayingScreen(
-    viewModel: NowPlayingScreenViewModel = hiltViewModel(),
-    backgroundColor: Color = Color.Unspecified,
-    onViewAlbum: ( String ) -> Unit,
-    onViewArtist: ( Long ) -> Unit,
-    onNavigateToQueueScreen: () -> Unit,
-    onNavigateToLyricsScreen: () -> Unit,
-    onLaunchEqualizerActivity: () -> Unit,
-    onHideBottomSheet: () -> Unit,
-    onShowSnackBar: (String) -> Unit,
-) {
-
-    val snackBarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val lyricsUiState by viewModel.lyricsUiState.collectAsStateWithLifecycle()
-    val playbackPosition by viewModel.playbackPosition.collectAsStateWithLifecycle()
-
-    NowPlayingScreenContent(
-        model = NowPlayingScreenModel(
-            uiState = uiState,
-            lyricsUiState = lyricsUiState,
-            backgroundColor = backgroundColor,
-            onGetPlaybackPosition = { playbackPosition },
-            onFavorite = viewModel::addToFavorites,
-            onPausePlayButtonClick = viewModel::playPause,
-            onPreviousButtonClick = viewModel::playPreviousSong,
-            onPlayNext = viewModel::playNextSong,
-            onSeekStart = viewModel::onSeekStarted,
-            onSeekEnd = viewModel::onSeekEnd,
-            onArtworkClicked = { song ->
-                onHideBottomSheet()
-                song.albumTitle?.let { onViewAlbum( it ) }
-            },
-            onArtistClicked = {
-                onHideBottomSheet()
-                onViewArtist( it )
-            },
-            onNavigateToQueueScreen = {
-                onHideBottomSheet()
-                onNavigateToQueueScreen()
-            },
-            onNavigateToLyricsScreen = {
-                onHideBottomSheet()
-                onNavigateToLyricsScreen()
-            },
-            onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
-            onCreatePlaylist = viewModel::createPlaylist,
-            onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
-            onViewAlbum = onViewAlbum,
-            onViewArtist = onViewArtist,
-            onHideNowPlayingBottomSheet = onHideBottomSheet,
-            onSwipeArtworkLeft = viewModel::playNextSong,
-            onSwipeArtworkRight = viewModel::playPreviousSong,
-            onStartSleepTimer = viewModel::startSleepTimer,
-            onStopSleepTimer = viewModel::stopSleepTimer,
-            onShowLyrics = viewModel::onShowLyrics,
-            onToggleLoopMode = viewModel::onToggleLoopMode,
-            onToggleShuffleMode = viewModel::onToggleShuffleMode,
-            onRemoveFromQueue = viewModel::removeSongFromQueue,
-            onShowSnackBar = {
-                coroutineScope.launch {
-                    snackBarHostState.showSnackbar(
-                        message = it,
-                        duration = SnackbarDuration.Short
-                    )
-                }
-            }
-        )
-
-    )
-}
+//@Composable
+//fun NowPlayingScreen(
+//    viewModel: NowPlayingScreenViewModel = hiltViewModel(),
+//    backgroundColor: Color = Color.Unspecified,
+//    onViewAlbum: ( String ) -> Unit,
+//    onViewArtist: ( Long ) -> Unit,
+//    onNavigateToQueueScreen: () -> Unit,
+//    onNavigateToLyricsScreen: () -> Unit,
+//    onLaunchEqualizerActivity: () -> Unit,
+//    onHideBottomSheet: () -> Unit,
+//    onShowSnackBar: ( String ) -> Unit,
+//) {
+//
+//    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+//    val lyricsUiState by viewModel.lyricsUiState.collectAsStateWithLifecycle()
+//    val playbackPosition by viewModel.playbackPosition.collectAsStateWithLifecycle()
+//
+//    NowPlayingScreenContent(
+//        model = NowPlayingScreenModel(
+//            uiState = uiState,
+//            lyricsUiState = lyricsUiState,
+//            backgroundColor = backgroundColor,
+//            onGetPlaybackPosition = { playbackPosition },
+//            onFavorite = viewModel::addToFavorites,
+//            onPlayPauseButtonClick = viewModel::playPause,
+//            onPreviousButtonClick = viewModel::playPreviousSong,
+//            onPlayNext = viewModel::playNextSong,
+//            onSeekStart = viewModel::onSeekStarted,
+//            onSeekEnd = viewModel::onSeekEnd,
+//            onArtworkClicked = { song ->
+//                onHideBottomSheet()
+//                song.albumTitle?.let { onViewAlbum( it ) }
+//            },
+//            onArtistClicked = {
+//                onHideBottomSheet()
+//                onViewArtist( it )
+//            },
+//            onNavigateToQueueScreen = {
+//                onHideBottomSheet()
+//                onNavigateToQueueScreen()
+//            },
+//            onNavigateToLyricsScreen = {
+//                onHideBottomSheet()
+//                onNavigateToLyricsScreen()
+//            },
+//            onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
+//            onCreatePlaylist = viewModel::createPlaylist,
+//            onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
+//            onViewAlbum = onViewAlbum,
+//            onViewArtist = onViewArtist,
+//            onHideNowPlayingBottomSheet = onHideBottomSheet,
+//            onSwipeArtworkLeft = viewModel::playNextSong,
+//            onSwipeArtworkRight = viewModel::playPreviousSong,
+//            onStartSleepTimer = viewModel::startSleepTimer,
+//            onStopSleepTimer = viewModel::stopSleepTimer,
+//            onShowLyrics = viewModel::onShowLyrics,
+//            onToggleLoopMode = viewModel::onToggleLoopMode,
+//            onToggleShuffleMode = viewModel::onToggleShuffleMode,
+//            onRemoveFromQueue = viewModel::removeSongFromQueue,
+//            onShowSnackBar = onShowSnackBar
+//        )
+//    )
+//}
 
 
 @OptIn( ExperimentalMaterial3Api::class )
@@ -176,187 +162,184 @@ fun NowPlayingScreenContent(
     val isMediumOrWider = currentWindowSizeClass
         .isWidthAtLeastBreakpoint( WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND )
 
-    when ( model.uiState ) {
-        NowPlayingScreenUiState.Loading -> {}
-        is NowPlayingScreenUiState.Success -> {
-            model.uiState.currentlyPlayingSong?.let { song ->
-                val portraitExpandedLayoutModel = PortraitExpandedLayoutModel(
-                    uiState = model.uiState,
-                    lyricsUiState = model.lyricsUiState,
-                    currentlyPlayingSong = song,
-                    onGetPlaybackPosition = model.onGetPlaybackPosition,
-                    onFavorite = model.onFavorite,
-                    onArtworkSwipedLeft = model.onSwipeArtworkLeft,
-                    onArtworkSwipedRight = model.onSwipeArtworkRight,
-                    onArtworkSwipedDown = model.onHideNowPlayingBottomSheet,
-                    onArtworkClicked = model.onArtworkClicked,
-                    onArtistClicked = model.onArtistClicked,
-                    onShowOptionsMenu = { showOptionsMenu = true },
-                    onSeekStart = model.onSeekStart,
-                    onSeekEnd = model.onSeekEnd,
-                    onPausePlayButtonClick = model.onPausePlayButtonClick,
-                    onPreviousButtonClick = model.onPreviousButtonClick,
-                    onPlayNext = model.onPlayNext,
-                    onNavigateToQueueScreen = model.onNavigateToQueueScreen,
-                    onNavigateToLyricsScreen = model.onNavigateToLyricsScreen,
-                    onShowLyrics = model.onShowLyrics,
-                    onToggleShuffleMode = model.onToggleShuffleMode,
-                    onToggleLoopMode = model.onToggleLoopMode,
+
+
+    model.uiState.currentlyPlayingSong.let { song ->
+        val portraitExpandedLayoutModel = PortraitExpandedLayoutModel(
+            uiState = model.uiState,
+            lyricsUiState = model.lyricsUiState,
+            currentlyPlayingSong = song,
+            onGetPlaybackPosition = model.onGetPlaybackPosition,
+            onFavorite = model.onFavorite,
+            onArtworkSwipedLeft = model.onSwipeArtworkLeft,
+            onArtworkSwipedRight = model.onSwipeArtworkRight,
+            onArtworkSwipedDown = model.onHideNowPlayingBottomSheet,
+            onArtworkClicked = model.onArtworkClicked,
+            onArtistClicked = model.onArtistClicked,
+            onShowOptionsMenu = { showOptionsMenu = true },
+            onSeekStart = model.onSeekStart,
+            onSeekEnd = model.onSeekEnd,
+            onPausePlayButtonClick = model.onPlayPauseButtonClick,
+            onPreviousButtonClick = model.onPreviousButtonClick,
+            onPlayNext = model.onPlayNext,
+            onNavigateToQueueScreen = model.onNavigateToQueueScreen,
+            onNavigateToLyricsScreen = model.onNavigateToLyricsScreen,
+            onShowLyrics = model.onShowLyrics,
+            onToggleShuffleMode = model.onToggleShuffleMode,
+            onToggleLoopMode = model.onToggleLoopMode,
+        )
+        when {
+            isExpanded || isMediumOrWider -> {
+                ExpandedLayout(
+                    modifier = modifier,
+                    model = portraitExpandedLayoutModel,
                 )
-                when {
-                    isExpanded || isMediumOrWider -> {
-                        ExpandedLayout(
-                            modifier = modifier,
-                            model = portraitExpandedLayoutModel,
-                        )
-                    }
-                    else -> {
-                        PortraitLayout(
-                            modifier = modifier,
-                            model = portraitExpandedLayoutModel,
-                        )
-                    }
-                }
+            }
+            else -> {
+                PortraitLayout(
+                    modifier = modifier,
+                    model = portraitExpandedLayoutModel,
+                )
+            }
+        }
 
-                if ( showOptionsMenu ) {
-                    ModalBottomSheet(
-                        onDismissRequest = {
-                            showOptionsMenu = false
+        if ( showOptionsMenu ) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showOptionsMenu = false
+                }
+            ) {
+                GenericOptionsBottomSheet(
+                    headerImageUri = song.artworkUri?.toUri(),
+                    headerTitle = song.title,
+                    titleIsHighlighted = true,
+                    headerDescription = song.artist,
+                    onGetPlaylists = { model.uiState.playlists },
+                    onDismissRequest = { showOptionsMenu = false },
+                    onPlayNext = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
+                    onAddToQueue = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
+                    onCreatePlaylist = model.onCreatePlaylist,
+                    onAddSongsToPlaylist = model.onAddSongsToPlaylist,
+                    onGetSongs = { listOf( song ) },
+                    leadingBottomSheetMenuItem = { onDismissRequest ->
+                        BottomSheetMenuItem(
+                            leadingIcon = if ( model.uiState.currentlyPlayingSongIsFavorite ) {
+                                MusicMattersIcons.Favorite
+                            } else {
+                                MusicMattersIcons.FavoriteBorder
+                            },
+                            label = stringResource( id = i8nR.string.core_i8n_favorite ),
+                            leadingIconTint = MaterialTheme.colorScheme.primary
+                        ) {
+                            onDismissRequest()
+                            model.onFavorite(
+                                song,
+                                !model.uiState.currentlyPlayingSongIsFavorite
+                            )
                         }
-                    ) {
-                        GenericOptionsBottomSheet(
-                            headerImageUri = song.artworkUri?.toUri(),
-                            headerTitle = song.title,
-                            titleIsHighlighted = true,
-                            headerDescription = song.artist,
-                            onGetPlaylists = { model.uiState.playlists },
-                            onDismissRequest = { showOptionsMenu = false },
-                            onPlayNext = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
-                            onAddToQueue = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
-                            onCreatePlaylist = model.onCreatePlaylist,
-                            onAddSongsToPlaylist = model.onAddSongsToPlaylist,
-                            onGetSongs = { listOf( song ) },
-                            leadingBottomSheetMenuItem = { onDismissRequest ->
-                                BottomSheetMenuItem(
-                                    leadingIcon = if ( model.uiState.currentlyPlayingSongIsFavorite ) {
-                                        MusicMattersIcons.Favorite
-                                    } else {
-                                        MusicMattersIcons.FavoriteBorder
-                                    },
-                                    label = stringResource( id = i8nR.string.core_i8n_favorite ),
-                                    leadingIconTint = MaterialTheme.colorScheme.primary
-                                ) {
-                                    onDismissRequest()
-                                    model.onFavorite(
-                                        song,
-                                        !model.uiState.currentlyPlayingSongIsFavorite
-                                    )
-                                }
-                            },
-                            onShowSnackBar = model.onShowSnackBar,
-                            onShowAddToQueueOption = { false },
-                            onRemoveFromQueue = { model.onRemoveFromQueue( song ) },
-                            trailingBottomSheetMenuItems = { onDismissRequest ->
-                                song.albumTitle?.let { albumTitle ->
-                                    BottomSheetMenuItem(
-                                        leadingIcon = Icons.Default.Album,
-                                        label = stringResource(
-                                            id = i8nR.string.core_i8n_view_album,
-                                            albumTitle
-                                        )
-                                    ) {
-                                        onDismissRequest()
-                                        model.onHideNowPlayingBottomSheet()
-                                        model.onViewAlbum( albumTitle )
-                                    }
-                                }
-                                song.artist.let { artistName ->
-                                    BottomSheetMenuItem(
-                                        leadingIcon = Icons.Default.Person,
-                                        label = stringResource(
-                                            id = i8nR.string.core_i8n_go_to_artist,
-                                            artistName
-                                        )
-                                    ) {
-                                        onDismissRequest()
-                                        model.onHideNowPlayingBottomSheet()
-                                        model.onViewArtist( song.artistId )
-                                    }
-                                }
-                                BottomSheetMenuItem(
-                                    leadingIcon = MusicMattersIcons.Info,
-                                    label = stringResource( id = i8nR.string.core_i8n_details )
-                                ) {
-                                    onDismissRequest()
-                                    showSongDetailsDialog = true
-                                }
-                                BottomSheetMenuItem(
-                                    leadingIcon = model.uiState.sleepTimer?.let {
-                                        MusicMattersIcons.TimerOn
-                                    } ?: MusicMattersIcons.Timer,
-                                    label = stringResource( id = i8nR.string.core_i8n_sleep_timer ),
-                                    leadingIconTint = model.uiState.sleepTimer?.let {
-                                        MaterialTheme.colorScheme.primary
-                                    }
-                                ) {
-                                    onDismissRequest()
-                                    showSleepTimerBottomSheet = true
-                                }
-                                BottomSheetMenuItem(
-                                    leadingIcon = MusicMattersIcons.Equalizer,
-                                    label = stringResource( id = i8nR.string.core_i8n_equalizer )
-                                ) {
-                                    onDismissRequest()
-                                    model.onCreateEqualizerActivityContract()
-                                }
+                    },
+                    onShowSnackBar = model.onShowSnackBar,
+                    onShowAddToQueueOption = { false },
+                    onRemoveFromQueue = { model.onRemoveFromQueue( song ) },
+                    trailingBottomSheetMenuItems = { onDismissRequest ->
+                        song.albumTitle?.let { albumTitle ->
+                            BottomSheetMenuItem(
+                                leadingIcon = Icons.Default.Album,
+                                label = stringResource(
+                                    id = i8nR.string.core_i8n_view_album,
+                                    albumTitle
+                                )
+                            ) {
+                                onDismissRequest()
+                                model.onHideNowPlayingBottomSheet()
+                                model.onViewAlbum( albumTitle )
                             }
-                        )
-                    }
-                }
-
-                if ( showSongDetailsDialog ) {
-                    SongDetailsDialog(
-                        song = song,
-                        durationFormatter = { it.formatMilliseconds() },
-                        onGetMetadata = { model.uiState.songMetadata }
-                    ) {
-                        showSongDetailsDialog = false
-                    }
-                }
-
-                if ( showSleepTimerBottomSheet ) {
-                    ModalBottomSheet(
-                        onDismissRequest = { showSleepTimerBottomSheet = false }
-                    ) {
-                        val sleepTimerStartedMessage = stringResource(
-                            id = i8nR.string.core_i8n_sleep_timer_set
-                        )
-                        val sleepTimerStoppedMessage = stringResource(
-                            id = i8nR.string.core_i8n_sleep_timer_off
-                        )
-                        SleepTimerDialogContent(
-                            sleepTimer = model.uiState.sleepTimer,
-                            onStartSleepTimer = {
-                                model.onStartSleepTimer( it )
-                                model.onShowSnackBar( sleepTimerStartedMessage )
-                            },
-                            onStartTimerToEndOfCurrentSong = {
-                                val duration = model.onGetPlaybackPosition().total.minus(
-                                    model.onGetPlaybackPosition().played
+                        }
+                        song.artist.let { artistName ->
+                            BottomSheetMenuItem(
+                                leadingIcon = Icons.Default.Person,
+                                label = stringResource(
+                                    id = i8nR.string.core_i8n_go_to_artist,
+                                    artistName
                                 )
-                                model.onStartSleepTimer(
-                                    duration.toDuration( DurationUnit.MILLISECONDS )
-                                )
-                                model.onShowSnackBar( sleepTimerStartedMessage )
-                            },
-                            onStopSleepTimer = {
-                                model.onStopSleepTimer()
-                                model.onShowSnackBar( sleepTimerStoppedMessage )
-                            },
-                            onDismissRequest = { showSleepTimerBottomSheet = false },
-                        )
+                            ) {
+                                onDismissRequest()
+                                model.onHideNowPlayingBottomSheet()
+                                model.onViewArtist( song.artistId )
+                            }
+                        }
+                        BottomSheetMenuItem(
+                            leadingIcon = MusicMattersIcons.Info,
+                            label = stringResource( id = i8nR.string.core_i8n_details )
+                        ) {
+                            onDismissRequest()
+                            showSongDetailsDialog = true
+                        }
+                        BottomSheetMenuItem(
+                            leadingIcon = model.uiState.sleepTimer?.let {
+                                MusicMattersIcons.TimerOn
+                            } ?: MusicMattersIcons.Timer,
+                            label = stringResource( id = i8nR.string.core_i8n_sleep_timer ),
+                            leadingIconTint = model.uiState.sleepTimer?.let {
+                                MaterialTheme.colorScheme.primary
+                            }
+                        ) {
+                            onDismissRequest()
+                            showSleepTimerBottomSheet = true
+                        }
+                        BottomSheetMenuItem(
+                            leadingIcon = MusicMattersIcons.Equalizer,
+                            label = stringResource( id = i8nR.string.core_i8n_equalizer )
+                        ) {
+                            onDismissRequest()
+                            model.onCreateEqualizerActivityContract()
+                        }
                     }
-                }
+                )
+            }
+        }
+
+        if ( showSongDetailsDialog ) {
+            SongDetailsDialog(
+                song = song,
+                durationFormatter = { it.formatMilliseconds() },
+                onGetMetadata = { model.uiState.songMetadata }
+            ) {
+                showSongDetailsDialog = false
+            }
+        }
+
+        if ( showSleepTimerBottomSheet ) {
+            ModalBottomSheet(
+                onDismissRequest = { showSleepTimerBottomSheet = false }
+            ) {
+                val sleepTimerStartedMessage = stringResource(
+                    id = i8nR.string.core_i8n_sleep_timer_set
+                )
+                val sleepTimerStoppedMessage = stringResource(
+                    id = i8nR.string.core_i8n_sleep_timer_off
+                )
+                SleepTimerDialogContent(
+                    sleepTimer = model.uiState.sleepTimer,
+                    onStartSleepTimer = {
+                        model.onStartSleepTimer( it )
+                        model.onShowSnackBar( sleepTimerStartedMessage )
+                    },
+                    onStartTimerToEndOfCurrentSong = {
+                        val duration = model.onGetPlaybackPosition().total.minus(
+                            model.onGetPlaybackPosition().played
+                        )
+                        model.onStartSleepTimer(
+                            duration.toDuration( DurationUnit.MILLISECONDS )
+                        )
+                        model.onShowSnackBar( sleepTimerStartedMessage )
+                    },
+                    onStopSleepTimer = {
+                        model.onStopSleepTimer()
+                        model.onShowSnackBar( sleepTimerStoppedMessage )
+                    },
+                    onDismissRequest = { showSleepTimerBottomSheet = false },
+                )
             }
         }
     }
@@ -364,13 +347,13 @@ fun NowPlayingScreenContent(
 }
 
 data class NowPlayingScreenModel(
-    val uiState: NowPlayingScreenUiState,
+    val uiState: NowPlayingScreenUiState.Success,
     val lyricsUiState: LyricsUiState,
     val backgroundColor: Color = Color.Unspecified,
     val onGetPlaybackPosition: () -> PlaybackPosition,
     val onArtistClicked: ( Long ) -> Unit,
     val onFavorite: ( Song, Boolean ) -> Unit,
-    val onPausePlayButtonClick: () -> Unit,
+    val onPlayPauseButtonClick: () -> Unit,
     val onPreviousButtonClick: () -> Unit,
     val onPlayNext: () -> Unit,
     val onSeekStart: () -> Unit,
@@ -591,7 +574,7 @@ private fun NowPlayingScreenContentPreview(
                 onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
                 onArtistClicked = {},
                 onFavorite = { _, _ -> },
-                onPausePlayButtonClick = {},
+                onPlayPauseButtonClick = {},
                 onPreviousButtonClick = {},
                 onPlayNext = {},
                 onSeekEnd = {},

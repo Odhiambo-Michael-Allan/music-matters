@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,10 +27,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -45,7 +40,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -57,14 +51,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
@@ -72,7 +64,6 @@ import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.media.connection.SleepTimer
 import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Lyric
-import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.ThemeMode
@@ -80,15 +71,14 @@ import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.feature.nowplaying.LyricsUiState
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenContent
+import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenModel
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Timer
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.roundToInt
-import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
@@ -115,9 +105,8 @@ data class PlayerSheetLayout(
  */
 @Composable
 internal fun PlayerSheetScaffold(
-    uiState: NowPlayingScreenUiState.Success,
-    playbackPosition: PlaybackPosition,
     layout: PlayerSheetLayout,
+    model: NowPlayingScreenModel,
     modifier: Modifier = Modifier,
 ) {
 
@@ -126,67 +115,67 @@ internal fun PlayerSheetScaffold(
     val scope = rememberCoroutineScope()
     val playerStateHolder = rememberSaveableStateHolder()
     val haptics = LocalHapticFeedback.current
-    val window = ( context as? android.app.Activity )?.window
 
-    if ( uiState.currentlyPlayingSong == null ) return
-
-    // Thresholds/specs factory is deprecated in favor of AnchoredDraggableDefaults.flingBehavior;
-    // Keep it here so mini-player settle velocity/feel stays identical.
-    @Suppress( "DEPRECATION" )
-    val sheetState = remember( density ) {
-        AnchoredDraggableState(
-            initialValue = PlayerSheetValue.Collapsed,
-            positionalThreshold = { distance: Float -> distance * 0.5f },
-            velocityThreshold = {
-                with( density ) {
-                    PlayerSheetDecisiveFlingDistance.toPx()
-                }
-            },
-            // Soft expressive settle - gesture gates below keep mini controls tappable
-            // while this runs ( don't stiffen the spring to "fix" dead taps ).
-            snapAnimationSpec = ExpressiveMotion.SpatialLargeSpring,
-            decayAnimationSpec = exponentialDecay(),
-        )
-    }
-    ConfigurePlayerSheetAnchors( sheetState, layout.collapsedTargetY )
-    val geometry = rememberPlayerSheetGeometry( sheetState, layout )
-    val isExpanded = sheetState.currentValue == PlayerSheetValue.Expanded
-    PlayerSheetSettledEffects( sheetState, haptics, uiState.currentlyPlayingSong )
-    PlayerSheetExternalExpansion( sheetState, layout.expandTrigger )
-    PlayerSheetPredictiveBack(
-        enabled = isExpanded,
-        sheetState = sheetState,
-        collapsedTargetY = layout.collapsedTargetY,
-    )
-    val sheetNestedScrollConnection = rememberPlayerSheetNestedScrollConnection( sheetState, density )
-    PlayerSheetSurface(
-        geometry = geometry,
-        content = PlayerSheetContentState(
-            playerState = uiState.playerState,
-            song = uiState.currentlyPlayingSong
-        ),
-        resources = PlayerSheetResources(
-            stateHolder = playerStateHolder,
-            scope = scope,
-            haptics = haptics,
-            flows = PlayerSheetFlows(
-                nestedScrollConnection = sheetNestedScrollConnection,
-                position = playbackPosition,
+    when ( model.uiState ) {
+        NowPlayingScreenUiState.Loading -> {}
+        is NowPlayingScreenUiState.Success -> {
+            // Thresholds/specs factory is deprecated in favor of AnchoredDraggableDefaults.flingBehavior;
+            // Keep it here so mini-player settle velocity/feel stays identical.
+            @Suppress( "DEPRECATION" )
+            val sheetState = remember( density ) {
+                AnchoredDraggableState(
+                    initialValue = PlayerSheetValue.Collapsed,
+                    positionalThreshold = { distance: Float -> distance * 0.5f },
+                    velocityThreshold = {
+                        with( density ) {
+                            PlayerSheetDecisiveFlingDistance.toPx()
+                        }
+                    },
+                    // Soft expressive settle - gesture gates below keep mini controls tappable
+                    // while this runs ( don't stiffen the spring to "fix" dead taps ).
+                    snapAnimationSpec = ExpressiveMotion.SpatialLargeSpring,
+                    decayAnimationSpec = exponentialDecay(),
+                )
+            }
+            ConfigurePlayerSheetAnchors( sheetState, layout.collapsedTargetY )
+            val geometry = rememberPlayerSheetGeometry( sheetState, layout )
+            val isExpanded = sheetState.currentValue == PlayerSheetValue.Expanded
+            PlayerSheetSettledEffects(
+                sheetState,
+                haptics,
+                model.uiState.currentlyPlayingSong
             )
-        ),
-        callbacks = PlayerSheetCallbacks(
-            onExpand = { requestSheetExpansion( sheetState, geometry.sheetOffset, scope ) },
-            onCollapse = {
-                requestSheetCollapse( sheetState, geometry.sheetOffset, layout.collapsedTargetY, scope )
-            },
-        ),
-        sheetState = sheetState,
-        containerHeight = layout.containerHeight,
-        uiState = uiState,
-        playbackPosition = playbackPosition,
-        modifier = modifier,
-    )
-
+            PlayerSheetExternalExpansion( sheetState, layout.expandTrigger )
+            PlayerSheetPredictiveBack(
+                enabled = isExpanded,
+                sheetState = sheetState,
+                collapsedTargetY = layout.collapsedTargetY,
+            )
+            val sheetNestedScrollConnection = rememberPlayerSheetNestedScrollConnection( sheetState, density )
+            PlayerSheetSurface(
+                geometry = geometry,
+                resources = PlayerSheetResources(
+                    stateHolder = playerStateHolder,
+                    scope = scope,
+                    haptics = haptics,
+                    flows = PlayerSheetFlows(
+                        nestedScrollConnection = sheetNestedScrollConnection,
+                        position = model.onGetPlaybackPosition,
+                    )
+                ),
+                callbacks = PlayerSheetCallbacks(
+                    onExpand = { requestSheetExpansion( sheetState, geometry.sheetOffset, scope ) },
+                    onCollapse = {
+                        requestSheetCollapse( sheetState, geometry.sheetOffset, layout.collapsedTargetY, scope )
+                    },
+                ),
+                sheetState = sheetState,
+                containerHeight = layout.containerHeight,
+                nowPlayingScreenModel = model,
+                modifier = modifier,
+            )
+        }
+    }
 }
 
 @Composable
@@ -542,13 +531,11 @@ private fun resolvePlayerSheetSettleTarget(
 @Suppress("DEPRECATION") // startDragImmediately=false keeps mini controls tappable during settle
 private fun PlayerSheetSurface(
     geometry: PlayerSheetGeometry,
-    content: PlayerSheetContentState,
     resources: PlayerSheetResources,
     callbacks: PlayerSheetCallbacks,
     sheetState: AnchoredDraggableState<PlayerSheetValue>,
     containerHeight: Dp,
-    uiState: NowPlayingScreenUiState.Success,
-    playbackPosition: PlaybackPosition,
+    nowPlayingScreenModel: NowPlayingScreenModel,
     modifier: Modifier = Modifier,
 ) {
     val shape =
@@ -593,13 +580,11 @@ private fun PlayerSheetSurface(
                     },
         ) {
             PlayerSheetLayers(
-                geometry,
-                content,
-                resources,
+                geometry = geometry,
+                resources = resources,
                 callbacks,
                 containerHeight,
-                uiState = uiState,
-                playbackPosition = playbackPosition,
+                model = nowPlayingScreenModel,
             )
         }
     }
@@ -619,7 +604,7 @@ private data class PlayerSheetResources(
 
 private data class PlayerSheetFlows(
     val nestedScrollConnection: NestedScrollConnection,
-    val position: PlaybackPosition,
+    val position: () -> PlaybackPosition,
 )
 
 private data class PlayerSheetCallbacks(
@@ -631,12 +616,10 @@ private data class PlayerSheetCallbacks(
 @Composable
 private fun PlayerSheetLayers(
     geometry: PlayerSheetGeometry,
-    content: PlayerSheetContentState,
     resources: PlayerSheetResources,
     callbacks: PlayerSheetCallbacks,
     containerHeight: Dp,
-    uiState: NowPlayingScreenUiState.Success,
-    playbackPosition: PlaybackPosition,
+    model: NowPlayingScreenModel,
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -645,18 +628,15 @@ private fun PlayerSheetLayers(
             visible = geometry.expansionFraction < 0.999f,
             geometry = geometry,
             resources = resources,
-            uiState = uiState,
-            playbackPosition = playbackPosition,
             callbacks = callbacks,
+            model = model,
         )
         FullPlayerLayer(
             visible = geometry.expansionFraction > 0.001f,
             geometry = geometry,
-            content = content,
             resources = resources,
-            callbacks = callbacks,
             containerHeight = containerHeight,
-            uiState = uiState,
+            model = model,
         )
     }
 }
@@ -666,8 +646,7 @@ private fun MiniPlayerLayer(
     visible: Boolean,
     geometry: PlayerSheetGeometry,
     resources: PlayerSheetResources,
-    uiState: NowPlayingScreenUiState.Success,
-    playbackPosition: PlaybackPosition,
+    model: NowPlayingScreenModel,
     callbacks: PlayerSheetCallbacks,
 ) {
     if ( !visible ) return
@@ -684,12 +663,12 @@ private fun MiniPlayerLayer(
                 )
         ) {
             MiniPlayerContent(
-                uiState = uiState,
-                playbackPosition = playbackPosition,
+                uiState = model.uiState,
+                onGetPlaybackPosition = model.onGetPlaybackPosition,
                 onNowPlayingBottomBarClick = callbacks.onExpand,
-                nextSong = { false },
-                previousSong = { false },
-                playPause = {},
+                nextSong = model.onPlayNext,
+                previousSong = model.onPreviousButtonClick,
+                playPause = model.onPlayPauseButtonClick,
             )
         }
     }
@@ -700,37 +679,8 @@ private fun FullPlayerLayer(
     visible: Boolean,
     geometry: PlayerSheetGeometry,
     resources: PlayerSheetResources,
-    callbacks: PlayerSheetCallbacks,
     containerHeight: Dp,
-    uiState: NowPlayingScreenUiState.Success,
-    lyricsUiState: LyricsUiState,
-    backgroundColor: Color = Color.Unspecified,
-    onGetPlaybackPosition: () -> PlaybackPosition,
-    onArtistClicked: ( Long ) -> Unit,
-    onFavorite: ( Song, Boolean ) -> Unit,
-    onPausePlayButtonClick: () -> Unit,
-    onPreviousButtonClick: () -> Unit,
-    onPlayNext: () -> Unit,
-    onSeekStart: () -> Unit,
-    onSeekEnd: ( Long ) -> Unit,
-    onArtworkClicked: ( Song ) -> Unit,
-    onSwipeArtworkLeft: () -> Unit,
-    onSwipeArtworkRight: () -> Unit,
-    onNavigateToQueueScreen: () -> Unit,
-    onNavigateToLyricsScreen: () -> Unit,
-    onCreateEqualizerActivityContract: () -> Unit,
-    onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
-    onViewAlbum: ( String ) -> Unit,
-    onViewArtist: ( Long ) -> Unit,
-    onHideNowPlayingBottomSheet: () -> Unit,
-    onShowSnackBar: ( String ) -> Unit,
-    onStartSleepTimer: ( Duration ) -> Unit,
-    onStopSleepTimer: () -> Unit,
-    onShowLyrics: ( Boolean ) -> Unit,
-    onToggleShuffleMode: ( Boolean ) -> Unit,
-    onToggleLoopMode: ( LoopMode ) -> Unit,
-    onRemoveFromQueue: ( Song ) -> Unit,
+    model: NowPlayingScreenModel,
 ) {
     if ( !visible ) return
 
@@ -753,48 +703,7 @@ private fun FullPlayerLayer(
                     }
                 }
         ) {
-            NowPlayingScreenContent(
-                uiState = uiState,
-                lyricsUiState = lyricsUiState,
-                onGetPlaybackPosition = { playbackPosition },
-                onFavorite = onAddToFavorites,
-                onPausePlayButtonClick = onPlayPause,
-                onPreviousButtonClick = onPlayPreviousSong,
-                onPlayNext = onPlayNextSong,
-                onSeekStart = onSeekStarted,
-                onSeekEnd = onSeekEnd,
-                onArtworkClicked = { song ->
-                    callbacks.onCollapse()
-                    song.albumTitle?.let { onViewAlbum( it ) }
-                },
-                onArtistClicked = {
-                    callbacks.onCollapse()
-                    onViewArtist( it )
-                },
-                onNavigateToQueueScreen = {
-                    callbacks.onCollapse()
-                    onNavigateToQueueScreen()
-                },
-                onNavigateToLyricsScreen = {
-                    callbacks.onCollapse()
-                    onNavigateToLyricsScreen()
-                },
-                onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
-                onCreatePlaylist = onCreatePlaylist,
-                onAddSongsToPlaylist = onAddSongsToPlaylist,
-                onViewAlbum = onViewAlbum,
-                onViewArtist = onViewArtist,
-                onHideNowPlayingBottomSheet = callbacks.onCollapse,
-                onSwipeArtworkLeft = onPlayNextSong,
-                onSwipeArtworkRight = onPlayPreviousSong,
-                onStartSleepTimer = onStartSleepTimer,
-                onStopSleepTimer = onStopSleepTimer,
-                onShowLyrics = onShowLyrics,
-                onToggleLoopMode = onToggleLoopMode,
-                onToggleShuffleMode = onToggleShuffleMode,
-                onRemoveFromQueue = onRemoveSongFromQueue,
-                onShowSnackBar = onShowSnackBar
-            )
+            NowPlayingScreenContent( model = model )
         }
     }
 }
@@ -854,38 +763,94 @@ private fun PlayerSheetScaffoldPreview(
                 }
 
             PlayerSheetScaffold(
-                uiState = NowPlayingScreenUiState.Success(
-                    userData = emptyUserData.copy(
-                        loopMode = LoopMode.Queue,
+                model = NowPlayingScreenModel(
+                    uiState = NowPlayingScreenUiState.Success(
+                        userData = emptyUserData.copy(
+                            loopMode = LoopMode.Queue,
+                        ),
+                        currentlyPlayingSong = previewData.songs.first(),
+                        currentlyPlayingSongIsFavorite = true,
+                        playerState = PlayerState(
+                            currentlyPlayingSongId = "song-id-1",
+                            isPlaying = true,
+                            isBuffering = false,
+                        ),
+                        playlists = emptyList(),
+                        songMetadata = SongMetadata(
+                            songId = "",
+                            codec = "mp3",
+                            bitrate = 0,
+                            samplingRate = 0f,
+                            bitsPerSample = 0,
+                            genreName = "Hip-Hop"
+                        ),
+                        sleepTimer = SleepTimer(
+                            duration = 300000L.toDuration( DurationUnit.MILLISECONDS ),
+                            endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS ),
+                            timer = Timer()
+                        )
                     ),
-                    currentlyPlayingSong = previewData.songs.first(),
-                    currentlyPlayingSongIsFavorite = true,
-                    playerState = PlayerState(
-                        currentlyPlayingSongId = "song-id-1",
-                        isPlaying = true,
-                        isBuffering = false,
+                    lyricsUiState = LyricsUiState.Success(
+                        lyrics = listOf(
+                            Lyric(
+                                timeStamp = java.time.Duration.ofMinutes( 1 ),
+                                content = "Sometime say the magic you dey feel inside is like gold"
+                            ),
+                            Lyric(
+                                timeStamp = java.time.Duration.ofMinutes( 2 ),
+                                content = "Something like do re mi fa so lat ti do do (Yeah)"
+                            ),
+                            Lyric(
+                                timeStamp = java.time.Duration.ofMinutes( 3 ),
+                                content = "Make I sing for you la la do do"
+                            ),
+                            Lyric(
+                                timeStamp = java.time.Duration.ofMinutes( 4 ),
+                                content = "Make I sing your song"
+                            ),
+                            Lyric(
+                                timeStamp = java.time.Duration.ofMinutes( 5 ),
+                                content = "Make I sing make you wine am do do o"
+                            )
+                        ),
                     ),
-                    playlists = emptyList(),
-                    songMetadata = SongMetadata(
-                        songId = "",
-                        codec = "mp3",
-                        bitrate = 0,
-                        samplingRate = 0f,
-                        bitsPerSample = 0,
-                        genreName = "Hip-Hop"
-                    ),
-                    sleepTimer = SleepTimer(
-                        duration = 300000L.toDuration( DurationUnit.MILLISECONDS ),
-                        endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS ),
-                        timer = Timer()
-                    )
+                    onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
+                    onArtistClicked = {},
+                    onFavorite = { _, _ -> },
+                    onPlayPauseButtonClick = {},
+                    onPreviousButtonClick = {},
+                    onPlayNext = {},
+                    onSeekEnd = {},
+                    onArtworkClicked = {},
+                    onSwipeArtworkLeft = {},
+                    onSwipeArtworkRight = {},
+                    onNavigateToQueueScreen = {},
+                    onSeekStart = {},
+                    onCreateEqualizerActivityContract = {
+                        object : ActivityResultContract<Unit, Unit>() {
+                            override fun createIntent(context: Context, input: Unit) = Intent()
+                            override fun parseResult( resultCode: Int, intent: Intent? ) {}
+
+                        }
+                    },
+                    onCreatePlaylist = { _, _ -> },
+                    onAddSongsToPlaylist = { _, _ -> },
+                    onViewAlbum = {},
+                    onViewArtist = {},
+                    onHideNowPlayingBottomSheet = {},
+                    onShowSnackBar = {},
+                    onStopSleepTimer = {},
+                    onStartSleepTimer = {},
+                    onShowLyrics = {},
+                    onToggleLoopMode = {},
+                    onToggleShuffleMode = {},
+                    onRemoveFromQueue = {},
+                    onNavigateToLyricsScreen = {},
                 ),
-                playbackPosition = PlaybackPosition( 2L, 3L, 5L ),
                 layout = PlayerSheetLayout(
                     collapsedTargetY = collapsedTargetY,
                     containerHeight = containerHeight,
                     collapsedHorizontalPadding = 12.dp,
-//                    expandTrigger = expandPlayerTrigger,
                 ),
             )
         }

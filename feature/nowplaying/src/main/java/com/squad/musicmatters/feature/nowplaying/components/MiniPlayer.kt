@@ -1,15 +1,9 @@
 package com.squad.musicmatters.feature.nowplaying.components
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.Animatable
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -43,11 +37,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -98,7 +90,6 @@ import com.squad.musicmatters.core.ui.DynamicAsyncImage
 import com.squad.musicmatters.core.ui.FadeTransition
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
-import com.squad.musicmatters.core.ui.TransitionDurations
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenViewModel
 import kotlin.math.absoluteValue
@@ -117,7 +108,7 @@ fun MiniPlayer(
 
     MiniPlayerContent(
         uiState = uiState,
-        playbackPosition = playbackPosition,
+        onGetPlaybackPosition = playbackPosition,
         onNowPlayingBottomBarClick = onShowNowPlayingBottomSheet,
         nextSong = viewModel::playNextSong,
         previousSong = viewModel::playPreviousSong,
@@ -131,10 +122,10 @@ fun MiniPlayer(
 fun MiniPlayerContent(
     modifier: Modifier = Modifier,
     uiState: NowPlayingScreenUiState,
-    playbackPosition: PlaybackPosition,
+    onGetPlaybackPosition: () -> PlaybackPosition,
     onNowPlayingBottomBarClick: () -> Unit,
-    nextSong: () -> Boolean,
-    previousSong: () -> Boolean,
+    nextSong: () -> Unit,
+    previousSong: () -> Unit,
     playPause: () -> Unit,
 ) {
 
@@ -284,14 +275,18 @@ fun MiniPlayerContent(
                                             .background(
                                                 progressBarColor.copy( alpha = 0.4f )
                                             )
-                                            .fillMaxWidth( playbackPosition.bufferedRatio )
+                                            .fillMaxWidth(
+                                                onGetPlaybackPosition().bufferedRatio
+                                            )
                                             .fillMaxHeight()
                                     )
                                     Box(
                                         modifier = Modifier
                                             .align( Alignment.CenterStart )
                                             .background( progressBarColor )
-                                            .fillMaxWidth( playbackPosition.playedRatio )
+                                            .fillMaxWidth(
+                                                onGetPlaybackPosition().playedRatio
+                                            )
                                             .fillMaxHeight()
                                     )
                                 }
@@ -560,11 +555,13 @@ private fun MiniPlayerPreview(
                     playlists = emptyList(),
                     songMetadata = null,
                 ),
-                playbackPosition = PlaybackPosition(
-                    played = 3L,
-                    total = 5L,
-                    buffered = 4L,
-                ),
+                onGetPlaybackPosition = {
+                    PlaybackPosition(
+                        played = 3L,
+                        total = 5L,
+                        buffered = 4L,
+                    )
+                },
                 onNowPlayingBottomBarClick = {},
                 nextSong = { true },
                 previousSong = { true },

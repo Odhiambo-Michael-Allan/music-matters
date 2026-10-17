@@ -68,7 +68,7 @@ class NowPlayingScreenViewModel @Inject constructor(
             sleepTimer ->
             NowPlayingScreenUiState.Success(
                 playerState = playerState,
-                currentlyPlayingSong = currentlyPlayingSong,
+                currentlyPlayingSong = currentlyPlayingSong ?: Song.EMPTY,
                 userData = userData,
                 currentlyPlayingSongIsFavorite = currentlyPlayingSongIsFavorite,
                 playlists = playlists,
@@ -172,7 +172,7 @@ sealed interface NowPlayingScreenUiState {
     data object Loading : NowPlayingScreenUiState
     data class Success(
         val userData: UserData,
-        val currentlyPlayingSong: Song?,
+        val currentlyPlayingSong: Song,
         val currentlyPlayingSongIsFavorite: Boolean,
         val playerState: PlayerState,
         val playlists: List<Playlist>,
