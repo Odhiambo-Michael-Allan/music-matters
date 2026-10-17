@@ -125,7 +125,7 @@ fun MiniPlayer(
 
 // Stateless
 @Composable
-private fun MiniPlayerContent(
+fun MiniPlayerContent(
     modifier: Modifier = Modifier,
     uiState: NowPlayingScreenUiState,
     playbackPosition: PlaybackPosition,
@@ -200,11 +200,11 @@ private fun MiniPlayerContent(
                         onClick = onNowPlayingBottomBarClick,
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding( 8.dp, 0.dp )
+//                            .padding( 8.dp, 0.dp )
                             .wrapContentHeight()
-                            .swipeable(
-                                onSwipeUp = onNowPlayingBottomBarSwipeUp,
-                            ),
+//                            .swipeable(
+//                                onSwipeUp = onNowPlayingBottomBarSwipeUp,
+//                            ),
                     ) {
                         Column {
                             Row (
@@ -212,61 +212,77 @@ private fun MiniPlayerContent(
                                 modifier = Modifier.padding( 0.dp, 8.dp )
                             ) {
                                 Spacer( modifier = Modifier.width( 12.dp ) )
-                                AnimatedContent(
-                                    label = "now-playing-card-image",
-                                    targetState = playingSong,
-                                    transitionSpec = {
-                                        val from = fadeIn(
-                                            animationSpec = TransitionDurations.Normal.asTween(
-                                                delayMillis = 150
-                                            )
-                                        )
-                                        val to = fadeOut(
-                                            animationSpec = TransitionDurations.Fast.asTween()
-                                        )
-                                        from togetherWith to
-                                    },
-                                ) { song ->
-                                    DynamicAsyncImage(
-                                        imageUri = song.artworkUri?.toUri(),
-                                        contentDescription = null,
-                                        onImageLoaded = { coverArtBitmap = it },
-                                        modifier = Modifier
-                                            .size( 45.dp )
-                                            .clip( RoundedCornerShape( 10.dp ) )
-                                    )
-                                }
+//                                AnimatedContent(
+//                                    label = "now-playing-card-image",
+//                                    targetState = playingSong,
+//                                    transitionSpec = {
+//                                        val from = fadeIn(
+//                                            animationSpec = TransitionDurations.Normal.asTween(
+//                                                delayMillis = 150
+//                                            )
+//                                        )
+//                                        val to = fadeOut(
+//                                            animationSpec = TransitionDurations.Fast.asTween()
+//                                        )
+//                                        from togetherWith to
+//                                    },
+//                                ) { song ->
+//                                    DynamicAsyncImage(
+//                                        imageUri = song.artworkUri?.toUri(),
+//                                        contentDescription = null,
+//                                        onImageLoaded = { coverArtBitmap = it },
+//                                        modifier = Modifier
+//                                            .size( 45.dp )
+//                                            .clip( RoundedCornerShape( 10.dp ) )
+//                                    )
+//                                }
+                                DynamicAsyncImage(
+                                    imageUri = playingSong.artworkUri?.toUri(),
+                                    contentDescription = null,
+                                    onImageLoaded = { coverArtBitmap = it },
+                                    modifier = Modifier
+                                        .size( 45.dp )
+                                        .clip( RoundedCornerShape( 10.dp ) )
+                                )
                                 Spacer( modifier = Modifier.width( 15.dp ) )
-                                AnimatedContent(
-                                    modifier = Modifier.weight( 1f ),
-                                    label = "now-playing-card-content",
-                                    targetState = playingSong,
-                                    transitionSpec = {
-                                        val from = fadeIn(
-                                            animationSpec = TransitionDurations.Normal.asTween(
-                                                delayMillis = 150
-                                            )
-                                        ) + scaleIn(
-                                            initialScale = 0.99f,
-                                            animationSpec = TransitionDurations.Normal.asTween(
-                                                delayMillis = 150
-                                            )
-                                        )
-                                        val to = fadeOut(
-                                            animationSpec = TransitionDurations.Fast.asTween()
-                                        )
-                                        from togetherWith to
-                                    }
-                                ) {
-                                    MiniPlayerContent(
-                                        song = it,
-                                        nextSong = nextSong,
-                                        previousSong = previousSong,
-                                        textMarquee = uiState.userData.miniPlayerTextMarquee,
-                                        colorToApply = colorToApply,
-                                        onNowPlayingBottomBarClick = onNowPlayingBottomBarClick,
-                                    )
-                                }
+//                                AnimatedContent(
+//                                    modifier = Modifier.weight( 1f ),
+//                                    label = "now-playing-card-content",
+//                                    targetState = playingSong,
+//                                    transitionSpec = {
+//                                        val from = fadeIn(
+//                                            animationSpec = TransitionDurations.Normal.asTween(
+//                                                delayMillis = 150
+//                                            )
+//                                        ) + scaleIn(
+//                                            initialScale = 0.99f,
+//                                            animationSpec = TransitionDurations.Normal.asTween(
+//                                                delayMillis = 150
+//                                            )
+//                                        )
+//                                        val to = fadeOut(
+//                                            animationSpec = TransitionDurations.Fast.asTween()
+//                                        )
+//                                        from togetherWith to
+//                                    }
+//                                ) {
+//                                    MiniPlayerContent(
+//                                        song = it,
+//                                        nextSong = nextSong,
+//                                        previousSong = previousSong,
+//                                        textMarquee = uiState.userData.miniPlayerTextMarquee,
+//                                        colorToApply = colorToApply,
+//                                        onNowPlayingBottomBarClick = onNowPlayingBottomBarClick,
+//                                    )
+//                                }
+                                MiniPlayerContent(
+                                    song = playingSong,
+                                    nextSong = nextSong,
+                                    previousSong = previousSong,
+                                    textMarquee = uiState.userData.miniPlayerTextMarquee,
+                                    colorToApply = colorToApply,
+                                    onNowPlayingBottomBarClick = onNowPlayingBottomBarClick,
+                                )
                                 Spacer( modifier = Modifier.width( 15.dp ) )
 
                                 IconButton( onClick = playPause ) {

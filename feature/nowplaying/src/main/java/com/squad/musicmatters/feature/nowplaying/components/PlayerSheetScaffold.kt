@@ -1,6 +1,9 @@
 package com.squad.musicmatters.feature.nowplaying.components
 
+import android.content.Context
+import android.content.Intent
 import androidx.activity.compose.PredictiveBackHandler
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +19,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,8 +27,10 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -65,11 +71,14 @@ import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.media.connection.SleepTimer
 import com.squad.musicmatters.core.model.LoopMode
+import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
+import com.squad.musicmatters.feature.nowplaying.LyricsUiState
+import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenContent
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -171,6 +180,8 @@ internal fun PlayerSheetScaffold(
         ),
         sheetState = sheetState,
         containerHeight = layout.containerHeight,
+        uiState = uiState,
+        playbackPosition = playbackPosition,
         modifier = modifier,
     )
 
@@ -216,8 +227,8 @@ private fun rememberPlayerSheetGeometry(
             containerHeight = layout.containerHeight,
             collapsedHorizontalPadding = layout.collapsedHorizontalPadding,
             miniPlayerHeight = 72.dp,
-            collapsedTopCornerRadius = 26.dp,
-            collapsedBottomCornerRadius = 14.dp,
+            collapsedTopCornerRadius = 12.dp,
+            collapsedBottomCornerRadius = 12.dp,
             fullEntranceOffsetPx = fullEntranceOffsetPx,
         )
     )
@@ -267,8 +278,8 @@ internal data class PlayerSheetGeometryInput(
     val collapsedHorizontalPadding: Dp,
     val fullEntranceOffsetPx: Float,
     val miniPlayerHeight: Dp = 64.dp,
-    val collapsedTopCornerRadius: Dp = 32.dp,
-    val collapsedBottomCornerRadius: Dp = 32.dp,
+    val collapsedTopCornerRadius: Dp = 24.dp,
+    val collapsedBottomCornerRadius: Dp = 24.dp,
 )
 
 internal data class PlayerSheetGeometryValues(
@@ -381,7 +392,7 @@ private fun rememberPlayerSheetNestedScrollConnection(
             )
         }
 
-        override suspend fun onPreFling(available: Velocity): Velocity =
+        override suspend fun onPreFling( available: Velocity ): Velocity =
             settlePlayerSheetPreFling( sheetState, available, density )
 
         override suspend fun onPostFling(
@@ -534,6 +545,8 @@ private fun PlayerSheetSurface(
     callbacks: PlayerSheetCallbacks,
     sheetState: AnchoredDraggableState<PlayerSheetValue>,
     containerHeight: Dp,
+    uiState: NowPlayingScreenUiState.Success,
+    playbackPosition: PlaybackPosition,
     modifier: Modifier = Modifier,
 ) {
     val shape =
@@ -547,19 +560,19 @@ private fun PlayerSheetSurface(
         modifier =
             modifier
                 .fillMaxWidth()
-                .offset { IntOffset(0, geometry.sheetOffset.roundToInt()) }
+                .offset { IntOffset( 0, geometry.sheetOffset.roundToInt() ) }
                 .graphicsLayer { clip = false }
-                .height(geometry.sheetHeight),
+                .height( geometry.sheetHeight ),
     ) {
         Box(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = geometry.horizontalPadding)
-                    .height(geometry.sheetHeight)
-                    .shadow(elevation = geometry.sheetElevation, shape = shape, clip = false)
-                    .background(color = miniSheetColor( MaterialTheme.colorScheme ), shape = shape)
-                    .clip(shape)
+                    .padding( horizontal = geometry.horizontalPadding )
+                    .height( geometry.sheetHeight )
+                    .shadow( elevation = geometry.sheetElevation, shape = shape, clip = false )
+                    .background( color = CardDefaults.cardColors().containerColor, shape = shape )
+                    .clip( shape )
                     .anchoredDraggable(
                         state = sheetState,
                         orientation = Orientation.Vertical,
@@ -567,16 +580,25 @@ private fun PlayerSheetSurface(
                         // ate mini controls for ~1–2s. Touch-slop still allows swipe-up
                         // expand from the collapsed mini player.
                         startDragImmediately = false,
-                    ).clickable(
+                    )
+                    .clickable(
                         enabled = geometry.expansionFraction < 0.5f,
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
                     ) {
-                        resources.haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        resources.haptics.performHapticFeedback( HapticFeedbackType.TextHandleMove )
                         callbacks.onExpand()
                     },
         ) {
-            PlayerSheetLayers( geometry, content, resources, callbacks, containerHeight )
+            PlayerSheetLayers(
+                geometry,
+                content,
+                resources,
+                callbacks,
+                containerHeight,
+                uiState = uiState,
+                playbackPosition = playbackPosition,
+            )
         }
     }
 }
@@ -613,15 +635,19 @@ private fun PlayerSheetLayers(
     resources: PlayerSheetResources,
     callbacks: PlayerSheetCallbacks,
     containerHeight: Dp,
+    uiState: NowPlayingScreenUiState.Success,
+    playbackPosition: PlaybackPosition,
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         MiniPlayerLayer(
-            visible = geometry.expansionFraction > 0.999f,
+            visible = geometry.expansionFraction < 0.999f,
             geometry = geometry,
-            content = content,
-            resources = resources
+            resources = resources,
+            uiState = uiState,
+            playbackPosition = playbackPosition,
+            callbacks = callbacks,
         )
         FullPlayerLayer(
             visible = geometry.expansionFraction > 0.001f,
@@ -630,6 +656,7 @@ private fun PlayerSheetLayers(
             resources = resources,
             callbacks = callbacks,
             containerHeight = containerHeight,
+            uiState = uiState,
         )
     }
 }
@@ -638,8 +665,10 @@ private fun PlayerSheetLayers(
 private fun MiniPlayerLayer(
     visible: Boolean,
     geometry: PlayerSheetGeometry,
-    content: PlayerSheetContentState,
-    resources: PlayerSheetResources
+    resources: PlayerSheetResources,
+    uiState: NowPlayingScreenUiState.Success,
+    playbackPosition: PlaybackPosition,
+    callbacks: PlayerSheetCallbacks,
 ) {
     if ( !visible ) return
     resources.stateHolder.SaveableStateProvider( "mini-player" ) {
@@ -648,14 +677,21 @@ private fun MiniPlayerLayer(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .height( geometry.miniPlayerHeight )
-                .fillMaxWidth()
+                .fillMaxSize()
                 .graphicsLayer { alpha = geometry.miniAlpha }
                 .zIndex(
                     if ( geometry.expansionFraction < 0.5f ) 1f else 0f
                 )
         ) {
-            Text(
-                "MINI PLAYER"
+            MiniPlayerContent(
+//                modifier = Modifier.fillMaxSize(),
+                uiState = uiState,
+                playbackPosition = playbackPosition,
+                onNowPlayingBottomBarClick = callbacks.onExpand,
+                onNowPlayingBottomBarSwipeUp = {},
+                nextSong = { false },
+                previousSong = { false },
+                playPause = {},
             )
         }
     }
@@ -669,31 +705,112 @@ private fun FullPlayerLayer(
     resources: PlayerSheetResources,
     callbacks: PlayerSheetCallbacks,
     containerHeight: Dp,
+    uiState: NowPlayingScreenUiState.Success,
 ) {
     if ( !visible ) return
 
     resources.stateHolder.SaveableStateProvider( "full-player" ) {
         Box(
             modifier = Modifier
-                .height( containerHeight )
+                .height(containerHeight)
                 .graphicsLayer {
                     alpha = geometry.fullAlpha
                     translationY = geometry.fullTranslationY
                 }
                 .zIndex(
-                    if ( geometry.expansionFraction >= 0.5f ) 1f else 0f
+                    if (geometry.expansionFraction >= 0.5f) 1f else 0f
                 )
                 .offset {
-                    if ( geometry.expansionFraction <= 0.01f ) {
-                        IntOffset( 0, 10000 )
+                    if (geometry.expansionFraction <= 0.01f) {
+                        IntOffset(0, 10000)
                     } else {
                         IntOffset.Zero
                     }
                 }
         ) {
-            Text(
-                text = "Full Player",
-                modifier = Modifier.align( Alignment.Center )
+            NowPlayingScreenContent(
+                uiState = NowPlayingScreenUiState.Success(
+                    userData = emptyUserData.copy(
+                        loopMode = LoopMode.Queue,
+                    ),
+                    currentlyPlayingSong = uiState.currentlyPlayingSong,
+                    currentlyPlayingSongIsFavorite = true,
+                    playerState = PlayerState(
+                        currentlyPlayingSongId = "song-id-1",
+                        isPlaying = true,
+                        isBuffering = false,
+                    ),
+                    playlists = emptyList(),
+                    songMetadata = SongMetadata(
+                        songId = "",
+                        codec = "mp3",
+                        bitrate = 0,
+                        samplingRate = 0f,
+                        bitsPerSample = 0,
+                        genreName = "Hip-Hop"
+                    ),
+                    sleepTimer = SleepTimer(
+                        duration = 300000L.toDuration( DurationUnit.MILLISECONDS ),
+                        endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS ),
+                        timer = Timer()
+                    )
+                ),
+                lyricsUiState = LyricsUiState.Success(
+                    lyrics = listOf(
+                        Lyric(
+                            timeStamp = java.time.Duration.ofMinutes( 1 ),
+                            content = "Sometime say the magic you dey feel inside is like gold"
+                        ),
+                        Lyric(
+                            timeStamp = java.time.Duration.ofMinutes( 2 ),
+                            content = "Something like do re mi fa so lat ti do do (Yeah)"
+                        ),
+                        Lyric(
+                            timeStamp = java.time.Duration.ofMinutes( 3 ),
+                            content = "Make I sing for you la la do do"
+                        ),
+                        Lyric(
+                            timeStamp = java.time.Duration.ofMinutes( 4 ),
+                            content = "Make I sing your song"
+                        ),
+                        Lyric(
+                            timeStamp = java.time.Duration.ofMinutes( 5 ),
+                            content = "Make I sing make you wine am do do o"
+                        )
+                    ),
+                ),
+                onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
+                onArtistClicked = {},
+                onFavorite = { _, _ -> },
+                onPausePlayButtonClick = {},
+                onPreviousButtonClick = {},
+                onPlayNext = {},
+                onSeekEnd = {},
+                onArtworkClicked = {},
+                onSwipeArtworkLeft = {},
+                onSwipeArtworkRight = {},
+                onNavigateToQueueScreen = {},
+                onSeekStart = {},
+                onCreateEqualizerActivityContract = {
+                    object : ActivityResultContract<Unit, Unit>() {
+                        override fun createIntent(context: Context, input: Unit) = Intent()
+                        override fun parseResult( resultCode: Int, intent: Intent? ) {}
+
+                    }
+                },
+                onCreatePlaylist = { _, _ -> },
+                onAddSongsToPlaylist = { _, _ -> },
+                onViewAlbum = {},
+                onViewArtist = {},
+                onHideNowPlayingBottomSheet = {},
+                onShowSnackBar = {},
+                onStopSleepTimer = {},
+                onStartSleepTimer = {},
+                onShowLyrics = {},
+                onToggleLoopMode = {},
+                onToggleShuffleMode = {},
+                onRemoveFromQueue = {},
+                onNavigateToLyricsScreen = {},
             )
         }
     }
@@ -704,9 +821,10 @@ private fun requestSheetExpansion(
     sheetOffset: Float,
     scope: kotlinx.coroutines.CoroutineScope,
 ) {
-    // Allow interrupting an in-flight soft settle so taps aren't ignored for ~1–2s.
-    if ( sheetOffset <= 0.5f ) return
-    scope.launch { sheetState.animateTo( PlayerSheetValue.Expanded ) }
+    if ( sheetOffset > 0.5f ) {
+        scope.launch { sheetState.animateTo( PlayerSheetValue.Expanded ) }
+    }
+
 }
 
 private fun requestSheetCollapse(

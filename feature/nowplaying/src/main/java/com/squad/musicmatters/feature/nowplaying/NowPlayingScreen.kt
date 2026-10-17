@@ -175,7 +175,7 @@ fun NowPlayingScreen(
 
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
-private fun NowPlayingScreenContent(
+fun NowPlayingScreenContent(
     modifier: Modifier = Modifier,
     uiState: NowPlayingScreenUiState,
     lyricsUiState: LyricsUiState,
