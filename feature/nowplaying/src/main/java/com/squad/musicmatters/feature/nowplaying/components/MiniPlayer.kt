@@ -11,7 +11,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -55,7 +54,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -67,8 +65,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFirstOrNull
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kmpalette.color
 import com.kmpalette.rememberPaletteState
 import com.materialkolor.hct.Hct
@@ -99,7 +95,6 @@ import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.feature.nowplaying.LyricsUiState
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenModel
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
-import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenViewModel
 import java.util.Timer
 import kotlin.math.absoluteValue
 import kotlin.time.DurationUnit
@@ -600,14 +595,14 @@ private fun MiniPlayerPreview(
                     onAddSongsToPlaylist = { _, _ -> },
                     onViewAlbum = {},
                     onViewArtist = {},
-                    onHideNowPlayingBottomSheet = {},
+//                    onHideNowPlayingBottomSheet = {},
                     onShowSnackBar = {},
                     onStopSleepTimer = {},
                     onStartSleepTimer = {},
                     onShowLyrics = {},
                     onToggleLoopMode = {},
                     onToggleShuffleMode = {},
-                    onRemoveFromQueue = {},
+                    onRemoveSongFromQueue = {},
                     onNavigateToLyricsScreen = {},
                 ),
                 onNowPlayingBottomBarClick = {},

@@ -1,9 +1,6 @@
 package com.squad.musicmatters.feature.nowplaying.components
 
-import android.content.Context
-import android.content.Intent
 import androidx.activity.compose.PredictiveBackHandler
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,14 +12,10 @@ import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,8 +40,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -57,30 +48,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
 import androidx.compose.ui.zIndex
-import com.squad.musicmatters.core.datastore.DefaultPreferences
-import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
-import com.squad.musicmatters.core.media.connection.SleepTimer
 import com.squad.musicmatters.core.model.LoopMode
-import com.squad.musicmatters.core.model.Lyric
+import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
-import com.squad.musicmatters.core.model.SongMetadata
-import com.squad.musicmatters.core.model.ThemeMode
-import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
-import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.feature.nowplaying.LyricsUiState
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenContent
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenModel
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
+import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenViewModel
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Timer
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.roundToInt
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
+import kotlin.time.Duration
 
 enum class PlayerSheetValue { Collapsed, Expanded }
 
@@ -104,10 +89,100 @@ data class PlayerSheetLayout(
  * player content, and predictive-back collapse.
  */
 @Composable
-internal fun PlayerSheetScaffold(
-    layout: PlayerSheetLayout,
-    model: NowPlayingScreenModel,
+fun PlayerSheetScaffold(
     modifier: Modifier = Modifier,
+    viewModel: NowPlayingScreenViewModel = hiltViewModel(),
+    layout: PlayerSheetLayout,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
+    onNavigateToQueueScreen: () -> Unit,
+    onNavigateToLyricsScreen: () -> Unit,
+    onLaunchEqualizerActivity: () -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
+) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val lyricsUiState by viewModel.lyricsUiState.collectAsStateWithLifecycle()
+    val playbackPosition by viewModel.playbackPosition.collectAsStateWithLifecycle()
+
+    PlayerSheetScaffoldContent(
+        uiState = uiState,
+        lyricsUiState = lyricsUiState,
+        onGetPlaybackPosition = { playbackPosition },
+        onFavorite = viewModel::addToFavorites,
+        onPlayPauseButtonClick = viewModel::playPause,
+        onPreviousButtonClick = viewModel::playPreviousSong,
+        onPlayNext = viewModel::playNextSong,
+        onSeekStart = viewModel::onSeekStarted,
+        onSeekEnd = viewModel::onSeekEnd,
+        onArtworkClicked = { song ->
+//            onHideBottomSheet()
+            song.albumTitle?.let { onViewAlbum( it ) }
+        },
+        onArtistClicked = {
+//            onHideBottomSheet()
+            onViewArtist( it )
+        },
+        onNavigateToQueueScreen = {
+//            onHideBottomSheet()
+            onNavigateToQueueScreen()
+        },
+        onNavigateToLyricsScreen = {
+//            onHideBottomSheet()
+            onNavigateToLyricsScreen()
+        },
+        onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
+        onCreatePlaylist = viewModel::createPlaylist,
+        onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
+        onViewAlbum = onViewAlbum,
+        onViewArtist = onViewArtist,
+//        onHideNowPlayingBottomSheet = onHideBottomSheet,
+        onSwipeArtworkLeft = viewModel::playNextSong,
+        onSwipeArtworkRight = viewModel::playPreviousSong,
+        onStartSleepTimer = viewModel::startSleepTimer,
+        onStopSleepTimer = viewModel::stopSleepTimer,
+        onShowLyrics = viewModel::onShowLyrics,
+        onToggleLoopMode = viewModel::onToggleLoopMode,
+        onToggleShuffleMode = viewModel::onToggleShuffleMode,
+        onRemoveSongFromQueue = viewModel::removeSongFromQueue,
+        onShowSnackBar = onShowSnackBar,
+        layout = layout,
+    )
+
+
+}
+
+@Composable
+private fun PlayerSheetScaffoldContent(
+    modifier: Modifier = Modifier,
+    uiState: NowPlayingScreenUiState,
+    lyricsUiState: LyricsUiState,
+    layout: PlayerSheetLayout,
+    onGetPlaybackPosition: () -> PlaybackPosition,
+    onArtistClicked: ( Long ) -> Unit,
+    onFavorite: ( Song, Boolean ) -> Unit,
+    onPlayPauseButtonClick: () -> Unit,
+    onPreviousButtonClick: () -> Unit,
+    onPlayNext: () -> Unit,
+    onSeekStart: () -> Unit,
+    onSeekEnd: ( Long ) -> Unit,
+    onArtworkClicked: ( Song ) -> Unit,
+    onSwipeArtworkLeft: () -> Unit,
+    onSwipeArtworkRight: () -> Unit,
+    onNavigateToQueueScreen: () -> Unit,
+    onNavigateToLyricsScreen: () -> Unit,
+    onCreateEqualizerActivityContract: () -> Unit,
+    onCreatePlaylist: ( String, List<Song> ) -> Unit,
+    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    onViewAlbum: ( String ) -> Unit,
+    onViewArtist: ( Long ) -> Unit,
+    onShowSnackBar: ( String ) -> Unit,
+    onStartSleepTimer: ( Duration ) -> Unit,
+    onStopSleepTimer: () -> Unit,
+    onShowLyrics: ( Boolean ) -> Unit,
+    onToggleShuffleMode: ( Boolean ) -> Unit,
+    onToggleLoopMode: ( LoopMode ) -> Unit,
+    onRemoveSongFromQueue: (Song ) -> Unit,
 ) {
 
     val context = LocalContext.current
@@ -116,9 +191,52 @@ internal fun PlayerSheetScaffold(
     val playerStateHolder = rememberSaveableStateHolder()
     val haptics = LocalHapticFeedback.current
 
-    when ( model.uiState ) {
+    when ( uiState ) {
         NowPlayingScreenUiState.Loading -> {}
         is NowPlayingScreenUiState.Success -> {
+            val model = NowPlayingScreenModel(
+                uiState = uiState,
+                lyricsUiState = lyricsUiState,
+                onGetPlaybackPosition = onGetPlaybackPosition,
+                onFavorite = onFavorite,
+                onPlayPauseButtonClick = onPlayPauseButtonClick,
+                onPreviousButtonClick = onPreviousButtonClick,
+                onPlayNext = onPlayNext,
+                onSeekStart = onSeekStart,
+                onSeekEnd = onSeekEnd,
+                onArtworkClicked = { song ->
+//                    onHideBottomSheet()
+                    song.albumTitle?.let { onViewAlbum( it ) }
+                },
+                onArtistClicked = {
+//                    onHideBottomSheet()
+                    onViewArtist( it )
+                },
+                onNavigateToQueueScreen = {
+//                    onHideBottomSheet()
+                    onNavigateToQueueScreen()
+                },
+                onNavigateToLyricsScreen = {
+//                    onHideBottomSheet()
+                    onNavigateToLyricsScreen()
+                },
+                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
+                onCreatePlaylist = onCreatePlaylist,
+                onAddSongsToPlaylist = onAddSongsToPlaylist,
+                onViewAlbum = onViewAlbum,
+                onViewArtist = onViewArtist,
+//                onHideNowPlayingBottomSheet = onHideNowPlayingBottomSheet,
+                onSwipeArtworkLeft = onSwipeArtworkLeft,
+                onSwipeArtworkRight = onSwipeArtworkRight,
+                onStartSleepTimer = onStartSleepTimer,
+                onStopSleepTimer = onStopSleepTimer,
+                onShowLyrics = onShowLyrics,
+                onToggleLoopMode = onToggleLoopMode,
+                onToggleShuffleMode = onToggleShuffleMode,
+                onRemoveSongFromQueue = onRemoveSongFromQueue,
+                onShowSnackBar = onShowSnackBar
+            )
+
             // Thresholds/specs factory is deprecated in favor of AnchoredDraggableDefaults.flingBehavior;
             // Keep it here so mini-player settle velocity/feel stays identical.
             @Suppress( "DEPRECATION" )
@@ -725,133 +843,133 @@ private fun requestSheetCollapse(
     scope.launch { sheetState.animateTo( PlayerSheetValue.Collapsed ) }
 }
 
-@PreviewScreenSizes
-@Composable
-private fun PlayerSheetScaffoldPreview(
-    @PreviewParameter( MusicMattersPreviewParametersProvider::class )
-    previewData: PreviewData
-) {
-    MusicMattersTheme(
-        themeMode = ThemeMode.LIGHT,
-        primaryColorName = "Blue",
-        fontName = DefaultPreferences.FONT_NAME,
-        fontScale = DefaultPreferences.FONT_SCALE,
-        useMaterialYou = true
-    ) {
-        BoxWithConstraints(
-            modifier = Modifier.fillMaxSize()
-        ) {
-
-            val density = LocalDensity.current
-            val screenHeightDp = maxHeight
-            val systemNavBarHeight = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-
-            val containerHeight = screenHeightDp + systemNavBarHeight + 50.dp
-            val collapsedTargetY =
-                with(density) {
-                    (
-                            screenHeightDp -
-                                    miniPlayerHeight -
-                                    ( navigationBarHeight + navigationBottomInset ) -
-//                                    playerSystemNavigationInset -
-                                    miniPlayerNavigationGap
-                            ).toPx()
-                }
-
-            PlayerSheetScaffold(
-                model = NowPlayingScreenModel(
-                    uiState = NowPlayingScreenUiState.Success(
-                        userData = emptyUserData.copy(
-                            loopMode = LoopMode.Queue,
-                        ),
-                        currentlyPlayingSong = previewData.songs.first(),
-                        currentlyPlayingSongIsFavorite = true,
-                        playerState = PlayerState(
-                            currentlyPlayingSongId = "song-id-1",
-                            isPlaying = true,
-                            isBuffering = false,
-                        ),
-                        playlists = emptyList(),
-                        songMetadata = SongMetadata(
-                            songId = "",
-                            codec = "mp3",
-                            bitrate = 0,
-                            samplingRate = 0f,
-                            bitsPerSample = 0,
-                            genreName = "Hip-Hop"
-                        ),
-                        sleepTimer = SleepTimer(
-                            duration = 300000L.toDuration( DurationUnit.MILLISECONDS ),
-                            endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS ),
-                            timer = Timer()
-                        )
-                    ),
-                    lyricsUiState = LyricsUiState.Success(
-                        lyrics = listOf(
-                            Lyric(
-                                timeStamp = java.time.Duration.ofMinutes( 1 ),
-                                content = "Sometime say the magic you dey feel inside is like gold"
-                            ),
-                            Lyric(
-                                timeStamp = java.time.Duration.ofMinutes( 2 ),
-                                content = "Something like do re mi fa so lat ti do do (Yeah)"
-                            ),
-                            Lyric(
-                                timeStamp = java.time.Duration.ofMinutes( 3 ),
-                                content = "Make I sing for you la la do do"
-                            ),
-                            Lyric(
-                                timeStamp = java.time.Duration.ofMinutes( 4 ),
-                                content = "Make I sing your song"
-                            ),
-                            Lyric(
-                                timeStamp = java.time.Duration.ofMinutes( 5 ),
-                                content = "Make I sing make you wine am do do o"
-                            )
-                        ),
-                    ),
-                    onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
-                    onArtistClicked = {},
-                    onFavorite = { _, _ -> },
-                    onPlayPauseButtonClick = {},
-                    onPreviousButtonClick = {},
-                    onPlayNext = {},
-                    onSeekEnd = {},
-                    onArtworkClicked = {},
-                    onSwipeArtworkLeft = {},
-                    onSwipeArtworkRight = {},
-                    onNavigateToQueueScreen = {},
-                    onSeekStart = {},
-                    onCreateEqualizerActivityContract = {
-                        object : ActivityResultContract<Unit, Unit>() {
-                            override fun createIntent(context: Context, input: Unit) = Intent()
-                            override fun parseResult( resultCode: Int, intent: Intent? ) {}
-
-                        }
-                    },
-                    onCreatePlaylist = { _, _ -> },
-                    onAddSongsToPlaylist = { _, _ -> },
-                    onViewAlbum = {},
-                    onViewArtist = {},
-                    onHideNowPlayingBottomSheet = {},
-                    onShowSnackBar = {},
-                    onStopSleepTimer = {},
-                    onStartSleepTimer = {},
-                    onShowLyrics = {},
-                    onToggleLoopMode = {},
-                    onToggleShuffleMode = {},
-                    onRemoveFromQueue = {},
-                    onNavigateToLyricsScreen = {},
-                ),
-                layout = PlayerSheetLayout(
-                    collapsedTargetY = collapsedTargetY,
-                    containerHeight = containerHeight,
-                    collapsedHorizontalPadding = 12.dp,
-                ),
-            )
-        }
-    }
-}
+//@PreviewScreenSizes
+//@Composable
+//private fun PlayerSheetScaffoldPreview(
+//    @PreviewParameter( MusicMattersPreviewParametersProvider::class )
+//    previewData: PreviewData
+//) {
+//    MusicMattersTheme(
+//        themeMode = ThemeMode.LIGHT,
+//        primaryColorName = "Blue",
+//        fontName = DefaultPreferences.FONT_NAME,
+//        fontScale = DefaultPreferences.FONT_SCALE,
+//        useMaterialYou = true
+//    ) {
+//        BoxWithConstraints(
+//            modifier = Modifier.fillMaxSize()
+//        ) {
+//
+//            val density = LocalDensity.current
+//            val screenHeightDp = maxHeight
+//            val systemNavBarHeight = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+//
+//            val containerHeight = screenHeightDp + systemNavBarHeight + 50.dp
+//            val collapsedTargetY =
+//                with(density) {
+//                    (
+//                            screenHeightDp -
+//                                    miniPlayerHeight -
+//                                    ( navigationBarHeight + navigationBottomInset ) -
+////                                    playerSystemNavigationInset -
+//                                    miniPlayerNavigationGap
+//                            ).toPx()
+//                }
+//
+//            PlayerSheetScaffold(
+//                model = NowPlayingScreenModel(
+//                    uiState = NowPlayingScreenUiState.Success(
+//                        userData = emptyUserData.copy(
+//                            loopMode = LoopMode.Queue,
+//                        ),
+//                        currentlyPlayingSong = previewData.songs.first(),
+//                        currentlyPlayingSongIsFavorite = true,
+//                        playerState = PlayerState(
+//                            currentlyPlayingSongId = "song-id-1",
+//                            isPlaying = true,
+//                            isBuffering = false,
+//                        ),
+//                        playlists = emptyList(),
+//                        songMetadata = SongMetadata(
+//                            songId = "",
+//                            codec = "mp3",
+//                            bitrate = 0,
+//                            samplingRate = 0f,
+//                            bitsPerSample = 0,
+//                            genreName = "Hip-Hop"
+//                        ),
+//                        sleepTimer = SleepTimer(
+//                            duration = 300000L.toDuration( DurationUnit.MILLISECONDS ),
+//                            endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS ),
+//                            timer = Timer()
+//                        )
+//                    ),
+//                    lyricsUiState = LyricsUiState.Success(
+//                        lyrics = listOf(
+//                            Lyric(
+//                                timeStamp = java.time.Duration.ofMinutes( 1 ),
+//                                content = "Sometime say the magic you dey feel inside is like gold"
+//                            ),
+//                            Lyric(
+//                                timeStamp = java.time.Duration.ofMinutes( 2 ),
+//                                content = "Something like do re mi fa so lat ti do do (Yeah)"
+//                            ),
+//                            Lyric(
+//                                timeStamp = java.time.Duration.ofMinutes( 3 ),
+//                                content = "Make I sing for you la la do do"
+//                            ),
+//                            Lyric(
+//                                timeStamp = java.time.Duration.ofMinutes( 4 ),
+//                                content = "Make I sing your song"
+//                            ),
+//                            Lyric(
+//                                timeStamp = java.time.Duration.ofMinutes( 5 ),
+//                                content = "Make I sing make you wine am do do o"
+//                            )
+//                        ),
+//                    ),
+//                    onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
+//                    onArtistClicked = {},
+//                    onFavorite = { _, _ -> },
+//                    onPlayPauseButtonClick = {},
+//                    onPreviousButtonClick = {},
+//                    onPlayNext = {},
+//                    onSeekEnd = {},
+//                    onArtworkClicked = {},
+//                    onSwipeArtworkLeft = {},
+//                    onSwipeArtworkRight = {},
+//                    onNavigateToQueueScreen = {},
+//                    onSeekStart = {},
+//                    onCreateEqualizerActivityContract = {
+//                        object : ActivityResultContract<Unit, Unit>() {
+//                            override fun createIntent(context: Context, input: Unit) = Intent()
+//                            override fun parseResult( resultCode: Int, intent: Intent? ) {}
+//
+//                        }
+//                    },
+//                    onCreatePlaylist = { _, _ -> },
+//                    onAddSongsToPlaylist = { _, _ -> },
+//                    onViewAlbum = {},
+//                    onViewArtist = {},
+//                    onHideNowPlayingBottomSheet = {},
+//                    onShowSnackBar = {},
+//                    onStopSleepTimer = {},
+//                    onStartSleepTimer = {},
+//                    onShowLyrics = {},
+//                    onToggleLoopMode = {},
+//                    onToggleShuffleMode = {},
+//                    onRemoveSongFromQueue = {},
+//                    onNavigateToLyricsScreen = {},
+//                ),
+//                layout = PlayerSheetLayout(
+//                    collapsedTargetY = collapsedTargetY,
+//                    containerHeight = containerHeight,
+//                    collapsedHorizontalPadding = 12.dp,
+//                ),
+//            )
+//        }
+//    }
+//}
 
 private val navigationBarHeight = 80.dp
 private val navigationBottomInset = 0.dp

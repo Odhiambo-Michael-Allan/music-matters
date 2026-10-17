@@ -11,12 +11,15 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.launch
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
@@ -49,6 +52,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -73,6 +77,8 @@ import com.squad.musicmatters.feature.foryou.navigation.ForYouRoute
 import com.squad.musicmatters.feature.foryou.navigation.navigateToForYouScreen
 import com.squad.musicmatters.feature.genres.navigation.navigateToGenres
 import com.squad.musicmatters.feature.lyrics.navigation.navigateToLyricsScreen
+import com.squad.musicmatters.feature.nowplaying.components.PlayerSheetLayout
+import com.squad.musicmatters.feature.nowplaying.components.PlayerSheetScaffold
 import com.squad.musicmatters.feature.playlists.navigation.navigateToPlaylists
 import com.squad.musicmatters.feature.queue.navigation.navigateToQueueScreen
 import com.squad.musicmatters.feature.search.navigation.navigateToSearchScreen
@@ -188,79 +194,118 @@ fun MusicMattersAppContent(
     val snackBarHostState = remember { SnackbarHostState() }
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    NavigationSuiteScaffold(
-        navigationSuiteColors = NavigationSuiteDefaults.colors(
-            navigationRailContainerColor = Color.Transparent,
-            navigationBarContainerColor = Color.Transparent,
-        ),
-        layoutType = customNavSuiteType,
-        navigationSuiteItems = {
-            TopLevelDestination.entries.forEach { destination ->
-                val isSelected = currentTopLevelDestinationName == destination.route.qualifiedName
-                item(
-                    selected = isSelected,
-                    alwaysShowLabel = labelVisibility == BottomBarLabelVisibility.ALWAYS_VISIBLE,
-                    onClick = {
-                        if ( destination == TopLevelDestination.LIBRARY ) {
-                            showMoreDestinationsBottomSheet = true
-                        }
-                        else if ( isSelected.not() ) {
-                            navController.navigateToTopLevelDestination( destination )
-                        }
-                    },
-                    icon = {
-                        Crossfade(
-                            targetState = isSelected,
-                            label = "home-bottom-bar"
-                        ) {
-                            Icon(
-                                imageVector = if ( it ) {
-                                    destination.selectedIcon
-                                } else {
-                                    destination.unselectedIcon
-                                },
-                                contentDescription = stringResource( id = destination.iconTextId )
-                            )
-                        }
-                    },
-                    label = when ( labelVisibility ) {
-                        BottomBarLabelVisibility.INVISIBLE -> null
-                        else -> ( {
-                            Text(
-                                text = stringResource( id = destination.iconTextId ),
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center,
-                                overflow = TextOverflow.Ellipsis,
-                                softWrap = false,
-                            )
-                        } )
-                    }
-                )
-            }
-        }
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize()
     ) {
-
-        Scaffold(
-            topBar = {
-                if ( shouldShowTopAppBar ) {
-                    TopAppBar(
-                        title = stringResource(
-                            id = if ( currentTopLevelDestinationName ==
-                                ForYouRoute::class.qualifiedName ) {
-                                i8nR.string.core_i8n_for_you
-                            } else {
-                                i8nR.string.core_i8n_songs
+        NavigationSuiteScaffold(
+            navigationSuiteColors = NavigationSuiteDefaults.colors(
+                navigationRailContainerColor = Color.Transparent,
+                navigationBarContainerColor = Color.Transparent,
+            ),
+            layoutType = customNavSuiteType,
+            navigationSuiteItems = {
+                TopLevelDestination.entries.forEach { destination ->
+                    val isSelected = currentTopLevelDestinationName == destination.route.qualifiedName
+                    item(
+                        selected = isSelected,
+                        alwaysShowLabel = labelVisibility == BottomBarLabelVisibility.ALWAYS_VISIBLE,
+                        onClick = {
+                            if ( destination == TopLevelDestination.LIBRARY ) {
+                                showMoreDestinationsBottomSheet = true
                             }
-                        ),
-                        topAppBarScrollBehavior = topAppBarScrollBehavior,
-                        onNavigationIconClicked = {
-                            navController.navigateToSearchScreen(
-                                navOptions = navOptions {
-                                    launchSingleTop = true
-                                }
-                            )
+                            else if ( isSelected.not() ) {
+                                navController.navigateToTopLevelDestination( destination )
+                            }
                         },
-                        onSettingsClicked = {
+                        icon = {
+                            Crossfade(
+                                targetState = isSelected,
+                                label = "home-bottom-bar"
+                            ) {
+                                Icon(
+                                    imageVector = if ( it ) {
+                                        destination.selectedIcon
+                                    } else {
+                                        destination.unselectedIcon
+                                    },
+                                    contentDescription = stringResource( id = destination.iconTextId )
+                                )
+                            }
+                        },
+                        label = when ( labelVisibility ) {
+                            BottomBarLabelVisibility.INVISIBLE -> null
+                            else -> ( {
+                                Text(
+                                    text = stringResource( id = destination.iconTextId ),
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center,
+                                    overflow = TextOverflow.Ellipsis,
+                                    softWrap = false,
+                                )
+                            } )
+                        }
+                    )
+                }
+            }
+        ) {
+
+            Scaffold(
+                topBar = {
+                    if ( shouldShowTopAppBar ) {
+                        TopAppBar(
+                            title = stringResource(
+                                id = if ( currentTopLevelDestinationName ==
+                                    ForYouRoute::class.qualifiedName ) {
+                                    i8nR.string.core_i8n_for_you
+                                } else {
+                                    i8nR.string.core_i8n_songs
+                                }
+                            ),
+                            topAppBarScrollBehavior = topAppBarScrollBehavior,
+                            onNavigationIconClicked = {
+                                navController.navigateToSearchScreen(
+                                    navOptions = navOptions {
+                                        launchSingleTop = true
+                                    }
+                                )
+                            },
+                            onSettingsClicked = {
+                                navController.navigateToSettings(
+                                    navOptions = navOptions {
+                                        launchSingleTop = true
+                                    }
+                                )
+                            }
+                        )
+                    }
+
+                },
+                snackbarHost = {
+                    SnackbarHost(
+                        snackBarHostState,
+                        modifier = Modifier.windowInsetsPadding(
+                            WindowInsets.safeDrawing.exclude(
+                                WindowInsets.ime,
+                            ),
+                        ),
+                    )
+                },
+                contentWindowInsets = WindowInsets( 0, 0, 0, 0 ),
+                modifier = Modifier
+                    .nestedScroll( topAppBarScrollBehavior.nestedScrollConnection )
+            ) { innerPadding ->
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding( innerPadding )
+                ) {
+
+                    MusicMattersNavHost(
+                        navController = navController,
+                        onDeleteSong = onDeleteSong,
+                        snackBarHostState = snackBarHostState,
+                        onNavigateToSettings = {
                             navController.navigateToSettings(
                                 navOptions = navOptions {
                                     launchSingleTop = true
@@ -268,119 +313,89 @@ fun MusicMattersAppContent(
                             )
                         }
                     )
-                }
-
-            },
-            snackbarHost = {
-                SnackbarHost(
-                    snackBarHostState,
-                    modifier = Modifier.windowInsetsPadding(
-                        WindowInsets.safeDrawing.exclude(
-                            WindowInsets.ime,
-                        ),
-                    ),
-                )
-            },
-            contentWindowInsets = WindowInsets( 0, 0, 0, 0 ),
-            modifier = Modifier
-                .nestedScroll( topAppBarScrollBehavior.nestedScrollConnection )
-        ) { innerPadding ->
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding( innerPadding )
-            ) {
-
-                MusicMattersNavHost(
-                    navController = navController,
-                    onDeleteSong = onDeleteSong,
-                    snackBarHostState = snackBarHostState,
-                    onNavigateToSettings = {
-                        navController.navigateToSettings(
-                            navOptions = navOptions {
-                                launchSingleTop = true
-                            }
-                        )
-                    }
-                )
 
 
-                if ( showMoreDestinationsBottomSheet ) {
-                    ModalBottomSheet(
-                        sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
-                        onDismissRequest = { showMoreDestinationsBottomSheet = false }
-                    ) {
-                        LibraryDestination.entries.forEach {
-                            val isSelected = currentlySelectedLibraryDestinationName ==
-                                    it.route.qualifiedName
-                            BottomSheetMenuItem(
-                                leadingIcon = it.icon,
-                                leadingIconContentDescription = stringResource( it.titleTextId ),
-                                label = stringResource( it.titleTextId ),
-                                isSelected = isSelected
-                            ) {
-                                showMoreDestinationsBottomSheet = false
-                                currentTopLevelDestinationName = TopLevelDestination.LIBRARY
-                                    .route.qualifiedName
-                                navController.navigateToLibraryDestination( it )
-                            }
-                        }
-                        Spacer( modifier = Modifier.size( 36.dp ) )
-                    }
-                }
-
-                MiniPlayer (
-                    onShowNowPlayingBottomSheet = { showNowPlayingScreen = true },
-                    modifier = Modifier.align( Alignment.BottomCenter ),
-                )
-
-                if ( showNowPlayingScreen ) {
-                    ModalBottomSheet(
-                        sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
-                        onDismissRequest = {
-                            showNowPlayingScreen = false
-                        },
-                        containerColor = CardDefaults.cardColors().containerColor,
-                        sheetMaxWidth = Dp.Unspecified
-                    ) {
-                        NowPlayingScreen(
-                            onViewAlbum = {},
-                            onViewArtist = {},
-                            onHideBottomSheet = {
-                                showNowPlayingScreen = false
-                            },
-
-                            onNavigateToQueueScreen = {
-                                navController.navigateToQueueScreen(
-                                    navOptions = navOptions {
-                                        launchSingleTop = true
-                                    }
-                                )
-                            },
-                            onNavigateToLyricsScreen = {
-                                navController.navigateToLyricsScreen(
-                                    navOptions = navOptions {
-                                        launchSingleTop = true
-                                    }
-                                )
-                            },
-                            onLaunchEqualizerActivity = {
-                                try {
-                                    equalizerActivity.launch()
-                                } catch ( exception: Exception ) {
-                                    Timber.tag( "NOW-PLAYING-BOTTOM-BAR" ).d(
-                                        "Launching equalizer failed: $exception"
-                                    )
+                    if ( showMoreDestinationsBottomSheet ) {
+                        ModalBottomSheet(
+                            sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
+                            onDismissRequest = { showMoreDestinationsBottomSheet = false }
+                        ) {
+                            LibraryDestination.entries.forEach {
+                                val isSelected = currentlySelectedLibraryDestinationName ==
+                                        it.route.qualifiedName
+                                BottomSheetMenuItem(
+                                    leadingIcon = it.icon,
+                                    leadingIconContentDescription = stringResource( it.titleTextId ),
+                                    label = stringResource( it.titleTextId ),
+                                    isSelected = isSelected
+                                ) {
+                                    showMoreDestinationsBottomSheet = false
+                                    currentTopLevelDestinationName = TopLevelDestination.LIBRARY
+                                        .route.qualifiedName
+                                    navController.navigateToLibraryDestination( it )
                                 }
                             }
-                        )
+                            Spacer( modifier = Modifier.size( 36.dp ) )
+                        }
                     }
                 }
+
+            }
+        }
+
+        val density = LocalDensity.current
+        val screenHeightDp = maxHeight
+        val systemNavBarHeight = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+        val classicNavigationChromeMetrics =
+            NavigationChromeMetrics(
+                navigationBarHeight = 80.dp,
+                navigationBottomInset = 0.dp,
+                miniPlayerHeight = 72.dp,
+                miniPlayerNavigationGap = 8.dp,
+                miniPlayerTopCornerRadius = 26.dp,
+                miniPlayerBottomCornerRadius = 14.dp,
+            )
+        val bottomChromeClearance = classicNavigationChromeMetrics.bottomNavigationClearance
+        val playerSystemNavigationInset = 0.dp
+        val containerHeight = screenHeightDp + systemNavBarHeight + 50.dp
+        val collapsedTargetY =
+            with(density) {
+                (
+                        screenHeightDp -
+                                classicNavigationChromeMetrics.miniPlayerHeight -
+                                bottomChromeClearance -
+                                playerSystemNavigationInset -
+                                classicNavigationChromeMetrics.miniPlayerNavigationGap
+                        ).toPx()
             }
 
-        }
+        PlayerSheetScaffold(
+            layout = PlayerSheetLayout(
+                collapsedTargetY = collapsedTargetY,
+                containerHeight = containerHeight,
+            ),
+            onViewAlbum = {},
+            onViewArtist = {},
+            onShowSnackBar = {},
+            onNavigateToLyricsScreen = {},
+            onNavigateToQueueScreen = {},
+            onLaunchEqualizerActivity = {},
+            modifier = Modifier.align( Alignment.TopStart )
+        )
+
     }
+}
+
+data class NavigationChromeMetrics(
+    val navigationBarHeight: Dp,
+    val navigationBottomInset: Dp,
+    val miniPlayerHeight: Dp,
+    val miniPlayerNavigationGap: Dp,
+    val miniPlayerTopCornerRadius: Dp,
+    val miniPlayerBottomCornerRadius: Dp,
+) {
+    val bottomNavigationClearance: Dp
+        get() = navigationBarHeight + navigationBottomInset
 }
 
 @Composable

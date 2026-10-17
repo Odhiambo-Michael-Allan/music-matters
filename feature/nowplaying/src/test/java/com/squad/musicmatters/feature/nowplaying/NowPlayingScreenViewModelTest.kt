@@ -178,7 +178,7 @@ class NowPlayingScreenViewModelTest {
         assertEquals(
             NowPlayingScreenUiState.Success(
                 playerState = PlayerState(),
-                currentlyPlayingSong = null,
+                currentlyPlayingSong = Song.EMPTY,
                 userData = emptyUserData,
                 currentlyPlayingSongIsFavorite = false,
                 playlists = emptyList(),

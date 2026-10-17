@@ -35,8 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
 import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.component.MusicMattersIcons
@@ -134,7 +132,7 @@ annotation class PreviewScreenSizesPortrait
 //            onShowLyrics = viewModel::onShowLyrics,
 //            onToggleLoopMode = viewModel::onToggleLoopMode,
 //            onToggleShuffleMode = viewModel::onToggleShuffleMode,
-//            onRemoveFromQueue = viewModel::removeSongFromQueue,
+//            onRemoveSongFromQueue = viewModel::removeSongFromQueue,
 //            onShowSnackBar = onShowSnackBar
 //        )
 //    )
@@ -173,7 +171,9 @@ fun NowPlayingScreenContent(
             onFavorite = model.onFavorite,
             onArtworkSwipedLeft = model.onSwipeArtworkLeft,
             onArtworkSwipedRight = model.onSwipeArtworkRight,
-            onArtworkSwipedDown = model.onHideNowPlayingBottomSheet,
+            onArtworkSwipedDown = {
+//                model.onHideNowPlayingBottomSheet
+            },
             onArtworkClicked = model.onArtworkClicked,
             onArtistClicked = model.onArtistClicked,
             onShowOptionsMenu = { showOptionsMenu = true },
@@ -240,7 +240,7 @@ fun NowPlayingScreenContent(
                     },
                     onShowSnackBar = model.onShowSnackBar,
                     onShowAddToQueueOption = { false },
-                    onRemoveFromQueue = { model.onRemoveFromQueue( song ) },
+                    onRemoveFromQueue = { model.onRemoveSongFromQueue( song ) },
                     trailingBottomSheetMenuItems = { onDismissRequest ->
                         song.albumTitle?.let { albumTitle ->
                             BottomSheetMenuItem(
@@ -251,7 +251,7 @@ fun NowPlayingScreenContent(
                                 )
                             ) {
                                 onDismissRequest()
-                                model.onHideNowPlayingBottomSheet()
+//                                model.onHideNowPlayingBottomSheet()
                                 model.onViewAlbum( albumTitle )
                             }
                         }
@@ -264,7 +264,7 @@ fun NowPlayingScreenContent(
                                 )
                             ) {
                                 onDismissRequest()
-                                model.onHideNowPlayingBottomSheet()
+//                                model.onHideNowPlayingBottomSheet()
                                 model.onViewArtist( song.artistId )
                             }
                         }
@@ -368,14 +368,14 @@ data class NowPlayingScreenModel(
     val onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     val onViewAlbum: ( String ) -> Unit,
     val onViewArtist: ( Long ) -> Unit,
-    val onHideNowPlayingBottomSheet: () -> Unit,
+//    val onHideNowPlayingBottomSheet: () -> Unit,
     val onShowSnackBar: ( String ) -> Unit,
     val onStartSleepTimer: ( Duration ) -> Unit,
     val onStopSleepTimer: () -> Unit,
     val onShowLyrics: ( Boolean ) -> Unit,
     val onToggleShuffleMode: ( Boolean ) -> Unit,
     val onToggleLoopMode: ( LoopMode ) -> Unit,
-    val onRemoveFromQueue: ( Song ) -> Unit,
+    val onRemoveSongFromQueue: (Song ) -> Unit,
 )
 
 
@@ -594,14 +594,14 @@ private fun NowPlayingScreenContentPreview(
                 onAddSongsToPlaylist = { _, _ -> },
                 onViewAlbum = {},
                 onViewArtist = {},
-                onHideNowPlayingBottomSheet = {},
+//                onHideNowPlayingBottomSheet = {},
                 onShowSnackBar = {},
                 onStopSleepTimer = {},
                 onStartSleepTimer = {},
                 onShowLyrics = {},
                 onToggleLoopMode = {},
                 onToggleShuffleMode = {},
-                onRemoveFromQueue = {},
+                onRemoveSongFromQueue = {},
                 onNavigateToLyricsScreen = {},
             )
         )
