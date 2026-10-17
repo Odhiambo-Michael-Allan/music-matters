@@ -7,14 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -26,9 +20,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -97,7 +89,8 @@ fun NowPlayingScreen(
     onNavigateToQueueScreen: () -> Unit,
     onNavigateToLyricsScreen: () -> Unit,
     onLaunchEqualizerActivity: () -> Unit,
-    onHideBottomSheet: () -> Unit
+    onHideBottomSheet: () -> Unit,
+    onShowSnackBar: (String) -> Unit,
 ) {
 
     val snackBarHostState = remember { SnackbarHostState() }
@@ -106,20 +99,8 @@ fun NowPlayingScreen(
     val lyricsUiState by viewModel.lyricsUiState.collectAsStateWithLifecycle()
     val playbackPosition by viewModel.playbackPosition.collectAsStateWithLifecycle()
 
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(
-                snackBarHostState,
-                modifier = Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.exclude(
-                        WindowInsets.ime,
-                    ),
-                ),
-            )
-        }
-    ) { innerPadding ->
-        NowPlayingScreenContent(
-            modifier = Modifier.consumeWindowInsets( innerPadding ),
+    NowPlayingScreenContent(
+        model = NowPlayingScreenModel(
             uiState = uiState,
             lyricsUiState = lyricsUiState,
             backgroundColor = backgroundColor,
@@ -169,7 +150,8 @@ fun NowPlayingScreen(
                 }
             }
         )
-    }
+
+    )
 }
 
 
@@ -177,35 +159,7 @@ fun NowPlayingScreen(
 @Composable
 fun NowPlayingScreenContent(
     modifier: Modifier = Modifier,
-    uiState: NowPlayingScreenUiState,
-    lyricsUiState: LyricsUiState,
-    backgroundColor: Color = Color.Unspecified,
-    onGetPlaybackPosition: () -> PlaybackPosition,
-    onArtistClicked: ( Long ) -> Unit,
-    onFavorite: ( Song, Boolean ) -> Unit,
-    onPausePlayButtonClick: () -> Unit,
-    onPreviousButtonClick: () -> Unit,
-    onPlayNext: () -> Unit,
-    onSeekStart: () -> Unit,
-    onSeekEnd: ( Long ) -> Unit,
-    onArtworkClicked: ( Song ) -> Unit,
-    onSwipeArtworkLeft: () -> Unit,
-    onSwipeArtworkRight: () -> Unit,
-    onNavigateToQueueScreen: () -> Unit,
-    onNavigateToLyricsScreen: () -> Unit,
-    onCreateEqualizerActivityContract: () -> Unit,
-    onCreatePlaylist: ( String, List<Song> ) -> Unit,
-    onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
-    onViewAlbum: ( String ) -> Unit,
-    onViewArtist: ( Long ) -> Unit,
-    onHideNowPlayingBottomSheet: () -> Unit,
-    onShowSnackBar: ( String ) -> Unit,
-    onStartSleepTimer: ( Duration ) -> Unit,
-    onStopSleepTimer: () -> Unit,
-    onShowLyrics: ( Boolean ) -> Unit,
-    onToggleShuffleMode: ( Boolean ) -> Unit,
-    onToggleLoopMode: ( LoopMode ) -> Unit,
-    onRemoveFromQueue: ( Song ) -> Unit,
+    model: NowPlayingScreenModel
 ) {
     val currentWindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     var showOptionsMenu by remember { mutableStateOf( false ) }
@@ -222,62 +176,44 @@ fun NowPlayingScreenContent(
     val isMediumOrWider = currentWindowSizeClass
         .isWidthAtLeastBreakpoint( WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND )
 
-    when ( uiState ) {
+    when ( model.uiState ) {
         NowPlayingScreenUiState.Loading -> {}
         is NowPlayingScreenUiState.Success -> {
-            uiState.currentlyPlayingSong?.let { song ->
+            model.uiState.currentlyPlayingSong?.let { song ->
+                val portraitExpandedLayoutModel = PortraitExpandedLayoutModel(
+                    uiState = model.uiState,
+                    lyricsUiState = model.lyricsUiState,
+                    currentlyPlayingSong = song,
+                    onGetPlaybackPosition = model.onGetPlaybackPosition,
+                    onFavorite = model.onFavorite,
+                    onArtworkSwipedLeft = model.onSwipeArtworkLeft,
+                    onArtworkSwipedRight = model.onSwipeArtworkRight,
+                    onArtworkSwipedDown = model.onHideNowPlayingBottomSheet,
+                    onArtworkClicked = model.onArtworkClicked,
+                    onArtistClicked = model.onArtistClicked,
+                    onShowOptionsMenu = { showOptionsMenu = true },
+                    onSeekStart = model.onSeekStart,
+                    onSeekEnd = model.onSeekEnd,
+                    onPausePlayButtonClick = model.onPausePlayButtonClick,
+                    onPreviousButtonClick = model.onPreviousButtonClick,
+                    onPlayNext = model.onPlayNext,
+                    onNavigateToQueueScreen = model.onNavigateToQueueScreen,
+                    onNavigateToLyricsScreen = model.onNavigateToLyricsScreen,
+                    onShowLyrics = model.onShowLyrics,
+                    onToggleShuffleMode = model.onToggleShuffleMode,
+                    onToggleLoopMode = model.onToggleLoopMode,
+                )
                 when {
                     isExpanded || isMediumOrWider -> {
                         ExpandedLayout(
                             modifier = modifier,
-                            uiState = uiState,
-                            lyricsUiState = lyricsUiState,
-                            currentlyPlayingSong = song,
-                            onGetPlaybackPosition = onGetPlaybackPosition,
-                            onFavorite = onFavorite,
-                            onArtworkSwipedLeft = onSwipeArtworkLeft,
-                            onArtworkSwipedRight = onSwipeArtworkRight,
-                            onArtworkSwipedDown = onHideNowPlayingBottomSheet,
-                            onArtworkClicked = onArtworkClicked,
-                            onArtistClicked = onArtistClicked,
-                            onShowOptionsMenu = { showOptionsMenu = true },
-                            onSeekStart = onSeekStart,
-                            onSeekEnd = onSeekEnd,
-                            onPausePlayButtonClick = onPausePlayButtonClick,
-                            onPreviousButtonClick = onPreviousButtonClick,
-                            onPlayNext = onPlayNext,
-                            onNavigateToQueueScreen = onNavigateToQueueScreen,
-                            onNavigateToLyricsScreen = onNavigateToLyricsScreen,
-                            onShowLyrics = onShowLyrics,
-                            onToggleShuffleMode = onToggleShuffleMode,
-                            onToggleLoopMode = onToggleLoopMode,
+                            model = portraitExpandedLayoutModel,
                         )
                     }
                     else -> {
                         PortraitLayout(
                             modifier = modifier,
-                            uiState = uiState,
-                            lyricsUiState = lyricsUiState,
-                            currentlyPlayingSong = song,
-                            backgroundColor = backgroundColor,
-                            onGetPlaybackPosition = onGetPlaybackPosition,
-                            onFavorite = onFavorite,
-                            onArtworkSwipedLeft = onSwipeArtworkLeft,
-                            onArtworkSwipedRight = onSwipeArtworkRight,
-                            onArtworkSwipedDown = onHideNowPlayingBottomSheet,
-                            onArtworkClicked = onArtworkClicked,
-                            onArtistClicked = onArtistClicked,
-                            onShowOptionsMenu = { showOptionsMenu = true },
-                            onSeekStart = onSeekStart,
-                            onSeekEnd = onSeekEnd,
-                            onPausePlayButtonClick = onPausePlayButtonClick,
-                            onPreviousButtonClick = onPreviousButtonClick,
-                            onPlayNext = onPlayNext,
-                            onNavigateToQueueScreen = onNavigateToQueueScreen,
-                            onNavigateToLyricsScreen = onNavigateToLyricsScreen,
-                            onShowLyrics = onShowLyrics,
-                            onToggleShuffleMode = onToggleShuffleMode,
-                            onToggleLoopMode = onToggleLoopMode,
+                            model = portraitExpandedLayoutModel,
                         )
                     }
                 }
@@ -293,16 +229,16 @@ fun NowPlayingScreenContent(
                             headerTitle = song.title,
                             titleIsHighlighted = true,
                             headerDescription = song.artist,
-                            onGetPlaylists = { uiState.playlists },
+                            onGetPlaylists = { model.uiState.playlists },
                             onDismissRequest = { showOptionsMenu = false },
                             onPlayNext = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
                             onAddToQueue = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
-                            onCreatePlaylist = onCreatePlaylist,
-                            onAddSongsToPlaylist = onAddSongsToPlaylist,
+                            onCreatePlaylist = model.onCreatePlaylist,
+                            onAddSongsToPlaylist = model.onAddSongsToPlaylist,
                             onGetSongs = { listOf( song ) },
                             leadingBottomSheetMenuItem = { onDismissRequest ->
                                 BottomSheetMenuItem(
-                                    leadingIcon = if ( uiState.currentlyPlayingSongIsFavorite ) {
+                                    leadingIcon = if ( model.uiState.currentlyPlayingSongIsFavorite ) {
                                         MusicMattersIcons.Favorite
                                     } else {
                                         MusicMattersIcons.FavoriteBorder
@@ -311,12 +247,15 @@ fun NowPlayingScreenContent(
                                     leadingIconTint = MaterialTheme.colorScheme.primary
                                 ) {
                                     onDismissRequest()
-                                    onFavorite( song, !uiState.currentlyPlayingSongIsFavorite )
+                                    model.onFavorite(
+                                        song,
+                                        !model.uiState.currentlyPlayingSongIsFavorite
+                                    )
                                 }
                             },
-                            onShowSnackBar = onShowSnackBar,
+                            onShowSnackBar = model.onShowSnackBar,
                             onShowAddToQueueOption = { false },
-                            onRemoveFromQueue = { onRemoveFromQueue( song ) },
+                            onRemoveFromQueue = { model.onRemoveFromQueue( song ) },
                             trailingBottomSheetMenuItems = { onDismissRequest ->
                                 song.albumTitle?.let { albumTitle ->
                                     BottomSheetMenuItem(
@@ -327,8 +266,8 @@ fun NowPlayingScreenContent(
                                         )
                                     ) {
                                         onDismissRequest()
-                                        onHideNowPlayingBottomSheet()
-                                        onViewAlbum( albumTitle )
+                                        model.onHideNowPlayingBottomSheet()
+                                        model.onViewAlbum( albumTitle )
                                     }
                                 }
                                 song.artist.let { artistName ->
@@ -340,8 +279,8 @@ fun NowPlayingScreenContent(
                                         )
                                     ) {
                                         onDismissRequest()
-                                        onHideNowPlayingBottomSheet()
-                                        onViewArtist( song.artistId )
+                                        model.onHideNowPlayingBottomSheet()
+                                        model.onViewArtist( song.artistId )
                                     }
                                 }
                                 BottomSheetMenuItem(
@@ -352,11 +291,11 @@ fun NowPlayingScreenContent(
                                     showSongDetailsDialog = true
                                 }
                                 BottomSheetMenuItem(
-                                    leadingIcon = uiState.sleepTimer?.let {
+                                    leadingIcon = model.uiState.sleepTimer?.let {
                                         MusicMattersIcons.TimerOn
                                     } ?: MusicMattersIcons.Timer,
                                     label = stringResource( id = i8nR.string.core_i8n_sleep_timer ),
-                                    leadingIconTint = uiState.sleepTimer?.let {
+                                    leadingIconTint = model.uiState.sleepTimer?.let {
                                         MaterialTheme.colorScheme.primary
                                     }
                                 ) {
@@ -368,7 +307,7 @@ fun NowPlayingScreenContent(
                                     label = stringResource( id = i8nR.string.core_i8n_equalizer )
                                 ) {
                                     onDismissRequest()
-                                    onCreateEqualizerActivityContract()
+                                    model.onCreateEqualizerActivityContract()
                                 }
                             }
                         )
@@ -379,7 +318,7 @@ fun NowPlayingScreenContent(
                     SongDetailsDialog(
                         song = song,
                         durationFormatter = { it.formatMilliseconds() },
-                        onGetMetadata = { uiState.songMetadata }
+                        onGetMetadata = { model.uiState.songMetadata }
                     ) {
                         showSongDetailsDialog = false
                     }
@@ -396,23 +335,23 @@ fun NowPlayingScreenContent(
                             id = i8nR.string.core_i8n_sleep_timer_off
                         )
                         SleepTimerDialogContent(
-                            sleepTimer = uiState.sleepTimer,
+                            sleepTimer = model.uiState.sleepTimer,
                             onStartSleepTimer = {
-                                onStartSleepTimer( it )
-                                onShowSnackBar( sleepTimerStartedMessage )
+                                model.onStartSleepTimer( it )
+                                model.onShowSnackBar( sleepTimerStartedMessage )
                             },
                             onStartTimerToEndOfCurrentSong = {
-                                val duration = onGetPlaybackPosition().total.minus(
-                                    onGetPlaybackPosition().played
+                                val duration = model.onGetPlaybackPosition().total.minus(
+                                    model.onGetPlaybackPosition().played
                                 )
-                                onStartSleepTimer(
+                                model.onStartSleepTimer(
                                     duration.toDuration( DurationUnit.MILLISECONDS )
                                 )
-                                onShowSnackBar( sleepTimerStartedMessage )
+                                model.onShowSnackBar( sleepTimerStartedMessage )
                             },
                             onStopSleepTimer = {
-                                onStopSleepTimer()
-                                onShowSnackBar( sleepTimerStoppedMessage )
+                                model.onStopSleepTimer()
+                                model.onShowSnackBar( sleepTimerStoppedMessage )
                             },
                             onDismissRequest = { showSleepTimerBottomSheet = false },
                         )
@@ -423,6 +362,38 @@ fun NowPlayingScreenContent(
     }
 
 }
+
+data class NowPlayingScreenModel(
+    val uiState: NowPlayingScreenUiState,
+    val lyricsUiState: LyricsUiState,
+    val backgroundColor: Color = Color.Unspecified,
+    val onGetPlaybackPosition: () -> PlaybackPosition,
+    val onArtistClicked: ( Long ) -> Unit,
+    val onFavorite: ( Song, Boolean ) -> Unit,
+    val onPausePlayButtonClick: () -> Unit,
+    val onPreviousButtonClick: () -> Unit,
+    val onPlayNext: () -> Unit,
+    val onSeekStart: () -> Unit,
+    val onSeekEnd: ( Long ) -> Unit,
+    val onArtworkClicked: ( Song ) -> Unit,
+    val onSwipeArtworkLeft: () -> Unit,
+    val onSwipeArtworkRight: () -> Unit,
+    val onNavigateToQueueScreen: () -> Unit,
+    val onNavigateToLyricsScreen: () -> Unit,
+    val onCreateEqualizerActivityContract: () -> Unit,
+    val onCreatePlaylist: ( String, List<Song> ) -> Unit,
+    val onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
+    val onViewAlbum: ( String ) -> Unit,
+    val onViewArtist: ( Long ) -> Unit,
+    val onHideNowPlayingBottomSheet: () -> Unit,
+    val onShowSnackBar: ( String ) -> Unit,
+    val onStartSleepTimer: ( Duration ) -> Unit,
+    val onStopSleepTimer: () -> Unit,
+    val onShowLyrics: ( Boolean ) -> Unit,
+    val onToggleShuffleMode: ( Boolean ) -> Unit,
+    val onToggleLoopMode: ( LoopMode ) -> Unit,
+    val onRemoveFromQueue: ( Song ) -> Unit,
+)
 
 
 
@@ -566,88 +537,90 @@ private fun NowPlayingScreenContentPreview(
         useMaterialYou = true
     ) {
         NowPlayingScreenContent(
-            uiState = NowPlayingScreenUiState.Success(
-                userData = emptyUserData.copy(
-                    loopMode = LoopMode.Queue,
-                ),
-                currentlyPlayingSong = previewData.songs.first(),
-                currentlyPlayingSongIsFavorite = true,
-                playerState = PlayerState(
-                    currentlyPlayingSongId = "song-id-1",
-                    isPlaying = true,
-                    isBuffering = false,
-                ),
-                playlists = emptyList(),
-                songMetadata = SongMetadata(
-                    songId = "",
-                    codec = "mp3",
-                    bitrate = 0,
-                    samplingRate = 0f,
-                    bitsPerSample = 0,
-                    genreName = "Hip-Hop"
-                ),
-                sleepTimer = SleepTimer(
-                    duration = 300000L.toDuration( DurationUnit.MILLISECONDS ),
-                    endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS ),
-                    timer = Timer()
-                )
-            ),
-            lyricsUiState = LyricsUiState.Success(
-                lyrics = listOf(
-                    Lyric(
-                        timeStamp = java.time.Duration.ofMinutes( 1 ),
-                        content = "Sometime say the magic you dey feel inside is like gold"
+            model = NowPlayingScreenModel(
+                uiState = NowPlayingScreenUiState.Success(
+                    userData = emptyUserData.copy(
+                        loopMode = LoopMode.Queue,
                     ),
-                    Lyric(
-                        timeStamp = java.time.Duration.ofMinutes( 2 ),
-                        content = "Something like do re mi fa so lat ti do do (Yeah)"
+                    currentlyPlayingSong = previewData.songs.first(),
+                    currentlyPlayingSongIsFavorite = true,
+                    playerState = PlayerState(
+                        currentlyPlayingSongId = "song-id-1",
+                        isPlaying = true,
+                        isBuffering = false,
                     ),
-                    Lyric(
-                        timeStamp = java.time.Duration.ofMinutes( 3 ),
-                        content = "Make I sing for you la la do do"
+                    playlists = emptyList(),
+                    songMetadata = SongMetadata(
+                        songId = "",
+                        codec = "mp3",
+                        bitrate = 0,
+                        samplingRate = 0f,
+                        bitsPerSample = 0,
+                        genreName = "Hip-Hop"
                     ),
-                    Lyric(
-                        timeStamp = java.time.Duration.ofMinutes( 4 ),
-                        content = "Make I sing your song"
-                    ),
-                    Lyric(
-                        timeStamp = java.time.Duration.ofMinutes( 5 ),
-                        content = "Make I sing make you wine am do do o"
+                    sleepTimer = SleepTimer(
+                        duration = 300000L.toDuration( DurationUnit.MILLISECONDS ),
+                        endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS ),
+                        timer = Timer()
                     )
                 ),
-            ),
-            onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
-            onArtistClicked = {},
-            onFavorite = { _, _ -> },
-            onPausePlayButtonClick = {},
-            onPreviousButtonClick = {},
-            onPlayNext = {},
-            onSeekEnd = {},
-            onArtworkClicked = {},
-            onSwipeArtworkLeft = {},
-            onSwipeArtworkRight = {},
-            onNavigateToQueueScreen = {},
-            onSeekStart = {},
-            onCreateEqualizerActivityContract = {
-                object : ActivityResultContract<Unit, Unit>() {
-                    override fun createIntent(context: Context, input: Unit) = Intent()
-                    override fun parseResult( resultCode: Int, intent: Intent? ) {}
+                lyricsUiState = LyricsUiState.Success(
+                    lyrics = listOf(
+                        Lyric(
+                            timeStamp = java.time.Duration.ofMinutes( 1 ),
+                            content = "Sometime say the magic you dey feel inside is like gold"
+                        ),
+                        Lyric(
+                            timeStamp = java.time.Duration.ofMinutes( 2 ),
+                            content = "Something like do re mi fa so lat ti do do (Yeah)"
+                        ),
+                        Lyric(
+                            timeStamp = java.time.Duration.ofMinutes( 3 ),
+                            content = "Make I sing for you la la do do"
+                        ),
+                        Lyric(
+                            timeStamp = java.time.Duration.ofMinutes( 4 ),
+                            content = "Make I sing your song"
+                        ),
+                        Lyric(
+                            timeStamp = java.time.Duration.ofMinutes( 5 ),
+                            content = "Make I sing make you wine am do do o"
+                        )
+                    ),
+                ),
+                onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
+                onArtistClicked = {},
+                onFavorite = { _, _ -> },
+                onPausePlayButtonClick = {},
+                onPreviousButtonClick = {},
+                onPlayNext = {},
+                onSeekEnd = {},
+                onArtworkClicked = {},
+                onSwipeArtworkLeft = {},
+                onSwipeArtworkRight = {},
+                onNavigateToQueueScreen = {},
+                onSeekStart = {},
+                onCreateEqualizerActivityContract = {
+                    object : ActivityResultContract<Unit, Unit>() {
+                        override fun createIntent(context: Context, input: Unit) = Intent()
+                        override fun parseResult( resultCode: Int, intent: Intent? ) {}
 
-                }
-            },
-            onCreatePlaylist = { _, _ -> },
-            onAddSongsToPlaylist = { _, _ -> },
-            onViewAlbum = {},
-            onViewArtist = {},
-            onHideNowPlayingBottomSheet = {},
-            onShowSnackBar = {},
-            onStopSleepTimer = {},
-            onStartSleepTimer = {},
-            onShowLyrics = {},
-            onToggleLoopMode = {},
-            onToggleShuffleMode = {},
-            onRemoveFromQueue = {},
-            onNavigateToLyricsScreen = {},
+                    }
+                },
+                onCreatePlaylist = { _, _ -> },
+                onAddSongsToPlaylist = { _, _ -> },
+                onViewAlbum = {},
+                onViewArtist = {},
+                onHideNowPlayingBottomSheet = {},
+                onShowSnackBar = {},
+                onStopSleepTimer = {},
+                onStartSleepTimer = {},
+                onShowLyrics = {},
+                onToggleLoopMode = {},
+                onToggleShuffleMode = {},
+                onRemoveFromQueue = {},
+                onNavigateToLyricsScreen = {},
+            )
         )
     }
 }

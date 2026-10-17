@@ -1,8 +1,10 @@
 package com.squad.musicmatters.feature.nowplaying.components
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.Animatable
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -41,9 +43,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -114,7 +118,6 @@ fun MiniPlayer(
     MiniPlayerContent(
         uiState = uiState,
         playbackPosition = playbackPosition,
-        onNowPlayingBottomBarSwipeUp = onShowNowPlayingBottomSheet,
         onNowPlayingBottomBarClick = onShowNowPlayingBottomSheet,
         nextSong = viewModel::playNextSong,
         previousSong = viewModel::playPreviousSong,
@@ -129,7 +132,6 @@ fun MiniPlayerContent(
     modifier: Modifier = Modifier,
     uiState: NowPlayingScreenUiState,
     playbackPosition: PlaybackPosition,
-    onNowPlayingBottomBarSwipeUp: () -> Unit,
     onNowPlayingBottomBarClick: () -> Unit,
     nextSong: () -> Boolean,
     previousSong: () -> Boolean,
@@ -200,11 +202,7 @@ fun MiniPlayerContent(
                         onClick = onNowPlayingBottomBarClick,
                         modifier = modifier
                             .fillMaxWidth()
-//                            .padding( 8.dp, 0.dp )
                             .wrapContentHeight()
-//                            .swipeable(
-//                                onSwipeUp = onNowPlayingBottomBarSwipeUp,
-//                            ),
                     ) {
                         Column {
                             Row (
@@ -212,30 +210,6 @@ fun MiniPlayerContent(
                                 modifier = Modifier.padding( 0.dp, 8.dp )
                             ) {
                                 Spacer( modifier = Modifier.width( 12.dp ) )
-//                                AnimatedContent(
-//                                    label = "now-playing-card-image",
-//                                    targetState = playingSong,
-//                                    transitionSpec = {
-//                                        val from = fadeIn(
-//                                            animationSpec = TransitionDurations.Normal.asTween(
-//                                                delayMillis = 150
-//                                            )
-//                                        )
-//                                        val to = fadeOut(
-//                                            animationSpec = TransitionDurations.Fast.asTween()
-//                                        )
-//                                        from togetherWith to
-//                                    },
-//                                ) { song ->
-//                                    DynamicAsyncImage(
-//                                        imageUri = song.artworkUri?.toUri(),
-//                                        contentDescription = null,
-//                                        onImageLoaded = { coverArtBitmap = it },
-//                                        modifier = Modifier
-//                                            .size( 45.dp )
-//                                            .clip( RoundedCornerShape( 10.dp ) )
-//                                    )
-//                                }
                                 DynamicAsyncImage(
                                     imageUri = playingSong.artworkUri?.toUri(),
                                     contentDescription = null,
@@ -245,36 +219,6 @@ fun MiniPlayerContent(
                                         .clip( RoundedCornerShape( 10.dp ) )
                                 )
                                 Spacer( modifier = Modifier.width( 15.dp ) )
-//                                AnimatedContent(
-//                                    modifier = Modifier.weight( 1f ),
-//                                    label = "now-playing-card-content",
-//                                    targetState = playingSong,
-//                                    transitionSpec = {
-//                                        val from = fadeIn(
-//                                            animationSpec = TransitionDurations.Normal.asTween(
-//                                                delayMillis = 150
-//                                            )
-//                                        ) + scaleIn(
-//                                            initialScale = 0.99f,
-//                                            animationSpec = TransitionDurations.Normal.asTween(
-//                                                delayMillis = 150
-//                                            )
-//                                        )
-//                                        val to = fadeOut(
-//                                            animationSpec = TransitionDurations.Fast.asTween()
-//                                        )
-//                                        from togetherWith to
-//                                    }
-//                                ) {
-//                                    MiniPlayerContent(
-//                                        song = it,
-//                                        nextSong = nextSong,
-//                                        previousSong = previousSong,
-//                                        textMarquee = uiState.userData.miniPlayerTextMarquee,
-//                                        colorToApply = colorToApply,
-//                                        onNowPlayingBottomBarClick = onNowPlayingBottomBarClick,
-//                                    )
-//                                }
                                 MiniPlayerContent(
                                     song = playingSong,
                                     nextSong = nextSong,
@@ -576,6 +520,13 @@ fun Color.clampBrightness(
     return Hct.from( hct.hue, clampedChroma, clampedTone ).toColor()
 }
 
+data class MiniPlayerSwipeTip(
+    val visible: Boolean = false,
+    val onDismissed: () -> Unit = {},
+)
+
+
+
 
 @Preview( showSystemUi = true )
 @Composable
@@ -614,7 +565,6 @@ private fun MiniPlayerPreview(
                     total = 5L,
                     buffered = 4L,
                 ),
-                onNowPlayingBottomBarSwipeUp = {},
                 onNowPlayingBottomBarClick = {},
                 nextSong = { true },
                 previousSong = { true },

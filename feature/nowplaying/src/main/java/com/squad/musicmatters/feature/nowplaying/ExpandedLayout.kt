@@ -45,27 +45,7 @@ import kotlin.time.toDuration
 @Composable
 internal fun ExpandedLayout(
     modifier: Modifier = Modifier,
-    uiState: NowPlayingScreenUiState.Success,
-    lyricsUiState: LyricsUiState,
-    currentlyPlayingSong: Song,
-    onGetPlaybackPosition: () -> PlaybackPosition,
-    onFavorite: ( Song, Boolean ) -> Unit,
-    onArtworkSwipedLeft: () -> Unit,
-    onArtworkSwipedRight: () -> Unit,
-    onArtworkSwipedDown: () -> Unit,
-    onArtworkClicked: ( Song ) -> Unit,
-    onArtistClicked: ( Long ) -> Unit,
-    onShowOptionsMenu: () -> Unit,
-    onSeekStart: () -> Unit,
-    onSeekEnd: ( Long ) -> Unit,
-    onPausePlayButtonClick: () -> Unit,
-    onPreviousButtonClick: () -> Unit,
-    onPlayNext: () -> Unit,
-    onNavigateToQueueScreen: () -> Unit,
-    onNavigateToLyricsScreen: () -> Unit,
-    onShowLyrics: ( Boolean ) -> Unit,
-    onToggleLoopMode: ( LoopMode ) -> Unit,
-    onToggleShuffleMode: ( Boolean ) -> Unit,
+    model: PortraitExpandedLayoutModel,
 ) {
 
     Card(
@@ -87,14 +67,16 @@ internal fun ExpandedLayout(
                 NowPlayingSongArtwork(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    song = currentlyPlayingSong,
-                    isPlaying = { uiState.playerState.isPlaying
-                            || uiState.playerState.isBuffering
+                    song = model.currentlyPlayingSong,
+                    isPlaying = { model.uiState.playerState.isPlaying
+                            || model.uiState.playerState.isBuffering
                     },
-                    onSwipeLeft = onArtworkSwipedLeft,
-                    onSwipeRight = onArtworkSwipedRight,
-                    onSwipeDown = onArtworkSwipedDown,
-                    onArtworkClicked = { onArtworkClicked( currentlyPlayingSong ) }
+                    onSwipeLeft = model.onArtworkSwipedLeft,
+                    onSwipeRight = model.onArtworkSwipedRight,
+                    onSwipeDown = model.onArtworkSwipedDown,
+                    onArtworkClicked = {
+                        model.onArtworkClicked( model.currentlyPlayingSong )
+                    }
                 )
                 Column(
                     verticalArrangement = Arrangement.SpaceEvenly,
@@ -103,50 +85,73 @@ internal fun ExpandedLayout(
                         .width( 400.dp )
                 ) {
                     TitleAndArtistSection(
-                        currentlyPlayingSong = currentlyPlayingSong,
-                        currentlyPlayingSongIsFavorite = uiState.currentlyPlayingSongIsFavorite,
-                        onArtistClicked = onArtistClicked,
-                        onFavorite = onFavorite,
-                        onShowOptionsMenu = onShowOptionsMenu,
+                        currentlyPlayingSong = model.currentlyPlayingSong,
+                        currentlyPlayingSongIsFavorite = model.uiState.currentlyPlayingSongIsFavorite,
+                        onArtistClicked = model.onArtistClicked,
+                        onFavorite = model.onFavorite,
+                        onShowOptionsMenu = model.onShowOptionsMenu,
                     )
                     NowPlayingSeekBar(
-                        onGetPlaybackPosition = onGetPlaybackPosition,
-                        onSeekStart = onSeekStart,
-                        onSeekEnd = onSeekEnd
+                        onGetPlaybackPosition = model.onGetPlaybackPosition,
+                        onSeekStart = model.onSeekStart,
+                        onSeekEnd = model.onSeekEnd
                     )
                     NowPlayingPlayerControls(
-                        isPlaying = uiState.playerState.isPlaying,
-                        shuffle = uiState.userData.shuffle,
-                        loopMode = uiState.userData.loopMode,
-                        onPreviousButtonClick = onPreviousButtonClick,
-                        onPausePlayButtonClick = onPausePlayButtonClick,
-                        onNextButtonClick = onPlayNext,
-                        onToggleLoopMode = onToggleLoopMode,
-                        onToggleShuffleMode  = { shuffle -> onToggleShuffleMode( shuffle ) },
+                        isPlaying = model.uiState.playerState.isPlaying,
+                        shuffle = model.uiState.userData.shuffle,
+                        loopMode = model.uiState.userData.loopMode,
+                        onPreviousButtonClick = model.onPreviousButtonClick,
+                        onPausePlayButtonClick = model.onPausePlayButtonClick,
+                        onNextButtonClick = model.onPlayNext,
+                        onToggleLoopMode = model.onToggleLoopMode,
+                        onToggleShuffleMode  = { shuffle -> model.onToggleShuffleMode( shuffle ) },
                     )
                     NowPlayingScreenBottomBar(
-                        showLyrics = uiState.userData.showLyrics,
-                        showLyricsOnSeparateScreen = uiState.userData.showLyricsOnSeparateScreen,
-                        onShowLyrics = onShowLyrics,
-                        onNavigateToQueueScreen = onNavigateToQueueScreen,
-                        onNavigateToLyricsScreen = onNavigateToLyricsScreen,
+                        showLyrics = model.uiState.userData.showLyrics,
+                        showLyricsOnSeparateScreen = model.uiState.userData.showLyricsOnSeparateScreen,
+                        onShowLyrics = model.onShowLyrics,
+                        onNavigateToQueueScreen = model.onNavigateToQueueScreen,
+                        onNavigateToLyricsScreen = model.onNavigateToLyricsScreen,
                     )
                 }
             }
             AnimatedVisibility(
-                visible = uiState.userData.showLyrics
+                visible = model.uiState.userData.showLyrics
             ) {
                 LyricsLayout(
-                    lyricsUiState = lyricsUiState,
-                    onGetPlaybackPosition = onGetPlaybackPosition,
-                    onSeekEnd = onSeekEnd,
+                    lyricsUiState = model.lyricsUiState,
+                    onGetPlaybackPosition = model.onGetPlaybackPosition,
+                    onSeekEnd = model.onSeekEnd,
                     modifier = Modifier.padding( 48.dp )
                 )
             }
         }
     }
-
 }
+
+internal data class PortraitExpandedLayoutModel(
+    val uiState: NowPlayingScreenUiState.Success,
+    val lyricsUiState: LyricsUiState,
+    val currentlyPlayingSong: Song,
+    val onGetPlaybackPosition: () -> PlaybackPosition,
+    val onFavorite: ( Song, Boolean ) -> Unit,
+    val onArtworkSwipedLeft: () -> Unit,
+    val onArtworkSwipedRight: () -> Unit,
+    val onArtworkSwipedDown: () -> Unit,
+    val onArtworkClicked: ( Song ) -> Unit,
+    val onArtistClicked: ( Long ) -> Unit,
+    val onShowOptionsMenu: () -> Unit,
+    val onSeekStart: () -> Unit,
+    val onSeekEnd: ( Long ) -> Unit,
+    val onPausePlayButtonClick: () -> Unit,
+    val onPreviousButtonClick: () -> Unit,
+    val onPlayNext: () -> Unit,
+    val onNavigateToQueueScreen: () -> Unit,
+    val onNavigateToLyricsScreen: () -> Unit,
+    val onShowLyrics: ( Boolean ) -> Unit,
+    val onToggleLoopMode: ( LoopMode ) -> Unit,
+    val onToggleShuffleMode: ( Boolean ) -> Unit,
+)
 
 @Preview( name = "Unfolded Foldable", device = FOLDABLE, showSystemUi = true )
 @Preview( name = "Tablet - Landscape", device = TABLET, showSystemUi = true )
@@ -164,79 +169,81 @@ private fun ExpandedLayoutPreview(
         useMaterialYou = true
     ) {
         ExpandedLayout(
-            uiState = NowPlayingScreenUiState.Success(
-                userData = emptyUserData.copy(
-                    loopMode = LoopMode.Queue,
-                    shuffle = true,
-                    showLyrics = false,
-                ),
-                currentlyPlayingSong = previewData.songs.first(),
-                currentlyPlayingSongIsFavorite = true,
-                playerState = PlayerState(
-                    currentlyPlayingSongId = "song-id-1",
-                    isPlaying = true,
-                    isBuffering = false,
-                ),
-                playlists = emptyList(),
-                songMetadata = SongMetadata(
-                    songId = "",
-                    codec = "mp3",
-                    bitrate = 0,
-                    samplingRate = 0f,
-                    bitsPerSample = 0,
-                    genreName = "Hip-Hop"
-                ),
-                sleepTimer = SleepTimer(
-                    duration = 300000L.toDuration(DurationUnit.MILLISECONDS),
-                    endsAt = System.currentTimeMillis().toDuration(
-                        DurationUnit.MILLISECONDS
+            model = PortraitExpandedLayoutModel(
+                uiState = NowPlayingScreenUiState.Success(
+                    userData = emptyUserData.copy(
+                        loopMode = LoopMode.Queue,
+                        shuffle = true,
+                        showLyrics = false,
                     ),
-                    timer = Timer()
-                )
-            ),
-            lyricsUiState = LyricsUiState.Success(
-                lyrics = listOf(
-                    Lyric(
-                        timeStamp = Duration.ofMinutes( 1 ),
-                        content = "Sometime say the magic you dey feel inside is like gold"
+                    currentlyPlayingSong = previewData.songs.first(),
+                    currentlyPlayingSongIsFavorite = true,
+                    playerState = PlayerState(
+                        currentlyPlayingSongId = "song-id-1",
+                        isPlaying = true,
+                        isBuffering = false,
                     ),
-                    Lyric(
-                        timeStamp = Duration.ofMinutes( 2 ),
-                        content = "Something like do re mi fa so lat ti do do (Yeah)"
+                    playlists = emptyList(),
+                    songMetadata = SongMetadata(
+                        songId = "",
+                        codec = "mp3",
+                        bitrate = 0,
+                        samplingRate = 0f,
+                        bitsPerSample = 0,
+                        genreName = "Hip-Hop"
                     ),
-                    Lyric(
-                        timeStamp = Duration.ofMinutes( 3 ),
-                        content = "Make I sing for you la la do do"
-                    ),
-                    Lyric(
-                        timeStamp = Duration.ofMinutes( 4 ),
-                        content = "Make I sing your song"
-                    ),
-                    Lyric(
-                        timeStamp = Duration.ofMinutes( 5 ),
-                        content = "Make I sing make you wine am do do o"
+                    sleepTimer = SleepTimer(
+                        duration = 300000L.toDuration(DurationUnit.MILLISECONDS),
+                        endsAt = System.currentTimeMillis().toDuration(
+                            DurationUnit.MILLISECONDS
+                        ),
+                        timer = Timer()
                     )
                 ),
-            ),
-            onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
-            onArtistClicked = {},
-            onFavorite = { _, _ -> },
-            onPausePlayButtonClick = {},
-            onPreviousButtonClick = {},
-            onPlayNext = {},
-            onSeekEnd = {},
-            onArtworkClicked = {},
-            onNavigateToQueueScreen = {},
-            onSeekStart = {},
-            currentlyPlayingSong = previewData.songs.first(),
-            onArtworkSwipedLeft = { TODO() },
-            onArtworkSwipedRight = { TODO() },
-            onArtworkSwipedDown = { TODO() },
-            onShowOptionsMenu = { TODO() },
-            onShowLyrics = {},
-            onToggleShuffleMode = {},
-            onToggleLoopMode = {},
-            onNavigateToLyricsScreen = {},
+                lyricsUiState = LyricsUiState.Success(
+                    lyrics = listOf(
+                        Lyric(
+                            timeStamp = Duration.ofMinutes( 1 ),
+                            content = "Sometime say the magic you dey feel inside is like gold"
+                        ),
+                        Lyric(
+                            timeStamp = Duration.ofMinutes( 2 ),
+                            content = "Something like do re mi fa so lat ti do do (Yeah)"
+                        ),
+                        Lyric(
+                            timeStamp = Duration.ofMinutes( 3 ),
+                            content = "Make I sing for you la la do do"
+                        ),
+                        Lyric(
+                            timeStamp = Duration.ofMinutes( 4 ),
+                            content = "Make I sing your song"
+                        ),
+                        Lyric(
+                            timeStamp = Duration.ofMinutes( 5 ),
+                            content = "Make I sing make you wine am do do o"
+                        )
+                    ),
+                ),
+                onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
+                onArtistClicked = {},
+                onFavorite = { _, _ -> },
+                onPausePlayButtonClick = {},
+                onPreviousButtonClick = {},
+                onPlayNext = {},
+                onSeekEnd = {},
+                onArtworkClicked = {},
+                onNavigateToQueueScreen = {},
+                onSeekStart = {},
+                currentlyPlayingSong = previewData.songs.first(),
+                onArtworkSwipedLeft = { TODO() },
+                onArtworkSwipedRight = { TODO() },
+                onArtworkSwipedDown = { TODO() },
+                onShowOptionsMenu = { TODO() },
+                onShowLyrics = {},
+                onToggleShuffleMode = {},
+                onToggleLoopMode = {},
+                onNavigateToLyricsScreen = {},
+            )
         )
     }
 }
