@@ -5,6 +5,7 @@ import com.squad.musicmatters.core.data.repository.impl.FAVORITES_PLAYLIST_ID
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.Playlist
+import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.testing.connection.FakeMusicMattersPlayer
 import com.squad.musicmatters.core.testing.media.FakePlaybackPositionUpdater
@@ -82,7 +83,7 @@ class NowPlayingScreenViewModelTest {
         assertEquals(
             NowPlayingScreenUiState.Success(
                 playerState = PlayerState(),
-                currentlyPlayingSong = null,
+                currentlyPlayingSong = Song.EMPTY,
                 userData = emptyUserData,
                 currentlyPlayingSongIsFavorite = false,
                 playlists = emptyList(),

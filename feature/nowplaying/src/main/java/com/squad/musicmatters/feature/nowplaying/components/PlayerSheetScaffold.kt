@@ -663,12 +663,8 @@ private fun MiniPlayerLayer(
                 )
         ) {
             MiniPlayerContent(
-                uiState = model.uiState,
-                onGetPlaybackPosition = model.onGetPlaybackPosition,
+                model = model,
                 onNowPlayingBottomBarClick = callbacks.onExpand,
-                nextSong = model.onPlayNext,
-                previousSong = model.onPreviousButtonClick,
-                playPause = model.onPlayPauseButtonClick,
             )
         }
     }

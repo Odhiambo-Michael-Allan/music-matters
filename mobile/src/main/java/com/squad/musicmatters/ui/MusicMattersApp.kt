@@ -73,8 +73,6 @@ import com.squad.musicmatters.feature.foryou.navigation.ForYouRoute
 import com.squad.musicmatters.feature.foryou.navigation.navigateToForYouScreen
 import com.squad.musicmatters.feature.genres.navigation.navigateToGenres
 import com.squad.musicmatters.feature.lyrics.navigation.navigateToLyricsScreen
-import com.squad.musicmatters.feature.nowplaying.NowPlayingScreen
-import com.squad.musicmatters.feature.nowplaying.components.MiniPlayer
 import com.squad.musicmatters.feature.playlists.navigation.navigateToPlaylists
 import com.squad.musicmatters.feature.queue.navigation.navigateToQueueScreen
 import com.squad.musicmatters.feature.search.navigation.navigateToSearchScreen

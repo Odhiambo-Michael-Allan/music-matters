@@ -1,6 +1,9 @@
 package com.squad.musicmatters.feature.nowplaying.components
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -75,9 +78,12 @@ import com.squad.musicmatters.core.datastore.DefaultPreferences
 import com.squad.musicmatters.core.designsystem.theme.MusicMattersTheme
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.media.connection.PlayerState
+import com.squad.musicmatters.core.media.connection.SleepTimer
 import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.LoopMode
+import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.model.Song
+import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.SortAlbumsBy
 import com.squad.musicmatters.core.model.SortArtistsBy
 import com.squad.musicmatters.core.model.SortGenresBy
@@ -90,43 +96,43 @@ import com.squad.musicmatters.core.ui.DynamicAsyncImage
 import com.squad.musicmatters.core.ui.FadeTransition
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
+import com.squad.musicmatters.feature.nowplaying.LyricsUiState
+import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenModel
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenViewModel
+import java.util.Timer
 import kotlin.math.absoluteValue
-
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 
 // Stateful
-@Composable
-fun MiniPlayer(
-    modifier: Modifier = Modifier,
-    viewModel: NowPlayingScreenViewModel = hiltViewModel(),
-    onShowNowPlayingBottomSheet: () -> Unit,
-) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val playbackPosition by viewModel.playbackPosition.collectAsStateWithLifecycle()
-
-    MiniPlayerContent(
-        uiState = uiState,
-        onGetPlaybackPosition = playbackPosition,
-        onNowPlayingBottomBarClick = onShowNowPlayingBottomSheet,
-        nextSong = viewModel::playNextSong,
-        previousSong = viewModel::playPreviousSong,
-        playPause = viewModel::playPause,
-        modifier = modifier,
-    )
-}
+//@Composable
+//fun MiniPlayer(
+//    modifier: Modifier = Modifier,
+//    viewModel: NowPlayingScreenViewModel = hiltViewModel(),
+//    onShowNowPlayingBottomSheet: () -> Unit,
+//) {
+//    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+//    val playbackPosition by viewModel.playbackPosition.collectAsStateWithLifecycle()
+//
+//    MiniPlayerContent(
+//        uiState = uiState,
+//        onGetPlaybackPosition = playbackPosition,
+//        onNowPlayingBottomBarClick = onShowNowPlayingBottomSheet,
+//        nextSong = viewModel::playNextSong,
+//        previousSong = viewModel::playPreviousSong,
+//        playPause = viewModel::playPause,
+//        modifier = modifier,
+//    )
+//}
 
 // Stateless
 @Composable
 fun MiniPlayerContent(
     modifier: Modifier = Modifier,
-    uiState: NowPlayingScreenUiState,
-    onGetPlaybackPosition: () -> PlaybackPosition,
+    model: NowPlayingScreenModel,
     onNowPlayingBottomBarClick: () -> Unit,
-    nextSong: () -> Unit,
-    previousSong: () -> Unit,
-    playPause: () -> Unit,
 ) {
 
     val paletteState = rememberPaletteState()
@@ -176,122 +182,101 @@ fun MiniPlayerContent(
         }
     }
 
-    when ( uiState ) {
-        NowPlayingScreenUiState.Loading -> {}
-        is NowPlayingScreenUiState.Success -> {
+    model.uiState.currentlyPlayingSong.let { song ->
+        ElevatedCard (
+            colors = CardDefaults.cardColors(
+                containerColor = colorToApply
+            ),
+            onClick = onNowPlayingBottomBarClick,
+            modifier = modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
+            Column {
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding( 0.dp, 8.dp )
+                ) {
+                    Spacer( modifier = Modifier.width( 12.dp ) )
+                    DynamicAsyncImage(
+                        imageUri = song.artworkUri?.toUri(),
+                        contentDescription = null,
+                        onImageLoaded = { coverArtBitmap = it },
+                        modifier = Modifier
+                            .size( 45.dp )
+                            .clip( RoundedCornerShape( 10.dp ) )
+                    )
+                    Spacer( modifier = Modifier.width( 15.dp ) )
+                    MiniPlayerContent(
+                        song = song,
+                        nextSong = model.onPlayNext,
+                        previousSong = model.onPreviousButtonClick,
+                        textMarquee = model.uiState.userData.miniPlayerTextMarquee,
+                        colorToApply = colorToApply,
+                        onNowPlayingBottomBarClick = onNowPlayingBottomBarClick,
+                    )
+                    Spacer( modifier = Modifier.width( 15.dp ) )
 
-            AnimatedVisibility(
-                visible = uiState.currentlyPlayingSong != null,
-                modifier = modifier,
-            ) {
-
-                uiState.currentlyPlayingSong?.let { playingSong ->
-                    ElevatedCard (
-                        colors = CardDefaults.cardColors(
-                            containerColor = colorToApply
-                        ),
-                        onClick = onNowPlayingBottomBarClick,
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                    ) {
-                        Column {
-                            Row (
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding( 0.dp, 8.dp )
-                            ) {
-                                Spacer( modifier = Modifier.width( 12.dp ) )
-                                DynamicAsyncImage(
-                                    imageUri = playingSong.artworkUri?.toUri(),
-                                    contentDescription = null,
-                                    onImageLoaded = { coverArtBitmap = it },
-                                    modifier = Modifier
-                                        .size( 45.dp )
-                                        .clip( RoundedCornerShape( 10.dp ) )
-                                )
-                                Spacer( modifier = Modifier.width( 15.dp ) )
-                                MiniPlayerContent(
-                                    song = playingSong,
-                                    nextSong = nextSong,
-                                    previousSong = previousSong,
-                                    textMarquee = uiState.userData.miniPlayerTextMarquee,
-                                    colorToApply = colorToApply,
-                                    onNowPlayingBottomBarClick = onNowPlayingBottomBarClick,
-                                )
-                                Spacer( modifier = Modifier.width( 15.dp ) )
-
-                                IconButton( onClick = playPause ) {
-                                    AnimatedContent(
-                                        targetState = uiState.playerState.isPlaying,
-                                        label = "now-playing-bottom-bar-play-arrow"
-                                    ) {
-                                        Icon(
-                                            imageVector = if ( it ) {
-                                                Icons.Rounded.Pause
-                                            } else {
-                                                Icons.Rounded.PlayArrow
-                                            },
-                                            tint = if ( colorToApply == Color.Unspecified ) {
-                                                LocalContentColor.current
-                                            } else {
-                                                Color.White
-                                            },
-                                            contentDescription = null
-                                        )
-                                    }
-                                }
-                                Spacer( modifier = Modifier.width( 8.dp ) )
-                            }
-                            // ------------------------- Progress Bar ------------------------------
-                            val progressBarColor = if ( colorToApply == Color.Unspecified ) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
-                                Color.White
-                            }
-                            Card(
-                                colors = CardDefaults.cardColors(
-                                    containerColor = Color.Transparent
-                                ),
-                                modifier = Modifier
-                                    .padding( 8.dp, 0.dp )
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .height( 4.dp )
-                                        .fillMaxWidth()
-                                    
-                                ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .background(
-                                                progressBarColor.copy( 0.3f )
-                                            )
-                                            .fillMaxWidth()
-                                            .fillMaxHeight()
-                                    )
-                                    Box(
-                                        modifier = Modifier
-                                            .align( Alignment.CenterStart )
-                                            .background(
-                                                progressBarColor.copy( alpha = 0.4f )
-                                            )
-                                            .fillMaxWidth(
-                                                onGetPlaybackPosition().bufferedRatio
-                                            )
-                                            .fillMaxHeight()
-                                    )
-                                    Box(
-                                        modifier = Modifier
-                                            .align( Alignment.CenterStart )
-                                            .background( progressBarColor )
-                                            .fillMaxWidth(
-                                                onGetPlaybackPosition().playedRatio
-                                            )
-                                            .fillMaxHeight()
-                                    )
-                                }
-                            }
+                    IconButton( onClick = model.onPlayPauseButtonClick ) {
+                        AnimatedContent(
+                            targetState = model.uiState.playerState.isPlaying,
+                            label = "now-playing-bottom-bar-play-arrow"
+                        ) {
+                            Icon(
+                                imageVector = if ( it ) {
+                                    Icons.Rounded.Pause
+                                } else {
+                                    Icons.Rounded.PlayArrow
+                                },
+                                tint = if ( colorToApply == Color.Unspecified ) {
+                                    LocalContentColor.current
+                                } else {
+                                    Color.White
+                                },
+                                contentDescription = null
+                            )
                         }
+                    }
+                    Spacer( modifier = Modifier.width( 8.dp ) )
+                }
+                // ------------------------- Progress Bar ------------------------------
+                val progressBarColor = if ( colorToApply == Color.Unspecified ) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    Color.White
+                }
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Transparent
+                    ),
+                    modifier = Modifier.padding( 8.dp, 0.dp )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .height( 4.dp )
+                            .fillMaxWidth()
+
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .background( progressBarColor.copy( 0.3f ) )
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                        )
+                        Box(
+                            modifier = Modifier
+                                .align( Alignment.CenterStart )
+                                .background( progressBarColor.copy( alpha = 0.4f ) )
+                                .fillMaxWidth( model.onGetPlaybackPosition().bufferedRatio )
+                                .fillMaxHeight()
+                        )
+                        Box(
+                            modifier = Modifier
+                                .align( Alignment.CenterStart )
+                                .background( progressBarColor )
+                                .fillMaxWidth( model.onGetPlaybackPosition().playedRatio )
+                                .fillMaxHeight()
+                        )
                     }
                 }
             }
@@ -303,8 +288,8 @@ fun MiniPlayerContent(
 @Composable
 private fun MiniPlayerContent(
     song: Song,
-    nextSong: () -> Boolean,
-    previousSong: () -> Boolean,
+    nextSong: () -> Unit,
+    previousSong: () -> Unit,
     textMarquee: Boolean,
     colorToApply: Color,
     onNowPlayingBottomBarClick: () -> Unit,
@@ -325,29 +310,29 @@ private fun MiniPlayerContent(
         )
 
         Box(
-            modifier = Modifier
-                .graphicsLayer( alpha = cardOpacity, translationX = cardOffsetX )
-                .pointerInput( Unit ) {
-                    detectHorizontalDragGestures(
-                        onDragEnd = {
-                            val threshHold = cardWidthInPixels / 4
-                            val affected = when {
-                                -offsetX > threshHold -> nextSong()
-                                offsetX > threshHold -> previousSong()
-                                else -> false
-                            }
-                            if ( !affected ) {
-                                offsetX = 0f
-                            }
-                        },
-                        onDragCancel = {
-                            offsetX = 0f
-                        },
-                        onHorizontalDrag = { _, dragAmount, ->
-                            offsetX += dragAmount
-                        },
-                    )
-                }
+//            modifier = Modifier
+//                .graphicsLayer( alpha = cardOpacity, translationX = cardOffsetX )
+//                .pointerInput( Unit ) {
+//                    detectHorizontalDragGestures(
+//                        onDragEnd = {
+//                            val threshHold = cardWidthInPixels / 4
+//                            val affected = when {
+//                                -offsetX > threshHold -> nextSong()
+//                                offsetX > threshHold -> previousSong()
+//                                else -> false
+//                            }
+//                            if ( !affected ) {
+//                                offsetX = 0f
+//                            }
+//                        },
+//                        onDragCancel = {
+//                            offsetX = 0f
+//                        },
+//                        onHorizontalDrag = { _, dragAmount, ->
+//                            offsetX += dragAmount
+//                        },
+//                    )
+//                }
         ) {
             Column (
                 modifier = Modifier.fillMaxWidth()
@@ -541,31 +526,91 @@ private fun MiniPlayerPreview(
         ){
             MiniPlayerContent(
                 modifier = Modifier.align( Alignment.Center ),
-                uiState = NowPlayingScreenUiState.Success(
-                    userData = emptyUserData.copy(
-                        miniPlayerTextMarquee = true
+                model = NowPlayingScreenModel(
+                    uiState = NowPlayingScreenUiState.Success(
+                        userData = emptyUserData.copy(
+                            loopMode = LoopMode.Queue,
+                        ),
+                        currentlyPlayingSong = previewData.songs.first(),
+                        currentlyPlayingSongIsFavorite = true,
+                        playerState = PlayerState(
+                            currentlyPlayingSongId = "song-id-1",
+                            isPlaying = true,
+                            isBuffering = false,
+                        ),
+                        playlists = emptyList(),
+                        songMetadata = SongMetadata(
+                            songId = "",
+                            codec = "mp3",
+                            bitrate = 0,
+                            samplingRate = 0f,
+                            bitsPerSample = 0,
+                            genreName = "Hip-Hop"
+                        ),
+                        sleepTimer = SleepTimer(
+                            duration = 300000L.toDuration( DurationUnit.MILLISECONDS ),
+                            endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS ),
+                            timer = Timer()
+                        )
                     ),
-                    currentlyPlayingSong = previewData.songs.first(),
-                    currentlyPlayingSongIsFavorite = true,
-                    playerState = PlayerState(
-                        currentlyPlayingSongId = "song-id-1",
-                        isPlaying = true,
-                        isBuffering = false,
+                    lyricsUiState = LyricsUiState.Success(
+                        lyrics = listOf(
+                            Lyric(
+                                timeStamp = java.time.Duration.ofMinutes( 1 ),
+                                content = "Sometime say the magic you dey feel inside is like gold"
+                            ),
+                            Lyric(
+                                timeStamp = java.time.Duration.ofMinutes( 2 ),
+                                content = "Something like do re mi fa so lat ti do do (Yeah)"
+                            ),
+                            Lyric(
+                                timeStamp = java.time.Duration.ofMinutes( 3 ),
+                                content = "Make I sing for you la la do do"
+                            ),
+                            Lyric(
+                                timeStamp = java.time.Duration.ofMinutes( 4 ),
+                                content = "Make I sing your song"
+                            ),
+                            Lyric(
+                                timeStamp = java.time.Duration.ofMinutes( 5 ),
+                                content = "Make I sing make you wine am do do o"
+                            )
+                        ),
                     ),
-                    playlists = emptyList(),
-                    songMetadata = null,
+                    onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
+                    onArtistClicked = {},
+                    onFavorite = { _, _ -> },
+                    onPlayPauseButtonClick = {},
+                    onPreviousButtonClick = {},
+                    onPlayNext = {},
+                    onSeekEnd = {},
+                    onArtworkClicked = {},
+                    onSwipeArtworkLeft = {},
+                    onSwipeArtworkRight = {},
+                    onNavigateToQueueScreen = {},
+                    onSeekStart = {},
+                    onCreateEqualizerActivityContract = {
+                        object : ActivityResultContract<Unit, Unit>() {
+                            override fun createIntent(context: Context, input: Unit) = Intent()
+                            override fun parseResult( resultCode: Int, intent: Intent? ) {}
+
+                        }
+                    },
+                    onCreatePlaylist = { _, _ -> },
+                    onAddSongsToPlaylist = { _, _ -> },
+                    onViewAlbum = {},
+                    onViewArtist = {},
+                    onHideNowPlayingBottomSheet = {},
+                    onShowSnackBar = {},
+                    onStopSleepTimer = {},
+                    onStartSleepTimer = {},
+                    onShowLyrics = {},
+                    onToggleLoopMode = {},
+                    onToggleShuffleMode = {},
+                    onRemoveFromQueue = {},
+                    onNavigateToLyricsScreen = {},
                 ),
-                onGetPlaybackPosition = {
-                    PlaybackPosition(
-                        played = 3L,
-                        total = 5L,
-                        buffered = 4L,
-                    )
-                },
                 onNowPlayingBottomBarClick = {},
-                nextSong = { true },
-                previousSong = { true },
-                playPause = {},
             )
         }
     }
