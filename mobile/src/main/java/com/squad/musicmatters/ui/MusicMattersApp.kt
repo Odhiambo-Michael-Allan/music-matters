@@ -360,13 +360,12 @@ fun MusicMattersAppContent(
         val containerHeight = screenHeightDp + systemNavBarHeight + 50.dp
         val collapsedTargetY =
             with(density) {
-                (
-                        screenHeightDp -
-                                classicNavigationChromeMetrics.miniPlayerHeight -
-                                bottomChromeClearance -
-                                playerSystemNavigationInset -
-                                classicNavigationChromeMetrics.miniPlayerNavigationGap
-                        ).toPx()
+                ( screenHeightDp -
+                        classicNavigationChromeMetrics.miniPlayerHeight -
+                        bottomChromeClearance -
+                        playerSystemNavigationInset -
+                        classicNavigationChromeMetrics.miniPlayerNavigationGap
+                ).toPx()
             }
 
         PlayerSheetScaffold(

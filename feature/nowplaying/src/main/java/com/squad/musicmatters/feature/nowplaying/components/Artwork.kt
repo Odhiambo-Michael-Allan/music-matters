@@ -64,15 +64,15 @@ internal fun NowPlayingSongArtwork(
                         .sizeIn( maxWidth = imageSize, maxHeight = imageSize )
                         .aspectRatio( 1f )
                         .clip( MaterialTheme.shapes.medium )
-                        .swipeable(
-                            minimumDragAmount = 100f,
-                            onSwipeLeft = onSwipeLeft,
-                            onSwipeRight = onSwipeRight,
-                            onSwipeDown = onSwipeDown,
-                        )
-                        .pointerInput(Unit) {
-                            detectTapGestures { _ -> onArtworkClicked() }
-                        }
+//                        .swipeable(
+//                            minimumDragAmount = 100f,
+//                            onSwipeLeft = onSwipeLeft,
+//                            onSwipeRight = onSwipeRight,
+//                            onSwipeDown = onSwipeDown,
+//                        )
+//                        .pointerInput(Unit) {
+//                            detectTapGestures { _ -> onArtworkClicked() }
+//                        }
                 )
             }
         }

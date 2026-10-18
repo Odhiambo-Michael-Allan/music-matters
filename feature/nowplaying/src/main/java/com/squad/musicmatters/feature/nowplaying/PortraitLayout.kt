@@ -19,6 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Devices.PHONE
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -51,6 +53,7 @@ import kotlin.time.toDuration
 internal fun PortraitLayout(
     modifier: Modifier = Modifier,
     model: PortraitExpandedLayoutModel,
+    nestedScrollConnection: NestedScrollConnection,
 ) {
     Card(
         modifier = Modifier.fillMaxSize()
@@ -60,7 +63,8 @@ internal fun PortraitLayout(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
                 .fillMaxSize()
-                .padding( 28.dp ),
+                .padding( 28.dp )
+                .nestedScroll( nestedScrollConnection ),
         ) {
             Box(
                 modifier = Modifier
@@ -223,7 +227,8 @@ private fun PortraitPreview(
                 onToggleLoopMode = {},
                 onToggleShuffleMode = {},
                 onNavigateToLyricsScreen = {},
-            )
+            ),
+            nestedScrollConnection = object : NestedScrollConnection {}
         )
     }
 }

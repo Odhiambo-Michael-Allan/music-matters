@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -143,7 +144,8 @@ annotation class PreviewScreenSizesPortrait
 @Composable
 fun NowPlayingScreenContent(
     modifier: Modifier = Modifier,
-    model: NowPlayingScreenModel
+    model: NowPlayingScreenModel,
+    nestedScrollConnection: NestedScrollConnection,
 ) {
     val currentWindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     var showOptionsMenu by remember { mutableStateOf( false ) }
@@ -193,12 +195,14 @@ fun NowPlayingScreenContent(
                 ExpandedLayout(
                     modifier = modifier,
                     model = portraitExpandedLayoutModel,
+                    nestedScrollConnection = nestedScrollConnection,
                 )
             }
             else -> {
                 PortraitLayout(
                     modifier = modifier,
                     model = portraitExpandedLayoutModel,
+                    nestedScrollConnection = nestedScrollConnection,
                 )
             }
         }
@@ -603,7 +607,8 @@ private fun NowPlayingScreenContentPreview(
                 onToggleShuffleMode = {},
                 onRemoveSongFromQueue = {},
                 onNavigateToLyricsScreen = {},
-            )
+            ),
+            nestedScrollConnection = object : NestedScrollConnection {},
         )
     }
 }

@@ -479,14 +479,15 @@ private fun rememberPlayerSheetNestedScrollConnection(
         override fun onPreScroll(
             available: Offset,
             source: NestedScrollSource,
-        ): Offset = consumePlayerSheetPreScroll( sheetState, available )
+        ): Offset =
+            consumePlayerSheetPreScroll(sheetState, available)
 
         override fun onPostScroll(
             consumed: Offset,
             available: Offset,
             source: NestedScrollSource,
         ): Offset {
-            if ( source == NestedScrollSource.UserInput ) {
+            if (source == NestedScrollSource.UserInput) {
                 contentOwnsGesture =
                     PlayerSheetNestedScrollLogic.contentOwnsGestureAfterScroll(
                         contentOwnsGesture,
@@ -501,8 +502,12 @@ private fun rememberPlayerSheetNestedScrollConnection(
             )
         }
 
-        override suspend fun onPreFling( available: Velocity ): Velocity =
-            settlePlayerSheetPreFling( sheetState, available, density )
+        override suspend fun onPreFling(available: Velocity): Velocity =
+            settlePlayerSheetPreFling(
+                sheetState,
+                available,
+                density
+            )
 
         override suspend fun onPostFling(
             consumed: Velocity,
@@ -518,7 +523,11 @@ private fun rememberPlayerSheetNestedScrollConnection(
                 ) {
                     return Velocity.Zero
                 }
-                return settlePlayerSheetPostFling( sheetState, available, density )
+                return settlePlayerSheetPostFling(
+                    sheetState,
+                    available,
+                    density
+                )
             } finally {
                 contentOwnsGesture = false
             }
@@ -532,7 +541,7 @@ private fun rememberPlayerSheetNestedScrollConnection(
  * A swipe that is still scrolling queue/notes must stop at the content top.
  * Collapsing the sheet requires a new downward swipe from that rest position.
  */
-internal object PlayerSheetNestedScrollLogic {
+object PlayerSheetNestedScrollLogic {
     const val EXPANDED_OFFSET_EPS = 0.5f
 
     fun isFullyExpanded( sheetOffset: Float ): Boolean = sheetOffset <= EXPANDED_OFFSET_EPS
@@ -801,23 +810,26 @@ private fun FullPlayerLayer(
     resources.stateHolder.SaveableStateProvider( "full-player" ) {
         Box(
             modifier = Modifier
-                .height(containerHeight)
+                .height( containerHeight )
                 .graphicsLayer {
                     alpha = geometry.fullAlpha
                     translationY = geometry.fullTranslationY
                 }
                 .zIndex(
-                    if (geometry.expansionFraction >= 0.5f) 1f else 0f
+                    if ( geometry.expansionFraction >= 0.5f ) 1f else 0f
                 )
                 .offset {
-                    if (geometry.expansionFraction <= 0.01f) {
-                        IntOffset(0, 10000)
+                    if ( geometry.expansionFraction <= 0.01f ) {
+                        IntOffset( 0, 10000 )
                     } else {
                         IntOffset.Zero
                     }
                 }
         ) {
-            NowPlayingScreenContent( model = model )
+            NowPlayingScreenContent(
+                model = model,
+                nestedScrollConnection = resources.flows.nestedScrollConnection
+            )
         }
     }
 }

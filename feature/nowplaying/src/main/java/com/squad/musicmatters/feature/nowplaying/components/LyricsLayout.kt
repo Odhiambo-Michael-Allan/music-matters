@@ -22,6 +22,7 @@ import com.squad.musicmatters.core.designsystem.theme.SupportedFonts
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
 import com.squad.musicmatters.core.model.Lyric
 import com.squad.musicmatters.core.ui.LyricsLayout
+import com.squad.musicmatters.core.ui.LyricsViewContent
 import com.squad.musicmatters.feature.nowplaying.LyricsUiState
 import java.time.Duration
 
@@ -36,17 +37,25 @@ internal fun LyricsLayout(
     when ( lyricsUiState ) {
         LyricsUiState.Loading -> {}
         is LyricsUiState.Success -> {
-            Box {
-                LyricsLayout(
-                    modifier = modifier.fillMaxSize(),
-                    lyrics = lyricsUiState.lyrics,
-                    currentDurationInPlayback = Duration.ofMillis(
-                        onGetPlaybackPosition().played
-                    ),
-                    onSeekTo = { onSeekEnd( it.toMillis() ) }
-                )
-
-            }
+            LyricsViewContent(
+                modifier = modifier.fillMaxSize(),
+                lyrics = lyricsUiState.lyrics,
+                currentDurationInPlayback = Duration.ofMillis(
+                    onGetPlaybackPosition().played
+                ),
+                onSeekTo = { onSeekEnd( it.toMillis() ) }
+            )
+//            Box {
+//                LyricsLayout(
+//                    modifier = modifier.fillMaxSize(),
+//                    lyrics = lyricsUiState.lyrics,
+//                    currentDurationInPlayback = Duration.ofMillis(
+//                        onGetPlaybackPosition().played
+//                    ),
+//                    onSeekTo = { onSeekEnd( it.toMillis() ) }
+//                )
+//
+//            }
         }
     }
 }

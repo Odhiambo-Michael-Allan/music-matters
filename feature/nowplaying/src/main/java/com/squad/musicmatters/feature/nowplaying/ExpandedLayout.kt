@@ -13,6 +13,8 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Devices.FOLDABLE
 import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +48,7 @@ import kotlin.time.toDuration
 internal fun ExpandedLayout(
     modifier: Modifier = Modifier,
     model: PortraitExpandedLayoutModel,
+    nestedScrollConnection: NestedScrollConnection,
 ) {
 
     Card(
@@ -63,6 +66,7 @@ internal fun ExpandedLayout(
                 modifier = Modifier
                     .fillMaxWidth( 0.5f )
                     .fillMaxHeight()
+                    .nestedScroll( nestedScrollConnection )
             ) {
                 NowPlayingSongArtwork(
                     modifier = Modifier
@@ -243,7 +247,8 @@ private fun ExpandedLayoutPreview(
                 onToggleShuffleMode = {},
                 onToggleLoopMode = {},
                 onNavigateToLyricsScreen = {},
-            )
+            ),
+            nestedScrollConnection = object : NestedScrollConnection {}
         )
     }
 }
