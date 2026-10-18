@@ -63,10 +63,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastFirstOrNull
 import androidx.core.net.toUri
-import com.kmpalette.color
-import com.kmpalette.rememberPaletteState
 import com.materialkolor.hct.Hct
 import com.materialkolor.ktx.toColor
 import com.materialkolor.ktx.toHct
@@ -100,29 +97,6 @@ import kotlin.math.absoluteValue
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-
-// Stateful
-//@Composable
-//fun MiniPlayer(
-//    modifier: Modifier = Modifier,
-//    viewModel: NowPlayingScreenViewModel = hiltViewModel(),
-//    onShowNowPlayingBottomSheet: () -> Unit,
-//) {
-//    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-//    val playbackPosition by viewModel.playbackPosition.collectAsStateWithLifecycle()
-//
-//    MiniPlayerContent(
-//        uiState = uiState,
-//        onGetPlaybackPosition = playbackPosition,
-//        onNowPlayingBottomBarClick = onShowNowPlayingBottomSheet,
-//        nextSong = viewModel::playNextSong,
-//        previousSong = viewModel::playPreviousSong,
-//        playPause = viewModel::playPause,
-//        modifier = modifier,
-//    )
-//}
-
-// Stateless
 @Composable
 fun MiniPlayerContent(
     modifier: Modifier = Modifier,
@@ -130,57 +104,57 @@ fun MiniPlayerContent(
     onNowPlayingBottomBarClick: () -> Unit,
 ) {
 
-    val paletteState = rememberPaletteState()
-    var coverArtBitmap by remember { mutableStateOf<ImageBitmap?>( null ) }
+//    val paletteState = rememberPaletteState()
+//    var coverArtBitmap by remember { mutableStateOf<ImageBitmap?>( null ) }
+//
+//    LaunchedEffect( coverArtBitmap ) {
+//        coverArtBitmap?.let { paletteState.generate( it ) }
+//    }
 
-    LaunchedEffect( coverArtBitmap ) {
-        coverArtBitmap?.let { paletteState.generate( it ) }
-    }
-
-    val colorToApply by remember( coverArtBitmap ) {
-        derivedStateOf {
-            val currentPalette = paletteState.palette
-
-            val rawColor = if ( coverArtBitmap != null && currentPalette != null ) {
-                val swatches = currentPalette.swatches
-
-                if ( swatches.isNotEmpty() ) {
-                    // Sort descending by population just like your original logic
-                    val sortedSwatches = swatches.sortedByDescending { it.population }
-                    val firstSwatch = sortedSwatches.first()
-                    val firstSwatchColorHct = firstSwatch.color.toHct()
-                    val firstSwatchPopulation = firstSwatch.population
-
-                    // Search for a swatch that is significantly more vibrant
-                    // (chroma delta >= 30) and makes up at least 10% of the dominant swatch
-                    val moreChromatic = sortedSwatches.fastFirstOrNull { swatch ->
-                        val currentHct = swatch.color.toHct()
-                        ( currentHct.chroma - firstSwatchColorHct.chroma >= 30 ) &&
-                                ( swatch.population.toFloat() / firstSwatchPopulation >= 0.1f )
-                    }
-
-                    // Return the more vibrant option, or fall back to the dominant one
-                    moreChromatic?.color ?: firstSwatch.color
-                } else {
-                    Color.Unspecified // Fallback if swatches are empty
-                }
-            } else {
-                Color.Unspecified // Fallback when loading or image is null
-            }
-
-            if ( rawColor != Color.Unspecified ) {
-                // Clamping the tone between 20 (soft dark gray) and 40 (soft light gray)
-                rawColor.clampBrightness( minTone = 20.0, maxTone = 40.0 )
-            } else {
-                Color.Unspecified
-            }
-        }
-    }
+//    val colorToApply by remember( coverArtBitmap ) {
+//        derivedStateOf {
+//            val currentPalette = paletteState.palette
+//
+//            val rawColor = if ( coverArtBitmap != null && currentPalette != null ) {
+//                val swatches = currentPalette.swatches
+//
+//                if ( swatches.isNotEmpty() ) {
+//                    // Sort descending by population just like your original logic
+//                    val sortedSwatches = swatches.sortedByDescending { it.population }
+//                    val firstSwatch = sortedSwatches.first()
+//                    val firstSwatchColorHct = firstSwatch.color.toHct()
+//                    val firstSwatchPopulation = firstSwatch.population
+//
+//                    // Search for a swatch that is significantly more vibrant
+//                    // (chroma delta >= 30) and makes up at least 10% of the dominant swatch
+//                    val moreChromatic = sortedSwatches.fastFirstOrNull { swatch ->
+//                        val currentHct = swatch.color.toHct()
+//                        ( currentHct.chroma - firstSwatchColorHct.chroma >= 30 ) &&
+//                                ( swatch.population.toFloat() / firstSwatchPopulation >= 0.1f )
+//                    }
+//
+//                    // Return the more vibrant option, or fall back to the dominant one
+//                    moreChromatic?.color ?: firstSwatch.color
+//                } else {
+//                    Color.Unspecified // Fallback if swatches are empty
+//                }
+//            } else {
+//                Color.Unspecified // Fallback when loading or image is null
+//            }
+//
+//            if ( rawColor != Color.Unspecified ) {
+//                // Clamping the tone between 20 (soft dark gray) and 40 (soft light gray)
+//                rawColor.clampBrightness( minTone = 20.0, maxTone = 40.0 )
+//            } else {
+//                Color.Unspecified
+//            }
+//        }
+//    }
 
     model.uiState.currentlyPlayingSong.let { song ->
         ElevatedCard (
             colors = CardDefaults.cardColors(
-                containerColor = colorToApply
+                containerColor = Color.Transparent
             ),
             onClick = onNowPlayingBottomBarClick,
             modifier = modifier
@@ -196,7 +170,7 @@ fun MiniPlayerContent(
                     DynamicAsyncImage(
                         imageUri = song.artworkUri?.toUri(),
                         contentDescription = null,
-                        onImageLoaded = { coverArtBitmap = it },
+//                        onImageLoaded = onImageLoaded,
                         modifier = Modifier
                             .size( 45.dp )
                             .clip( RoundedCornerShape( 10.dp ) )
@@ -207,7 +181,7 @@ fun MiniPlayerContent(
                         nextSong = model.onPlayNext,
                         previousSong = model.onPreviousButtonClick,
                         textMarquee = model.uiState.userData.miniPlayerTextMarquee,
-                        colorToApply = colorToApply,
+//                        colorToApply = colorToApply,
                         onNowPlayingBottomBarClick = onNowPlayingBottomBarClick,
                     )
                     Spacer( modifier = Modifier.width( 15.dp ) )
@@ -223,11 +197,11 @@ fun MiniPlayerContent(
                                 } else {
                                     Icons.Rounded.PlayArrow
                                 },
-                                tint = if ( colorToApply == Color.Unspecified ) {
-                                    LocalContentColor.current
-                                } else {
-                                    Color.White
-                                },
+//                                tint = if ( colorToApply == Color.Unspecified ) {
+//                                    LocalContentColor.current
+//                                } else {
+//                                    Color.White
+//                                },
                                 contentDescription = null
                             )
                         }
@@ -235,11 +209,7 @@ fun MiniPlayerContent(
                     Spacer( modifier = Modifier.width( 8.dp ) )
                 }
                 // ------------------------- Progress Bar ------------------------------
-                val progressBarColor = if ( colorToApply == Color.Unspecified ) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    Color.White
-                }
+                val progressBarColor = MaterialTheme.colorScheme.primary
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = Color.Transparent
@@ -286,49 +256,13 @@ private fun MiniPlayerContent(
     nextSong: () -> Unit,
     previousSong: () -> Unit,
     textMarquee: Boolean,
-    colorToApply: Color,
+//    colorToApply: Color,
     onNowPlayingBottomBarClick: () -> Unit,
 ) {
     BoxWithConstraints (
         modifier = Modifier.clipToBounds()
     ) {
-        val cardWidthInPixels = this@BoxWithConstraints.constraints.maxWidth
-        var offsetX by remember { mutableFloatStateOf( 0f ) }
-
-        val cardOffsetX by animateFloatAsState(
-            targetValue = offsetX / 2,
-            label = "now-playing-card-offset-x"
-        )
-        val cardOpacity by animateFloatAsState(
-            targetValue = if ( offsetX != 0f ) 0.7f else 1f,
-            label = "now-playing-card-opacity"
-        )
-
-        Box(
-//            modifier = Modifier
-//                .graphicsLayer( alpha = cardOpacity, translationX = cardOffsetX )
-//                .pointerInput( Unit ) {
-//                    detectHorizontalDragGestures(
-//                        onDragEnd = {
-//                            val threshHold = cardWidthInPixels / 4
-//                            val affected = when {
-//                                -offsetX > threshHold -> nextSong()
-//                                offsetX > threshHold -> previousSong()
-//                                else -> false
-//                            }
-//                            if ( !affected ) {
-//                                offsetX = 0f
-//                            }
-//                        },
-//                        onDragCancel = {
-//                            offsetX = 0f
-//                        },
-//                        onHorizontalDrag = { _, dragAmount, ->
-//                            offsetX += dragAmount
-//                        },
-//                    )
-//                }
-        ) {
+        Box {
             Column (
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -338,7 +272,7 @@ private fun MiniPlayerContent(
                         fontWeight = FontWeight.SemiBold
                     ),
                     textMarquee = textMarquee,
-                    colorToApply = colorToApply,
+//                    colorToApply = colorToApply,
                     onClick = onNowPlayingBottomBarClick,
                 )
                 NowPlayingBottomBarContentText(
@@ -348,7 +282,7 @@ private fun MiniPlayerContent(
                         color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
                     ),
                     textMarquee = textMarquee,
-                    colorToApply = colorToApply,
+//                    colorToApply = colorToApply,
                     onClick = onNowPlayingBottomBarClick,
                 )
             }
@@ -444,40 +378,6 @@ internal fun NowPlayingBottomBarContentText(
     }
 }
 
-internal fun Modifier.swipeable(
-    minimumDragAmount: Float = 50f,
-    onSwipeLeft: ( () -> Unit )? = null,
-    onSwipeRight: ( () -> Unit )? = null,
-    onSwipeUp: ( () -> Unit )? = null,
-    onSwipeDown: ( () -> Unit )? = null,
-) = pointerInput( Unit ) {
-    var offset = Offset.Zero
-    detectDragGestures(
-        onDrag = { pointer, dragAmount ->
-            pointer.consume()
-            offset += dragAmount
-        },
-        onDragEnd = {
-            val xAbsolute = offset.x.absoluteValue
-            val yAbsolute = offset.y.absoluteValue
-            when {
-                xAbsolute > minimumDragAmount && xAbsolute > yAbsolute -> when {
-                    offset.x > 0 -> onSwipeRight?.invoke()
-                    else -> onSwipeLeft?.invoke()
-                }
-                yAbsolute > minimumDragAmount -> when {
-                    offset.y > 0 -> onSwipeDown?.invoke()
-                    else -> onSwipeUp?.invoke()
-                }
-            }
-            offset = Offset.Zero
-        },
-        onDragCancel = {
-            offset = Offset.Zero
-        }
-    )
-}
-
 fun Color.clampBrightness(
     minTone: Double = 15.0,
     maxTone: Double = 85.0,
@@ -494,14 +394,6 @@ fun Color.clampBrightness(
     // Rebuild the color with the modified tone
     return Hct.from( hct.hue, clampedChroma, clampedTone ).toColor()
 }
-
-data class MiniPlayerSwipeTip(
-    val visible: Boolean = false,
-    val onDismissed: () -> Unit = {},
-)
-
-
-
 
 @Preview( showSystemUi = true )
 @Composable
@@ -521,6 +413,7 @@ private fun MiniPlayerPreview(
         ){
             MiniPlayerContent(
                 modifier = Modifier.align( Alignment.Center ),
+//                onImageLoaded = {},
                 model = NowPlayingScreenModel(
                     uiState = NowPlayingScreenUiState.Success(
                         userData = emptyUserData.copy(

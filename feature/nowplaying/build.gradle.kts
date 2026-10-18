@@ -17,8 +17,10 @@ dependencies {
     implementation( libs.androidx.appcompat )
     implementation( libs.material )
 
-    implementation( libs.kmpalette.core )
+//    implementation( libs.kmpalette.core )
     implementation( libs.materialkolor )
+    implementation( libs.coil.kt.compose )
+    implementation( libs.androidx.palette.ktx )
 
     testImplementation( libs.junit )
 }
