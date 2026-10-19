@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -59,7 +60,7 @@ fun LyricsViewContent(
     modifier: Modifier = Modifier,
     lyrics: List<Lyric>,
     currentDurationInPlayback: Duration,
-    blurColor: Color = CardDefaults.cardColors().containerColor,
+    colorScheme: ColorScheme,
     onSeekTo: ( Duration ) -> Unit,
 ) {
     val listState = rememberLazyListState()
@@ -155,14 +156,15 @@ fun LyricsViewContent(
 
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .background(blurColor),
+            .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         if ( lyrics.isEmpty() ) {
             Text(
                 text = stringResource( id = i8nR.string.core_i8n_no_lyrics_found ),
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.displaySmall.copy(
+                    fontWeight = FontWeight.Bold
+                ),
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
                     alpha = 0.6f,
                 ),
@@ -215,7 +217,7 @@ fun LyricsViewContent(
                         )
                     },
                 contentPadding = PaddingValues(
-                    horizontal = 24.dp,
+                    horizontal = 0.dp,
                     vertical = 32.dp,
                 ),
                 verticalArrangement = Arrangement.spacedBy( 16.dp ),
@@ -236,6 +238,7 @@ fun LyricsViewContent(
                     LyricItem(
                         lyric = lyric,
                         isActive = index == activeIndex,
+                        colorScheme = colorScheme,
                         onClick = {
                             clickedIndex = index
                             onSeekTo( lyric.timeStamp )
@@ -309,13 +312,14 @@ private fun LyricsScrollEffect(
 private fun LyricItem(
     lyric: Lyric,
     isActive: Boolean,
+    colorScheme: ColorScheme,
     onClick: () -> Unit,
 ) {
     val textColor by animateColorAsState(
         targetValue = if ( isActive ) {
-            MaterialTheme.colorScheme.primary
+            colorScheme.primary
         } else {
-            MaterialTheme.colorScheme.onSurface
+            colorScheme.onSurface
         },
         animationSpec = tween( durationMillis = 300 ),
         label = "textColor"
@@ -389,6 +393,7 @@ private fun LyricsViewContentPreview() {
             ),
             currentDurationInPlayback = Duration.ofMinutes(3),
             onSeekTo = {},
+            colorScheme = MaterialTheme.colorScheme
         )
     }
 }

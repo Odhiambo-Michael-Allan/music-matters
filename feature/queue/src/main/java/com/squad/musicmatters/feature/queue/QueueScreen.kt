@@ -176,6 +176,7 @@ private fun QueueScreenTopAppBar(
                     }
                     ShuffleButton(
                         shuffleEnabled = uiState.shuffle,
+                        colorScheme = MaterialTheme.colorScheme,
                         onToggleShuffleMode = { onShuffle( !uiState.shuffle ) },
                         modifier = Modifier.size(
                             MusicMattersIcons.Shuffle.defaultHeight.minus( 5.dp )

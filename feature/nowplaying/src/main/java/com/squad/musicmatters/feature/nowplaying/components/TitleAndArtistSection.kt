@@ -10,8 +10,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.ThumbUpAlt
 import androidx.compose.material.icons.rounded.ThumbUpAlt
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,6 +26,7 @@ import com.squad.musicmatters.core.ui.FadeTransition
 internal fun TitleAndArtistSection(
     currentlyPlayingSong: Song,
     currentlyPlayingSongIsFavorite: Boolean,
+    colorScheme: ColorScheme,
     onArtistClicked: ( Long ) -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
     onShowOptionsMenu: () -> Unit,
@@ -80,7 +83,11 @@ internal fun TitleAndArtistSection(
                             Icons.Outlined.ThumbUpAlt
                         },
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = if ( it ) {
+                            colorScheme.primary
+                        } else {
+                            LocalContentColor.current
+                        }
                     )
 
                 }

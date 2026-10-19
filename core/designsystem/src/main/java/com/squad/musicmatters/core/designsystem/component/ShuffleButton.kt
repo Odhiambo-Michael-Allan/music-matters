@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -24,6 +25,7 @@ import com.squad.musicmatters.core.designsystem.R
 fun ShuffleButton(
     modifier: Modifier = Modifier,
     shuffleEnabled: Boolean,
+    colorScheme: ColorScheme,
     onToggleShuffleMode: ( Boolean ) -> Unit,
 ) {
     AnimatedContent(
@@ -41,7 +43,7 @@ fun ShuffleButton(
                     painter = painterResource( id = R.drawable.ic_shuffle ),
                     contentDescription = null,
                     tint = if ( isShuffleEnabled ) {
-                        MaterialTheme.colorScheme.primary
+                        colorScheme.primary
                     } else {
                         LocalContentColor.current
                     },

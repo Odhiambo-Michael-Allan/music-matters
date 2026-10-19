@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -57,6 +58,7 @@ internal fun NowPlayingScreenBottomBar(
     modifier: Modifier = Modifier,
     showLyrics: Boolean,
     showLyricsOnSeparateScreen: Boolean,
+    colorScheme: ColorScheme,
     onShowLyrics: ( Boolean ) -> Unit,
     onNavigateToQueueScreen: () -> Unit,
     onNavigateToLyricsScreen: () -> Unit,
@@ -87,7 +89,7 @@ internal fun NowPlayingScreenBottomBar(
                     painter = painterResource(
                         id = if ( it ) R.drawable.ic_lyrics else R.drawable.ic_lyrics_outline,
                     ),
-                    tint = if ( it ) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+                    tint = if ( it ) colorScheme.primary else LocalContentColor.current,
                     contentDescription = null,
                 )
             }
@@ -116,6 +118,7 @@ private fun NowPlayingScreenBottomBarPreview() {
         NowPlayingScreenBottomBar(
             showLyrics = true,
             showLyricsOnSeparateScreen = false,
+            colorScheme = MaterialTheme.colorScheme,
             onShowLyrics = {},
             onNavigateToQueueScreen = {},
             onNavigateToLyricsScreen = {},

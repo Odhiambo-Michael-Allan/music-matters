@@ -1,5 +1,8 @@
 package com.squad.musicmatters.feature.nowplaying
 
+import android.content.Context
+import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,7 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material3.Card
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -52,85 +55,86 @@ import kotlin.time.toDuration
 @Composable
 internal fun PortraitLayout(
     modifier: Modifier = Modifier,
-    model: PortraitExpandedLayoutModel,
+    model: NowPlayingScreenModel,
+    callbacks: NowPlayingScreenCallbacks,
     nestedScrollConnection: NestedScrollConnection,
 ) {
-    Card(
-        modifier = Modifier.fillMaxSize()
+    Column (
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxSize()
+            .padding( 28.dp )
+            .nestedScroll( nestedScrollConnection ),
     ) {
-        Column (
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                .fillMaxSize()
-                .padding( 28.dp )
-                .nestedScroll( nestedScrollConnection ),
+        Box(
+            modifier = Modifier
+                .sizeIn( maxWidth = 400.dp, maxHeight = 400.dp )
+                .aspectRatio( 1f )
+                .clip( MaterialTheme.shapes.medium )
         ) {
-            Box(
-                modifier = Modifier
-                    .sizeIn( maxWidth = 400.dp, maxHeight = 400.dp )
-                    .aspectRatio( 1f )
-                    .clip( MaterialTheme.shapes.medium )
-            ) {
-                AnimatedContent(
-                    targetState = model.uiState.userData.showLyrics
-                ) { showLyrics ->
-                    if ( showLyrics ) {
-                        LyricsLayout(
-                            lyricsUiState = model.lyricsUiState,
-                            onGetPlaybackPosition = model.onGetPlaybackPosition,
-                            onSeekEnd = model.onSeekEnd,
-                        )
-                    } else {
-                        NowPlayingSongArtwork(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            song = model.currentlyPlayingSong,
-                            isPlaying = { model.uiState.playerState.isPlaying
-                                    || model.uiState.playerState.isBuffering
-                            },
-                            onSwipeLeft = model.onArtworkSwipedLeft,
-                            onSwipeRight = model.onArtworkSwipedRight,
-                            onSwipeDown = model.onArtworkSwipedDown,
-                            onArtworkClicked = {
-                                model.onArtworkClicked( model.currentlyPlayingSong )
-                            }
-                        )
-                    }
+            AnimatedContent(
+                targetState = model.uiState.userData.showLyrics
+            ) { showLyrics ->
+                if ( showLyrics ) {
+                    LyricsLayout(
+                        lyricsUiState = model.lyricsUiState,
+                        colorScheme = model.colorScheme,
+                        onGetPlaybackPosition = callbacks.onGetPlaybackPosition,
+                        onSeekEnd = callbacks.onSeekEnd,
+                    )
+                } else {
+                    NowPlayingSongArtwork(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        song = model.uiState.currentlyPlayingSong,
+                        isPlaying = { model.uiState.playerState.isPlaying
+                                || model.uiState.playerState.isBuffering
+                        },
+                        onSwipeLeft = callbacks.onSwipeArtworkLeft,
+                        onSwipeRight = callbacks.onSwipeArtworkRight,
+                        onArtworkClicked = {
+                            callbacks.onArtworkClicked( model.uiState.currentlyPlayingSong )
+                        }
+                    )
                 }
             }
-            TitleAndArtistSection(
-                currentlyPlayingSong = model.currentlyPlayingSong,
-                currentlyPlayingSongIsFavorite = model.uiState.currentlyPlayingSongIsFavorite,
-                onArtistClicked = model.onArtistClicked,
-                onFavorite = model.onFavorite,
-                onShowOptionsMenu = model.onShowOptionsMenu,
-            )
-            NowPlayingSeekBar(
-                onGetPlaybackPosition = model.onGetPlaybackPosition,
-                onSeekStart = model.onSeekStart,
-                onSeekEnd = model.onSeekEnd
-            )
-            Spacer( modifier = Modifier.height( 28.dp ) )
-            NowPlayingPlayerControls(
-                isPlaying = model.uiState.playerState.isPlaying,
-                shuffle = model.uiState.userData.shuffle,
-                loopMode = model.uiState.userData.loopMode,
-                onPreviousButtonClick = model.onPreviousButtonClick,
-                onPausePlayButtonClick = model.onPausePlayButtonClick,
-                onNextButtonClick = model.onPlayNext,
-                onToggleLoopMode = model.onToggleLoopMode,
-                onToggleShuffleMode = { shuffle -> model.onToggleShuffleMode( shuffle ) },
-            )
-            Spacer( modifier = Modifier.height( 16.dp ) )
-            NowPlayingScreenBottomBar(
-                showLyrics = model.uiState.userData.showLyrics,
-                showLyricsOnSeparateScreen = model.uiState.userData.showLyricsOnSeparateScreen,
-                onShowLyrics = model.onShowLyrics,
-                onNavigateToQueueScreen = model.onNavigateToQueueScreen,
-                onNavigateToLyricsScreen = model.onNavigateToLyricsScreen,
-            )
         }
+        TitleAndArtistSection(
+            currentlyPlayingSong = model.uiState.currentlyPlayingSong,
+            currentlyPlayingSongIsFavorite = model.uiState.currentlyPlayingSongIsFavorite,
+            colorScheme = model.colorScheme,
+            onArtistClicked = callbacks.onArtistClicked,
+            onFavorite = callbacks.onFavorite,
+            onShowOptionsMenu = callbacks.onShowOptionsMenu,
+        )
+        NowPlayingSeekBar(
+            colorScheme = model.colorScheme,
+            onGetPlaybackPosition = callbacks.onGetPlaybackPosition,
+            onSeekStart = callbacks.onSeekStart,
+            onSeekEnd = callbacks.onSeekEnd
+        )
+        Spacer( modifier = Modifier.height( 28.dp ) )
+        NowPlayingPlayerControls(
+            isPlaying = model.uiState.playerState.isPlaying,
+            shuffle = model.uiState.userData.shuffle,
+            loopMode = model.uiState.userData.loopMode,
+            colorScheme = model.colorScheme,
+            onPreviousButtonClick = callbacks.onPreviousButtonClick,
+            onPlayPauseButtonClick = callbacks.onPlayPauseButtonClick,
+            onPlayNext = callbacks.onPlayNext,
+            onToggleLoopMode = callbacks.onToggleLoopMode,
+            onToggleShuffleMode = { shuffle -> callbacks.onToggleShuffleMode( shuffle ) },
+        )
+        Spacer( modifier = Modifier.height( 16.dp ) )
+        NowPlayingScreenBottomBar(
+            showLyrics = model.uiState.userData.showLyrics,
+            showLyricsOnSeparateScreen = model.uiState.userData.showLyricsOnSeparateScreen,
+            colorScheme = model.colorScheme,
+            onShowLyrics = callbacks.onShowLyrics,
+            onNavigateToQueueScreen = callbacks.onNavigateToQueueScreen,
+            onNavigateToLyricsScreen = callbacks.onNavigateToLyricsScreen,
+        )
     }
 }
 
@@ -153,12 +157,12 @@ private fun PortraitPreview(
         useMaterialYou = true
     ) {
         PortraitLayout(
-            model = PortraitExpandedLayoutModel(
+            model = NowPlayingScreenModel(
                 uiState = NowPlayingScreenUiState.Success(
                     userData = emptyUserData.copy(
                         loopMode = LoopMode.Queue,
                         shuffle = true,
-                        showLyrics = true,
+                        showLyrics = false,
                     ),
                     currentlyPlayingSong = previewData.songs.first(),
                     currentlyPlayingSongIsFavorite = true,
@@ -208,24 +212,41 @@ private fun PortraitPreview(
                         )
                     ),
                 ),
-                onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
+                colorScheme = MaterialTheme.colorScheme,
+            ),
+            callbacks = NowPlayingScreenCallbacks(
+                onGetPlaybackPosition = {
+                    PlaybackPosition( 2L, 3L, 5L )
+                },
                 onArtistClicked = {},
                 onFavorite = { _, _ -> },
-                onPausePlayButtonClick = {},
+                onPlayPauseButtonClick = {},
                 onPreviousButtonClick = {},
                 onPlayNext = {},
                 onSeekEnd = {},
                 onArtworkClicked = {},
+                onSwipeArtworkLeft = {},
+                onSwipeArtworkRight = {},
                 onNavigateToQueueScreen = {},
                 onSeekStart = {},
-                currentlyPlayingSong = previewData.songs.first(),
-                onArtworkSwipedLeft = { TODO() },
-                onArtworkSwipedRight = { TODO() },
-                onArtworkSwipedDown = { TODO() },
-                onShowOptionsMenu = { TODO() },
+                onCreateEqualizerActivityContract = {
+                    object : ActivityResultContract<Unit, Unit>() {
+                        override fun createIntent( context: Context, input: Unit ) = Intent()
+                        override fun parseResult( resultCode: Int, intent: Intent? ) {}
+
+                    }
+                },
+                onCreatePlaylist = { _, _ -> },
+                onAddSongsToPlaylist = { _, _ -> },
+                onViewAlbum = {},
+                onViewArtist = {},
+                onShowSnackBar = {},
+                onStopSleepTimer = {},
+                onStartSleepTimer = {},
                 onShowLyrics = {},
                 onToggleLoopMode = {},
                 onToggleShuffleMode = {},
+                onRemoveSongFromQueue = {},
                 onNavigateToLyricsScreen = {},
             ),
             nestedScrollConnection = object : NestedScrollConnection {}

@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -90,6 +92,7 @@ import com.squad.musicmatters.core.ui.FadeTransition
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.feature.nowplaying.LyricsUiState
+import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenCallbacks
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenModel
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
 import java.util.Timer
@@ -101,190 +104,103 @@ import kotlin.time.toDuration
 fun MiniPlayerContent(
     modifier: Modifier = Modifier,
     model: NowPlayingScreenModel,
+    callbacks: NowPlayingScreenCallbacks,
     onNowPlayingBottomBarClick: () -> Unit,
 ) {
 
-//    val paletteState = rememberPaletteState()
-//    var coverArtBitmap by remember { mutableStateOf<ImageBitmap?>( null ) }
-//
-//    LaunchedEffect( coverArtBitmap ) {
-//        coverArtBitmap?.let { paletteState.generate( it ) }
-//    }
-
-//    val colorToApply by remember( coverArtBitmap ) {
-//        derivedStateOf {
-//            val currentPalette = paletteState.palette
-//
-//            val rawColor = if ( coverArtBitmap != null && currentPalette != null ) {
-//                val swatches = currentPalette.swatches
-//
-//                if ( swatches.isNotEmpty() ) {
-//                    // Sort descending by population just like your original logic
-//                    val sortedSwatches = swatches.sortedByDescending { it.population }
-//                    val firstSwatch = sortedSwatches.first()
-//                    val firstSwatchColorHct = firstSwatch.color.toHct()
-//                    val firstSwatchPopulation = firstSwatch.population
-//
-//                    // Search for a swatch that is significantly more vibrant
-//                    // (chroma delta >= 30) and makes up at least 10% of the dominant swatch
-//                    val moreChromatic = sortedSwatches.fastFirstOrNull { swatch ->
-//                        val currentHct = swatch.color.toHct()
-//                        ( currentHct.chroma - firstSwatchColorHct.chroma >= 30 ) &&
-//                                ( swatch.population.toFloat() / firstSwatchPopulation >= 0.1f )
-//                    }
-//
-//                    // Return the more vibrant option, or fall back to the dominant one
-//                    moreChromatic?.color ?: firstSwatch.color
-//                } else {
-//                    Color.Unspecified // Fallback if swatches are empty
-//                }
-//            } else {
-//                Color.Unspecified // Fallback when loading or image is null
-//            }
-//
-//            if ( rawColor != Color.Unspecified ) {
-//                // Clamping the tone between 20 (soft dark gray) and 40 (soft light gray)
-//                rawColor.clampBrightness( minTone = 20.0, maxTone = 40.0 )
-//            } else {
-//                Color.Unspecified
-//            }
-//        }
-//    }
-
     model.uiState.currentlyPlayingSong.let { song ->
-        ElevatedCard (
-            colors = CardDefaults.cardColors(
-                containerColor = Color.Transparent
-            ),
-            onClick = onNowPlayingBottomBarClick,
-            modifier = modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = modifier.fillMaxWidth()
         ) {
-            Column {
-                Row (
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding( 0.dp, 8.dp )
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding( 0.dp, 8.dp )
+            ) {
+                Spacer( modifier = Modifier.width( 12.dp ) )
+                DynamicAsyncImage(
+                    imageUri = song.artworkUri?.toUri(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size( 45.dp )
+                        .clip( RoundedCornerShape( 10.dp ) )
+                )
+                Spacer( modifier = Modifier.width( 15.dp ) )
+                Column (
+                    modifier = Modifier.weight( 1f )
                 ) {
-                    Spacer( modifier = Modifier.width( 12.dp ) )
-                    DynamicAsyncImage(
-                        imageUri = song.artworkUri?.toUri(),
-                        contentDescription = null,
-//                        onImageLoaded = onImageLoaded,
-                        modifier = Modifier
-                            .size( 45.dp )
-                            .clip( RoundedCornerShape( 10.dp ) )
-                    )
-                    Spacer( modifier = Modifier.width( 15.dp ) )
-                    MiniPlayerContent(
-                        song = song,
-                        nextSong = model.onPlayNext,
-                        previousSong = model.onPreviousButtonClick,
+                    NowPlayingBottomBarContentText(
+                        text = song.title,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
                         textMarquee = model.uiState.userData.miniPlayerTextMarquee,
-//                        colorToApply = colorToApply,
-                        onNowPlayingBottomBarClick = onNowPlayingBottomBarClick,
+                        onClick = onNowPlayingBottomBarClick,
                     )
-                    Spacer( modifier = Modifier.width( 15.dp ) )
-
-                    IconButton( onClick = model.onPlayPauseButtonClick ) {
-                        AnimatedContent(
-                            targetState = model.uiState.playerState.isPlaying,
-                            label = "now-playing-bottom-bar-play-arrow"
-                        ) {
-                            Icon(
-                                imageVector = if ( it ) {
-                                    Icons.Rounded.Pause
-                                } else {
-                                    Icons.Rounded.PlayArrow
-                                },
-//                                tint = if ( colorToApply == Color.Unspecified ) {
-//                                    LocalContentColor.current
-//                                } else {
-//                                    Color.White
-//                                },
-                                contentDescription = null
-                            )
-                        }
-                    }
-                    Spacer( modifier = Modifier.width( 8.dp ) )
+                    NowPlayingBottomBarContentText(
+                        text = song.artist,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
+                        ),
+                        textMarquee = model.uiState.userData.miniPlayerTextMarquee,
+                        onClick = onNowPlayingBottomBarClick,
+                    )
                 }
-                // ------------------------- Progress Bar ------------------------------
-                val progressBarColor = MaterialTheme.colorScheme.primary
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.Transparent
-                    ),
-                    modifier = Modifier.padding( 8.dp, 0.dp )
+                Spacer( modifier = Modifier.width( 15.dp ) )
+
+                IconButton( onClick = callbacks.onPlayPauseButtonClick ) {
+                    AnimatedContent(
+                        targetState = model.uiState.playerState.isPlaying,
+                        label = "now-playing-bottom-bar-play-arrow"
+                    ) {
+                        Icon(
+                            imageVector = if ( it ) {
+                                Icons.Rounded.Pause
+                            } else {
+                                Icons.Rounded.PlayArrow
+                            },
+                            contentDescription = null
+                        )
+                    }
+                }
+                Spacer( modifier = Modifier.width( 8.dp ) )
+            }
+            // ------------------------- Progress Bar ------------------------------
+            val progressBarColor = model.colorScheme.primary
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.Transparent
+                ),
+                modifier = Modifier.padding( 8.dp, 0.dp )
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height( 4.dp )
+                        .fillMaxWidth()
+
                 ) {
                     Box(
                         modifier = Modifier
-                            .height( 4.dp )
+                            .background( progressBarColor.copy( 0.3f ) )
                             .fillMaxWidth()
-
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .background( progressBarColor.copy( 0.3f ) )
-                                .fillMaxWidth()
-                                .fillMaxHeight()
-                        )
-                        Box(
-                            modifier = Modifier
-                                .align( Alignment.CenterStart )
-                                .background( progressBarColor.copy( alpha = 0.4f ) )
-                                .fillMaxWidth( model.onGetPlaybackPosition().bufferedRatio )
-                                .fillMaxHeight()
-                        )
-                        Box(
-                            modifier = Modifier
-                                .align( Alignment.CenterStart )
-                                .background( progressBarColor )
-                                .fillMaxWidth( model.onGetPlaybackPosition().playedRatio )
-                                .fillMaxHeight()
-                        )
-                    }
+                            .fillMaxHeight()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .align( Alignment.CenterStart )
+                            .background( progressBarColor.copy( alpha = 0.4f ) )
+                            .fillMaxWidth( callbacks.onGetPlaybackPosition().bufferedRatio )
+                            .fillMaxHeight()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .align( Alignment.CenterStart )
+                            .background( progressBarColor )
+                            .fillMaxWidth( callbacks.onGetPlaybackPosition().playedRatio )
+                            .fillMaxHeight()
+                    )
                 }
-            }
-        }
-    }
-}
-
-@SuppressLint( "UnusedBoxWithConstraintsScope" )
-@Composable
-private fun MiniPlayerContent(
-    song: Song,
-    nextSong: () -> Unit,
-    previousSong: () -> Unit,
-    textMarquee: Boolean,
-//    colorToApply: Color,
-    onNowPlayingBottomBarClick: () -> Unit,
-) {
-    BoxWithConstraints (
-        modifier = Modifier.clipToBounds()
-    ) {
-        Box {
-            Column (
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                NowPlayingBottomBarContentText(
-                    text = song.title,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    textMarquee = textMarquee,
-//                    colorToApply = colorToApply,
-                    onClick = onNowPlayingBottomBarClick,
-                )
-                NowPlayingBottomBarContentText(
-                    text = song.artist,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface.copy( alpha = 0.5f )
-                    ),
-                    textMarquee = textMarquee,
-//                    colorToApply = colorToApply,
-                    onClick = onNowPlayingBottomBarClick,
-                )
             }
         }
     }
@@ -378,23 +294,6 @@ internal fun NowPlayingBottomBarContentText(
     }
 }
 
-fun Color.clampBrightness(
-    minTone: Double = 15.0,
-    maxTone: Double = 85.0,
-    maxChroma: Float = 30f
-): Color {
-    val hct = this.toHct()
-
-    // 1. Keep it away from pure pitch black or pure paper white
-    val clampedTone = hct.tone.coerceIn( minTone, maxTone )
-
-    // 2. Squash the saturation! If it's a loud hot pink, pull it down to a soft dusty rose
-    val clampedChroma = hct.chroma.coerceAtMost(  maxChroma.toDouble() )
-
-    // Rebuild the color with the modified tone
-    return Hct.from( hct.hue, clampedChroma, clampedTone ).toColor()
-}
-
 @Preview( showSystemUi = true )
 @Composable
 private fun MiniPlayerPreview(
@@ -410,10 +309,9 @@ private fun MiniPlayerPreview(
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
-        ){
+        ) {
             MiniPlayerContent(
                 modifier = Modifier.align( Alignment.Center ),
-//                onImageLoaded = {},
                 model = NowPlayingScreenModel(
                     uiState = NowPlayingScreenUiState.Success(
                         userData = emptyUserData.copy(
@@ -465,6 +363,9 @@ private fun MiniPlayerPreview(
                             )
                         ),
                     ),
+                    colorScheme = MaterialTheme.colorScheme,
+                ),
+                callbacks = NowPlayingScreenCallbacks(
                     onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
                     onArtistClicked = {},
                     onFavorite = { _, _ -> },
@@ -488,7 +389,6 @@ private fun MiniPlayerPreview(
                     onAddSongsToPlaylist = { _, _ -> },
                     onViewAlbum = {},
                     onViewArtist = {},
-//                    onHideNowPlayingBottomSheet = {},
                     onShowSnackBar = {},
                     onStopSleepTimer = {},
                     onStartSleepTimer = {},

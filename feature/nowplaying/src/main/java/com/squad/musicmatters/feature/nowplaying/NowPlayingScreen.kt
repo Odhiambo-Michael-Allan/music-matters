@@ -5,8 +5,10 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -14,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
@@ -56,6 +59,7 @@ import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
 import com.squad.musicmatters.core.ui.PreviewData
 import com.squad.musicmatters.core.ui.dialog.SongDetailsDialog
 import com.squad.musicmatters.feature.nowplaying.components.emptyUserData
+import com.squad.musicmatters.feature.nowplaying.components.playerCanvas
 import java.util.Locale
 import java.util.Timer
 import kotlin.time.Clock
@@ -66,85 +70,12 @@ import kotlin.time.toDuration
 
 import com.squad.musicmatters.core.i8n.R as i8nR
 
-@Retention( AnnotationRetention.BINARY )
-@Target( AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION )
-@Preview( name = "Phone", device = "spec:width=411dp,height=891dp", showSystemUi = true )
-@Preview( name = "Unfolded Foldable", device = "spec:width=673dp,height=841dp", showSystemUi = true )
-@Preview( name = "Tablet", device = "spec:width=1280dp,height=800dp,dpi=240", showSystemUi = true )
-@Preview( name = "Desktop", device = "spec:width=1920dp,height=1080dp,dpi=160", showSystemUi = true )
-annotation class PreviewScreenSizesPortrait
-
-// Stateful
-//@Composable
-//fun NowPlayingScreen(
-//    viewModel: NowPlayingScreenViewModel = hiltViewModel(),
-//    backgroundColor: Color = Color.Unspecified,
-//    onViewAlbum: ( String ) -> Unit,
-//    onViewArtist: ( Long ) -> Unit,
-//    onNavigateToQueueScreen: () -> Unit,
-//    onNavigateToLyricsScreen: () -> Unit,
-//    onLaunchEqualizerActivity: () -> Unit,
-//    onHideBottomSheet: () -> Unit,
-//    onShowSnackBar: ( String ) -> Unit,
-//) {
-//
-//    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-//    val lyricsUiState by viewModel.lyricsUiState.collectAsStateWithLifecycle()
-//    val playbackPosition by viewModel.playbackPosition.collectAsStateWithLifecycle()
-//
-//    NowPlayingScreenContent(
-//        model = NowPlayingScreenModel(
-//            uiState = uiState,
-//            lyricsUiState = lyricsUiState,
-//            backgroundColor = backgroundColor,
-//            onGetPlaybackPosition = { playbackPosition },
-//            onFavorite = viewModel::addToFavorites,
-//            onPlayPauseButtonClick = viewModel::playPause,
-//            onPreviousButtonClick = viewModel::playPreviousSong,
-//            onPlayNext = viewModel::playNextSong,
-//            onSeekStart = viewModel::onSeekStarted,
-//            onSeekEnd = viewModel::onSeekEnd,
-//            onArtworkClicked = { song ->
-//                onHideBottomSheet()
-//                song.albumTitle?.let { onViewAlbum( it ) }
-//            },
-//            onArtistClicked = {
-//                onHideBottomSheet()
-//                onViewArtist( it )
-//            },
-//            onNavigateToQueueScreen = {
-//                onHideBottomSheet()
-//                onNavigateToQueueScreen()
-//            },
-//            onNavigateToLyricsScreen = {
-//                onHideBottomSheet()
-//                onNavigateToLyricsScreen()
-//            },
-//            onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
-//            onCreatePlaylist = viewModel::createPlaylist,
-//            onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
-//            onViewAlbum = onViewAlbum,
-//            onViewArtist = onViewArtist,
-//            onHideNowPlayingBottomSheet = onHideBottomSheet,
-//            onSwipeArtworkLeft = viewModel::playNextSong,
-//            onSwipeArtworkRight = viewModel::playPreviousSong,
-//            onStartSleepTimer = viewModel::startSleepTimer,
-//            onStopSleepTimer = viewModel::stopSleepTimer,
-//            onShowLyrics = viewModel::onShowLyrics,
-//            onToggleLoopMode = viewModel::onToggleLoopMode,
-//            onToggleShuffleMode = viewModel::onToggleShuffleMode,
-//            onRemoveSongFromQueue = viewModel::removeSongFromQueue,
-//            onShowSnackBar = onShowSnackBar
-//        )
-//    )
-//}
-
-
 @OptIn( ExperimentalMaterial3Api::class )
 @Composable
 fun NowPlayingScreenContent(
     modifier: Modifier = Modifier,
     model: NowPlayingScreenModel,
+    callbacks: NowPlayingScreenCallbacks,
     nestedScrollConnection: NestedScrollConnection,
 ) {
     val currentWindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
@@ -165,45 +96,31 @@ fun NowPlayingScreenContent(
 
 
     model.uiState.currentlyPlayingSong.let { song ->
-        val portraitExpandedLayoutModel = PortraitExpandedLayoutModel(
-            uiState = model.uiState,
-            lyricsUiState = model.lyricsUiState,
-            currentlyPlayingSong = song,
-            onGetPlaybackPosition = model.onGetPlaybackPosition,
-            onFavorite = model.onFavorite,
-            onArtworkSwipedLeft = model.onSwipeArtworkLeft,
-            onArtworkSwipedRight = model.onSwipeArtworkRight,
-            onArtworkSwipedDown = {
-//                model.onHideNowPlayingBottomSheet
-            },
-            onArtworkClicked = model.onArtworkClicked,
-            onArtistClicked = model.onArtistClicked,
-            onShowOptionsMenu = { showOptionsMenu = true },
-            onSeekStart = model.onSeekStart,
-            onSeekEnd = model.onSeekEnd,
-            onPausePlayButtonClick = model.onPlayPauseButtonClick,
-            onPreviousButtonClick = model.onPreviousButtonClick,
-            onPlayNext = model.onPlayNext,
-            onNavigateToQueueScreen = model.onNavigateToQueueScreen,
-            onNavigateToLyricsScreen = model.onNavigateToLyricsScreen,
-            onShowLyrics = model.onShowLyrics,
-            onToggleShuffleMode = model.onToggleShuffleMode,
-            onToggleLoopMode = model.onToggleLoopMode,
-        )
-        when {
-            isExpanded || isMediumOrWider -> {
-                ExpandedLayout(
-                    modifier = modifier,
-                    model = portraitExpandedLayoutModel,
-                    nestedScrollConnection = nestedScrollConnection,
-                )
-            }
-            else -> {
-                PortraitLayout(
-                    modifier = modifier,
-                    model = portraitExpandedLayoutModel,
-                    nestedScrollConnection = nestedScrollConnection,
-                )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .playerCanvas( model.colorScheme )
+                .padding( top = 32.dp )
+        ) {
+            when {
+                isExpanded || isMediumOrWider -> {
+                    ExpandedLayout(
+                        modifier = modifier,
+                        model = model,
+                        callbacks = callbacks.copy(
+                            onShowOptionsMenu = { showOptionsMenu = true }
+                        ),
+                        nestedScrollConnection = nestedScrollConnection,
+                    )
+                }
+                else -> {
+                    PortraitLayout(
+                        modifier = modifier,
+                        model = model,
+                        callbacks = callbacks,
+                        nestedScrollConnection = nestedScrollConnection,
+                    )
+                }
             }
         }
 
@@ -222,8 +139,8 @@ fun NowPlayingScreenContent(
                     onDismissRequest = { showOptionsMenu = false },
                     onPlayNext = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
                     onAddToQueue = {}, // No need to do anything as duplicates are not allowed in idsOfSongsInQueue
-                    onCreatePlaylist = model.onCreatePlaylist,
-                    onAddSongsToPlaylist = model.onAddSongsToPlaylist,
+                    onCreatePlaylist = callbacks.onCreatePlaylist,
+                    onAddSongsToPlaylist = callbacks.onAddSongsToPlaylist,
                     onGetSongs = { listOf( song ) },
                     leadingBottomSheetMenuItem = { onDismissRequest ->
                         BottomSheetMenuItem(
@@ -236,15 +153,15 @@ fun NowPlayingScreenContent(
                             leadingIconTint = MaterialTheme.colorScheme.primary
                         ) {
                             onDismissRequest()
-                            model.onFavorite(
+                            callbacks.onFavorite(
                                 song,
                                 !model.uiState.currentlyPlayingSongIsFavorite
                             )
                         }
                     },
-                    onShowSnackBar = model.onShowSnackBar,
+                    onShowSnackBar = callbacks.onShowSnackBar,
                     onShowAddToQueueOption = { false },
-                    onRemoveFromQueue = { model.onRemoveSongFromQueue( song ) },
+                    onRemoveFromQueue = { callbacks.onRemoveSongFromQueue( song ) },
                     trailingBottomSheetMenuItems = { onDismissRequest ->
                         song.albumTitle?.let { albumTitle ->
                             BottomSheetMenuItem(
@@ -255,22 +172,18 @@ fun NowPlayingScreenContent(
                                 )
                             ) {
                                 onDismissRequest()
-//                                model.onHideNowPlayingBottomSheet()
-                                model.onViewAlbum( albumTitle )
+                                callbacks.onViewAlbum( albumTitle )
                             }
                         }
-                        song.artist.let { artistName ->
-                            BottomSheetMenuItem(
-                                leadingIcon = Icons.Default.Person,
-                                label = stringResource(
-                                    id = i8nR.string.core_i8n_go_to_artist,
-                                    artistName
-                                )
-                            ) {
-                                onDismissRequest()
-//                                model.onHideNowPlayingBottomSheet()
-                                model.onViewArtist( song.artistId )
-                            }
+                        BottomSheetMenuItem(
+                            leadingIcon = Icons.Default.Person,
+                            label = stringResource(
+                                id = i8nR.string.core_i8n_go_to_artist,
+                                song.artist
+                            )
+                        ) {
+                            onDismissRequest()
+                            callbacks.onViewArtist( song.artistId )
                         }
                         BottomSheetMenuItem(
                             leadingIcon = MusicMattersIcons.Info,
@@ -296,7 +209,7 @@ fun NowPlayingScreenContent(
                             label = stringResource( id = i8nR.string.core_i8n_equalizer )
                         ) {
                             onDismissRequest()
-                            model.onCreateEqualizerActivityContract()
+                            callbacks.onCreateEqualizerActivityContract()
                         }
                     }
                 )
@@ -326,21 +239,21 @@ fun NowPlayingScreenContent(
                 SleepTimerDialogContent(
                     sleepTimer = model.uiState.sleepTimer,
                     onStartSleepTimer = {
-                        model.onStartSleepTimer( it )
-                        model.onShowSnackBar( sleepTimerStartedMessage )
+                        callbacks.onStartSleepTimer( it )
+                        callbacks.onShowSnackBar( sleepTimerStartedMessage )
                     },
                     onStartTimerToEndOfCurrentSong = {
-                        val duration = model.onGetPlaybackPosition().total.minus(
-                            model.onGetPlaybackPosition().played
+                        val duration = callbacks.onGetPlaybackPosition().total.minus(
+                            callbacks.onGetPlaybackPosition().played
                         )
-                        model.onStartSleepTimer(
+                        callbacks.onStartSleepTimer(
                             duration.toDuration( DurationUnit.MILLISECONDS )
                         )
-                        model.onShowSnackBar( sleepTimerStartedMessage )
+                        callbacks.onShowSnackBar( sleepTimerStartedMessage )
                     },
                     onStopSleepTimer = {
-                        model.onStopSleepTimer()
-                        model.onShowSnackBar( sleepTimerStoppedMessage )
+                        callbacks.onStopSleepTimer()
+                        callbacks.onShowSnackBar( sleepTimerStoppedMessage )
                     },
                     onDismissRequest = { showSleepTimerBottomSheet = false },
                 )
@@ -353,7 +266,10 @@ fun NowPlayingScreenContent(
 data class NowPlayingScreenModel(
     val uiState: NowPlayingScreenUiState.Success,
     val lyricsUiState: LyricsUiState,
-    val backgroundColor: Color = Color.Unspecified,
+    val colorScheme: ColorScheme,
+)
+
+data class NowPlayingScreenCallbacks(
     val onGetPlaybackPosition: () -> PlaybackPosition,
     val onArtistClicked: ( Long ) -> Unit,
     val onFavorite: ( Song, Boolean ) -> Unit,
@@ -372,18 +288,15 @@ data class NowPlayingScreenModel(
     val onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
     val onViewAlbum: ( String ) -> Unit,
     val onViewArtist: ( Long ) -> Unit,
-//    val onHideNowPlayingBottomSheet: () -> Unit,
     val onShowSnackBar: ( String ) -> Unit,
     val onStartSleepTimer: ( Duration ) -> Unit,
     val onStopSleepTimer: () -> Unit,
     val onShowLyrics: ( Boolean ) -> Unit,
     val onToggleShuffleMode: ( Boolean ) -> Unit,
     val onToggleLoopMode: ( LoopMode ) -> Unit,
-    val onRemoveSongFromQueue: (Song ) -> Unit,
+    val onRemoveSongFromQueue: ( Song ) -> Unit,
+    val onShowOptionsMenu: () -> Unit = {},
 )
-
-
-
 
 
 @OptIn( ExperimentalTime::class )
@@ -509,7 +422,6 @@ private val SLEEP_TIMER_VALUES = setOf(
     1L.toDuration( DurationUnit.HOURS )
 )
 
-
 @PreviewScreenSizesPortrait
 @Composable
 private fun NowPlayingScreenContentPreview(
@@ -575,6 +487,9 @@ private fun NowPlayingScreenContentPreview(
                         )
                     ),
                 ),
+                colorScheme = MaterialTheme.colorScheme,
+            ),
+            callbacks = NowPlayingScreenCallbacks(
                 onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
                 onArtistClicked = {},
                 onFavorite = { _, _ -> },
@@ -589,7 +504,7 @@ private fun NowPlayingScreenContentPreview(
                 onSeekStart = {},
                 onCreateEqualizerActivityContract = {
                     object : ActivityResultContract<Unit, Unit>() {
-                        override fun createIntent(context: Context, input: Unit) = Intent()
+                        override fun createIntent( context: Context, input: Unit ) = Intent()
                         override fun parseResult( resultCode: Int, intent: Intent? ) {}
 
                     }
@@ -598,7 +513,6 @@ private fun NowPlayingScreenContentPreview(
                 onAddSongsToPlaylist = { _, _ -> },
                 onViewAlbum = {},
                 onViewArtist = {},
-//                onHideNowPlayingBottomSheet = {},
                 onShowSnackBar = {},
                 onStopSleepTimer = {},
                 onStartSleepTimer = {},
@@ -612,6 +526,14 @@ private fun NowPlayingScreenContentPreview(
         )
     }
 }
+
+@Retention( AnnotationRetention.BINARY )
+@Target( AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION )
+@Preview( name = "Phone", device = "spec:width=411dp,height=891dp", showSystemUi = true )
+@Preview( name = "Unfolded Foldable", device = "spec:width=673dp,height=841dp", showSystemUi = true )
+@Preview( name = "Tablet", device = "spec:width=1280dp,height=800dp,dpi=240", showSystemUi = true )
+@Preview( name = "Desktop", device = "spec:width=1920dp,height=1080dp,dpi=160", showSystemUi = true )
+annotation class PreviewScreenSizesPortrait
 
 
 

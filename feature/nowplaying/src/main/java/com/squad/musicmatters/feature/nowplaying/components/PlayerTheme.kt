@@ -1,7 +1,6 @@
 package com.squad.musicmatters.feature.nowplaying.components
 
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -15,7 +14,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.platform.LocalContext
 import androidx.palette.graphics.Palette
@@ -63,7 +61,7 @@ fun rememberPlayerColorScheme( imageUrl: String? ): ColorScheme {
                 val request =
                     ImageRequest.Builder( context )
                         .data( imageUrl )
-                        .size( Size( 100, 100 ) )
+//                        .size( Size( 100, 100 ) )
                         .allowHardware( false ) // Required for Palette pixel reads
                         .memoryCachePolicy( CachePolicy.ENABLED )
                         .diskCachePolicy( CachePolicy.ENABLED )
@@ -143,4 +141,4 @@ fun Modifier.playerCanvas(scheme: ColorScheme): Modifier = drawBehind {
 }
 
 /** Flat sheet color used while collapsed (mini player) — matches the classic pill look. */
-fun miniSheetColor(scheme: ColorScheme): Color = scheme.primaryContainer
+fun miniPlayerSheetColor(scheme: ColorScheme): Color = scheme.primaryContainer

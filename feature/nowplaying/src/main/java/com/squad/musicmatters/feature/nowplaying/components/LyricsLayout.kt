@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -31,6 +32,7 @@ import java.time.Duration
 internal fun LyricsLayout(
     modifier: Modifier = Modifier,
     lyricsUiState: LyricsUiState,
+    colorScheme: ColorScheme,
     onGetPlaybackPosition: () -> PlaybackPosition,
     onSeekEnd: ( Long ) -> Unit,
 ) {
@@ -40,22 +42,12 @@ internal fun LyricsLayout(
             LyricsViewContent(
                 modifier = modifier.fillMaxSize(),
                 lyrics = lyricsUiState.lyrics,
+                colorScheme = colorScheme,
                 currentDurationInPlayback = Duration.ofMillis(
                     onGetPlaybackPosition().played
                 ),
                 onSeekTo = { onSeekEnd( it.toMillis() ) }
             )
-//            Box {
-//                LyricsLayout(
-//                    modifier = modifier.fillMaxSize(),
-//                    lyrics = lyricsUiState.lyrics,
-//                    currentDurationInPlayback = Duration.ofMillis(
-//                        onGetPlaybackPosition().played
-//                    ),
-//                    onSeekTo = { onSeekEnd( it.toMillis() ) }
-//                )
-//
-//            }
         }
     }
 }

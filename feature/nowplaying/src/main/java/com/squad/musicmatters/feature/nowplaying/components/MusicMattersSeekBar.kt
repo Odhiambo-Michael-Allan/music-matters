@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -46,6 +47,7 @@ import kotlin.time.toDuration
 
 @Composable
 internal fun NowPlayingSeekBar(
+    colorScheme: ColorScheme,
     onGetPlaybackPosition: () -> PlaybackPosition,
     onSeekStart: () -> Unit,
     onSeekEnd: ( Long ) -> Unit,
@@ -56,11 +58,11 @@ internal fun NowPlayingSeekBar(
     Column (
         modifier = Modifier.fillMaxWidth()
     ) {
-//        Spacer( modifier = Modifier.height( 12.dp ) )
         Column (
             modifier = Modifier.fillMaxWidth()
         ) {
             NowPlayingSeekBar(
+                colorScheme = colorScheme,
                 onGetPlaybackPosition = onGetPlaybackPosition,
                 isDragging = { isDragging },
                 onSetDragging = { isDragging = it },
@@ -95,6 +97,7 @@ internal fun NowPlayingSeekBar(
 @Composable
 private fun NowPlayingSeekBar(
     modifier: Modifier = Modifier,
+    colorScheme: ColorScheme,
     onGetPlaybackPosition: () -> PlaybackPosition,
     isDragging: () -> Boolean,
     onSetDragging: ( Boolean ) -> Unit,
@@ -176,7 +179,7 @@ private fun NowPlayingSeekBar(
                 .height(trackHeight)
                 .fillMaxWidth()
                 .background(
-                    MaterialTheme.colorScheme.surfaceVariant,
+                    colorScheme.surfaceVariant,
                     RoundedCornerShape(thumbSizeHalf)
                 )
         ) {
@@ -191,7 +194,7 @@ private fun NowPlayingSeekBar(
                         }
                     )
                     .background(
-                        MaterialTheme.colorScheme.primary,
+                        colorScheme.primary,
                         RoundedCornerShape(thumbSizeHalf)
                     )
             )
@@ -200,7 +203,7 @@ private fun NowPlayingSeekBar(
                     .height(trackHeight)
                     .fillMaxWidth(onGetPlaybackPosition().bufferedRatio)
                     .background(
-                        MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                        colorScheme.primary.copy( alpha = 0.2f ),
                         RoundedCornerShape(thumbSizeHalf)
                     )
             )

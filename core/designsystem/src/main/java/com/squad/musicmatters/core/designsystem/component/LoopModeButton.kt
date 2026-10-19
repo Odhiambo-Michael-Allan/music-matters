@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -19,6 +20,7 @@ import com.squad.musicmatters.core.model.LoopMode
 fun LoopModeButton(
     modifier: Modifier = Modifier,
     loopMode: LoopMode,
+    colorScheme: ColorScheme,
     onToggleLoopMode: ( LoopMode ) -> Unit,
 ) {
     AnimatedContent(
@@ -41,7 +43,7 @@ fun LoopModeButton(
                     contentDescription = null,
                     tint = when ( loopMode ) {
                         LoopMode.None -> LocalContentColor.current
-                        else -> MaterialTheme.colorScheme.primary
+                        else -> colorScheme.primary
                     },
                     modifier = modifier
                 )

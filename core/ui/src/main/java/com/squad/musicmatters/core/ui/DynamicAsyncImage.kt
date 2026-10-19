@@ -94,7 +94,6 @@ fun DynamicAsyncImage(
             },
             modifier = Modifier
                 .fillMaxSize()
-                .then( sizeResolver )
         )
     }
 }

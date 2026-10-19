@@ -19,23 +19,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -54,11 +51,11 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.squad.musicmatters.core.media.connection.PlaybackPosition
-import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Playlist
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.feature.nowplaying.LyricsUiState
+import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenCallbacks
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenContent
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenModel
 import com.squad.musicmatters.feature.nowplaying.NowPlayingScreenUiState
@@ -109,6 +106,7 @@ fun PlayerSheetScaffold(
     val playbackPosition by viewModel.playbackPosition.collectAsStateWithLifecycle()
 
     PlayerSheetScaffoldContent(
+        modifier = modifier,
         uiState = uiState,
         lyricsUiState = lyricsUiState,
         onGetPlaybackPosition = { playbackPosition },
@@ -118,28 +116,13 @@ fun PlayerSheetScaffold(
         onPlayNext = viewModel::playNextSong,
         onSeekStart = viewModel::onSeekStarted,
         onSeekEnd = viewModel::onSeekEnd,
-        onArtworkClicked = { song ->
-//            onHideBottomSheet()
-            song.albumTitle?.let { onViewAlbum( it ) }
-        },
-        onArtistClicked = {
-//            onHideBottomSheet()
-            onViewArtist( it )
-        },
-        onNavigateToQueueScreen = {
-//            onHideBottomSheet()
-            onNavigateToQueueScreen()
-        },
-        onNavigateToLyricsScreen = {
-//            onHideBottomSheet()
-            onNavigateToLyricsScreen()
-        },
+        onNavigateToQueueScreen = onNavigateToQueueScreen,
+        onNavigateToLyricsScreen = onNavigateToLyricsScreen,
         onCreateEqualizerActivityContract = onLaunchEqualizerActivity,
         onCreatePlaylist = viewModel::createPlaylist,
         onAddSongsToPlaylist = viewModel::addSongsToPlaylist,
         onViewAlbum = onViewAlbum,
         onViewArtist = onViewArtist,
-//        onHideNowPlayingBottomSheet = onHideBottomSheet,
         onSwipeArtworkLeft = viewModel::playNextSong,
         onSwipeArtworkRight = viewModel::playPreviousSong,
         onStartSleepTimer = viewModel::startSleepTimer,
@@ -162,14 +145,12 @@ private fun PlayerSheetScaffoldContent(
     lyricsUiState: LyricsUiState,
     layout: PlayerSheetLayout,
     onGetPlaybackPosition: () -> PlaybackPosition,
-    onArtistClicked: ( Long ) -> Unit,
     onFavorite: ( Song, Boolean ) -> Unit,
     onPlayPauseButtonClick: () -> Unit,
     onPreviousButtonClick: () -> Unit,
     onPlayNext: () -> Unit,
     onSeekStart: () -> Unit,
     onSeekEnd: ( Long ) -> Unit,
-    onArtworkClicked: ( Song ) -> Unit,
     onSwipeArtworkLeft: () -> Unit,
     onSwipeArtworkRight: () -> Unit,
     onNavigateToQueueScreen: () -> Unit,
@@ -188,7 +169,6 @@ private fun PlayerSheetScaffoldContent(
     onRemoveSongFromQueue: (Song ) -> Unit,
 ) {
 
-    val context = LocalContext.current
     val density = LocalDensity.current
     val scope = rememberCoroutineScope()
     val playerStateHolder = rememberSaveableStateHolder()
@@ -197,47 +177,8 @@ private fun PlayerSheetScaffoldContent(
     when ( uiState ) {
         NowPlayingScreenUiState.Loading -> {}
         is NowPlayingScreenUiState.Success -> {
-            val model = NowPlayingScreenModel(
-                uiState = uiState,
-                lyricsUiState = lyricsUiState,
-                onGetPlaybackPosition = onGetPlaybackPosition,
-                onFavorite = onFavorite,
-                onPlayPauseButtonClick = onPlayPauseButtonClick,
-                onPreviousButtonClick = onPreviousButtonClick,
-                onPlayNext = onPlayNext,
-                onSeekStart = onSeekStart,
-                onSeekEnd = onSeekEnd,
-                onArtworkClicked = { song ->
-//                    onHideBottomSheet()
-                    song.albumTitle?.let { onViewAlbum( it ) }
-                },
-                onArtistClicked = {
-//                    onHideBottomSheet()
-                    onViewArtist( it )
-                },
-                onNavigateToQueueScreen = {
-//                    onHideBottomSheet()
-                    onNavigateToQueueScreen()
-                },
-                onNavigateToLyricsScreen = {
-//                    onHideBottomSheet()
-                    onNavigateToLyricsScreen()
-                },
-                onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
-                onCreatePlaylist = onCreatePlaylist,
-                onAddSongsToPlaylist = onAddSongsToPlaylist,
-                onViewAlbum = onViewAlbum,
-                onViewArtist = onViewArtist,
-//                onHideNowPlayingBottomSheet = onHideNowPlayingBottomSheet,
-                onSwipeArtworkLeft = onSwipeArtworkLeft,
-                onSwipeArtworkRight = onSwipeArtworkRight,
-                onStartSleepTimer = onStartSleepTimer,
-                onStopSleepTimer = onStopSleepTimer,
-                onShowLyrics = onShowLyrics,
-                onToggleLoopMode = onToggleLoopMode,
-                onToggleShuffleMode = onToggleShuffleMode,
-                onRemoveSongFromQueue = onRemoveSongFromQueue,
-                onShowSnackBar = onShowSnackBar
+            val colorScheme = rememberPlayerColorScheme(
+                uiState.currentlyPlayingSong.artworkUri
             )
 
             // Thresholds/specs factory is deprecated in favor of AnchoredDraggableDefaults.flingBehavior;
@@ -264,7 +205,7 @@ private fun PlayerSheetScaffoldContent(
             PlayerSheetSettledEffects(
                 sheetState,
                 haptics,
-                model.uiState.currentlyPlayingSong
+                uiState.currentlyPlayingSong
             )
             PlayerSheetExternalExpansion( sheetState, layout.expandTrigger )
             PlayerSheetPredictiveBack(
@@ -273,27 +214,69 @@ private fun PlayerSheetScaffoldContent(
                 collapsedTargetY = layout.collapsedTargetY,
             )
             val sheetNestedScrollConnection = rememberPlayerSheetNestedScrollConnection( sheetState, density )
+            val playerSheetCallbacks = PlayerSheetCallbacks(
+                onExpand = { requestSheetExpansion( sheetState, geometry.sheetOffset, scope ) },
+                onCollapse = {
+                    requestSheetCollapse( sheetState, geometry.sheetOffset, layout.collapsedTargetY, scope )
+                },
+            )
             PlayerSheetSurface(
+                modifier = modifier,
                 geometry = geometry,
+                colorScheme = colorScheme,
                 resources = PlayerSheetResources(
                     stateHolder = playerStateHolder,
                     scope = scope,
                     haptics = haptics,
-                    flows = PlayerSheetFlows(
-                        nestedScrollConnection = sheetNestedScrollConnection,
-                        position = model.onGetPlaybackPosition,
-                    )
+                    nestedScrollConnection = sheetNestedScrollConnection,
                 ),
-                callbacks = PlayerSheetCallbacks(
-                    onExpand = { requestSheetExpansion( sheetState, geometry.sheetOffset, scope ) },
-                    onCollapse = {
-                        requestSheetCollapse( sheetState, geometry.sheetOffset, layout.collapsedTargetY, scope )
-                    },
-                ),
+                playerSheetCallbacks = playerSheetCallbacks,
                 sheetState = sheetState,
                 containerHeight = layout.containerHeight,
-                nowPlayingScreenModel = model,
-                modifier = modifier,
+                nowPlayingScreenModel = NowPlayingScreenModel(
+                    uiState = uiState,
+                    lyricsUiState = lyricsUiState,
+                    colorScheme = colorScheme,
+                ),
+                nowPlayingScreenCallbacks = NowPlayingScreenCallbacks(
+                    onGetPlaybackPosition = onGetPlaybackPosition,
+                    onFavorite = onFavorite,
+                    onPlayPauseButtonClick = onPlayPauseButtonClick,
+                    onPreviousButtonClick = onPreviousButtonClick,
+                    onPlayNext = onPlayNext,
+                    onSeekStart = onSeekStart,
+                    onSeekEnd = onSeekEnd,
+                    onArtworkClicked = { song ->
+                        playerSheetCallbacks.onCollapse()
+                        song.albumTitle?.let { onViewAlbum( it ) }
+                    },
+                    onArtistClicked = {
+                        playerSheetCallbacks.onCollapse()
+                        onViewArtist( it )
+                    },
+                    onNavigateToQueueScreen = {
+                        playerSheetCallbacks.onCollapse()
+                        onNavigateToQueueScreen()
+                    },
+                    onNavigateToLyricsScreen = {
+                        playerSheetCallbacks.onCollapse()
+                        onNavigateToLyricsScreen()
+                    },
+                    onCreateEqualizerActivityContract = onCreateEqualizerActivityContract,
+                    onCreatePlaylist = onCreatePlaylist,
+                    onAddSongsToPlaylist = onAddSongsToPlaylist,
+                    onViewAlbum = onViewAlbum,
+                    onViewArtist = onViewArtist,
+                    onSwipeArtworkLeft = onSwipeArtworkLeft,
+                    onSwipeArtworkRight = onSwipeArtworkRight,
+                    onStartSleepTimer = onStartSleepTimer,
+                    onStopSleepTimer = onStopSleepTimer,
+                    onShowLyrics = onShowLyrics,
+                    onToggleLoopMode = onToggleLoopMode,
+                    onToggleShuffleMode = onToggleShuffleMode,
+                    onRemoveSongFromQueue = onRemoveSongFromQueue,
+                    onShowSnackBar = onShowSnackBar,
+                )
             )
         }
     }
@@ -661,8 +644,10 @@ private fun resolvePlayerSheetSettleTarget(
 @Suppress("DEPRECATION") // startDragImmediately=false keeps mini controls tappable during settle
 private fun PlayerSheetSurface(
     geometry: PlayerSheetGeometry,
+    colorScheme: ColorScheme,
     resources: PlayerSheetResources,
-    callbacks: PlayerSheetCallbacks,
+    nowPlayingScreenCallbacks: NowPlayingScreenCallbacks,
+    playerSheetCallbacks: PlayerSheetCallbacks,
     sheetState: AnchoredDraggableState<PlayerSheetValue>,
     containerHeight: Dp,
     nowPlayingScreenModel: NowPlayingScreenModel,
@@ -690,7 +675,7 @@ private fun PlayerSheetSurface(
                     .padding( horizontal = geometry.horizontalPadding )
                     .height( geometry.sheetHeight )
                     .shadow( elevation = geometry.sheetElevation, shape = shape, clip = false )
-                    .background( color = CardDefaults.cardColors().containerColor, shape = shape )
+                    .background( color = miniPlayerSheetColor( colorScheme ), shape = shape )
                     .clip( shape )
                     .anchoredDraggable(
                         state = sheetState,
@@ -706,37 +691,29 @@ private fun PlayerSheetSurface(
                         indication = null,
                     ) {
                         resources.haptics.performHapticFeedback( HapticFeedbackType.TextHandleMove )
-                        callbacks.onExpand()
+                        playerSheetCallbacks.onExpand()
                     },
         ) {
             PlayerSheetLayers(
                 geometry = geometry,
                 resources = resources,
-                callbacks,
-                containerHeight,
+                playerSheetCallbacks = playerSheetCallbacks,
+                nowPlayingScreenCallbacks = nowPlayingScreenCallbacks,
+                containerHeight = containerHeight,
                 model = nowPlayingScreenModel,
             )
         }
     }
 }
 
-private data class PlayerSheetContentState(
-    val playerState: PlayerState,
-    val song: Song,
-)
+
 
 private data class PlayerSheetResources(
     val stateHolder: androidx.compose.runtime.saveable.SaveableStateHolder,
     val scope: kotlinx.coroutines.CoroutineScope,
     val haptics: androidx.compose.ui.hapticfeedback.HapticFeedback,
-    val flows: PlayerSheetFlows,
-)
-
-private data class PlayerSheetFlows(
     val nestedScrollConnection: NestedScrollConnection,
-    val position: () -> PlaybackPosition,
 )
-
 private data class PlayerSheetCallbacks(
     val onExpand: () -> Unit,
     val onCollapse: () -> Unit,
@@ -747,7 +724,8 @@ private data class PlayerSheetCallbacks(
 private fun PlayerSheetLayers(
     geometry: PlayerSheetGeometry,
     resources: PlayerSheetResources,
-    callbacks: PlayerSheetCallbacks,
+    nowPlayingScreenCallbacks: NowPlayingScreenCallbacks,
+    playerSheetCallbacks: PlayerSheetCallbacks,
     containerHeight: Dp,
     model: NowPlayingScreenModel,
 ) {
@@ -758,7 +736,8 @@ private fun PlayerSheetLayers(
             visible = geometry.expansionFraction < 0.999f,
             geometry = geometry,
             resources = resources,
-            callbacks = callbacks,
+            nowPlayingScreenCallbacks = nowPlayingScreenCallbacks,
+            playerSheetCallbacks = playerSheetCallbacks,
             model = model,
         )
         FullPlayerLayer(
@@ -767,6 +746,7 @@ private fun PlayerSheetLayers(
             resources = resources,
             containerHeight = containerHeight,
             model = model,
+            callbacks = nowPlayingScreenCallbacks,
         )
     }
 }
@@ -777,7 +757,8 @@ private fun MiniPlayerLayer(
     geometry: PlayerSheetGeometry,
     resources: PlayerSheetResources,
     model: NowPlayingScreenModel,
-    callbacks: PlayerSheetCallbacks,
+    nowPlayingScreenCallbacks: NowPlayingScreenCallbacks,
+    playerSheetCallbacks: PlayerSheetCallbacks,
 ) {
     if ( !visible ) return
     resources.stateHolder.SaveableStateProvider( "mini-player" ) {
@@ -794,7 +775,8 @@ private fun MiniPlayerLayer(
         ) {
             MiniPlayerContent(
                 model = model,
-                onNowPlayingBottomBarClick = callbacks.onExpand,
+                callbacks = nowPlayingScreenCallbacks,
+                onNowPlayingBottomBarClick = playerSheetCallbacks.onExpand,
             )
         }
     }
@@ -807,6 +789,7 @@ private fun FullPlayerLayer(
     resources: PlayerSheetResources,
     containerHeight: Dp,
     model: NowPlayingScreenModel,
+    callbacks: NowPlayingScreenCallbacks,
 ) {
     if ( !visible ) return
 
@@ -831,7 +814,8 @@ private fun FullPlayerLayer(
         ) {
             NowPlayingScreenContent(
                 model = model,
-                nestedScrollConnection = resources.flows.nestedScrollConnection
+                callbacks = callbacks,
+                nestedScrollConnection = resources.nestedScrollConnection
             )
         }
     }

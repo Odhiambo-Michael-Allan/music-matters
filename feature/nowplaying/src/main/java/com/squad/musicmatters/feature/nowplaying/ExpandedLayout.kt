@@ -1,5 +1,8 @@
 package com.squad.musicmatters.feature.nowplaying
 
+import android.content.Context
+import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,7 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +30,6 @@ import com.squad.musicmatters.core.media.connection.PlayerState
 import com.squad.musicmatters.core.media.connection.SleepTimer
 import com.squad.musicmatters.core.model.LoopMode
 import com.squad.musicmatters.core.model.Lyric
-import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.model.SongMetadata
 import com.squad.musicmatters.core.model.ThemeMode
 import com.squad.musicmatters.core.ui.MusicMattersPreviewParametersProvider
@@ -47,119 +49,95 @@ import kotlin.time.toDuration
 @Composable
 internal fun ExpandedLayout(
     modifier: Modifier = Modifier,
-    model: PortraitExpandedLayoutModel,
+    model: NowPlayingScreenModel,
+    callbacks: NowPlayingScreenCallbacks,
     nestedScrollConnection: NestedScrollConnection,
 ) {
 
-    Card(
-        modifier = modifier.fillMaxSize()
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxSize()
     ) {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier
-                .fillMaxSize()
+        Column (
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth( 0.5f )
+                .fillMaxHeight()
+                .nestedScroll( nestedScrollConnection )
         ) {
-            Column (
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            NowPlayingSongArtwork(
                 modifier = Modifier
-                    .fillMaxWidth( 0.5f )
-                    .fillMaxHeight()
-                    .nestedScroll( nestedScrollConnection )
-            ) {
-                NowPlayingSongArtwork(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    song = model.currentlyPlayingSong,
-                    isPlaying = { model.uiState.playerState.isPlaying
-                            || model.uiState.playerState.isBuffering
-                    },
-                    onSwipeLeft = model.onArtworkSwipedLeft,
-                    onSwipeRight = model.onArtworkSwipedRight,
-                    onSwipeDown = model.onArtworkSwipedDown,
-                    onArtworkClicked = {
-                        model.onArtworkClicked( model.currentlyPlayingSong )
-                    }
-                )
-                Column(
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width( 400.dp )
-                ) {
-                    TitleAndArtistSection(
-                        currentlyPlayingSong = model.currentlyPlayingSong,
-                        currentlyPlayingSongIsFavorite = model.uiState.currentlyPlayingSongIsFavorite,
-                        onArtistClicked = model.onArtistClicked,
-                        onFavorite = model.onFavorite,
-                        onShowOptionsMenu = model.onShowOptionsMenu,
-                    )
-                    NowPlayingSeekBar(
-                        onGetPlaybackPosition = model.onGetPlaybackPosition,
-                        onSeekStart = model.onSeekStart,
-                        onSeekEnd = model.onSeekEnd
-                    )
-                    NowPlayingPlayerControls(
-                        isPlaying = model.uiState.playerState.isPlaying,
-                        shuffle = model.uiState.userData.shuffle,
-                        loopMode = model.uiState.userData.loopMode,
-                        onPreviousButtonClick = model.onPreviousButtonClick,
-                        onPausePlayButtonClick = model.onPausePlayButtonClick,
-                        onNextButtonClick = model.onPlayNext,
-                        onToggleLoopMode = model.onToggleLoopMode,
-                        onToggleShuffleMode  = { shuffle -> model.onToggleShuffleMode( shuffle ) },
-                    )
-                    NowPlayingScreenBottomBar(
-                        showLyrics = model.uiState.userData.showLyrics,
-                        showLyricsOnSeparateScreen = model.uiState.userData.showLyricsOnSeparateScreen,
-                        onShowLyrics = model.onShowLyrics,
-                        onNavigateToQueueScreen = model.onNavigateToQueueScreen,
-                        onNavigateToLyricsScreen = model.onNavigateToLyricsScreen,
-                    )
+                    .fillMaxWidth(),
+                song = model.uiState.currentlyPlayingSong,
+                isPlaying = { model.uiState.playerState.isPlaying
+                        || model.uiState.playerState.isBuffering
+                },
+                onSwipeLeft = callbacks.onSwipeArtworkLeft,
+                onSwipeRight = callbacks.onSwipeArtworkRight,
+                onArtworkClicked = {
+                    callbacks.onArtworkClicked( model.uiState.currentlyPlayingSong )
                 }
-            }
-            AnimatedVisibility(
-                visible = model.uiState.userData.showLyrics
+            )
+            Column(
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width( 400.dp )
             ) {
-                LyricsLayout(
-                    lyricsUiState = model.lyricsUiState,
-                    onGetPlaybackPosition = model.onGetPlaybackPosition,
-                    onSeekEnd = model.onSeekEnd,
-                    modifier = Modifier.padding( 48.dp )
+                TitleAndArtistSection(
+                    currentlyPlayingSong = model.uiState.currentlyPlayingSong,
+                    currentlyPlayingSongIsFavorite = model.uiState.currentlyPlayingSongIsFavorite,
+                    colorScheme = model.colorScheme,
+                    onArtistClicked = callbacks.onArtistClicked,
+                    onFavorite = callbacks.onFavorite,
+                    onShowOptionsMenu = callbacks.onShowOptionsMenu,
+                )
+                NowPlayingSeekBar(
+                    colorScheme = model.colorScheme,
+                    onGetPlaybackPosition = callbacks.onGetPlaybackPosition,
+                    onSeekStart = callbacks.onSeekStart,
+                    onSeekEnd = callbacks.onSeekEnd
+                )
+                NowPlayingPlayerControls(
+                    isPlaying = model.uiState.playerState.isPlaying,
+                    shuffle = model.uiState.userData.shuffle,
+                    loopMode = model.uiState.userData.loopMode,
+                    colorScheme = model.colorScheme,
+                    onPreviousButtonClick = callbacks.onPreviousButtonClick,
+                    onPlayPauseButtonClick = callbacks.onPlayPauseButtonClick,
+                    onPlayNext = callbacks.onPlayNext,
+                    onToggleLoopMode = callbacks.onToggleLoopMode,
+                    onToggleShuffleMode  = { shuffle -> callbacks.onToggleShuffleMode( shuffle ) },
+                )
+                NowPlayingScreenBottomBar(
+                    showLyrics = model.uiState.userData.showLyrics,
+                    showLyricsOnSeparateScreen = model.uiState.userData.showLyricsOnSeparateScreen,
+                    onShowLyrics = callbacks.onShowLyrics,
+                    colorScheme = model.colorScheme,
+                    onNavigateToQueueScreen = callbacks.onNavigateToQueueScreen,
+                    onNavigateToLyricsScreen = callbacks.onNavigateToLyricsScreen,
                 )
             }
+        }
+        AnimatedVisibility(
+            visible = model.uiState.userData.showLyrics
+        ) {
+            LyricsLayout(
+                lyricsUiState = model.lyricsUiState,
+                colorScheme = model.colorScheme,
+                onGetPlaybackPosition = callbacks.onGetPlaybackPosition,
+                onSeekEnd = callbacks.onSeekEnd,
+                modifier = Modifier.padding( 48.dp )
+            )
         }
     }
 }
 
-internal data class PortraitExpandedLayoutModel(
-    val uiState: NowPlayingScreenUiState.Success,
-    val lyricsUiState: LyricsUiState,
-    val currentlyPlayingSong: Song,
-    val onGetPlaybackPosition: () -> PlaybackPosition,
-    val onFavorite: ( Song, Boolean ) -> Unit,
-    val onArtworkSwipedLeft: () -> Unit,
-    val onArtworkSwipedRight: () -> Unit,
-    val onArtworkSwipedDown: () -> Unit,
-    val onArtworkClicked: ( Song ) -> Unit,
-    val onArtistClicked: ( Long ) -> Unit,
-    val onShowOptionsMenu: () -> Unit,
-    val onSeekStart: () -> Unit,
-    val onSeekEnd: ( Long ) -> Unit,
-    val onPausePlayButtonClick: () -> Unit,
-    val onPreviousButtonClick: () -> Unit,
-    val onPlayNext: () -> Unit,
-    val onNavigateToQueueScreen: () -> Unit,
-    val onNavigateToLyricsScreen: () -> Unit,
-    val onShowLyrics: ( Boolean ) -> Unit,
-    val onToggleLoopMode: ( LoopMode ) -> Unit,
-    val onToggleShuffleMode: ( Boolean ) -> Unit,
-)
-
 @Preview( name = "Unfolded Foldable", device = FOLDABLE, showSystemUi = true )
 @Preview( name = "Tablet - Landscape", device = TABLET, showSystemUi = true )
-//@Preview( name = "Desktop", device = "spec:width=1920dp,height=1080dp,dpi=160", showSystemUi = true )
 @Composable
 private fun ExpandedLayoutPreview(
     @PreviewParameter(MusicMattersPreviewParametersProvider::class )
@@ -173,7 +151,7 @@ private fun ExpandedLayoutPreview(
         useMaterialYou = true
     ) {
         ExpandedLayout(
-            model = PortraitExpandedLayoutModel(
+            model = NowPlayingScreenModel(
                 uiState = NowPlayingScreenUiState.Success(
                     userData = emptyUserData.copy(
                         loopMode = LoopMode.Queue,
@@ -228,24 +206,39 @@ private fun ExpandedLayoutPreview(
                         )
                     ),
                 ),
+                colorScheme = MaterialTheme.colorScheme,
+            ),
+            callbacks = NowPlayingScreenCallbacks(
                 onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
                 onArtistClicked = {},
                 onFavorite = { _, _ -> },
-                onPausePlayButtonClick = {},
+                onPlayPauseButtonClick = {},
                 onPreviousButtonClick = {},
                 onPlayNext = {},
                 onSeekEnd = {},
                 onArtworkClicked = {},
+                onSwipeArtworkLeft = {},
+                onSwipeArtworkRight = {},
                 onNavigateToQueueScreen = {},
                 onSeekStart = {},
-                currentlyPlayingSong = previewData.songs.first(),
-                onArtworkSwipedLeft = { TODO() },
-                onArtworkSwipedRight = { TODO() },
-                onArtworkSwipedDown = { TODO() },
-                onShowOptionsMenu = { TODO() },
+                onCreateEqualizerActivityContract = {
+                    object : ActivityResultContract<Unit, Unit>() {
+                        override fun createIntent(context: Context, input: Unit) = Intent()
+                        override fun parseResult( resultCode: Int, intent: Intent? ) {}
+
+                    }
+                },
+                onCreatePlaylist = { _, _ -> },
+                onAddSongsToPlaylist = { _, _ -> },
+                onViewAlbum = {},
+                onViewArtist = {},
+                onShowSnackBar = {},
+                onStopSleepTimer = {},
+                onStartSleepTimer = {},
                 onShowLyrics = {},
-                onToggleShuffleMode = {},
                 onToggleLoopMode = {},
+                onToggleShuffleMode = {},
+                onRemoveSongFromQueue = {},
                 onNavigateToLyricsScreen = {},
             ),
             nestedScrollConnection = object : NestedScrollConnection {}
