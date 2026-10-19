@@ -450,7 +450,7 @@ internal fun displayToastWithMessage(context: Context, message: String ) = Toast
     Toast.LENGTH_SHORT
 ).show()
 
-private fun nonTopLevelDestinationNavOptions() = navOptions {
+internal fun nonTopLevelDestinationNavOptions() = navOptions {
     launchSingleTop = true
     restoreState = true
 }

@@ -172,7 +172,7 @@ fun NowPlayingScreenContent(
                                 )
                             ) {
                                 onDismissRequest()
-                                callbacks.onViewAlbum( albumTitle )
+                                callbacks.onViewAlbum( song.albumId )
                             }
                         }
                         BottomSheetMenuItem(
@@ -286,7 +286,7 @@ data class NowPlayingScreenCallbacks(
     val onCreateEqualizerActivityContract: () -> Unit,
     val onCreatePlaylist: ( String, List<Song> ) -> Unit,
     val onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
-    val onViewAlbum: ( String ) -> Unit,
+    val onViewAlbum: ( Long ) -> Unit,
     val onViewArtist: ( Long ) -> Unit,
     val onShowSnackBar: ( String ) -> Unit,
     val onStartSleepTimer: ( Duration ) -> Unit,

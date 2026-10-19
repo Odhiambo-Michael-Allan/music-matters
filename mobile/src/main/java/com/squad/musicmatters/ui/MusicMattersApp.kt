@@ -70,7 +70,9 @@ import com.squad.musicmatters.core.model.BottomBarLabelVisibility
 import com.squad.musicmatters.core.model.Song
 import com.squad.musicmatters.core.ui.BottomSheetMenuItem
 import com.squad.musicmatters.core.ui.TopAppBar
+import com.squad.musicmatters.feature.album.navigation.navigateToAlbum
 import com.squad.musicmatters.feature.albums.navigation.navigateToAlbums
+import com.squad.musicmatters.feature.artist.navigation.navigateToArtist
 import com.squad.musicmatters.feature.artists.navigation.navigateToArtists
 import com.squad.musicmatters.feature.folders.navigation.navigateToFolders
 import com.squad.musicmatters.feature.foryou.navigation.ForYouRoute
@@ -87,6 +89,7 @@ import com.squad.musicmatters.feature.songs.navigation.navigateToSongs
 import com.squad.musicmatters.navigation.LibraryDestination
 import com.squad.musicmatters.navigation.MusicMattersNavHost
 import com.squad.musicmatters.navigation.TopLevelDestination
+import com.squad.musicmatters.navigation.nonTopLevelDestinationNavOptions
 import com.squad.musicmatters.utils.ScreenOrientation
 import timber.log.Timber
 import kotlin.OptIn
@@ -314,7 +317,6 @@ fun MusicMattersAppContent(
                         }
                     )
 
-
                     if ( showMoreDestinationsBottomSheet ) {
                         ModalBottomSheet(
                             sheetState = rememberModalBottomSheetState( skipPartiallyExpanded = true ),
@@ -373,12 +375,42 @@ fun MusicMattersAppContent(
                 collapsedTargetY = collapsedTargetY,
                 containerHeight = containerHeight,
             ),
-            onViewAlbum = {},
-            onViewArtist = {},
+            onViewAlbum = {
+                navController.navigateToAlbum(
+                    albumId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
+            onViewArtist = {
+                navController.navigateToArtist(
+                    artistId = it,
+                    navOptions = nonTopLevelDestinationNavOptions()
+                )
+            },
             onShowSnackBar = {},
-            onNavigateToLyricsScreen = {},
-            onNavigateToQueueScreen = {},
-            onLaunchEqualizerActivity = {},
+            onNavigateToLyricsScreen = {
+                navController.navigateToLyricsScreen(
+                    navOptions = navOptions {
+                        launchSingleTop = true
+                    }
+                )
+            },
+            onNavigateToQueueScreen = {
+                navController.navigateToQueueScreen(
+                    navOptions = navOptions {
+                        launchSingleTop = true
+                    }
+                )
+            },
+            onLaunchEqualizerActivity = {
+                try {
+                    equalizerActivity.launch()
+                } catch ( exception: Exception ) {
+                    Timber.tag( "NOW-PLAYING-BOTTOM-BAR" ).d(
+                        "Launching equalizer failed: $exception"
+                    )
+                }
+            },
             modifier = Modifier.align( Alignment.TopStart )
         )
 

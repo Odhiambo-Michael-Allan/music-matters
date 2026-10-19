@@ -93,7 +93,7 @@ fun PlayerSheetScaffold(
     modifier: Modifier = Modifier,
     viewModel: NowPlayingScreenViewModel = hiltViewModel(),
     layout: PlayerSheetLayout,
-    onViewAlbum: ( String ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( Long ) -> Unit,
     onNavigateToQueueScreen: () -> Unit,
     onNavigateToLyricsScreen: () -> Unit,
@@ -158,7 +158,7 @@ private fun PlayerSheetScaffoldContent(
     onCreateEqualizerActivityContract: () -> Unit,
     onCreatePlaylist: ( String, List<Song> ) -> Unit,
     onAddSongsToPlaylist: (Playlist, List<Song> ) -> Unit,
-    onViewAlbum: ( String ) -> Unit,
+    onViewAlbum: ( Long ) -> Unit,
     onViewArtist: ( Long ) -> Unit,
     onShowSnackBar: ( String ) -> Unit,
     onStartSleepTimer: ( Duration ) -> Unit,
@@ -248,7 +248,7 @@ private fun PlayerSheetScaffoldContent(
                     onSeekEnd = onSeekEnd,
                     onArtworkClicked = { song ->
                         playerSheetCallbacks.onCollapse()
-                        song.albumTitle?.let { onViewAlbum( it ) }
+                        onViewAlbum( song.albumId )
                     },
                     onArtistClicked = {
                         playerSheetCallbacks.onCollapse()
