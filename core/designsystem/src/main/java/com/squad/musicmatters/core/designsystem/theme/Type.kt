@@ -174,7 +174,7 @@ object SupportedFonts {
     val Poppins = MusicMattersFont.fromValue(
         fontName = "Poppins",
         fontFamily = FontFamily(
-            Font( R.font.roboto_regular, FontWeight.Normal ),
+            Font( R.font.poppins_regular, FontWeight.Normal ),
         )
     )
 

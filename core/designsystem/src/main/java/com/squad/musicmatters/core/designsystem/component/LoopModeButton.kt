@@ -27,7 +27,7 @@ fun LoopModeButton(
         targetState = loopMode,
     ) {
         IconButton(
-            onClick = { loopMode.let { onToggleLoopMode( loopMode ) } }
+            onClick = { onToggleLoopMode( loopMode ) }
         ) {
             Column (
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -48,7 +48,7 @@ fun LoopModeButton(
                     modifier = modifier
                 )
                 if ( it != LoopMode.None ) {
-                    PlayerSettingOnIndicator()
+                    PlayerSettingOnIndicator( colorScheme = colorScheme )
                 }
             }
         }

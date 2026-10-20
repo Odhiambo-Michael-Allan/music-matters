@@ -55,7 +55,7 @@ android {
 dependencies {
     implementation( projects.feature.forYou )
     implementation( projects.feature.songs )
-    implementation( projects.feature.nowplaying )
+    implementation( projects.feature.player )
     implementation( projects.feature.queue )
     implementation( projects.feature.lyrics )
     implementation( projects.feature.settings )

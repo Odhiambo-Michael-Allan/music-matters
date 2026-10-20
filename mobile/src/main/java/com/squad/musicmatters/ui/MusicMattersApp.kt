@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -79,8 +78,8 @@ import com.squad.musicmatters.feature.foryou.navigation.ForYouRoute
 import com.squad.musicmatters.feature.foryou.navigation.navigateToForYouScreen
 import com.squad.musicmatters.feature.genres.navigation.navigateToGenres
 import com.squad.musicmatters.feature.lyrics.navigation.navigateToLyricsScreen
-import com.squad.musicmatters.feature.nowplaying.components.PlayerSheetLayout
-import com.squad.musicmatters.feature.nowplaying.components.PlayerSheetScaffold
+import com.squad.musicmatters.feature.player.components.PlayerSheetLayout
+import com.squad.musicmatters.feature.player.components.PlayerSheetScaffold
 import com.squad.musicmatters.feature.playlists.navigation.navigateToPlaylists
 import com.squad.musicmatters.feature.queue.navigation.navigateToQueueScreen
 import com.squad.musicmatters.feature.search.navigation.navigateToSearchScreen
