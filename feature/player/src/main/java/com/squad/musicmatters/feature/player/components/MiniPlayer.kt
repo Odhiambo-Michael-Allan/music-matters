@@ -46,7 +46,9 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -208,7 +210,40 @@ internal fun NowPlayingBottomBarContentText(
 
     var showOverlay by remember { mutableStateOf( false ) }
 
-    Box {
+    Box (
+        modifier = Modifier
+            .graphicsLayer {
+                /*
+                 * Offscreen compositing ensures the
+                 * destination-in gradients fade the
+                 * rendered list rather than individual
+                 * drawing operations.
+                 */
+                compositingStrategy =
+                    CompositingStrategy.Offscreen
+            }
+            .graphicsLayer {
+                compositingStrategy = CompositingStrategy.Offscreen
+            }
+            .drawWithContent {
+                drawContent()
+
+                val fadeWidth = 12.dp.toPx()
+                val fadeStart = (size.width - fadeWidth).coerceAtLeast(0f)
+
+                drawRect(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            Color.Black,
+                            Color.Transparent,
+                        ),
+                        startX = fadeStart,
+                        endX = size.width,
+                    ),
+                    blendMode = BlendMode.DstIn,
+                )
+            }
+    ) {
         Text(
             text = text,
             style = style,
@@ -224,7 +259,7 @@ internal fun NowPlayingBottomBarContentText(
                 }
                 .then(
                     if ( textMarquee ) {
-                        Modifier.basicMarquee(Int.MAX_VALUE)
+                        Modifier.basicMarquee( Int.MAX_VALUE )
                     } else Modifier
                 )
                 .onGloballyPositioned {
@@ -258,20 +293,20 @@ internal fun NowPlayingBottomBarContentText(
                             )
                     )
                 }
-                Spacer( modifier = Modifier.weight( 1f ) )
-                Box (
-                    modifier = Modifier
-                        .width( 12.dp )
-                        .fillMaxHeight()
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    colorScheme.primaryContainer
-                                )
-                            )
-                        )
-                )
+//                Spacer( modifier = Modifier.weight( 1f ) )
+//                Box (
+//                    modifier = Modifier
+//                        .width( 12.dp )
+//                        .fillMaxHeight()
+//                        .background(
+//                            brush = Brush.horizontalGradient(
+//                                colors = listOf(
+//                                    Color.Transparent,
+//                                    colorScheme.primaryContainer
+//                                )
+//                            )
+//                        )
+//                )
             }
         }
     }

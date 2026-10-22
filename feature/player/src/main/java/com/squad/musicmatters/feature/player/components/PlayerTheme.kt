@@ -112,9 +112,12 @@ suspend fun extractSeedColor( bitmap: Bitmap ): Color = withContext( Dispatchers
  * scheme itself is produced by [generateBrandColorScheme].
  */
 fun Modifier.playerCanvas(scheme: ColorScheme): Modifier = drawBehind {
-    val top = scheme.primaryContainer.copy(alpha = 0.65f).compositeOver(scheme.surface)
-    val mid = scheme.primaryContainer.copy(alpha = 0.35f).compositeOver(scheme.surface)
-    val bottom = scheme.primaryContainer.copy(alpha = 0.12f).compositeOver(scheme.surface)
+    val top = scheme.primaryContainer.copy( alpha = 0.65f )
+        .compositeOver( scheme.surface )
+    val mid = scheme.primaryContainer.copy( alpha = 0.35f )
+        .compositeOver( scheme.surface )
+    val bottom = scheme.primaryContainer.copy( alpha = 0.12f )
+        .compositeOver( scheme.surface )
 
     drawRect(
         brush = Brush.verticalGradient(
