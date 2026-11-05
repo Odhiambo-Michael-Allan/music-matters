@@ -208,6 +208,7 @@ internal fun NowPlayingBottomBarContentText(
     onClick: ( () -> Unit )? = null,
 ) {
 
+    val fadeWidthDp = 12.dp
     var showOverlay by remember { mutableStateOf( false ) }
 
     Box (
@@ -222,26 +223,33 @@ internal fun NowPlayingBottomBarContentText(
                 compositingStrategy =
                     CompositingStrategy.Offscreen
             }
-            .graphicsLayer {
-                compositingStrategy = CompositingStrategy.Offscreen
-            }
             .drawWithContent {
                 drawContent()
+                val fadeWidth = fadeWidthDp.toPx()
 
-                val fadeWidth = 12.dp.toPx()
-                val fadeStart = (size.width - fadeWidth).coerceAtLeast(0f)
+                // End fade (always appears)
+                val endFadeStart = ( size.width - fadeWidth ).coerceAtLeast( 0f )
 
                 drawRect(
                     brush = Brush.horizontalGradient(
-                        colors = listOf(
-                            Color.Black,
-                            Color.Transparent,
-                        ),
-                        startX = fadeStart,
+                        colors = listOf( Color.Black, Color.Transparent ),
+                        startX = endFadeStart,
                         endX = size.width,
                     ),
                     blendMode = BlendMode.DstIn,
                 )
+
+                // Start fade (only when overlay is shown)
+                if ( showOverlay ) {
+                    drawRect(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf( Color.Transparent, Color.Black ),
+                            startX = 0f,
+                            endX = fadeWidth.coerceAtMost( size.width ),
+                        ),
+                        blendMode = BlendMode.DstIn
+                    )
+                }
             }
     ) {
         Text(
@@ -267,48 +275,34 @@ internal fun NowPlayingBottomBarContentText(
                     showOverlay = offsetX.absoluteValue != 0f
                 }
         )
-        Box(
-            modifier = Modifier.matchParentSize()
-        ) {
-            Row(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                AnimatedVisibility(
-                    visible = showOverlay,
-                    enter = FadeTransition.enterTransition(),
-                    exit = FadeTransition.exitTransition()
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .width( 12.dp )
-                            .fillMaxHeight()
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    colors = listOf(
-                                        colorScheme.primaryContainer,
-                                        Color.Transparent
-                                    ),
-                                    tileMode = TileMode.Mirror
-                                )
-                            )
-                    )
-                }
-//                Spacer( modifier = Modifier.weight( 1f ) )
-//                Box (
-//                    modifier = Modifier
-//                        .width( 12.dp )
-//                        .fillMaxHeight()
-//                        .background(
-//                            brush = Brush.horizontalGradient(
-//                                colors = listOf(
-//                                    Color.Transparent,
-//                                    colorScheme.primaryContainer
+//        Box(
+//            modifier = Modifier.matchParentSize()
+//        ) {
+//            Row(
+//                modifier = Modifier.fillMaxSize()
+//            ) {
+//                AnimatedVisibility(
+//                    visible = showOverlay,
+//                    enter = FadeTransition.enterTransition(),
+//                    exit = FadeTransition.exitTransition()
+//                ) {
+//                    Box(
+//                        modifier = Modifier
+//                            .width( 12.dp )
+//                            .fillMaxHeight()
+//                            .background(
+//                                brush = Brush.horizontalGradient(
+//                                    colors = listOf(
+//                                        colorScheme.primaryContainer,
+//                                        Color.Transparent
+//                                    ),
+//                                    tileMode = TileMode.Mirror
 //                                )
 //                            )
-//                        )
-//                )
-            }
-        }
+//                    )
+//                }
+//            }
+//        }
     }
 }
 
