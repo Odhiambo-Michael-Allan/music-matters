@@ -275,34 +275,6 @@ internal fun NowPlayingBottomBarContentText(
                     showOverlay = offsetX.absoluteValue != 0f
                 }
         )
-//        Box(
-//            modifier = Modifier.matchParentSize()
-//        ) {
-//            Row(
-//                modifier = Modifier.fillMaxSize()
-//            ) {
-//                AnimatedVisibility(
-//                    visible = showOverlay,
-//                    enter = FadeTransition.enterTransition(),
-//                    exit = FadeTransition.exitTransition()
-//                ) {
-//                    Box(
-//                        modifier = Modifier
-//                            .width( 12.dp )
-//                            .fillMaxHeight()
-//                            .background(
-//                                brush = Brush.horizontalGradient(
-//                                    colors = listOf(
-//                                        colorScheme.primaryContainer,
-//                                        Color.Transparent
-//                                    ),
-//                                    tileMode = TileMode.Mirror
-//                                )
-//                            )
-//                    )
-//                }
-//            }
-//        }
     }
 }
 

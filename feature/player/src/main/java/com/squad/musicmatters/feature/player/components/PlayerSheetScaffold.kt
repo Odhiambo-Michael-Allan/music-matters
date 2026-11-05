@@ -1,5 +1,6 @@
 package com.squad.musicmatters.feature.player.components
 
+import android.util.Log
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.foundation.background
@@ -19,27 +20,34 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -61,7 +69,7 @@ import com.squad.musicmatters.feature.player.NowPlayingScreenModel
 import com.squad.musicmatters.feature.player.NowPlayingScreenUiState
 import com.squad.musicmatters.feature.player.NowPlayingScreenViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.cancellation.CancellationException
@@ -178,6 +186,8 @@ private fun PlayerSheetScaffoldContent(
     when ( uiState ) {
         NowPlayingScreenUiState.Loading -> {}
         is NowPlayingScreenUiState.Success -> {
+            SideEffect { Log.d( "Recomp", "PlayerSheetScaffoldContent" ) }
+
             val colorScheme = rememberPlayerColorScheme(
                 uiState.currentlyPlayingSong.artworkUri
             )
@@ -202,7 +212,6 @@ private fun PlayerSheetScaffoldContent(
             }
             ConfigurePlayerSheetAnchors( sheetState, layout.collapsedTargetY )
             val geometry = rememberPlayerSheetGeometry( sheetState, layout )
-            val isExpanded = sheetState.currentValue == PlayerSheetValue.Expanded
             PlayerSheetSettledEffects(
                 sheetState,
                 haptics,
@@ -210,21 +219,54 @@ private fun PlayerSheetScaffoldContent(
             )
             PlayerSheetExternalExpansion( sheetState, layout.expandTrigger )
             PlayerSheetPredictiveBack(
-                enabled = isExpanded,
+                enabled = sheetState.settledValue == PlayerSheetValue.Expanded,
                 sheetState = sheetState,
-                collapsedTargetY = layout.collapsedTargetY,
             )
-            val sheetNestedScrollConnection = rememberPlayerSheetNestedScrollConnection( sheetState, density )
-            val playerSheetCallbacks = PlayerSheetCallbacks(
-                onExpand = { requestSheetExpansion( sheetState, geometry.sheetOffset, scope ) },
-                onCollapseWithAnimation = {
-                    requestSheetCollapse( sheetState, geometry.sheetOffset, layout.collapsedTargetY, scope )
-                },
-                onCollapseWithoutAnimation = {
-                    requestSheetCollapseWithoutAnimation( sheetState, geometry.sheetOffset, layout.collapsedTargetY, scope )
-                }
+            val sheetNestedScrollConnection = rememberPlayerSheetNestedScrollConnection(
+                sheetState,
+                density
+            )
 
-            )
+            val collapsedTargetY = layout.collapsedTargetY
+            val playerSheetCallbacks = remember(
+                sheetState,
+                scope,
+                collapsedTargetY
+            ) {
+                PlayerSheetCallbacks(
+                    onExpand = {
+                        requestSheetExpansion( sheetState, scope )
+                    },
+                    onCollapseWithAnimation = {
+                        requestSheetCollapse(
+                            sheetState,
+                            collapsedTargetY,
+                            scope
+                        )
+                    },
+                    onCollapseWithoutAnimation = {
+                        requestSheetCollapseWithoutAnimation(
+                            sheetState,
+                            collapsedTargetY,
+                            scope
+                        )
+                    }
+                )
+            }
+            val resources = remember (
+                playerStateHolder,
+                scope,
+                haptics,
+                sheetNestedScrollConnection
+            ) {
+                PlayerSheetResources(
+                    playerStateHolder,
+                    scope,
+                    haptics,
+                    sheetNestedScrollConnection
+                )
+            }
+
             PlayerSheetSurface(
                 modifier = modifier,
                 geometry = geometry,
@@ -308,50 +350,50 @@ private fun ConfigurePlayerSheetAnchors(
     }
 }
 
+
 @Composable
 private fun rememberPlayerSheetGeometry(
     sheetState: AnchoredDraggableState<PlayerSheetValue>,
     layout: PlayerSheetLayout,
-): PlayerSheetGeometry {
-
+): State<PlayerSheetGeometry> {
     val density = LocalDensity.current
-    val sheetOffset by remember( sheetState, layout.collapsedTargetY ) {
-        derivedStateOf {
-            val raw = sheetState.offset
-            if ( raw.isNaN() ) layout.collapsedTargetY else raw.coerceIn( 0f, layout.collapsedTargetY )
-        }
-    }
-    val fullEntranceOffsetPx = remember( density ) {
-        with( density ) {
-            24.dp.toPx()
-        }
-    }
-    val values = calculatePlayerSheetGeometry(
-        PlayerSheetGeometryInput(
-            sheetOffset = sheetOffset,
-            collapsedTargetY = layout.collapsedTargetY,
-            containerHeight = layout.containerHeight,
-            collapsedHorizontalPadding = layout.collapsedHorizontalPadding,
-            miniPlayerHeight = 72.dp,
-            collapsedTopCornerRadius = 12.dp,
-            collapsedBottomCornerRadius = 12.dp,
-            fullEntranceOffsetPx = fullEntranceOffsetPx,
-        )
-    )
-    return PlayerSheetGeometry(
-        sheetOffset = sheetOffset,
-        expansionFraction = values.expansionFraction,
-        miniPlayerHeight = values.miniPlayerHeight,
-        sheetHeight = values.sheetHeight,
-        topCornerRadius = values.topCornerRadius,
-        bottomCornerRadius = values.bottomCornerRadius,
-        horizontalPadding = values.horizontalPadding,
-        sheetElevation = values.sheetElevation,
-        miniAlpha = values.miniAlpha,
-        fullAlpha = values.fullAlpha,
-        fullTranslationY = values.fullTranslationY,
-    )
+    val currentLayout by rememberUpdatedState( layout )
+    val fullEntranceOffsetPx = remember( density ) { with( density ) { 24.dp.toPx() } }
 
+    return remember( sheetState, fullEntranceOffsetPx ) {
+        derivedStateOf {
+            val collapsedTargetY = currentLayout.collapsedTargetY
+            val raw = sheetState.offset
+            val sheetOffset =
+                if ( raw.isNaN() ) collapsedTargetY else raw.coerceIn( 0f, collapsedTargetY )
+
+            val values = calculatePlayerSheetGeometry(
+                PlayerSheetGeometryInput(
+                    sheetOffset = sheetOffset,
+                    collapsedTargetY = collapsedTargetY,
+                    containerHeight = currentLayout.containerHeight,
+                    collapsedHorizontalPadding = currentLayout.collapsedHorizontalPadding,
+                    miniPlayerHeight = miniPlayerHeight,
+                    collapsedTopCornerRadius = 12.dp,
+                    collapsedBottomCornerRadius = 12.dp,
+                    fullEntranceOffsetPx = fullEntranceOffsetPx,
+                )
+            )
+            PlayerSheetGeometry(
+                sheetOffset = sheetOffset,
+                expansionFraction = values.expansionFraction,
+                miniPlayerHeight = values.miniPlayerHeight,
+                sheetHeight = values.sheetHeight,
+                topCornerRadius = values.topCornerRadius,
+                bottomCornerRadius = values.bottomCornerRadius,
+                horizontalPadding = values.horizontalPadding,
+                sheetElevation = values.sheetElevation,
+                miniAlpha = values.miniAlpha,
+                fullAlpha = values.fullAlpha,
+                fullTranslationY = values.fullTranslationY,
+            )
+        }
+    }
 }
 
 internal fun calculatePlayerSheetGeometry(
@@ -447,21 +489,10 @@ private fun PlayerSheetExternalExpansion(
 private fun PlayerSheetPredictiveBack(
     enabled: Boolean,
     sheetState: AnchoredDraggableState<PlayerSheetValue>,
-    collapsedTargetY: Float,
 ) {
     PredictiveBackHandler( enabled = enabled ) { progress ->
-        try {
-            progress.collect { backEvent ->
-                val target = collapsedTargetY * 0.2f * backEvent.progress
-                sheetState.dispatchRawDelta( target - sheetState.requireOffset() )
-            }
-            sheetState.animateTo( PlayerSheetValue.Collapsed )
-        } catch ( exception: CancellationException ) {
-            withContext( NonCancellable ) {
-                sheetState.animateTo( PlayerSheetValue.Expanded )
-            }
-            throw exception
-        }
+        progress.collect()
+        sheetState.animateTo( PlayerSheetValue.Collapsed )
     }
 }
 
@@ -652,9 +683,9 @@ private fun resolvePlayerSheetSettleTarget(
 }
 
 @Composable
-@Suppress("DEPRECATION") // startDragImmediately=false keeps mini controls tappable during settle
+@Suppress( "DEPRECATION" )
 private fun PlayerSheetSurface(
-    geometry: PlayerSheetGeometry,
+    geometry: State<PlayerSheetGeometry>,
     colorScheme: ColorScheme,
     resources: PlayerSheetResources,
     nowPlayingScreenCallbacks: NowPlayingScreenCallbacks,
@@ -664,56 +695,63 @@ private fun PlayerSheetSurface(
     nowPlayingScreenModel: NowPlayingScreenModel,
     modifier: Modifier = Modifier,
 ) {
-    val shape =
-        RoundedCornerShape(
-            topStart = geometry.topCornerRadius,
-            topEnd = geometry.topCornerRadius,
-            bottomStart = geometry.bottomCornerRadius,
-            bottomEnd = geometry.bottomCornerRadius,
-        )
+    val containerColor = miniPlayerSheetColor( colorScheme )
+    val interactionSource = remember { MutableInteractionSource() }
+
+    // Only invalidates when the value flips, not on every frame.
+    val miniOnTop by remember( geometry ) {
+        derivedStateOf { geometry.value.expansionFraction < 0.5f }
+    }
+
     Box(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .offset { IntOffset( 0, geometry.sheetOffset.roundToInt() ) }
-                .graphicsLayer { clip = false }
-                .height( geometry.sheetHeight ),
-    ) {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding( horizontal = geometry.horizontalPadding )
-                    .height( geometry.sheetHeight )
-                    .shadow( elevation = geometry.sheetElevation, shape = shape, clip = false )
-                    .background( color = miniPlayerSheetColor( colorScheme ), shape = shape )
-                    .clip( shape )
-                    .anchoredDraggable(
-                        state = sheetState,
-                        orientation = Orientation.Vertical,
-                        // Never steal taps while settling: default true-during-animation
-                        // ate mini controls for ~1–2s. Touch-slop still allows swipe-up
-                        // expand from the collapsed mini player.
-                        startDragImmediately = false,
-                    )
-                    .clickable(
-                        enabled = geometry.expansionFraction < 0.5f,
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                    ) {
-                        resources.haptics.performHapticFeedback( HapticFeedbackType.TextHandleMove )
-                        playerSheetCallbacks.onExpand()
-                    },
-        ) {
-            PlayerSheetLayers(
-                geometry = geometry,
-                resources = resources,
-                playerSheetCallbacks = playerSheetCallbacks,
-                nowPlayingScreenCallbacks = nowPlayingScreenCallbacks,
-                containerHeight = containerHeight,
-                model = nowPlayingScreenModel,
+        modifier = modifier
+            .fillMaxWidth()
+            // Layout phase: height, horizontal padding and vertical offset.
+            .layout { measurable, constraints ->
+                val g = geometry.value
+                val pad = g.horizontalPadding.roundToPx()
+                val width = ( constraints.maxWidth - pad * 2 ).coerceAtLeast( 0 )
+                val height = g.sheetHeight.roundToPx()
+                val placeable = measurable.measure( Constraints.fixed( width, height ) )
+                layout( constraints.maxWidth, height ) {
+                    placeable.place( pad, g.sheetOffset.roundToInt() )
+                }
+            }
+            // Draw phase: shadow, corner radii, clipping.
+            .graphicsLayer {
+                val g = geometry.value
+                shadowElevation = g.sheetElevation.toPx()
+                shape = RoundedCornerShape(
+                    topStart = g.topCornerRadius,
+                    topEnd = g.topCornerRadius,
+                    bottomStart = g.bottomCornerRadius,
+                    bottomEnd = g.bottomCornerRadius,
+                )
+                clip = true
+            }
+            .drawBehind { drawRect( containerColor ) }
+            .anchoredDraggable(
+                state = sheetState,
+                orientation = Orientation.Vertical,
+                startDragImmediately = false,
             )
-        }
+            .clickable(
+                enabled = miniOnTop,
+                interactionSource = interactionSource,
+                indication = null,
+            ) {
+                resources.haptics.performHapticFeedback( HapticFeedbackType.TextHandleMove )
+                playerSheetCallbacks.onExpand()
+            },
+    ) {
+        PlayerSheetLayers(
+            geometry = geometry,
+            resources = resources,
+            playerSheetCallbacks = playerSheetCallbacks,
+            nowPlayingScreenCallbacks = nowPlayingScreenCallbacks,
+            containerHeight = containerHeight,
+            model = nowPlayingScreenModel,
+        )
     }
 }
 
@@ -721,7 +759,7 @@ private fun PlayerSheetSurface(
 
 private data class PlayerSheetResources(
     val stateHolder: androidx.compose.runtime.saveable.SaveableStateHolder,
-    val scope: kotlinx.coroutines.CoroutineScope,
+    val scope: CoroutineScope,
     val haptics: androidx.compose.ui.hapticfeedback.HapticFeedback,
     val nestedScrollConnection: NestedScrollConnection,
 )
@@ -734,56 +772,66 @@ private data class PlayerSheetCallbacks(
 
 @Composable
 private fun PlayerSheetLayers(
-    geometry: PlayerSheetGeometry,
+    geometry: State<PlayerSheetGeometry>,
     resources: PlayerSheetResources,
     nowPlayingScreenCallbacks: NowPlayingScreenCallbacks,
     playerSheetCallbacks: PlayerSheetCallbacks,
     containerHeight: Dp,
     model: NowPlayingScreenModel,
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        MiniPlayerLayer(
-            visible = geometry.expansionFraction < 0.999f,
-            geometry = geometry,
-            resources = resources,
-            nowPlayingScreenCallbacks = nowPlayingScreenCallbacks,
-            playerSheetCallbacks = playerSheetCallbacks,
-            model = model,
-        )
-        FullPlayerLayer(
-            visible = geometry.expansionFraction > 0.001f,
-            geometry = geometry,
-            resources = resources,
-            containerHeight = containerHeight,
-            model = model,
-            callbacks = nowPlayingScreenCallbacks,
-        )
+    // Each of these flips at most a few times per gesture.
+    val miniVisible by remember( geometry ) {
+        derivedStateOf { geometry.value.expansionFraction < 0.999f }
+    }
+    val fullVisible by remember( geometry ) {
+        derivedStateOf { geometry.value.expansionFraction > 0.01f }
+    }
+    val fullOnTop by remember( geometry ) {
+        derivedStateOf { geometry.value.expansionFraction >= 0.5f }
+    }
+
+    Box( modifier = Modifier.fillMaxSize() ) {
+        if ( miniVisible ) {
+            MiniPlayerLayer(
+                geometry = geometry,
+                fullOnTop = fullOnTop,
+                resources = resources,
+                model = model,
+                nowPlayingScreenCallbacks = nowPlayingScreenCallbacks,
+                playerSheetCallbacks = playerSheetCallbacks,
+            )
+        }
+        if ( fullVisible ) {
+            FullPlayerLayer(
+                geometry = geometry,
+                fullOnTop = fullOnTop,
+                resources = resources,
+                containerHeight = containerHeight,
+                model = model,
+                callbacks = nowPlayingScreenCallbacks,
+            )
+        }
     }
 }
 
 @Composable
 private fun MiniPlayerLayer(
-    visible: Boolean,
-    geometry: PlayerSheetGeometry,
+    geometry: State<PlayerSheetGeometry>,
+    fullOnTop: Boolean,
     resources: PlayerSheetResources,
     model: NowPlayingScreenModel,
     nowPlayingScreenCallbacks: NowPlayingScreenCallbacks,
     playerSheetCallbacks: PlayerSheetCallbacks,
 ) {
-    if ( !visible ) return
     resources.stateHolder.SaveableStateProvider( "mini-player" ) {
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .height( geometry.miniPlayerHeight )
-                .fillMaxSize()
-                .graphicsLayer { alpha = geometry.miniAlpha }
-                .zIndex(
-                    if ( geometry.expansionFraction < 0.5f ) 1f else 0f
-                )
+                .fillMaxWidth()
+                .height( miniPlayerHeight )
+                .graphicsLayer { alpha = geometry.value.miniAlpha }   // draw phase
+                .zIndex( if ( fullOnTop ) 0f else 1f )
         ) {
             MiniPlayerContent(
                 model = model,
@@ -796,38 +844,31 @@ private fun MiniPlayerLayer(
 
 @Composable
 private fun FullPlayerLayer(
-    visible: Boolean,
-    geometry: PlayerSheetGeometry,
+    geometry: State<PlayerSheetGeometry>,
+    fullOnTop: Boolean,
     resources: PlayerSheetResources,
     containerHeight: Dp,
     model: NowPlayingScreenModel,
     callbacks: NowPlayingScreenCallbacks,
 ) {
-    if ( !visible ) return
-
     resources.stateHolder.SaveableStateProvider( "full-player" ) {
         Box(
             modifier = Modifier
+                // Fixed-height, top-aligned content that ignores the shrinking parent,
+                // so the full player isn't re-measured as the sheet height changes.
+                .wrapContentHeight( align = Alignment.Top, unbounded = true )
                 .height( containerHeight )
-                .graphicsLayer {
-                    alpha = geometry.fullAlpha
-                    translationY = geometry.fullTranslationY
+                .graphicsLayer {                                       // draw phase
+                    val g = geometry.value
+                    alpha = g.fullAlpha
+                    translationY = g.fullTranslationY
                 }
-                .zIndex(
-                    if ( geometry.expansionFraction >= 0.5f ) 1f else 0f
-                )
-                .offset {
-                    if ( geometry.expansionFraction <= 0.01f ) {
-                        IntOffset( 0, 10000 )
-                    } else {
-                        IntOffset.Zero
-                    }
-                }
+                .zIndex( if ( fullOnTop ) 1f else 0f )
         ) {
             NowPlayingScreenContent(
                 model = model,
                 callbacks = callbacks,
-                nestedScrollConnection = resources.nestedScrollConnection
+                nestedScrollConnection = resources.nestedScrollConnection,
             )
         }
     }
@@ -835,161 +876,30 @@ private fun FullPlayerLayer(
 
 private fun requestSheetExpansion(
     sheetState: AnchoredDraggableState<PlayerSheetValue>,
-    sheetOffset: Float,
-    scope: kotlinx.coroutines.CoroutineScope,
+    scope: CoroutineScope,
 ) {
-    if ( sheetOffset > 0.5f ) {
+    if ( sheetState.offset > 0.5f ) {
         scope.launch { sheetState.animateTo( PlayerSheetValue.Expanded ) }
     }
 }
 
 private fun requestSheetCollapse(
     sheetState: AnchoredDraggableState<PlayerSheetValue>,
-    sheetOffset: Float,
     collapsedTargetY: Float,
-    scope: kotlinx.coroutines.CoroutineScope,
+    scope: CoroutineScope,
 ) {
-    if ( sheetOffset >= collapsedTargetY - 0.5f ) return
+    if ( sheetState.offset >= collapsedTargetY - 0.5f ) return
     scope.launch { sheetState.animateTo( PlayerSheetValue.Collapsed ) }
 }
 
 private fun requestSheetCollapseWithoutAnimation(
     sheetState: AnchoredDraggableState<PlayerSheetValue>,
-    sheetOffset: Float,
     collapsedTargetY: Float,
-    scope: CoroutineScope
+    scope: CoroutineScope,
 ) {
-    if ( sheetOffset >= collapsedTargetY - 0.5f ) return
-    scope.launch { sheetState.snapTo( PlayerSheetValue.Collapsed )}
+    if ( sheetState.offset >= collapsedTargetY - 0.5f ) return
+    scope.launch { sheetState.snapTo( PlayerSheetValue.Collapsed ) }
 }
-
-//@PreviewScreenSizes
-//@Composable
-//private fun PlayerSheetScaffoldPreview(
-//    @PreviewParameter( MusicMattersPreviewParametersProvider::class )
-//    previewData: PreviewData
-//) {
-//    MusicMattersTheme(
-//        themeMode = ThemeMode.LIGHT,
-//        primaryColorName = "Blue",
-//        fontName = DefaultPreferences.FONT_NAME,
-//        fontScale = DefaultPreferences.FONT_SCALE,
-//        useMaterialYou = true
-//    ) {
-//        BoxWithConstraints(
-//            modifier = Modifier.fillMaxSize()
-//        ) {
-//
-//            val density = LocalDensity.current
-//            val screenHeightDp = maxHeight
-//            val systemNavBarHeight = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-//
-//            val containerHeight = screenHeightDp + systemNavBarHeight + 50.dp
-//            val collapsedTargetY =
-//                with(density) {
-//                    (
-//                            screenHeightDp -
-//                                    miniPlayerHeight -
-//                                    ( navigationBarHeight + navigationBottomInset ) -
-////                                    playerSystemNavigationInset -
-//                                    miniPlayerNavigationGap
-//                            ).toPx()
-//                }
-//
-//            PlayerSheetScaffold(
-//                model = NowPlayingScreenModel(
-//                    uiState = NowPlayingScreenUiState.Success(
-//                        userData = emptyUserData.copy(
-//                            loopMode = LoopMode.Queue,
-//                        ),
-//                        currentlyPlayingSong = previewData.songs.first(),
-//                        currentlyPlayingSongIsFavorite = true,
-//                        playerState = PlayerState(
-//                            currentlyPlayingSongId = "song-id-1",
-//                            isPlaying = true,
-//                            isBuffering = false,
-//                        ),
-//                        playlists = emptyList(),
-//                        songMetadata = SongMetadata(
-//                            songId = "",
-//                            codec = "mp3",
-//                            bitrate = 0,
-//                            samplingRate = 0f,
-//                            bitsPerSample = 0,
-//                            genreName = "Hip-Hop"
-//                        ),
-//                        sleepTimer = SleepTimer(
-//                            duration = 300000L.toDuration( DurationUnit.MILLISECONDS ),
-//                            endsAt = System.currentTimeMillis().toDuration( DurationUnit.MILLISECONDS ),
-//                            timer = Timer()
-//                        )
-//                    ),
-//                    lyricsUiState = LyricsUiState.Success(
-//                        lyrics = listOf(
-//                            Lyric(
-//                                timeStamp = java.time.Duration.ofMinutes( 1 ),
-//                                content = "Sometime say the magic you dey feel inside is like gold"
-//                            ),
-//                            Lyric(
-//                                timeStamp = java.time.Duration.ofMinutes( 2 ),
-//                                content = "Something like do re mi fa so lat ti do do (Yeah)"
-//                            ),
-//                            Lyric(
-//                                timeStamp = java.time.Duration.ofMinutes( 3 ),
-//                                content = "Make I sing for you la la do do"
-//                            ),
-//                            Lyric(
-//                                timeStamp = java.time.Duration.ofMinutes( 4 ),
-//                                content = "Make I sing your song"
-//                            ),
-//                            Lyric(
-//                                timeStamp = java.time.Duration.ofMinutes( 5 ),
-//                                content = "Make I sing make you wine am do do o"
-//                            )
-//                        ),
-//                    ),
-//                    onGetPlaybackPosition = { PlaybackPosition( 2L, 3L, 5L ) },
-//                    onArtistClicked = {},
-//                    onFavorite = { _, _ -> },
-//                    onPlayPauseButtonClick = {},
-//                    onPreviousButtonClick = {},
-//                    onPlayNext = {},
-//                    onSeekEnd = {},
-//                    onArtworkClicked = {},
-//                    onSwipeArtworkLeft = {},
-//                    onSwipeArtworkRight = {},
-//                    onNavigateToQueueScreen = {},
-//                    onSeekStart = {},
-//                    onCreateEqualizerActivityContract = {
-//                        object : ActivityResultContract<Unit, Unit>() {
-//                            override fun createIntent(context: Context, input: Unit) = Intent()
-//                            override fun parseResult( resultCode: Int, intent: Intent? ) {}
-//
-//                        }
-//                    },
-//                    onCreatePlaylist = { _, _ -> },
-//                    onAddSongsToPlaylist = { _, _ -> },
-//                    onViewAlbum = {},
-//                    onViewArtist = {},
-//                    onHideNowPlayingBottomSheet = {},
-//                    onShowSnackBar = {},
-//                    onStopSleepTimer = {},
-//                    onStartSleepTimer = {},
-//                    onShowLyrics = {},
-//                    onToggleLoopMode = {},
-//                    onToggleShuffleMode = {},
-//                    onRemoveSongFromQueue = {},
-//                    onNavigateToLyricsScreen = {},
-//                ),
-//                layout = PlayerSheetLayout(
-//                    collapsedTargetY = collapsedTargetY,
-//                    containerHeight = containerHeight,
-//                    collapsedHorizontalPadding = 12.dp,
-//                ),
-//            )
-//        }
-//    }
-//}
 
 private val navigationBarHeight = 80.dp
 private val navigationBottomInset = 0.dp

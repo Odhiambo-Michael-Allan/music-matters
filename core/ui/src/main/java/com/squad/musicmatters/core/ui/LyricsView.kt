@@ -342,7 +342,7 @@ private fun LyricItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable( onClick = onClick )
-            .padding( vertical = 4.dp )
+            .padding( top = 4.dp, bottom = 4.dp, end = 12.dp,  )
             .graphicsLayer {
                 scaleX = textScale
                 scaleY = textScale

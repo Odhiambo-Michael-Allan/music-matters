@@ -2,6 +2,7 @@ package com.squad.musicmatters.feature.player
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -79,6 +81,8 @@ fun NowPlayingScreenContent(
     callbacks: NowPlayingScreenCallbacks,
     nestedScrollConnection: NestedScrollConnection,
 ) {
+    SideEffect { Log.d( "Recomp", "PlayerSheetScaffoldContent" ) }
+
     val currentWindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     var showOptionsMenu by remember { mutableStateOf( false ) }
     var showSongDetailsDialog by remember { mutableStateOf( false ) }

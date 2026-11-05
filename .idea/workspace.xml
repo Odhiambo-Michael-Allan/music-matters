@@ -179,6 +179,7 @@
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/feature/player/src/main/java/com/squad/musicmatters/feature/player/components/MiniPlayer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/player/src/main/java/com/squad/musicmatters/feature/player/components/MiniPlayer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature/player/src/main/java/com/squad/musicmatters/feature/player/components/PlayerSheetScaffold.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/player/src/main/java/com/squad/musicmatters/feature/player/components/PlayerSheetScaffold.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,7 +189,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/app/.android/avd/Pixel_9a.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/app/.android/avd/Pixel_9_Pro_Fold.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />

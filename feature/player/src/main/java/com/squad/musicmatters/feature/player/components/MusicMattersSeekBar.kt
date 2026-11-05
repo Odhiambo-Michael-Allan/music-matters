@@ -22,9 +22,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -85,7 +91,9 @@ internal fun NowPlayingSeekBar(
     }
 }
 
-@SuppressLint("UnusedBoxWithConstraintsScope")
+private val SeekBarHeight = 24.dp
+private val SeekBarCornerRadius = 6.dp
+
 @Composable
 private fun NowPlayingSeekBar(
     modifier: Modifier = Modifier,
@@ -98,110 +106,91 @@ private fun NowPlayingSeekBar(
     onSeekEnd: ( Float ) -> Unit,
     onSeekCancel: () -> Unit,
 ) {
+    val currentOnSetDragging by rememberUpdatedState( onSetDragging )
+    val currentOnSeekStart by rememberUpdatedState( onSeekStart )
+    val currentOnSeek by rememberUpdatedState( onSeek )
+    val currentOnSeekEnd by rememberUpdatedState( onSeekEnd )
+    val currentOnSeekCancel by rememberUpdatedState( onSeekCancel )
 
     var dragRatio by remember { mutableFloatStateOf( 0f ) }
 
-    val sliderHeight = 24.dp
-    val thumbSize = 12.dp
-    val thumbSizeHalf = thumbSize.div( 2 )
-    val trackHeight by animateDpAsState(
+    // Keep this as State<Dp> (no `by`) so it is only read in the draw phase.
+    val trackHeight = animateDpAsState(
         targetValue = if ( isDragging() ) 12.dp else 8.dp,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioLowBouncy,
-            stiffness = Spring.StiffnessLow
-        )
+            stiffness = Spring.StiffnessLow,
+        ),
+        label = "seekBarTrackHeight",
     )
 
+    val trackColor = colorScheme.surfaceVariant
+    val playedColor = colorScheme.primary
+    val bufferedColor = playedColor.copy( alpha = 0.2f )
 
-
-    BoxWithConstraints(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(sliderHeight),
-        contentAlignment = Alignment.Center,
-    ) {
-        val sliderWidth = maxWidth
+            .height( SeekBarHeight )
+            .drawBehind {
+                val trackHeightPx = trackHeight.value.toPx()
+                val top = ( size.height - trackHeightPx ) / 2f
+                val radius = CornerRadius( SeekBarCornerRadius.toPx() )
 
-        Box(
-            modifier = Modifier
-                .height(sliderHeight)
-                .fillMaxWidth()
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = { offset ->
-                            onSeekStart()
-                            val tapRatio = (offset.x / sliderWidth.toPx())
-                                .coerceIn(0f..1f)
-                            onSeekEnd(tapRatio)
-                        }
-                    )
+                fun bar( color: Color, fraction: Float ) {
+                    val width = size.width * fraction.coerceIn( 0f, 1f )
+                    if ( width > 0f ) {
+                        drawRoundRect(
+                            color = color,
+                            topLeft = Offset( 0f, top ),
+                            size = Size( width, trackHeightPx ),
+                            cornerRadius = radius,
+                        )
+                    }
                 }
-                .pointerInput(Unit) {
-                    var offsetX = 0f
-                    detectHorizontalDragGestures(
-                        onDragStart = { offset ->
-                            offsetX = offset.x
-                            onSetDragging(true)
-                            onSeekStart()
-                        },
-                        onDragEnd = {
-                            onSeekEnd(dragRatio)
-                            offsetX = 0f
-                            onSetDragging(false)
-                            dragRatio = 0f
-                        },
-                        onDragCancel = {
-                            onSeekCancel()
-                            offsetX = 0f
-                            onSetDragging(false)
-                            dragRatio = 0f
-                        },
-                        onHorizontalDrag = { pointer, dragAmount ->
-                            pointer.consume()
-                            offsetX += dragAmount
-                            dragRatio = (offsetX / sliderWidth.toPx())
-                                .coerceIn(0f..1f)
-                            onSeek(dragRatio)
-                        }
-                    )
+
+                val position = onGetPlaybackPosition()
+                val playedRatio = if ( isDragging() ) dragRatio else position.playedRatio
+
+                bar( trackColor, 1f )
+                bar( playedColor, playedRatio )
+                bar( bufferedColor, position.bufferedRatio )
+            }
+            .pointerInput( Unit ) {
+                detectTapGestures { offset ->
+                    val width = size.width.toFloat().coerceAtLeast( 1f )
+                    currentOnSeekStart()
+                    currentOnSeekEnd( ( offset.x / width ).coerceIn( 0f, 1f ) )
                 }
-        )
-        Box(
-            modifier = Modifier
-                .height(trackHeight)
-                .fillMaxWidth()
-                .background(
-                    colorScheme.surfaceVariant,
-                    RoundedCornerShape(thumbSizeHalf)
+            }
+            .pointerInput( Unit ) {
+                var offsetX = 0f
+                detectHorizontalDragGestures(
+                    onDragStart = { offset ->
+                        val width = size.width.toFloat().coerceAtLeast( 1f )
+                        offsetX = offset.x
+                        dragRatio = ( offsetX / width ).coerceIn( 0f, 1f )
+                        currentOnSetDragging( true )
+                        currentOnSeekStart()
+                    },
+                    onDragEnd = {
+                        currentOnSeekEnd( dragRatio )
+                        currentOnSetDragging( false )
+                    },
+                    onDragCancel = {
+                        currentOnSeekCancel()
+                        currentOnSetDragging( false )
+                    },
+                    onHorizontalDrag = { change, dragAmount ->
+                        change.consume()
+                        val width = size.width.toFloat().coerceAtLeast( 1f )
+                        offsetX += dragAmount
+                        dragRatio = ( offsetX / width ).coerceIn( 0f, 1f )
+                        currentOnSeek( dragRatio )
+                    },
                 )
-        ) {
-            Box(
-                modifier = Modifier
-                    .height(trackHeight)
-                    .fillMaxWidth(
-                        if (isDragging()) {
-                            dragRatio
-                        } else {
-                            onGetPlaybackPosition().playedRatio
-                        }
-                    )
-                    .background(
-                        colorScheme.primary,
-                        RoundedCornerShape(thumbSizeHalf)
-                    )
-            )
-            Box(
-                modifier = Modifier
-                    .height(trackHeight)
-                    .fillMaxWidth(onGetPlaybackPosition().bufferedRatio)
-                    .background(
-                        colorScheme.primary.copy( alpha = 0.2f ),
-                        RoundedCornerShape(thumbSizeHalf)
-                    )
-            )
-        }
-    }
-
+            }
+    )
 }
 @Composable
 private fun PlayDurationLabel(
