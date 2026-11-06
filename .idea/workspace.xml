@@ -187,62 +187,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbffc8aa-31a5-40f7-aefb-adfea4fc77c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/ic_launcher-playstore.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mobile/src/main/res/values/ic_launcher_background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/9.0-milestone-1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/build-logic/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/player/src/main/java/com/squad/musicmatters/feature/player/NowPlayingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/player/src/main/java/com/squad/musicmatters/feature/player/NowPlayingScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature/player/src/main/java/com/squad/musicmatters/feature/player/components/PlayerSheetScaffold.kt" beforeDir="false" afterPath="$PROJECT_DIR$/feature/player/src/main/java/com/squad/musicmatters/feature/player/components/PlayerSheetScaffold.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/MusicMattersApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/java/com/squad/musicmatters/ui/MusicMattersApp.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/drawable/logo_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/drawable/logo_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-hdpi/ic_launcher.webp" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-hdpi/ic_launcher.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-hdpi/ic_launcher_round.webp" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-hdpi/ic_launcher_round.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-mdpi/ic_launcher.webp" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-mdpi/ic_launcher.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-mdpi/ic_launcher_round.webp" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-mdpi/ic_launcher_round.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xhdpi/ic_launcher.webp" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xhdpi/ic_launcher.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xhdpi/ic_launcher_round.webp" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xhdpi/ic_launcher_round.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xxhdpi/ic_launcher.webp" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xxhdpi/ic_launcher.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mobile/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_163543 (101)." beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_163543.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_163611 (101)." beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_163611.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_163631.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_182235.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_182252.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195354.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195409.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195442.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195454.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195516.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195537.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195559.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195617.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195649.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195819.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195832.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195845.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195900.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195916.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_195939.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_200019.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_200049.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_200152.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/Screenshot_20260823_200610.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/MusicMattersIcons.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/designsystem/src/main/java/com/squad/musicmatters/core/designsystem/component/MusicMattersIcons.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -252,7 +201,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/app/.android/avd/Pixel_9_Pro_XL.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=/Users/app/.android/avd/Pixel_9_Pro_Fold.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />

@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.PlaylistAdd
 import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
+import androidx.compose.material.icons.automirrored.rounded.QueueMusic
 import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material.icons.filled.CastConnected
 import androidx.compose.material.icons.filled.Face
@@ -62,7 +63,7 @@ object MusicMattersIcons {
     val Share = Icons.Rounded.IosShare
     val SongDetails = Icons.Rounded.Info
     val Delete = Icons.Rounded.Delete
-    val Queue = Icons.AutoMirrored.Rounded.PlaylistPlay
+    val Queue = Icons.AutoMirrored.Rounded.QueueMusic
     val PlaylistAdd = Icons.AutoMirrored.Rounded.PlaylistAdd
     val FastForward = Icons.Rounded.FastForward
     val FastRewind = Icons.Rounded.FastRewind
