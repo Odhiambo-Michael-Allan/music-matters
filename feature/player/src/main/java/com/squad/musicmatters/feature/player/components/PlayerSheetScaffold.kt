@@ -186,7 +186,6 @@ private fun PlayerSheetScaffoldContent(
     when ( uiState ) {
         NowPlayingScreenUiState.Loading -> {}
         is NowPlayingScreenUiState.Success -> {
-            SideEffect { Log.d( "Recomp", "PlayerSheetScaffoldContent" ) }
 
             val colorScheme = rememberPlayerColorScheme(
                 uiState.currentlyPlayingSong.artworkUri
@@ -253,19 +252,20 @@ private fun PlayerSheetScaffoldContent(
                     }
                 )
             }
-            val resources = remember (
-                playerStateHolder,
-                scope,
-                haptics,
-                sheetNestedScrollConnection
-            ) {
-                PlayerSheetResources(
-                    playerStateHolder,
-                    scope,
-                    haptics,
-                    sheetNestedScrollConnection
-                )
-            }
+
+//            val resources = remember (
+//                playerStateHolder,
+//                scope,
+//                haptics,
+//                sheetNestedScrollConnection
+//            ) {
+//                PlayerSheetResources(
+//                    playerStateHolder,
+//                    scope,
+//                    haptics,
+//                    sheetNestedScrollConnection
+//                )
+//            }
 
             PlayerSheetSurface(
                 modifier = modifier,
@@ -685,6 +685,7 @@ private fun resolvePlayerSheetSettleTarget(
 @Composable
 @Suppress( "DEPRECATION" )
 private fun PlayerSheetSurface(
+    modifier: Modifier = Modifier,
     geometry: State<PlayerSheetGeometry>,
     colorScheme: ColorScheme,
     resources: PlayerSheetResources,
@@ -693,7 +694,7 @@ private fun PlayerSheetSurface(
     sheetState: AnchoredDraggableState<PlayerSheetValue>,
     containerHeight: Dp,
     nowPlayingScreenModel: NowPlayingScreenModel,
-    modifier: Modifier = Modifier,
+
 ) {
     val containerColor = miniPlayerSheetColor( colorScheme )
     val interactionSource = remember { MutableInteractionSource() }

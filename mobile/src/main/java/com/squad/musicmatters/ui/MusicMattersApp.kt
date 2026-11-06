@@ -370,6 +370,7 @@ fun MusicMattersAppContent(
             }
 
         PlayerSheetScaffold(
+            modifier = Modifier.align( Alignment.TopStart ),
             layout = PlayerSheetLayout(
                 collapsedTargetY = collapsedTargetY,
                 containerHeight = containerHeight,
@@ -409,8 +410,7 @@ fun MusicMattersAppContent(
                         "Launching equalizer failed: $exception"
                     )
                 }
-            },
-            modifier = Modifier.align( Alignment.TopStart )
+            }
         )
 
     }
